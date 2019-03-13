@@ -160,8 +160,13 @@ digawsqanewKB_fed_dedicated_EBIv2 = new ServerBean("Dedicated EBI QA fed KB - Us
 
 
 // this will be your default
+<<<<<<< HEAD
 //defaultRestServer = digawsqanewKB
 defaultRestServer = digawsdevWorkflowKBrevised
+=======
+defaultRestServer = digdevlocalServer
+//defaultRestServer = digawsdevWorkflowKB
+>>>>>>> master
 
 
 getRestServerList = [
@@ -317,7 +322,9 @@ environments {
 //        grails.serverURL = "http://demo52k.us-east-1.elasticbeanstalk.com"
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
+
 //     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+
 
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
 
@@ -622,7 +629,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                 1, // expose the common variant tab have on the gene page
                                                 1, // expose the high-impact variant tab on the gene page
                                                 1, // do we have parent level associations to show
-                                                0, // Do we have gene level associations to show?
+                                                1, // Do we have gene level associations to show?
                                                 1, // add a link to the GRS module into the headers. Note that the GRS module is available whether or not the link is in place
                                                 1, // no longer used?
                                                 0, // if true then entering a gene takes you to a region page around that chain
@@ -884,3 +891,5 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0  // expose the 'genes in region' tab on the gene page
                                   )
 ]
+
+

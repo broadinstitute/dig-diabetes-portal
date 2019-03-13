@@ -41,7 +41,7 @@
                 {{/phewasTab}}
                 {{#forestTab}}
                 <li role="presentation" class="variantTableLabels highImpacVariantChooser">
-                    <a style="float: left;" href="#forestTabHolder" aria-controls="forestTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">Forest plot</a> <span class='new-dataset-flag' style="display: inline-flex; margin:-3px 0 0 -30px">&nbsp;</span>
+                    <a style="float: left;" href="#forestTabHolder" aria-controls="forestTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">Forest plot</a>
                 </li>
                 {{/forestTab}}
                 {{#exposeGreenBoxes}}
@@ -62,17 +62,20 @@
 
                    <div id="phewas" class="btn-group btn-group-vertical text-left">
 Choose associations to view:
+
+  <label  for="phewasTopVariants" class="radio">
+                                <input class="radio" id="phewasTopVariants" name="optRadio" type="radio" checked>
+                                Lowest p-value&nbsp;
+                            <g:helpText title="geneTable.TopVar.phewas.help.header" placement="bottom" body="geneTable.TopVar.phewas.help.text"/>
+                            </label>
+
                                                         <label  for="phewasBottomLineResults" class="radio">
-                                <input class="radio" id="phewasBottomLineResults" name="optRadio" type="radio" checked>
+                                <input class="radio" id="phewasBottomLineResults" name="optRadio" type="radio">
                                 Bottom line analysis&nbsp;
                                 <g:helpText title="geneTable.BottomLine.phewas.help.header" placement="bottom" body="geneTable.BottomLine.phewas.help.text"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             &nbsp;<span class='new-dataset-flag' style="display: inline-flex; margin:-3px 0 0 -30px">&nbsp;</span></label>
 
-                            <label  for="phewasTopVariants" class="radio">
-                                <input class="radio" id="phewasTopVariants" name="optRadio" type="radio">
-                                Smallest p-value&nbsp;
-                            <g:helpText title="geneTable.TopVar.phewas.help.header" placement="bottom" body="geneTable.TopVar.phewas.help.text"/>
-                            </label>
+
 
                             <label  for="phewasAllDatasets" class="radio">
                                 <input class="radio" id="phewasAllDatasets" name="optRadio" type="radio">

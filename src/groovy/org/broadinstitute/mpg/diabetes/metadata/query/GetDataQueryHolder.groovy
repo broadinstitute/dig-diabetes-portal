@@ -494,5 +494,8 @@ class GetDataQueryHolder {
         return allFilters;
     }
 
+    private addStaticQueryFilterBean(QueryFilterBean queryFilterBean) {
+        //add the queryFilterBean
 
+    }
 }

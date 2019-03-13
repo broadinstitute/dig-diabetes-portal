@@ -14,6 +14,8 @@ public class QueryFilterBean implements QueryFilter {
     String operator;
     String value;
     String requestedPhenotype;
+    String requestedDataset;
+    Boolean geneTablemdv37;
     List<QueryFilter> queryFilterList = new ArrayList<QueryFilter>();
 
     /**
@@ -44,6 +46,15 @@ public class QueryFilterBean implements QueryFilter {
         this.queryFilterList = queryFilterList;
     }
 
+    public QueryFilterBean(Property property, String operator, String value, String requestedPhenotype,String requestedDataset,boolean geneTablemdv37) {
+        this.property = property;
+        this.operator = operator;
+        this.value = value;
+        this.requestedPhenotype = requestedPhenotype;
+        this.requestedDataset = requestedDataset;
+        this.geneTablemdv37 = geneTablemdv37;
+    }
+
     /**
      * returns the filter string for the property and values given
      *
@@ -55,7 +66,12 @@ public class QueryFilterBean implements QueryFilter {
         } else if (queryFilterList.size()>0){
             String compoundValue = QueryJsonBuilder.getQueryJsonBuilder().getFilterStringForListOfFilters(queryFilterList);
             return   (property.getWebServiceFilterString(operator, compoundValue,requestedPhenotype));
-        } else {
+        }
+        //HACK ALERT - to provide phenotype and dataset for gene table of 52K
+        else if(this.geneTablemdv37 != null && this.geneTablemdv37==true) {
+            return (property.getWebServiceFilterString(operator, value,requestedPhenotype,requestedDataset));
+        }
+        else {
             return (property.getWebServiceFilterString(operator, value,requestedPhenotype));
         }
     }
@@ -77,6 +93,12 @@ public class QueryFilterBean implements QueryFilter {
     }
 
     public String getRequestedPhenotype() { return requestedPhenotype; }
+
+    public String getRequestedDataset() { return requestedDataset; }
+
+    public boolean isGeneTablemdv37() {
+        return geneTablemdv37;
+    }
 
     public List<QueryFilter> getListOfQueryFilter() { return queryFilterList; }
 

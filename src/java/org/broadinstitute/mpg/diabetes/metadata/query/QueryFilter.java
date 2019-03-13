@@ -27,4 +27,8 @@ public interface QueryFilter {
     public List<QueryFilter>  getListOfQueryFilter();
 
     public String getRequestedPhenotype();
+
+    public String getRequestedDataset();
+
+    public boolean isGeneTablemdv37();
 }

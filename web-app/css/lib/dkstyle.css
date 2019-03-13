@@ -1227,3 +1227,15 @@ span.new-dataset-flag {
 .analysis-modules-btn:hover ul {
 	display: block;
 }
+
+.variant-association-ui > .btn-group, .gene-association-ui > .btn-group {
+	width: 84% !important; height: 35px;
+}
+
+.variant-association-ui > .btn-group > button, .gene-association-ui > .btn-group > button {
+	height: 35px; border-radius: 5px; border: none;
+}
+
+.variant-association-ui, .gene-association-ui { opacity: 0; -webkit-transition: all 1000ms ease-out; transition: opacity 1000ms ease-out; }
+
+.variant-association-ui > div.trait-input, .gene-association-ui > div.gene-trait-input { width: 83% !important; height: 35px; background-color:#fff; border:none; border-radius: 5px; border-top-left-radius: 3px; border-bottom-left-radius: 3px; margin:0; margin-right: 0.5%; font-size: 16px; }

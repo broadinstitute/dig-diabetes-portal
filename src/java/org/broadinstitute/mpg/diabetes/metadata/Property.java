@@ -17,11 +17,20 @@ public interface Property extends DataSet {
 
     public boolean isSearchable();
 
+    public String getRequestedPhenotype();
+
+    public String getRequestedDataset();
+
+    public boolean isGeneTablemdv37();
+
+
     public int getSortOrder();
 
     public String getWebServiceOrderByString(String directionOfSort);
 
     public String getWebServiceFilterString(String operand, String value,String requestedPhenotype);
+
+    public String getWebServiceFilterString(String operand, String value,String requestedPhenotype, String requestedDataset);
 
     /**
      * determines if the property has been tagged with a given metadata word

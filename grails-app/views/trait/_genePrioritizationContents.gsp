@@ -9,6 +9,7 @@
         prioritizedGeneInfoAjaxUrl: '${createLink(controller: "trait", action: "prioritizedGeneInfoAjax")}',
         getGeneLevelResultsUrl: '${createLink(controller: "home", action: "getGeneLevelResults")}',
         launchGeneVariantQueryUrl: '${createLink(controller: "variantSearch", action: "findEveryVariantForAGene")}',
+        geneInfoUrl: '${createLink(controller: "gene", action: "geneInfo")}',
         phenotypeDropdownIdentifier:'#phenotypeDropdownIdentifier',
         subphenotypeDropdownIdentifier:'#subphenotypeDropdownIdentifier',
         local:"${locale}",
@@ -31,15 +32,17 @@
 
 <div class="form-group row">
 
-    <!--<h3><g:message code="traitTable.messages.results" /></h3>
-    <span id="traitTableDescription"></span>-->
+    <!--<h3><g:message code="traitTable.messages.results" /></h3>-->
+    %{--<span id="traitTableDescription"></span>--}%
 
+<p><g:message code="genetable.interface"></g:message></p>
+    &nbsp;<br>
     <div class="col-md-6">
         <label>Dataset: </label><select id="phenotypeDropdownIdentifier" class="form-control" name="manhattanSampleGroupChooser" onchange="mpgSoftware.genePrioritization.pickNewGeneInfo()">
         </select>
     </div>
     <div class="col-md-6">
-        <label>Variants: </label><select id="subphenotypeDropdownIdentifier" class="form-control" name="manhattanSampleGroupChooser" onchange="mpgSoftware.genePrioritization.pickNewGeneInfo()">
+        <label>Masks: </label><select id="subphenotypeDropdownIdentifier" class="form-control" name="manhattanSampleGroupChooser" onchange="mpgSoftware.genePrioritization.pickNewGeneInfo()">
         </select>
     </div>
 
@@ -58,20 +61,22 @@
 <input id="get clump" type="button" value="Get clump" onclick="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants();" style="display: none;"/>
 
 
-<table id="phenotypeTraits" class="table dk-t2d-general-table basictable table-striped">
+<table id="phenotypeTraits"  class="table dk-t2d-general-table basictable table-striped">
     <thead>
     <tr>
-        <th width="15%"><g:message code="geneTable.columnHeaders.shared.gene" /></th>
-        <th width="6%"><g:message code="geneTable.columnHeaders.shared.chromosome" /></th>
-        <th width="19%"><g:message code="geneTable.columnHeaders.shared.position" /></th>
-        <th width="15%"><g:message code="geneTable.columnHeaders.shared.all_p_val" /></th>
-        <th width="15%"><g:message code="geneTable.columnHeaders.shared.oddsRatio" /></th>
-        <th width="15%"><g:message code="geneTable.columnHeaders.shared.acu" />
-        <g:helpText title="geneTable.columnHeaders.shared.acu.help.header" placement="bottom" body="geneTable.columnHeaders.shared.acu.help.text"/>
-        </th>
-        <th width="15%"><g:message code="geneTable.columnHeaders.shared.aca" />
-        <g:helpText title="geneTable.columnHeaders.shared.aca.help.header" placement="bottom" body="geneTable.columnHeaders.shared.aca.help.text"/>
-        </th>
+        <th width="10%"><g:message code="geneTable.columnHeaders.shared.gene" /></th>
+        <th width="10%"><g:message code="geneTable.columnHeaders.shared.chromosome" /></th>
+        <th width="10%"><g:message code="geneTable.columnHeaders.shared.position" /></th>
+        <th width="15%"><g:message code="geneTable.columnHeaders.shared.numVars" /></th>
+        <th width="10%"><g:message code="geneTable.columnHeaders.shared.mina" /></th>
+        <th width="10%"><g:message code="geneTable.columnHeaders.shared.minu" /></th>
+        <th width="10%"><g:message code="geneTable.columnHeaders.shared.orfirth" /></th>
+        <th width="10%"><g:message code="geneTable.columnHeaders.shared.pfirth" /></th>
+        <th width="15%"><g:message code="geneTable.columnHeaders.shared.pSkat" /></th>
+
+
+
+
     </tr>
     </thead>
     <tbody id="traitTableBody">
