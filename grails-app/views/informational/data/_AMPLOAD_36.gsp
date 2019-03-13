@@ -10,7 +10,6 @@
 
 
     <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
-    <p><g:message code="pheno.help.text"></g:message></p>
 
     <ul>
     <li><g:message code="informational.shared.traits.albumin"></g:message></li>
