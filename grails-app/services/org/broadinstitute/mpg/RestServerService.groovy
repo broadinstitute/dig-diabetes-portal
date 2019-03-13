@@ -2516,7 +2516,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
     public JSONObject gatherBottomLineResultsByVarId( String variantId ) {
-        String rawReturnFromApi =  getRestCall("${GET_BOTTOM_LINE_RESULTS_URL}?var_id=${variantId}")
+        PortalVersionBean portalVersionBean = retrieveBeanForCurrentPortal();
+        String rawReturnFromApi =  getRestCall(
+                "${GET_BOTTOM_LINE_RESULTS_URL}?var_id=${variantId}&disease_focus=${portalVersionBean.getKnowledgeBaseName()}")
         JsonSlurper slurper = new JsonSlurper()
         JSONObject jsonObject = slurper.parseText(rawReturnFromApi) as JSONObject
         return jsonObject

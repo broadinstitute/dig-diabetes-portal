@@ -159,8 +159,8 @@ digawsqanewKB_fed_dedicated_EBIv2 = new ServerBean("Dedicated EBI QA fed KB - Us
 
 
 // this will be your default
-defaultRestServer = digdevlocalServer
-//defaultRestServer = digawsdevWorkflowKB
+//defaultRestServer = digdevlocalServer
+defaultRestServer = digawsdevnewKB
 
 
 getRestServerList = [
