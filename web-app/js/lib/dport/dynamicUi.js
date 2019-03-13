@@ -1272,7 +1272,7 @@ mpgSoftware.dynamicUi = (function () {
         _.forEach(_.groupBy(getAccumulatorObject("rawAbcInfo"), 'GENE'), function (value, geneName) {
             var geneObject = {geneName: geneName};
             geneObject['source'] = _.map(_.uniqBy(value, 'SOURCE'), function (o) {
-                return o.SOURCE
+                return {tissueName:o.SOURCE,value:o.VALUE};
             }).sort();
             geneObject['experiment'] = _.map(_.uniqBy(value, 'EXPERIMENT'), function (o) {
                 return o.EXPERIMENT
@@ -1357,7 +1357,8 @@ mpgSoftware.dynamicUi = (function () {
                                 tissuesExist:(recordsPerGene.source.length)?[1]:[],
                                 geneName:recordsPerGene.geneName,
                                 tissues:_.map(_.sortBy(recordsPerGene.source),function(tissueRecord){
-                                    return {  tissueName: tissueRecord  };
+                                    return {    tissueName: tissueRecord.tissueName,
+                                                value:tissueRecord.value };
                                 })
                             };
                             intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell('eQTL',
@@ -1635,80 +1636,6 @@ mpgSoftware.dynamicUi = (function () {
 
 
     var displayTissuesFromAbc = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-        //var returnObject = createNewDisplayReturnObject();
-        //
-        //_.forEach(_.groupBy(getAccumulatorObject("rawAbcInfo"), 'SOURCE'), function (value, tissueName) {
-        //    var geneObject = {tissueName: tissueName};
-        //    geneObject['gene'] = _.map(_.uniqBy(value, 'GENE'), function (o) {
-        //        return o.GENE
-        //    }).sort();
-        //    geneObject['experiment'] = _.map(_.uniqBy(value, 'EXPERIMENT'), function (o) {
-        //        return o.EXPERIMENT
-        //    }).sort();
-        //    var startPosRec = _.minBy(value, function (o) {
-        //        return o.START
-        //    });
-        //    geneObject['start_pos'] = (startPosRec) ? startPosRec.START : 0;
-        //    var stopPosRec = _.maxBy(value, function (o) {
-        //        return o.STOP
-        //    });
-        //    geneObject['stop_pos'] = (stopPosRec) ? stopPosRec.STOP : 0;
-        //    returnObject.tissuesByAbc.push(geneObject);
-        //
-        //});
-        //returnObject['abcTissuesExist'] = function () {
-        //    return (this.tissuesByAbc.length > 0) ? [1] : [];
-        //};
-        //
-        //
-        //returnObject['numberOfGenes'] = function () {
-        //    return (this.gene.length);
-        //};
-        //returnObject['numberOfExperiments'] = function () {
-        //    return (this.experiment.length);
-        //};
-        //
-        //addAdditionalResultsObject({tissuesFromAbc: returnObject});
-        //
-        //var intermediateDataStructure = new IntermediateDataStructure();
-        //
-        //if (( typeof returnObject.abcGenesExist !== 'undefined') && ( returnObject.abcGenesExist())) {
-        //    intermediateDataStructure.rowsToAdd.push({
-        //        category: 'Annotation',
-        //        displayCategory: 'Annotation',
-        //        subcategory: 'ABC',
-        //        displaySubcategory: 'ABC',
-        //        columnCells: []
-        //    });
-        //    // set up the headers, and give us an empty row of column cells
-        //    _.forEach(returnObject.genesByAbc, function (oneRecord) {
-        //        intermediateDataStructure.headerNames.push(oneRecord.geneName);
-        //        intermediateDataStructure.headerContents.push(Mustache.render($("#dynamicAbcGeneTableHeader")[0].innerHTML, oneRecord));
-        //        intermediateDataStructure.headers.push({
-        //            name: oneRecord.geneName,
-        //            contents: Mustache.render($("#dynamicAbcGeneTableHeader")[0].innerHTML, oneRecord)
-        //        });
-        //        intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell("ABC", ""));
-        //    });
-        //
-        //    // fill in all of the column cells
-        //    _.forEach(returnObject.genesByAbc, function (recordsPerGene) {
-        //        var indexOfColumn = _.indexOf(intermediateDataStructure.headerNames, recordsPerGene.geneName);
-        //        if (indexOfColumn === -1) {
-        //            console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
-        //        } else {
-        //            recordsPerGene["numberOfTissues"] = recordsPerGene.source.length;
-        //            recordsPerGene["numberOfExperiments"] = recordsPerGene.experiment.length;
-        //            intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell("",
-        //                Mustache.render($("#dynamicAbcGeneTableBody")[0].innerHTML, recordsPerGene));
-        //        }
-        //    });
-        //    intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
-        //
-        //}
-        //
-        //
-        //prepareToPresentToTheScreen(idForTheTargetDiv, '#dynamicAbcTissueTable', returnObject, clearBeforeStarting, intermediateDataStructure);
     };
 
 
@@ -2209,7 +2136,8 @@ mpgSoftware.dynamicUi = (function () {
                             tissuesExist:(recordsPerGene.tissues.length)?[1]:[],
                             geneName:recordsPerGene.geneName,
                             tissues:_.map(_.sortBy(recordsPerGene.tissues,['value']),function(tissueRecord){
-                                return {  tissueName: tissueRecord.tissueName, value: tissueRecord.value };
+                                return {  tissueName: tissueRecord.tissueName,
+                                    value: UTILS.realNumberFormatter(""+tissueRecord.value) };
                             })
                         };
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell('eQTL',
