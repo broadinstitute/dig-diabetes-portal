@@ -325,6 +325,7 @@ class RestServerService {
             newPortalVersionBean = new PortalVersionBean( portalType,
                     existingPortalVersionBean.getPortalDescription(),
                     mdvName,
+                    existingPortalVersionBean.getKnowledgeBaseName(),
                     existingPortalVersionBean.getPhenotype(),
                     existingPortalVersionBean.getDataSet(),
                     existingPortalVersionBean.getTissueRegionOverlapMatcher(),

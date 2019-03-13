@@ -594,6 +594,7 @@ portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", "ibd", "e
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
                                                         "T2D",  // displayable label for this portal type
                                                         "mdv37",    // the MDV number for this portal
+                                                        "T2DKP", // name of KB data we want
                                                         "T2D",      // the default phenotype for this portal
                                                         "ExSeq_19k_mdv28",  // default data set.  Used rarely.
                                                         ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
@@ -643,6 +644,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                   new PortalVersionBean("stroke",
                                                           "Stroke",
                                                           "mdv75",
+                                          "CVDKP", // name of KB data we want
                                                           "Stroke_all",
                                                           "GWAS_Stroke_mdv70",
                                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
@@ -687,6 +689,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                   new PortalVersionBean("mi",
                                                           "Myocardial Infarction",
                                                           "mdv96",
+                                          "CDKP", // name of KB data we want
                                                           "MI",
                                                           "GWAS_CARDIoGRAM_mdv91",
                                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
@@ -733,6 +736,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           //"Inflammatory Bowel Disease",
                                           "Variant to Function",
                                                           "mdv80",
+                                          "T2DKP", // name of KB data we want
                                                           "CD",// another option would be "IBD"
                                                             "GWAS_IBDGenomics_eu_mdv80",
                                                           ["UCSC annotation","ATACSeq_QTL","Enhancer-gene link"],
@@ -780,6 +784,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                   new PortalVersionBean("epilepsy",
                                           "Epilepsy",
                                           "mdv100",
+                                          "T2DKP", // name of KB data we want
                                           "GGE", // make sure your default phenotype exists in your default data set
                                           "ExSeq_Epi25k_mdv100",// used to pick a default data set for a gene query
                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
@@ -825,6 +830,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                   new PortalVersionBean("sleep",
                                           "Sleep",
                                           "mdv110",
+                                          "SDKP", // name of KB data we want
                                           "SleepChronotype", // make sure your default phenotype exists in your default data set
                                           "GWAS_UKBB_mdv110",// used to pick a default data set for a gene query
                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],

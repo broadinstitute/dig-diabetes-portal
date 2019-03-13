@@ -17,6 +17,7 @@ class PortalVersionBean {
     private String portalType
     private String portalDescription
     private String mdvName
+    private String knowledgeBaseName=""
     private String phenotype=""
     private String dataSet=""
     List<String> tissueRegionOverlapMatcher=[]
@@ -67,6 +68,7 @@ class PortalVersionBean {
     public PortalVersionBean(String portalType,
                              String portalDescription,
                              String mdvName,
+                             String knowledgeBaseName,
                              String phenotype,
                              String dataSet,
                              List<String> tissueRegionOverlapMatcher,
@@ -115,6 +117,7 @@ class PortalVersionBean {
         this.portalType = portalType;
         this.portalDescription = portalDescription;
         this.mdvName = mdvName;
+        this.knowledgeBaseName=knowledgeBaseName;
         this.phenotype = phenotype;
         this.dataSet = dataSet
         this.tissueRegionOverlapMatcher = tissueRegionOverlapMatcher
@@ -185,6 +188,10 @@ class PortalVersionBean {
 
     public String getMdvName() {
         return mdvName
+    }
+
+    public String getKnowledgeBaseName() {
+        return knowledgeBaseName
     }
 
     public String getPhenotype() {
