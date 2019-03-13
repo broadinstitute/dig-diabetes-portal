@@ -275,16 +275,16 @@
                     <table class="openEqtlInGeneTable" style="border: 0">
                      <thead>
                       <tr role="row">
-                        <th style="border-top: 0;border-right: 0;">value</th>
-                        <th style="border-top: 0;border-right: 0;">tissue</th>
+                        <th style="border-right: 0;border-top: 0;">tissue</th>
+                        <th style="border-right: 0;">value</th>
                       </tr>
                      </thead>
                      <tbody>
                     {{/tissuesExist}}
                     {{#tissues}}
                        <tr role="row">
+                           <td style="padding: 3px">{{tissueName}}</td>
                            <td style="border-right: 0; padding: 3px">{{value}}</td>
-                           <td style="border-right: 0; padding: 3px">{{tissueName}}</td>
                        </tr>
                     {{/tissues}}
                     {{#tissuesExist}}
@@ -667,14 +667,16 @@
                     <table class="openAbcInGeneTable" style="border: 0">
                      <thead>
                       <tr role="row">
-                        <th style="border-top: 0;border-right: 0;">tissue</th>
+                        <th style="border-top: 0;">tissue</th>
+                        <th style="border-top: 0;border-right: 0;">value</th>
                       </tr>
                      </thead>
                      <tbody>
                     {{/tissuesExist}}
                     {{#tissues}}
                        <tr role="row">
-                           <td style="border-right: 0; padding: 3px">{{tissueName}}</td>
+                           <td style="padding: 3px">{{tissueName}}</td>
+                           <td style="border-right: 0; padding: 3px">{{value}}</td>
                        </tr>
                     {{/tissues}}
                     {{#tissuesExist}}
@@ -701,16 +703,16 @@
                     <table class="openDepictInGeneTable" style="border: 0">
                      <thead>
                       <tr role="row">
-                        <th style="border-top: 0">pValue</th>
-                        <th style="border-top: 0;border-right: 0;">data set</th>
+                        <th style="border-top: 0;">data set</th>
+                        <th style="border-right: 0; border-top: 0">pValue</th>
                       </tr>
                      </thead>
                      <tbody>
                     {{/recordsExist}}
                     {{#records}}
                        <tr role="row">
-                           <td style="padding: 3px">{{value}}</td>
-                           <td style="border-right: 0; padding: 3px">{{dataset}}</td>
+                           <td style="padding: 3px">{{dataset}}</td>
+                           <td style="border-right: 0; padding: 3px">{{value}}</td>
                        </tr>
                     {{/records}}
                     {{#recordsExist}}
@@ -736,16 +738,16 @@
                     <table class="openMetaXcanInGeneTable" style="border: 0">
                      <thead>
                       <tr role="row">
-                        <th style="border-top: 0">pValue</th>
-                        <th style="border-top: 0;border-right: 0;">tissue</th>
+                        <th style="border-top: 0">tissue</th>
+                        <th style="border-top: 0;border-right: 0;">pValue</th>
                       </tr>
                      </thead>
                      <tbody>
                     {{/tissuesExist}}
                     {{#tissues}}
                        <tr role="row">
-                           <td style="padding: 3px">{{value}}</td>
-                           <td style="border-right: 0; padding: 3px">{{tissue}}</td>
+                           <td style="padding: 3px">{{tissue}}</td>
+                           <td style="border-right: 0;padding: 3px">{{value}}</td>
                        </tr>
                     {{/tissues}}
                     {{#tissuesExist}}

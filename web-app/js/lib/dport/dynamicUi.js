@@ -1356,9 +1356,9 @@ mpgSoftware.dynamicUi = (function () {
                             var renderData = {  numberOfTissues:recordsPerGene.source.length,
                                 tissuesExist:(recordsPerGene.source.length)?[1]:[],
                                 geneName:recordsPerGene.geneName,
-                                tissues:_.map(_.sortBy(recordsPerGene.source),function(tissueRecord){
+                                tissues:_.map(_.sortBy(recordsPerGene.source,["value"]),function(tissueRecord){
                                     return {    tissueName: tissueRecord.tissueName,
-                                                value:tissueRecord.value };
+                                                value:UTILS.realNumberFormatter(""+tissueRecord.value) };
                                 })
                             };
                             intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell('eQTL',
