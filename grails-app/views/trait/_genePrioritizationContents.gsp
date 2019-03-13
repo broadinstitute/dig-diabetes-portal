@@ -42,7 +42,7 @@
         </select>
     </div>
     <div class="col-md-6">
-        <label>Masks: </label><select id="subphenotypeDropdownIdentifier" class="form-control" name="manhattanSampleGroupChooser" onchange="mpgSoftware.genePrioritization.pickNewGeneInfo()">
+        <label>Variant filters: <g:helpText title="masks.help.header" placement="right" body="masks.help.text"/></label><select id="subphenotypeDropdownIdentifier" class="form-control" name="manhattanSampleGroupChooser" onchange="mpgSoftware.genePrioritization.pickNewGeneInfo()">
         </select>
     </div>
 
