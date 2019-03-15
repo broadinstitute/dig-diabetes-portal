@@ -380,6 +380,44 @@
                 }
             }
 
+
+
+            function showAttachedData( event) {
+                var dataTarget = $(event.target).attr('data-target').substring(1).trim();
+                var dataTargetContent = $("#"+dataTarget).html();
+
+                if($(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).length) {
+                    console.log("it's already there");
+                } else {
+                    var dataWrapper = '<div class="dk-new-ui-data-wrapper wrapper-'+dataTarget+'"><div class="closer-wrapper" style="text-align: center;"><spna style="">'+dataTarget+'</spna><span style="float:right; font-size: 12px; color: #888;" onclick="removeWrapper(event);" class="glyphicon glyphicon-remove" aria-hidden="true">\n' +
+                        '</span></div><div class="content-wrapper">'+dataTargetContent+'</div></div>';
+                    $('body').append(dataWrapper);
+
+                    var contentWidth = $(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).find("table").width();
+                    var contentHeight = $(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).find("table").height();
+
+                    contentWidth = (contentWidth > 350)? 350 : contentWidth + 25;
+                    contentHeight = (contentHeight > 300)? 300 : contentHeight + 25;
+
+                    var divTop = $(event.target).offset().top;
+                    var divLeft = $(event.target).offset().left + $(event.target).width();
+
+                    $(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).find(".content-wrapper").css({"width":contentWidth, "height":contentHeight});
+                    $(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).css({"top":divTop,"left":divLeft});
+
+                    $(".dk-new-ui-data-wrapper").draggable({ handle:".closer-wrapper"});
+                    $(".dk-new-ui-data-wrapper").resizable();
+                }
+
+
+            }
+
+            function removeWrapper( event ) {
+                $(event.target).parent().parent().remove();
+            }
+
+
+
             /* copy url of variant search result page to clipboard*/
 
             function copyVariantSearchURL() {
@@ -428,6 +466,23 @@
             })
 
         </script>
+
+        <style>
+        body::-webkit-scrollbar {
+            width: 0.3em;
+        }
+
+        body::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        }
+
+        body::-webkit-scrollbar-thumb {
+            background-color: darkgrey;
+            outline: 1px solid slategrey;
+        }
+            .dk-new-ui-data-wrapper { position: absolute; top: 100px; left:100px; background-color: #ddd; padding: 5px; border: solid 1px #bbb; border-radius: 5px; -moz-box-shadow: 3px 3px 3px 0 #ddd; -webkit-box-shadow: 3px 3px 3px 0 #ddd; box-shadow: 3px 3px 3px 0 #ddd; }
+            .dk-new-ui-data-wrapper > .content-wrapper { background-color: #fff; padding: 5px; width: 200px; height: 300px; overflow:auto; font-size: 12px; }
+        </style>
 
     </head>
 

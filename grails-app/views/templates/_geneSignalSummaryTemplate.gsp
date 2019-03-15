@@ -905,7 +905,6 @@
                                 <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne" aria-expanded="true" onclick="mpgSoftware.traitsFilter.massageLZ();">
                                     <h2>View gene specific data</h2>
                                 </a>
-                                <!--<a href="#geneSpecificHolder" aria-controls="geneSpecificHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();" class="top-level" style="margin: 20px">Gene specific data</a>-->
                             </div>
 
                             <div id="collapseOne" class="accordion-body collapse">
