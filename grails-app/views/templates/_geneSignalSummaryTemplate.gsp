@@ -895,26 +895,26 @@
 
 
 <script id="organizeSignalSummaryHeader"  type="x-tmpl-mustache">
-            <div class="text-right" id="phenotypeLabel">{{pName}}</div>
-            {{#exposeGenesInRegionTab}}
-                <div class="row">
-                    <div class="col-xs-12">
+    <div class="text-right" id="phenotypeLabel">{{pName}}</div>
+        {{#exposeGenesInRegionTab}}
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="accordion" id="accordion1">
+                        <div class="accordion-group">
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne" aria-expanded="true" onclick="mpgSoftware.traitsFilter.massageLZ();">
+                                    <h2>View gene specific data</h2>
+                                </a>
+                                <!--<a href="#geneSpecificHolder" aria-controls="geneSpecificHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();" class="top-level" style="margin: 20px">Gene specific data</a>-->
+                            </div>
 
-                        <div class="accordion" id="accordion1">
-                            <div class="accordion-group">
-                                <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne" aria-expanded="true" onclick="mpgSoftware.traitsFilter.massageLZ();">
-                                        <h2>View gene specific data</h2>
-                                    </a>
-                                </div>
+                            <div id="collapseOne" class="accordion-body collapse">
+                                <div class="accordion-inner">
 
-                                <div id="collapseOne" class="accordion-body collapse">
-                                    <div class="accordion-inner">
-                                        <div role="tabpanel" class="active tab-pane geneSpecificHolder" id="geneSpecificHolder">
-                                            <ul class="nav nav-tabs" role="tablist">
-                                                {{#commonTab}}
-                                                    <li role="presentation" class="active variantTableLabels commonVariantChooser">
-                                                        <a href="#commonVariantTabHolder" aria-controls="commonVariantTabHolder" role="tab" data-toggle="tab"
+                                        <ul class="nav nav-tabs" role="tablist">
+                                            {{#commonTab}}
+                                                <li role="presentation" class="variantTableLabels commonVariantChooser active ">
+                                                    <a href="#commonVariantTabHolder" aria-controls="commonVariantTabHolder" role="tab" data-toggle="tab"
                                                         onclick="mpgSoftware.traitsFilter.massageLZ();">Top variants: {{pName}}</a>
                                                     </li>
                                                 {{/commonTab}}
@@ -927,7 +927,7 @@
                                             </ul>
 
                                             <div class="tab-content">
-                                                <div role="tabpanel" class="tab-pane" id="commonVariantTabHolder">
+                                                <div role="tabpanel" class="tab-pane active" id="commonVariantTabHolder">
                                                     <div class="row" style="border: none">
                                                         <div class="col-xs-12">
                                                             <div class="variantCategoryHolder">
@@ -939,7 +939,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div role="tabpanel" class="tab-pane active" id="highImpactVariantTabHolder">
+                                                <div role="tabpanel" class="tab-pane" id="highImpactVariantTabHolder">
                                                     <div class="row"  style="border: none">
                                                         <div class="col-xs-12">
                                                             <div class="variantCategoryHolder">
@@ -957,7 +957,7 @@
                                             </div>
 
                                         </div>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -974,7 +974,7 @@
                                     <div class="accordion-inner">
                                         <ul class="nav nav-tabs" role="tablist">
                                             {{#credibleSetTab}}
-                                                <li role="presentation" class="active variantTableLabels credibleSetChooser">
+                                                <li role="presentation" class="variantTableLabels credibleSetChooser active">
                                                    <a style="float:left;" href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab"
                                                    onclick="mpgSoftware.traitsFilter.massageLZ();">{{pName}}</a>
                                                    <!--<span class='new-dataset-flag' style="display: inline-flex; margin:-3px 0 0 -30px">&nbsp;</span>-->
@@ -1007,7 +1007,7 @@
                                         </ul>
 
                                         <div class="tab-content">
-                                            <div role="tabpanel" class="tab-pane credibleSetChooser" id="credibleSetTabHolder"></div>
+                                            <div role="tabpanel" class="tab-pane credibleSetChooser active" id="credibleSetTabHolder"></div>
                                             <div role="tabpanel" class="tab-pane exposeDynamicUiChooser" id="exposeDynamicUiTabHolder">
                                                 {{#dynamicUiTab}}
                                                     <div class="row" style="border: none">
@@ -1209,7 +1209,7 @@
                                 </div>
                             </div>
                         </div>
-<div class="row" style="margin-bottom: 20px">
+<!--<div class="row" style="margin-bottom: 20px">
     <div class="col-xs-2"></div>
     <div class="col-xs-8">
         <ul class="nav nav-justified nav-pills" role="tablist">
@@ -1223,10 +1223,10 @@
             </li>
         </ul>
     </div>
-</div>
+</div>-->
 <div class="tab-content">
 
-    <div role="tabpanel" class="active tab-pane geneSpecificHolder" id="geneSpecificHolder">
+    <!--<div role="tabpanel" class="active tab-pane geneSpecificHolder" id="geneSpecificHolder">
 
         <ul class="nav nav-tabs" role="tablist">
             {{#commonTab}}
@@ -1243,7 +1243,7 @@
             {{/highImpactTab}}
         </ul>
 
-    </div>
+    </div>-->
 
     <div role="tabpanel" class="tab-pane generalRangeHolder" id="generalRangeHolder">
 
@@ -1332,10 +1332,6 @@
 </div>
 {{/exposeGenesInRegionTab}}
             %{--<div id="cDataModalGoesHere"></div>--}%
-
-
-
-
 
 </script>
 <script id="organizeSignalSummaryCommon"  type="x-tmpl-mustache">
