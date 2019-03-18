@@ -55,3 +55,35 @@ a.cellExpander {
 a.top-level {
     font-size: 22px;
 }
+body::-webkit-scrollbar {
+    width: 0.3em;
+}
+
+body::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    outline: 1px solid slategrey;
+}
+.dk-new-ui-data-wrapper {
+    position: absolute;
+    top: 100px;
+    left:100px;
+    background-color: #ddd;
+    padding: 5px;
+    border: solid 1px #bbb;
+    border-radius: 5px;
+    -moz-box-shadow: 3px 3px 3px 0 #ddd;
+    -webkit-box-shadow: 3px 3px 3px 0 #ddd;
+    box-shadow: 3px 3px 3px 0 #ddd;
+}
+.dk-new-ui-data-wrapper > .content-wrapper {
+    background-color: #fff;
+    padding: 5px;
+    width: 200px;
+    height: 300px;
+    overflow:auto;
+    font-size: 12px;
+}

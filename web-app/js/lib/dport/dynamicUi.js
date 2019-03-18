@@ -4382,19 +4382,56 @@ var destroySharedTable = function (whereTheTableGoes) {
     };
 
 
-    //_.forEach(tissueColumnsToHide,function(oneColumn){
-    //    var classListForColumn = $(oneColumn).attr("class").split(/\s+/);
-    //    if (_.includes(classListForColumn,'tissueRecord')){
-    //        var buildSelector = 'th.'+classListForColumn.join('.');
-    //        datatable.DataTable().column(buildSelector).visible(false);
-    //    }
-    //
-    //});
+
+    var extractStraightFromTarget = function (dataTarget){
+        return $("#"+dataTarget).html();
+    };
+
+
+    function showAttachedData( event, title, functionToGenerateContents) {
+        var dataTarget = $(event.target).attr('data-target').substring(1).trim();
+        var dataTargetContent = functionToGenerateContents(dataTarget);
+
+        if($(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).length) {
+            console.log("it's already there");
+        } else {
+            var dataWrapper = '<div class="dk-new-ui-data-wrapper wrapper-'+dataTarget+'"><div class="closer-wrapper" style="text-align: center;"><spna style="">'+title+
+                '</spna><span style="float:right; font-size: 12px; color: #888;" onclick="mpgSoftware.dynamicUi.removeWrapper(event);" class="glyphicon glyphicon-remove" aria-hidden="true">\n' +
+                '</span></div><div class="content-wrapper">'+dataTargetContent+'</div></div>';
+            $('body').append(dataWrapper);
+
+            var contentWidth = $(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).find("table").width();
+            var contentHeight = $(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).find("table").height();
+
+            contentWidth = (contentWidth > 350)? 350 : contentWidth + 25;
+            contentHeight = (contentHeight > 300)? 300 : contentHeight + 25;
+
+            var divTop = $(event.target).offset().top;
+            var divLeft = $(event.target).offset().left + $(event.target).width();
+
+            $(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).find(".content-wrapper").css({"width":contentWidth, "height":contentHeight});
+            $(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).css({"top":divTop,"left":divLeft});
+
+            $(".dk-new-ui-data-wrapper").draggable({ handle:".closer-wrapper"});
+            $(".dk-new-ui-data-wrapper").resizable();
+        }
+
+
+    }
+
+    function removeWrapper( event ) {
+        $(event.target).parent().parent().remove();
+    }
+
+
 
 
 
 // public routines are declared below
     return {
+        extractStraightFromTarget:extractStraightFromTarget,
+        showAttachedData:showAttachedData,
+        removeWrapper:removeWrapper,
         transposeThisTable:transposeThisTable,
         dataTableZoomSet:dataTableZoomSet,
         dataTableZoomDynaSet:dataTableZoomDynaSet,

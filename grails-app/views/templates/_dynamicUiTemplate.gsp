@@ -268,7 +268,8 @@
 
 <script id="dynamicGeneTableEqtlSummaryBody"  type="x-tmpl-mustache">
             <div sortField={{numberOfTissues}}>
-               <a data-toggle="collapse" class="cellExpander" data-target="#eqtl_{{geneName}}">records={{numberOfTissues}}</a>
+               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'eQTLs for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget);"
+               class="cellExpander" data-target="#eqtl_{{geneName}}">records={{numberOfTissues}}</a>
                %{--<div  class="popup">--}%
                <div  class="collapse openEqtlInGeneTable popuptext" id="eqtl_{{geneName}}">
                     {{#tissuesExist}}
@@ -532,7 +533,7 @@
         {{/abcTissuesExist}}
         {{#tissuesByAbc}}
             <td >
-            <div><a data-toggle="collapse" class="cellExpander" data-target="#genes_{{tissueName}}">genes={{numberOfGenes}}</a>
+            <div><a onclick="mpgSoftware.dynamicUi.showAttachedData(event)" class="cellExpander" data-target="#genes_{{tissueName}}">genes={{numberOfGenes}}</a>
                <div  class="collapse holdMultipleElements" id="genes_{{tissueName}}">
                     {{#gene}}
                        <div>{{.}}</div>
@@ -540,7 +541,7 @@
                </div>
             </div>
 
-            <div><a data-toggle="collapse" class="cellExpander" data-target="#experiments_{{tissueName}}">experiments={{numberOfExperiments}}</a>
+            <div><a onclick="mpgSoftware.dynamicUi.showAttachedData(event)" class="cellExpander" data-target="#experiments_{{tissueName}}">experiments={{numberOfExperiments}}</a>
                <div  class="collapse holdMultipleElements" id="experiments_{{tissueName}}">
                     {{#experiment}}
                        <div>{{.}}</div>
@@ -579,14 +580,14 @@
         {{/abcGenesExist}}
         {{#genesByAbc}}
             <td >
-            <div><a data-toggle="collapse" class="cellExpander" data-target="#tissues_{{geneName}}">tissues={{numberOfTissues}}</a>
+            <div><a onclick="mpgSoftware.dynamicUi.showAttachedData(event)" class="cellExpander" data-target="#tissues_{{geneName}}">tissues={{numberOfTissues}}</a>
                <div  class="collapse holdMultipleElements openTissues" id="tissues_{{geneName}}">
                     <div id="tooltip_tissues_{{geneName}}"></div>
                     <div id="graphic_tissues_{{geneName}}"></div>
                </div>
             </div>
 
-            <div><a data-toggle="collapse" class="cellExpander" data-target="#experiments_{{geneName}}">experiments={{numberOfExperiments}}</a>
+            <div><a onclick="mpgSoftware.dynamicUi.showAttachedData(event)" class="cellExpander" data-target="#experiments_{{geneName}}">experiments={{numberOfExperiments}}</a>
                <div  class="collapse holdMultipleElements" id="experiments_{{geneName}}">
                     {{#experiment}}
                        <div>{{.}}</div>
@@ -652,9 +653,9 @@
 </script>
 <script id="dynamicAbcGeneTableBody"  type="x-tmpl-mustache">
             <div sortField={{numberOfTissues}}>
-               <a data-toggle="collapse" class="cellExpander" data-target="#abc_{{geneName}}">tissues={{numberOfTissues}}</a>
-               <a data-toggle="collapse" class="cellExpander" data-target="#tissues_{{geneName}}">
-               <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>
+               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'ABC for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander" data-target="#abc_{{geneName}}">tissues={{numberOfTissues}}</a>
+               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'ABC for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander" data-target="#tissues_{{geneName}}">
+               <span class="glyphicon glyphicon-zoom-in" aria-hidden="true" data-target="#tissues_{{geneName}}"></span>
                &nbsp;
                </a>
                <div  class="collapse holdMultipleElements openTissues" id="tissues_{{geneName}}">
@@ -697,7 +698,7 @@
 
 
              <div sortField={{numberOfRecords}}>
-               <a data-toggle="collapse" class="cellExpander" data-target="#depict_data_{{geneName}}">records={{numberOfRecords}}</a>
+               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'DEPICT predictions for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander" data-target="#depict_data_{{geneName}}">records={{numberOfRecords}}</a>
                <div  class="collapse openDepictInGeneTable" id="depict_data_{{geneName}}">
                     {{#recordsExist}}
                     <table class="openDepictInGeneTable" style="border: 0">
@@ -711,7 +712,7 @@
                     {{/recordsExist}}
                     {{#records}}
                        <tr role="row">
-                           <td style="padding: 3px">{{dataset}}</td>
+                           <td style="padding: 3px; word-break: break-all">{{dataset}}</td>
                            <td style="border-right: 0; padding: 3px">{{value}}</td>
                        </tr>
                     {{/records}}
@@ -732,7 +733,7 @@
 <script id="geneAssociationTableBody"  type="x-tmpl-mustache">
 
             <div sortField={{numberOfRecords}}>
-               <a data-toggle="collapse" class="cellExpander" data-target="#MetaXcan_{{gene}}">records={{numberOfRecords}}</a>
+               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'MetaXcan for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander" data-target="#MetaXcan_{{gene}}">records={{numberOfRecords}}</a>
                <div  class="collapse openMetaXcanInGeneTable" id="MetaXcan_{{gene}}">
                     {{#tissuesExist}}
                     <table class="openMetaXcanInGeneTable" style="border: 0">
