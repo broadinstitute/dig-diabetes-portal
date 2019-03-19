@@ -155,10 +155,24 @@
                     <table class="table table-condensed table-responsive table-striped" border="1">
                         <tr><th><b>PubMed ID</b></th><th><b>Title</b></th><th><b>Download files</b></th><th><b>README files</b></th></tr>
 
+
+                        <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/30846698" target="_blank">PMID:30846698</a></td><td>Genome-wide association study identifies genetic loci for self-reported habitual sleep duration supported by accelerometer-derived estimates.</td>
+                            <td>Sleep duration associations: <a href="https://personal.broadinstitute.org/mvon/sleepdurationsumstats.txt.zip" target="_blank">Download</a><br>
+                                Long sleep duration associations: <a href="https://personal.broadinstitute.org/mvon/longsumstats.txt.zip" target="_blank">Download</a><br>
+                                Short sleep duration associations: <a href="https://personal.broadinstitute.org/mvon/shortsumstats.txt.zip" target="_blank">Download</a><br>
+                            </td><td><a href="https://s3.amazonaws.com/broad-portal-resources/sleep/Saxena_fullUKBB_Sleepduration_summary_stats_README" target="_blank">Sleep duration README</a><br>
+                            <a href="https://s3.amazonaws.com/broad-portal-resources/sleep/Saxena_fullUKBB_Longsleep_summary_stats_README" target="_blank">Long sleep duration README</a><br>
+                            <a href="https://s3.amazonaws.com/broad-portal-resources/sleep/Saxena_fullUKBB_Shortsleep_summary_stats_README" target="_blank">Short sleep duration README</a></td></tr>
+
+
+
+
                         <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/30696823" target="_blank">PMID:30696823</a></td><td>Genome-wide association analyses of chronotype in 697,828 individuals provides insights into circadian rhythms.</td>
                             <td>Chronotype associations: <a href="https://personal.broadinstitute.org/mvon/chronotype_raw_BOLT.output_HRC.only_plus.metrics_maf0.001_hwep1em12_info0.3.txt.gz" target="_blank">Download</a><br>
                                 Morning person (binary chronotype) associations: <a href="https://personal.broadinstitute.org/mvon/morning_person_BOLT.output_HRC.only_plus.metrics_maf0.001_hwep1em12_info0.3_logORs.txt.gz" target="_blank">Download</a><br>
                                 </td><td><a href="https://s3.amazonaws.com/broad-portal-resources/sleep/chronotype_raw_README" target="_blank">Chronotype README</a><br><a href="https://s3.amazonaws.com/broad-portal-resources/sleep/morning_person_README.txt" target="_blank">Morning person README</a></td></tr>
+
+
 
                         <tr><td>Cade <i>et al</i>. 2019, in press</td><td>Associations of Variants In the Hexokinase 1 and Interleukin 18 Receptor Regions with Oxyhemoglobin Saturation During Sleep.</td>
                             <td>Associations with average oxyhemoglobin saturation during sleep (average SpO2): <a href="https://personal.broadinstitute.org/mvon/cade_et_al_2018_average_spo2_multiethnic_discovery_replication.txt.zip" target="_blank">Download</a><br>
