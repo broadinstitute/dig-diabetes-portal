@@ -1439,6 +1439,63 @@ mpgSoftware.dynamicUi = (function () {
     };
 
 
+
+    var buildRegionGraphic = function (placeForGraphic,placeForTooltip,divWithData) {
+        // the user wants to drill down into the tissues. Let's make them a graphic using the data we stored above
+        var dataMatrix =
+            _.map($(divWithData).data("sourceByTissue"),
+                function (v, k) {
+                    var retVal = [];
+                    _.forEach(v, function (oneRec) {
+                        retVal.push(oneRec);
+                    });
+                    return retVal;
+                }
+            );
+        var geneInfoArray = getAccumulatorObject("geneInfoArray");
+        var geneInfoIndex = _.findIndex(geneInfoArray, {name: $(divWithData).data("geneName")});
+        var additionalParameters;
+        if (geneInfoIndex < 0) {
+            additionalParameters = {
+                regionStart: _.minBy(_.flatMap($(divWithData).data("sourceByTissue")), 'START').START,
+                regionEnd: _.maxBy(_.flatMap($(divWithData).data("sourceByTissue")), 'STOP').STOP,
+                stateColorBy: ['Flanking TSS'],
+                mappingInformation: _.map($(divWithData).data('allUniqueTissues'), function () {
+                    return [1]
+                })
+            };
+        } else {
+            additionalParameters = {
+                regionStart: geneInfoArray[geneInfoIndex].startPos,
+                regionEnd: geneInfoArray[geneInfoIndex].endPos,
+                stateColorBy: ['Flanking TSS'],
+                mappingInformation: _.map($(divWithData).data('allUniqueTissues'), function () {
+                    return [1]
+                })
+            };
+        }
+
+        //  here comes that D3 graphic!
+        $(placeForTooltip).empty();
+        $(placeForGraphic).empty();
+        buildMultiTissueDisplay(['Flanking TSS'],
+            $(divWithData).data('allUniqueTissues'),
+            dataMatrix,
+            additionalParameters,
+            placeForTooltip,
+            placeForGraphic);
+
+    };
+
+
+
+
+
+
+
+
+
+
     var displayGenesFromDepict = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
         var returnObject = createNewDisplayReturnObject();
 
@@ -4390,23 +4447,36 @@ var destroySharedTable = function (whereTheTableGoes) {
     };
 
 
+    var createOutOfRegionGraphic = function (event){
+        var dataTarget = $(event.target).attr('data-target').substring(1).trim();
+        if (dataTarget.indexOf("tissues_")>0){
+            var geneName = targetName.substring(targetName.indexOf("tissues_"));
+            buildRegionGraphic(placeForGraphic,placeForTooltip,'#tissue_'+geneName);
+        }
 
-    var extractStraightFromTarget = function (dataTarget){
+        return $("#"+dataTarget).html();
+    };
+
+
+    var extractStraightFromTarget = function (event){
+        var dataTarget = $(event.target).attr('data-target').substring(1).trim();
         return $("#"+dataTarget).html();
     };
 
 
     function showAttachedData( event, title, functionToGenerateContents) {
         var dataTarget = $(event.target).attr('data-target').substring(1).trim();
-        var dataTargetContent = functionToGenerateContents(dataTarget);
+        var dataTargetContent = functionToGenerateContents(event);
+        var uniqueId  = '#'+dataTarget+'_uniquifier';
 
         if($(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).length) {
             console.log("it's already there");
         } else {
             var dataWrapper = '<div class="dk-new-ui-data-wrapper wrapper-'+dataTarget+'"><div class="closer-wrapper" style="text-align: center;"><spna style="">'+title+
                 '</spna><span style="float:right; font-size: 12px; color: #888;" onclick="mpgSoftware.dynamicUi.removeWrapper(event);" class="glyphicon glyphicon-remove" aria-hidden="true">\n' +
-                '</span></div><div class="content-wrapper">'+dataTargetContent+'</div></div>';
+                '</span></div><div class="content-wrapper" id="'+uniqueId+'"></div></div>';
             $('body').append(dataWrapper);
+            $(uniqueId).append(dataTargetContent);
 
             var contentWidth = $(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).find("table").width();
             var contentHeight = $(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).find("table").height();
@@ -4440,6 +4510,7 @@ var destroySharedTable = function (whereTheTableGoes) {
         extractStraightFromTarget:extractStraightFromTarget,
         showAttachedData:showAttachedData,
         removeWrapper:removeWrapper,
+        createOutOfRegionGraphic:createOutOfRegionGraphic,
         transposeThisTable:transposeThisTable,
         dataTableZoomSet:dataTableZoomSet,
         dataTableZoomDynaSet:dataTableZoomDynaSet,

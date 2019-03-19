@@ -653,8 +653,12 @@
 </script>
 <script id="dynamicAbcGeneTableBody"  type="x-tmpl-mustache">
             <div sortField={{numberOfTissues}}>
-               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'ABC for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander" data-target="#abc_{{geneName}}">tissues={{numberOfTissues}}</a>
-               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'ABC for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander" data-target="#tissues_{{geneName}}">
+               <a
+               onclick="mpgSoftware.dynamicUi.showAttachedData(event,'ABC for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)"
+                class="cellExpander" data-target="#abc_{{geneName}}">tissues={{numberOfTissues}}</a>
+               <a
+               onclick="mpgSoftware.dynamicUi.showAttachedData(event,'ABC for {{geneName}}',mpgSoftware.dynamicUi.createOutOfRegionGraphic)"
+                class="cellExpander" data-target="#tissues_{{geneName}}">
                <span class="glyphicon glyphicon-zoom-in" aria-hidden="true" data-target="#tissues_{{geneName}}"></span>
                &nbsp;
                </a>
