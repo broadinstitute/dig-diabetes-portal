@@ -3070,6 +3070,7 @@ mpgSoftware.dynamicUi = (function () {
         });
 
 
+        // Everything that happens on the gene table
         $('#retrieveMultipleRecordsTest').on('click', function () {
             var arrayOfRoutinesToUndertake = [];
 
@@ -3112,7 +3113,7 @@ mpgSoftware.dynamicUi = (function () {
         });
 
 
-
+        // Everything that happens on the variant table
         $('#getVariantsFromQtlAndThenRetrieveEpigeneticData').on('click', function () {
 
             resetAccumulatorObject("sharedTable_table.combinedVariantTableHolder");
@@ -3343,6 +3344,7 @@ mpgSoftware.dynamicUi = (function () {
                     break;
                 case 'eQTL':
                 case 'Depict':
+                case 'MetaXcan':
                 case 'ABC':
                     var x = parseInt($(a).attr('sortField'));
                     if (isNaN(x)){
@@ -3472,6 +3474,12 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 };
                 break;
             case 'Depict':
+                currentSortRequestObject = {
+                    'currentSort':oneClass,
+                    'table':'table.combinedGeneTableHolder'
+                };
+                break;
+            case 'MetaXcan':
                 currentSortRequestObject = {
                     'currentSort':oneClass,
                     'table':'table.combinedGeneTableHolder'

@@ -633,7 +633,7 @@
 <script id="dynamicGeneTableHeaderV2"  type="x-tmpl-mustache">
 
             <div sortStrategy="alphabetical"  sortTerm="{{name1}}" class="geneName text-center">
-             {{name1}}</div>
+             {{name2}}</div>
              <div class="genePosition text-center">
              {{chromosome}}: {{addrStart}}-{{addrEnd}}
              </div>
@@ -733,7 +733,7 @@
 <script id="geneAssociationTableBody"  type="x-tmpl-mustache">
 
             <div sortField={{numberOfRecords}}>
-               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'MetaXcan for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander" data-target="#MetaXcan_{{gene}}">records={{numberOfRecords}}</a>
+               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'MetaXcan for {{gene}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander" data-target="#MetaXcan_{{gene}}">records={{numberOfRecords}}</a>
                <div  class="collapse openMetaXcanInGeneTable" id="MetaXcan_{{gene}}">
                     {{#tissuesExist}}
                     <table class="openMetaXcanInGeneTable" style="border: 0">

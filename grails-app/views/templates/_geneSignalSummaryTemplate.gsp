@@ -639,7 +639,7 @@ div.genePosition{
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#collapseContextRefiner" aria-expanded="false" aria-controls="collapseContextRefiner">
                             Refine context
                          </button>
@@ -658,6 +658,11 @@ div.genePosition{
                                 </div>
                             </div>
                          </div>
+                    </div>
+                    <div class="col-sm-2 text-right">
+                        <button class="btn btn-secondary" type="button" onclick="$('#retrieveMultipleRecordsTest').click()" aria-controls="collapseContextRefiner">
+                            Refresh table
+                         </button>
                     </div>
                 </div>
 
@@ -889,7 +894,7 @@ div.genePosition{
 
 
 <script id="templateForDirectorButtonsOnATab"  type="x-tmpl-mustache">
- <div class="row" style="border: none; margin-top: 10px">
+ <div class="row" style="border: none; margin-top: 10px; display: none">
 {{#directorButtons}}
      <div class="row">
         <div class="col-sm-2">

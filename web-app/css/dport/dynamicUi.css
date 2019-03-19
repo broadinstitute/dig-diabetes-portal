@@ -37,9 +37,9 @@ div.contextHolder{
 div.openMetaXcanInGeneTable {
     font-size: 10px;
 }
-table.openMetaXcanInGeneTable {
-    background-color: #bce8f1;
-}
+/*table.openMetaXcanInGeneTable {*/
+    /*background-color: #bce8f1;*/
+/*}*/
 div.openDepictInGeneTable {
     font-size: 10px;
 }

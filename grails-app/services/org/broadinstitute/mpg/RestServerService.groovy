@@ -1681,7 +1681,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
     public String getSampleMetadata() {
         String retdat
-        retdat = getRestCallBase(GET_SAMPLE_METADATA_URL, currentRestServer())
+        retdat = getRestCallBase("${GET_SAMPLE_METADATA_URL}?mdv=${this.metaDataService?.getDataVersion()}", currentRestServer())
         return retdat
     }
 
