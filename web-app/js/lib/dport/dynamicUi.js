@@ -1353,7 +1353,9 @@ mpgSoftware.dynamicUi = (function () {
                             intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
                                 Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML), "tissue specific");
                         } else {
-                            var renderData = {  numberOfTissues:recordsPerGene.source.length,
+                            var renderData = {
+                                numberOfTissues:recordsPerGene.source.length,
+                                tissueCategoryNumber:categorizeTissueNumbers( recordsPerGene.source.length ),
                                 tissuesExist:(recordsPerGene.source.length)?[1]:[],
                                 geneName:recordsPerGene.geneName,
                                 tissues:_.map(_.sortBy(recordsPerGene.source,["value"]),function(tissueRecord){
@@ -1567,7 +1569,9 @@ mpgSoftware.dynamicUi = (function () {
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
                             Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML), "tissue specific");
                     } else {
-                        var renderData = {  numberOfRecords:recordsPerGene.recordByDataSet.length,
+                        var renderData = {
+                            numberOfRecords:recordsPerGene.recordByDataSet.length,
+                            tissueCategoryNumber:categorizeTissueNumbers( recordsPerGene.recordByDataSet.length ),
                             recordsExist:(recordsPerGene.recordByDataSet.length)?[1]:[],
                             geneName:recordsPerGene.geneName,
                             records:_.map(_.sortBy(recordsPerGene.recordByDataSet,['pvalue']),function(tissueRecord){
@@ -1656,6 +1660,7 @@ mpgSoftware.dynamicUi = (function () {
                             Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML), "tissue specific");
                     } else {
                         var renderData = {  numberOfRecords:recordsPerGene.tissues.length,
+                                            tissueCategoryNumber:categorizeTissueNumbers( recordsPerGene.tissues.length ),
                                             tissuesExist:(recordsPerGene.tissues.length)?[1]:[],
                                             gene:recordsPerGene.gene,
                                             tissues:_.map(_.sortBy(recordsPerGene.tissues,['value']),function(tissueRecord){
@@ -2190,6 +2195,7 @@ mpgSoftware.dynamicUi = (function () {
                             Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML), "tissue specific");
                     } else {
                         var renderData = {  numberOfTissues:recordsPerGene.tissues.length,
+                            tissueCategoryNumber:categorizeTissueNumbers( recordsPerGene.tissues.length ),
                             tissuesExist:(recordsPerGene.tissues.length)?[1]:[],
                             geneName:recordsPerGene.geneName,
                             tissues:_.map(_.sortBy(recordsPerGene.tissues,['value']),function(tissueRecord){
@@ -3208,6 +3214,11 @@ mpgSoftware.dynamicUi = (function () {
         displayContext('#contextDescription',getAccumulatorObject());
 
         $('#retrieveMultipleRecordsTest').click();
+        $('div.tissueCategory_1').parents('td').css('background','#3333FF');
+        $('div.tissueCategory_2').parents('td').css('background','#3366FF');
+        $('div.tissueCategory_3').parents('td').css('background','#3399FF');
+        $('div.tissueCategory_4').parents('td').css('background','#33CCFF');
+        $('div.tissueCategory_5').parents('td').css('background','#33FFFF');
        // $('#getVariantsFromQtlAndThenRetrieveEpigeneticData').click();
     };
 
@@ -4044,6 +4055,12 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 // }
             });
             $(whereTheTableGoes).dataTable().fnAddData(_.map(rowDescriber,function(o){return o.content}));
+            $('div.tissueCategory_1').parents('td').css('background','#FF0033');
+            $('div.tissueCategory_2').parents('td').css('background','#FF3333');
+            $('div.tissueCategory_3').parents('td').css('background','#FF9933');
+            $('div.tissueCategory_4').parents('td').css('background','#FFCC33');
+            $('div.tissueCategory_5').parents('td').css('background','#FFFF33');
+
         });
         return rememberCategories;
     }
@@ -4464,7 +4481,7 @@ var destroySharedTable = function (whereTheTableGoes) {
     };
 
 
-    function showAttachedData( event, title, functionToGenerateContents) {
+    var showAttachedData = function( event, title, functionToGenerateContents) {
         var dataTarget = $(event.target).attr('data-target').substring(1).trim();
         var uniqueId  = dataTarget+'_uniquifier';
 
@@ -4511,11 +4528,31 @@ var destroySharedTable = function (whereTheTableGoes) {
         }
 
 
-    }
+    };
 
-    function removeWrapper( event ) {
+    var removeWrapper = function ( event ) {
         $(event.target).parent().parent().remove();
-    }
+    };
+
+
+
+    var categorizeTissueNumbers = function ( numberOfTissues ) {
+        var returnValue = 0;
+        if ((numberOfTissues>0) &&(numberOfTissues<=2)) {
+            returnValue = 1;
+        } else if ((numberOfTissues>2) &&(numberOfTissues<=8)) {
+            returnValue = 2;
+        } else if ((numberOfTissues>8) &&(numberOfTissues<=25)) {
+            returnValue = 3;
+        } else if ((numberOfTissues>25) &&(numberOfTissues<=100)) {
+            returnValue = 4;
+        } else if (numberOfTissues>100) {
+            returnValue = 5;
+        }
+        return returnValue;
+    };
+
+
 
 
 

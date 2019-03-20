@@ -267,7 +267,7 @@
 
 
 <script id="dynamicGeneTableEqtlSummaryBody"  type="x-tmpl-mustache">
-            <div sortField={{numberOfTissues}}>
+            <div sortField={{numberOfTissues}} class="tissueCategory_{{tissueCategoryNumber}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'eQTLs for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget);"
                class="cellExpander" data-target="#eqtl_{{geneName}}">records={{numberOfTissues}}</a>
                %{--<div  class="popup">--}%
@@ -652,7 +652,7 @@
 
 </script>
 <script id="dynamicAbcGeneTableBody"  type="x-tmpl-mustache">
-            <div sortField={{numberOfTissues}}>
+            <div sortField={{numberOfTissues}} class="tissueCategory_{{tissueCategoryNumber}}">
                <a
                onclick="mpgSoftware.dynamicUi.showAttachedData(event,'ABC for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)"
                 class="cellExpander" data-target="#abc_{{geneName}}">tissues={{numberOfTissues}}</a>
@@ -701,7 +701,7 @@
 <script id="depictGeneTableBody"  type="x-tmpl-mustache">
 
 
-             <div sortField={{numberOfRecords}}>
+             <div sortField={{numberOfRecords}} class="tissueCategory_{{tissueCategoryNumber}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'DEPICT predictions for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander" data-target="#depict_data_{{geneName}}">records={{numberOfRecords}}</a>
                <div  class="collapse openDepictInGeneTable" id="depict_data_{{geneName}}">
                     {{#recordsExist}}
@@ -736,7 +736,7 @@
 
 <script id="geneAssociationTableBody"  type="x-tmpl-mustache">
 
-            <div sortField={{numberOfRecords}}>
+            <div sortField={{numberOfRecords}} class="tissueCategory_{{tissueCategoryNumber}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'MetaXcan for {{gene}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander" data-target="#MetaXcan_{{gene}}">records={{numberOfRecords}}</a>
                <div  class="collapse openMetaXcanInGeneTable" id="MetaXcan_{{gene}}">
                     {{#tissuesExist}}

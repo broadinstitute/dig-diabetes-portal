@@ -87,3 +87,19 @@ body::-webkit-scrollbar-thumb {
     overflow:auto;
     font-size: 12px;
 }
+
+div.tissueCategory_1{
+    background: #FF0033;
+}
+div.tissueCategory_2{
+    background: #FF3333;
+}
+div.tissueCategory_3{
+    background: #FF9933;
+}
+div.tissueCategory_4{
+    background: #FFCC33;
+}
+div.tissueCategory_5{
+    background: #FFFF33;
+}
