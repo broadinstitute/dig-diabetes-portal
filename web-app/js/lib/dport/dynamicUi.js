@@ -1479,7 +1479,7 @@ mpgSoftware.dynamicUi = (function () {
         $(placeForTooltip).empty();
         $(placeForGraphic).empty();
         buildMultiTissueDisplay(['Flanking TSS'],
-            $(divWithData).data('allUniqueTissues'),
+            _.map($(divWithData).data('allUniqueTissues'),'tissueName'),
             dataMatrix,
             additionalParameters,
             placeForTooltip,
@@ -4449,12 +4449,12 @@ var destroySharedTable = function (whereTheTableGoes) {
 
     var createOutOfRegionGraphic = function (event){
         var dataTarget = $(event.target).attr('data-target').substring(1).trim();
-        if (dataTarget.indexOf("tissues_")>0){
-            var geneName = targetName.substring(targetName.indexOf("tissues_"));
-            buildRegionGraphic(placeForGraphic,placeForTooltip,'#tissue_'+geneName);
+        if (dataTarget.indexOf("tissues_")>=0){
+            var geneName = dataTarget.substring("tissues_".length);
+            var uniqueId  = dataTarget+'_uniquifier';
+            buildRegionGraphic('#'+uniqueId,'#'+uniqueId,'#tissues_'+geneName);
         }
-
-        return $("#"+dataTarget).html();
+        return "";
     };
 
 
@@ -4466,23 +4466,39 @@ var destroySharedTable = function (whereTheTableGoes) {
 
     function showAttachedData( event, title, functionToGenerateContents) {
         var dataTarget = $(event.target).attr('data-target').substring(1).trim();
-        var dataTargetContent = functionToGenerateContents(event);
-        var uniqueId  = '#'+dataTarget+'_uniquifier';
+        var uniqueId  = dataTarget+'_uniquifier';
+
 
         if($(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).length) {
-            console.log("it's already there");
+            //mpgSoftware.dynamicUi.removeWrapper(event);
+            console.log('a');
         } else {
             var dataWrapper = '<div class="dk-new-ui-data-wrapper wrapper-'+dataTarget+'"><div class="closer-wrapper" style="text-align: center;"><spna style="">'+title+
                 '</spna><span style="float:right; font-size: 12px; color: #888;" onclick="mpgSoftware.dynamicUi.removeWrapper(event);" class="glyphicon glyphicon-remove" aria-hidden="true">\n' +
                 '</span></div><div class="content-wrapper" id="'+uniqueId+'"></div></div>';
             $('body').append(dataWrapper);
-            $(uniqueId).append(dataTargetContent);
+            var dataTargetContent = functionToGenerateContents(event);
+            $('#'+uniqueId).append(dataTargetContent);
 
-            var contentWidth = $(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).find("table").width();
-            var contentHeight = $(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).find("table").height();
-
-            contentWidth = (contentWidth > 350)? 350 : contentWidth + 25;
-            contentHeight = (contentHeight > 300)? 300 : contentHeight + 25;
+            // we have two kinds of drill down graphics at this point, one of which is a table and one of which is a D3 graphic.  Let's look for
+            //  the table, and if it doesn't exist then extract the size from the presumed SVG element
+            var holderElement = $(".dk-new-ui-data-wrapper.wrapper-"+dataTarget);
+            var contentWidth = 0;
+            var contentHeight = 0;
+            if (holderElement.find("table").length>0){
+                contentWidth = holderElement.find("table").width();
+                contentHeight = holderElement.find("table").height();
+                contentWidth = (contentWidth > 350)? 350 : contentWidth + 25;
+                contentHeight = (contentHeight > 300)? 300 : contentHeight + 25;
+            } else {
+                contentWidth = holderElement.find("svg").width()+25;
+                contentHeight = holderElement.find("svg").height()+75;
+            }
+            //var contentWidth = $(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).find("table").width();
+            //var contentHeight = $(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).find("table").height();
+            //
+            //contentWidth = (contentWidth > 350)? 350 : contentWidth + 25;
+            //contentHeight = (contentHeight > 300)? 300 : contentHeight + 25;
 
             var divTop = $(event.target).offset().top;
             var divLeft = $(event.target).offset().left + $(event.target).width();
