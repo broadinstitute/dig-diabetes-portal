@@ -1536,8 +1536,8 @@ mpgSoftware.dynamicUi = (function () {
             intermediateDataStructure.rowsToAdd.push({
                 category: 'Annotation',
                 displayCategory: 'Annotation',
-                subcategory: 'Depict',
-                displaySubcategory: 'Depict',
+                subcategory: 'DEPICT',
+                displaySubcategory: 'DEPICT',
                 columnCells: []
             });
 
@@ -1593,13 +1593,13 @@ mpgSoftware.dynamicUi = (function () {
             true,
             'geneTableGeneHeaders');
 
-        _.forEach(returnObject.genesByAbc, function (value) {
-            $('#tissues_' + value.geneName).data('allUniqueTissues', value.abcTissuesVector());
-            $('#tissues_' + value.geneName).data('sourceByTissue', value.sourceByTissue());
-            $('#tissues_' + value.geneName).data('regionStart', value.start_pos);
-            $('#tissues_' + value.geneName).data('regionEnd', value.stop_pos);
-            $('#tissues_' + value.geneName).data('geneName', value.geneName);
-        });
+        //_.forEach(returnObject.genesByAbc, function (value) {
+        //    $('#tissues_' + value.geneName).data('allUniqueTissues', value.abcTissuesVector());
+        //    $('#tissues_' + value.geneName).data('sourceByTissue', value.sourceByTissue());
+        //    $('#tissues_' + value.geneName).data('regionStart', value.start_pos);
+        //    $('#tissues_' + value.geneName).data('regionEnd', value.stop_pos);
+        //    $('#tissues_' + value.geneName).data('geneName', value.geneName);
+        //});
 
     };
 
@@ -3149,8 +3149,8 @@ mpgSoftware.dynamicUi = (function () {
                 actionDefaultFollowUp("getTissuesFromProximityForLocusContext")));
 
 
-            arrayOfRoutinesToUndertake.push( actionContainer('getTissuesFromEqtlsForGenesTable',
-                actionDefaultFollowUp("getTissuesFromEqtlsForGenesTable")));
+            //arrayOfRoutinesToUndertake.push( actionContainer('getTissuesFromEqtlsForGenesTable',
+            //    actionDefaultFollowUp("getTissuesFromEqtlsForGenesTable")));
 
             arrayOfRoutinesToUndertake.push( actionContainer('getGeneAssociationsForGenesTable',
                 actionDefaultFollowUp("getGeneAssociationsForGenesTable")));
@@ -3208,7 +3208,7 @@ mpgSoftware.dynamicUi = (function () {
         displayContext('#contextDescription',getAccumulatorObject());
 
         $('#retrieveMultipleRecordsTest').click();
-        $('#getVariantsFromQtlAndThenRetrieveEpigeneticData').click();
+       // $('#getVariantsFromQtlAndThenRetrieveEpigeneticData').click();
     };
 
 
@@ -3400,7 +3400,7 @@ mpgSoftware.dynamicUi = (function () {
                     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
                     break;
                 case 'eQTL':
-                case 'Depict':
+                case 'DEPICT':
                 case 'MetaXcan':
                 case 'ABC':
                     var x = parseInt($(a).attr('sortField'));
@@ -3530,7 +3530,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     'table':'table.combinedGeneTableHolder'
                 };
                 break;
-            case 'Depict':
+            case 'DEPICT':
                 currentSortRequestObject = {
                     'currentSort':oneClass,
                     'table':'table.combinedGeneTableHolder'

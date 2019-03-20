@@ -197,7 +197,10 @@ td.tissueTable.informationIsPresent{
                     exposeDynamicUi:"${portalVersionBean.getExposeDynamicUi()}",
                     exposeCommonVariantTab:"${portalVersionBean.getExposeCommonVariantTab()}",
                     exposeRareVariantTab:"${portalVersionBean.getExposeRareVariantTab()}",
-                    exposeGenesInRegionTab:"${portalVersionBean.getExposeGenesInRegionTab()}"
+                    exposeGenesInRegionTab:"${portalVersionBean.getExposeGenesInRegionTab()}",
+                    exposeRegionAdjustmentOnGenePage:"${portalVersionBean.getExposeRegionAdjustmentOnGenePage()}",
+                    exposeGeneTableOnDynamicUi:"${portalVersionBean.getExposeGeneTableOnDynamicUi()}",
+                    exposeVariantTableOfDynamicUi:"${portalVersionBean.getExposeVariantTableOfDynamicUi()}"
                 };
                 mpgSoftware.geneSignalSummaryMethods.setSignalSummarySectionVariables(drivingVariables);
                 mpgSoftware.geneSignalSummaryMethods.initialPageSetUp(drivingVariables);

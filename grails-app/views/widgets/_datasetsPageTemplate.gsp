@@ -108,6 +108,8 @@
 <g:render template="./data/GWAS_MEDIA_aa" />
 <g:render template="./data/ExSeq_FinnMetSeq_eu" />
 <g:render template="./data/GWAS_UKBiobankGEFOS_eu" />
+<g:render template="./data/AMPLOAD_52_mdv1" />
+<g:render template="./data/GWAS_UKBB_eu" />
 
 
 

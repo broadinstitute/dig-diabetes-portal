@@ -194,7 +194,7 @@
                             <label><input type="radio" name="radio-gene-association" class="radio" onchange="mpgSoftware.homePage.switchVisibility(['variant-association-ui-wrapper'],['gene-association-ui-wrapper']);" checked> View variant associations</label>
                         </div>
                         <div class="radio-inline">
-                            <label><input type="radio" name="radio-gene-association" class="radio" onchange="mpgSoftware.homePage.switchVisibility(['gene-association-ui-wrapper'], ['variant-association-ui-wrapper']);" > View gene associations</label>
+                            <label><input type="radio" name="radio-gene-association" class="radio" onchange="mpgSoftware.homePage.switchVisibility(['gene-association-ui-wrapper'], ['variant-association-ui-wrapper']);" > View gene associations</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class='new-dataset-flag' style="display: inline-flex; margin:-3px 0 0 -30px">&nbsp;</span>
                         </div>
 
                     </g:if>
@@ -295,7 +295,7 @@
                         <img src="${resource(dir: 'images', file: 'data_icon3.png')}" style="width: 200px; margin-right: -50px;" align="right" >
                         <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData" default="About the data" /></h2>
                     <p><g:message code="about.the.portal.data.text" />
-                    <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">66 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">162 traits</span></h1>
+                    <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">67 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">164 traits</span></h1>
 
                         <span style="display:block; width: 100%;text-align:left;"><a style=" font-size: 20px; padding:10px 40px 10px 0; margin-right: -30px;background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; text-decoration:none; color:#333333; " href="${createLink(controller:'informational', action:'data')}"><g:message code="about.the.portal.data.text2"/></a></span>
                     </g:else>
@@ -497,7 +497,9 @@
                     </div>
                 </div>
                 </div>
-
+                    <g:if test="${g.portalTypeString()?.equals('t2d')}">
+                        <a href="http://t2d-genetics-portal.blogspot.com/2019/03/upcoming-t2dkp-webinar-march-21.html" style="display:block; float:right; margin: 20px 15px -20px 0;"><img src="${resource(dir: 'images', file: 'webinar.png')}" style="" ></a>
+                    </g:if>
                     <div class="col-md-5 col-md-offset-1" style="margin-top:30px;">
                         <h3 style="font-weight:700; font-size:30px; font-family:'Oswald'; color:#000000; text-align: left; margin-top: 10px;"><g:message code="portal.home.news_headline" default="What's new" />&nbsp;<span style="color:#4eadcd; vertical-align: 5px;" class="glyphicon glyphicon-comment" aria-hidden="true"></span></h3>
                         <ul id="newsFeedHolder" class="dk-news-items gallery-fade"></ul>

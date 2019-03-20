@@ -627,7 +627,7 @@ div.genePosition{
         </div>
         <div role="tabpanel" class="tab-pane exposeDynamicUiChooser" id="exposeDynamicUiTabHolder">
             {{#dynamicUiTab}}
-                <div class="row" style="border: none">
+                <div class="row" style="border: none; {{suppressionOfRange}}">
                     <div id="configurableUiTabStorage" style="display: none"></div>
                     <div class="col-sm-12">
                     Current context:
@@ -647,13 +647,7 @@ div.genePosition{
                             <div  style="margin-top: 10px">
                                 <div class="card card-body">
                                     <div id="contextControllersInDynamicUi">
-                                        %{--<div class="row" style="border: none">--}%
-                                           %{--<button id="{{generalizedGoButtonId}}" class="btn btn-primary buttonsForManualContextRefinement "--}%
-                                                %{--type="button">Reset context</button>--}%
-                                            %{--<input id="{{generalizedInputId}}" value="" type="text" class="form-control input-default inputForInitiatingRefinementStep">--}%
-                                        %{--</div>--}%
-                                        %{--<div class="row" style="border: none; margin-top: 10px">--}%
-                                        %{--</div>--}%
+
                                     </div>
                                 </div>
                             </div>
@@ -666,13 +660,13 @@ div.genePosition{
                     </div>
                 </div>
 
-                <div class="row" style="border: none">
+                <div class="row" style="border: none; {{suppressionOfAllDynamicUiTabs}}">
                     <div class="col-sm-12">
                         <ul class="nav nav-tabs">
-                            <li class="nav-item active">
+                            <li class="nav-item active" style="{{suppressionOfGeneTable}}">
                                 <a class="nav-link sub-tab" href="#dynamicGeneHolder" role="tab" data-toggle="tab">Gene</a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item" style="{{suppressionOfVariantTable}}">
                                 <a class="nav-link sub-tab" href="#dynamicVariantHolder" role="tab" data-toggle="tab">Variant</a>
                             </li>
                             <li class="nav-item"  style="display: none">
@@ -708,7 +702,23 @@ div.genePosition{
                                             T
                                         </button>
                                     </div>
-                                    <div class="col-sm-9">
+                                    <div class="col-sm-2">
+
+                                    </div>
+                                   <div class="col-sm-1">
+                                            <button type="button" class="btn btn-secondary" aria-label="click to organize by greatest significance"  title="click to organize by greatest significance"
+                                                style="background-color: #99d6ff" onclick="">Significance
+                                            </button>
+                                    </div>
+                                   <div class="col-sm-1">
+
+                                    </div>
+                                    <div class="col-sm-1">
+                                            <button type="button" class="btn btn-secondary" aria-label="click to organized by number of associated tissues"  title="click to organized by number of associated tissues"
+                                                style="background-color: #ffdf80"   onclick="">Tissues
+                                            </button>
+                                    </div>
+                                   <div class="col-sm-4">
 
                                     </div>
                                     <div class="col-sm-2">

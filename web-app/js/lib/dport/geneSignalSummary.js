@@ -1929,8 +1929,29 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             if ( typeof additionalParameters.currentPhenotype !== 'undefined'){
                 phenotype =  additionalParameters.currentPhenotype;
             }
+            var suppressionOfRange = "display: none";
+            if (additionalParameters.exposeRegionAdjustmentOnGenePage === "1"){
+                suppressionOfRange = "";
+            }
+            var suppressionOfGeneTable = "display: none";
+            if (additionalParameters.exposeGeneTableOnDynamicUi === "1"){
+                suppressionOfGeneTable = "";
+            }
+            var suppressionOfVariantTable = "display: none";
+            if (additionalParameters.exposeVariantTableOfDynamicUi === "1"){
+                suppressionOfVariantTable = "";
+            }
+            var suppressionOfAllDynamicUiTabs = "";
+            if ((additionalParameters.exposeGeneTableOnDynamicUi === "0") && (additionalParameters.exposeVariantTableOfDynamicUi === "0")){
+                suppressionOfAllDynamicUiTabs = "display: none";
+            }
+
             exposeDynamicUiIndicator.push(
                 {
+                    suppressionOfRange:suppressionOfRange,
+                    suppressionOfGeneTable:suppressionOfGeneTable,
+                    suppressionOfVariantTable:suppressionOfVariantTable,
+                    suppressionOfAllDynamicUiTabs:suppressionOfAllDynamicUiTabs,
                     generalizedInputId:additionalParameters.generalizedInputId,
                     generalizedGoButtonId:additionalParameters.generalizedGoButtonId,
                     geneExtentBegin:additionalParameters.geneExtentBegin,

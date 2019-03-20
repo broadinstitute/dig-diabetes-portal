@@ -160,10 +160,8 @@ digawsqanewKB_fed_dedicated_EBIv2 = new ServerBean("Dedicated EBI QA fed KB - Us
 
 
 // this will be your default
-
 defaultRestServer = digawsdevWorkflowKBrevised
-//defaultRestServer = digdevlocalServer
-//defaultRestServer = digawsdevWorkflowKB
+
 
 
 
@@ -646,8 +644,12 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                 0, // expose the data set hierarchy in the sunburst visualization on the data page
                                                 0, // expose the old school variant and association table.  Potentially useful for debugging
                                                 0, // expose the IGV interface in its own accordion section
-                                                0,  // expose an accordion section with the burden test on the gene page
-                                                0 ), // expose the 'genes in region' tab on the gene page
+                                                0, // expose an accordion section with the burden test on the gene page
+                                                0, // expose the 'genes in region' tab on the gene page
+                                                0, // expose the region adjuster for the gene page
+                                                0, // expose the gene table on the dynamic UI
+                                                0  // expose the variant table on the dynamic UI
+                                            ),
                                   new PortalVersionBean("stroke",
                                                           "Stroke",
                                                           "mdv75",
@@ -694,7 +696,10 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0, // expose the old school variant and association table.  Potentially useful for debugging
                                           0, // expose the IGV interface in its own accordion section
                                           0,  // expose an accordion section with the burden test on the gene page
-                                          0  // expose the 'genes in region' tab on the gene page
+                                          0,  // expose the 'genes in region' tab on the gene page
+                                          0, // expose the region adjuster for the gene page
+                                          0, // expose the gene table on the dynamic UI
+                                          0  // expose the variant table on the dynamic UI
                                   ),
                                   new PortalVersionBean("mi",
                                                           "Myocardial Infarction",
@@ -743,7 +748,10 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0, // expose the old school variant and association table.  Potentially useful for debugging
                                           0, // expose the IGV interface in its own accordion section
                                           0,  // expose an accordion section with the burden test on the gene page
-                                          0  // expose the 'genes in region' tab on the gene page
+                                          0,  // expose the 'genes in region' tab on the gene page
+                                          0, // expose the region adjuster for the gene page
+                                          0, // expose the gene table on the dynamic UI
+                                          0  // expose the variant table on the dynamic UI
                                   ),
                                   new PortalVersionBean("ibd",
                                           //"Inflammatory Bowel Disease",
@@ -795,7 +803,10 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0, // expose the old school variant and association table.  Potentially useful for debugging
                                           0, // expose the IGV interface in its own accordion section
                                           0,  // expose an accordion section with the burden test on the gene page
-                                          1  // expose the 'genes in region' tab on the gene page
+                                          1,  // expose the 'genes in region' tab on the gene page
+                                          0, // expose the region adjuster for the gene page
+                                          0, // expose the gene table on the dynamic UI
+                                          0  // expose the variant table on the dynamic UI
                                   ),
                                   new PortalVersionBean("epilepsy",
                                           "Epilepsy",
@@ -844,7 +855,10 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0, // expose the old school variant and association table.  Potentially useful for debugging
                                           0, // expose the IGV interface in its own accordion section
                                           0,  // expose an accordion section with the burden test on the gene page
-                                          0  // expose the 'genes in region' tab on the gene page
+                                          0,  // expose the 'genes in region' tab on the gene page
+                                          0, // expose the region adjuster for the gene page
+                                          0, // expose the gene table on the dynamic UI
+                                          0  // expose the variant table on the dynamic UI
                                   ),
                                   new PortalVersionBean("sleep",
                                           "Sleep",
@@ -892,7 +906,10 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0, // expose the old school variant and association table.  Potentially useful for debugging
                                           0, // expose the IGV interface in its own accordion section
                                           0,  // expose an accordion section with the burden test on the gene page
-                                          0  // expose the 'genes in region' tab on the gene page
+                                          0,  // expose the 'genes in region' tab on the gene page
+                                          0, // expose the region adjuster for the gene page
+                                          0, // expose the gene table on the dynamic UI
+                                          0  // expose the variant table on the dynamic UI
                                   )
 ]
 
