@@ -24,6 +24,8 @@ div.genePosition{
     font-size: 11px;
 }
 
+
+
 </style>
 
 <script id="genomeBrowserTemplate"  type="x-tmpl-mustache">
@@ -694,47 +696,75 @@ div.genePosition{
                                         </div>
                                     </div>
                                 </div>
+
+                                <style>
+
+                                #dynamicGeneHolder > div.row { background-color: #fff !important; border: none !important; }
+                                div.datatable-control-box { float: right; padding: 10px 10px 15px 0px; }
+                                div.datatable-transpose-control, div.datatable-cell-color-control, div.datatable-zoom-control { float: left; padding-left: 15px; }
+                                div.datatable-transpose-control div.tool-label, div.datatable-cell-color-control div.tool-label, div.datatable-zoom-control div.tool-label { font-size: 12px; color: #666; text-align: center; padding-bottom: 5px; padding-bottom: 5px; }
+
+                                div.datatable-transpose-control button.btn.btn-secondary, div.datatable-cell-color-control button.btn.btn-secondary, .datatable-zoom-control button.btn.btn-secondary { padding: 5px 20px 5px 20px; font-size: 0.88em; border-radius: 20px; border:solid 1px #ccc; }
+
+                                div.datatable-transpose-control button:focus, div.datatable-cell-color-control button:focus, .datatable-zoom-control button:focus { outline:0; }
+
+                                .datatable-zoom-control button.btn.btn-secondary { padding: 5px 8px 5px 8px; }
+
+                                div.datatable-cell-color-control button.first-btn { border-top-right-radius: 0 !important; border-bottom-right-radius: 0 !important; border-right: }
+
+                                div.datatable-cell-color-control button.last-btn { border-top-left-radius: 0 !important; border-bottom-left-radius: 0 !important; }
+
+                                div.datatable-cell-color-control button.significance { background-color: #99d6ff }
+                                div.datatable-cell-color-control button.tissues { background-color: #ffdf80 }
+                                div.datatable-cell-color-control button.active { -moz-box-shadow: inset 1px 1px 4px #666666; -webkit-box-shadow: inset 1px 1px 4px #666666; box-shadow: inset 1px 1px 4px #666666; }
+
+                                .variantTableLabels { margin: 0 2px !important; }
+                                #dynamicGeneHolder div.dt-buttons { margin-top: 10px !important }
+
+                                #dynamicGeneHolder .paginate_button.current { padding: 5px 20px 5px 20px; font-size: 0.88em; border-radius: 20px; border:solid 1px #ccc; }
+
+                                table.combinedGeneTableHolder a:hover { cursor:pointer; }
+
+                                #highImpactTemplateHolder_wrapper.dataTables_wrapper { padding: 20px 20px 20px 20px; }
+                                #highImpactTemplateHolder_wrapper div.dt-buttons { margin-bottom: 15px; }
+
+                                </style>
+
                                 <div class="row">
-                                    <div class="col-sm-1">
-                                        <button type="button" class="btn btn-link transpose" title="click to transpose table"
-                                        style="font-size: 32pt"
-                                        onclick = "mpgSoftware.dynamicUi.transposeThisTable('table.combinedGeneTableHolder')">
-                                            T
-                                        </button>
-                                    </div>
-                                    <div class="col-sm-2">
-
-                                    </div>
-                                   <div class="col-sm-1">
-                                            <button type="button" class="btn btn-secondary" aria-label="click to organize by greatest significance"  title="click to organize by greatest significance"
-                                                style="background-color: #99d6ff" onclick="">Significance
+                                    <div class="col-sm-12">
+                                    <div class="datatable-control-box">
+                                        <div class="datatable-transpose-control">
+                                            <div class="tool-label">Transpose table</div>
+                                            <button class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table"
+                                            onclick = "mpgSoftware.dynamicUi.transposeThisTable('table.combinedGeneTableHolder')">
+                                                Transpose
                                             </button>
-                                    </div>
-                                   <div class="col-sm-1">
+                                        </div>
+                                        <div class="datatable-cell-color-control">
+                                            <div class="tool-label">Cell color</div>
 
-                                    </div>
-                                    <div class="col-sm-1">
-                                            <button type="button" class="btn btn-secondary" aria-label="click to organized by number of associated tissues"  title="click to organized by number of associated tissues"
-                                                style="background-color: #ffdf80"   onclick="">Tissues
+                                            <button type="button" class="btn btn-secondary first-btn significance" aria-label="click to organize by greatest significance"  title="click to organize by greatest significance" onclick="setColorButtonActive(event,['tissues']);">Significance
                                             </button>
-                                    </div>
-                                   <div class="col-sm-4">
 
-                                    </div>
-                                    <div class="col-sm-2">
-                                            <div class="datatable-zoom-control">
-                                            <div class="btn-vert-block" style="margin-top: 30px">
-                                            <button type="button" class="btn btn-default" aria-label="Zoom in"  title="click to zoom in"
-                                                onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicGeneHolder',true)">
-                                                <span class="glyphicon glyphicon-plus" aria-hidden="true"
-                                                onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicGeneHolder',true)"></span>
+                                            <button type="button" class="btn btn-secondary last-btn tissues" aria-label="click to organized by number of associated tissues"  title="click to organized by number of associated tissues" onclick="setColorButtonActive(event,['significance']);">Tissues
                                             </button>
-                                            <button type="button" class="btn btn-default" aria-label="Zoom out"  title="click to zoom out"
+                                        </div>
+
+
+                                        <div class="datatable-zoom-control">
+                                            <div class="tool-label">Zoom</div>
+                                            <button type="button" class="btn btn-default btn-secondary" aria-label="Zoom out"  title="click to zoom out"
                                                 onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicGeneHolder',false)">
                                                 <span class="glyphicon glyphicon-minus" aria-hidden="true"
                                                 onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicGeneHolder',false)"></span>
                                             </button>
-                                            </div>
+                                            <button type="button" class="btn btn-default btn-secondary" aria-label="Zoom in"  title="click to zoom in"
+                                                onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicGeneHolder',true)">
+                                                <span class="glyphicon glyphicon-plus" aria-hidden="true"
+                                                onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicGeneHolder',true)"></span>
+                                            </button>
+
+                                        </div>
                                         </div>
                                     </div>
                                 </div>

@@ -427,6 +427,24 @@
 
             })
 
+            //function for Ben's new UI
+
+            var setColorButtonActive = function(event,DEACTIVATE) {
+                if ($(event.target).hasClass("active")) {
+                    $(event.target).removeClass("active");
+                } else {
+                    $(event.target).addClass("active");
+                }
+
+                $.each(DEACTIVATE, function(index,value) {
+                    var className = "." + value;
+                    var idName = "#" + value;
+
+                    if ($(className).length) { $(className).removeClass("active") }
+                    if ($(idName).length) { $(className).removeClass("active") }
+                })
+            }
+
         </script>
 
     </head>
