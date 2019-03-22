@@ -508,19 +508,24 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getAnnotationsFromModForGenesTable":
                 functionToLaunchDataRetrieval = function () {
-                    resetAccumulatorObject("modNameArray");
-                    var geneNameArray = _.map(getAccumulatorObject("geneNameArray"), function (o) {
-                        return {gene: o.name}
-                    });
-                    retrieveRemotedContextInformation(buildRemoteContextArray({
-                        name: "getAnnotationsFromModForGenesTable",
-                        retrieveDataUrl: additionalParameters.retrieveModDataUrl,
-                        dataForCall: geneNameArray,
-                        processEachRecord: processRecordsFromMod,
-                        displayRefinedContextFunction: displayFunction,
-                        placeToDisplayData: displayLocation,
-                        actionId: nextActionId
-                    }));
+
+                    if (accumulatorObjectFieldEmpty("geneNameArray")) {
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getAnnotationsFromModForGenesTable"});
+                        actionToUndertake();
+                    } else {
+                        var geneNameArray = _.map(getAccumulatorObject("geneNameArray"), function (o) {
+                            return {gene: o.name}
+                        });
+                        retrieveRemotedContextInformation(buildRemoteContextArray({
+                            name: "getAnnotationsFromModForGenesTable",
+                            retrieveDataUrl: additionalParameters.retrieveModDataUrl,
+                            dataForCall: geneNameArray,
+                            processEachRecord: processRecordsFromMod,
+                            displayRefinedContextFunction: displayFunction,
+                            placeToDisplayData: displayLocation,
+                            actionId: nextActionId
+                        }));
+                    }
                 };
                 break;
 
@@ -799,8 +804,8 @@ mpgSoftware.dynamicUi = (function () {
      */
     var processRecordsFromMod = function (data) {
         var returnObject = {
-            rawData: [],
             uniqueGenes: [],
+            uniqueGeneDescription: [],
             uniqueMods: []
         };
         var originalGene = data.gene;
@@ -819,12 +824,16 @@ mpgSoftware.dynamicUi = (function () {
                 if (!returnObject.uniqueGenes.includes(oneRec.Human_gene)) {
                     returnObject.uniqueGenes.push(oneRec.Human_gene);
                 }
-                ;
+
                 if (!returnObject.uniqueMods.includes(oneRec.Term)) {
                     returnObject.uniqueMods.push(oneRec.Term);
                 }
-                ;
-                returnObject.rawData.push(oneRec);
+
+                if (!returnObject.uniqueGeneDescription.includes(oneRec.Name)) {
+                    returnObject.uniqueGeneDescription.push(oneRec.Name);
+                }
+
+                //returnObject.rawData.push(oneRec);
             });
             // now let's add them to our global structure.  First, find any record for this gene that we might already have
             var geneIndex = _.findIndex(getAccumulatorObject("modNameArray"), {geneName: originalGene});
@@ -832,17 +841,9 @@ mpgSoftware.dynamicUi = (function () {
                 var modNameArray = getAccumulatorObject("modNameArray");
                 modNameArray.push({
                     geneName: originalGene,
-                    mods: returnObject.uniqueMods
+                    mods: returnObject
                 });
                 setAccumulatorObject("modNameArray", modNameArray);
-            } else { // we already know about this tissue, but have we seen this gene associated with it before?
-                alert('this never happens, I think');
-                var tissueRecord = getAccumulatorObject("modNameArray")[geneIndex];
-                _.forEach(uniqueMods, function (oneMod) {
-                    if (!tissueRecord.mods.includes(oneMod)) {
-                        tissueRecord.mods.push(oneMod);
-                    }
-                });
             }
         }
         return returnObject;
@@ -856,9 +857,11 @@ mpgSoftware.dynamicUi = (function () {
 
             var recordToDisplay = {
                 mods: [],
+                humanGene: geneWithMods.mods.uniqueGenes,
+                geneDescription: geneWithMods.mods.uniqueGeneDescription,
                 geneName: geneWithMods.geneName
             };
-            _.forEach(geneWithMods.mods, function (eachMod) {
+            _.forEach(geneWithMods.mods.uniqueMods, function (eachMod) {
                 recordToDisplay.mods.push({modName: eachMod})
             });
             returnObject.geneModTerms.push(recordToDisplay);
@@ -872,28 +875,46 @@ mpgSoftware.dynamicUi = (function () {
         if (returnObject.genesExist()) {
             intermediateDataStructure.rowsToAdd.push({
                 category: 'Annotation',
+                displayCategory: 'Annotation',
                 subcategory: 'MOD',
+                displaySubcategory: 'MOD',
                 columnCells: []
             });
-            _.forEach(returnObject.uniqueGenes, function (uniqueGene) {
-                intermediateDataStructure.headerNames.push(uniqueGene.name);
-                intermediateDataStructure.headerContents.push(Mustache.render($("#dynamicGeneTableHeader")[0].innerHTML, uniqueGene));
-                intermediateDataStructure.headers.push({
-                    name: uniqueGene.name,
-                    contents: Mustache.render($("#dynamicGeneTableHeader")[0].innerHTML, uniqueGene)
+            // set up the headers, and give us an empty row of column cells
+            var headerNames = [];
+            if (accumulatorObjectFieldEmpty("geneNameArray")) {
+                console.log("We always have to have a record of the current gene names in depict display. We have a problem.");
+            } else {
+                headerNames  = _.map(getAccumulatorObject("geneNameArray"),'name');
+                _.forEach(getAccumulatorObject("geneNameArray"), function (oneRecord) {
+                    intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
+                        Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML),"header"));
                 });
-                intermediateDataStructure.rowsToAdd[0].columnCells.push("");
-            });
-
+            }
         }
-        if (( typeof returnObject.geneModsExist !== 'undefined') && ( returnObject.geneModsExist())) {
+        if (( typeof returnObject.geneModTerms !== 'undefined') && ( returnObject.geneModTerms.length>0 )) {
 
             _.forEach(returnObject.geneModTerms, function (recordsPerGene) {
-                var indexOfColumn = _.indexOf(intermediateDataStructure.headerNames, recordsPerGene.geneName);
+                var indexOfColumn = _.indexOf(headerNames, recordsPerGene.geneName);
                 if (indexOfColumn === -1) {
                     console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
                 } else {
-                    intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = Mustache.render($("#dynamicGeneTableBody")[0].innerHTML, recordsPerGene);
+                    if ((recordsPerGene.mods.length === 0)) {
+                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
+                            Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML), "tissue specific");
+                    } else {
+                        var renderData = {
+                            numberOfRecords:recordsPerGene.mods.length,
+                            tissueCategoryNumber:categorizeTissueNumbers( recordsPerGene.mods.length ),
+                            recordsExist:(recordsPerGene.mods.length)?[1]:[],
+                            geneName:recordsPerGene.geneName,
+                            humanGene:recordsPerGene.humanGene,
+                            geneDescription:recordsPerGene.geneDescription,
+                            modTerms: _.sortBy(recordsPerGene.mods,["modName"])
+                        };
+                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
+                            Mustache.render($("#dynamicGeneTableModBody")[0].innerHTML, renderData)," tissue specific");
+                    }
                 }
             });
             intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
@@ -1596,14 +1617,6 @@ mpgSoftware.dynamicUi = (function () {
             intermediateDataStructure,
             true,
             'geneTableGeneHeaders');
-
-        //_.forEach(returnObject.genesByAbc, function (value) {
-        //    $('#tissues_' + value.geneName).data('allUniqueTissues', value.abcTissuesVector());
-        //    $('#tissues_' + value.geneName).data('sourceByTissue', value.sourceByTissue());
-        //    $('#tissues_' + value.geneName).data('regionStart', value.start_pos);
-        //    $('#tissues_' + value.geneName).data('regionEnd', value.stop_pos);
-        //    $('#tissues_' + value.geneName).data('geneName', value.geneName);
-        //});
 
     };
 
@@ -3148,6 +3161,8 @@ mpgSoftware.dynamicUi = (function () {
             resetAccumulatorObject("abcAggregatedPerVariant");
             resetAccumulatorObject("sharedTable_table.combinedGeneTableHolder");
 
+            resetAccumulatorObject("modNameArray");
+
 
             destroySharedTable('table.combinedGeneTableHolder');
 
@@ -3164,11 +3179,11 @@ mpgSoftware.dynamicUi = (function () {
             arrayOfRoutinesToUndertake.push( actionContainer('getInformationFromDepictForGenesTable',
                 actionDefaultFollowUp("getInformationFromDepictForGenesTable")));
 
-            //////// arrayOfRoutinesToUndertake.push( actionContainer('getAnnotationsFromModForGenesTable',
-            ////////     actionDefaultFollowUp("getAnnotationsFromModForGenesTable")));
+            arrayOfRoutinesToUndertake.push( actionContainer('getAnnotationsFromModForGenesTable',
+                 actionDefaultFollowUp("getAnnotationsFromModForGenesTable")));
 
-            arrayOfRoutinesToUndertake.push( actionContainer("getTissuesFromAbcForGenesTable",
-                actionDefaultFollowUp("getTissuesFromAbcForGenesTable")));
+            //arrayOfRoutinesToUndertake.push( actionContainer("getTissuesFromAbcForGenesTable",
+            //    actionDefaultFollowUp("getTissuesFromAbcForGenesTable")));
 
             _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
 
@@ -4464,6 +4479,13 @@ var destroySharedTable = function (whereTheTableGoes) {
     };
 
 
+    /***
+     * helper function for showAttachedData.  This one creates a nice big D3 graphic.  I built it for ABC data, but it should work
+     * equally well whenever you have multiple regions that influence the expression of a gene
+     *
+     * @param event
+     * @returns {string}
+     */
     var createOutOfRegionGraphic = function (event){
         var dataTarget = $(event.target).attr('data-target').substring(1).trim();
         if (dataTarget.indexOf("tissues_")>=0){
@@ -4474,27 +4496,38 @@ var destroySharedTable = function (whereTheTableGoes) {
         return "";
     };
 
-
+    /***
+     * helper function for showAttachedData
+     *
+     * @param event
+     * @returns {*|jQuery}
+     */
     var extractStraightFromTarget = function (event){
         var dataTarget = $(event.target).attr('data-target').substring(1).trim();
         return $("#"+dataTarget).html();
     };
 
-
+    /***
+     * click handler for the cells in the dynamic UI tables.  Note that I pass in a function as an argument to help showAttachedData
+     * to provide exactly the sort of drill down display we need
+     *
+     * @param event
+     * @param title
+     * @param functionToGenerateContents
+     */
     var showAttachedData = function( event, title, functionToGenerateContents) {
         var dataTarget = $(event.target).attr('data-target').substring(1).trim();
         var uniqueId  = dataTarget+'_uniquifier';
 
 
-        if($(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).length) {
-            //mpgSoftware.dynamicUi.removeWrapper(event);
-            console.log('a');
+        if($(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).length) { // if we already have a window then get rid of it.
+            $(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).remove();
         } else {
             var dataWrapper = '<div class="dk-new-ui-data-wrapper wrapper-'+dataTarget+'"><div class="closer-wrapper" style="text-align: center;"><spna style="">'+title+
                 '</spna><span style="float:right; font-size: 12px; color: #888;" onclick="mpgSoftware.dynamicUi.removeWrapper(event);" class="glyphicon glyphicon-remove" aria-hidden="true">\n' +
                 '</span></div><div class="content-wrapper" id="'+uniqueId+'"></div></div>';
-            $('body').append(dataWrapper);
-            var dataTargetContent = functionToGenerateContents(event);
+            $('body').append(dataWrapper);  // add the div to the DOM
+            var dataTargetContent = functionToGenerateContents(event);  // either gather data, and append it, or else insert it right into the div.
             $('#'+uniqueId).append(dataTargetContent);
 
             // we have two kinds of drill down graphics at this point, one of which is a table and one of which is a D3 graphic.  Let's look for
@@ -4509,13 +4542,8 @@ var destroySharedTable = function (whereTheTableGoes) {
                 contentHeight = (contentHeight > 300)? 300 : contentHeight + 25;
             } else {
                 contentWidth = holderElement.find("svg").width()+25;
-                contentHeight = holderElement.find("svg").height()+75;
+                contentHeight = holderElement.find("svg").height()+95;
             }
-            //var contentWidth = $(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).find("table").width();
-            //var contentHeight = $(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).find("table").height();
-            //
-            //contentWidth = (contentWidth > 350)? 350 : contentWidth + 25;
-            //contentHeight = (contentHeight > 300)? 300 : contentHeight + 25;
 
             var divTop = $(event.target).offset().top;
             var divLeft = $(event.target).offset().left + $(event.target).width();
@@ -4530,12 +4558,36 @@ var destroySharedTable = function (whereTheTableGoes) {
 
     };
 
+
     var removeWrapper = function ( event ) {
         $(event.target).parent().parent().remove();
     };
 
 
+    var setColorButtonActive = function(event,DEACTIVATE) {
+        if ($(event.target).hasClass("active")) {
+            $(event.target).removeClass("active");
+        } else {
+            $(event.target).addClass("active");
+        }
 
+        $.each(DEACTIVATE, function(index,value) {
+            var className = "." + value;
+            var idName = "#" + value;
+
+            if ($(className).length) { $("button."+className).removeClass("active") }
+            if ($(idName).length) { $("button."+className).removeClass("active") }
+        })
+    }
+
+
+    /***
+     * provide a category number which we will use to decide what class will use for coloring.  In this case
+     * we are coloring by the number of tissues.
+     *
+     * @param numberOfTissues
+     * @returns {number}
+     */
     var categorizeTissueNumbers = function ( numberOfTissues ) {
         var returnValue = 0;
         if ((numberOfTissues>0) &&(numberOfTissues<=2)) {
@@ -4562,6 +4614,7 @@ var destroySharedTable = function (whereTheTableGoes) {
     return {
         extractStraightFromTarget:extractStraightFromTarget,
         showAttachedData:showAttachedData,
+        setColorButtonActive: setColorButtonActive,
         removeWrapper:removeWrapper,
         createOutOfRegionGraphic:createOutOfRegionGraphic,
         transposeThisTable:transposeThisTable,

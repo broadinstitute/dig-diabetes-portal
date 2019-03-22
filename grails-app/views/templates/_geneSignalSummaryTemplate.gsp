@@ -743,10 +743,12 @@ div.genePosition{
                                         <div class="datatable-cell-color-control">
                                             <div class="tool-label">Cell color</div>
 
-                                            <button type="button" class="btn btn-secondary first-btn significance" aria-label="click to organize by greatest significance"  title="click to organize by greatest significance" onclick="setColorButtonActive(event,['tissues']);">Significance
+                                            <button type="button" class="btn btn-secondary first-btn significance" aria-label="click to organize by greatest significance"
+                                            title="click to organize by greatest significance" onclick="mpgSoftware.dynamicUi.setColorButtonActive(event,['tissues']);">Significance
                                             </button>
 
-                                            <button type="button" class="btn btn-secondary last-btn tissues" aria-label="click to organized by number of associated tissues"  title="click to organized by number of associated tissues" onclick="setColorButtonActive(event,['significance']);">Tissues
+                                            <button type="button" class="btn btn-secondary last-btn tissues" aria-label="click to organized by number of associated tissues"
+                                            title="click to organized by number of associated tissues" onclick="mpgSoftware.dynamicUi.setColorButtonActive(event,['significance']);">Tissues
                                             </button>
                                         </div>
 

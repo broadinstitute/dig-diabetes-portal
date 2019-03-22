@@ -219,19 +219,53 @@
 
 </script>
 
-<script id="dynamicGeneTableBody"  type="x-tmpl-mustache">
-
-
-            {{#mods}}
-                <div>
-                    {{modName}}
-                </div>
-            {{/mods}}
 
 
 
-
+<script id="dynamicGeneTableModBody"  type="x-tmpl-mustache">
+             <div sortField={{numberOfRecords}} class="tissueCategory_{{tissueCategoryNumber}}">
+               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'MOD matches for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander" data-target="#mod_data_{{geneName}}">records={{numberOfRecords}}</a>
+               <div  class="collapse openModInGeneTable" id="mod_data_{{geneName}}">
+                    {{#recordsExist}}
+                    {{#geneName}}
+                     <div> {{.}}</div>
+                    {{/geneName}}
+                    {{#geneDescription}}
+                       <div> {{.}}</div>
+                    {{/geneDescription}}
+                    <table class="openModInGeneTable" style="border: 0">
+                     <thead>
+                      <tr role="row">
+                        <th style="border-top: 0;">term</th>
+                      </tr>
+                     </thead>
+                     <tbody>
+                    {{/recordsExist}}
+                    {{#modTerms}}
+                       <tr role="row">
+                           <td style="padding: 3px">{{modName}}</td>
+                       </tr>
+                    {{/modTerms}}
+                    {{#recordsExist}}
+                     </tbody>
+                    </table>
+                    {{/recordsExist}}
+               </div>
+            </div>
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -699,8 +733,6 @@
 
 
 <script id="depictGeneTableBody"  type="x-tmpl-mustache">
-
-
              <div sortField={{numberOfRecords}} class="tissueCategory_{{tissueCategoryNumber}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'DEPICT predictions for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander" data-target="#depict_data_{{geneName}}">records={{numberOfRecords}}</a>
                <div  class="collapse openDepictInGeneTable" id="depict_data_{{geneName}}">
@@ -726,9 +758,6 @@
                     {{/recordsExist}}
                </div>
             </div>
-
-
-
 </script>
 
 
