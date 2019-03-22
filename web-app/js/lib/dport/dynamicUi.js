@@ -3429,6 +3429,7 @@ mpgSoftware.dynamicUi = (function () {
                 case 'DEPICT':
                 case 'MetaXcan':
                 case 'ABC':
+                case 'MOD':
                     var x = parseInt($(a).attr('sortField'));
                     if (isNaN(x)){
                         x = parseInt($(a).attr('subSortField'));
@@ -3557,6 +3558,12 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 };
                 break;
             case 'DEPICT':
+                currentSortRequestObject = {
+                    'currentSort':oneClass,
+                    'table':'table.combinedGeneTableHolder'
+                };
+                break;
+            case 'MOD':
                 currentSortRequestObject = {
                     'currentSort':oneClass,
                     'table':'table.combinedGeneTableHolder'

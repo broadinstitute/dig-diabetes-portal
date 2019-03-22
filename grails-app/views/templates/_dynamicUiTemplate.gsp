@@ -40,7 +40,7 @@
 
 
 <script id="emptyRecord"  type="x-tmpl-mustache">
-     <div class="initialLinearIndex_{{initialLinearIndex}} {{otherClasses}}">
+     <div class="initialLinearIndex_{{initialLinearIndex}} {{otherClasses}}" sortField="A">
      </div>
 </script>
 
@@ -666,7 +666,7 @@
 %{--Called from displayGenesFromAbc--}%
 <script id="dynamicGeneTableHeaderV2"  type="x-tmpl-mustache">
 
-            <div sortStrategy="alphabetical"  sortTerm="{{name1}}" class="geneName text-center">
+            <div sortStrategy="alphabetical" sortField="-1"  sortTerm="{{name1}}" class="geneName text-center">
              {{name2}}</div>
              <div class="genePosition text-center">
              {{chromosome}}: {{addrStart}}-{{addrEnd}}
