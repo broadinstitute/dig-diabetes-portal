@@ -640,7 +640,7 @@ class RegionInfoController {
         int endPosition = -1
         String chromosome = ""
         boolean looksOkay = true
-        JSONArray jsonReturn
+        JSONObject jsonObject
         def slurper = new JsonSlurper()
 
         if (params.gene) {
@@ -675,7 +675,48 @@ class RegionInfoController {
         }
 
         if (looksOkay){
-            jsonReturn = restServerService.gatherDepictData( gene, phenotype, startPosition, endPosition, chromosome )
+            jsonObject = restServerService.gatherDepictData( gene, phenotype, startPosition, endPosition, chromosome )
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+            jsonObject =  slurper.parseText(proposedJsonString) as JSONArray;
+        }
+
+        render(status: 200, contentType: "application/json") {jsonObject}
+        return
+    }
+
+
+
+
+
+    def retrieveDepictGeneSetData() {
+        String gene = ""
+        String phenotype = ""
+        float pValueThreshold = 0.0005
+        boolean looksOkay = true
+        JSONArray jsonReturn
+        def slurper = new JsonSlurper()
+
+        if (params.gene) {
+            gene = params.gene
+        }
+
+        if (params.phenotype) {
+            phenotype = params.phenotype
+        }
+
+        if (params.pValueThreshold) {
+            try {
+                pValueThreshold = Double.parseDouble(params.pValueThreshold).toFloat()
+            } catch (Exception e) {
+                looksOkay = false
+                e.printStackTrace()
+                log.error("retrieveAbcData:failed to convert pValueThreshold value=${params.pValueThreshold}")
+            }
+        }
+
+        if (looksOkay){
+            jsonReturn = restServerService.gatherDepictGeneSetData( gene, phenotype, pValueThreshold )
         } else {
             String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
             jsonReturn =  slurper.parseText(proposedJsonString) as JSONArray;
@@ -684,6 +725,9 @@ class RegionInfoController {
         render(status: 200, contentType: "application/json") {jsonReturn}
         return
     }
+
+
+
 
 
 
@@ -824,12 +868,15 @@ class RegionInfoController {
     def retrieveModData() {
         String gene = ""
         boolean looksOkay = true
-        JSONObject jsonReturn
+        JSONObject jsonReturn = new JSONObject()
+
 
         if (params.gene) {
             gene = params.gene
         }
 
+        jsonReturn['gene']=gene
+        jsonReturn['records']=new JSONArray()
 
         if (looksOkay){
             jsonReturn = restServerService.gatherModsData( gene )

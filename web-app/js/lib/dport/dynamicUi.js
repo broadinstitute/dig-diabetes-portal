@@ -250,6 +250,10 @@ mpgSoftware.dynamicUi = (function () {
                 defaultFollowUp.placeToDisplayData = '#dynamicGeneHolder div.dynamicUiHolder';
                 break;
 
+            case "getDepictGeneSetForGenesTable":
+                defaultFollowUp.displayRefinedContextFunction = displayGeneSetFromDepict;
+                defaultFollowUp.placeToDisplayData = '#dynamicGeneHolder div.dynamicUiHolder';
+                break;
 
             case "getRecordsFromAbcForTissueTable":
                 defaultFollowUp.displayRefinedContextFunction = displayTissuesFromAbc;
@@ -700,6 +704,34 @@ mpgSoftware.dynamicUi = (function () {
                     }
                 };
                 break;
+
+            case "getDepictGeneSetForGenesTable":
+                functionToLaunchDataRetrieval = function () {
+                    if (accumulatorObjectFieldEmpty("geneNameArray")) {
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getDepictGeneSetForGenesTable"});
+                        actionToUndertake();
+                    } else {
+                        var phenotype = $('li.chosenPhenotype').attr('id');
+                        var dataForCall = _.map(getAccumulatorObject("geneNameArray"), function (o) {
+                            return {
+                                gene: o.name,
+                                phenotype: phenotype
+                            }
+                        });
+
+                        retrieveRemotedContextInformation(buildRemoteContextArray({
+                            name: "getDepictGeneSetForGenesTable",
+                            retrieveDataUrl: additionalParameters.retrieveDepictGeneSetUrl,
+                            dataForCall: dataForCall,
+                            processEachRecord: processRecordsFromDepictGeneSet,
+                            displayRefinedContextFunction: displayFunction,
+                            placeToDisplayData: displayLocation,
+                            actionId: nextActionId
+                        }));
+                    }
+                };
+                break;
+
             case "getDnaseGivenVariantList":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty("variantNameArray")) {
@@ -809,7 +841,8 @@ mpgSoftware.dynamicUi = (function () {
             uniqueMods: []
         };
         var originalGene = data.gene;
-        if (data.records.length === 0) {
+        if ( (data.records.length === 0) ||
+            (data.is_error )) {
             // no mods.  add an empty record for this gene to the global structure
             var modNameArray = getAccumulatorObject("modNameArray");
             modNameArray.push({geneName: originalGene, mods: []});
@@ -1243,6 +1276,20 @@ mpgSoftware.dynamicUi = (function () {
     };
 
 
+    var processRecordsFromDepictGeneSet = function (data) {
+
+        var depictGeneSet = getAccumulatorObject('depictGeneSetInfo');
+
+        _.forEach(data, function (oneRec) {
+
+            depictGeneSet.push(oneRec);
+
+        });
+
+        return depictGeneSet;
+    };
+
+
     var processRecordsFromQtl = function (data) {
         // build up an object to describe this
         var returnObject = {
@@ -1634,6 +1681,88 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
+
+    var displayGeneSetFromDepict = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+        var returnObject = createNewDisplayReturnObject();
+        var depictGeneSet = getAccumulatorObject('depictGeneSetInfo');
+        if (( typeof getAccumulatorObject("depictGeneSetInfo") !== 'undefined') &&
+            ( getAccumulatorObject("depictGeneSetInfo").length > 0 ) &&
+            ( typeof getAccumulatorObject("depictGeneSetInfo").data !== 'undefined') &&
+            ( getAccumulatorObject("depictGeneSetInfo").data.length > 0 ) ){
+            _.forEach(getAccumulatorObject("depictGeneSetInfo").data, function (informationForAPathway, index) {
+                depictGeneSet.push(informationForAPathway);
+            });
+
+        }
+
+        var intermediateDataStructure = new IntermediateDataStructure();
+
+        if (( typeof depictGeneSet !== 'undefined') && ( depictGeneSet.length > 0)) {
+            intermediateDataStructure.rowsToAdd.push({
+                category: 'Annotation',
+                displayCategory: 'Annotation',
+                subcategory: 'DEPICT gene set',
+                displaySubcategory: 'DEPICT gene set',
+                columnCells: []
+            });
+
+            // set up the headers, and give us an empty row of column cells
+            var headerNames = [];
+            if (accumulatorObjectFieldEmpty("geneNameArray")) {
+                console.log("We always have to have a record of the current gene names in depict gene set display. We have a problem.");
+            } else {
+                headerNames  = _.map(getAccumulatorObject("geneNameArray"),'name');
+                _.forEach(getAccumulatorObject("geneNameArray"), function (oneRecord) {
+                    intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
+                        Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML),"header"));
+                });
+            }
+
+
+            // set up the headers, and give us an empty row of column cells
+
+
+            // fill in all of the column cells
+            _.forEach(depictGeneSet, function (recordsPerGene) {
+                var indexOfColumn = _.indexOf(headerNames, recordsPerGene.gene);
+                recordsPerGene["recordsExist"] =  [];
+                if (indexOfColumn === -1) {
+                    console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
+                } else {
+                    recordsPerGene["numberOfRecords"] =  depictGeneSet.length;
+                    if ((recordsPerGene.gene_list === 0)) {
+                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
+                            Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML), "tissue specific");
+                    } else {
+                        recordsPerGene["recordsExist"] =  [1];
+                        recordsPerGene["pvalue_str"] =  UTILS.realNumberFormatter(''+recordsPerGene.pvalue);
+                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
+                            Mustache.render($("#depictGeneSetBody")[0].innerHTML, recordsPerGene),"tissue specific");
+                    }
+
+                }
+            });
+            intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
+        }
+
+
+        prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
+            '#dynamicAbcGeneTable',
+            returnObject,
+            clearBeforeStarting,
+            intermediateDataStructure,
+            true,
+            'geneTableGeneHeaders');
+
+    };
+
+
+
+
+
+
+
+
     var displayGenePhenotypeAssociations = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
         var returnObject = createNewDisplayReturnObject();
 
@@ -1682,7 +1811,7 @@ mpgSoftware.dynamicUi = (function () {
                             Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML), "tissue specific");
                     } else {
                         var tissueRecords = _.map(_.sortBy(recordsPerGene.tissues,['value']),function(tissueRecord){
-                            return {  tissueName: tissueRecord.tissueName,
+                            return {  tissueName: tissueRecord.tissue,
                                 value: UTILS.realNumberFormatter(""+tissueRecord.value),
                                 numericalValue: tissueRecord.value };
                         });
@@ -2852,7 +2981,11 @@ mpgSoftware.dynamicUi = (function () {
         var objectContainingRetrievedRecords = [];
         var promiseArray = [];
 
+
+
         _.forEach(collectionOfRemoteCallingParameters.multiples,function(eachRemoteCallingParameter){
+            var rememberUrl = eachRemoteCallingParameter.retrieveDataUrl;
+            var rememberData = eachRemoteCallingParameter.dataForCall;
             promiseArray.push(
                 $.ajax({
                     cache: false,
@@ -2866,6 +2999,7 @@ mpgSoftware.dynamicUi = (function () {
 
                 }).fail(function (jqXHR, textStatus, errorThrown) {
                     loading.hide();
+                    alert("Ajax call failed, url="+rememberUrl+", data="+rememberData+".");
                     core.errorReporter(jqXHR, errorThrown)
                 })
             );
@@ -2893,7 +3027,7 @@ mpgSoftware.dynamicUi = (function () {
 
 
         }, function(e) {
-            alert("Ajax call failed");
+            alert("Ajax call failed.");
         });
 
     };
@@ -3199,6 +3333,9 @@ mpgSoftware.dynamicUi = (function () {
 
             //arrayOfRoutinesToUndertake.push( actionContainer("getTissuesFromAbcForGenesTable",
             //    actionDefaultFollowUp("getTissuesFromAbcForGenesTable")));
+
+            arrayOfRoutinesToUndertake.push( actionContainer('getDepictGeneSetForGenesTable',
+                actionDefaultFollowUp("getDepictGeneSetForGenesTable")));
 
             _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
 
@@ -3515,6 +3652,7 @@ mpgSoftware.dynamicUi = (function () {
                 default:
                     break;
             }
+            alert('currentSort='+currentSort+'.');
             var x = UTILS.extractAnchorTextAsInteger(a);
             var y = UTILS.extractAnchorTextAsInteger(b);
             return ((x < y) ? -1 : ((x > y) ? 1 : 0));
@@ -4092,11 +4230,11 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 // }
             });
             $(whereTheTableGoes).dataTable().fnAddData(_.map(rowDescriber,function(o){return o.content}));
-            $('div.tissueCategory_1').parents('td').css('background','#FF0033');
-            $('div.tissueCategory_2').parents('td').css('background','#FF3333');
-            $('div.tissueCategory_3').parents('td').css('background','#FF9933');
-            $('div.tissueCategory_4').parents('td').css('background','#FFCC33');
-            $('div.tissueCategory_5').parents('td').css('background','#FFFF33');
+            // $('div.tissueCategory_1').parents('td').css('background','#FF0033');
+            // $('div.tissueCategory_2').parents('td').css('background','#FF3333');
+            // $('div.tissueCategory_3').parents('td').css('background','#FF9933');
+            // $('div.tissueCategory_4').parents('td').css('background','#FFCC33');
+            // $('div.tissueCategory_5').parents('td').css('background','#FFFF33');
 
         });
         return rememberCategories;

@@ -67,7 +67,8 @@ class RestServerService {
     private String GET_EQTLS_FOR_A_VARIANT_LIST_URL= "testcalls/ledge/eqtl/object"
     private String GET_VARIANT_ECAVIAR_COLOCALIZATION_FROM_URL= "testcalls/ecaviar/colocalization/object"
     private String GET_REGION_FROM_ABC_URL= "testcalls/abc/region/object"
-    private String GET_GENE_BASED_RECORDS_FROM_DEPICT_URL= "testcalls/depict/region/object"
+    private String GET_GENE_BASED_RECORDS_FROM_DEPICT_URL= "testcalls/depict/genepathway/object"
+    private String GET_GENESET_RECORDS_FROM_DEPICT_URL= "testcalls/depict/region/object"
     private String GET_DNASE_RECORDS_URL= "testcalls/region/dnase/object"
     private String GET_H3K27AC_RECORDS_URL= "testcalls/region/h3k27ac/object"
     private String GET_BOTTOM_LINE_RESULTS_URL= "graph/meta/variant/object"
@@ -2430,7 +2431,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
-    public JSONArray gatherDepictData( String gene, String phenotype,
+    public JSONObject gatherDepictData( String gene, String phenotype,
                                     int  startPosition, int  endPosition, String chromosome ) {
         List<String> specifyRequestList = []
         if ((gene) && (gene.length() > 0)) {
@@ -2452,9 +2453,32 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
         String rawReturnFromApi =  getRestCall("${GET_GENE_BASED_RECORDS_FROM_DEPICT_URL}?${specifyRequestList.join("&")}".toString())
         JsonSlurper slurper = new JsonSlurper()
+        JSONObject jsonObject = slurper.parseText(rawReturnFromApi)
+        return jsonObject
+    }
+
+
+
+
+    public JSONArray gatherDepictGeneSetData( String gene, String phenotype, float pValueThreshold ) {
+        List<String> specifyRequestList = []
+        if ((gene) && (gene.length() > 0)) {
+            specifyRequestList << "gene=${gene}"
+        }
+        if ((phenotype) && (phenotype.length() > 0)) {
+            specifyRequestList << "phenotype=${phenotype}"
+        }
+        if ((pValueThreshold) ) {
+            specifyRequestList << "lt_value=${pValueThreshold}"
+        }
+
+        String rawReturnFromApi =  getRestCall("${GET_GENESET_RECORDS_FROM_DEPICT_URL}?${specifyRequestList.join("&")}".toString())
+        JsonSlurper slurper = new JsonSlurper()
         JSONArray jsonArray = slurper.parseText(rawReturnFromApi) as JSONArray
         return jsonArray
     }
+
+
 
 
 
@@ -2546,10 +2570,22 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
         String rawReturnFromApi =  getRestCallBase("testcalls/knockout/object?${specifyRequestList.join("&")}", GET_TEMPORARY_MODS_URL)
         JsonSlurper slurper = new JsonSlurper()
-        JSONArray jsonArray = slurper.parseText(rawReturnFromApi) as List
-        JSONObject jsonObject = new JSONObject()
-        jsonObject['gene']=gene
-        jsonObject['records']=jsonArray
+        JSONArray jsonArray
+        JSONObject jsonObject
+        try {
+            try{
+                jsonArray = slurper.parseText(rawReturnFromApi) as List
+            } catch(Exception e){
+                // are you telling me this stupid library interprets a list of one as not a list at all, but an object?  eat me, Java
+                jsonArray = [slurper.parseText(rawReturnFromApi)] as List
+            }
+            jsonObject = new JSONObject()
+            jsonObject['gene']=gene
+            jsonObject['records']=jsonArray
+        } catch (Exception e){
+            e.printStackTrace()
+        }
+
         return jsonObject
     }
 

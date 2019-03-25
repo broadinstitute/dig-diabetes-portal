@@ -258,6 +258,43 @@
 
 
 
+<script id="depictGeneSetBody"  type="x-tmpl-mustache">
+             <div sortField={{numberOfRecords}} class="tissueCategory_0">
+               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'DEPICT genes set containing {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander" data-target="#depict_geneset_{{gene}}">records={{numberOfRecords}}</a>
+               <div  class="collapse openDepictGeneSetInGeneTable" id="depict_geneset_{{gene}}">
+                    {{#recordsExist}}
+                     <div>{{gene}}</div>
+                     <div>pathway ID:{{pathway_id}}</div>
+                     <div>description:{{pathway_description}}</div>
+                     <div>pvalue:{{pvalue_str}}</div>
+                    <table class="openDepictGeneSetInGeneTable" style="border: 0">
+                     <thead>
+                      <tr role="row">
+                        <th style="border-top: 0;">gene</th>
+                      </tr>
+                     </thead>
+                     <tbody>
+                    {{/recordsExist}}
+                    {{#gene_list}}
+                       <tr role="row">
+                           <td style="padding: 3px">{{.}}</td>
+                       </tr>
+                    {{/gene_list}}
+                    {{#recordsExist}}
+                     </tbody>
+                    </table>
+                    {{/recordsExist}}
+               </div>
+            </div>
+</script>
+
+
+
+
+
+
+
+
 
 
 
@@ -780,7 +817,7 @@
                     {{/tissuesExist}}
                     {{#tissues}}
                        <tr role="row">
-                           <td style="padding: 3px">{{tissue}}</td>
+                           <td style="padding: 3px">{{tissueName}}</td>
                            <td style="border-right: 0;padding: 3px">{{value}}</td>
                        </tr>
                     {{/tissues}}
@@ -790,7 +827,6 @@
                     {{/tissuesExist}}
                </div>
             </div>
-
 </script>
 
 
