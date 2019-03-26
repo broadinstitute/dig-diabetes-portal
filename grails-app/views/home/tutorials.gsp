@@ -168,7 +168,7 @@
 
             <div class="tutorial" style="margin-bottom: 15px; text-align: center">
                 <div class="tutorial" style="margin-bottom: 15px; text-align: center">
-                <div class="btn dk-t2d-blue dk-video-button dk-right-column-buttons-compact "><a href="https://youtu.be/CR_V8vX2dyE" target="_blank">Video walkthrough</a></div>
+                <div class="btn dk-t2d-blue dk-video-button dk-right-column-buttons-compact "><a href="https://youtu.be/CR_V8vX2dyE" target="_blank">Introduction to the Knowledge Portals</a></div>
 
                 %{--<div class="btn dk-t2d-blue dk-video-button dk-right-column-buttons-compact "><a href="https://www.youtube.com/watch?v=jsgUxsd7Z4w" target="_blank">Video walkthrough</a></div>--}%
 
@@ -191,11 +191,18 @@
         </g:if>
 
         <g:elseif test="${g.portalTypeString()?.equals('t2d')}">
+            <h3 align="center">Videos</h3>
+                        <div class="tutorial" style="margin-bottom: 15px; text-align: center">
+                            <div class="btn dk-t2d-blue dk-video-button dk-right-column-buttons-compact "><a href="https://youtu.be/CR_V8vX2dyE" target="_blank">Introduction to the Knowledge Portals</a></div></div>
+<div class="tutorial" style="margin-bottom: 15px; text-align: center">
+                            <div class="btn dk-t2d-blue dk-video-button dk-right-column-buttons-compact "><a href="" target="_blank">Webinar: AMP-T2DKP Workshop</a></div>
+                            </div>
+
+                            <hr>
+                            <h3 align="center">Help documentation</h3>
 
 
-            <div class="tutorial" style="margin-bottom: 15px; text-align: center">
-                <div class="btn dk-t2d-blue dk-video-button dk-right-column-buttons-compact "><a href="https://youtu.be/CR_V8vX2dyE" target="_blank">Video walkthrough</a></div>
-                <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact "><a id="portalPdf"><g:message
+                            <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact "><a id="portalPdf"><g:message
                     code="portal.introTutorial.title"/></a></div>
                 <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact"><a id="GenePageGuidePdf"><g:message
                         code="portal.GenePageGuide.title"/></a></div>
@@ -217,7 +224,7 @@
 <g:elseif test="${g.portalTypeString()?.equals('mi')}">
 
     <div class="tutorial" style="margin-bottom: 15px; text-align: center">
-                <div class="btn dk-t2d-blue dk-video-button dk-right-column-buttons-compact "><a href="https://youtu.be/CR_V8vX2dyE" target="_blank">Video walkthrough</a></div>
+                <div class="btn dk-t2d-blue dk-video-button dk-right-column-buttons-compact "><a href="https://youtu.be/CR_V8vX2dyE" target="_blank">Introduction to the Knowledge Portals</a></div>
             <div class="tutorial" style="margin-bottom: 15px; text-align: center">
                 <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact "><a id="portalPdf"><g:message
                     code="portal.introTutorial.title"/></a></div>
@@ -250,7 +257,7 @@
 
         <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
             <div class="tutorial" style="margin-bottom: 15px; text-align: center">
-                <div class="btn dk-t2d-blue dk-video-button dk-right-column-buttons-compact "><a href="https://youtu.be/CR_V8vX2dyE" target="_blank">Video walkthrough</a></div>
+                <div class="btn dk-t2d-blue dk-video-button dk-right-column-buttons-compact "><a href="https://youtu.be/CR_V8vX2dyE" target="_blank">Introduction to the Knowledge Portals</a></div>
             <div class="tutorial" style="margin-bottom: 15px; text-align: center">
                 <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact "><a id="portalPdf"><g:message
                         code="portal.introTutorial.title"/></a></div>
