@@ -1280,11 +1280,12 @@ mpgSoftware.dynamicUi = (function () {
 
         var depictGeneSet = getAccumulatorObject('depictGeneSetInfo');
 
-        _.forEach(data, function (oneRec) {
+        //_.forEach(data, function (oneRec) {
+        //    depictGeneSet.push(oneRec);
+        //});
 
-            depictGeneSet.push(oneRec);
+        depictGeneSet.push(data);
 
-        });
 
         return depictGeneSet;
     };
@@ -1729,13 +1730,22 @@ mpgSoftware.dynamicUi = (function () {
                 if (indexOfColumn === -1) {
                     console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
                 } else {
-                    recordsPerGene["numberOfRecords"] =  depictGeneSet.length;
-                    if ((recordsPerGene.gene_list === 0)) {
+                    recordsPerGene["numberOfRecords"] =  recordsPerGene.data.length;
+                    if ((recordsPerGene.data.length === 0)) {
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
                             Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML), "tissue specific");
                     } else {
                         recordsPerGene["recordsExist"] =  [1];
-                        recordsPerGene["pvalue_str"] =  UTILS.realNumberFormatter(''+recordsPerGene.pvalue);
+                        recordsPerGene.data = _.sortBy(recordsPerGene.data,['pvalue'])
+                        _.forEach(recordsPerGene.data,function(eachPathway){
+                            eachPathway["pvalue_str"] =  UTILS.realNumberFormatter(''+eachPathway.pvalue);
+                            if (eachPathway.pathway_id.includes(":")){
+                                eachPathway["pathway_id_str"] = eachPathway.pathway_id.split(":")[1];
+                            } else {
+                                eachPathway["pathway_id_str"] = eachPathway.pathway_id;
+                            }
+                            eachPathway["number_genes"] = eachPathway.gene_list.length;
+                        });
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
                             Mustache.render($("#depictGeneSetBody")[0].innerHTML, recordsPerGene),"tissue specific");
                     }
@@ -3652,7 +3662,7 @@ mpgSoftware.dynamicUi = (function () {
                 default:
                     break;
             }
-            alert('currentSort='+currentSort+'.');
+//            alert('currentSort='+currentSort+'.');
             var x = UTILS.extractAnchorTextAsInteger(a);
             var y = UTILS.extractAnchorTextAsInteger(b);
             return ((x < y) ? -1 : ((x > y) ? 1 : 0));
@@ -4230,11 +4240,11 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 // }
             });
             $(whereTheTableGoes).dataTable().fnAddData(_.map(rowDescriber,function(o){return o.content}));
-            // $('div.tissueCategory_1').parents('td').css('background','#FF0033');
-            // $('div.tissueCategory_2').parents('td').css('background','#FF3333');
-            // $('div.tissueCategory_3').parents('td').css('background','#FF9933');
-            // $('div.tissueCategory_4').parents('td').css('background','#FFCC33');
-            // $('div.tissueCategory_5').parents('td').css('background','#FFFF33');
+             $('div.tissueCategory_1').parents('td').css('background','#FF0033');
+             $('div.tissueCategory_2').parents('td').css('background','#FF3333');
+             $('div.tissueCategory_3').parents('td').css('background','#FF9933');
+             $('div.tissueCategory_4').parents('td').css('background','#FFCC33');
+             $('div.tissueCategory_5').parents('td').css('background','#FFFF33');
 
         });
         return rememberCategories;

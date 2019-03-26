@@ -264,22 +264,33 @@
                <div  class="collapse openDepictGeneSetInGeneTable" id="depict_geneset_{{gene}}">
                     {{#recordsExist}}
                      <div>{{gene}}</div>
-                     <div>pathway ID:{{pathway_id}}</div>
-                     <div>description:{{pathway_description}}</div>
-                     <div>pvalue:{{pvalue_str}}</div>
                     <table class="openDepictGeneSetInGeneTable" style="border: 0">
                      <thead>
                       <tr role="row">
-                        <th style="border-top: 0;">gene</th>
+                        <th style="border-top: 0;">pathway ID</th>
+                        <th style="border-top: 0;">description</th>
+                        <th style="border-top: 0;">p-value</th>
+                        <th style="border-top: 0;">genes</th>
                       </tr>
                      </thead>
                      <tbody>
                     {{/recordsExist}}
-                    {{#gene_list}}
-                       <tr role="row">
-                           <td style="padding: 3px">{{.}}</td>
+                    {{#data}}
+                      <tr role="row">
+                           <td style="padding: 3px">{{pathway_id}}</td>
+                           <td style="padding: 3px">{{pathway_description}}</td>
+                           <td style="padding: 3px">{{pvalue_str}}</td>
+                           <td style="padding: 3px">
+                           <a  data-toggle="collapse" class="cellExpander" data-target="#depict_geneset_d{{pathway_id_str}}" title="{{#gene_list}}{{.}},{{/gene_list}}">{{number_genes}} genes</a>
+                               <div  class="collapse holdMultipleElements openTissues" id="depict_geneset_d{{pathway_id_str}}" >
+                                 {{#gene_list}}
+                                    {{.}},
+                                 {{/gene_list}}
+                               </div>
+                           </td>
                        </tr>
-                    {{/gene_list}}
+
+                    {{/data}}
                     {{#recordsExist}}
                      </tbody>
                     </table>
