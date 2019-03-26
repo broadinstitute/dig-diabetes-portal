@@ -497,9 +497,9 @@
                     </div>
                 </div>
                 </div>
-                    <g:if test="${g.portalTypeString()?.equals('t2d')}">
-                        <a href="http://t2d-genetics-portal.blogspot.com/2019/03/upcoming-t2dkp-webinar-march-21.html" style="display:block; float:right; margin: 20px 15px -20px 0;"><img src="${resource(dir: 'images', file: 'webinar.png')}" style="" ></a>
-                    </g:if>
+                    %{--<g:if test="${g.portalTypeString()?.equals('t2d')}">--}%
+                        %{--<a href="http://t2d-genetics-portal.blogspot.com/2019/03/upcoming-t2dkp-webinar-march-21.html" style="display:block; float:right; margin: 20px 15px -20px 0;"><img src="${resource(dir: 'images', file: 'webinar.png')}" style="" ></a>--}%
+                    %{--</g:if>--}%
                     <div class="col-md-5 col-md-offset-1" style="margin-top:30px;">
                         <h3 style="font-weight:700; font-size:30px; font-family:'Oswald'; color:#000000; text-align: left; margin-top: 10px;"><g:message code="portal.home.news_headline" default="What's new" />&nbsp;<span style="color:#4eadcd; vertical-align: 5px;" class="glyphicon glyphicon-comment" aria-hidden="true"></span></h3>
                         <ul id="newsFeedHolder" class="dk-news-items gallery-fade"></ul>
