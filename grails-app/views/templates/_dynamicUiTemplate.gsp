@@ -223,8 +223,9 @@
 
 
 <script id="dynamicGeneTableModBody"  type="x-tmpl-mustache">
-             <div sortField={{numberOfRecords}} class="tissueCategory_{{tissueCategoryNumber}}">
-               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'MOD matches for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander" data-target="#mod_data_{{geneName}}">records={{numberOfRecords}}</a>
+             <div sortField={{numberOfRecords}} class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}}">
+               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'MOD matches for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)"
+               class="cellExpander" data-target="#mod_data_{{geneName}}"  style="color:black">records={{numberOfRecords}}</a>
                <div  class="collapse openModInGeneTable" id="mod_data_{{geneName}}">
                     {{#recordsExist}}
                     {{#geneName}}
@@ -259,8 +260,9 @@
 
 
 <script id="depictGeneSetBody"  type="x-tmpl-mustache">
-             <div sortField={{numberOfRecords}} class="tissueCategory_0">
-               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'DEPICT genes set containing {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander" data-target="#depict_geneset_{{gene}}">records={{numberOfRecords}}</a>
+             <div sortField={{numberOfRecords}} class="tissueCategory_0  significanceCategory_{{significanceCategoryNumber}}">
+               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'DEPICT genes set containing {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
+               data-target="#depict_geneset_{{gene}}" style="color:black">records={{numberOfRecords}}</a>
                <div  class="collapse openDepictGeneSetInGeneTable" id="depict_geneset_{{gene}}">
                     {{#recordsExist}}
                      <div>{{gene}}</div>
@@ -349,9 +351,9 @@
 
 
 <script id="dynamicGeneTableEqtlSummaryBody"  type="x-tmpl-mustache">
-            <div sortField={{numberOfTissues}} class="tissueCategory_{{tissueCategoryNumber}}">
+            <div sortField={{numberOfTissues}} class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'eQTLs for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget);"
-               class="cellExpander" data-target="#eqtl_{{geneName}}">records={{numberOfTissues}}</a>
+               class="cellExpander" data-target="#eqtl_{{geneName}}" style="color:black">records={{numberOfTissues}}</a>
                %{--<div  class="popup">--}%
                <div  class="collapse openEqtlInGeneTable popuptext" id="eqtl_{{geneName}}">
                     {{#tissuesExist}}
@@ -734,13 +736,13 @@
 
 </script>
 <script id="dynamicAbcGeneTableBody"  type="x-tmpl-mustache">
-            <div sortField={{numberOfTissues}} class="tissueCategory_{{tissueCategoryNumber}}">
+            <div sortField={{numberOfTissues}} class="tissueCategory_{{tissueCategoryNumber}}  significanceCategory_{{significanceCategoryNumber}}">
                <a
                onclick="mpgSoftware.dynamicUi.showAttachedData(event,'ABC for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)"
-                class="cellExpander" data-target="#abc_{{geneName}}">tissues={{numberOfTissues}}</a>
+                class="cellExpander" data-target="#abc_{{geneName}}" style="color:black">tissues={{numberOfTissues}}</a>
                <a
                onclick="mpgSoftware.dynamicUi.showAttachedData(event,'ABC for {{geneName}}',mpgSoftware.dynamicUi.createOutOfRegionGraphic)"
-                class="cellExpander" data-target="#tissues_{{geneName}}">
+                class="cellExpander" data-target="#tissues_{{geneName}}"  style="color:black">
                <span class="glyphicon glyphicon-zoom-in" aria-hidden="true" data-target="#tissues_{{geneName}}"></span>
                &nbsp;
                </a>
@@ -781,8 +783,9 @@
 
 
 <script id="depictGeneTableBody"  type="x-tmpl-mustache">
-             <div sortField={{numberOfRecords}} class="tissueCategory_{{tissueCategoryNumber}}">
-               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'DEPICT predictions for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander" data-target="#depict_data_{{geneName}}">records={{numberOfRecords}}</a>
+             <div sortField={{numberOfRecords}} class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}}">
+               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'DEPICT predictions for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)"
+               class="cellExpander" data-target="#depict_data_{{geneName}}" style="color:black">records={{numberOfRecords}}</a>
                <div  class="collapse openDepictInGeneTable" id="depict_data_{{geneName}}">
                     {{#recordsExist}}
                     <table class="openDepictInGeneTable" style="border: 0">
@@ -813,8 +816,9 @@
 
 <script id="geneAssociationTableBody"  type="x-tmpl-mustache">
 
-            <div sortField={{numberOfRecords}} class="tissueCategory_{{tissueCategoryNumber}}">
-               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'MetaXcan for {{gene}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander" data-target="#MetaXcan_{{gene}}">records={{numberOfRecords}}</a>
+            <div sortField={{numberOfRecords}} class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}}">
+               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'MetaXcan for {{gene}}',mpgSoftware.dynamicUi.extractStraightFromTarget)"
+               class="cellExpander" data-target="#MetaXcan_{{gene}}"  style="color:black">records={{numberOfRecords}}</a>
                <div  class="collapse openMetaXcanInGeneTable" id="MetaXcan_{{gene}}">
                     {{#tissuesExist}}
                     <table class="openMetaXcanInGeneTable" style="border: 0">

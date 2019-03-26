@@ -936,15 +936,17 @@ mpgSoftware.dynamicUi = (function () {
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
                             Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML), "tissue specific");
                     } else {
+                        var modRecs = _.sortBy(recordsPerGene.mods,["modName"]);
                         var renderData = {
                             numberOfRecords:recordsPerGene.mods.length,
                             tissueCategoryNumber:categorizeTissueNumbers( recordsPerGene.mods.length ),
+                            significanceCategoryNumber:categorizeSignificanceNumbers( modRecs, "MOD" ),
                             recordsExist:(recordsPerGene.mods.length)?[1]:[],
                             geneName:recordsPerGene.geneName,
                             humanGene:recordsPerGene.humanGene,
                             geneDescription:recordsPerGene.geneDescription,
-                            bestSignificanceNumber:0,
-                            modTerms: _.sortBy(recordsPerGene.mods,["modName"])
+                            significanceCategoryNumber:0,
+                            modTerms: modRecs
                         };
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
                             Mustache.render($("#dynamicGeneTableModBody")[0].innerHTML, renderData)," tissue specific");
@@ -1423,7 +1425,7 @@ mpgSoftware.dynamicUi = (function () {
                             intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
                                 Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML), "tissue specific");
                         } else {
-                            var records = _.map(_.sortBy(recordsPerGene.source,["value"]),function(tissueRecord){
+                            var sortedTissues = _.map(_.sortBy(recordsPerGene.source,["value"]),function(tissueRecord){
                                 return {    tissueName: tissueRecord.tissueName,
                                             numericalValue:tissueRecord.value,
                                             value:UTILS.realNumberFormatter(""+tissueRecord.value) };
@@ -1431,12 +1433,10 @@ mpgSoftware.dynamicUi = (function () {
                             var renderData = {
                                 numberOfTissues:recordsPerGene.source.length,
                                 tissueCategoryNumber:categorizeTissueNumbers( recordsPerGene.source.length ),
+                                significanceCategoryNumber:categorizeSignificanceNumbers( sortedTissues, "ABC" ),
                                 tissuesExist:(recordsPerGene.source.length)?[1]:[],
                                 geneName:recordsPerGene.geneName,
-                                tissues:_.map(_.sortBy(recordsPerGene.source,["value"]),function(tissueRecord){
-                                    return {    tissueName: tissueRecord.tissueName,
-                                                value:UTILS.realNumberFormatter(""+tissueRecord.value) };
-                                })
+                                tissues:sortedTissues
                             };
                             intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell('eQTL',
                                 Mustache.render($("#dynamicAbcGeneTableBody")[0].innerHTML, renderData),'tisseRecord');
@@ -1652,7 +1652,7 @@ mpgSoftware.dynamicUi = (function () {
                         var renderData = {
                             numberOfRecords:recordsPerGene.recordByDataSet.length,
                             tissueCategoryNumber:categorizeTissueNumbers( recordsPerGene.recordByDataSet.length ),
-                            bestSignificanceNumber:categorizeSignificanceNumber( records[0].numericalValue ),
+                            significanceCategoryNumber:categorizeSignificanceNumbers( records, "DEP" ),
                             recordsExist:(recordsPerGene.recordByDataSet.length)?[1]:[],
                             geneName:recordsPerGene.geneName,
                             records:records
@@ -1736,7 +1736,9 @@ mpgSoftware.dynamicUi = (function () {
                             Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML), "tissue specific");
                     } else {
                         recordsPerGene["recordsExist"] =  [1];
-                        recordsPerGene.data = _.sortBy(recordsPerGene.data,['pvalue'])
+                        recordsPerGene.data = _.sortBy(recordsPerGene.data,['pvalue']);
+                        recordsPerGene["tissueCategoryNumber"]=categorizeTissueNumbers( recordsPerGene.data.length );
+                        recordsPerGene["significanceCategoryNumber"]=categorizeSignificanceNumbers( recordsPerGene.data,"DEG" );
                         _.forEach(recordsPerGene.data,function(eachPathway){
                             eachPathway["pvalue_str"] =  UTILS.realNumberFormatter(''+eachPathway.pvalue);
                             if (eachPathway.pathway_id.includes(":")){
@@ -1829,7 +1831,7 @@ mpgSoftware.dynamicUi = (function () {
                                             tissueCategoryNumber:categorizeTissueNumbers( recordsPerGene.tissues.length ),
                                             tissuesExist:(recordsPerGene.tissues.length)?[1]:[],
                                             gene:recordsPerGene.gene,
-                                            bestSignificanceNumber:categorizeSignificanceNumber( tissueRecords[0].numericalValue ),
+                                            significanceCategoryNumber:categorizeSignificanceNumbers( tissueRecords, "MET" ),
                                             tissues:tissueRecords
                         };
                         recordsPerGene["numberOfRecords"] = recordsPerGene.tissues.length;
@@ -2367,7 +2369,7 @@ mpgSoftware.dynamicUi = (function () {
                             tissueCategoryNumber:categorizeTissueNumbers( recordsPerGene.tissues.length ),
                             tissuesExist:(recordsPerGene.tissues.length)?[1]:[],
                             geneName:recordsPerGene.geneName,
-                            bestSignificanceNumber:categorizeSignificanceNumber( tissueRecords[0].numericalValue ),
+                            significanceCategoryNumber:categorizeSignificanceNumbers( tissueRecords, "EQT" ),
                             tissues:tissueRecords
                         };
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell('eQTL',
@@ -3391,11 +3393,7 @@ mpgSoftware.dynamicUi = (function () {
         displayContext('#contextDescription',getAccumulatorObject());
 
         $('#retrieveMultipleRecordsTest').click();
-        $('div.tissueCategory_1').parents('td').css('background','#3333FF');
-        $('div.tissueCategory_2').parents('td').css('background','#3366FF');
-        $('div.tissueCategory_3').parents('td').css('background','#3399FF');
-        $('div.tissueCategory_4').parents('td').css('background','#33CCFF');
-        $('div.tissueCategory_5').parents('td').css('background','#33FFFF');
+
        // $('#getVariantsFromQtlAndThenRetrieveEpigeneticData').click();
     };
 
@@ -4036,6 +4034,30 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         } else {
             switch(headerType){
                 case 'geneTableGeneHeaders':
+                case 'geneTableAnnotationHeaders':
+                    if (!headerSpecific){
+                        var whereTheTableGoes = 'table.combinedGeneTableHolder';
+                        var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
+                        if ( typeof sharedTable.cellColoringScheme === 'undefined'){
+                            sharedTable["cellColoringScheme"] = "Tissues";
+                        }
+                        if (sharedTable["cellColoringScheme"]==="Tissues"){
+                            $('div.tissueCategory_0').parents('td').css('background','#FFFFFF');
+                            $('div.tissueCategory_1').parents('td').css('background','#FF0033');
+                            $('div.tissueCategory_2').parents('td').css('background','#FF3333');
+                            $('div.tissueCategory_3').parents('td').css('background','#FF9933');
+                            $('div.tissueCategory_4').parents('td').css('background','#FFCC33');
+                            $('div.tissueCategory_5').parents('td').css('background','#FFFF33');
+                        } else if (sharedTable["cellColoringScheme"]==="Significance"){
+                            $('div.significanceCategory_0').parents('td').css('background','#FFFFFF');
+                            $('div.significanceCategory_1').parents('td').css('background','#3333FF');
+                            $('div.significanceCategory_2').parents('td').css('background','#3366FF');
+                            $('div.significanceCategory_3').parents('td').css('background','#3399FF');
+                            $('div.significanceCategory_4').parents('td').css('background','#33CCFF');
+                            $('div.significanceCategory_5').parents('td').css('background','#33FFFF');
+                        }
+
+                    }
                   break;
                 case 'variantTableVariantHeaders':
                     if (headerSpecific) {
@@ -4240,11 +4262,11 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 // }
             });
             $(whereTheTableGoes).dataTable().fnAddData(_.map(rowDescriber,function(o){return o.content}));
-             $('div.tissueCategory_1').parents('td').css('background','#FF0033');
-             $('div.tissueCategory_2').parents('td').css('background','#FF3333');
-             $('div.tissueCategory_3').parents('td').css('background','#FF9933');
-             $('div.tissueCategory_4').parents('td').css('background','#FFCC33');
-             $('div.tissueCategory_5').parents('td').css('background','#FFFF33');
+             //$('div.tissueCategory_1').parents('td').css('background','#FF0033');
+             //$('div.tissueCategory_2').parents('td').css('background','#FF3333');
+             //$('div.tissueCategory_3').parents('td').css('background','#FF9933');
+             //$('div.tissueCategory_4').parents('td').css('background','#FFCC33');
+             //$('div.tissueCategory_5').parents('td').css('background','#FFFF33');
 
         });
         return rememberCategories;
@@ -4734,7 +4756,9 @@ var destroySharedTable = function (whereTheTableGoes) {
     };
 
 
-    var setColorButtonActive = function(event,DEACTIVATE) {
+    var setColorButtonActive = function(event,DEACTIVATE,whereTheTableGoes) {
+        var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
+        sharedTable["cellColoringScheme"] = event.target.textContent.trim();
         if ($(event.target).hasClass("active")) {
             $(event.target).removeClass("active");
         } else {
@@ -4745,9 +4769,10 @@ var destroySharedTable = function (whereTheTableGoes) {
             var className = "." + value;
             var idName = "#" + value;
 
-            if ($(className).length) { $("button."+className).removeClass("active") }
-            if ($(idName).length) { $("button."+className).removeClass("active") }
-        })
+            if ($(className).length) { $("button"+className).removeClass("active") }
+            if ($(idName).length) { $("button"+className).removeClass("active") }
+        });
+        refineTableRecords($(whereTheTableGoes).dataTable(),'geneTableGeneHeaders',[],false);
     }
 
 
@@ -4777,19 +4802,54 @@ var destroySharedTable = function (whereTheTableGoes) {
 
 
 
-    var categorizeSignificanceNumber = function ( significance ) {
+    var categorizeSignificanceNumbers = function ( significance, datatype ) {
         var returnValue = 0;
-        if ((significance>0) &&(significance<=0.5E-8)) {
-            returnValue = 1;
-        } else if ((significance>0.5E-8>2) &&(significance<=0.5E-4)) {
-            returnValue = 2;
-        } else if ((significance>0.5E-4) &&(significance<=0.05)) {
-            returnValue = 3;
-        } else if ((significance>0.05) &&(significance<=0.4)) {
-            returnValue = 4;
-        } else if (significance>0.4) {
-            returnValue = 5;
+        if ( ( typeof significance !== 'undefined') &&
+             ( $.isArray(significance) ) &&
+            ( significance.length>0 ) ){
+            var recordToAssess = significance[0];
+            switch (datatype){
+                case "MOD": // significance is not a meaningful concept
+                    break;
+                case "ABC": // activity by contact predictions -- higher numbers are good
+                    var valueToAssess = significance[0].value;
+                    if ((valueToAssess>0) &&(valueToAssess<=0.2)) {
+                        returnValue = 5;
+                    } else if ((valueToAssess>0.2) &&(valueToAssess<=0.4)) {
+                        returnValue = 4;
+                    } else if ((valueToAssess>0.4) &&(valueToAssess<=0.6)) {
+                        returnValue = 3;
+                    } else if ((valueToAssess>0.6) &&(valueToAssess<=0.8)) {
+                        returnValue = 2;
+                    } else if (valueToAssess>0.9) {
+                        returnValue = 1;
+                    }
+                    break
+                //pvalues -- lower numbers are good
+                case "DEG":
+                    var valueToAssess = significance[0].value;
+                case "DEP":
+                case "MET":
+                case "EQT":
+                    var valueToAssess = significance[0].numericalValue;
+                    if ((valueToAssess>0) &&(valueToAssess<=0.5E-8)) {
+                        returnValue = 1;
+                    } else if ((valueToAssess>0.5E-8) &&(valueToAssess<=0.5E-4)) {
+                        returnValue = 2;
+                    } else if ((valueToAssess>0.5E-4) &&(valueToAssess<=0.05)) {
+                        returnValue = 3;
+                    } else if ((valueToAssess>0.05) &&(valueToAssess<=0.4)) {
+                        returnValue = 4;
+                    } else if (valueToAssess>0.4) {
+                        returnValue = 5;
+                    }
+                    break;
+                default:
+                    break;
+            }
+
         }
+
         return returnValue;
     };
 

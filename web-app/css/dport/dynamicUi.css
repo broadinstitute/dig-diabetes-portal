@@ -88,21 +88,21 @@ body::-webkit-scrollbar-thumb {
     font-size: 12px;
 }
 
-div.tissueCategory_1{
-    background: #FF0033;
-}
-div.tissueCategory_2{
-    background: #FF3333;
-}
-div.tissueCategory_3{
-    background: #FF9933;
-}
-div.tissueCategory_4{
-    background: #FFCC33;
-}
-div.tissueCategory_5{
-    background: #FFFF33;
-}
+/*div.tissueCategory_1{*/
+    /*background: #FF0033;*/
+/*}*/
+/*div.tissueCategory_2{*/
+    /*background: #FF3333;*/
+/*}*/
+/*div.tissueCategory_3{*/
+    /*background: #FF9933;*/
+/*}*/
+/*div.tissueCategory_4{*/
+    /*background: #FFCC33;*/
+/*}*/
+/*div.tissueCategory_5{*/
+    /*background: #FFFF33;*/
+/*}*/
 table.combinedGeneTableHolder td.sorting_1{
 
 }
