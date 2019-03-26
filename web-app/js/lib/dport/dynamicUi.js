@@ -3539,27 +3539,28 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
-        var generalPurposeSort  = function(a, b, direction, currentSort ){
+        var generalPurposeSort  = function(a, b, direction, currentSort, sortTermOverride ){
 
+            var defaultSearchField = 'sortField';
             switch (currentSort){
                 case 'geneMethods':
-                    var textA = $(a).attr('sortField').toUpperCase();
-                    var textB = $(b).attr('sortField').toUpperCase();
+                    var textA = $(a).attr(defaultSearchField).toUpperCase();
+                    var textB = $(b).attr(defaultSearchField).toUpperCase();
                     return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
                     break;
                 case 'variantAnnotationCategory':
                 case 'methods':
-                    var textA = $(a).attr('sortField').toUpperCase();
-                    var textB = $(b).attr('sortField').toUpperCase();
+                    var textA = $(a).attr(defaultSearchField).toUpperCase();
+                    var textB = $(b).attr(defaultSearchField).toUpperCase();
                     return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
                     break;
                 case 'H3k27ac':
                 case 'DNase':
-                case 'ABC':
-                case 'eQTL':
+                //case 'ABC':
+                //case 'eQTL':
                 case 'variantHeader':
-                    var x = parseInt($(a).attr('sortField'));
-                    var y = parseInt($(b).attr('sortField'));
+                    var x = parseInt($(a).attr(defaultSearchField));
+                    var y = parseInt($(b).attr(defaultSearchField));
                     if ( (-1===x) && (-1===y) ) {
                         return 0;
                     }
@@ -3582,13 +3583,13 @@ mpgSoftware.dynamicUi = (function () {
                 case 'Splice_site':
                 case 'UTR':
                 case 'Coding':
-                    var x = parseInt($(a).attr('sortField'));
-                    var y = parseInt($(b).attr('sortField'));
+                    var x = parseInt($(a).attr(defaultSearchField));
+                    var y = parseInt($(b).attr(defaultSearchField));
                     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
                     break;
                 case 'P-value':
-                    var x = parseFloat($(a).attr('sortField'));
-                    var y = parseFloat($(b).attr('sortField'));
+                    var x = parseFloat($(a).attr(defaultSearchField));
+                    var y = parseFloat($(b).attr(defaultSearchField));
                     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
                     break;
                 case 'eQTL':
@@ -3596,11 +3597,12 @@ mpgSoftware.dynamicUi = (function () {
                 case 'MetaXcan':
                 case 'ABC':
                 case 'MOD':
-                    var x = parseInt($(a).attr('sortField'));
+                    defaultSearchField = sortTermOverride;
+                    var x = parseFloat($(a).attr(defaultSearchField));
                     if (isNaN(x)){
                         x = parseInt($(a).attr('subSortField'));
                     }
-                    var y = parseInt($(b).attr('sortField'));
+                    var y = parseFloat($(b).attr(defaultSearchField));
                     if (isNaN(y)){
                         y = parseInt($(b).attr('subSortField'));
                     }
@@ -3624,11 +3626,12 @@ mpgSoftware.dynamicUi = (function () {
                     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
                     break;
                 case 'geneHeader':
-                    var x = parseInt($(a).attr('sortField'));
+                    defaultSearchField = sortTermOverride;
+                    var x = parseFloat($(a).attr(defaultSearchField));
                     if (isNaN(x)){
                         x = parseInt($(a).attr('subSortField'));
                     }
-                    var y = parseInt($(b).attr('sortField'));
+                    var y = parseFloat($(b).attr(defaultSearchField));
                     if (isNaN(y)){
                         y = parseInt($(b).attr('subSortField'));
                     }
@@ -3674,17 +3677,30 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
+        var findDesiredSearchTerm=function(){
+            var favoredSortField = 'sortField';
+            var whereTheTableGoes = 'table.combinedGeneTableHolder';
+            var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
+            if ( sharedTable.cellColoringScheme === 'Significance'){
+                favoredSortField = 'significance_sortfield'
+            }
+            return favoredSortField;
+        }
+
+
+
         jQuery.fn.dataTableExt.oSort['generalSort-asc'] = function (a, b ) {
             var currentSortRequest = getAccumulatorObject("currentSortRequest");
-            return generalPurposeSort(a,b,'asc',currentSortRequest.currentSort);
+
+            return generalPurposeSort(a,b,'asc',currentSortRequest.currentSort,findDesiredSearchTerm());
         };
 
         jQuery.fn.dataTableExt.oSort['generalSort-desc'] = function (a, b) {
             var currentSortRequest = getAccumulatorObject("currentSortRequest");
             if (currentSortRequest.currentSort === "variantAnnotationCategory"){
-                return generalPurposeSort(a,b,'desc',currentSortRequest.currentSort);
+                return generalPurposeSort(a,b,'desc',currentSortRequest.currentSort,findDesiredSearchTerm());
             } else {
-                return generalPurposeSort(b,a,'desc',currentSortRequest.currentSort);
+                return generalPurposeSort(b,a,'desc',currentSortRequest.currentSort,findDesiredSearchTerm());
             }
         };
 
