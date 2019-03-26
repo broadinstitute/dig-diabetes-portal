@@ -743,12 +743,12 @@ div.genePosition{
                                         <div class="datatable-cell-color-control">
                                             <div class="tool-label">Cell color</div>
 
-                                            <button type="button" class="btn btn-secondary first-btn significance" aria-label="click to organize by greatest significance"
+                                            <button type="button" class="btn btn-secondary first-btn significance active" aria-label="click to organize by greatest significance"
                                             title="click to organize by greatest significance" onclick="mpgSoftware.dynamicUi.setColorButtonActive(event,['tissues'],'table.combinedGeneTableHolder');">Significance
                                             </button>
 
-                                            <button type="button" class="btn btn-secondary last-btn tissues active" aria-label="click to organized by number of associated tissues"
-                                            title="click to organized by number of associated tissues" onclick="mpgSoftware.dynamicUi.setColorButtonActive(event,['significance'],'table.combinedGeneTableHolder');">Tissues
+                                            <button type="button" class="btn btn-secondary last-btn tissues" aria-label="click to organized by number of associated tissues"
+                                            title="click to organized by number of associated tissues" onclick="mpgSoftware.dynamicUi.setColorButtonActive(event,['significance'],'table.combinedGeneTableHolder');">Records
                                             </button>
                                         </div>
 

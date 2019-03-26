@@ -946,6 +946,7 @@ mpgSoftware.dynamicUi = (function () {
                             humanGene:recordsPerGene.humanGene,
                             geneDescription:recordsPerGene.geneDescription,
                             significanceCategoryNumber:0,
+                            significanceValue:0,
                             modTerms: modRecs
                         };
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
@@ -1436,6 +1437,7 @@ mpgSoftware.dynamicUi = (function () {
                                 significanceCategoryNumber:categorizeSignificanceNumbers( sortedTissues, "ABC" ),
                                 tissuesExist:(recordsPerGene.source.length)?[1]:[],
                                 geneName:recordsPerGene.geneName,
+                                significanceValue:sortedTissues[0].numericalValue,
                                 tissues:sortedTissues
                             };
                             intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell('eQTL',
@@ -1655,6 +1657,7 @@ mpgSoftware.dynamicUi = (function () {
                             significanceCategoryNumber:categorizeSignificanceNumbers( records, "DEP" ),
                             recordsExist:(recordsPerGene.recordByDataSet.length)?[1]:[],
                             geneName:recordsPerGene.geneName,
+                            significanceValue:records[0].numericalValue,
                             records:records
                         };
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
@@ -1739,6 +1742,7 @@ mpgSoftware.dynamicUi = (function () {
                         recordsPerGene.data = _.sortBy(recordsPerGene.data,['pvalue']);
                         recordsPerGene["tissueCategoryNumber"]=categorizeTissueNumbers( recordsPerGene.data.length );
                         recordsPerGene["significanceCategoryNumber"]=categorizeSignificanceNumbers( recordsPerGene.data,"DEG" );
+                        recordsPerGene["significanceValue"]=recordsPerGene.data[0].pvalue;
                         _.forEach(recordsPerGene.data,function(eachPathway){
                             eachPathway["pvalue_str"] =  UTILS.realNumberFormatter(''+eachPathway.pvalue);
                             if (eachPathway.pathway_id.includes(":")){
@@ -1832,6 +1836,7 @@ mpgSoftware.dynamicUi = (function () {
                                             tissuesExist:(recordsPerGene.tissues.length)?[1]:[],
                                             gene:recordsPerGene.gene,
                                             significanceCategoryNumber:categorizeSignificanceNumbers( tissueRecords, "MET" ),
+                                            significanceValue:tissueRecords[0].numericalValue,
                                             tissues:tissueRecords
                         };
                         recordsPerGene["numberOfRecords"] = recordsPerGene.tissues.length;
@@ -2370,6 +2375,7 @@ mpgSoftware.dynamicUi = (function () {
                             tissuesExist:(recordsPerGene.tissues.length)?[1]:[],
                             geneName:recordsPerGene.geneName,
                             significanceCategoryNumber:categorizeSignificanceNumbers( tissueRecords, "EQT" ),
+                            significanceValue:tissueRecords[0].numericalValue,
                             tissues:tissueRecords
                         };
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell('eQTL',
@@ -4039,9 +4045,9 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         var whereTheTableGoes = 'table.combinedGeneTableHolder';
                         var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
                         if ( typeof sharedTable.cellColoringScheme === 'undefined'){
-                            sharedTable["cellColoringScheme"] = "Tissues";
+                            sharedTable["cellColoringScheme"] = "Significance";
                         }
-                        if (sharedTable["cellColoringScheme"]==="Tissues"){
+                        if (sharedTable["cellColoringScheme"]==="Records"){
                             $('div.tissueCategory_0').parents('td').css('background','#FFFFFF');
                             $('div.tissueCategory_1').parents('td').css('background','#FF0033');
                             $('div.tissueCategory_2').parents('td').css('background','#FF3333');
@@ -4827,7 +4833,19 @@ var destroySharedTable = function (whereTheTableGoes) {
                     break
                 //pvalues -- lower numbers are good
                 case "DEG":
-                    var valueToAssess = significance[0].value;
+                    var valueToAssess = significance[0].pvalue;
+                    if ((valueToAssess>0) &&(valueToAssess<=0.5E-8)) {
+                        returnValue = 1;
+                    } else if ((valueToAssess>0.5E-8) &&(valueToAssess<=0.5E-4)) {
+                        returnValue = 2;
+                    } else if ((valueToAssess>0.5E-4) &&(valueToAssess<=0.05)) {
+                        returnValue = 3;
+                    } else if ((valueToAssess>0.05) &&(valueToAssess<=0.4)) {
+                        returnValue = 4;
+                    } else if (valueToAssess>0.4) {
+                        returnValue = 5;
+                    }
+                    break;
                 case "DEP":
                 case "MET":
                 case "EQT":
