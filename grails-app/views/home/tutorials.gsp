@@ -194,8 +194,8 @@
             <h3 align="center">Videos</h3>
                         <div class="tutorial" style="margin-bottom: 15px; text-align: center">
                             <div class="btn dk-t2d-blue dk-video-button dk-right-column-buttons-compact "><a href="https://youtu.be/CR_V8vX2dyE" target="_blank">Introduction to the Knowledge Portals</a></div></div>
-<div class="tutorial" style="margin-bottom: 15px; text-align: center">
-                            <div class="btn dk-t2d-blue dk-video-button dk-right-column-buttons-compact "><a href="" target="_blank">Webinar: AMP-T2DKP Workshop</a></div>
+%{--<div class="tutorial" style="margin-bottom: 15px; text-align: center">--}%
+                            %{--<div class="btn dk-t2d-blue dk-video-button dk-right-column-buttons-compact "><a href="" target="_blank">Webinar: AMP-T2DKP Workshop</a></div>--}%
                             </div>
 
                             <hr>
