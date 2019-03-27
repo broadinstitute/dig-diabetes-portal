@@ -730,11 +730,17 @@ div.genePosition{
 
                                 </style>
 
+
+<div  style="margin: 0 0 -15px 10px">This tab displays annotations for genes that are located on chromosome {{chromosome}} between coordinates {{geneExtentBegin}} and {{geneExtentEnd}}.
+
+
+                                    %{--<p><g:message code="GenePrioritization.interface.help"></g:message></p>--}%
+                                    </div>
                                 <div class="row">
                                     <div class="col-sm-12">
                                     <div class="datatable-control-box">
                                         <div class="datatable-transpose-control">
-                                            <div class="tool-label">Transpose table</div>
+                                            <div class="tool-label">Transpose table&nbsp;&nbsp;<g:helpText title="table.transpose.help.header" placement="bottom" body="table.transpose.help.text"/></div>
                                             <button class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table"
                                             onclick = "mpgSoftware.dynamicUi.transposeThisTable('table.combinedGeneTableHolder')">
                                                 Transpose
@@ -744,11 +750,11 @@ div.genePosition{
                                             <div class="tool-label">Cell color</div>
 
                                             <button type="button" class="btn btn-secondary first-btn significance" aria-label="click to organize by greatest significance"
-                                            title="click to organize by greatest significance" onclick="mpgSoftware.dynamicUi.setColorButtonActive(event,['tissues'],'table.combinedGeneTableHolder');">Significance
+                                            title="click to color-code by significance" onclick="mpgSoftware.dynamicUi.setColorButtonActive(event,['tissues'],'table.combinedGeneTableHolder');">Significance
                                             </button>
 
                                             <button type="button" class="btn btn-secondary last-btn tissues active" aria-label="click to organized by number of associated tissues"
-                                            title="click to organized by number of associated tissues" onclick="mpgSoftware.dynamicUi.setColorButtonActive(event,['significance'],'table.combinedGeneTableHolder');">Tissues
+                                            title="click to color-code by number of associated tissues" onclick="mpgSoftware.dynamicUi.setColorButtonActive(event,['significance'],'table.combinedGeneTableHolder');">Tissues
                                             </button>
                                         </div>
 
