@@ -343,7 +343,7 @@
 
 <script id="dynamicGeneTableEmptyRecord"  type="x-tmpl-mustache">
 
-                <div sortField=0>
+                <div sortField=0 significance_sortfield='0.0'>
                 </div>
 
 

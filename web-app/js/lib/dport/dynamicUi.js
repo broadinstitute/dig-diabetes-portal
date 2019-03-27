@@ -4213,7 +4213,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                             row.subcategory)) ;
                         indexInOneDimensionalArray++;
                         rowDescriber.push( new IntermediateStructureDataCell(row.subcategory,
-                            "<div class='subcategory "+
+                            "<div significance_sortfield='0.0' class='subcategory "+
                             " initialLinearIndex_"+indexInOneDimensionalArray+"' sortField='"+row.displaySubcategory+"' subSortField='-1'>"+row.displaySubcategory+"</div>" ,
                             "insertedColumn2"));
                         numberOfColumnsAdded += rowDescriber.length;
