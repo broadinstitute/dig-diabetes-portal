@@ -261,7 +261,7 @@
 
 <script id="depictGeneSetBody"  type="x-tmpl-mustache">
              <div sortField={{numberOfRecords}} class="tissueCategory_0  significanceCategory_{{significanceCategoryNumber}}">
-               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'DEPICT genes set containing {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
+               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'DEPICT gene sets containing {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
                data-target="#depict_geneset_{{gene}}" style="color:black">records={{numberOfRecords}}</a>
                <div  class="collapse openDepictGeneSetInGeneTable" id="depict_geneset_{{gene}}">
                     {{#recordsExist}}
@@ -791,8 +791,8 @@
                     <table class="openDepictInGeneTable" style="border: 0">
                      <thead>
                       <tr role="row">
-                        <th style="border-top: 0;">data set</th>
-                        <th style="border-right: 0; border-top: 0">pValue</th>
+                        <th style="border-top: 0;">dataset</th>
+                        <th style="border-right: 0; border-top: 0">p-value</th>
                       </tr>
                      </thead>
                      <tbody>
@@ -825,7 +825,7 @@
                      <thead>
                       <tr role="row">
                         <th style="border-top: 0">tissue</th>
-                        <th style="border-top: 0;border-right: 0;">pValue</th>
+                        <th style="border-top: 0;border-right: 0;">p-value</th>
                       </tr>
                      </thead>
                      <tbody>
