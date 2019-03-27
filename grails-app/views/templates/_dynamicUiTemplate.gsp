@@ -308,6 +308,43 @@
 
 
 
+<script id="eCaviarBody"  type="x-tmpl-mustache">
+
+             <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}} class="tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}}">
+               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'eCAVIAR records referencing {{gene}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
+               data-target="#eCaviar_{{gene}}" style="color:black">records={{numberOfRecords}}</a>
+               <div  class="collapse openDepictGeneSetInGeneTable" id="eCaviar_{{gene}}">
+                    {{#recordsExist}}
+                    <table class="openDepictGeneSetInGeneTable" style="border: 0">
+                     <thead>
+                      <tr role="row">
+                        <th style="border-top: 0;">tissue</th>
+                        <th style="border-top: 0;">post_prob</th>
+                        <th style="border-top: 0;">GWAS_Z</th>
+                        <th style="border-top: 0;">eQTL_Z</th>
+                      </tr>
+                     </thead>
+                     <tbody>
+                    {{/recordsExist}}
+                    {{#records}}
+                      <tr role="row">
+                           <td style="padding: 3px">{{tissueName}}</td>
+                           <td style="padding: 3px">{{clpp}}</td>
+                           <td style="padding: 3px">{{gwas_z_score}}</td>
+                           <td style="padding: 3px">{{eqtl_z_score}}</td>
+                       </tr>
+
+                    {{/records}}
+                    {{#recordsExist}}
+                     </tbody>
+                    </table>
+                    {{/recordsExist}}
+               </div>
+            </div>
+</script>
+
+
+
 
 
 

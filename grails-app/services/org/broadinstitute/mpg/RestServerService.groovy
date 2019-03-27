@@ -2569,7 +2569,13 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
         String rawReturnFromApi =  getRestCall("${GET_VARIANT_ECAVIAR_COLOCALIZATION_FROM_URL}?${specifyRequestList.join("&")}".toString())
         JsonSlurper slurper = new JsonSlurper()
-        JSONArray jsonArray = slurper.parseText(rawReturnFromApi) as List
+        JSONArray jsonArray
+        try{
+            jsonArray = slurper.parseText(rawReturnFromApi) as List
+        } catch(Exception e){
+            // are you telling me this stupid library interprets a list of one as not a list at all, but an object?  eat me, Java
+            jsonArray = [slurper.parseText(rawReturnFromApi)] as List
+        }
         return jsonArray
     }
 

@@ -752,14 +752,15 @@ class RegionInfoController {
         Map geneNameMap = [:]
 
         if (params.gene) {
-            String commonName = params.gene
-            if (commonName.startsWith("ENSG")){
-                gene = commonName
-            } else {
-                ensemblMapper = restServerService.convertGeneCommonNameToEnsemblId(commonName,true)
-                geneNameMap[ensemblMapper["GEN_ID"]] = commonName
-                gene = ensemblMapper["GEN_ID"]
-            }
+            gene = params.gene
+//            String commonName = params.gene
+//            if (commonName.startsWith("ENSG")){
+//                gene = commonName
+//            } else {
+//                ensemblMapper = restServerService.convertGeneCommonNameToEnsemblId(commonName,true)
+//                geneNameMap[ensemblMapper["GEN_ID"]] = commonName
+//                gene = ensemblMapper["GEN_ID"]
+//            }
         }
 
         if (params.tissue) {
@@ -797,12 +798,12 @@ class RegionInfoController {
             chromosome = params.chromosome
         }
 
-        if ((startPosition == -1) && (endPosition == -1)){ //if the start position and end position were not explicitly specified
-                                                           // then we will grab those from the database and insert them
-            endPosition = ensemblMapper.END
-            startPosition = ensemblMapper.START
-            chromosome = ensemblMapper.CHROM
-        }
+//        if ((startPosition == -1) && (endPosition == -1)){ //if the start position and end position were not explicitly specified
+//                                                           // then we will grab those from the database and insert them
+//            endPosition = ensemblMapper.END
+//            startPosition = ensemblMapper.START
+//            chromosome = ensemblMapper.CHROM
+//        }
 
 
         if (looksOkay){
