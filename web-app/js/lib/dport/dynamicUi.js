@@ -2050,11 +2050,11 @@ mpgSoftware.dynamicUi = (function () {
                 } else {
                     var validRecords = _.filter(recordsPerGene.data,function(o){return (o.clpp!==0)});
                     recordsPerGene["numberOfRecords"] =  validRecords.length;
-                    if ((recordsPerGene.data.length === 0)) {
+                    if ((validRecords.length === 0)) {
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
                             Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML), "tissue specific");
                     } else {
-                        var records =  _.map(_.orderBy(_.filter(recordsPerGene.data,function(o){return (o.clpp!==0)}),["clpp"],["desc"]),function(tissueRecord){
+                        var records =  _.map(_.orderBy(validRecords,["clpp"],["desc"]),function(tissueRecord){
                             return {  tissueName: tissueRecord.tissue,
                                 clpp: UTILS.realNumberFormatter(""+tissueRecord.clpp),
                                 prob_in_causal_set: UTILS.realNumberFormatter(""+tissueRecord.prob_in_causal_set),
@@ -2062,7 +2062,7 @@ mpgSoftware.dynamicUi = (function () {
                                 eqtl_z_score: UTILS.realNumberFormatter(""+tissueRecord.eqtl_z_score),
                                 numericalValue: tissueRecord.clpp
                             }});
-                        var cellPresentationString = "records="+recordsPerGene.data.length;
+                        var cellPresentationString = "records="+validRecords.length;
                         var significanceValue = 0;
                         if ((findCellColoringChoice ('table.combinedGeneTableHolder')=== 'Significance')&&
                             ( typeof records !== 'undefined')&&
@@ -2073,10 +2073,10 @@ mpgSoftware.dynamicUi = (function () {
 
                         var renderData = {
                             cellPresentationString:cellPresentationString,
-                            numberOfRecords:recordsPerGene.data.length,
-                            tissueCategoryNumber:categorizeTissueNumbers( recordsPerGene.data.length ),
+                            numberOfRecords:validRecords.length,
+                            tissueCategoryNumber:categorizeTissueNumbers( validRecords.length ),
                             significanceCategoryNumber:categorizeSignificanceNumbers( records, "ECA" ),
-                            recordsExist:(recordsPerGene.data.length)?[1]:[],
+                            recordsExist:(validRecords.length)?[1]:[],
                             gene:recordsPerGene.gene,
                             significanceValue:significanceValue,
                             records:records
