@@ -225,7 +225,7 @@
 <script id="dynamicGeneTableModBody"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}} class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'MOD matches for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)"
-               class="cellExpander" data-target="#mod_data_{{geneName}}"  style="color:black">records={{numberOfRecords}}</a>
+               class="cellExpander" data-target="#mod_data_{{geneName}}"  style="color:black">{{cellPresentationString}}</a>
                <div  class="collapse openModInGeneTable" id="mod_data_{{geneName}}">
                     {{#recordsExist}}
                     {{#geneName}}
@@ -264,7 +264,7 @@
              <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}} class="tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'DEPICT genes set containing {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
 
-               data-target="#depict_geneset_{{gene}}" style="color:black">records={{numberOfRecords}}</a>
+               data-target="#depict_geneset_{{gene}}" style="color:black">{{cellPresentationString}}</a>
                <div  class="collapse openDepictGeneSetInGeneTable" id="depict_geneset_{{gene}}">
                     {{#recordsExist}}
                      <div>{{gene}}</div>
@@ -309,10 +309,9 @@
 
 
 <script id="eCaviarBody"  type="x-tmpl-mustache">
-
              <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}} class="tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'eCAVIAR records referencing {{gene}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
-               data-target="#eCaviar_{{gene}}" style="color:black">records={{numberOfRecords}}</a>
+               data-target="#eCaviar_{{gene}}" style="color:black">{{cellPresentationString}}</a>
                <div  class="collapse openDepictGeneSetInGeneTable" id="eCaviar_{{gene}}">
                     {{#recordsExist}}
                     <table class="openDepictGeneSetInGeneTable" style="border: 0">
@@ -320,8 +319,7 @@
                       <tr role="row">
                         <th style="border-top: 0;">tissue</th>
                         <th style="border-top: 0;">post_prob</th>
-                        <th style="border-top: 0;">GWAS_Z</th>
-                        <th style="border-top: 0;">eQTL_Z</th>
+                        <th style="border-top: 0;">prob_in_causal_set</th>
                       </tr>
                      </thead>
                      <tbody>
@@ -330,8 +328,7 @@
                       <tr role="row">
                            <td style="padding: 3px">{{tissueName}}</td>
                            <td style="padding: 3px">{{clpp}}</td>
-                           <td style="padding: 3px">{{gwas_z_score}}</td>
-                           <td style="padding: 3px">{{eqtl_z_score}}</td>
+                           <td style="padding: 3px">{{prob_in_causal_set}}</td>
                        </tr>
 
                     {{/records}}
@@ -392,7 +389,7 @@
 <script id="dynamicGeneTableEqtlSummaryBody"  type="x-tmpl-mustache">
             <div significance_sortField="{{significanceValue}}" sortField={{numberOfTissues}} class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'eQTLs for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget);"
-               class="cellExpander" data-target="#eqtl_{{geneName}}" style="color:black">records={{numberOfTissues}}</a>
+               class="cellExpander" data-target="#eqtl_{{geneName}}" style="color:black">{{cellPresentationString}}</a>
                %{--<div  class="popup">--}%
                <div  class="collapse openEqtlInGeneTable popuptext" id="eqtl_{{geneName}}">
                     {{#tissuesExist}}
@@ -778,7 +775,7 @@
             <div significance_sortField="{{significanceValue}}" sortField={{numberOfTissues}} class="tissueCategory_{{tissueCategoryNumber}}  significanceCategory_{{significanceCategoryNumber}}">
                <a
                onclick="mpgSoftware.dynamicUi.showAttachedData(event,'ABC for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)"
-                class="cellExpander" data-target="#abc_{{geneName}}" style="color:black">tissues={{numberOfTissues}}</a>
+                class="cellExpander" data-target="#abc_{{geneName}}" style="color:black">{{cellPresentationString}}</a>
                <a
                onclick="mpgSoftware.dynamicUi.showAttachedData(event,'ABC for {{geneName}}',mpgSoftware.dynamicUi.createOutOfRegionGraphic)"
                 class="cellExpander" data-target="#tissues_{{geneName}}"  style="color:black">
@@ -824,13 +821,12 @@
 <script id="depictGeneTableBody"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}} class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'DEPICT predictions for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)"
-               class="cellExpander" data-target="#depict_data_{{geneName}}" style="color:black">records={{numberOfRecords}}</a>
+               class="cellExpander" data-target="#depict_data_{{geneName}}" style="color:black">{{cellPresentationString}}</a>
                <div  class="collapse openDepictInGeneTable" id="depict_data_{{geneName}}">
                     {{#recordsExist}}
                     <table class="openDepictInGeneTable" style="border: 0">
                      <thead>
                       <tr role="row">
-                        <th style="border-top: 0;">dataset</th>
                         <th style="border-right: 0; border-top: 0">p-value</th>
                       </tr>
                      </thead>
@@ -838,7 +834,6 @@
                     {{/recordsExist}}
                     {{#records}}
                        <tr role="row">
-                           <td style="padding: 3px; word-break: break-all">{{dataset}}</td>
                            <td style="border-right: 0; padding: 3px">{{value}}</td>
                        </tr>
                     {{/records}}
@@ -857,7 +852,7 @@
 
             <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}} class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'MetaXcan for {{gene}}',mpgSoftware.dynamicUi.extractStraightFromTarget)"
-               class="cellExpander" data-target="#MetaXcan_{{gene}}"  style="color:black">records={{numberOfRecords}}</a>
+               class="cellExpander" data-target="#MetaXcan_{{gene}}"  style="color:black">{{cellPresentationString}}</a>
                <div  class="collapse openMetaXcanInGeneTable" id="MetaXcan_{{gene}}">
                     {{#tissuesExist}}
                     <table class="openMetaXcanInGeneTable" style="border: 0">
