@@ -19,8 +19,7 @@
     <li><g:message code="informational.shared.traits.serum_creatinine"></g:message></li>
     <li><g:message code="informational.shared.traits.diastolicBP"></g:message></li>
 <li><g:message code="informational.shared.traits.eGFR-creat"></g:message></li>
-<li><g:message code="informational.shared.traits.HbA1c_mmol"></g:message></li>
-<li><g:message code="informational.shared.traits.HbA1c_percent"></g:message></li>
+<li><g:message code="informational.shared.traits.HbA1c"></g:message></li>
     <li><g:message code="informational.shared.traits.height"></g:message></li>
     <li><g:message code="informational.shared.traits.HDL_cholesterol"></g:message></li>
     <li><g:message code="informational.shared.traits.LDL_cholesterol"></g:message></li>
