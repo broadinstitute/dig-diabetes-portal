@@ -65,7 +65,8 @@ class RestServerService {
     private String GET_TISSUE_ASSOCIATION_BASED_ON_LDSR_URL= "ld_score/by_phenotype/object"
     private String GET_VARIANT_GTEX_EQTL_FROM_URL= "ledge/gtex_eqtl/object"
     private String GET_EQTLS_FOR_A_VARIANT_LIST_URL= "testcalls/ledge/eqtl/object"
-    private String GET_VARIANT_ECAVIAR_COLOCALIZATION_FROM_URL= "testcalls/ecaviar/colocalization/object"
+    private String GET_VARIANT_ECAVIAR_COLOCALIZATION_FROM_URL= "testcalls/ecaviar/colocalization_max/object"
+    private String GET_VARIANT_COLOC_COLOCALIZATION_FROM_URL= "testcalls/ecaviar/colocalization_expanded_max/object"
     private String GET_REGION_FROM_ABC_URL= "testcalls/abc/region/object"
     private String GET_GENE_BASED_RECORDS_FROM_DEPICT_URL= "testcalls/depict/region/object"
     private String GET_GENESET_RECORDS_FROM_DEPICT_URL= "testcalls/depict/genepathway/object"
@@ -2606,6 +2607,53 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
         return jsonObject
     }
+
+
+
+
+
+
+
+    public JSONArray gatherEColocData( String gene, String tissue,
+                                        String variant, String phenotype,
+                                        int  startPosition, int  endPosition,
+                                        String chromosome) {
+        List<String> specifyRequestList = []
+        if ((gene) && (gene.length() > 0)) {
+            specifyRequestList << "gene=${gene}"
+        }
+        if ((tissue) && (tissue.length() > 0)) {
+            specifyRequestList << "tissue=${tissue}"
+        }
+        if ((phenotype) && (phenotype.length() > 0)) {
+            specifyRequestList << "phenotype=${phenotype}"
+        }
+        if ((variant) && (variant.length() > 0)) {
+            specifyRequestList << "variant=${variant}"
+        }
+
+        if ((chromosome) && (chromosome.length() > 0)) {
+            specifyRequestList << "chrom=${chromosome}"
+        }
+        if (startPosition > -1) {
+            specifyRequestList << "start_pos=${startPosition}"
+        }
+        if (endPosition > -1) {
+            specifyRequestList << "end_pos=${endPosition}"
+        }
+
+        String rawReturnFromApi =  getRestCall("${GET_VARIANT_COLOC_COLOCALIZATION_FROM_URL}?${specifyRequestList.join("&")}".toString())
+        JsonSlurper slurper = new JsonSlurper()
+        JSONArray jsonArray
+        try{
+            jsonArray = slurper.parseText(rawReturnFromApi) as List
+        } catch(Exception e){
+            jsonArray = [slurper.parseText(rawReturnFromApi)] as List
+        }
+        return jsonArray
+    }
+
+
 
 
 

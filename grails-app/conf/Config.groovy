@@ -912,6 +912,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0  // expose the variant table on the dynamic UI
                                   )
 ]
-
+// Here the secret authentication strings
+auth.providers.twitter.secret = 'l3dJBs3w9QraAuivcfaqdjVGkJ4cxQSMMNNkZ6v9bwz8nXBCXQ'
+oauth.providers.google.secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'
 
 

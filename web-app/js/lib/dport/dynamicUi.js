@@ -222,7 +222,12 @@ mpgSoftware.dynamicUi = (function () {
                 break;
 
             case "getRecordsFromECaviarForGeneTable":
-                defaultFollowUp.displayRefinedContextFunction = displayGenesFromColocalization;
+                defaultFollowUp.displayRefinedContextFunction = displayGenesFromECaviar;
+                defaultFollowUp.placeToDisplayData = '#dynamicPhenotypeHolder div.dynamicUiHolder';
+                break;
+
+            case "getRecordsFromColocForGeneTable":
+                defaultFollowUp.displayRefinedContextFunction = displayGenesFromColoc;
                 defaultFollowUp.placeToDisplayData = '#dynamicPhenotypeHolder div.dynamicUiHolder';
                 break;
 
@@ -456,7 +461,7 @@ mpgSoftware.dynamicUi = (function () {
                         name: "getPhenotypesFromECaviarForPhenotypeTable",
                         retrieveDataUrl: additionalParameters.retrieveECaviarDataUrl,
                         dataForCall: geneNameArray,
-                        processEachRecord: processRecordsFromColocalization,//TODO
+                        processEachRecord: processRecordsFromECaviar,//TODO
                         displayRefinedContextFunction: displayFunction,
                         placeToDisplayData: displayLocation,
                         actionId: nextActionId
@@ -477,7 +482,7 @@ mpgSoftware.dynamicUi = (function () {
                             name: "getPhenotypesFromECaviarForPhenotypeTable",
                             retrieveDataUrl: additionalParameters.retrieveECaviarDataUrl,
                             dataForCall: geneNameArray,
-                            processEachRecord: processRecordsFromColocalization,
+                            processEachRecord: processRecordsFromECaviar,
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
                             actionId: nextActionId
@@ -502,7 +507,31 @@ mpgSoftware.dynamicUi = (function () {
                             name: "getRecordsFromECaviarForGeneTable",
                             retrieveDataUrl: additionalParameters.retrieveECaviarDataUrl,
                             dataForCall: geneNameArray,
-                            processEachRecord: processRecordsFromColocalization,
+                            processEachRecord: processRecordsFromECaviar,
+                            displayRefinedContextFunction: displayFunction,
+                            placeToDisplayData: displayLocation,
+                            actionId: nextActionId
+                        }));
+                    }
+                };
+                break;
+
+            case "getRecordsFromColocForGeneTable":
+                functionToLaunchDataRetrieval = function () {
+                    if (accumulatorObjectFieldEmpty("geneNameArray")) {
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getRecordsFromColocForGeneTable"});
+                        actionToUndertake();
+                    } else {
+                        var phenotype = $('li.chosenPhenotype').attr('id');
+                        var geneNameArray = _.map(getAccumulatorObject("geneNameArray"), function (o) {
+                            return {gene: o.name,
+                                phenotype:phenotype}
+                        });
+                        retrieveRemotedContextInformation(buildRemoteContextArray({
+                            name: "getRecordsFromColocForGeneTable",
+                            retrieveDataUrl: additionalParameters.retrieveColocDataUrl,
+                            dataForCall: geneNameArray,
+                            processEachRecord: processRecordsFromColoc,
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
                             actionId: nextActionId
@@ -940,14 +969,14 @@ mpgSoftware.dynamicUi = (function () {
                     } else {
                         var modRecs = _.sortBy(recordsPerGene.mods,["modName"]);
                         var cellPresentationString = "records="+recordsPerGene.mods.length;
-                        if (findCellColoringChoice ('table.combinedGeneTableHolder')=== 'Significance'){
-                            cellPresentationString = modRecs[0].modName;
-                        }
+                        //if (findCellColoringChoice ('table.combinedGeneTableHolder')=== 'Significance'){
+                        //    cellPresentationString = modRecs[0].modName;
+                        //}
                         var renderData = {
                             cellPresentationString :cellPresentationString,
                             numberOfRecords:recordsPerGene.mods.length,
                             tissueCategoryNumber:categorizeTissueNumbers( recordsPerGene.mods.length ),
-                            significanceCategoryNumber:categorizeSignificanceNumbers( modRecs, "MOD" ),
+                            significanceCategoryNumber:categorizeTissueNumbers( recordsPerGene.mods.length ),//categorizeSignificanceNumbers( modRecs, "MOD" ),
                             recordsExist:(recordsPerGene.mods.length)?[1]:[],
                             geneName:recordsPerGene.geneName,
                             humanGene:recordsPerGene.humanGene,
@@ -1232,7 +1261,7 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
-    var processRecordsFromColocalization = function (data) {
+    var processRecordsFromECaviar = function (data) {
         // build up an object to describe this
         var returnObject = {
             rawData: []
@@ -1248,6 +1277,22 @@ mpgSoftware.dynamicUi = (function () {
 
         return rawColocalizationInfo;
     };
+
+
+
+
+
+    var processRecordsFromColoc = function (data) {
+        var rawColocalizationInfo = getAccumulatorObject('rawColoInfo');
+
+        _.forEach(data, function (oneRec) {
+            rawColocalizationInfo.push(oneRec);
+        });
+
+        return rawColocalizationInfo;
+    };
+
+
 
 
     var processRecordsFromAbc = function (data) {
@@ -1989,7 +2034,7 @@ mpgSoftware.dynamicUi = (function () {
     };
 
 
-    var displayGenesFromColocalization = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+    var displayGenesFromECaviar = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
         var returnObject = createNewDisplayReturnObject();
         var eCaviarInfo = getAccumulatorObject('eCaviarInfo');
         _.forEach(_.groupBy(getAccumulatorObject("rawColocalizationInfo"), 'gene'), function (value, geneName) {
@@ -2102,6 +2147,131 @@ mpgSoftware.dynamicUi = (function () {
 
 
     };
+
+
+
+
+
+
+
+    var displayGenesFromColoc = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+        var returnObject = createNewDisplayReturnObject();
+        var eColocInfo = getAccumulatorObject('eColocInfo');
+        _.forEach(_.groupBy(getAccumulatorObject("rawColoInfo"), 'gene'), function (value, geneName) {
+            var geneObject = {gene: geneName};
+            geneObject['phenotypes'] = _.map(_.uniqBy(value, 'phenotype'), function (o) {
+                return o.phenotype
+            }).sort();
+            geneObject['tissues'] = _.map(_.uniqBy(value, 'tissue'), function (o) {
+                return o.tissue
+            }).sort();
+            geneObject['varId'] = _.map(_.uniqBy(value, 'var_id'), function (o) {
+                return o.var_id
+            }).sort();
+            geneObject['colocTissuesVector'] = function () {
+                return geneObject['tissue'];
+            };
+            geneObject['sourceByTissue'] = function () {
+                return _.groupBy(value, 'tissue');
+            };
+            geneObject['data'] = value;
+            eColocInfo.push(geneObject);
+        });
+
+
+        var intermediateDataStructure = new IntermediateDataStructure();
+
+        if (( typeof eColocInfo !== 'undefined') && ( eColocInfo.length > 0)) {
+            intermediateDataStructure.rowsToAdd.push({
+                category: 'Annotation',
+                displayCategory: 'Annotation',
+                subcategory: 'COLOC',
+                displaySubcategory: 'COLOC',
+                columnCells: []
+            });
+
+            // set up the headers, and give us an empty row of column cells
+            var headerNames = [];
+            if (accumulatorObjectFieldEmpty("geneNameArray")) {
+                console.log("We always have to have a record of the current gene names in depict gene set display. We have a problem.");
+            } else {
+                headerNames  = _.map(getAccumulatorObject("geneNameArray"),'name');
+                _.forEach(getAccumulatorObject("geneNameArray"), function (oneRecord) {
+                    intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
+                        Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML),"header"));
+                });
+            }
+
+
+            // set up the headers, and give us an empty row of column cells
+
+
+            // fill in all of the column cells
+            _.forEach(eColocInfo, function (recordsPerGene) {
+                var indexOfColumn = _.indexOf(headerNames, recordsPerGene.gene);
+                recordsPerGene["recordsExist"] =  [];
+                if (indexOfColumn === -1) {
+                    console.log("Did not find index of gene name="+recordsPerGene.gene+" for eColocInfo.  Shouldn't we?")
+                } else {
+                    var validRecords = _.filter(recordsPerGene.data,function(o){return true});
+                    recordsPerGene["numberOfRecords"] =  validRecords.length;
+                    if ((validRecords.length === 0)) {
+                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
+                            Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML), "tissue specific");
+                    } else {
+                        var records =  _.map(_.orderBy(validRecords,["prob_exists_coloc"],["desc"]),function(tissueRecord){
+                            return {  tissue: tissueRecord.tissue,
+                                conditional_prob_snp_coloc: UTILS.realNumberFormatter(""+tissueRecord.conditional_prob_snp_coloc),
+                                unconditional_prob_snp_coloc: UTILS.realNumberFormatter(""+tissueRecord.unconditional_prob_snp_coloc),
+                                prob_exists_coloc: UTILS.realNumberFormatter(""+tissueRecord.prob_exists_coloc),
+                                var_id: tissueRecord.var_id,
+                                numericalValue: tissueRecord.prob_exists_coloc
+                            }});
+                        var cellPresentationString = "records="+validRecords.length;
+                        var significanceValue = 0;
+                        if ((findCellColoringChoice ('table.combinedGeneTableHolder')=== 'Significance')&&
+                            ( typeof records !== 'undefined')&&
+                            (records.length>0)){
+                            significanceValue = records[0].prob_exists_coloc;
+                            cellPresentationString = records[0].tissue+" : "+records[0].prob_exists_coloc;
+                        }
+
+                        var renderData = {
+                            cellPresentationString:cellPresentationString,
+                            numberOfRecords:validRecords.length,
+                            tissueCategoryNumber:categorizeTissueNumbers( validRecords.length ),
+                            significanceCategoryNumber:categorizeSignificanceNumbers( records, "COL" ),
+                            recordsExist:(validRecords.length)?[1]:[],
+                            gene:recordsPerGene.gene,
+                            significanceValue:significanceValue,
+                            records:records
+                        };
+                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
+                            Mustache.render($("#colocBody")[0].innerHTML, renderData),"tissue specific");
+                    }
+
+                }
+            });
+            intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
+        }
+
+
+        prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
+            '#dynamicAbcGeneTable',
+            returnObject,
+            clearBeforeStarting,
+            intermediateDataStructure,
+            true,
+            'geneTableGeneHeaders');
+        prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder", '#dynamicColocalizationGeneTable', returnObject, clearBeforeStarting);
+
+
+    };
+
+
+
+
+
 
 
     var processEqtlRecordsFromVariantBasedRequest = function (data) {
@@ -3443,7 +3613,8 @@ mpgSoftware.dynamicUi = (function () {
             arrayOfRoutinesToUndertake.push( actionContainer('getRecordsFromECaviarForGeneTable',
                 actionDefaultFollowUp("getRecordsFromECaviarForGeneTable")));
 
-
+            arrayOfRoutinesToUndertake.push( actionContainer('getRecordsFromColocForGeneTable',
+                actionDefaultFollowUp("getRecordsFromColocForGeneTable")));
 
             _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
 
@@ -3688,6 +3859,7 @@ mpgSoftware.dynamicUi = (function () {
                 case 'ABC':
                 case 'MOD':
                 case 'eCAVIAR':
+                case 'COLOC':
                     defaultSearchField = sortTermOverride;
                     var x = parseFloat($(a).attr(defaultSearchField));
                     if (isNaN(x)){
@@ -3964,6 +4136,12 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 };
                 break;
             case 'eCAVIAR':
+                currentSortRequestObject = {
+                    'currentSort':oneClass,
+                    'table':'table.combinedGeneTableHolder'
+                };
+                break;
+            case 'COLOC':
                 currentSortRequestObject = {
                     'currentSort':oneClass,
                     'table':'table.combinedGeneTableHolder'
@@ -4962,11 +5140,12 @@ var destroySharedTable = function (whereTheTableGoes) {
                 'geneTableGeneHeaders', false, additionalDetailsForHeaders);
             refineTableRecords(datatable, 'geneTableGeneHeaders', [], true);
 
-            displayGenesFromColocalization();
+            displayGenesFromECaviar();
             displayGenesFromDepict();
             displayGenePhenotypeAssociations();
             displayRefinedModContext();
             displayGeneSetFromDepict();
+            displayGenesFromColoc();
 
 
             refineTableRecords(datatable, 'geneTableGeneHeaders', [], false);
@@ -5035,6 +5214,20 @@ var destroySharedTable = function (whereTheTableGoes) {
                 //pvalues -- lower numbers are good
                 case "ECA":
                     var valueToAssess = significance[0].clpp;
+                    if ((valueToAssess>0) &&(valueToAssess<=0.2)) {
+                        returnValue = 5;
+                    } else if ((valueToAssess>0.2) &&(valueToAssess<=0.4)) {
+                        returnValue = 4;
+                    } else if ((valueToAssess>0.4) &&(valueToAssess<=0.6)) {
+                        returnValue = 3;
+                    } else if ((valueToAssess>0.6) &&(valueToAssess<=0.8)) {
+                        returnValue = 2;
+                    } else if (valueToAssess>0.9) {
+                        returnValue = 1;
+                    }
+                    break;
+                case "COL":
+                    var valueToAssess = significance[0].prob_exists_coloc;
                     if ((valueToAssess>0) &&(valueToAssess<=0.2)) {
                         returnValue = 5;
                     } else if ((valueToAssess>0.2) &&(valueToAssess<=0.4)) {

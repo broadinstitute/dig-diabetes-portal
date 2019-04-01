@@ -753,14 +753,6 @@ class RegionInfoController {
 
         if (params.gene) {
             gene = params.gene
-//            String commonName = params.gene
-//            if (commonName.startsWith("ENSG")){
-//                gene = commonName
-//            } else {
-//                ensemblMapper = restServerService.convertGeneCommonNameToEnsemblId(commonName,true)
-//                geneNameMap[ensemblMapper["GEN_ID"]] = commonName
-//                gene = ensemblMapper["GEN_ID"]
-//            }
         }
 
         if (params.tissue) {
@@ -798,14 +790,6 @@ class RegionInfoController {
             chromosome = params.chromosome
         }
 
-//        if ((startPosition == -1) && (endPosition == -1)){ //if the start position and end position were not explicitly specified
-//                                                           // then we will grab those from the database and insert them
-//            endPosition = ensemblMapper.END
-//            startPosition = ensemblMapper.START
-//            chromosome = ensemblMapper.CHROM
-//        }
-
-
         if (looksOkay){
             jsonReturn = restServerService.gatherECaviarData( gene, tissue, variant, phenotype,startPosition, endPosition, chromosome)
         } else {
@@ -823,6 +807,83 @@ class RegionInfoController {
         render(status: 200, contentType: "application/json") {jsonArray}
         return
     }
+
+
+
+
+
+    def retrieveColocData() {
+        String gene = ""
+        String tissue = ""
+        String variant = ""
+        String phenotype = ""
+        int startPosition = -1
+        int endPosition = -1
+        String chromosome = ""
+        boolean looksOkay = true
+        JSONArray jsonReturn
+        Map ensemblMapper
+        Map geneNameMap = [:]
+
+        if (params.gene) {
+            gene = params.gene
+        }
+
+        if (params.tissue) {
+            tissue = params.tissue
+        }
+
+        if (params.variant) {
+            variant = params.variant
+        }
+
+        if (params.phenotype) {
+            phenotype = params.phenotype
+        }
+
+        if (params.startPos) {
+            try {
+                startPosition = Double.parseDouble(params.startPos).intValue()
+            } catch (Exception e) {
+                looksOkay = false
+                e.printStackTrace()
+                log.error("retrieveAbcData:failed to convert startPos value=${params.startPos}")
+            }
+        }
+        if (params.endPos) {
+            try {
+                endPosition = Double.parseDouble(params.endPos).intValue()
+            } catch (Exception e) {
+                looksOkay = false
+                e.printStackTrace()
+                log.error("retrieveAbcData:failed to convert endPos value=${params.startPos}")
+            }
+        }
+
+        if (params.chromosome) {
+            chromosome = params.chromosome
+        }
+
+        if (looksOkay){
+            jsonReturn = restServerService.gatherEColocData( gene, tissue, variant, phenotype,startPosition, endPosition, chromosome)
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+            def slurper = new JsonSlurper()
+            jsonReturn =  slurper.parseText(proposedJsonString) as JSONArray;
+        }
+
+        JSONArray jsonArray = new JSONArray()
+        for (JSONObject jsonObject in jsonReturn) {
+            jsonObject.put("common_name", geneNameMap[jsonObject.gene] ?: jsonObject.gene)
+            jsonArray.put(jsonObject)
+        }
+
+        render(status: 200, contentType: "application/json") {jsonArray}
+        return
+    }
+
+
+
 
 
 

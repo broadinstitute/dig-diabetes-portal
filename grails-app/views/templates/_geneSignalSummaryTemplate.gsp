@@ -697,45 +697,9 @@ div.genePosition{
                                     </div>
                                 </div>
 
-                                <style>
+                                <div  style="margin: 0 0 -15px 10px">This tab displays annotations for genes that are located on chromosome
+                                {{chromosome}} between coordinates {{geneExtentBegin}} and {{geneExtentEnd}}.</div>
 
-                                #dynamicGeneHolder > div.row { background-color: #fff !important; border: none !important; }
-                                div.datatable-control-box { float: right; padding: 10px 10px 15px 0px; }
-                                div.datatable-transpose-control, div.datatable-cell-color-control, div.datatable-zoom-control { float: left; padding-left: 15px; }
-                                div.datatable-transpose-control div.tool-label, div.datatable-cell-color-control div.tool-label, div.datatable-zoom-control div.tool-label { font-size: 12px; color: #666; text-align: center; padding-bottom: 5px; padding-bottom: 5px; }
-
-                                div.datatable-transpose-control button.btn.btn-secondary, div.datatable-cell-color-control button.btn.btn-secondary, .datatable-zoom-control button.btn.btn-secondary { padding: 5px 20px 5px 20px; font-size: 0.88em; border-radius: 20px; border:solid 1px #ccc; }
-
-                                div.datatable-transpose-control button:focus, div.datatable-cell-color-control button:focus, .datatable-zoom-control button:focus { outline:0; }
-
-                                .datatable-zoom-control button.btn.btn-secondary { padding: 5px 8px 5px 8px; }
-
-                                div.datatable-cell-color-control button.first-btn { border-top-right-radius: 0 !important; border-bottom-right-radius: 0 !important; border-right: }
-
-                                div.datatable-cell-color-control button.last-btn { border-top-left-radius: 0 !important; border-bottom-left-radius: 0 !important; }
-
-                                div.datatable-cell-color-control button.significance { background-color: #99d6ff }
-                                div.datatable-cell-color-control button.tissues { background-color: #ffdf80 }
-                                div.datatable-cell-color-control button.active { -moz-box-shadow: inset 1px 1px 4px #666666; -webkit-box-shadow: inset 1px 1px 4px #666666; box-shadow: inset 1px 1px 4px #666666; }
-
-                                .variantTableLabels { margin: 0 2px !important; }
-                                #dynamicGeneHolder div.dt-buttons { margin-top: 10px !important }
-
-                                #dynamicGeneHolder .paginate_button.current { padding: 5px 20px 5px 20px; font-size: 0.88em; border-radius: 20px; border:solid 1px #ccc; }
-
-                                table.combinedGeneTableHolder a:hover { cursor:pointer; }
-
-                                #highImpactTemplateHolder_wrapper.dataTables_wrapper { padding: 20px 20px 20px 20px; }
-                                #highImpactTemplateHolder_wrapper div.dt-buttons { margin-bottom: 15px; }
-
-                                </style>
-
-
-<div  style="margin: 0 0 -15px 10px">This tab displays annotations for genes that are located on chromosome {{chromosome}} between coordinates {{geneExtentBegin}} and {{geneExtentEnd}}.
-
-
-                                    %{--<p><g:message code="GenePrioritization.interface.help"></g:message></p>--}%
-                                    </div>
                                 <div class="row">
                                     <div class="col-sm-12">
                                     <div class="datatable-control-box">
