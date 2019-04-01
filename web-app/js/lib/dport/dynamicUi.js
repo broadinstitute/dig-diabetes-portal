@@ -2140,6 +2140,7 @@ mpgSoftware.dynamicUi = (function () {
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.gene,
                             Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML), "tissue specific");
                     } else {
+                        var significanceValue=0;
                         var tissueRecords = _.map(_.sortBy(_.filter(recordsPerGene.tissues,function(t){return t.tissue.includes("SKAT")}),['value']),function(tissueRecord){
                             return {  tissueName: tissueRecord.tissue,
                                 value: UTILS.realNumberFormatter(""+tissueRecord.value),
@@ -2149,6 +2150,7 @@ mpgSoftware.dynamicUi = (function () {
                         if (findCellColoringChoice ('table.combinedGeneTableHolder')=== 'Significance'){
                             var minPValue=_.find(recordsPerGene.tissues,function(t){return t.tissue.includes("P_MIN_P_SKAT_NS_STRICT_NS_1PCT")})
                             cellPresentationString = "p="+minPValue.value+" (Minimum SKAT p-value)";
+                            significanceValue = minPValue.value;
                         }
                         var renderData = {  numberOfRecords:recordsPerGene.tissues.length,
                             cellPresentationString :cellPresentationString,
@@ -2156,7 +2158,7 @@ mpgSoftware.dynamicUi = (function () {
                             tissuesExist:(recordsPerGene.tissues.length)?[1]:[],
                             gene:recordsPerGene.gene,
                             significanceCategoryNumber:categorizeSignificanceNumbers( tissueRecords, "MET" ),
-                            significanceValue:tissueRecords[0].numericalValue,
+                            significanceValue:significanceValue,
                             tissues:tissueRecords
                         };
                         recordsPerGene["numberOfRecords"] = recordsPerGene.tissues.length;
@@ -2233,6 +2235,7 @@ mpgSoftware.dynamicUi = (function () {
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.gene,
                             Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML), "tissue specific");
                     } else {
+                        var significanceValue=0;
                         var tissueRecords = _.map(_.sortBy(_.filter(recordsPerGene.tissues,function(t){return t.tissue.includes("FIRTH")}),['value']),function(tissueRecord){
                             return {  tissueName: tissueRecord.tissue,
                                 value: UTILS.realNumberFormatter(""+tissueRecord.value),
@@ -2242,6 +2245,7 @@ mpgSoftware.dynamicUi = (function () {
                         if (findCellColoringChoice ('table.combinedGeneTableHolder')=== 'Significance'){
                             var minPValue=_.find(recordsPerGene.tissues,function(t){return t.tissue.includes("P_MIN_P_FIRTH_NS_STRICT_NS_1PCT")})
                             cellPresentationString = "p="+minPValue.value+" (Minimum Firth p-value)";
+                            significanceValue = minPValue.value;
                         }
                         var renderData = {  numberOfRecords:recordsPerGene.tissues.length,
                             cellPresentationString :cellPresentationString,
@@ -2249,7 +2253,7 @@ mpgSoftware.dynamicUi = (function () {
                             tissuesExist:(recordsPerGene.tissues.length)?[1]:[],
                             gene:recordsPerGene.gene,
                             significanceCategoryNumber:categorizeSignificanceNumbers( tissueRecords, "MET" ),
-                            significanceValue:tissueRecords[0].numericalValue,
+                            significanceValue:significanceValue,
                             tissues:tissueRecords
                         };
                         recordsPerGene["numberOfRecords"] = recordsPerGene.tissues.length;
@@ -4630,6 +4634,10 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                          (additionalDetailsForHeaders.length > 0)){
                          contentOfHeader += additionalDetailsForHeaders[count].content;
                      }
+                     if ((typeOfHeader === 'geneTableAnnotationHeaders')&&
+                         (additionalDetailsForHeaders.length > 0)){
+                         contentOfHeader += additionalDetailsForHeaders[count].content;
+                     }
 
                      var initialLinearIndex = extractClassBasedIndex(header.content,"initialLinearIndex_");
                      if (initialLinearIndex === -1){
@@ -5020,12 +5028,12 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 fullDataVector.push(header.children[1].outerHTML);
             });
         }
-        //if (tableAndOrientation ==='geneTableAnnotationHeaders'){// in this case we collapse the first row into the header, so we now need to re-extract it into data
-        //    _.each(_.range(0,numberOfHeaders),function(index){
-        //        var header=dataTable.table().column(index).header();
-        //        fullDataVector.push(header.children[1].outerHTML);
-        //    });
-        //}
+        if (tableAndOrientation ==='geneTableAnnotationHeaders'){// in this case we collapse the first row into the header, so we now need to re-extract it into data
+           _.each(_.range(0,numberOfHeaders),function(index){
+               var header=dataTable.table().column(index).header();
+               fullDataVector.push(header.children[1].outerHTML);
+           });
+        }
          var dataFromTable = dataTable.rows().data();
         _.forEach(dataFromTable, function (row, rowIndex) {
             _.forEach(row, function (cell, columnIndex) {
@@ -5117,11 +5125,11 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     (currentLocationInArray + transposedTableDescription.numberOfColumns));
                 currentLocationInArray += transposedTableDescription.numberOfColumns;
             }
-            //if (sharedTable.currentForm === 'geneTableAnnotationHeaders') { // collapse the first row into the header
-            //    additionalDetailsForHeaders = _.slice(transposedTableDescription.dataCells, currentLocationInArray,
-            //        (currentLocationInArray + transposedTableDescription.numberOfColumns));
-            //    currentLocationInArray += transposedTableDescription.numberOfColumns;
-            //}
+            if (sharedTable.currentForm === 'geneTableAnnotationHeaders') { // collapse the first row into the header
+               additionalDetailsForHeaders = _.slice(transposedTableDescription.dataCells, currentLocationInArray,
+                   (currentLocationInArray + transposedTableDescription.numberOfColumns));
+               currentLocationInArray += transposedTableDescription.numberOfColumns;
+            }
             var datatable = buildHeadersForTable(whereTheTableGoes, headers, false,
                 sharedTable.currentForm, false, additionalDetailsForHeaders);
             refineTableRecords(datatable, sharedTable.currentForm, [], true);
@@ -5490,11 +5498,11 @@ var destroySharedTable = function (whereTheTableGoes) {
                     (currentLocationInArray + transposedTableDescription.numberOfColumns));
                 currentLocationInArray += transposedTableDescription.numberOfColumns;
             }
-            //if (sharedTable.currentForm === 'geneTableAnnotationHeaders') { // collapse the first row into the header
-            //    additionalDetailsForHeaders = _.slice(transposedTableDescription.dataCells, currentLocationInArray,
-            //        (currentLocationInArray + transposedTableDescription.numberOfColumns));
-            //    currentLocationInArray += transposedTableDescription.numberOfColumns;
-            //}
+            if (sharedTable.currentForm === 'geneTableAnnotationHeaders') { // collapse the first row into the header
+               additionalDetailsForHeaders = _.slice(transposedTableDescription.dataCells, currentLocationInArray,
+                   (currentLocationInArray + transposedTableDescription.numberOfColumns));
+               currentLocationInArray += transposedTableDescription.numberOfColumns;
+            }
             var datatable = buildHeadersForTable(whereTheTableGoes, headers, false,
                 'geneTableGeneHeaders', false, additionalDetailsForHeaders);
             refineTableRecords(datatable, 'geneTableGeneHeaders', [], true);
