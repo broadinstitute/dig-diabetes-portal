@@ -2883,21 +2883,38 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @param phenotypeName
      * @return
      */
-    public JSONObject gatherGenePhenotypeAssociations (String phenotypeName,String geneName,String desiredMeaning) {
+    public JSONObject gatherGenePhenotypeAssociations (String phenotypeName,String geneName,
+                                                       List<String> desiredMeanings, String preferredSampleGroup) {
 
         // Now we need to find the data sets that contain the phenotype we are interested in.  If I end up with more than one data set than
-        // I'll ignore everyone other than the one with the largest sample size.
-        SampleGroup sampleGroupToWorkWith = null
-        List<SampleGroup> sampleGroupList = metaDataService.getSampleGroupsBasedOnPhenotypeAndMeaning(phenotypeName,desiredMeaning,
-                MetaDataService.METADATA_GENE)
-        sampleGroupList = sampleGroupList?.sort{SampleGroup a,SampleGroup b->b.subjectsNumber<=>a.subjectsNumber}
-        if ((sampleGroupList)&&(sampleGroupList.size()>0)){
-            sampleGroupToWorkWith = sampleGroupList?.first()
+        // I'll ignore every one other than the one with the largest sample size.
+        List<SampleGroup> listOfSampleGroupsToWorkWith = []
+        if (desiredMeanings?.size()>0){
+            for (String desiredMeaning in desiredMeanings){
+                List<SampleGroup> sampleGroupList = metaDataService.getSampleGroupsBasedOnPhenotypeAndMeaning(phenotypeName,desiredMeaning,
+                        MetaDataService.METADATA_GENE)
+                boolean sampleGroupChosen = false
+                if (preferredSampleGroup) { // if a specific sample group was requested then try to get it
+                    SampleGroup requestedSampleGroup =  sampleGroupList?.find{it.getSystemId()==preferredSampleGroup}
+                    if (requestedSampleGroup){
+                        listOfSampleGroupsToWorkWith << sampleGroupList?.first()
+                        sampleGroupChosen = true
+                    }
+                }
+                if (!sampleGroupChosen){ // either a specific sample group wasn't requested, or else we couldn't find it
+                    sampleGroupList = sampleGroupList?.sort{SampleGroup a,SampleGroup b->b.subjectsNumber<=>a.subjectsNumber}
+                    if ((sampleGroupList)&&(sampleGroupList.size()>0)){
+                        listOfSampleGroupsToWorkWith << sampleGroupList?.first()
+                    }
+
+                }
+            }
         }
 
+        listOfSampleGroupsToWorkWith = listOfSampleGroupsToWorkWith.unique()
         // we might legitimately have no Gene level data for this phenotype
         String dataJsonObjectString
-        if (sampleGroupToWorkWith==null){
+        if (listOfSampleGroupsToWorkWith.size()==0){
             dataJsonObjectString = """{
             "is_error": true,
             "error_message": "No gene level data for phenotype ${phenotypeName}"
@@ -2910,10 +2927,15 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
             // now let's find our chosen phenotype in the sample group, and then stroll through that phenotypes properties and pull back every name
             // which has our chosen meaning
-            PhenotypeBean phenotype = sampleGroupToWorkWith.getPhenotypes().find{PhenotypeBean p->p.getName() == phenotypeName}
-            List<PropertyBean> properties = phenotype.getProperties().findAll{ PropertyBean property->property.hasMeaning(desiredMeaning)}
-            for(Property property in properties){
-                addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, sampleGroupToWorkWith.getSystemId(), property.getName())
+            for (SampleGroup sampleGroup in listOfSampleGroupsToWorkWith){
+                PhenotypeBean phenotype = sampleGroup.getPhenotypes().find{PhenotypeBean p->p.getName() == phenotypeName}
+                for (String desiredMeaning in desiredMeanings) {
+                    for(Property property in phenotype.getProperties().findAll{ PropertyBean p->p.hasMeaning(desiredMeaning)}){
+                        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, sampleGroup.getSystemId(), property.getName())
+                    }
+                }
+
+
             }
             getDataQueryHolder.addProperties(resultColumnsToDisplay)
             getDataQueryHolder.getDataQuery.setLimit(5000)

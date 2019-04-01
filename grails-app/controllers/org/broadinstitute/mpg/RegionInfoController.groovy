@@ -893,7 +893,18 @@ class RegionInfoController {
         String gene = ""
         String phenotype = ""
         boolean looksOkay = true
+        String preferredSampleGroup = ""
+
+        def slurper = new JsonSlurper()
+        List<String> propertyList = []
+        if (params.propertyNames) {
+            propertyList = slurper.parseText( params.propertyNames as String)  as JSONArray
+        }
         JSONObject jsonReturn
+
+        if (params.preferredSampleGroup) {
+            preferredSampleGroup = params.preferredSampleGroup
+        }
 
         if (params.gene) {
             gene = params.gene
@@ -910,13 +921,12 @@ class RegionInfoController {
         }
 
         if (looksOkay){
-            jsonReturn = restServerService.gatherGenePhenotypeAssociations( phenotype, gene, "P_VALUE")
+            jsonReturn = restServerService.gatherGenePhenotypeAssociations( phenotype, gene, propertyList, preferredSampleGroup)
         } else {
             String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
-            def slurper = new JsonSlurper()
+
             jsonReturn =  slurper.parseText(proposedJsonString) as JSONArray;
         }
-
         render(status: 200, contentType: "application/json") {jsonReturn}
         return
     }
