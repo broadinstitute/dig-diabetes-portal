@@ -34,7 +34,7 @@
 
     <tr><td>3,414</td><td>0</td><td><a onclick="showSection(event)">Hoorn Diabetes Care System cohort</a>
 
-    <div style="display: none;" class="cohortDetail">--}%
+    <div style="display: none;" class="cohortDetail">
          <table border="1">
          <tr>
          <th>Case selection criteria</th>
@@ -62,6 +62,7 @@
 
 <h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
 <p><g:message code="informational.data.exptsumm.Hoornstudies"></g:message></p>
+
 
     <h4>Accessing Hoorn DCS 2018 results</h4>
     <p><g:message code="informational.data.accessing.Hoornstudies1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.Hoornstudies2"></g:message></p>
