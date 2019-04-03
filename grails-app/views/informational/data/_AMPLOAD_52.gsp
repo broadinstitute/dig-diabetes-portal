@@ -16,7 +16,7 @@
     <li><g:message code="informational.shared.traits.fasting_glucose"></g:message></li>
     <li><g:message code="informational.shared.traits.BMI"></g:message></li>
     <li><g:message code="informational.shared.traits.cholesterol"></g:message></li>
-    <li><g:message code="informational.shared.traits.serum_creatinine"></g:message></li>
+    <li><g:message code="informational.shared.traits.creatinine"></g:message></li>
     <li><g:message code="informational.shared.traits.diastolicBP"></g:message></li>
 <li><g:message code="informational.shared.traits.eGFR-creat"></g:message></li>
 <li><g:message code="informational.shared.traits.HbA1c"></g:message></li>
