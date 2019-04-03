@@ -3933,8 +3933,10 @@ mpgSoftware.dynamicUi = (function () {
             arrayOfRoutinesToUndertake.push( actionContainer("getTissuesFromProximityForLocusContext",
                 actionDefaultFollowUp("getTissuesFromProximityForLocusContext")));
 
+            // arrayOfRoutinesToUndertake.push( actionContainer("getTissuesFromAbcForGenesTable",
+            //    actionDefaultFollowUp("getTissuesFromAbcForGenesTable")));
 
-            //arrayOfRoutinesToUndertake.push( actionContainer('getTissuesFromEqtlsForGenesTable',
+            // arrayOfRoutinesToUndertake.push( actionContainer('getTissuesFromEqtlsForGenesTable',
             //    actionDefaultFollowUp("getTissuesFromEqtlsForGenesTable")));
 
             arrayOfRoutinesToUndertake.push( actionContainer('getGeneAssociationsForGenesTable',
@@ -3946,8 +3948,7 @@ mpgSoftware.dynamicUi = (function () {
             arrayOfRoutinesToUndertake.push( actionContainer('getAnnotationsFromModForGenesTable',
                  actionDefaultFollowUp("getAnnotationsFromModForGenesTable")));
 
-            //arrayOfRoutinesToUndertake.push( actionContainer("getTissuesFromAbcForGenesTable",
-            //    actionDefaultFollowUp("getTissuesFromAbcForGenesTable")));
+
 
             arrayOfRoutinesToUndertake.push( actionContainer('getDepictGeneSetForGenesTable',
                 actionDefaultFollowUp("getDepictGeneSetForGenesTable")));
@@ -5462,9 +5463,11 @@ var destroySharedTable = function (whereTheTableGoes) {
         numberOfColumns = sharedTable.numberOfColumns;
         numberOfRows = sharedTable.dataCells.length / numberOfColumns;
         if ((sharedTable.currentForm === 'geneTableGeneHeaders') || (sharedTable.currentForm === 'variantTableVariantHeaders')) {
-            // numberOfColumns = sharedTable.numberOfColumns;
-            // numberOfRows = sharedTable.dataCells.length / numberOfColumns;
+             numberOfColumns = sharedTable.numberOfColumns;
+             numberOfRows = sharedTable.dataCells.length / numberOfColumns;
         } else {
+            numberOfColumns = sharedTable.numberOfRows;
+            numberOfRows = sharedTable.dataCells.length / numberOfColumns;
             transposeNec = true;
         }
 
@@ -5491,30 +5494,43 @@ var destroySharedTable = function (whereTheTableGoes) {
             //  Now we should be all done fiddling with the data order.
             var additionalDetailsForHeaders = [];
             var currentLocationInArray = 0;
-            var headers = _.slice(transposedTableDescription.dataCells, currentLocationInArray, transposedTableDescription.numberOfColumns);
-            currentLocationInArray += transposedTableDescription.numberOfColumns;
+            var headers = [];
+            // var headers = _.slice(transposedTableDescription.dataCells, currentLocationInArray, transposedTableDescription.numberOfColumns);
+            // currentLocationInArray += transposedTableDescription.numberOfColumns;
             if (sharedTable.currentForm === 'variantTableAnnotationHeaders') { // collapse the first row into the header
+                transposedTableDescription.dataCells = linearDataTransposor(sortedData, numberOfRows, numberOfColumns, function (x, y, rows, cols) {
+                    return (x * cols) + y
+                });
+                headers = _.slice(transposedTableDescription.dataCells, currentLocationInArray, transposedTableDescription.numberOfColumns);
                 additionalDetailsForHeaders = _.slice(transposedTableDescription.dataCells, currentLocationInArray,
                     (currentLocationInArray + transposedTableDescription.numberOfColumns));
                 currentLocationInArray += transposedTableDescription.numberOfColumns;
             }
-            if (sharedTable.currentForm === 'geneTableAnnotationHeaders') { // collapse the first row into the header
-               additionalDetailsForHeaders = _.slice(transposedTableDescription.dataCells, currentLocationInArray,
-                   (currentLocationInArray + transposedTableDescription.numberOfColumns));
+            else if (sharedTable.currentForm === 'geneTableAnnotationHeaders') { // collapse the first row into the header
+                transposedTableDescription.dataCells = linearDataTransposor(sortedData, numberOfRows, numberOfColumns, function (x, y, rows, cols) {
+                    return (x * cols) + y
+                });
+                // We just transposed the data, so now the number of columns is defined by what was the number of rows
+                var revisedNumberOfColumns = transposedTableDescription.numberOfRows;
+                headers = _.slice(transposedTableDescription.dataCells, currentLocationInArray, revisedNumberOfColumns);
+                additionalDetailsForHeaders = _.slice(transposedTableDescription.dataCells, currentLocationInArray,
+                   (currentLocationInArray + revisedNumberOfColumns));
                currentLocationInArray += transposedTableDescription.numberOfColumns;
+            } else {
+                headers = _.slice(transposedTableDescription.dataCells, currentLocationInArray, transposedTableDescription.numberOfColumns);
             }
             var datatable = buildHeadersForTable(whereTheTableGoes, headers, false,
                 'geneTableGeneHeaders', false, additionalDetailsForHeaders);
             refineTableRecords(datatable, 'geneTableGeneHeaders', [], true);
 
-            displayGenesFromECaviar();
-            displayGenesFromDepict();
+            displayGeneFirthAssociationsForGeneTable();
+            displayGeneSkatAssociationsForGeneTable();
             displayGenePhenotypeAssociations();
-            displayRefinedModContext();
+            displayGenesFromDepict();
             displayGeneSetFromDepict();
+            displayGenesFromECaviar();
             displayGenesFromColoc();
-            displayGeneFirthAssociationsForGeneTable()
-            displayGeneSkatAssociationsForGeneTable()
+            displayRefinedModContext();
 
 
             refineTableRecords(datatable, 'geneTableGeneHeaders', [], false);

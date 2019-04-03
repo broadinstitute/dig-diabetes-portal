@@ -69,6 +69,7 @@ class RestServerService {
     private String GET_VARIANT_COLOC_COLOCALIZATION_FROM_URL= "testcalls/ecaviar/colocalization_expanded_max/object"
     private String GET_REGION_FROM_ABC_URL= "testcalls/abc/region/object"
     private String GET_GENE_BASED_RECORDS_FROM_DEPICT_URL= "testcalls/depict/region/object"
+    private String GET_GENE_BASED_RECORDS_FROM_MODS_URL= "testcalls/knockout/object"
     private String GET_GENESET_RECORDS_FROM_DEPICT_URL= "testcalls/depict/genepathway/object"
     private String GET_DNASE_RECORDS_URL= "testcalls/region/dnase/object"
     private String GET_H3K27AC_RECORDS_URL= "testcalls/region/h3k27ac/object"
@@ -2392,7 +2393,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         if ((tissue) && (tissue.length() > 0)) {
             specifyRequestList << "tissue=${tissue}"
         }
-        String rawReturnFromApi =  getRestCallBase("${GET_VARIANT_GTEX_EQTL_FROM_URL}?${specifyRequestList.join("&")}", GET_TEMPORARY_EQTL_URL)
+        String rawReturnFromApi =  getRestCall("${GET_VARIANT_GTEX_EQTL_FROM_URL}?${specifyRequestList.join("&")}")
         //String rawReturnFromApi =  getRestCallBase("ledge/gtex_eqtl/object?${specifyRequestList.join("&")}", GET_TEMPORARY_EQTL_URL)
         JsonSlurper slurper = new JsonSlurper()
         JSONArray jsonArray = slurper.parseText(rawReturnFromApi) as JSONArray
@@ -2587,7 +2588,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             specifyRequestList << "gene=${gene}"
         }
 
-        String rawReturnFromApi =  getRestCallBase("testcalls/knockout/object?${specifyRequestList.join("&")}", GET_TEMPORARY_MODS_URL)
+        String rawReturnFromApi =  getRestCall("${GET_GENE_BASED_RECORDS_FROM_MODS_URL}?${specifyRequestList.join("&")}")
         JsonSlurper slurper = new JsonSlurper()
         JSONArray jsonArray
         JSONObject jsonObject
