@@ -1301,7 +1301,7 @@ mpgSoftware.dynamicUi = (function () {
             var geneRecord = {};
             _.forEach(data.variants[0], function (oneRec) {
                 _.forEach(oneRec, function(sampleRecord,tissue){
-                    if (tissue==='GENE') {
+                    if ((tissue==='GENE')||(tissue==='Gene')) {
                         geneRecord['gene'] = sampleRecord;
                         geneRecord['tissues'] = [];
                     } else {
@@ -1343,7 +1343,7 @@ mpgSoftware.dynamicUi = (function () {
             var geneRecord = {};
             _.forEach(data.variants[0], function (oneRec) {
                 _.forEach(oneRec, function(sampleRecord,tissue){
-                    if (tissue==='GENE') {
+                    if ((tissue==='GENE')||(tissue==='Gene')) {
                         geneRecord['gene'] = sampleRecord;
                         geneRecord['tissues'] = [];
                     } else {
@@ -1384,7 +1384,7 @@ mpgSoftware.dynamicUi = (function () {
             var geneRecord = {};
             _.forEach(data.variants[0], function (oneRec) {
                 _.forEach(oneRec, function(sampleRecord,tissue){
-                    if (tissue==='GENE') {
+                    if ((tissue==='GENE')||(tissue==='Gene')) {
                         geneRecord['gene'] = sampleRecord;
                         geneRecord['tissues'] = [];
                     } else {

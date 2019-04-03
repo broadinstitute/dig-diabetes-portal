@@ -801,6 +801,7 @@ class RegionInfoController {
         JSONArray jsonArray = new JSONArray()
         for (JSONObject jsonObject in jsonReturn) {
             jsonObject.put("common_name", geneNameMap[jsonObject.gene] ?: jsonObject.gene)
+            jsonObject.put("tissue_trans",g.message(code: "metadata.${jsonObject.tissue}", default: jsonObject.tissue))
             jsonArray.put(jsonObject)
         }
 
@@ -875,6 +876,7 @@ class RegionInfoController {
         JSONArray jsonArray = new JSONArray()
         for (JSONObject jsonObject in jsonReturn) {
             jsonObject.put("common_name", geneNameMap[jsonObject.gene] ?: jsonObject.gene)
+            jsonObject.put("tissue_trans",g.message(code: "metadata.${jsonObject.tissue}", default: jsonObject.tissue))
             jsonArray.put(jsonObject)
         }
 
@@ -922,6 +924,21 @@ class RegionInfoController {
 
         if (looksOkay){
             jsonReturn = restServerService.gatherGenePhenotypeAssociations( phenotype, gene, propertyList, preferredSampleGroup)
+            // insert translations if they exist
+            if ((jsonReturn?.variants)&&(jsonReturn?.variants?.size()>0)){
+                for (Map map in jsonReturn?.variants[0]){
+                    map.each{String k,v->
+                        if (k!="Gene"){
+                            String translation = g.message(code: "metadata.$k", default: "no translation")
+                            if (translation != "no translation"){
+                                map[translation]=v
+                                map.remove(k)
+                            }
+                        }
+
+                    }
+                }
+            }
         } else {
             String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
 
