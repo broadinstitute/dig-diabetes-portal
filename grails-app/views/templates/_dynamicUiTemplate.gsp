@@ -212,6 +212,18 @@
 
 
 
+<script id="sharedCategoryWriter"  type="x-tmpl-mustache">
+     <div significance_sortfield='0' sortField='{{index}}' subSortField='-1' class={{row.subcategory}} initialLinearIndex_{{indexInOneDimensionalArray}} geneRow'>
+     {{#dataAnnotation}}
+          {{displayCategory}}
+
+     {{/dataAnnotation}}
+     </div>
+</script>
+
+
+
+
 %{--a new and reduced form of dynamicGeneTable initially for displayRefinedModContext--}%
 <script id="dynamicGeneTableHeader"  type="x-tmpl-mustache">
 
@@ -219,6 +231,17 @@
 
 </script>
 
+
+
+<script id="dynamicGeneTableModSubCategory"  type="x-tmpl-mustache">
+     <div significance_sortfield='{{index}}' class='subcategory initialLinearIndex_{{indexInOneDimensionalArray}}'
+      sortField='{{index}}' subSortField='-1'>
+     {{#dataAnnotation}}
+          {{displaySubcategory}}
+          <g:helpText title="variant.alleleFrequency.help.header" placement="bottom" body="variant.alleleFrequency.help.text"/>
+     {{/dataAnnotation}}
+     </div>
+</script>
 
 
 
@@ -256,13 +279,20 @@
 </script>
 
 
-
+<script id="depictGeneSetSubCategory"  type="x-tmpl-mustache">
+     <div significance_sortfield='{{index}}' class='subcategory initialLinearIndex_{{indexInOneDimensionalArray}}'
+      sortField='{{index}}' subSortField='-1'>
+     {{#dataAnnotation}}
+          {{displaySubcategory}}
+     {{/dataAnnotation}}
+    </div>
+</script>
 
 
 <script id="depictGeneSetBody"  type="x-tmpl-mustache">
 
              <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}} class="tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}}">
-               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'DEPICT genes set containing {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
+               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'DEPICT gene set containing {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
 
                data-target="#depict_geneset_{{gene}}" style="color:black">{{cellPresentationString}}</a>
                <div  class="collapse openDepictGeneSetInGeneTable" id="depict_geneset_{{gene}}">
@@ -305,6 +335,18 @@
 
 
 
+<script id="eCaviarSubCategory"  type="x-tmpl-mustache">
+     <div significance_sortfield='{{index}}' class='subcategory initialLinearIndex_{{indexInOneDimensionalArray}}'
+      sortField='{{index}}' subSortField='-1'>
+      {{#dataAnnotation}}
+         {{displaySubcategory}}
+      {{/dataAnnotation}}
+     </div>
+</script>
+
+
+
+
 <script id="eCaviarBody"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}} class="tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'eCAVIAR records referencing {{gene}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
@@ -339,6 +381,14 @@
 
 
 
+<script id="colocSubCategory"  type="x-tmpl-mustache">
+     <div significance_sortfield='{{index}}' class='subcategory initialLinearIndex_{{indexInOneDimensionalArray}}'
+      sortField='{{index}}' subSortField='-1'>
+     {{#dataAnnotation}}
+          {{displaySubcategory}}
+     {{/dataAnnotation}}
+     </div>
+</script>
 
 
 <script id="colocBody"  type="x-tmpl-mustache">
@@ -849,6 +899,15 @@
 </script>
 
 
+<script id="depictGeneTableSubCategory"  type="x-tmpl-mustache">
+     <div significance_sortfield='{{index}}' class='subcategory initialLinearIndex_{{indexInOneDimensionalArray}}'
+      sortField='{{index}}' subSortField='-1'>
+     {{#dataAnnotation}}
+          {{displaySubcategory}}
+     {{/dataAnnotation}}
+     </div>
+</script>
+
 
 <script id="depictGeneTableBody"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}} class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}}">
@@ -878,7 +937,14 @@
 </script>
 
 
-
+<script id="geneAssociationTableSubCategory"  type="x-tmpl-mustache">
+     <div significance_sortfield='{{index}}' class='subcategory initialLinearIndex_{{indexInOneDimensionalArray}}'
+      sortField='{{index}}' subSortField='-1'>
+     {{#dataAnnotation}}
+          {{displaySubcategory}}
+     {{/dataAnnotation}}
+    </div>
+</script>
 
 <script id="geneAssociationTableBody"  type="x-tmpl-mustache">
 
@@ -911,6 +977,14 @@
 </script>
 
 
+<script id="geneSkatAssociationTableSubCategory"  type="x-tmpl-mustache">
+     <div significance_sortfield='{{index}}' class='subcategory initialLinearIndex_{{indexInOneDimensionalArray}}'
+      sortField='{{index}}' subSortField='-1'>
+     {{#dataAnnotation}}
+          {{displaySubcategory}}
+     {{/dataAnnotation}}
+    </div>
+</script>
 
 
 <script id="geneSkatAssociationTableBody"  type="x-tmpl-mustache">
@@ -943,6 +1017,15 @@
             </div>
 </script>
 
+
+<script id="geneFirthAssociationTableSubCategory"  type="x-tmpl-mustache">
+     <div significance_sortfield='{{index}}' class='subcategory initialLinearIndex_{{indexInOneDimensionalArray}}'
+      sortField='{{index}}' subSortField='-1'>
+     {{#dataAnnotation}}
+          {{displaySubcategory}}
+     {{/dataAnnotation}}
+     </div>
+</script>
 
 
 <script id="geneFirthAssociationTableBody"  type="x-tmpl-mustache">

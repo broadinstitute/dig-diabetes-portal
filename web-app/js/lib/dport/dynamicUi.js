@@ -183,8 +183,22 @@ mpgSoftware.dynamicUi = (function () {
     var CELL_COLORING_REDDISH_TOP_MINUS4 = '#FFCEC4';
     var CELL_COLORING_REDDISH_BOTTOM = '#eeeeee';
 
-
     var CELL_COLORING_UNUSED = '#FFFFFF';
+
+    var getDatatypeInformation = function( dataTypeCode ) {
+        var returnValue = {};
+        var additionalParameters = getDyanamicUiVariables();
+        var index = _.findIndex( additionalParameters.dataAnnotationTypes, { 'code' : dataTypeCode } );
+        if ( index === -1 ) {
+            alert(' ERROR: fielding request for dataTypeCode='+dataTypeCode+', which does not exist.')
+        } else {
+            returnValue = { index: index,
+                            dataAnnotation: additionalParameters.dataAnnotationTypes[index] };
+        }
+        return returnValue;
+    }
+
+
 
     var setDyanamicUiVariables = function (incomingDyanamicUiVariables) {
         dyanamicUiVariables = incomingDyanamicUiVariables;
@@ -949,6 +963,24 @@ mpgSoftware.dynamicUi = (function () {
     }
 
 
+
+
+
+
+    var addRowHolderToIntermediateDataStructure = function (dataAnnotationTypeCode,intermediateDataStructure){
+        var displayDetails = getDatatypeInformation(dataAnnotationTypeCode );
+        intermediateDataStructure.rowsToAdd.push({
+            code: displayDetails.dataAnnotation.code,
+            category: displayDetails.dataAnnotation.category,
+            displayCategory: displayDetails.dataAnnotation.displayCategory,
+            subcategory: displayDetails.dataAnnotation.subcategory,
+            displaySubcategory: displayDetails.dataAnnotation.displaySubcategory,
+            columnCells: []
+        });
+    }
+
+
+
     /***
      * Mod annotation search
      * @param idForTheTargetDiv
@@ -1002,6 +1034,7 @@ mpgSoftware.dynamicUi = (function () {
         return returnObject;
     };
     var displayRefinedModContext = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+        var dataAnnotationTypeCode = 'MOD';
         var returnObject = createNewDisplayReturnObject();
         var selectorForIidForTheTargetDiv = idForTheTargetDiv;
         $(selectorForIidForTheTargetDiv).empty();
@@ -1026,13 +1059,8 @@ mpgSoftware.dynamicUi = (function () {
 
         // Mod data for the gene table
         if (returnObject.genesExist()) {
-            intermediateDataStructure.rowsToAdd.push({
-                category: 'Annotation',
-                displayCategory: 'Annotation',
-                subcategory: 'Mouse knockout phenotype',
-                displaySubcategory: 'Mouse knockout phenotype',
-                columnCells: []
-            });
+            addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
+
             // set up the headers, and give us an empty row of column cells
             var headerNames = [];
             if (accumulatorObjectFieldEmpty("geneNameArray")) {
@@ -1563,6 +1591,7 @@ mpgSoftware.dynamicUi = (function () {
 
 
     var displayGenesFromAbc = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+        var dataAnnotationTypeCode = 'ECA';
         var returnObject = createNewDisplayReturnObject();
 
         // for each gene collect up the data we want to display
@@ -1611,13 +1640,7 @@ mpgSoftware.dynamicUi = (function () {
         var intermediateDataStructure = new IntermediateDataStructure();
 
         if (( typeof returnObject.abcGenesExist !== 'undefined') && ( returnObject.abcGenesExist())) {
-            intermediateDataStructure.rowsToAdd.push({
-                category: 'Annotation',
-                displayCategory: 'Annotation',
-                subcategory: 'ABC',
-                displaySubcategory: 'ABC',
-                columnCells: []
-            });
+            addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
 
             // set up the headers, and give us an empty row of column cells
             var headerNames = [];
@@ -1805,6 +1828,7 @@ mpgSoftware.dynamicUi = (function () {
 
 
     var displayGenesFromDepict = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+        var dataAnnotationTypeCode = 'DEP_GP';
         var returnObject = createNewDisplayReturnObject();
 
         // for each gene collect up the data we want to display
@@ -1841,13 +1865,7 @@ mpgSoftware.dynamicUi = (function () {
         var intermediateDataStructure = new IntermediateDataStructure();
 
         if (( typeof returnObject.genesByDepict !== 'undefined') && ( returnObject.genesByDepict.length > 0)) {
-            intermediateDataStructure.rowsToAdd.push({
-                category: 'Annotation',
-                displayCategory: 'Annotation',
-                subcategory: 'DEPICT gene prioritization',
-                displaySubcategory: 'DEPICT gene prioritization',
-                columnCells: []
-            });
+            addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
 
             // set up the headers, and give us an empty row of column cells
             var headerNames = [];
@@ -1921,6 +1939,7 @@ mpgSoftware.dynamicUi = (function () {
 
 
     var displayGeneSetFromDepict = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+        var dataAnnotationTypeCode = 'DEP_GS';
         var returnObject = createNewDisplayReturnObject();
         var depictGeneSet = getAccumulatorObject('depictGeneSetInfo');
         if (( typeof getAccumulatorObject("depictGeneSetInfo") !== 'undefined') &&
@@ -1936,13 +1955,9 @@ mpgSoftware.dynamicUi = (function () {
         var intermediateDataStructure = new IntermediateDataStructure();
 
         if (( typeof depictGeneSet !== 'undefined') && ( depictGeneSet.length > 0)) {
-            intermediateDataStructure.rowsToAdd.push({
-                category: 'Annotation',
-                displayCategory: 'Annotation',
-                subcategory: 'DEPICT gene set',
-                displaySubcategory: 'DEPICT gene set',
-                columnCells: []
-            });
+            addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
+
+
 
             // set up the headers, and give us an empty row of column cells
             var headerNames = [];
@@ -2020,6 +2035,7 @@ mpgSoftware.dynamicUi = (function () {
 
 
     var displayGenePhenotypeAssociations = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+        var dataAnnotationTypeCode = 'MET';
         var returnObject = createNewDisplayReturnObject();
 
         // for each gene collect up the data we want to display
@@ -2032,13 +2048,7 @@ mpgSoftware.dynamicUi = (function () {
         var intermediateDataStructure = new IntermediateDataStructure();
 
         if (( typeof returnObject.geneAssociations !== 'undefined') && ( returnObject.geneAssociations.length > 0)) {
-            intermediateDataStructure.rowsToAdd.push({
-                category: 'Annotation',
-                displayCategory: 'Annotation',
-                subcategory: 'MetaXcan',
-                displaySubcategory: 'MetaXcan',
-                columnCells: []
-            });
+            addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
 
             // set up the headers, and give us an empty row of column cells
             var headerNames = [];
@@ -2111,6 +2121,7 @@ mpgSoftware.dynamicUi = (function () {
 
 
     var displayGeneSkatAssociationsForGeneTable = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+        var dataAnnotationTypeCode = 'SKA';
         var returnObject = createNewDisplayReturnObject();
 
         // for each gene collect up the data we want to display
@@ -2123,13 +2134,7 @@ mpgSoftware.dynamicUi = (function () {
         var intermediateDataStructure = new IntermediateDataStructure();
 
         if (( typeof returnObject.geneAssociations !== 'undefined') && ( returnObject.geneAssociations.length > 0)) {
-            intermediateDataStructure.rowsToAdd.push({
-                category: 'Annotation',
-                displayCategory: 'Annotation',
-                subcategory: '52K SKAT gene associations',
-                displaySubcategory: '52K SKAT gene associations',
-                columnCells: []
-            });
+            addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
 
             // set up the headers, and give us an empty row of column cells
             var headerNames = [];
@@ -2206,6 +2211,7 @@ mpgSoftware.dynamicUi = (function () {
 
 
     var displayGeneFirthAssociationsForGeneTable = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+        var dataAnnotationTypeCode = 'FIR';
         var returnObject = createNewDisplayReturnObject();
 
         // for each gene collect up the data we want to display
@@ -2218,13 +2224,7 @@ mpgSoftware.dynamicUi = (function () {
         var intermediateDataStructure = new IntermediateDataStructure();
 
         if (( typeof returnObject.geneAssociations !== 'undefined') && ( returnObject.geneAssociations.length > 0)) {
-            intermediateDataStructure.rowsToAdd.push({
-                category: 'Annotation',
-                displayCategory: 'Annotation',
-                subcategory: '52K Firth gene associations',
-                displaySubcategory: '52K Firth gene associations',
-                columnCells: []
-            });
+            addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
 
             // set up the headers, and give us an empty row of column cells
             var headerNames = [];
@@ -2393,6 +2393,7 @@ mpgSoftware.dynamicUi = (function () {
 
 
     var displayGenesFromECaviar = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+        var dataAnnotationTypeCode = 'ECA';
         var returnObject = createNewDisplayReturnObject();
         var eCaviarInfo = getAccumulatorObject('eCaviarInfo');
         _.forEach(_.groupBy(getAccumulatorObject("rawColocalizationInfo"), 'gene'), function (value, geneName) {
@@ -2420,13 +2421,7 @@ mpgSoftware.dynamicUi = (function () {
         var intermediateDataStructure = new IntermediateDataStructure();
 
         if (( typeof eCaviarInfo !== 'undefined') && ( eCaviarInfo.length > 0)) {
-            intermediateDataStructure.rowsToAdd.push({
-                category: 'Annotation',
-                displayCategory: 'Annotation',
-                subcategory: 'eCAVIAR',
-                displaySubcategory: 'eCAVIAR',
-                columnCells: []
-            });
+            addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
 
             // set up the headers, and give us an empty row of column cells
             var headerNames = [];
@@ -2513,6 +2508,7 @@ mpgSoftware.dynamicUi = (function () {
 
 
     var displayGenesFromColoc = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+        var dataAnnotationTypeCode = 'COL';
         var returnObject = createNewDisplayReturnObject();
         var eColocInfo = getAccumulatorObject('eColocInfo');
         _.forEach(_.groupBy(getAccumulatorObject("rawColoInfo"), 'gene'), function (value, geneName) {
@@ -2540,13 +2536,7 @@ mpgSoftware.dynamicUi = (function () {
         var intermediateDataStructure = new IntermediateDataStructure();
 
         if (( typeof eColocInfo !== 'undefined') && ( eColocInfo.length > 0)) {
-            intermediateDataStructure.rowsToAdd.push({
-                category: 'Annotation',
-                displayCategory: 'Annotation',
-                subcategory: 'COLOC',
-                displaySubcategory: 'COLOC',
-                columnCells: []
-            });
+            addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
 
             // set up the headers, and give us an empty row of column cells
             var headerNames = [];
@@ -2925,6 +2915,7 @@ mpgSoftware.dynamicUi = (function () {
 
 
     var displayTissuesPerGeneFromEqtl = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+        var dataAnnotationTypeCode = 'EQT';
         var returnObject = createNewDisplayReturnObject();
         _.forEach(getAccumulatorObject("tissuesForEveryGene"), function (eachGene) {
             returnObject.uniqueGenes.push({name: eachGene.geneName});
@@ -2943,13 +2934,8 @@ mpgSoftware.dynamicUi = (function () {
 
         var intermediateDataStructure = new IntermediateDataStructure();
         if (( typeof returnObject.eqtlTissuesExist !== 'undefined') && ( returnObject.eqtlTissuesExist())) {
-            intermediateDataStructure.rowsToAdd.push({
-                category: 'Annotation',
-                displayCategory: 'Annotation',
-                subcategory: 'eQTL',
-                displaySubcategory: 'eQTL',
-                columnCells: []
-            });
+            addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
+
              //set up the headers, and give us an empty row of column cells
             var headerNames = [];
             if (accumulatorObjectFieldEmpty("geneNameArray")) {
@@ -4171,17 +4157,18 @@ mpgSoftware.dynamicUi = (function () {
 
             var defaultSearchField = 'sortField';
             switch (currentSort){
-                case 'geneMethods':
-                    var textA = $(a).attr(defaultSearchField).toUpperCase();
-                    var textB = $(b).attr(defaultSearchField).toUpperCase();
-                    return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-                    break;
+                // case 'geneMethods':
+                //     var textA = $(a).attr(defaultSearchField).toUpperCase();
+                //     var textB = $(b).attr(defaultSearchField).toUpperCase();
+                //     return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+                //     break;
                 case 'variantAnnotationCategory':
                 case 'methods':
                     var textA = $(a).attr(defaultSearchField).toUpperCase();
                     var textB = $(b).attr(defaultSearchField).toUpperCase();
                     return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
                     break;
+                case 'geneMethods':
                 case 'H3k27ac':
                 case 'DNase':
                 //case 'ABC':
@@ -4592,7 +4579,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     ],
                     "bDestroy": true,
                     "bAutoWidth": false,
-                    "columnDefs": []
+                    "columnDefs": [],
+                    "order": [[ 1, "asc" ]]
                 };
                 var addedColumns = [];
                 if (prependColumns){ // we may wish to add in some columns based on metadata about a row.
@@ -4743,31 +4731,17 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                             $('div.tissueCategory_5').parents('td').css('background',CELL_COLORING_REDDISH_TOP_MINUS4);
                             $('div.tissueCategory_6').parents('td').css('background',CELL_COLORING_UNUSED);
 
-
-                            // $('div.tissueCategory_0').parents('td').css('background','#FFFF33');
-                            // $('div.tissueCategory_1').parents('td').css('background','#FFCC33');
-                            // $('div.tissueCategory_2').parents('td').css('background','#FF9933');
-                            // $('div.tissueCategory_3').parents('td').css('background','#FF3333');
-                            // $('div.tissueCategory_4').parents('td').css('background','#FF0033');
-                            // $('div.tissueCategory_5').parents('td').css('background','#CCCCCC');
                         } else if (sharedTable["cellColoringScheme"]==="Significance"){
-                            // $('div.significanceCategory_0').parents('td').css('background','#FFFFFF');
-                            // $('div.significanceCategory_1').parents('td').css('background','#3333FF');
-                            // $('div.significanceCategory_2').parents('td').css('background','#3366FF');
-                            // $('div.significanceCategory_3').parents('td').css('background','#3399FF');
-                            // $('div.significanceCategory_4').parents('td').css('background','#33CCFF');
-                            // $('div.significanceCategory_5').parents('td').css('background','#33FFFF');
-
-                            $('div.significanceCategory_0').parents('td').css('background',CELL_COLORING_BLUISH_BOTTOM);
+                           $('div.significanceCategory_0').parents('td').css('background',CELL_COLORING_BLUISH_BOTTOM);
                             $('div.significanceCategory_1').parents('td').css('background',CELL_COLORING_BLUISH_TOP_MINUS1);
                             $('div.significanceCategory_2').parents('td').css('background',CELL_COLORING_BLUISH_TOP_MINUS2);
                             $('div.significanceCategory_3').parents('td').css('background',CELL_COLORING_BLUISH_TOP_MINUS3);
-                           // $('div.significanceCategory_3 a').css('color','#DDDDDD');
                             $('div.significanceCategory_4').parents('td').css('background',CELL_COLORING_BLUISH_TOP_MINUS4);
                            // $('div.significanceCategory_4 a').css('color','#DDDDDD');
                             $('div.significanceCategory_5').parents('td').css('background',CELL_COLORING_BLUISH_BOTTOM);
                             $('div.significanceCategory_6').parents('td').css('background',CELL_COLORING_UNUSED);
                         }
+                       // datatable.DataTable().order([[1,'ASC']]).draw();
 
                     }
                   break;
@@ -4865,6 +4839,18 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         return numberToExtract;
     }
 
+    var displayCategoryHtml = function (dataAnnotationCode,indexInOneDimensionalArray){
+        var displayDetails = getDatatypeInformation( dataAnnotationCode );
+        displayDetails["indexInOneDimensionalArray"]=indexInOneDimensionalArray;
+        var returnValue = Mustache.render($('#'+displayDetails.dataAnnotation.categoryWriter)[0].innerHTML,displayDetails);
+        return returnValue;
+    }
+    var displaySubcategoryHtml = function (dataAnnotationCode,indexInOneDimensionalArray){
+        var displayDetails = getDatatypeInformation( dataAnnotationCode );
+        displayDetails["indexInOneDimensionalArray"]=indexInOneDimensionalArray;
+        var returnValue = Mustache.render($('#'+displayDetails.dataAnnotation.subCategoryWriter)[0].innerHTML,displayDetails);
+        return returnValue;
+    }
 
 
 
@@ -4882,12 +4868,6 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             }
 
             var numberOfExistingRows = $(whereTheTableGoes).dataTable().DataTable().rows()[0].length+1;
-            //if (numberOfExistingRows === 2){ // special case.  When the table is first created a fake row is added by jquery datatable.  Ignore it
-            //                                 //   for the purposes of building our in memory representation of the table.
-            //    if ($(whereTheTableGoes+" tr.odd td").hasClass("dataTables_empty")){
-            //        numberOfExistingRows = 1;
-            //    }
-            //}
             var sharedTable = getAccumulatorObject("sharedTable_"+whereTheTableGoes);
             var numberOfColumns  = sharedTable.numberOfColumns;
             var rowDescriber = [];
@@ -4898,13 +4878,15 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     case 'geneTableGeneHeaders':
                         indexInOneDimensionalArray = (numberOfExistingRows*numberOfColumns);
                         rowDescriber.push( new IntermediateStructureDataCell(row.category,
-                            "<div class='"+row.subcategory+
-                            " initialLinearIndex_"+indexInOneDimensionalArray+" geneRow'>"+row.displayCategory+"</div>" ,
+                            displayCategoryHtml(row.code,indexInOneDimensionalArray),
+                            // "<div class='"+row.subcategory+
+                            // " initialLinearIndex_"+indexInOneDimensionalArray+" geneRow'>"+row.displayCategory+"</div>" ,
                             row.subcategory)) ;
                         indexInOneDimensionalArray++;
                         rowDescriber.push( new IntermediateStructureDataCell(row.subcategory,
-                            "<div significance_sortfield='0.0' class='subcategory "+
-                            " initialLinearIndex_"+indexInOneDimensionalArray+"' sortField='"+row.displaySubcategory+"' subSortField='-1'>"+row.displaySubcategory+"</div>" ,
+                            displaySubcategoryHtml(row.code,indexInOneDimensionalArray),
+                            // "<div significance_sortfield='0.0' class='subcategory "+
+                            // " initialLinearIndex_"+indexInOneDimensionalArray+"' sortField='"+row.displaySubcategory+"' subSortField='-1'>"+row.displaySubcategory+"</div>" ,
                             "insertedColumn2"));
                         numberOfColumnsAdded += rowDescriber.length;
                         break;
