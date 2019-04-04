@@ -169,6 +169,23 @@ mpgSoftware.dynamicUi = (function () {
     var dyanamicUiVariables;
     var clearBeforeStarting = false;
 
+    var CELL_COLORING_BLUISH_TOP = '#1240FE';
+    var CELL_COLORING_BLUISH_TOP_MINUS1 = '#3D63FF';
+    var CELL_COLORING_BLUISH_TOP_MINUS2 = '#6482FE';
+    var CELL_COLORING_BLUISH_TOP_MINUS3 = '#91A6FE';
+    var CELL_COLORING_BLUISH_TOP_MINUS4 = '#CCD6FE';
+    var CELL_COLORING_BLUISH_BOTTOM = '#eeeeee';
+
+    var CELL_COLORING_REDDISH_TOP = '#FE2F06';
+    var CELL_COLORING_REDDISH_TOP_MINUS1 = '#FE5E3D';
+    var CELL_COLORING_REDDISH_TOP_MINUS2 = '#FE8870';
+    var CELL_COLORING_REDDISH_TOP_MINUS3 = '#FFAC9C';
+    var CELL_COLORING_REDDISH_TOP_MINUS4 = '#FFCEC4';
+    var CELL_COLORING_REDDISH_BOTTOM = '#eeeeee';
+
+
+    var CELL_COLORING_UNUSED = '#FFFFFF';
+
     var setDyanamicUiVariables = function (incomingDyanamicUiVariables) {
         dyanamicUiVariables = incomingDyanamicUiVariables;
     };
@@ -1012,8 +1029,8 @@ mpgSoftware.dynamicUi = (function () {
             intermediateDataStructure.rowsToAdd.push({
                 category: 'Annotation',
                 displayCategory: 'Annotation',
-                subcategory: 'MOD',
-                displaySubcategory: 'MOD',
+                subcategory: 'Mouse knockout phenotype',
+                displaySubcategory: 'Mouse knockout phenotype',
                 columnCells: []
             });
             // set up the headers, and give us an empty row of column cells
@@ -1048,7 +1065,7 @@ mpgSoftware.dynamicUi = (function () {
                             cellPresentationString :cellPresentationString,
                             numberOfRecords:recordsPerGene.mods.length,
                             tissueCategoryNumber:categorizeTissueNumbers( recordsPerGene.mods.length ),
-                            significanceCategoryNumber:categorizeTissueNumbers( recordsPerGene.mods.length ),//categorizeSignificanceNumbers( modRecs, "MOD" ),
+                            significanceCategoryNumber:categorizeSignificanceNumbers( [0], "MOD" ),//categorizeSignificanceNumbers( modRecs, "MOD" ),
                             recordsExist:(recordsPerGene.mods.length)?[1]:[],
                             geneName:recordsPerGene.geneName,
                             humanGene:recordsPerGene.humanGene,
@@ -4718,19 +4735,38 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                             sharedTable["cellColoringScheme"] = "Significance";
                         }
                         if (sharedTable["cellColoringScheme"]==="Records"){
-                            $('div.tissueCategory_0').parents('td').css('background','#FFFFFF');
-                            $('div.tissueCategory_1').parents('td').css('background','#FF0033');
-                            $('div.tissueCategory_2').parents('td').css('background','#FF3333');
-                            $('div.tissueCategory_3').parents('td').css('background','#FF9933');
-                            $('div.tissueCategory_4').parents('td').css('background','#FFCC33');
-                            $('div.tissueCategory_5').parents('td').css('background','#FFFF33');
+                            $('div.tissueCategory_0').parents('td').css('background',CELL_COLORING_REDDISH_BOTTOM);
+                            $('div.tissueCategory_1').parents('td').css('background',CELL_COLORING_REDDISH_TOP);
+                            $('div.tissueCategory_2').parents('td').css('background',CELL_COLORING_REDDISH_TOP_MINUS1);
+                            $('div.tissueCategory_3').parents('td').css('background',CELL_COLORING_REDDISH_TOP_MINUS2);
+                            $('div.tissueCategory_4').parents('td').css('background',CELL_COLORING_REDDISH_TOP_MINUS3);
+                            $('div.tissueCategory_5').parents('td').css('background',CELL_COLORING_REDDISH_TOP_MINUS4);
+                            $('div.tissueCategory_6').parents('td').css('background',CELL_COLORING_UNUSED);
+
+
+                            // $('div.tissueCategory_0').parents('td').css('background','#FFFF33');
+                            // $('div.tissueCategory_1').parents('td').css('background','#FFCC33');
+                            // $('div.tissueCategory_2').parents('td').css('background','#FF9933');
+                            // $('div.tissueCategory_3').parents('td').css('background','#FF3333');
+                            // $('div.tissueCategory_4').parents('td').css('background','#FF0033');
+                            // $('div.tissueCategory_5').parents('td').css('background','#CCCCCC');
                         } else if (sharedTable["cellColoringScheme"]==="Significance"){
-                            $('div.significanceCategory_0').parents('td').css('background','#FFFFFF');
-                            $('div.significanceCategory_1').parents('td').css('background','#3333FF');
-                            $('div.significanceCategory_2').parents('td').css('background','#3366FF');
-                            $('div.significanceCategory_3').parents('td').css('background','#3399FF');
-                            $('div.significanceCategory_4').parents('td').css('background','#33CCFF');
-                            $('div.significanceCategory_5').parents('td').css('background','#33FFFF');
+                            // $('div.significanceCategory_0').parents('td').css('background','#FFFFFF');
+                            // $('div.significanceCategory_1').parents('td').css('background','#3333FF');
+                            // $('div.significanceCategory_2').parents('td').css('background','#3366FF');
+                            // $('div.significanceCategory_3').parents('td').css('background','#3399FF');
+                            // $('div.significanceCategory_4').parents('td').css('background','#33CCFF');
+                            // $('div.significanceCategory_5').parents('td').css('background','#33FFFF');
+
+                            $('div.significanceCategory_0').parents('td').css('background',CELL_COLORING_BLUISH_BOTTOM);
+                            $('div.significanceCategory_1').parents('td').css('background',CELL_COLORING_BLUISH_TOP_MINUS1);
+                            $('div.significanceCategory_2').parents('td').css('background',CELL_COLORING_BLUISH_TOP_MINUS2);
+                            $('div.significanceCategory_3').parents('td').css('background',CELL_COLORING_BLUISH_TOP_MINUS3);
+                           // $('div.significanceCategory_3 a').css('color','#DDDDDD');
+                            $('div.significanceCategory_4').parents('td').css('background',CELL_COLORING_BLUISH_TOP_MINUS4);
+                           // $('div.significanceCategory_4 a').css('color','#DDDDDD');
+                            $('div.significanceCategory_5').parents('td').css('background',CELL_COLORING_BLUISH_BOTTOM);
+                            $('div.significanceCategory_6').parents('td').css('background',CELL_COLORING_UNUSED);
                         }
 
                     }
@@ -4938,11 +4974,6 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 // }
             });
             $(whereTheTableGoes).dataTable().fnAddData(_.map(rowDescriber,function(o){return o.content}));
-             //$('div.tissueCategory_1').parents('td').css('background','#FF0033');
-             //$('div.tissueCategory_2').parents('td').css('background','#FF3333');
-             //$('div.tissueCategory_3').parents('td').css('background','#FF9933');
-             //$('div.tissueCategory_4').parents('td').css('background','#FFCC33');
-             //$('div.tissueCategory_5').parents('td').css('background','#FFFF33');
 
         });
         return rememberCategories;
@@ -5581,6 +5612,7 @@ var destroySharedTable = function (whereTheTableGoes) {
             var recordToAssess = significance[0];
             switch (datatype){
                 case "MOD": // significance is not a meaningful concept
+                    returnValue = 6;
                     break;
                 case "ABC": // activity by contact predictions -- higher numbers are good
                     var valueToAssess = significance[0].value;
