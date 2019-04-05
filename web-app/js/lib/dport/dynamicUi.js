@@ -4579,7 +4579,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             var datatable;
             if ( ! $.fn.DataTable.isDataTable( whereTheTableGoes ) ) {
                 var headerDescriber = {
-                    "aaSorting": [[ 1, "asc" ]],
+                   // "aaSorting": [[ 1, "asc" ]],
                     "dom": '<"top">rt<"bottom"iplB>',
                     "buttons": [
                         {extend: "copy", text: "Copy all to clipboard"},
@@ -4594,6 +4594,10 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     "bAutoWidth": false,
                     "aoColumnDefs": []
                 };
+                // if we are building the table for the first time *only*, then give it a default ordering
+                if (storeHeadersInDataStructure){
+                    headerDescriber["aaSorting"] =  [[ 1, "asc" ]];
+                }
                 var addedColumns = [];
                 if (prependColumns){ // we may wish to add in some columns based on metadata about a row.
                                      //  Definitely we don't if we are transposing, however, since we've already built that material
@@ -5520,8 +5524,6 @@ var destroySharedTable = function (whereTheTableGoes) {
             var additionalDetailsForHeaders = [];
             var currentLocationInArray = 0;
             var headers = [];
-            // var headers = _.slice(transposedTableDescription.dataCells, currentLocationInArray, transposedTableDescription.numberOfColumns);
-            // currentLocationInArray += transposedTableDescription.numberOfColumns;
             if (sharedTable.currentForm === 'variantTableAnnotationHeaders') { // collapse the first row into the header
                 transposedTableDescription.dataCells = linearDataTransposor(sortedData, numberOfRows, numberOfColumns, function (x, y, rows, cols) {
                     return (x * cols) + y
@@ -5529,7 +5531,7 @@ var destroySharedTable = function (whereTheTableGoes) {
                 headers = _.slice(transposedTableDescription.dataCells, currentLocationInArray, transposedTableDescription.numberOfColumns);
                 additionalDetailsForHeaders = _.slice(transposedTableDescription.dataCells, currentLocationInArray,
                     (currentLocationInArray + transposedTableDescription.numberOfColumns));
-                currentLocationInArray += transposedTableDescription.numberOfColumns;
+                currentLocationInArray += transposedTableDescription.numberOfRows;
             }
             else if (sharedTable.currentForm === 'geneTableAnnotationHeaders') { // collapse the first row into the header
                 transposedTableDescription.dataCells = linearDataTransposor(sortedData, numberOfRows, numberOfColumns, function (x, y, rows, cols) {
@@ -5540,25 +5542,42 @@ var destroySharedTable = function (whereTheTableGoes) {
                 headers = _.slice(transposedTableDescription.dataCells, currentLocationInArray, revisedNumberOfColumns);
                 additionalDetailsForHeaders = _.slice(transposedTableDescription.dataCells, currentLocationInArray,
                    (currentLocationInArray + revisedNumberOfColumns));
-               currentLocationInArray += transposedTableDescription.numberOfColumns;
+               currentLocationInArray += transposedTableDescription.numberOfRows;
             } else {
                 headers = _.slice(transposedTableDescription.dataCells, currentLocationInArray, transposedTableDescription.numberOfColumns);
+                currentLocationInArray += transposedTableDescription.numberOfColumns;
             }
             var datatable = buildHeadersForTable(whereTheTableGoes, headers, false,
                 'geneTableGeneHeaders', false, additionalDetailsForHeaders);
             refineTableRecords(datatable, 'geneTableGeneHeaders', [], true);
 
-            displayGeneFirthAssociationsForGeneTable();
-            displayGeneSkatAssociationsForGeneTable();
-            displayGenePhenotypeAssociations();
-            displayGenesFromDepict();
-            displayGeneSetFromDepict();
-            displayGenesFromECaviar();
-            displayGenesFromColoc();
-            displayRefinedModContext();
+            // build the body
+            var rowsToAdd = [];
+            var content = _.slice(transposedTableDescription.dataCells, currentLocationInArray);
 
+            _.forEach(content, function (datacell, index) {
+                var modulus = index % currentLocationInArray;
+                if (modulus === 0) {
+                    rowsToAdd.push({category: datacell.title, columnCells: new Array()});
+                }
+                var lastRow = rowsToAdd[rowsToAdd.length - 1];
+                return lastRow.columnCells.push(datacell);
+            });
+            datatable = $(whereTheTableGoes).dataTable();
+            var rememberCategories = addContentToTable(whereTheTableGoes, rowsToAdd, false, sharedTable.currentForm, false);
+            refineTableRecords(datatable, sharedTable.currentForm, rememberCategories, false);
 
-            refineTableRecords(datatable, 'geneTableGeneHeaders', [], false);
+            //displayGeneFirthAssociationsForGeneTable();
+            //displayGeneSkatAssociationsForGeneTable();
+            //displayGenePhenotypeAssociations();
+            //displayGenesFromDepict();
+            //displayGeneSetFromDepict();
+            //displayGenesFromECaviar();
+            //displayGenesFromColoc();
+            //displayRefinedModContext();
+            //
+            //
+            //refineTableRecords(datatable, 'geneTableGeneHeaders', [], false);
             sharedTable.currentForm = 'geneTableGeneHeaders';
 
             if (transposeNec){transposeThisTable(whereTheTableGoes)}
