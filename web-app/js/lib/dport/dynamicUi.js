@@ -185,6 +185,61 @@ mpgSoftware.dynamicUi = (function () {
 
     var CELL_COLORING_UNUSED = '#FFFFFF';
 
+    //
+    //var matrixMath = (function(){
+    //
+    //    var Matrix = function(dataArray,numberOfRows,numberOfColumns){
+    //        if (( typeof dataArray === 'undefined') ||
+    //            (!$.isArray(dataArray))||
+    //            (dataArray.length<1)){
+    //            alert(" No data array to work with")
+    //        } else if ((dataArray.length % numberOfColumns) !== 0) {  // sanity check 1
+    //            alert(" CRITICAL ERROR in matrix constructor.  Consistency check (dataArray.length % numberOfColumns) === 0) has failed.")
+    //        } else if ((dataArray.length % numberOfRows) !== 0) {  // sanity check 2
+    //            console.log(" CRITICAL ERROR in matrix constructor.  Consistency check (dataArray.length % numberOfRows) === 0) has failed.")
+    //        }
+    //        return {
+    //            dataArray:dataArray,
+    //            numberOfRows:numberOfRows,
+    //            numberOfColumns:numberOfColumns
+    //        }
+    //    };
+    //
+    //    var getElement = function(matrix,row,column)[
+    //
+    //        ]
+    //
+    //
+    //
+    //    var buildArrayOfZeros = function(numberOfRows,numberOfColumns){
+    //        var dataArray = Array.apply(null, Array(numberOfRows*numberOfColumns)).map(function(){return 0});
+    //        return new Matrix(dataArray,numberOfRows,numberOfColumns);
+    //    };
+    //
+    //    /***
+    //     * We are building an identity matrix, except swapping column A and B
+    //     * @param matrix
+    //     * @param colA
+    //     * @param colB
+    //     */
+    //    var buildMatrixToSwapColumns  = function(matrix,colA,colB){
+    //        if ((colA>=matrix.numberOfColumns) || (colB>=matrix.numberOfColumn)){
+    //            alert("buildMatrixToSwapColumns problem with number of columns requested.")
+    //        }
+    //
+    //    }
+    //
+    //    return {
+    //        Matrix:Matrix
+    //
+    //    }
+    //}());
+
+
+
+
+
+
     var getDatatypeInformation = function( dataTypeCode ) {
         var returnValue = {};
         var additionalParameters = getDyanamicUiVariables();
