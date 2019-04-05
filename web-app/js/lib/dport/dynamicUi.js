@@ -2479,7 +2479,7 @@ mpgSoftware.dynamicUi = (function () {
                             ( typeof records !== 'undefined')&&
                             (records.length>0)){
                             significanceValue = records[0].clpp;
-                            cellPresentationString = "clpp="+records[0].clpp+" ("+records[0].tissueName+")";
+                            cellPresentationString = "CLPP="+records[0].clpp+" ("+records[0].tissueName+")";
                         }
 
                         var renderData = {
@@ -2594,7 +2594,7 @@ mpgSoftware.dynamicUi = (function () {
                             ( typeof records !== 'undefined')&&
                             (records.length>0)){
                             significanceValue = records[0].prob_exists_coloc;
-                            cellPresentationString = "clpp="+records[0].prob_exists_coloc+" ("+records[0].tissue+")";
+                            cellPresentationString = "CLPP="+records[0].prob_exists_coloc+" ("+records[0].tissue+")";
                         }
 
                         var renderData = {
