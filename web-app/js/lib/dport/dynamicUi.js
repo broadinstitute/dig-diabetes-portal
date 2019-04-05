@@ -1209,10 +1209,23 @@ mpgSoftware.dynamicUi = (function () {
         }
         if (typeof chosenField !== 'undefined') {
             returnValue = accumulatorObject[chosenField];
+
             if (typeof returnValue === 'undefined') {
-                // if someone requests a field that doesn't exist then let's presume that they are going to
-                //  want an array. Create one, add it to the accumulator object, and then give them a pointer to it
-                accumulatorObject[chosenField] = new Array();
+                // if someone requests a field that doesn't exist then as a default we can give them an array.  If we
+                //  get a request for something that we recognize, we can also provide something more specific.
+                switch (chosenField){ // we can provide defaults for some accumulator objects
+                    case "currentSortRequest":
+                        accumulatorObject[chosenField] = {
+                            columnNumberValue: 1,
+                            currentSort: "geneMethods",
+                            sortOrder: "asc",
+                            table: "table.combinedGeneTableHolder"
+                        };
+                        break;
+                    default:
+                        accumulatorObject[chosenField] = new Array();
+                        break;
+                }
                 returnValue = accumulatorObject[chosenField];
             }
         } else {
@@ -4566,8 +4579,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             var datatable;
             if ( ! $.fn.DataTable.isDataTable( whereTheTableGoes ) ) {
                 var headerDescriber = {
-                    //dom: '<"#gaitButtons"B><"#gaitVariantTableLength"l>rtip',
-                    dom: '<"top">rt<"bottom"iplB>',
+                    "aaSorting": [[ 1, "asc" ]],
+                    "dom": '<"top">rt<"bottom"iplB>',
                     "buttons": [
                         {extend: "copy", text: "Copy all to clipboard"},
                         {extend: "csv", text: "Copy all to csv"},
@@ -4579,8 +4592,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     ],
                     "bDestroy": true,
                     "bAutoWidth": false,
-                    "columnDefs": [],
-                    "order": [[ 1, "asc" ]]
+                    "aoColumnDefs": []
                 };
                 var addedColumns = [];
                 if (prependColumns){ // we may wish to add in some columns based on metadata about a row.
@@ -4606,7 +4618,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     }
                     _.forEach(addedColumns, function (column, index){
                         var contentOfHeader = column.content;
-                        headerDescriber.columnDefs.push({
+                        headerDescriber.aoColumnDefs.push({
                             "title": contentOfHeader,
                             "targets": (sortability[index])?[index]:'nosort',
                             "name": column.title,
@@ -4660,7 +4672,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
 
                      var noSorting = (((count+numberOfAddedColumns)===0)&&(typeOfHeader==='geneTableGeneHeaders'));
-                      headerDescriber.columnDefs.push({
+                      headerDescriber.aoColumnDefs.push({
                         "title": contentOfHeader,
                         "targets": noSorting?'nosort':[count+numberOfAddedColumns],
                         "name": header.title,
@@ -4670,7 +4682,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     });
                      addedColumns.push(new IntermediateStructureDataCell(header.title,contentOfHeader,header.annotation));
                 });
-                var headerContents = _.map(headerDescriber.columnDefs,function(o){return o.title});
+                var headerContents = _.map(headerDescriber.aoColumnDefs,function(o){return o.title});
                 datatable = $(whereTheTableGoes).DataTable(headerDescriber);
 
 
@@ -4692,7 +4704,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                             typeOfHeader,
                             0,
                             columnIndex,
-                            headerDescriber.columnDefs.length );
+                            headerDescriber.aoColumnDefs.length );
                     });
                 }
             }
