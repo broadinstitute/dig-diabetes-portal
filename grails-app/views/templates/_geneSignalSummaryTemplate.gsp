@@ -697,8 +697,11 @@ div.genePosition{
                                     </div>
                                 </div>
 
-                                <div  style="margin: 0 0 -15px 10px">This tab displays annotations for genes that are located on chromosome
-                                {{chromosome}} between coordinates {{geneExtentBegin}} and {{geneExtentEnd}}.</div>
+                                <div  style="margin: 0 0 -15px 10px"><p><g:message code="GenePrioritization.interface.help1"></g:message></p>
+                                <p><g:message code="GenePrioritization.interface.help2"></g:message></p>
+                                <p><g:message code="GenePrioritization.interface.help3"></g:message></p>
+
+                                </div>
 
                                 <div class="row">
                                     <div class="col-sm-12">
