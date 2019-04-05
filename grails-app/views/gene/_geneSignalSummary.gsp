@@ -232,7 +232,7 @@ td.tissueTable.informationIsPresent{
                             category: 'Annotation',
                             displayCategory: 'Annotation',
                             subcategory: 'DEPICT gene set',
-                            displaySubcategory: 'DEPICT gene set',
+                            displaySubcategory: 'DEPICT gene sets',
                             cellBodyWriter:'depictGeneSetBody',
                             categoryWriter:'sharedCategoryWriter',
                             subCategoryWriter:'depictGeneSetSubCategory' },
