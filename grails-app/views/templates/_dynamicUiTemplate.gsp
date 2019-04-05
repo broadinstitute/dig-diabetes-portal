@@ -238,7 +238,7 @@
       sortField='{{index}}' subSortField='-1'>
      {{#dataAnnotation}}
           {{displaySubcategory}}
-          <g:helpText title="variant.alleleFrequency.help.header" placement="bottom" body="variant.alleleFrequency.help.text"/>
+          <g:helpText title="gene.MOD.help.header" placement="bottom" body="gene.MOD.help.text"/>
      {{/dataAnnotation}}
      </div>
 </script>
@@ -368,7 +368,7 @@
                     {{#records}}
                       <tr role="row">
                            <td style="padding: 3px">{{tissueName}}</td>
-                           <td style="padding: 3px">{{CLPP}}</td>
+                           <td style="padding: 3px">{{clpp}}</td>
                            <td style="padding: 3px">{{prob_in_causal_set}}</td>
                        </tr>
 
@@ -388,7 +388,7 @@
       sortField='{{index}}' subSortField='-1'>
      {{#dataAnnotation}}
           {{displaySubcategory}}
-          <g:helpText title="variant.alleleFrequency.help.header" placement="bottom" body="variant.alleleFrequency.help.text"/>
+          <g:helpText title="gene.COLOC.help.header" placement="bottom" body="gene.COLOC.help.text"/>
      {{/dataAnnotation}}
      </div>
 </script>
@@ -987,7 +987,7 @@
       sortField='{{index}}' subSortField='-1'>
      {{#dataAnnotation}}
           {{displaySubcategory}}
-          <g:helpText title="variant.alleleFrequency.help.header" placement="bottom" body="variant.alleleFrequency.help.text"/>
+          <g:helpText title="gene.skat.help.header" placement="bottom" body="gene.skat.help.text"/>
      {{/dataAnnotation}}
     </div>
 </script>
@@ -1029,7 +1029,7 @@
       sortField='{{index}}' subSortField='-1'>
      {{#dataAnnotation}}
           {{displaySubcategory}}
-          <g:helpText title="variant.alleleFrequency.help.header" placement="bottom" body="variant.alleleFrequency.help.text"/>
+          <g:helpText title="gene.firth.help.header" placement="bottom" body="gene.firth.help.text"/>
      {{/dataAnnotation}}
      </div>
 </script>
