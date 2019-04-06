@@ -697,9 +697,10 @@ div.genePosition{
                                     </div>
                                 </div>
 
-                                <div  style="margin: 0 0 -15px 10px"><p><g:message code="GenePrioritization.interface.help1"></g:message></p>
-                                <p><g:message code="GenePrioritization.interface.help2"></g:message></p>
-                                <p><g:message code="GenePrioritization.interface.help3"></g:message></p>
+                                <div  style="margin: 0 0 -15px 10px"><p><g:message code="GenePrioritization.interface.help1"></g:message>
+<g:helpText title="gene.overall.help.header" placement="bottom" body="gene.overall.help.text"/>
+<g:message code="GenePrioritization.interface.help2"></g:message></p>
+
 
                                 </div>
 
