@@ -232,7 +232,7 @@ td.tissueTable.informationIsPresent{
                             category: 'Annotation',
                             displayCategory: 'Annotation',
                             subcategory: 'DEPICT gene set',
-                            displaySubcategory: 'DEPICT gene set',
+                            displaySubcategory: 'DEPICT gene sets',
                             cellBodyWriter:'depictGeneSetBody',
                             categoryWriter:'sharedCategoryWriter',
                             subCategoryWriter:'depictGeneSetSubCategory' },
@@ -264,7 +264,7 @@ td.tissueTable.informationIsPresent{
                             category: 'Annotation',
                             displayCategory: 'Annotation',
                             subcategory: 'Mouse knockout phenotype',
-                            displaySubcategory: 'Mouse knockout phenotype',
+                            displaySubcategory: 'Mouse knockout phenotypes',
                             cellBodyWriter:'dynamicGeneTableModBody',
                             categoryWriter:'sharedCategoryWriter',
                             subCategoryWriter:'dynamicGeneTableModSubCategory' }

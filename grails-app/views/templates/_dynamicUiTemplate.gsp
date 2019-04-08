@@ -238,7 +238,7 @@
       sortField='{{index}}' subSortField='-1'>
      {{#dataAnnotation}}
           {{displaySubcategory}}
-          <g:helpText title="variant.alleleFrequency.help.header" placement="bottom" body="variant.alleleFrequency.help.text"/>
+          <g:helpText title="gene.MOD.help.header" placement="bottom" body="gene.MOD.help.text"/>
      {{/dataAnnotation}}
      </div>
 </script>
@@ -284,6 +284,7 @@
       sortField='{{index}}' subSortField='-1'>
      {{#dataAnnotation}}
           {{displaySubcategory}}
+          <g:helpText title="gene.DEPICTsets.help.header" placement="bottom" body="gene.DEPICTsets.help.text"/>
      {{/dataAnnotation}}
     </div>
 </script>
@@ -340,6 +341,7 @@
       sortField='{{index}}' subSortField='-1'>
       {{#dataAnnotation}}
          {{displaySubcategory}}
+         <g:helpText title="gene.eCAVIAR.help.header" placement="bottom" body="gene.eCAVIAR.help.text"/>
       {{/dataAnnotation}}
      </div>
 </script>
@@ -386,6 +388,7 @@
       sortField='{{index}}' subSortField='-1'>
      {{#dataAnnotation}}
           {{displaySubcategory}}
+          <g:helpText title="gene.COLOC.help.header" placement="bottom" body="gene.COLOC.help.text"/>
      {{/dataAnnotation}}
      </div>
 </script>
@@ -904,6 +907,7 @@
       sortField='{{index}}' subSortField='-1'>
      {{#dataAnnotation}}
           {{displaySubcategory}}
+          <g:helpText title="gene.DEPICTprior.help.header" placement="bottom" body="gene.DEPICTprior.help.text"/>
      {{/dataAnnotation}}
      </div>
 </script>
@@ -942,6 +946,7 @@
       sortField='{{index}}' subSortField='-1'>
      {{#dataAnnotation}}
           {{displaySubcategory}}
+          <g:helpText title="gene.MetaXcan.help.header" placement="bottom" body="gene.MetaXcan.help.text"/>
      {{/dataAnnotation}}
     </div>
 </script>
@@ -982,6 +987,7 @@
       sortField='{{index}}' subSortField='-1'>
      {{#dataAnnotation}}
           {{displaySubcategory}}
+          <g:helpText title="gene.skat.help.header" placement="bottom" body="gene.skat.help.text"/>
      {{/dataAnnotation}}
     </div>
 </script>
@@ -1023,6 +1029,7 @@
       sortField='{{index}}' subSortField='-1'>
      {{#dataAnnotation}}
           {{displaySubcategory}}
+          <g:helpText title="gene.firth.help.header" placement="bottom" body="gene.firth.help.text"/>
      {{/dataAnnotation}}
      </div>
 </script>
