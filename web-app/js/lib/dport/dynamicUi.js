@@ -242,7 +242,7 @@ mpgSoftware.dynamicUi = (function () {
 
 
         var getRowFromMatrix = function(matrix,rowNumber){
-            return _.slice(matrix.dataArray,rowNumber*matrix.numberOfColumns,rowNumber*matrix.numberOfColumns+1);
+            return _.slice(matrix.dataArray,rowNumber*matrix.numberOfColumns,(1+rowNumber)*matrix.numberOfColumns);
         };
 
         var getColumnFromMatrix = function(matrix,columnNumber){
@@ -263,6 +263,18 @@ mpgSoftware.dynamicUi = (function () {
             return sum;
         }
 
+        var binaryInnerProduct = function (vectorA, vectorB){
+            //  we're going to assume that these are the same length
+            //  Now we are assuming that vectorB contains all zeros, except for exactly one element == 1.
+            //  The location of the nonzero element in the vector therefore determines which element of vectorA is returned
+            var returnValue = "";
+            _.times(vectorA.length,function(elementIndex){
+                if  (vectorB[elementIndex]===1){
+                    returnValue = vectorA[elementIndex];
+                }
+            });
+            return returnValue;
+        }
 
 
 
@@ -272,15 +284,16 @@ mpgSoftware.dynamicUi = (function () {
                 var rowVector = getRowFromMatrix(matrixA,rowNumber);
                 _.times(matrixB.numberOfColumns,function(columnNumber){
                     var columnVector = getColumnFromMatrix(matrixB,columnNumber);
-                    setElement(returnValue,rowNumber,columnNumber,innerProduct(rowVector,columnVector));
+                    setElement(returnValue,rowNumber,columnNumber,binaryInnerProduct(rowVector,columnVector));
                 });
             });
+            return returnValue;
         }
 
         var swapColumnsInDataStructure = function(dataArray,numberOfRows,numberOfColumns,colA,colB){
             var matrixToManipulate = new Matrix(dataArray,numberOfRows,numberOfColumns);
-            var multiplierMatrix = buildMatrixToSwapColumns (buildArrayOfZeros(numberOfRows,numberOfColumns),colA,colB);
-            return multiplyMatrices(matrixToManipulate,multiplierMatrix);
+            var multiplierMatrix = buildMatrixToSwapColumns (buildArrayOfZeros(numberOfColumns,numberOfColumns),colA,colB);
+            return multiplyMatrices(matrixToManipulate,multiplierMatrix).dataArray;
         };
 
         return {
@@ -5624,7 +5637,6 @@ var destroySharedTable = function (whereTheTableGoes) {
         var numberOfColumns;
         var numberOfRows;
         var transposeNec = false;
-        var foo=matrixMath.swapColumnsInDataStructure(sharedTable.dataCells,sharedTable.numberOfRows,sharedTable.numberOfColumns,2,3);
         numberOfColumns = sharedTable.numberOfColumns;
         numberOfRows = sharedTable.dataCells.length / numberOfColumns;
         if ((sharedTable.currentForm === 'geneTableGeneHeaders') || (sharedTable.currentForm === 'variantTableVariantHeaders')) {
@@ -5637,6 +5649,8 @@ var destroySharedTable = function (whereTheTableGoes) {
         }
 
         var sortedData = extractSortedDataFromTable(whereTheTableGoes, numberOfRows, numberOfColumns, sharedTable.currentForm);
+        sortedData=matrixMath.swapColumnsInDataStructure(sortedData,sharedTable.numberOfRows,sharedTable.numberOfColumns,2,3);
+
 
         destroySharedTable(whereTheTableGoes);
 
