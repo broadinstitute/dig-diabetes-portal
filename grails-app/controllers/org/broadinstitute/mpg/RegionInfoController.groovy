@@ -925,19 +925,31 @@ class RegionInfoController {
         if (looksOkay){
             jsonReturn = restServerService.gatherGenePhenotypeAssociations( phenotype, gene, propertyList, preferredSampleGroup)
             // insert translations if they exist
+            LinkedHashMap<String, String> tissueTranslations = [:] as LinkedHashMap
             if ((jsonReturn?.variants)&&(jsonReturn?.variants?.size()>0)){
                 for (Map map in jsonReturn?.variants[0]){
                     map.each{String k,v->
                         if (k!="Gene"){
                             String translation = g.message(code: "metadata.$k", default: "no translation")
-                            if (translation != "no translation"){
-                                map[translation]=v
-                                map.remove(k)
+                            if ((!tissueTranslations.containsKey(k)) &&
+                                    (translation != "no translation")){
+                                tissueTranslations[k]=translation
                             }
+//                            if (translation != "no translation"){
+//                                map[translation]=v
+//                                map.remove(k)
+//                            }
                         }
 
                     }
                 }
+                JSONObject translationTable = new JSONObject()
+                tissueTranslations.each{k,v->
+                    translationTable[k]=v
+                }
+                JSONObject holdTranslationTable = new JSONObject()
+                holdTranslationTable.put("TISSUE_TRANSLATIONS",translationTable)
+                jsonReturn?.variants[0] << holdTranslationTable
             }
         } else {
             String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()

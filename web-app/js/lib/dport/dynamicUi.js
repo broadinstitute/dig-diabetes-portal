@@ -1470,10 +1470,12 @@ mpgSoftware.dynamicUi = (function () {
                     if ((tissue==='GENE')||(tissue==='Gene')) {
                         geneRecord['gene'] = sampleRecord;
                         geneRecord['tissues'] = [];
+                    } else if (tissue==='TISSUE_TRANSLATIONS') {
+                        geneRecord['TISSUE_TRANSLATIONS'] = sampleRecord;
                     } else {
                         _.forEach(sampleRecord, function (phenotypeRecord, dataset) {
                             _.forEach(phenotypeRecord, function (number, phenotypeString) {
-                                console.log("phenotypeString=" + phenotypeString + ", number, " + number);
+
                                 if (number !== null) {
                                     geneRecord['tissues'].push({tissue: tissue, value: number});
 
@@ -1512,10 +1514,12 @@ mpgSoftware.dynamicUi = (function () {
                     if ((tissue==='GENE')||(tissue==='Gene')) {
                         geneRecord['gene'] = sampleRecord;
                         geneRecord['tissues'] = [];
+                    } else if (tissue==='TISSUE_TRANSLATIONS') {
+                        geneRecord['TISSUE_TRANSLATIONS'] = sampleRecord;
                     } else {
                         _.forEach(sampleRecord, function (phenotypeRecord, dataset) {
                             _.forEach(phenotypeRecord, function (number, phenotypeString) {
-                                console.log("phenotypeString=" + phenotypeString + ", number, " + number);
+
                                 if (number !== null) {
                                     geneRecord['tissues'].push({tissue: tissue, value: number});
 
@@ -1553,10 +1557,12 @@ mpgSoftware.dynamicUi = (function () {
                     if ((tissue==='GENE')||(tissue==='Gene')) {
                         geneRecord['gene'] = sampleRecord;
                         geneRecord['tissues'] = [];
-                    } else {
+                    } else if (tissue==='TISSUE_TRANSLATIONS') {
+                        geneRecord['TISSUE_TRANSLATIONS'] = sampleRecord;
+                    }  else {
                         _.forEach(sampleRecord, function (phenotypeRecord, dataset) {
                             _.forEach(phenotypeRecord, function (number, phenotypeString) {
-                                console.log("phenotypeString=" + phenotypeString + ", number, " + number);
+
                                 if (number !== null) {
                                     geneRecord['tissues'].push({tissue: tissue, value: number});
 
@@ -2197,8 +2203,10 @@ mpgSoftware.dynamicUi = (function () {
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.gene,
                             Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML), "tissue specific");
                     } else {
+                        var tissueTranslations = recordsPerGene["TISSUE_TRANSLATIONS"];
                         var tissueRecords = _.map(_.sortBy(recordsPerGene.tissues,['value']),function(tissueRecord){
-                            return {  tissueName: tissueRecord.tissue,
+                            return {  tissueName: translateATissueName(tissueTranslations,tissueRecord.tissue),
+                                tissue: tissueRecord.tissue,
                                 value: UTILS.realNumberFormatter(""+tissueRecord.value),
                                 numericalValue: tissueRecord.value };
                         });
@@ -2239,6 +2247,18 @@ mpgSoftware.dynamicUi = (function () {
     };
 
 
+    var translateATissueName = function(tissueTranslations,tissueKey){
+        var returnValue = tissueKey;
+        if ( typeof  tissueTranslations !== 'undefined') {
+            var translatedTissueName = tissueTranslations[tissueKey];
+            if ( typeof  translatedTissueName !== 'undefined'){
+                returnValue = translatedTissueName;
+            }
+        }
+        return returnValue
+    }
+
+
 
 
     var displayGeneSkatAssociationsForGeneTable = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
@@ -2274,6 +2294,7 @@ mpgSoftware.dynamicUi = (function () {
 
 
             // fill in all of the column cells
+            var preferredSummaryKey = "P_MIN_P_SKAT_NS_STRICT_NS_1PCT";
             _.forEach(returnObject.geneAssociations, function (recordsPerGene) {
                 var indexOfColumn = _.indexOf(headerNames, recordsPerGene.gene);
                 if (indexOfColumn === -1) {
@@ -2284,15 +2305,18 @@ mpgSoftware.dynamicUi = (function () {
                             Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML), "tissue specific");
                     } else {
                         var significanceValue=0;
+                        var tissueTranslations = recordsPerGene["TISSUE_TRANSLATIONS"];
                         var tissueRecords = _.map(_.sortBy(_.filter(recordsPerGene.tissues,function(t){return t.tissue.includes("SKAT")}),['value']),function(tissueRecord){
-                            return {  tissueName: tissueRecord.tissue,
+                            var tissueName  = translateATissueName(tissueTranslations,tissueRecord.tissue);
+                            return {  tissueName: tissueName,
+                                tissue:tissueRecord.tissue,
                                 value: UTILS.realNumberFormatter(""+tissueRecord.value),
                                 numericalValue: tissueRecord.value };
                         });
                         var cellPresentationString = "records="+recordsPerGene.tissues.length;
                         if (findCellColoringChoice ('table.combinedGeneTableHolder')=== 'Significance'){
-                            var minPValue=_.find(recordsPerGene.tissues,function(t){return t.tissue.includes("P_MIN_P_SKAT_NS_STRICT_NS_1PCT")})
-                            cellPresentationString = "p="+minPValue.value+" (Minimum SKAT p-value)";
+                            var minPValue=_.find(tissueRecords,function(t){return t.tissue.includes(preferredSummaryKey)})
+                            cellPresentationString = "p="+minPValue.value+" ("+translateATissueName(tissueTranslations,preferredSummaryKey)+")";
                             significanceValue = minPValue.value;
                         }
                         var renderData = {  numberOfRecords:recordsPerGene.tissues.length,
@@ -2364,6 +2388,7 @@ mpgSoftware.dynamicUi = (function () {
 
 
             // fill in all of the column cells
+            var preferredSummaryKey = "P_MIN_P_FIRTH_NS_STRICT_NS_1PCT";
             _.forEach(returnObject.geneAssociations, function (recordsPerGene) {
                 var indexOfColumn = _.indexOf(headerNames, recordsPerGene.gene);
                 if (indexOfColumn === -1) {
@@ -2374,15 +2399,17 @@ mpgSoftware.dynamicUi = (function () {
                             Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML), "tissue specific");
                     } else {
                         var significanceValue=0;
+                        var tissueTranslations = recordsPerGene["TISSUE_TRANSLATIONS"];
                         var tissueRecords = _.map(_.sortBy(_.filter(recordsPerGene.tissues,function(t){return t.tissue.includes("FIRTH")}),['value']),function(tissueRecord){
-                            return {  tissueName: tissueRecord.tissue,
+                            return {  tissueName:  translateATissueName(tissueTranslations,tissueRecord.tissue),
+                                tissue: tissueRecord.tissue,
                                 value: UTILS.realNumberFormatter(""+tissueRecord.value),
                                 numericalValue: tissueRecord.value };
                         });
                         var cellPresentationString = "records="+recordsPerGene.tissues.length;
                         if (findCellColoringChoice ('table.combinedGeneTableHolder')=== 'Significance'){
-                            var minPValue=_.find(recordsPerGene.tissues,function(t){return t.tissue.includes("P_MIN_P_FIRTH_NS_STRICT_NS_1PCT")})
-                            cellPresentationString = "p="+minPValue.value+" (Minimum Firth p-value)";
+                            var minPValue=_.find(recordsPerGene.tissues,function(t){return t.tissue.includes(preferredSummaryKey)})
+                            cellPresentationString = "p="+minPValue.value+" ("+translateATissueName(tissueTranslations,preferredSummaryKey)+")";
                             significanceValue = minPValue.value;
                         }
                         var renderData = {  numberOfRecords:recordsPerGene.tissues.length,
