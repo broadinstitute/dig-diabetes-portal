@@ -1212,6 +1212,8 @@ mpgSoftware.dynamicUi = (function () {
                         //    cellPresentationString = modRecs[0].modName;
                         //}
                         var renderData = {
+                            cellPresentationStringMap:{ Records:cellPresentationString,
+                                                        Significance:cellPresentationString },
                             cellPresentationString :cellPresentationString,
                             numberOfRecords:recordsPerGene.mods.length,
                             tissueCategoryNumber:categorizeTissueNumbers( recordsPerGene.mods.length ),
@@ -2623,16 +2625,19 @@ mpgSoftware.dynamicUi = (function () {
                                 eqtl_z_score: UTILS.realNumberFormatter(""+tissueRecord.eqtl_z_score),
                                 numericalValue: tissueRecord.clpp
                             }});
-                        var cellPresentationString = "records="+validRecords.length;
-                        var significanceValue = 0;
-                        if ((findCellColoringChoice ('table.combinedGeneTableHolder')=== 'Significance')&&
-                            ( typeof records !== 'undefined')&&
-                            (records.length>0)){
-                            significanceValue = records[0].clpp;
-                            cellPresentationString = "CLPP="+records[0].clpp+" ("+records[0].tissueName+")";
-                        }
+                        var recordsCellPresentationString = "records="+validRecords.length;
+                        var significanceCellPresentationString = "CLPP="+records[0].clpp+" ("+records[0].tissueName+")";
+                        var significanceValue = records[0].clpp;
+                        // if ((findCellColoringChoice ('table.combinedGeneTableHolder')=== 'Significance')&&
+                        //     ( typeof records !== 'undefined')&&
+                        //     (records.length>0)){
+                        //     significanceValue = records[0].clpp;
+                        //     cellPresentationString = "CLPP="+records[0].clpp+" ("+records[0].tissueName+")";
+                        // }
 
                         var renderData = {
+                            cellPresentationStringMap:{ Records:recordsCellPresentationString,
+                                Significance:significanceCellPresentationString },
                             cellPresentationString:cellPresentationString,
                             numberOfRecords:validRecords.length,
                             tissueCategoryNumber:categorizeTissueNumbers( validRecords.length ),
@@ -4739,6 +4744,9 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             //     break;
 
             default:  //  the standard case, where a cell renders its own data using its chosen mustache template
+                var cellColoringScheme ="records";
+                intermediateStructureDataCell.renderData["cellPresentationString"] =
+                    intermediateStructureDataCell.renderData.cellPresentationStringMap[findCellColoringChoice('table.combinedGeneTableHolder')];
                 var displayDetails = getDatatypeInformation(intermediateStructureDataCell.dataAnnotationTypeCode);
                 returnValue = Mustache.render($('#'+displayDetails.dataAnnotation.cellBodyWriter)[0].innerHTML,intermediateStructureDataCell.renderData);
                 break;
