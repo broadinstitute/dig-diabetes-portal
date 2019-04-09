@@ -1190,7 +1190,7 @@ mpgSoftware.dynamicUi = (function () {
                 headerNames  = _.map(getAccumulatorObject("geneNameArray"),'name');
                 _.forEach(getAccumulatorObject("geneNameArray"), function (oneRecord) {
                     intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
-                        Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML),"header"));
+                        {},"header",'EMC'));
                 });
             }
         }
@@ -1202,8 +1202,9 @@ mpgSoftware.dynamicUi = (function () {
                     console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
                 } else {
                     if ((recordsPerGene.mods.length === 0)) {
-                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
-                            Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML), "tissue specific");
+                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] =
+                            new IntermediateStructureDataCell(recordsPerGene.geneName,
+                                {}, "tissue specific",'EMC');
                     } else {
                         var modRecs = _.sortBy(recordsPerGene.mods,["modName"]);
                         var cellPresentationString = "records="+recordsPerGene.mods.length;
@@ -1223,8 +1224,9 @@ mpgSoftware.dynamicUi = (function () {
                             significanceValue:0,
                             modTerms: modRecs
                         };
-                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
-                            Mustache.render($("#dynamicGeneTableModBody")[0].innerHTML, renderData)," tissue specific");
+                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] =
+                            new IntermediateStructureDataCell(recordsPerGene.geneName,
+                             renderData,"tissue specific",dataAnnotationTypeCode);
                     }
                 }
             });
@@ -1790,7 +1792,7 @@ mpgSoftware.dynamicUi = (function () {
                 headerNames  = _.map(getAccumulatorObject("geneNameArray"),'name');
                 _.forEach(getAccumulatorObject("geneNameArray"), function (oneRecord) {
                     intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell("",
-                        Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML), "header of some sort"));
+                        {}, "header of some sort",'EMC' ));
                 });
             }
 
@@ -1807,11 +1809,11 @@ mpgSoftware.dynamicUi = (function () {
                     if ((recordsPerGene.source.length === 0) &&
                         (recordsPerGene.experiment.length === 0)) {
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
-                            Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML),"not sure this is ever used?");
+                            {},"not sure this is ever used?",'EMC');
                     } else {
                         if ((recordsPerGene.source.length === 0)) {
                             intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
-                                Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML), "tissue specific");
+                                {}, "tissue specific",'EMC');
                         } else {
                             var sortedTissues = _.map(_.sortBy(recordsPerGene.source,["value"]),function(tissueRecord){
                                 return {    tissueName: tissueRecord.tissueName,
@@ -1833,7 +1835,7 @@ mpgSoftware.dynamicUi = (function () {
                                 tissues:sortedTissues
                             };
                             intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell('eQTL',
-                                Mustache.render($("#dynamicAbcGeneTableBody")[0].innerHTML, renderData),'tisseRecord');
+                                renderData,'tisseRecord',dataAnnotationTypeCode );
                         };
                     }
 
@@ -2015,7 +2017,7 @@ mpgSoftware.dynamicUi = (function () {
                 headerNames  = _.map(getAccumulatorObject("geneNameArray"),'name');
                 _.forEach(getAccumulatorObject("geneNameArray"), function (oneRecord) {
                     intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
-                        Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML),"header"));
+                        {},"header",'EMC'));
                 });
             }
 
@@ -2031,7 +2033,7 @@ mpgSoftware.dynamicUi = (function () {
                 } else {
                     if ((recordsPerGene.recordByDataSet.length === 0)) {
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
-                            Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML), "tissue specific");
+                            {}, "tissue specific",'EMC');
                     } else {
                         var records = _.map(_.sortBy(recordsPerGene.recordByDataSet,['pvalue']),function(tissueRecord){
                             return {    value:UTILS.realNumberFormatter(''+tissueRecord.pvalue),
@@ -2053,7 +2055,7 @@ mpgSoftware.dynamicUi = (function () {
                             records:records
                         };
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
-                            Mustache.render($("#depictGeneTableBody")[0].innerHTML, renderData),"tissue specific");
+                            renderData,"tissue specific", dataAnnotationTypeCode);
                     }
 
                 }
@@ -2107,7 +2109,7 @@ mpgSoftware.dynamicUi = (function () {
                 headerNames  = _.map(getAccumulatorObject("geneNameArray"),'name');
                 _.forEach(getAccumulatorObject("geneNameArray"), function (oneRecord) {
                     intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
-                        Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML),"header"));
+                        {},"header",'EMC'));
                 });
             }
 
@@ -2125,7 +2127,7 @@ mpgSoftware.dynamicUi = (function () {
                     recordsPerGene["numberOfRecords"] =  recordsPerGene.data.length;
                     if ((recordsPerGene.data.length === 0)) {
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
-                            Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML), "tissue specific");
+                            {}, "tissue specific",'EMC');
                     } else {
                         recordsPerGene.data = _.sortBy(recordsPerGene.data,['pvalue']);
 
@@ -2148,7 +2150,7 @@ mpgSoftware.dynamicUi = (function () {
                             eachPathway["number_genes"] = eachPathway.gene_list.length;
                         });
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
-                            Mustache.render($("#depictGeneSetBody")[0].innerHTML, recordsPerGene),"tissue specific");
+                            recordsPerGene,"tissue specific", dataAnnotationTypeCode);
                     }
 
                 }
@@ -2198,7 +2200,7 @@ mpgSoftware.dynamicUi = (function () {
                 headerNames  = _.map(getAccumulatorObject("geneNameArray"),'name');
                 _.forEach(getAccumulatorObject("geneNameArray"), function (oneRecord) {
                     intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
-                        Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML),"header"));
+                        {},"header",'EMC'));
                 });
             }
 
@@ -2214,7 +2216,7 @@ mpgSoftware.dynamicUi = (function () {
                 } else {
                     if ((recordsPerGene.tissues.length === 0)) {
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.gene,
-                            Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML), "tissue specific");
+                            {}, "tissue specific",'EMC');
                     } else {
                         var tissueTranslations = recordsPerGene["TISSUE_TRANSLATIONS"];
                         var tissueRecords = _.map(_.sortBy(recordsPerGene.tissues,['value']),function(tissueRecord){
@@ -2238,7 +2240,7 @@ mpgSoftware.dynamicUi = (function () {
                         };
                         recordsPerGene["numberOfRecords"] = recordsPerGene.tissues.length;
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.gene,
-                            Mustache.render($("#geneAssociationTableBody")[0].innerHTML, renderData),"tissue specific");
+                            renderData,"tissue specific", dataAnnotationTypeCode );
                     }
 
                 }
@@ -2298,7 +2300,7 @@ mpgSoftware.dynamicUi = (function () {
                 headerNames  = _.map(getAccumulatorObject("geneNameArray"),'name');
                 _.forEach(getAccumulatorObject("geneNameArray"), function (oneRecord) {
                     intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
-                        Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML),"header"));
+                        {},"header",'EMC'));
                 });
             }
 
@@ -2315,7 +2317,7 @@ mpgSoftware.dynamicUi = (function () {
                 } else {
                     if ((recordsPerGene.tissues.length === 0)) {
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.gene,
-                            Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML), "tissue specific");
+                            {}, "tissue specific",'EMC');
                     } else {
                         var significanceValue=0;
                         var tissueTranslations = recordsPerGene["TISSUE_TRANSLATIONS"];
@@ -2343,7 +2345,7 @@ mpgSoftware.dynamicUi = (function () {
                         };
                         recordsPerGene["numberOfRecords"] = recordsPerGene.tissues.length;
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.gene,
-                            Mustache.render($("#geneSkatAssociationTableBody")[0].innerHTML, renderData),"tissue specific");
+                            renderData,"tissue specific", dataAnnotationTypeCode);
                     }
 
                 }
@@ -2392,7 +2394,7 @@ mpgSoftware.dynamicUi = (function () {
                 headerNames  = _.map(getAccumulatorObject("geneNameArray"),'name');
                 _.forEach(getAccumulatorObject("geneNameArray"), function (oneRecord) {
                     intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
-                        Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML),"header"));
+                        {},"header",'EMC'));
                 });
             }
 
@@ -2409,7 +2411,7 @@ mpgSoftware.dynamicUi = (function () {
                 } else {
                     if ((recordsPerGene.tissues.length === 0)) {
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.gene,
-                            Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML), "tissue specific");
+                            {}, "tissue specific",'EMC');
                     } else {
                         var significanceValue=0;
                         var tissueTranslations = recordsPerGene["TISSUE_TRANSLATIONS"];
@@ -2436,7 +2438,7 @@ mpgSoftware.dynamicUi = (function () {
                         };
                         recordsPerGene["numberOfRecords"] = recordsPerGene.tissues.length;
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.gene,
-                            Mustache.render($("#geneFirthAssociationTableBody")[0].innerHTML, renderData),"tissue specific");
+                            renderData,"tissue specific",dataAnnotationTypeCode );
                     }
 
                 }
@@ -2592,7 +2594,7 @@ mpgSoftware.dynamicUi = (function () {
                 headerNames  = _.map(getAccumulatorObject("geneNameArray"),'name');
                 _.forEach(getAccumulatorObject("geneNameArray"), function (oneRecord) {
                     intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
-                        Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML),"header"));
+                        {},"header",'EMC'));
                 });
             }
 
@@ -2611,7 +2613,7 @@ mpgSoftware.dynamicUi = (function () {
                     recordsPerGene["numberOfRecords"] =  validRecords.length;
                     if ((validRecords.length === 0)) {
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
-                            Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML), "tissue specific");
+                            {}, "tissue specific",'EMC');
                     } else {
                         var records =  _.map(_.orderBy(validRecords,["clpp"],["desc"]),function(tissueRecord){
                             return {  tissueName: tissueRecord.tissue,
@@ -2641,7 +2643,7 @@ mpgSoftware.dynamicUi = (function () {
                             records:records
                         };
                          intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
-                            Mustache.render($("#eCaviarBody")[0].innerHTML, renderData),"tissue specific");
+                            renderData,"tissue specific", dataAnnotationTypeCode);
                     }
 
                 }
@@ -2707,7 +2709,7 @@ mpgSoftware.dynamicUi = (function () {
                 headerNames  = _.map(getAccumulatorObject("geneNameArray"),'name');
                 _.forEach(getAccumulatorObject("geneNameArray"), function (oneRecord) {
                     intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
-                        Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML),"header"));
+                        {},"header",'EMC'));
                 });
             }
 
@@ -2726,7 +2728,7 @@ mpgSoftware.dynamicUi = (function () {
                     recordsPerGene["numberOfRecords"] =  validRecords.length;
                     if ((validRecords.length === 0)) {
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
-                            Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML), "tissue specific");
+                            {}, "tissue specific",'EMC');
                     } else {
                         var records =  _.map(_.orderBy(validRecords,["prob_exists_coloc"],["desc"]),function(tissueRecord){
                             return {  tissue: tissueRecord.tissue,
@@ -2756,7 +2758,7 @@ mpgSoftware.dynamicUi = (function () {
                             records:records
                         };
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
-                            Mustache.render($("#colocBody")[0].innerHTML, renderData),"tissue specific");
+                            renderData,"tissue specific", dataAnnotationTypeCode);
                     }
 
                 }
@@ -3105,7 +3107,7 @@ mpgSoftware.dynamicUi = (function () {
                 headerNames  = _.map(getAccumulatorObject("geneNameArray"),'name');
                 _.forEach(getAccumulatorObject("geneNameArray"), function (oneRecord) {
                     intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell('eQTL',
-                        Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML),'eQTL for genes'));
+                        {},'eQTL for genes','EMC'));
                 });
             }
 
@@ -3117,7 +3119,7 @@ mpgSoftware.dynamicUi = (function () {
                 } else {
                     if ((recordsPerGene.tissues.length === 0)) {
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
-                            Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML), "tissue specific");
+                            {}, "tissue specific",'EMC');
                     } else {
                         var tissueRecords = _.map(_.sortBy(recordsPerGene.tissues,['value']),function(tissueRecord){
                             return {  tissueName: tissueRecord.tissueName,
@@ -3140,7 +3142,7 @@ mpgSoftware.dynamicUi = (function () {
                             tissues:tissueRecords
                         };
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell('eQTL',
-                            Mustache.render($("#dynamicGeneTableEqtlSummaryBody")[0].innerHTML, renderData),'tisseRecord');
+                            renderData,'tisseRecord', dataAnnotationTypeCode);
                     };
 
                 }
@@ -3248,8 +3250,9 @@ mpgSoftware.dynamicUi = (function () {
             _.forEach(objectContainingRetrievedRecords.rawData, function (oneRecord,index) {
                 intermediateDataStructure.headerNames.push(oneRecord.name1);
                 intermediateDataStructure.headerContents.push(Mustache.render($("#dynamicGeneTableHeaderV2")[0].innerHTML, oneRecord));
+                // alert('needs to be fixed 1');
                 intermediateDataStructure.headers.push(new IntermediateStructureDataCell(oneRecord.name1,
-                    Mustache.render($("#dynamicGeneTableHeaderV2")[0].innerHTML, oneRecord),"geneHeader asc "));
+                    Mustache.render($("#dynamicGeneTableHeaderV2")[0].innerHTML, oneRecord),"geneHeader asc ",'LIT'));
             });
 
             intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
@@ -3524,6 +3527,7 @@ mpgSoftware.dynamicUi = (function () {
                     sortField: "summary "+category+"x"
                 };
                 var dataWorthDisplayingExists = false;
+                alert('needs to be fixed 2');
                 _.forEach(variantNameArray, function (aVariant, indexOfColumn) {
                     var recordsPerVariant = _.find(recordsAggregatedPerVariant, {variant: aVariant});
                     if (typeof  recordsPerVariant === 'undefined') {
@@ -3632,6 +3636,7 @@ mpgSoftware.dynamicUi = (function () {
 
         var variantAnnotationAppearance = function(annotationName,recordsPerVariant,indexOfColumn,intermediateDataStructure,numberOfVariants,
                                                    testToRun,category){
+            alert('needs to be fixed 3');
             var row = _.find(intermediateDataStructure.rowsToAdd,{'subcategory':annotationName});
             if ( typeof row === 'undefined'){
                 var colCells = [];
@@ -4269,18 +4274,22 @@ mpgSoftware.dynamicUi = (function () {
             dataCells: dataCells
         };
     };
-    var SharedTableDataCell = function (title,content,annotation, ascensionNumber){
-        return {
-            title: title,
-            content: content,
-            annotation: annotation,
-            ascensionNumber:ascensionNumber
-        };
+    var SharedTableDataCell = function (title,renderData,annotation, ascensionNumber, dataAnnotationTypeCode){
+        renderData["ascensionNumber"] = ascensionNumber;
+        return renderData;
+        // return {
+        //     title: title,
+        //     renderData: renderData,
+        //     annotation: annotation,
+        //     ascensionNumber:ascensionNumber,
+        //     dataAnnotationTypeCode:dataAnnotationTypeCode
+        // };
     };
-    var IntermediateStructureDataCell = function (name,content, annotation){
+    var IntermediateStructureDataCell = function (name,renderData, annotation, dataAnnotationTypeCode){
         return {
+            dataAnnotationTypeCode:dataAnnotationTypeCode,
+            renderData:renderData,
             title: name,
-            content: content,
             annotation:  annotation
         };
     };
@@ -4304,9 +4313,11 @@ mpgSoftware.dynamicUi = (function () {
             sharedTable.dataCells.push.apply(sharedTable.dataCells, new Array(numberOfColumns));
         }
         sharedTable.dataCells [indexInOneDimensionalArray] = new SharedTableDataCell(   cell.title,
-                                                                                        cell.content,
+                                                                                        cell,
                                                                                         cell.annotation,
-                                                                                        indexInOneDimensionalArray );
+                                                                                        indexInOneDimensionalArray,
+                                                                                        cell.dataAnnotationTypeCode
+            );
         // update the row count
         var maximumLinearDataLength = sharedTable.dataCells.length;
         sharedTable.numberOfRows = Math.floor(maximumLinearDataLength/numberOfColumns);
@@ -4702,7 +4713,39 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 };
 
 
+    var getDisplayableCellContent  = function (intermediateStructureDataCell,indexInOneDimensionalArray){
+        var returnValue = "";
+        //var displayDetails = getDatatypeInformation( intermediateStructureDataCell.dataAnnotationTypeCode );
+        switch (intermediateStructureDataCell.dataAnnotationTypeCode){
+            case 'LIT': // a literal. Used when we recall the headers straight from the table
+                returnValue = intermediateStructureDataCell.renderData;
+                break;
+            case 'EMC':  // an empty cell
+                returnValue = Mustache.render($('#dynamicGeneTableEmptyRecord')[0].innerHTML,intermediateStructureDataCell.renderData);
+                break;
+            case 'EMP':  // the first two columns are always empty, but contains some information in render data
+                returnValue = Mustache.render($('#emptyRecord')[0].innerHTML,intermediateStructureDataCell.renderData);
+                break;
+            case 'GHD':  // the first two columns are always empty, but contains some information in render data
+                returnValue = Mustache.render($('#dynamicGeneTableHeaderV2')[0].innerHTML,intermediateStructureDataCell.renderData);
+                break;
+            // case 'CAT':  // the first two columns on each annotation row
+            //     displayDetails["indexInOneDimensionalArray"]=indexInOneDimensionalArray;
+            //     var returnValue = Mustache.render($('#'+displayDetails.dataAnnotation.categoryWriter)[0].innerHTML,displayDetails);
+            //     break;
+            // case 'SUB':
+            //     displayDetails["indexInOneDimensionalArray"]=indexInOneDimensionalArray;
+            //     var returnValue = Mustache.render($('#'+displayDetails.dataAnnotation.subCategoryWriter)[0].innerHTML,displayDetails);
+            //     break;
 
+            default:  //  the standard case, where a cell renders its own data using its chosen mustache template
+                var displayDetails = getDatatypeInformation(intermediateStructureDataCell.dataAnnotationTypeCode);
+                returnValue = Mustache.render($('#'+displayDetails.dataAnnotation.cellBodyWriter)[0].innerHTML,intermediateStructureDataCell.renderData);
+                break;
+
+        }
+        return returnValue;
+    };
 
     /***
      * Initiate the jQuery data table and build its headers. This routine expects objects
@@ -4752,15 +4795,23 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     var sortability = [];
                     switch(typeOfHeader){
                         case 'geneTableGeneHeaders':
-                            addedColumns.push(new IntermediateStructureDataCell('farLeftCorner',Mustache.render($('#emptyRecord')[0].innerHTML,{initialLinearIndex:0}),'geneFarLeftCorner'));
+                            addedColumns.push(new IntermediateStructureDataCell('farLeftCorner',
+                                {initialLinearIndex:0},
+                                'geneFarLeftCorner','EMP'));
                             sortability.push(false);
-                            addedColumns.push(new IntermediateStructureDataCell('b',Mustache.render($('#emptyRecord')[0].innerHTML,{initialLinearIndex:1}),'geneMethods'));
+                            addedColumns.push(new IntermediateStructureDataCell('b',
+                                {initialLinearIndex:1},
+                                'geneMethods','EMP'));
                             sortability.push(true);
                             break;
                         case 'variantTableVariantHeaders':
-                            addedColumns.push(new IntermediateStructureDataCell('farLeftCorner',Mustache.render($('#emptyRecord')[0].innerHTML,{initialLinearIndex:0}),'variantAnnotationCategory'));
+                            addedColumns.push(new IntermediateStructureDataCell('farLeftCorner',
+                                {initialLinearIndex:0},
+                                'variantAnnotationCategory','EMP'));
                             sortability.push(true);
-                            addedColumns.push(new IntermediateStructureDataCell('b',Mustache.render($('#emptyRecord')[0].innerHTML,{initialLinearIndex:1}),'methods'));
+                            addedColumns.push(new IntermediateStructureDataCell('b',
+                                {initialLinearIndex:1},
+                                'methods','EMP'));
                             sortability.push(true);
                             break;
                         case 'variantTableAnnotationHeaders':
@@ -4769,7 +4820,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                             break;
                     }
                     _.forEach(addedColumns, function (column, index){
-                        var contentOfHeader = column.content;
+                        var contentOfHeader = getDisplayableCellContent(column);
                         headerDescriber.aoColumnDefs.push({
                             "title": contentOfHeader,
                             "targets": (sortability[index])?[index]:'nosort',
@@ -4788,9 +4839,10 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                  _.forEach(headers, function (header, count) {
                      var classesToPromote = [];
                      // first let us extract any classes that we need to promote to the header
-                     if ((header.content.length>0)&&
-                         ( typeof  $(header.content).attr("class") !== 'undefined')){
-                         var classList = $(header.content).attr("class").split(/\s+/);
+                     var headerContent = getDisplayableCellContent(header);
+                     if ((headerContent.length>0)&&
+                         ( typeof  $(headerContent).attr("class") !== 'undefined')){
+                         var classList = $(headerContent).attr("class").split(/\s+/);
                          var currentSortRequestObject = {};
                          _.forEach(classList, function (oneClass){
                              var sortOrderDesignation = "sorting_";
@@ -4799,19 +4851,19 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                              }
                          });
                      }
-                     var contentOfHeader = header.content;
+                     var contentOfHeader = headerContent;
                      if ((typeOfHeader === 'variantTableAnnotationHeaders')&&
                          (additionalDetailsForHeaders.length > 0)){
-                         contentOfHeader += additionalDetailsForHeaders[count].content;
+                         contentOfHeader += getDisplayableCellContent(additionalDetailsForHeaders[count]);
                      }
                      if ((typeOfHeader === 'geneTableAnnotationHeaders')&&
                          (additionalDetailsForHeaders.length > 0)){
-                         contentOfHeader += additionalDetailsForHeaders[count].content;
+                         contentOfHeader += getDisplayableCellContent(additionalDetailsForHeaders[count]);
                      }
 
-                     var initialLinearIndex = extractClassBasedIndex(header.content,"initialLinearIndex_");
+                     var initialLinearIndex = extractClassBasedIndex(headerContent,"initialLinearIndex_");
                      if (initialLinearIndex === -1){
-                         var domContent = $(header.content);
+                         var domContent = $(headerContent);
                          domContent.addClass("initialLinearIndex_"+(count+numberOfAddedColumns));
                          contentOfHeader = '';
                          _.forEach(domContent,function(domElement){
@@ -4832,9 +4884,11 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         "sortable": !noSorting,
                         "type": "generalSort"
                     });
-                     addedColumns.push(new IntermediateStructureDataCell(header.title,contentOfHeader,header.annotation));
+                     addedColumns.push(new IntermediateStructureDataCell(header.title,contentOfHeader,header.annotation,'LIT'));
                 });
-                var headerContents = _.map(headerDescriber.aoColumnDefs,function(o){return o.title});
+                var headerContents = _.map(headerDescriber.aoColumnDefs,function(o){return
+                    o.title
+                });
                 datatable = $(whereTheTableGoes).DataTable(headerDescriber);
 
 
@@ -4850,7 +4904,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     var numberOfHeaders = datatable.table().columns().length;
                     _.forEach(datatable.table().columns().header(),function(o,columnIndex){
                         var domElement = $(o);
-                        var headerName = domElement.text().trim();
+                        //var contentOfHeader = getDisplayableCellContent(addedColumns[columnIndex]);
+                        //var headerName = domElement.text().trim();
                         storeCellInMemoryRepresentationOfSharedTable(whereTheTableGoes,
                             addedColumns[columnIndex],
                             typeOfHeader,
@@ -5043,30 +5098,30 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         indexInOneDimensionalArray = (numberOfExistingRows*numberOfColumns);
                         rowDescriber.push( new IntermediateStructureDataCell(row.category,
                             displayCategoryHtml(row.code,indexInOneDimensionalArray),
-                            // "<div class='"+row.subcategory+
-                            // " initialLinearIndex_"+indexInOneDimensionalArray+" geneRow'>"+row.displayCategory+"</div>" ,
-                            row.subcategory)) ;
+                            //getDisplayableCellContent(new IntermediateStructureDataCell (row.category,{},row.category,'CAT')),
+                            row.subcategory,"LIT")) ;
                         indexInOneDimensionalArray++;
                         rowDescriber.push( new IntermediateStructureDataCell(row.subcategory,
                             displaySubcategoryHtml(row.code,indexInOneDimensionalArray),
-                            // "<div significance_sortfield='0.0' class='subcategory "+
-                            // " initialLinearIndex_"+indexInOneDimensionalArray+"' sortField='"+row.displaySubcategory+"' subSortField='-1'>"+row.displaySubcategory+"</div>" ,
-                            "insertedColumn2"));
+                            //getDisplayableCellContent(new IntermediateStructureDataCell (row.subcategory,{},row.subcategory,'SUB')),
+                            "insertedColumn2","LIT"));
                         numberOfColumnsAdded += rowDescriber.length;
                         break;
                     case 'variantTableVariantHeaders':
                         indexInOneDimensionalArray = (numberOfExistingRows*numberOfColumns);
                         var primarySortField =  ( typeof row.sortField === 'undefined') ? row.category : row.sortField;
                         rowDescriber.push( new IntermediateStructureDataCell(row.category,
-                                               "<div class='"+row.subcategory+
-                                               " initialLinearIndex_"+indexInOneDimensionalArray+" variantRow' sortField='"+primarySortField+"'>"+
+                            getDisplayableCellContent(new IntermediateStructureDataCell (row.category,{},row.category,'CAT')),
+                                               // "<div class='"+row.subcategory+
+                                               // " initialLinearIndex_"+indexInOneDimensionalArray+" variantRow' sortField='"+primarySortField+"'>"+
                                                 row.displayCategory+"</div>" ,
                                                 row.subcategory)) ;
                         indexInOneDimensionalArray++;
                         rowDescriber.push( new IntermediateStructureDataCell(row.subcategory,
-                                                "<div class='subcategory "+
-                                                " initialLinearIndex_"+indexInOneDimensionalArray+" variantRow' sortField='"+row.subcategory+"'>"+
-                                                row.displaySubcategory+"</div>" ,
+                                                // "<div class='subcategory "+
+                                                // " initialLinearIndex_"+indexInOneDimensionalArray+" variantRow' sortField='"+row.subcategory+"'>"+
+                                                // row.displaySubcategory+"</div>" ,
+                            getDisplayableCellContent(new IntermediateStructureDataCell (row.subcategory,{},row.subcategory,'SUB')),
                                                 "insertedColumn2"));
                         numberOfColumnsAdded += rowDescriber.length;
                         break;
@@ -5100,12 +5155,14 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             _.forEach(row.columnCells, function (val, index) {
                 // if (( typeof val !== 'undefined') &&
                 //     ( typeof val.content !== 'undefined')){
-                    var initialLinearIndex = extractClassBasedIndex(val.content,"initialLinearIndex_");
+                    var valContent =  getDisplayableCellContent(val);
+                    var initialLinearIndex = extractClassBasedIndex(valContent,"initialLinearIndex_");
                     if (initialLinearIndex === -1){
-                        var domContent = $(val.content);
+                        var domContent = $(valContent);
                         indexInOneDimensionalArray = (numberOfExistingRows*numberOfColumns)+index + numberOfColumnsAdded;
-                        domContent.addClass("initialLinearIndex_"+indexInOneDimensionalArray);
-                        val.content = domContent[0].outerHTML;
+                        val.renderData['initialLinearIndex'] = "initialLinearIndex_"+indexInOneDimensionalArray;
+                        //domContent.addClass("initialLinearIndex_"+indexInOneDimensionalArray);
+                        //valContent = domContent[0].outerHTML;
                     }
                     rowDescriber.push(val);
                     if (storeRecordsInDataStructure){
@@ -5119,7 +5176,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
                 // }
             });
-            $(whereTheTableGoes).dataTable().fnAddData(_.map(rowDescriber,function(o){return o.content}));
+
+            $(whereTheTableGoes).dataTable().fnAddData(_.map(rowDescriber,function(o){return getDisplayableCellContent(o)}));
 
         });
         return rememberCategories;
@@ -5236,7 +5294,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             //var yIndex = linearIndex%numberOfRows;
             var yIndex = Math.floor(linearIndex/numberOfRows);
             var newIndex = mapper(xIndex,yIndex,numberOfRows,numberOfColumns);//(yIndex*numberOfRows)+xIndex;
-            temporaryArray.push({newIndex:newIndex,cell: (new SharedTableDataCell(oneCell.title,oneCell.content,oneCell.annotation,oneCell.ascensionNumber))});
+            temporaryArray.push({newIndex:newIndex,cell: oneCell});
         });
         var nowTransposed = _.sortBy(temporaryArray,['newIndex']);
         return _.map(nowTransposed,'cell');
@@ -5649,7 +5707,7 @@ var destroySharedTable = function (whereTheTableGoes) {
         }
 
         var sortedData = extractSortedDataFromTable(whereTheTableGoes, numberOfRows, numberOfColumns, sharedTable.currentForm);
-        sortedData=matrixMath.swapColumnsInDataStructure(sortedData,sharedTable.numberOfRows,sharedTable.numberOfColumns,2,3);
+        //sortedData=matrixMath.swapColumnsInDataStructure(sortedData,sharedTable.numberOfRows,sharedTable.numberOfColumns,2,3);
 
 
         destroySharedTable(whereTheTableGoes);

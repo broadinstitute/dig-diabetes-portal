@@ -40,7 +40,7 @@
 
 
 <script id="emptyRecord"  type="x-tmpl-mustache">
-     <div class="initialLinearIndex_{{initialLinearIndex}} {{otherClasses}}" sortField="A">
+     <div class="initialLinearIndex_{{initialLinearIndex}} {{otherClasses}} {{initialLinearIndex}}" sortField="A">
      </div>
 </script>
 
@@ -246,7 +246,8 @@
 
 
 <script id="dynamicGeneTableModBody"  type="x-tmpl-mustache">
-             <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}} class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}}">
+             <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
+             class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'MOD matches for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)"
                class="cellExpander" data-target="#mod_data_{{geneName}}"  style="color:black">{{cellPresentationString}}</a>
                <div  class="collapse openModInGeneTable" id="mod_data_{{geneName}}">
@@ -292,7 +293,8 @@
 
 <script id="depictGeneSetBody"  type="x-tmpl-mustache">
 
-             <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}} class="tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}}">
+             <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
+             class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'DEPICT gene set containing {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
 
                data-target="#depict_geneset_{{gene}}" style="color:black">{{cellPresentationString}}</a>
@@ -350,7 +352,8 @@
 
 
 <script id="eCaviarBody"  type="x-tmpl-mustache">
-             <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}} class="tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}}">
+             <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
+             class="tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'eCAVIAR records referencing {{gene}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
                data-target="#eCaviar_{{gene}}" style="color:black">{{cellPresentationString}}</a>
                <div  class="collapse openDepictGeneSetInGeneTable" id="eCaviar_{{gene}}">
@@ -395,7 +398,8 @@
 
 
 <script id="colocBody"  type="x-tmpl-mustache">
-             <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}} class="tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}}">
+             <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
+             class="tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'COLOC records referencing {{gene}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
                data-target="#COLOC_{{gene}}" style="color:black">{{cellPresentationString}}</a>
                <div  class="collapse openColocInGeneTable" id="COLOC_{{gene}}">
@@ -462,7 +466,7 @@
 
 <script id="dynamicGeneTableEmptyRecord"  type="x-tmpl-mustache">
 
-                <div sortField=0 significance_sortfield='0.0'>
+                <div class="{{initialLinearIndex}}" sortField=0 significance_sortfield='0.0'>
                 </div>
 
 
@@ -472,7 +476,8 @@
 
 
 <script id="dynamicGeneTableEqtlSummaryBody"  type="x-tmpl-mustache">
-            <div significance_sortField="{{significanceValue}}" sortField={{numberOfTissues}} class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}}">
+            <div significance_sortField="{{significanceValue}}" sortField={{numberOfTissues}}
+            class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'eQTLs for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget);"
                class="cellExpander" data-target="#eqtl_{{geneName}}" style="color:black">{{cellPresentationString}}</a>
                %{--<div  class="popup">--}%
@@ -837,7 +842,7 @@
 %{--Called from displayGenesFromAbc--}%
 <script id="dynamicGeneTableHeaderV2"  type="x-tmpl-mustache">
 
-            <div sortStrategy="alphabetical" sortField="-1"  sortTerm="{{name1}}" class="geneName text-center">
+            <div sortStrategy="alphabetical" sortField="-1"  sortTerm="{{name1}}" class="geneName text-center {{initialLinearIndex}}">
              {{name2}}</div>
              <div class="genePosition text-center">
              {{chromosome}}: {{addrStart}}-{{addrEnd}}
@@ -857,7 +862,8 @@
 
 </script>
 <script id="dynamicAbcGeneTableBody"  type="x-tmpl-mustache">
-            <div significance_sortField="{{significanceValue}}" sortField={{numberOfTissues}} class="tissueCategory_{{tissueCategoryNumber}}  significanceCategory_{{significanceCategoryNumber}}">
+            <div significance_sortField="{{significanceValue}}" sortField={{numberOfTissues}}
+            class="tissueCategory_{{tissueCategoryNumber}}  significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                <a
                onclick="mpgSoftware.dynamicUi.showAttachedData(event,'ABC for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)"
                 class="cellExpander" data-target="#abc_{{geneName}}" style="color:black">{{cellPresentationString}}</a>
@@ -914,7 +920,8 @@
 
 
 <script id="depictGeneTableBody"  type="x-tmpl-mustache">
-             <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}} class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}}">
+             <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
+             class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'DEPICT predictions for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)"
                class="cellExpander" data-target="#depict_data_{{geneName}}" style="color:black">{{cellPresentationString}}</a>
                <div  class="collapse openDepictInGeneTable" id="depict_data_{{geneName}}">
@@ -953,7 +960,8 @@
 
 <script id="geneAssociationTableBody"  type="x-tmpl-mustache">
 
-            <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}} class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}}">
+            <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
+            class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'MetaXcan for {{gene}}',mpgSoftware.dynamicUi.extractStraightFromTarget)"
                class="cellExpander" data-target="#MetaXcan_{{gene}}"  style="color:black">{{cellPresentationString}}</a>
                <div  class="collapse openMetaXcanInGeneTable" id="MetaXcan_{{gene}}">
@@ -995,7 +1003,8 @@
 
 <script id="geneSkatAssociationTableBody"  type="x-tmpl-mustache">
 
-            <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}} class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}}">
+            <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
+            class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'SKAT associations for {{gene}}',mpgSoftware.dynamicUi.extractStraightFromTarget)"
                class="cellExpander" data-target="#geneSkatAssociation_{{gene}}"  style="color:black">{{cellPresentationString}}</a>
                <div  class="collapse opengeneSkatAssociationInGeneTable" id="geneSkatAssociation_{{gene}}">
@@ -1037,7 +1046,8 @@
 
 <script id="geneFirthAssociationTableBody"  type="x-tmpl-mustache">
 
-            <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}} class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}}">
+            <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
+            class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'Firth associations for {{gene}}',mpgSoftware.dynamicUi.extractStraightFromTarget)"
                class="cellExpander" data-target="#geneFirthAssociation_{{gene}}"  style="color:black">{{cellPresentationString}}</a>
                <div  class="collapse opengeneFirthAssociationInGeneTable" id="geneFirthAssociation_{{gene}}">
