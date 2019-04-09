@@ -715,7 +715,7 @@ div.genePosition{
                                             </button>
                                         </div>
                                         <div class="datatable-cell-color-control">
-                                            <div class="tool-label">Cell color</div>
+                                            <div class="tool-label">View:</div>
 
 
                                             <button type="button" class="btn btn-secondary first-btn significance active" aria-label="click to organize by greatest significance"
