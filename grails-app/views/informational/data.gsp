@@ -90,7 +90,7 @@
                 </g:if>
                 <g:elseif test="${g.portalTypeString()?.equals('mi')}">
             <div class="col-md-12">
-                <h1 class="dk-page-title">Polygenic Risk Scores</h1>
+                <h1 class="dk-page-title">Polygenic Scores</h1>
 
 
                 %{--<p style="font-weight: 300; font-size: 18px;"><g:message code="informational.about.PRS2"></g:message></p>--}%
