@@ -299,7 +299,6 @@
              <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
              class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'DEPICT gene set containing {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
-
                data-target="#depict_geneset_{{gene}}" style="color:black">{{cellPresentationString}}</a>
                <div  class="collapse openDepictGeneSetInGeneTable" id="depict_geneset_{{gene}}">
                     {{#recordsExist}}
@@ -321,12 +320,19 @@
                            <td style="padding: 3px">{{pathway_description}}</td>
                            <td style="padding: 3px">{{pvalue_str}}</td>
                            <td style="padding: 3px">
-                           <a  data-toggle="collapse" class="cellExpander" data-target="#depict_geneset_d{{pathway_id_str}}" title="{{#gene_list}}{{.}},{{/gene_list}}">{{number_genes}} genes</a>
+                           <div>
+                               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'DEPICT gene set',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander" data-target="#depict_geneset_d{{pathway_id_str}}" title="{{#gene_list}}{{.}},{{/gene_list}}">{{number_genes}} genes</a>
                                <div  class="collapse holdMultipleElements openTissues" id="depict_geneset_d{{pathway_id_str}}" >
+                               <table width=50>
+                               <th>{{pathway_id}}</th>
+                               <tbody>
                                  {{#gene_list}}
-                                    {{.}},
+                                    <tr><td class="text-center">{{.}}</td></tr>
                                  {{/gene_list}}
+                               </tbody>
+                               </table>
                                </div>
+                           </div>
                            </td>
                        </tr>
 
@@ -850,7 +856,8 @@
                 <span class="glyphicon glyphicon-step-backward" aria-hidden="true" onclick="mpgSoftware.dynamicUi.shiftColumnsByOne(event,this,'backward','table.combinedGeneTableHolder')"></span>
                 <span class="glyphicon glyphicon-step-forward" aria-hidden="true" onclick="mpgSoftware.dynamicUi.shiftColumnsByOne(event,this,'forward','table.combinedGeneTableHolder')"></span>
             </div>
-             {{name2}}</div>
+             <span class="displayGeneName">{{name2}}</span>
+             </div>
              <div class="genePosition text-center">
              {{chromosome}}: {{addrStart}}-{{addrEnd}}
              </div>

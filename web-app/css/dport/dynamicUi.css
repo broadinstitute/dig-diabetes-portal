@@ -133,3 +133,7 @@ div.geneHeaderShifters{
     margin: 0;
     height: 15px;
 }
+span.displayGeneName{
+    color: black;
+    font-weight: bold;
+}

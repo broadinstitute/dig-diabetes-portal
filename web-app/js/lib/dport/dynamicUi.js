@@ -1219,7 +1219,6 @@ mpgSoftware.dynamicUi = (function () {
                             geneName:recordsPerGene.geneName,
                             humanGene:recordsPerGene.humanGene,
                             geneDescription:recordsPerGene.geneDescription,
-                            significanceCategoryNumber:0,
                             significanceValue:0,
                             modTerms: modRecs
                         };
@@ -2343,7 +2342,7 @@ mpgSoftware.dynamicUi = (function () {
                                 numericalValue: tissueRecord.value };
                         });
                         var recordsCellPresentationString = "records="+tissueRecords.length;
-                        var significanceCellPresentationString = "0";
+                        var significanceCellPresentationString = "";
                         var significanceValue = 0;
                         if (( typeof tissueRecords !== 'undefined')&&
                             (tissueRecords.length>0)){
@@ -4458,6 +4457,11 @@ mpgSoftware.dynamicUi = (function () {
                     }
                     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
                     break;
+                case  'geneFarLeftCorner':
+                    var textA = a.trim().toUpperCase();
+                    var textB = b.trim().toUpperCase();
+                    return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+                    break;
                 case 'straightAlphabetic':
                     var textA = a.trim().toUpperCase();
                     var textB = b.trim().toUpperCase();
@@ -4616,9 +4620,13 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 break;
             case 'geneFarLeftCorner':
                 currentSortRequestObject = {
-                    'currentSort':'straightAlphabeticWithSpacesOnTop',
+                    'currentSort':oneClass,
                     'table':'table.combinedGeneTableHolder'
                 };
+                //currentSortRequestObject = {
+                //    'currentSort':'straightAlphabeticWithSpacesOnTop',
+                //    'table':'table.combinedGeneTableHolder'
+                //};
                 break;
             case 'geneMethods':
                 currentSortRequestObject = {
@@ -4726,13 +4734,16 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
     currentSortRequestObject['sortOrder'] = (sortOrder === 'asc')?'desc':'asc';
     currentSortRequestObject['columnNumberValue'] = actualColumnIndex;
     var setOfColumnsToSort = [];
-    //setOfColumnsToSort.push([ currentSortRequestObject.columnNumberValue, currentSortRequestObject.sortOrder ]);
     if ((typeOfHeader === "variantTableVariantHeaders")&&
         ( currentSortRequestObject.currentSort !== "variantAnnotationCategory")){
         setOfColumnsToSort.push([0,'asc']);
         if ( currentSortRequestObject.currentSort !== 'methods'){
             setOfColumnsToSort.push([1,'asc']);
         }
+    }
+    else  if ((typeOfHeader === "geneTableGeneHeaders")&&
+        ( currentSortRequestObject.currentSort === "geneHeader")){
+       // setOfColumnsToSort.push([0,'desc']);
     }
     setOfColumnsToSort.push([ currentSortRequestObject.columnNumberValue, currentSortRequestObject.sortOrder ]);
     setAccumulatorObject("currentSortRequest", currentSortRequestObject );
@@ -4815,6 +4826,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         [100, 500, "All"]
                     ],
                     "bDestroy": true,
+                    "bSort": true,
                     "bAutoWidth": false,
                     "aoColumnDefs": []
                 };
@@ -4856,7 +4868,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         var contentOfHeader = getDisplayableCellContent(column);
                         headerDescriber.aoColumnDefs.push({
                             "title": contentOfHeader,
-                            "targets": (sortability[index])?[index]:'nosort',
+                            "targets": (sortability[index])?[0,index]:'nosort',
                             "name": column.title,
                             "className": column.annotation+" initialLinearIndex_"+index,
                             "sortable": sortability[index],
@@ -4908,8 +4920,9 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                      }
 
 
-                     var noSorting = (((count+numberOfAddedColumns)===0)&&(typeOfHeader==='geneTableGeneHeaders'));
-                      headerDescriber.aoColumnDefs.push({
+                     //var noSorting = (((count+numberOfAddedColumns)===0)&&(typeOfHeader==='geneTableGeneHeaders'));
+                     var noSorting = false;
+                     headerDescriber.aoColumnDefs.push({
                         "title": contentOfHeader,
                         "targets": noSorting?'nosort':[count+numberOfAddedColumns],
                         "name": header.title,
@@ -4995,6 +5008,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                             $('div.significanceCategory_5').parents('td').css('background',CELL_COLORING_BLUISH_BOTTOM);
                             $('div.significanceCategory_6').parents('td').css('background',CELL_COLORING_UNUSED);
                         }
+                        $('div.subcategory').css('font-weight','normal');
                     }
                     break;
                 case 'geneTableAnnotationHeaders':
@@ -5023,6 +5037,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                             $('div.significanceCategory_5').parents('td').css('background',CELL_COLORING_BLUISH_BOTTOM);
                             $('div.significanceCategory_6').parents('td').css('background',CELL_COLORING_UNUSED);
                         }
+                        $('div.subcategory').css('font-weight','bold');
                     }
                   break;
                 case 'variantTableVariantHeaders':
@@ -5950,7 +5965,9 @@ var destroySharedTable = function (whereTheTableGoes) {
                 case "MET":
                 case "EQT":
                     var valueToAssess = significance[0].numericalValue;
-                    if ((valueToAssess>0) &&(valueToAssess<=0.5E-8)) {
+                    if (valueToAssess===0)  {
+                        returnValue = 6;
+                    } else if ((valueToAssess>0) &&(valueToAssess<=0.5E-8)) {
                         returnValue = 1;
                     } else if ((valueToAssess>0.5E-8) &&(valueToAssess<=0.5E-4)) {
                         returnValue = 2;
