@@ -5728,14 +5728,14 @@ var destroySharedTable = function (whereTheTableGoes) {
             if ($(className).length) { $("button"+className).removeClass("active") }
             if ($(idName).length) { $("button"+className).removeClass("active") }
         });
-        redrawTableOnClick('table.combinedGeneTableHolder');
+        redrawTableOnClick('table.combinedGeneTableHolder',-1,-1);
         refineTableRecords($(whereTheTableGoes).dataTable(),'geneTableGeneHeaders',[],false);
     }
 
 
 
 
-    var redrawTableOnClick = function (whereTheTableGoes) {
+    var redrawTableOnClick = function (whereTheTableGoes,swapColA,swapColB) {
         var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
         var numberOfColumns;
         var numberOfRows;
@@ -5752,6 +5752,9 @@ var destroySharedTable = function (whereTheTableGoes) {
         }
 
         var sortedData = extractSortedDataFromTable(whereTheTableGoes, numberOfRows, numberOfColumns, sharedTable.currentForm);
+        if ((swapColA !== -1) && (swapColB !== -1)){
+            sortedData=matrixMath.swapColumnsInDataStructure(sortedData,sharedTable.numberOfRows,sharedTable.numberOfColumns,swapColA,swapColB);
+        }
         //sortedData=matrixMath.swapColumnsInDataStructure(sortedData,sharedTable.numberOfRows,sharedTable.numberOfColumns,2,3);
 
 
@@ -5820,17 +5823,6 @@ var destroySharedTable = function (whereTheTableGoes) {
             var rememberCategories = addContentToTable(whereTheTableGoes, rowsToAdd, false, sharedTable.currentForm, false);
             refineTableRecords(datatable, sharedTable.currentForm, rememberCategories, false);
 
-            //displayGeneFirthAssociationsForGeneTable();
-            //displayGeneSkatAssociationsForGeneTable();
-            //displayGenePhenotypeAssociations();
-            //displayGenesFromDepict();
-            //displayGeneSetFromDepict();
-            //displayGenesFromECaviar();
-            //displayGenesFromColoc();
-            //displayRefinedModContext();
-            //
-            //
-            //refineTableRecords(datatable, 'geneTableGeneHeaders', [], false);
             sharedTable.currentForm = 'geneTableGeneHeaders';
 
             if (transposeNec){transposeThisTable(whereTheTableGoes)}
@@ -5963,13 +5955,36 @@ var destroySharedTable = function (whereTheTableGoes) {
         return returnValue;
     };
 
+    var shiftColumnsByOne = function ( event, offeredThis, direction, whereTheTableGoes) {
+        event.stopPropagation();
+        var identifyingNode = $(offeredThis).parent().parent().parent();
+        var initialLinearIndex = extractClassBasedIndex(identifyingNode[0].innerHTML,"initialLinearIndex_");
+        var dataTable = $(whereTheTableGoes).dataTable().DataTable();
+        var numberOfHeaders = dataTable.table().columns()[0].length;
+        var indexOfClickedColumn = -1;
+        _.each(_.range(0,numberOfHeaders),function(index) {
+            var header = dataTable.table().column(index).header();
+            var headerLinearIndex = extractClassBasedIndex($(header)[0].innerHTML,"initialLinearIndex_");
+            if (headerLinearIndex ===initialLinearIndex){
+                indexOfClickedColumn = index;
+            }
+        });
+        if (direction==="forward"){
+            if ((indexOfClickedColumn>1) &&(indexOfClickedColumn<(numberOfHeaders-1))){
+                redrawTableOnClick('table.combinedGeneTableHolder',indexOfClickedColumn,indexOfClickedColumn+1);
+            }
+        }else if (direction==="backward") {
+            if ((indexOfClickedColumn>2) &&(indexOfClickedColumn<(numberOfHeaders))){
+                redrawTableOnClick('table.combinedGeneTableHolder',indexOfClickedColumn,indexOfClickedColumn-1);
+            }
+        }
 
-
-
+    }
 
 
 // public routines are declared below
     return {
+        shiftColumnsByOne:shiftColumnsByOne,
         extractStraightFromTarget:extractStraightFromTarget,
         showAttachedData:showAttachedData,
         setColorButtonActive: setColorButtonActive,
