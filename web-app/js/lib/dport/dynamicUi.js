@@ -2342,13 +2342,7 @@ mpgSoftware.dynamicUi = (function () {
                                 value: UTILS.realNumberFormatter(""+tissueRecord.value),
                                 numericalValue: tissueRecord.value };
                         });
-                        //var cellPresentationString = "records="+recordsPerGene.tissues.length;
-                        //if (findCellColoringChoice ('table.combinedGeneTableHolder')=== 'Significance'){
-                        //    var minPValue=_.find(tissueRecords,function(t){return t.tissue.includes(preferredSummaryKey)})
-                        //    cellPresentationString = "p="+minPValue.value+" ("+translateATissueName(tissueTranslations,preferredSummaryKey)+")";
-                        //    significanceValue = minPValue.value;
-                        //}
-                        var recordsCellPresentationString = "records="+recordsPerGene.tissues.length;
+                        var recordsCellPresentationString = "records="+tissueRecords.length;
                         var significanceCellPresentationString = "0";
                         var significanceValue = 0;
                         if (( typeof tissueRecords !== 'undefined')&&
@@ -2357,11 +2351,11 @@ mpgSoftware.dynamicUi = (function () {
                             significanceCellPresentationString = "p="+minPValue.value+" ("+translateATissueName(tissueTranslations,preferredSummaryKey)+")";
                             significanceValue = minPValue.value;
                         }
-                        var renderData = {  numberOfRecords:recordsPerGene.tissues.length,
+                        var renderData = {  numberOfRecords:tissueRecords.length,
                             cellPresentationStringMap:{ Records:recordsCellPresentationString,
                                 Significance:significanceCellPresentationString },
-                            tissueCategoryNumber:categorizeTissueNumbers( recordsPerGene.tissues.length ),
-                            tissuesExist:(recordsPerGene.tissues.length)?[1]:[],
+                            tissueCategoryNumber:categorizeTissueNumbers( tissueRecords.length ),
+                            tissuesExist:(tissueRecords.length)?[1]:[],
                             gene:recordsPerGene.gene,
                             significanceCategoryNumber:categorizeSignificanceNumbers( tissueRecords, "MET" ),
                             significanceValue:significanceValue,
@@ -2445,14 +2439,7 @@ mpgSoftware.dynamicUi = (function () {
                                 value: UTILS.realNumberFormatter(""+tissueRecord.value),
                                 numericalValue: tissueRecord.value };
                         });
-                        //var cellPresentationString = "records="+recordsPerGene.tissues.length;
-                        //if (findCellColoringChoice ('table.combinedGeneTableHolder')=== 'Significance'){
-                        //    var minPValue=_.find(recordsPerGene.tissues,function(t){return t.tissue.includes(preferredSummaryKey)})
-                        //    cellPresentationString = "p="+minPValue.value+" ("+translateATissueName(tissueTranslations,preferredSummaryKey)+")";
-                        //    significanceValue = minPValue.value;
-                        //}
-
-                        var recordsCellPresentationString = "records="+recordsPerGene.tissues.length;
+                        var recordsCellPresentationString = "records="+tissueRecords.length;
                         var significanceCellPresentationString = "0";
                         var significanceValue = 0;
                         if (( typeof recordsPerGene.tissues !== 'undefined')&&
@@ -2461,11 +2448,11 @@ mpgSoftware.dynamicUi = (function () {
                             significanceValue = minPValue.value;
                             significanceCellPresentationString = "p="+minPValue.value+" ("+translateATissueName(tissueTranslations,preferredSummaryKey)+")";
                         }
-                        var renderData = {  numberOfRecords:recordsPerGene.tissues.length,
+                        var renderData = {  numberOfRecords:tissueRecords.length,
                             cellPresentationStringMap:{ Records:recordsCellPresentationString,
                                 Significance:significanceCellPresentationString },
-                            tissueCategoryNumber:categorizeTissueNumbers( recordsPerGene.tissues.length ),
-                            tissuesExist:(recordsPerGene.tissues.length)?[1]:[],
+                            tissueCategoryNumber:categorizeTissueNumbers( tissueRecords.length ),
+                            tissuesExist:(tissueRecords.length)?[1]:[],
                             gene:recordsPerGene.gene,
                             significanceCategoryNumber:categorizeSignificanceNumbers( tissueRecords, "MET" ),
                             significanceValue:significanceValue,
@@ -2656,6 +2643,7 @@ mpgSoftware.dynamicUi = (function () {
                                 prob_in_causal_set: UTILS.realNumberFormatter(""+tissueRecord.prob_in_causal_set),
                                 gwas_z_score: UTILS.realNumberFormatter(""+tissueRecord.gwas_z_score),
                                 eqtl_z_score: UTILS.realNumberFormatter(""+tissueRecord.eqtl_z_score),
+                                var_id:tissueRecord.var_id,
                                 numericalValue: tissueRecord.clpp
                             }});
                         var recordsCellPresentationString = "records="+validRecords.length;
@@ -4789,7 +4777,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 break;
 
         }
-        return returnValue;
+        return returnValue.trim();
     };
 
     /***
@@ -4841,21 +4829,21 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     switch(typeOfHeader){
                         case 'geneTableGeneHeaders':
                             addedColumns.push(new IntermediateStructureDataCell('farLeftCorner',
-                                {initialLinearIndex:0},
+                                {initialLinearIndex:"initialLinearIndex_0"},
                                 'geneFarLeftCorner','EMP'));
-                            sortability.push(false);
+                            sortability.push(true);
                             addedColumns.push(new IntermediateStructureDataCell('b',
-                                {initialLinearIndex:1},
+                                {initialLinearIndex:"initialLinearIndex_1"},
                                 'geneMethods','EMP'));
                             sortability.push(true);
                             break;
                         case 'variantTableVariantHeaders':
                             addedColumns.push(new IntermediateStructureDataCell('farLeftCorner',
-                                {initialLinearIndex:0},
+                                {initialLinearIndex:"initialLinearIndex_0"},
                                 'variantAnnotationCategory','EMP'));
                             sortability.push(true);
                             addedColumns.push(new IntermediateStructureDataCell('b',
-                                {initialLinearIndex:1},
+                                {initialLinearIndex:"initialLinearIndex_1"},
                                 'methods','EMP'));
                             sortability.push(true);
                             break;

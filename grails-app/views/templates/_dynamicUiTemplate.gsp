@@ -40,7 +40,7 @@
 
 
 <script id="emptyRecord"  type="x-tmpl-mustache">
-     <div class="initialLinearIndex_{{initialLinearIndex}} {{otherClasses}} {{initialLinearIndex}}" sortField="A">
+     <div class="{{initialLinearIndex}} {{otherClasses}}" sortField="A">
      </div>
 </script>
 
@@ -214,7 +214,7 @@
 
 <script id="sharedCategoryWriter"  type="x-tmpl-mustache">
      <div significance_sortfield='0' sortField='{{index}}' subSortField='-1' class={{row.subcategory}} initialLinearIndex_{{indexInOneDimensionalArray}} geneRow'>
-           <div class="geneAnnotationShifters">
+           <div class="geneAnnotationShifters text-center">
                 <span class="glyphicon glyphicon-step-backward" aria-hidden="true" onclick="mpgSoftware.dynamicUi.shiftColumnsByOne(event,this,'backward','table.combinedGeneTableHolder')"></span>
                 <span class="glyphicon glyphicon-step-forward" aria-hidden="true" onclick="mpgSoftware.dynamicUi.shiftColumnsByOne(event,this,'forward','table.combinedGeneTableHolder')"></span>
             </div>
@@ -264,7 +264,7 @@
                     <table class="openModInGeneTable" style="border: 0">
                      <thead>
                       <tr role="row">
-                        <th style="border-top: 0;">term</th>
+                        <th style="border-top: 0;" class="text-center">term</th>
                       </tr>
                      </thead>
                      <tbody>
@@ -307,10 +307,10 @@
                     <table class="openDepictGeneSetInGeneTable" style="border: 0">
                      <thead>
                       <tr role="row">
-                        <th style="border-top: 0;">pathway ID</th>
-                        <th style="border-top: 0;">description</th>
-                        <th style="border-top: 0;">p-value</th>
-                        <th style="border-top: 0;">genes</th>
+                        <th style="border-top: 0;" class="text-center">pathway ID</th>
+                        <th style="border-top: 0;" class="text-center">description</th>
+                        <th style="border-top: 0;" class="text-center">p-value</th>
+                        <th style="border-top: 0;" class="text-center">genes</th>
                       </tr>
                      </thead>
                      <tbody>
@@ -364,9 +364,9 @@
                     <table class="openDepictGeneSetInGeneTable" style="border: 0">
                      <thead>
                       <tr role="row">
-                        <th style="border-top: 0;">tissue</th>
-                        <th style="border-top: 0;">post_prob</th>
-                        <th style="border-top: 0;">prob_in_causal_set</th>
+                        <th style="border-top: 0;" class="text-center">tissue</th>
+                        <th style="border-top: 0;" class="text-center">post_prob</th>
+                        <th style="border-top: 0;" class="text-center">variant</th>
                       </tr>
                      </thead>
                      <tbody>
@@ -375,7 +375,7 @@
                       <tr role="row">
                            <td style="padding: 3px">{{tissueName}}</td>
                            <td style="padding: 3px">{{clpp}}</td>
-                           <td style="padding: 3px">{{prob_in_causal_set}}</td>
+                           <td style="padding: 3px">{{var_id}}</td>
                        </tr>
 
                     {{/records}}
@@ -410,10 +410,10 @@
                     <table class="openColocInGeneTable" style="border: 0">
                      <thead>
                       <tr role="row">
-                        <th style="border-top: 0;">tissue</th>
-                        <th style="border-top: 0;">prob exists coloc</th>
-                        <th style="border-top: 0;">prob snp coloc</th>
-                        <th style="border-top: 0;">var_id</th>
+                        <th style="border-top: 0;" class="text-center">tissue</th>
+                        <th style="border-top: 0;" class="text-center">pp coloc snp exists</th>
+                        <th style="border-top: 0;" class="text-center">pp snp coloc</th>
+                        <th style="border-top: 0;" class="text-center">var_id</th>
                       </tr>
                      </thead>
                      <tbody>
@@ -489,8 +489,8 @@
                     <table class="openEqtlInGeneTable" style="border: 0">
                      <thead>
                       <tr role="row">
-                        <th style="border-right: 0;border-top: 0;">tissue</th>
-                        <th style="border-right: 0;">value</th>
+                        <th style="border-right: 0;border-top: 0;" class="text-center">tissue</th>
+                        <th style="border-right: 0;" class="text-center">value</th>
                       </tr>
                      </thead>
                      <tbody>
@@ -846,7 +846,7 @@
 <script id="dynamicGeneTableHeaderV2"  type="x-tmpl-mustache">
 
             <div sortStrategy="alphabetical" sortField="-1"  sortTerm="{{name1}}" class="geneName text-center {{initialLinearIndex}}">
-            <div class="geneHeaderShifters">
+            <div class="geneHeaderShifters text-center">
                 <span class="glyphicon glyphicon-step-backward" aria-hidden="true" onclick="mpgSoftware.dynamicUi.shiftColumnsByOne(event,this,'backward','table.combinedGeneTableHolder')"></span>
                 <span class="glyphicon glyphicon-step-forward" aria-hidden="true" onclick="mpgSoftware.dynamicUi.shiftColumnsByOne(event,this,'forward','table.combinedGeneTableHolder')"></span>
             </div>
@@ -890,8 +890,8 @@
                     <table class="openAbcInGeneTable" style="border: 0">
                      <thead>
                       <tr role="row">
-                        <th style="border-top: 0;">tissue</th>
-                        <th style="border-top: 0;border-right: 0;">value</th>
+                        <th style="border-top: 0;" class="text-center">tissue</th>
+                        <th style="border-top: 0;border-right: 0;" class="text-center">value</th>
                       </tr>
                      </thead>
                      <tbody>
@@ -936,14 +936,14 @@
                     <table class="openDepictInGeneTable" style="border: 0">
                      <thead>
                       <tr role="row">
-                        <th style="border-right: 0; border-top: 0">p-value</th>
+                        <th style="border-right: 0; border-top: 0"  class="text-center"></th>
                       </tr>
                      </thead>
                      <tbody>
                     {{/recordsExist}}
                     {{#records}}
                        <tr role="row">
-                           <td style="border-right: 0; padding: 3px">{{value}}</td>
+                           <td style="border-right: 0; padding: 3px">p-value = {{value}}</td>
                        </tr>
                     {{/records}}
                     {{#recordsExist}}
@@ -976,8 +976,8 @@
                     <table class="openMetaXcanInGeneTable" style="border: 0">
                      <thead>
                       <tr role="row">
-                        <th style="border-top: 0">tissue</th>
-                        <th style="border-top: 0;border-right: 0;">p-value</th>
+                        <th style="border-top: 0" class="text-center">tissue</th>
+                        <th style="border-top: 0;border-right: 0;" class="text-center">p-value</th>
                       </tr>
                      </thead>
                      <tbody>
@@ -1019,8 +1019,8 @@
                     <table class="openMetaXcanInGeneTable" style="border: 0">
                      <thead>
                       <tr role="row">
-                        <th style="border-top: 0">tissue</th>
-                        <th style="border-top: 0;border-right: 0;">p-value</th>
+                        <th style="border-top: 0" class="text-center">technique</th>
+                        <th style="border-top: 0;border-right: 0;" class="text-center">p-value</th>
                       </tr>
                      </thead>
                      <tbody>
@@ -1062,8 +1062,8 @@
                     <table class="openMetaXcanInGeneTable" style="border: 0">
                      <thead>
                       <tr role="row">
-                        <th style="border-top: 0">tissue</th>
-                        <th style="border-top: 0;border-right: 0;">p-value</th>
+                        <th style="border-top: 0" class="text-center">technique</th>
+                        <th style="border-top: 0;border-right: 0;" class="text-center">p-value</th>
                       </tr>
                      </thead>
                      <tbody>
