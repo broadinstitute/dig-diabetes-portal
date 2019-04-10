@@ -1208,9 +1208,6 @@ mpgSoftware.dynamicUi = (function () {
                     } else {
                         var modRecs = _.sortBy(recordsPerGene.mods,["modName"]);
                         var cellPresentationString = "records="+recordsPerGene.mods.length;
-                        //if (findCellColoringChoice ('table.combinedGeneTableHolder')=== 'Significance'){
-                        //    cellPresentationString = modRecs[0].modName;
-                        //}
                         var renderData = {
                             cellPresentationStringMap:{ Records:cellPresentationString,
                                                         Significance:cellPresentationString },
@@ -1822,18 +1819,23 @@ mpgSoftware.dynamicUi = (function () {
                                             numericalValue:tissueRecord.value,
                                             value:UTILS.realNumberFormatter(""+tissueRecord.value) };
                             });
-                            var cellPresentationString = "records="+recordsPerGene.source.length;
-                            if (findCellColoringChoice ('table.combinedGeneTableHolder')=== 'Significance'){
-                                cellPresentationString = "ABC="+sortedTissues[0].value+" ("+sortedTissues[0].tissueName+")";
+                            var recordsCellPresentationString = "records="+recordsPerGene.source.length;
+                            var significanceCellPresentationString = "CLPP="+records[0].clpp+" ("+records[0].tissueName+")";
+                            var significanceValue = 0;
+                            if (( typeof records !== 'undefined')&&
+                                (records.length>0)){
+                                significanceValue = sortedTissues[0].numericalValue;
+                                significanceCellPresentationString = "ABC="+sortedTissues[0].value+" ("+sortedTissues[0].tissueName+")";
                             }
                             var renderData = {
-                                cellPresentationString :cellPresentationString,
+                                cellPresentationStringMap:{ Records:recordsCellPresentationString,
+                                    Significance:significanceCellPresentationString },
                                 numberOfTissues:recordsPerGene.source.length,
                                 tissueCategoryNumber:categorizeTissueNumbers( recordsPerGene.source.length ),
                                 significanceCategoryNumber:categorizeSignificanceNumbers( sortedTissues, "ABC" ),
                                 tissuesExist:(recordsPerGene.source.length)?[1]:[],
                                 geneName:recordsPerGene.geneName,
-                                significanceValue:sortedTissues[0].numericalValue,
+                                significanceValue:significanceValue,
                                 tissues:sortedTissues
                             };
                             intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell('eQTL',
@@ -2042,12 +2044,17 @@ mpgSoftware.dynamicUi = (function () {
                                         numericalValue:tissueRecord.pvalue,
                                         dataset: tissueRecord.dataset };
                         });
-                        var cellPresentationString = "records="+recordsPerGene.recordByDataSet.length;
-                        if (findCellColoringChoice ('table.combinedGeneTableHolder')=== 'Significance'){
-                            cellPresentationString = "p="+records[0].value;
+                        var recordsCellPresentationString = "records="+recordsPerGene.recordByDataSet.length;
+                        var significanceCellPresentationString = "CLPP="+records[0].clpp+" ("+records[0].tissueName+")";
+                        var significanceValue = 0;
+                        if (( typeof records !== 'undefined')&&
+                            (records.length>0)){
+                            significanceValue = records[0].numericalValue;
+                            significanceCellPresentationString = "p="+records[0].value;
                         }
                         var renderData = {
-                            cellPresentationString :cellPresentationString,
+                            cellPresentationStringMap:{ Records:recordsCellPresentationString,
+                                Significance:significanceCellPresentationString },
                             numberOfRecords:recordsPerGene.recordByDataSet.length,
                             tissueCategoryNumber:categorizeTissueNumbers( recordsPerGene.recordByDataSet.length ),
                             significanceCategoryNumber:categorizeSignificanceNumbers( records, "DEP" ),
@@ -2144,11 +2151,11 @@ mpgSoftware.dynamicUi = (function () {
                             } else {
                                 eachPathway["pathway_id_str"] = eachPathway.pathway_id;
                             }
-                            var cellPresentationString = "records="+recordsPerGene.data.length;
-                            if (findCellColoringChoice ('table.combinedGeneTableHolder')=== 'Significance'){
-                                cellPresentationString = "p="+recordsPerGene.data[0].pvalue_str+" ("+recordsPerGene.data[0].pathway_id+")";
-                            }
-                            recordsPerGene["cellPresentationString"] =  cellPresentationString;
+                            var recordsCellPresentationString = "records="+recordsPerGene.data.length;
+                            var significanceCellPresentationString = "0";
+                                significanceCellPresentationString  = "p="+recordsPerGene.data[0].pvalue_str+" ("+recordsPerGene.data[0].pathway_id+")";
+                            recordsPerGene["cellPresentationStringMap"] = { Records:recordsCellPresentationString,
+                                Significance:significanceCellPresentationString };
                             eachPathway["number_genes"] = eachPathway.gene_list.length;
                         });
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
@@ -2227,17 +2234,22 @@ mpgSoftware.dynamicUi = (function () {
                                 value: UTILS.realNumberFormatter(""+tissueRecord.value),
                                 numericalValue: tissueRecord.value };
                         });
-                        var cellPresentationString = "records="+recordsPerGene.tissues.length;
-                        if (findCellColoringChoice ('table.combinedGeneTableHolder')=== 'Significance'){
-                            cellPresentationString = "p="+tissueRecords[0].value+" ("+tissueRecords[0].tissueName+")";
+                        var recordsCellPresentationString = "records="+recordsPerGene.tissues.length;
+                        var significanceCellPresentationString = "0";
+                        var significanceValue = 0;
+                        if (( typeof tissueRecords !== 'undefined')&&
+                            (tissueRecords.length>0)){
+                            significanceValue = tissueRecords[0].numericalValue;
+                            significanceCellPresentationString = "p="+tissueRecords[0].value+" ("+tissueRecords[0].tissueName+")";
                         }
                         var renderData = {  numberOfRecords:recordsPerGene.tissues.length,
-                                            cellPresentationString :cellPresentationString,
+                                            cellPresentationStringMap:{ Records:recordsCellPresentationString,
+                                                Significance:significanceCellPresentationString },
                                             tissueCategoryNumber:categorizeTissueNumbers( recordsPerGene.tissues.length ),
                                             tissuesExist:(recordsPerGene.tissues.length)?[1]:[],
                                             gene:recordsPerGene.gene,
                                             significanceCategoryNumber:categorizeSignificanceNumbers( tissueRecords, "MET" ),
-                                            significanceValue:tissueRecords[0].numericalValue,
+                                            significanceValue:significanceValue,
                                             tissues:tissueRecords
                         };
                         recordsPerGene["numberOfRecords"] = recordsPerGene.tissues.length;
@@ -2330,14 +2342,24 @@ mpgSoftware.dynamicUi = (function () {
                                 value: UTILS.realNumberFormatter(""+tissueRecord.value),
                                 numericalValue: tissueRecord.value };
                         });
-                        var cellPresentationString = "records="+recordsPerGene.tissues.length;
-                        if (findCellColoringChoice ('table.combinedGeneTableHolder')=== 'Significance'){
-                            var minPValue=_.find(tissueRecords,function(t){return t.tissue.includes(preferredSummaryKey)})
-                            cellPresentationString = "p="+minPValue.value+" ("+translateATissueName(tissueTranslations,preferredSummaryKey)+")";
+                        //var cellPresentationString = "records="+recordsPerGene.tissues.length;
+                        //if (findCellColoringChoice ('table.combinedGeneTableHolder')=== 'Significance'){
+                        //    var minPValue=_.find(tissueRecords,function(t){return t.tissue.includes(preferredSummaryKey)})
+                        //    cellPresentationString = "p="+minPValue.value+" ("+translateATissueName(tissueTranslations,preferredSummaryKey)+")";
+                        //    significanceValue = minPValue.value;
+                        //}
+                        var recordsCellPresentationString = "records="+recordsPerGene.tissues.length;
+                        var significanceCellPresentationString = "0";
+                        var significanceValue = 0;
+                        if (( typeof tissueRecords !== 'undefined')&&
+                            (tissueRecords.length>0)){
+                            var minPValue=_.find(tissueRecords,function(t){return t.tissue.includes(preferredSummaryKey)});
+                            significanceCellPresentationString = "p="+minPValue.value+" ("+translateATissueName(tissueTranslations,preferredSummaryKey)+")";
                             significanceValue = minPValue.value;
                         }
                         var renderData = {  numberOfRecords:recordsPerGene.tissues.length,
-                            cellPresentationString :cellPresentationString,
+                            cellPresentationStringMap:{ Records:recordsCellPresentationString,
+                                Significance:significanceCellPresentationString },
                             tissueCategoryNumber:categorizeTissueNumbers( recordsPerGene.tissues.length ),
                             tissuesExist:(recordsPerGene.tissues.length)?[1]:[],
                             gene:recordsPerGene.gene,
@@ -2423,14 +2445,25 @@ mpgSoftware.dynamicUi = (function () {
                                 value: UTILS.realNumberFormatter(""+tissueRecord.value),
                                 numericalValue: tissueRecord.value };
                         });
-                        var cellPresentationString = "records="+recordsPerGene.tissues.length;
-                        if (findCellColoringChoice ('table.combinedGeneTableHolder')=== 'Significance'){
+                        //var cellPresentationString = "records="+recordsPerGene.tissues.length;
+                        //if (findCellColoringChoice ('table.combinedGeneTableHolder')=== 'Significance'){
+                        //    var minPValue=_.find(recordsPerGene.tissues,function(t){return t.tissue.includes(preferredSummaryKey)})
+                        //    cellPresentationString = "p="+minPValue.value+" ("+translateATissueName(tissueTranslations,preferredSummaryKey)+")";
+                        //    significanceValue = minPValue.value;
+                        //}
+
+                        var recordsCellPresentationString = "records="+recordsPerGene.tissues.length;
+                        var significanceCellPresentationString = "0";
+                        var significanceValue = 0;
+                        if (( typeof recordsPerGene.tissues !== 'undefined')&&
+                            (recordsPerGene.tissues.length>0)){
                             var minPValue=_.find(recordsPerGene.tissues,function(t){return t.tissue.includes(preferredSummaryKey)})
-                            cellPresentationString = "p="+minPValue.value+" ("+translateATissueName(tissueTranslations,preferredSummaryKey)+")";
                             significanceValue = minPValue.value;
+                            significanceCellPresentationString = "p="+minPValue.value+" ("+translateATissueName(tissueTranslations,preferredSummaryKey)+")";
                         }
                         var renderData = {  numberOfRecords:recordsPerGene.tissues.length,
-                            cellPresentationString :cellPresentationString,
+                            cellPresentationStringMap:{ Records:recordsCellPresentationString,
+                                Significance:significanceCellPresentationString },
                             tissueCategoryNumber:categorizeTissueNumbers( recordsPerGene.tissues.length ),
                             tissuesExist:(recordsPerGene.tissues.length)?[1]:[],
                             gene:recordsPerGene.gene,
@@ -2627,18 +2660,16 @@ mpgSoftware.dynamicUi = (function () {
                             }});
                         var recordsCellPresentationString = "records="+validRecords.length;
                         var significanceCellPresentationString = "CLPP="+records[0].clpp+" ("+records[0].tissueName+")";
-                        var significanceValue = records[0].clpp;
-                        // if ((findCellColoringChoice ('table.combinedGeneTableHolder')=== 'Significance')&&
-                        //     ( typeof records !== 'undefined')&&
-                        //     (records.length>0)){
-                        //     significanceValue = records[0].clpp;
-                        //     cellPresentationString = "CLPP="+records[0].clpp+" ("+records[0].tissueName+")";
-                        // }
+                        var significanceValue = 0;
+                         if (( typeof records !== 'undefined')&&
+                             (records.length>0)){
+                             significanceValue = records[0].clpp;
+                             significanceCellPresentationString = "CLPP="+records[0].clpp+" ("+records[0].tissueName+")";
+                         }
 
                         var renderData = {
                             cellPresentationStringMap:{ Records:recordsCellPresentationString,
                                 Significance:significanceCellPresentationString },
-                            cellPresentationString:cellPresentationString,
                             numberOfRecords:validRecords.length,
                             tissueCategoryNumber:categorizeTissueNumbers( validRecords.length ),
                             significanceCategoryNumber:categorizeSignificanceNumbers( records, "ECA" ),
@@ -2743,17 +2774,18 @@ mpgSoftware.dynamicUi = (function () {
                                 var_id: tissueRecord.var_id,
                                 numericalValue: tissueRecord.prob_exists_coloc
                             }});
-                        var cellPresentationString = "records="+validRecords.length;
+                        var recordsCellPresentationString = "records="+validRecords.length;
+                        var significanceCellPresentationString = 0;
                         var significanceValue = 0;
-                        if ((findCellColoringChoice ('table.combinedGeneTableHolder')=== 'Significance')&&
-                            ( typeof records !== 'undefined')&&
+                        if (( typeof records !== 'undefined')&&
                             (records.length>0)){
                             significanceValue = records[0].prob_exists_coloc;
-                            cellPresentationString = "CLPP="+records[0].prob_exists_coloc+" ("+records[0].tissue+")";
+                            significanceCellPresentationString = "CLPP="+records[0].prob_exists_coloc+" ("+records[0].tissue+")";
                         }
 
                         var renderData = {
-                            cellPresentationString:cellPresentationString,
+                            cellPresentationStringMap:{ Records:recordsCellPresentationString,
+                                Significance:significanceCellPresentationString },
                             numberOfRecords:validRecords.length,
                             tissueCategoryNumber:categorizeTissueNumbers( validRecords.length ),
                             significanceCategoryNumber:categorizeSignificanceNumbers( records, "COL" ),
@@ -3132,18 +3164,23 @@ mpgSoftware.dynamicUi = (function () {
                                 numericalValue: tissueRecord.value };
                         });
 
-                        var cellPresentationString = "records="+recordsPerGene.data.length;
-                        if (findCellColoringChoice ('table.combinedGeneTableHolder')=== 'Significance'){
-                            cellPresentationString = "p="+tissueRecords[0].value+" ("+tissueRecords[0].tissueName+")";
+                        var recordsCellPresentationString  = "records="+recordsPerGene.data.length;
+                        var significanceCellPresentationString = 0;
+                        var significanceValue = 0;
+                        if (( typeof tissueRecords !== 'undefined')&&
+                            (tissueRecords.length>0)){
+                            significanceValue = tissueRecords[0].numericalValue,
+                            significanceCellPresentationString = "p="+tissueRecords[0].value+" ("+tissueRecords[0].tissueName+")";
                         }
 
                         var renderData = {  numberOfTissues:recordsPerGene.tissues.length,
-                            cellPresentationString:cellPresentationString,
+                            cellPresentationStringMap:{ Records:recordsCellPresentationString,
+                                Significance:significanceCellPresentationString },
                             tissueCategoryNumber:categorizeTissueNumbers( recordsPerGene.tissues.length ),
                             tissuesExist:(recordsPerGene.tissues.length)?[1]:[],
                             geneName:recordsPerGene.geneName,
                             significanceCategoryNumber:categorizeSignificanceNumbers( tissueRecords, "EQT" ),
-                            significanceValue:tissueRecords[0].numericalValue,
+                            significanceValue:significanceValue,
                             tissues:tissueRecords
                         };
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell('eQTL',
