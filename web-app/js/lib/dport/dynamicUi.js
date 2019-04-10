@@ -2342,13 +2342,7 @@ mpgSoftware.dynamicUi = (function () {
                                 value: UTILS.realNumberFormatter(""+tissueRecord.value),
                                 numericalValue: tissueRecord.value };
                         });
-                        //var cellPresentationString = "records="+recordsPerGene.tissues.length;
-                        //if (findCellColoringChoice ('table.combinedGeneTableHolder')=== 'Significance'){
-                        //    var minPValue=_.find(tissueRecords,function(t){return t.tissue.includes(preferredSummaryKey)})
-                        //    cellPresentationString = "p="+minPValue.value+" ("+translateATissueName(tissueTranslations,preferredSummaryKey)+")";
-                        //    significanceValue = minPValue.value;
-                        //}
-                        var recordsCellPresentationString = "records="+recordsPerGene.tissues.length;
+                        var recordsCellPresentationString = "records="+tissueRecords.length;
                         var significanceCellPresentationString = "0";
                         var significanceValue = 0;
                         if (( typeof tissueRecords !== 'undefined')&&
@@ -2357,11 +2351,11 @@ mpgSoftware.dynamicUi = (function () {
                             significanceCellPresentationString = "p="+minPValue.value+" ("+translateATissueName(tissueTranslations,preferredSummaryKey)+")";
                             significanceValue = minPValue.value;
                         }
-                        var renderData = {  numberOfRecords:recordsPerGene.tissues.length,
+                        var renderData = {  numberOfRecords:tissueRecords.length,
                             cellPresentationStringMap:{ Records:recordsCellPresentationString,
                                 Significance:significanceCellPresentationString },
-                            tissueCategoryNumber:categorizeTissueNumbers( recordsPerGene.tissues.length ),
-                            tissuesExist:(recordsPerGene.tissues.length)?[1]:[],
+                            tissueCategoryNumber:categorizeTissueNumbers( tissueRecords.length ),
+                            tissuesExist:(tissueRecords.length)?[1]:[],
                             gene:recordsPerGene.gene,
                             significanceCategoryNumber:categorizeSignificanceNumbers( tissueRecords, "MET" ),
                             significanceValue:significanceValue,
@@ -2445,14 +2439,7 @@ mpgSoftware.dynamicUi = (function () {
                                 value: UTILS.realNumberFormatter(""+tissueRecord.value),
                                 numericalValue: tissueRecord.value };
                         });
-                        //var cellPresentationString = "records="+recordsPerGene.tissues.length;
-                        //if (findCellColoringChoice ('table.combinedGeneTableHolder')=== 'Significance'){
-                        //    var minPValue=_.find(recordsPerGene.tissues,function(t){return t.tissue.includes(preferredSummaryKey)})
-                        //    cellPresentationString = "p="+minPValue.value+" ("+translateATissueName(tissueTranslations,preferredSummaryKey)+")";
-                        //    significanceValue = minPValue.value;
-                        //}
-
-                        var recordsCellPresentationString = "records="+recordsPerGene.tissues.length;
+                        var recordsCellPresentationString = "records="+tissueRecords.length;
                         var significanceCellPresentationString = "0";
                         var significanceValue = 0;
                         if (( typeof recordsPerGene.tissues !== 'undefined')&&
@@ -2461,11 +2448,11 @@ mpgSoftware.dynamicUi = (function () {
                             significanceValue = minPValue.value;
                             significanceCellPresentationString = "p="+minPValue.value+" ("+translateATissueName(tissueTranslations,preferredSummaryKey)+")";
                         }
-                        var renderData = {  numberOfRecords:recordsPerGene.tissues.length,
+                        var renderData = {  numberOfRecords:tissueRecords.length,
                             cellPresentationStringMap:{ Records:recordsCellPresentationString,
                                 Significance:significanceCellPresentationString },
-                            tissueCategoryNumber:categorizeTissueNumbers( recordsPerGene.tissues.length ),
-                            tissuesExist:(recordsPerGene.tissues.length)?[1]:[],
+                            tissueCategoryNumber:categorizeTissueNumbers( tissueRecords.length ),
+                            tissuesExist:(tissueRecords.length)?[1]:[],
                             gene:recordsPerGene.gene,
                             significanceCategoryNumber:categorizeSignificanceNumbers( tissueRecords, "MET" ),
                             significanceValue:significanceValue,
@@ -2656,6 +2643,7 @@ mpgSoftware.dynamicUi = (function () {
                                 prob_in_causal_set: UTILS.realNumberFormatter(""+tissueRecord.prob_in_causal_set),
                                 gwas_z_score: UTILS.realNumberFormatter(""+tissueRecord.gwas_z_score),
                                 eqtl_z_score: UTILS.realNumberFormatter(""+tissueRecord.eqtl_z_score),
+                                var_id:tissueRecord.var_id,
                                 numericalValue: tissueRecord.clpp
                             }});
                         var recordsCellPresentationString = "records="+validRecords.length;
@@ -4789,7 +4777,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 break;
 
         }
-        return returnValue;
+        return returnValue.trim();
     };
 
     /***
@@ -4841,21 +4829,21 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     switch(typeOfHeader){
                         case 'geneTableGeneHeaders':
                             addedColumns.push(new IntermediateStructureDataCell('farLeftCorner',
-                                {initialLinearIndex:0},
+                                {initialLinearIndex:"initialLinearIndex_0"},
                                 'geneFarLeftCorner','EMP'));
-                            sortability.push(false);
+                            sortability.push(true);
                             addedColumns.push(new IntermediateStructureDataCell('b',
-                                {initialLinearIndex:1},
+                                {initialLinearIndex:"initialLinearIndex_1"},
                                 'geneMethods','EMP'));
                             sortability.push(true);
                             break;
                         case 'variantTableVariantHeaders':
                             addedColumns.push(new IntermediateStructureDataCell('farLeftCorner',
-                                {initialLinearIndex:0},
+                                {initialLinearIndex:"initialLinearIndex_0"},
                                 'variantAnnotationCategory','EMP'));
                             sortability.push(true);
                             addedColumns.push(new IntermediateStructureDataCell('b',
-                                {initialLinearIndex:1},
+                                {initialLinearIndex:"initialLinearIndex_1"},
                                 'methods','EMP'));
                             sortability.push(true);
                             break;
@@ -4977,12 +4965,43 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             ( typeof datatable.DataTable().columns().header() === 'undefined') ) {
             console.log(" ERROR: invalid parameter in refineTableRecords");
         } else {
+            var whereTheTableGoes = 'table.combinedGeneTableHolder';
+            var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
+
             switch(headerType){
                 case 'geneTableGeneHeaders':
+                    if (!headerSpecific){
+                        $('div.geneAnnotationShifters').hide ();
+                        $('div.geneHeaderShifters').show ();
+
+                        if ( typeof sharedTable.cellColoringScheme === 'undefined'){
+                            sharedTable["cellColoringScheme"] = "Significance";
+                        }
+                        if (sharedTable["cellColoringScheme"]==="Records"){
+                            $('div.tissueCategory_0').parents('td').css('background',CELL_COLORING_REDDISH_BOTTOM);
+                            $('div.tissueCategory_1').parents('td').css('background',CELL_COLORING_REDDISH_TOP);
+                            $('div.tissueCategory_2').parents('td').css('background',CELL_COLORING_REDDISH_TOP_MINUS1);
+                            $('div.tissueCategory_3').parents('td').css('background',CELL_COLORING_REDDISH_TOP_MINUS2);
+                            $('div.tissueCategory_4').parents('td').css('background',CELL_COLORING_REDDISH_TOP_MINUS3);
+                            $('div.tissueCategory_5').parents('td').css('background',CELL_COLORING_REDDISH_TOP_MINUS4);
+                            $('div.tissueCategory_6').parents('td').css('background',CELL_COLORING_UNUSED);
+
+                        } else if (sharedTable["cellColoringScheme"]==="Significance"){
+                            $('div.significanceCategory_0').parents('td').css('background',CELL_COLORING_BLUISH_BOTTOM);
+                            $('div.significanceCategory_1').parents('td').css('background',CELL_COLORING_BLUISH_TOP_MINUS1);
+                            $('div.significanceCategory_2').parents('td').css('background',CELL_COLORING_BLUISH_TOP_MINUS2);
+                            $('div.significanceCategory_3').parents('td').css('background',CELL_COLORING_BLUISH_TOP_MINUS3);
+                            $('div.significanceCategory_4').parents('td').css('background',CELL_COLORING_BLUISH_TOP_MINUS4);
+                            $('div.significanceCategory_5').parents('td').css('background',CELL_COLORING_BLUISH_BOTTOM);
+                            $('div.significanceCategory_6').parents('td').css('background',CELL_COLORING_UNUSED);
+                        }
+                    }
+                    break;
                 case 'geneTableAnnotationHeaders':
                     if (!headerSpecific){
-                        var whereTheTableGoes = 'table.combinedGeneTableHolder';
-                        var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
+                        $('div.geneAnnotationShifters').show ();
+                        $('div.geneHeaderShifters').hide ();
+
                         if ( typeof sharedTable.cellColoringScheme === 'undefined'){
                             sharedTable["cellColoringScheme"] = "Significance";
                         }
@@ -5001,12 +5020,9 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                             $('div.significanceCategory_2').parents('td').css('background',CELL_COLORING_BLUISH_TOP_MINUS2);
                             $('div.significanceCategory_3').parents('td').css('background',CELL_COLORING_BLUISH_TOP_MINUS3);
                             $('div.significanceCategory_4').parents('td').css('background',CELL_COLORING_BLUISH_TOP_MINUS4);
-                           // $('div.significanceCategory_4 a').css('color','#DDDDDD');
                             $('div.significanceCategory_5').parents('td').css('background',CELL_COLORING_BLUISH_BOTTOM);
                             $('div.significanceCategory_6').parents('td').css('background',CELL_COLORING_UNUSED);
                         }
-                       // datatable.DataTable().order([[1,'ASC']]).draw();
-
                     }
                   break;
                 case 'variantTableVariantHeaders':
@@ -5753,9 +5769,9 @@ var destroySharedTable = function (whereTheTableGoes) {
 
         var sortedData = extractSortedDataFromTable(whereTheTableGoes, numberOfRows, numberOfColumns, sharedTable.currentForm);
         if ((swapColA !== -1) && (swapColB !== -1)){
-            sortedData=matrixMath.swapColumnsInDataStructure(sortedData,sharedTable.numberOfRows,sharedTable.numberOfColumns,swapColA,swapColB);
+            sortedData=matrixMath.swapColumnsInDataStructure(sortedData,numberOfRows,numberOfColumns,swapColA,swapColB);
         }
-        //sortedData=matrixMath.swapColumnsInDataStructure(sortedData,sharedTable.numberOfRows,sharedTable.numberOfColumns,2,3);
+
 
 
         destroySharedTable(whereTheTableGoes);
@@ -5957,6 +5973,7 @@ var destroySharedTable = function (whereTheTableGoes) {
 
     var shiftColumnsByOne = function ( event, offeredThis, direction, whereTheTableGoes) {
         event.stopPropagation();
+        var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
         var identifyingNode = $(offeredThis).parent().parent().parent();
         var initialLinearIndex = extractClassBasedIndex(identifyingNode[0].innerHTML,"initialLinearIndex_");
         var dataTable = $(whereTheTableGoes).dataTable().DataTable();
@@ -5969,12 +5986,18 @@ var destroySharedTable = function (whereTheTableGoes) {
                 indexOfClickedColumn = index;
             }
         });
+        var leftBackstop;
+        if ((sharedTable.currentForm === 'geneTableGeneHeaders') || (sharedTable.currentForm === 'variantTableVariantHeaders')){
+            leftBackstop = 1;
+        } else {
+            leftBackstop = 0;
+        }
         if (direction==="forward"){
-            if ((indexOfClickedColumn>1) &&(indexOfClickedColumn<(numberOfHeaders-1))){
+            if ((indexOfClickedColumn>leftBackstop) &&(indexOfClickedColumn<(numberOfHeaders-1))){
                 redrawTableOnClick('table.combinedGeneTableHolder',indexOfClickedColumn,indexOfClickedColumn+1);
             }
         }else if (direction==="backward") {
-            if ((indexOfClickedColumn>2) &&(indexOfClickedColumn<(numberOfHeaders))){
+            if ((indexOfClickedColumn>(leftBackstop+1)) &&(indexOfClickedColumn<(numberOfHeaders))){
                 redrawTableOnClick('table.combinedGeneTableHolder',indexOfClickedColumn,indexOfClickedColumn-1);
             }
         }

@@ -118,8 +118,18 @@ table.combinedGeneTableHolder td.sorting_1{
 
 }
 .glyphicon.glyphicon-step-backward {
-    font-size: 8px;
+    font-size: 10px;
 }
 .glyphicon.glyphicon-step-forward {
-    font-size: 8px;
+    font-size: 10px;
+}
+div.geneAnnotationShifters{
+    padding: 0;
+    margin: 0;
+    height: 15px;
+}
+div.geneHeaderShifters{
+    padding: 0;
+    margin: 0;
+    height: 15px;
 }
