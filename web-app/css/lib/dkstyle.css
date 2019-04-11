@@ -1239,3 +1239,14 @@ span.new-dataset-flag {
 .variant-association-ui, .gene-association-ui { opacity: 0; -webkit-transition: all 1000ms ease-out; transition: opacity 1000ms ease-out; }
 
 .variant-association-ui > div.trait-input, .gene-association-ui > div.gene-trait-input { width: 83% !important; height: 35px; background-color:#fff; border:none; border-radius: 5px; border-top-left-radius: 3px; border-bottom-left-radius: 3px; margin:0; margin-right: 0.5%; font-size: 16px; }
+
+
+.experimental-flag {
+	background-image: url(css/images/experimental2.png);
+	display: block;
+	width: 56px;
+	height: 55px;
+	position: absolute;
+	top: -3px;
+	right: -2px;
+}

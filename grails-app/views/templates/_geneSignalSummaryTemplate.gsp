@@ -1028,7 +1028,7 @@ div.genePosition{
                                     {{#dynamicUiTab}}
                                         <li role="presentation" class="variantTableLabels chromatinConformationChooser">
                                            <a href="#exposeDynamicUiTabHolder" aria-controls="exposeDynamicUiTabHolder" role="tab"
-                                           data-toggle="tab">Genes in region: {{pName}}</a>
+                                           data-toggle="tab">Genes in region: {{pName}}</a><span class="experimental-flag">&nbsp;</span>
                                         </li>
                                     {{/dynamicUiTab}}
                                 </ul>
@@ -1076,7 +1076,7 @@ div.genePosition{
                             {{/chromatinConformationTab}}
                             {{#dynamicUiTab}}
                                 <li role="presentation" class="variantTableLabels chromatinConformationChooser">
-                                   <a href="#exposeDynamicUiTabHolder" aria-controls="exposeDynamicUiTabHolder" role="tab" data-toggle="tab">Genes in region: {{pName}}</a>
+                                   <a href="#exposeDynamicUiTabHolder" aria-controls="exposeDynamicUiTabHolder" role="tab" data-toggle="tab">Genes in region: {{pName}}</a><span class="experimental-flag">&nbsp;</span>
                                 </li>
                             {{/dynamicUiTab}}
                         </ul>
