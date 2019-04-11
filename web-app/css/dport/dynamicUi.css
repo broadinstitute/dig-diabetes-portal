@@ -87,7 +87,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 #dynamicGeneHolder > div.row { background-color: #fff !important; border: none !important; }
-div.datatable-control-box { float: right; padding: 10px 10px 15px 0px; }
+div.datatable-control-box { float: right; padding: 30px 10px 15px 0px; }
 div.datatable-transpose-control, div.datatable-cell-color-control, div.datatable-zoom-control { float: left; padding-left: 15px; }
 div.datatable-transpose-control div.tool-label, div.datatable-cell-color-control div.tool-label, div.datatable-zoom-control div.tool-label { font-size: 12px; color: #666; text-align: center; padding-bottom: 5px; padding-bottom: 5px; }
 
