@@ -2356,7 +2356,7 @@ mpgSoftware.dynamicUi = (function () {
                             tissueCategoryNumber:categorizeTissueNumbers( tissueRecords.length ),
                             tissuesExist:(tissueRecords.length)?[1]:[],
                             gene:recordsPerGene.gene,
-                            significanceCategoryNumber:categorizeSignificanceNumbers( tissueRecords, "MET" ),
+                            significanceCategoryNumber:categorizeSignificanceNumbers( tissueRecords, "MET", significanceValue ),
                             significanceValue:significanceValue,
                             tissues:tissueRecords
                         };
@@ -2453,7 +2453,7 @@ mpgSoftware.dynamicUi = (function () {
                             tissueCategoryNumber:categorizeTissueNumbers( tissueRecords.length ),
                             tissuesExist:(tissueRecords.length)?[1]:[],
                             gene:recordsPerGene.gene,
-                            significanceCategoryNumber:categorizeSignificanceNumbers( tissueRecords, "MET" ),
+                            significanceCategoryNumber:categorizeSignificanceNumbers( tissueRecords, "MET", significanceValue ),
                             significanceValue:significanceValue,
                             tissues:tissueRecords
                         };
@@ -5893,7 +5893,7 @@ var destroySharedTable = function (whereTheTableGoes) {
 
 
 
-    var categorizeSignificanceNumbers = function ( significance, datatype ) {
+    var categorizeSignificanceNumbers = function ( significance, datatype, overrideValue ) {
         var returnValue = 0;
         if ( ( typeof significance !== 'undefined') &&
              ( $.isArray(significance) ) &&
@@ -5964,7 +5964,12 @@ var destroySharedTable = function (whereTheTableGoes) {
                 case "DEP":
                 case "MET":
                 case "EQT":
-                    var valueToAssess = significance[0].numericalValue;
+                    var valueToAssess;
+                    if ( typeof  overrideValue !== 'undefined') {
+                        valueToAssess = overrideValue
+                    } else {
+                        valueToAssess = significance[0].numericalValue;
+                    }
                     if (valueToAssess===0)  {
                         returnValue = 6;
                     } else if ((valueToAssess>0) &&(valueToAssess<=0.5E-8)) {
