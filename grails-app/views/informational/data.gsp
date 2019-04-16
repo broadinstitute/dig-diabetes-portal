@@ -90,8 +90,25 @@
                 </g:if>
                 <g:elseif test="${g.portalTypeString()?.equals('mi')}">
             <div class="col-md-12">
-                <h1 class="dk-page-title">Polygenic Risk Scores</h1>
+                <h1 class="dk-page-title">Polygenic Scores</h1>
 
+
+                %{--<p style="font-weight: 300; font-size: 18px;"><g:message code="informational.about.PRS2"></g:message></p>--}%
+                %{--<p style="font-weight: 300; font-size: 15px;">--}%
+                    %{--<g:message code="informational.shared.publications.Khera_2019_Cell"></g:message><br>--}%
+                    %{--<g:message code="informational.shared.publications.Khera_2019_Cell.author"></g:message><g:message code="informational.shared.publications.etal"></g:message><br>--}%
+                    %{--<g:message code="informational.shared.publications.Khera_2019_Cell.citation"></g:message><br>--}%
+                %{--</p>--}%
+                %{--<p style="font-weight: 300; font-size: 15px;">--}%
+                    %{--<a href="" target="_blank">Body mass index and obesity (89 MB)</a>--}%
+                %{--</p>--}%
+                %{--<p>--}%
+                    %{--<i><g:message code="informational.mi.prsinfo"></g:message></i>--}%
+                %{--</p>--}%
+
+
+
+                <hr width="70%" size="10">
                 <p style="font-weight: 300; font-size: 18px;"><g:message code="informational.about.PRS"></g:message></p>
                 <p style="font-weight: 300; font-size: 15px;">
                     <g:message code="informational.shared.publications.Khera_2018_NatGenet"></g:message><br>

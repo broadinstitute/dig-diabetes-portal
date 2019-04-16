@@ -653,7 +653,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                   new PortalVersionBean("stroke",
                                                           "Stroke",
                                                           "mdv75",
-                                          "CVDKP", // name of KB data we want
+                                          "CDKP", // name of KB data we want
                                                           "Stroke_all",
                                                           "GWAS_Stroke_mdv70",
                                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
@@ -704,7 +704,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                   new PortalVersionBean("mi",
                                                           "Myocardial Infarction",
                                                           "mdv96",
-                                          "CDKP", // name of KB data we want
+                                          "CVDKP", // name of KB data we want
                                                           "MI",
                                                           "GWAS_CARDIoGRAM_mdv91",
                                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
