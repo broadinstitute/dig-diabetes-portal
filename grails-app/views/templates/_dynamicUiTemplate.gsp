@@ -1,0 +1,1126 @@
+%{--called from displayVariantRecordsFromVariantQtlSearch--}%
+<script id="dynamicVariantTable"  type="x-tmpl-mustache">
+
+    <table  class="table">
+    {{#variantsExist}}
+    <tr>
+        <th  scope="row">Variants</th>
+        {{/variantsExist}}
+        {{#uniqueVariants}}
+            <th  scope="col">{{variantName}}</th>
+        {{/uniqueVariants}}
+        {{#variantsExist}}
+    </tr>
+    {{/variantsExist}}
+
+    {{#variantPhenotypesExist}}
+    <tr>
+        <th  scope="row">Phenotype</th>
+        {{/variantPhenotypesExist}}
+        {{#variantPhenotypeQtl}}
+            <td >{{#phenotypes}}
+            <div>{{phenotypeName}}</div>
+            {{/phenotypes}}
+            </td>
+        {{/variantPhenotypeQtl}}
+        {{#variantPhenotypesExist}}
+    </tr>
+    {{/variantPhenotypesExist}}
+
+
+    </table>
+</script>
+
+
+
+<script id="emptySummaryVariantAnnotationRecord"  type="x-tmpl-mustache">
+     <div class="summaryVariantAnnotationRecord" sortField=0>
+     </div>
+</script>
+
+
+<script id="emptyRecord"  type="x-tmpl-mustache">
+     <div class="{{initialLinearIndex}} {{otherClasses}}" sortField="A">
+     </div>
+</script>
+
+
+<script id="dynamicEqtlVariantTableBodySummaryRecord"  type="x-tmpl-mustache">
+     <div class="summaryVariantRecord {{category}}" geneNumber={{geneNumber}}  tissueNumber={{tissueNumber}} sortField={{tissueNumber}}>
+     <div>G:{{geneNumber}}</div>
+     <div>T:{{tissueNumber}}</div>
+     </div>
+</script>
+
+
+
+
+<script id="dynamicEqtlVariantTableBody"  type="x-tmpl-mustache">
+
+{{#.}}
+     <div class="variantRecordExists {{category}}" value={{value}}  geneName="{{geneName}}" sortField=1>
+     {{geneName}}
+     {{value}}
+     </div>
+{{/.}}
+{{^.}}
+     <div class="individualTissueRecord"   sortField=0></div>
+{{/.}}
+</script>
+
+
+
+<script id="dynamicDnaseVariantTableBody"  type="x-tmpl-mustache">
+{{#.}}
+     <div class="variantRecordExists {{category}} tissueTable {{quantileIndicator}}" value={{value}}  tissueName="{{tissueName}}" sortField=1>
+     {{tissueName}}
+     {{value}}
+     </div>
+{{/.}}
+{{^.}}
+     <div class="individualTissueRecord"   sortField=0></div>
+{{/.}}
+</script>
+
+
+
+<script id="dynamicDnaseVariantTableBodySummaryRecord"  type="x-tmpl-mustache">
+     <div class="summaryVariantRecord {{category}}"   tissueNumber={{tissueNumber}} sortField={{tissueNumber}}>
+     <div>T:{{tissueNumber}}</div>
+     </div>
+</script>
+
+
+<script id="dynamicH3k27acVariantTableBody"  type="x-tmpl-mustache">
+{{#.}}
+     <div class="variantRecordExists {{category}} tissueTable {{quantileIndicator}}" value={{value}}  tissueName="{{tissueName}}" sortField=1>
+     {{value}}
+     </div>
+{{/.}}
+{{^.}}
+     <div class="individualTissueRecord"   sortField=0></div>
+{{/.}}
+
+</script>
+
+
+
+<script id="dynamicH3k27acVariantTableBodySummaryRecord"  type="x-tmpl-mustache">
+     <div class="summaryVariantRecord {{category}}"   tissueNumber={{tissueNumber}} sortField={{tissueNumber}}>
+     <div>T:{{tissueNumber}}</div>
+     </div>
+</script>
+
+
+
+
+<script id="dynamicVariantHeader"  type="x-tmpl-mustache">
+
+            <div class="variantTableVarHeader columnNumber_{{index}}" sortterm="{{variantName}}">{{variantName}}</div>
+
+</script>
+
+<script id="dynamicVariantBody"  type="x-tmpl-mustache">
+
+        {{#variantPhenotypeQtl}}
+           {{#phenotypes}}
+            <div>{{phenotypeName}}</div>
+            {{/phenotypes}}
+        {{/variantPhenotypeQtl}
+
+</script>
+
+
+<script id="dynamicVariantCellAnnotations"  type="x-tmpl-mustache">
+      {{#variantAnnotationIsPresent}}
+      <div class="credset.present"></div>
+      {{/variantAnnotationIsPresent}}
+      {{^variantAnnotationIsPresent}}
+      <div class="credset.absent"></div>
+      {{/variantAnnotationIsPresent}}
+</script>
+
+<script id="dynamicVariantCellAssociations"  type="x-tmpl-mustache">
+      <div sortField="{{valueToDisplay}}">{{valueToDisplay}}</div>
+ </script>
+
+
+%{--Called from displayRefinedModContext, displayTissuesPerGeneFromEqtl, displayRefinedGenesInARange--}%
+<script id="dynamicGeneTable"  type="x-tmpl-mustache">
+    <table  class="table">
+    {{#genesExist}}
+    <tr>
+        <th>gene</th>
+        {{/genesExist}}
+        {{#uniqueGenes}}
+            <th  scope="col">{{name}}</th>
+        {{/uniqueGenes}}
+        {{#genesExist}}
+    </tr>
+    {{/genesExist}}
+
+    {{#genesPositionsExist}}
+    <tr>
+        <th  scope="row">Position</th>
+        {{/genesPositionsExist}}
+        {{#genePositions}}
+            <td >{{name}}</td>
+        {{/genePositions}}
+        {{#genesPositionsExist}}
+    </tr>
+    {{/genesPositionsExist}}
+
+    {{#eqtlTissuesExist}}
+    <tr>
+        <th  scope="row">Tissues with eQTLs</th>
+        {{/eqtlTissuesExist}}
+        {{#uniqueEqtlGenes}}
+            <td >
+            {{#tissues}}
+                <div>
+                    {{tissueName}}
+                </div>
+            {{/tissues}}
+            </td>
+        {{/uniqueEqtlGenes}}
+       {{#eqtlTissuesExist}}
+    </tr>
+    {{/eqtlTissuesExist}}
+
+
+    {{#geneModsExist}}
+    <tr>
+        <th  scope="row">Associated mouse phenotypes</th>
+        {{/geneModsExist}}
+        {{#geneModTerms}}
+            <td >
+            {{#mods}}
+                <div>
+                    {{modName}}
+                </div>
+            {{/mods}}
+            </td>
+        {{/geneModTerms}}
+       {{#geneModsExist}}
+    </tr>
+    {{/geneModsExist}}
+
+
+    </table>
+</script>
+
+
+
+
+<script id="sharedCategoryWriter"  type="x-tmpl-mustache">
+     <div significance_sortfield='0' sortField='{{index}}' subSortField='-1' class={{row.subcategory}} initialLinearIndex_{{indexInOneDimensionalArray}} geneRow'>
+           <div class="geneAnnotationShifters text-center">
+                <span class="glyphicon glyphicon-step-backward" aria-hidden="true" onclick="mpgSoftware.dynamicUi.shiftColumnsByOne(event,this,'backward','table.combinedGeneTableHolder')"></span>
+                <span class="glyphicon glyphicon-step-forward" aria-hidden="true" onclick="mpgSoftware.dynamicUi.shiftColumnsByOne(event,this,'forward','table.combinedGeneTableHolder')"></span>
+            </div>
+     {{#dataAnnotation}}
+          {{displayCategory}}
+     {{/dataAnnotation}}
+     </div>
+</script>
+
+
+
+
+%{--a new and reduced form of dynamicGeneTable initially for displayRefinedModContext--}%
+<script id="dynamicGeneTableHeader"  type="x-tmpl-mustache">
+
+            {{name}}
+
+</script>
+
+
+
+<script id="dynamicGeneTableModSubCategory"  type="x-tmpl-mustache">
+     <div significance_sortfield='{{index}}' class='subcategory initialLinearIndex_{{indexInOneDimensionalArray}}'
+      sortField='{{index}}' subSortField='-1'>
+     {{#dataAnnotation}}
+          {{displaySubcategory}}
+          <g:helpText title="gene.MOD.help.header" placement="bottom" body="gene.MOD.help.text"/>
+     {{/dataAnnotation}}
+     </div>
+</script>
+
+
+
+<script id="dynamicGeneTableModBody"  type="x-tmpl-mustache">
+             <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
+             class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
+               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'MOD matches for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)"
+               class="cellExpander" data-target="#mod_data_{{geneName}}"  style="color:black">{{cellPresentationString}}</a>
+               <div  class="collapse openModInGeneTable" id="mod_data_{{geneName}}">
+                    {{#recordsExist}}
+                    {{#geneName}}
+                     <div> {{.}}</div>
+                    {{/geneName}}
+                    {{#geneDescription}}
+                       <div> {{.}}</div>
+                    {{/geneDescription}}
+                    <table class="openModInGeneTable" style="border: 0">
+                     <thead>
+                      <tr role="row">
+                        <th style="border-top: 0;" class="text-center">term</th>
+                      </tr>
+                     </thead>
+                     <tbody>
+                    {{/recordsExist}}
+                    {{#modTerms}}
+                       <tr role="row">
+                           <td style="padding: 3px">{{modName}}</td>
+                       </tr>
+                    {{/modTerms}}
+                    {{#recordsExist}}
+                     </tbody>
+                    </table>
+                    {{/recordsExist}}
+               </div>
+            </div>
+</script>
+
+
+<script id="depictGeneSetSubCategory"  type="x-tmpl-mustache">
+     <div significance_sortfield='{{index}}' class='subcategory initialLinearIndex_{{indexInOneDimensionalArray}}'
+      sortField='{{index}}' subSortField='-1'>
+     {{#dataAnnotation}}
+          {{displaySubcategory}}
+          <g:helpText title="gene.DEPICTsets.help.header" placement="bottom" body="gene.DEPICTsets.help.text"/>
+     {{/dataAnnotation}}
+    </div>
+</script>
+
+
+<script id="depictGeneSetBody"  type="x-tmpl-mustache">
+
+             <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
+             class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
+               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'DEPICT gene set containing {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
+               data-target="#depict_geneset_{{gene}}" style="color:black">{{cellPresentationString}}</a>
+               <div  class="collapse openDepictGeneSetInGeneTable" id="depict_geneset_{{gene}}">
+                    {{#recordsExist}}
+                     <div>{{gene}}</div>
+                    <table class="openDepictGeneSetInGeneTable" style="border: 0">
+                     <thead>
+                      <tr role="row">
+                        <th style="border-top: 0;" class="text-center">pathway ID</th>
+                        <th style="border-top: 0;" class="text-center">description</th>
+                        <th style="border-top: 0;" class="text-center">p-value</th>
+                        <th style="border-top: 0;" class="text-center">genes</th>
+                      </tr>
+                     </thead>
+                     <tbody>
+                    {{/recordsExist}}
+                    {{#data}}
+                      <tr role="row">
+                           <td style="padding: 3px">{{pathway_id}}</td>
+                           <td style="padding: 3px">{{pathway_description}}</td>
+                           <td style="padding: 3px">{{pvalue_str}}</td>
+                           <td style="padding: 3px">
+                           <div>
+                               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'DEPICT gene set',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander" data-target="#depict_geneset_d{{pathway_id_str}}" title="{{#gene_list}}{{.}},{{/gene_list}}">{{number_genes}} genes</a>
+                               <div  class="collapse holdMultipleElements openTissues" id="depict_geneset_d{{pathway_id_str}}" >
+                               <table width=50>
+                               <th>{{pathway_id}}</th>
+                               <tbody>
+                                 {{#gene_list}}
+                                    <tr><td class="text-center">{{.}}</td></tr>
+                                 {{/gene_list}}
+                               </tbody>
+                               </table>
+                               </div>
+                           </div>
+                           </td>
+                       </tr>
+
+                    {{/data}}
+                    {{#recordsExist}}
+                     </tbody>
+                    </table>
+                    {{/recordsExist}}
+               </div>
+            </div>
+</script>
+
+
+
+<script id="eCaviarSubCategory"  type="x-tmpl-mustache">
+     <div significance_sortfield='{{index}}' class='subcategory initialLinearIndex_{{indexInOneDimensionalArray}}'
+      sortField='{{index}}' subSortField='-1'>
+      {{#dataAnnotation}}
+         {{displaySubcategory}}
+         <g:helpText title="gene.eCAVIAR.help.header" placement="bottom" body="gene.eCAVIAR.help.text"/>
+      {{/dataAnnotation}}
+     </div>
+</script>
+
+
+
+
+<script id="eCaviarBody"  type="x-tmpl-mustache">
+             <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
+             class="tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
+               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'eCAVIAR records referencing {{gene}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
+               data-target="#eCaviar_{{gene}}" style="color:black">{{cellPresentationString}}</a>
+               <div  class="collapse openDepictGeneSetInGeneTable" id="eCaviar_{{gene}}">
+                    {{#recordsExist}}
+                    <table class="openDepictGeneSetInGeneTable" style="border: 0">
+                     <thead>
+                      <tr role="row">
+                        <th style="border-top: 0;" class="text-center">tissue</th>
+                        <th style="border-top: 0;" class="text-center">post_prob</th>
+                        <th style="border-top: 0;" class="text-center">variant</th>
+                      </tr>
+                     </thead>
+                     <tbody>
+                    {{/recordsExist}}
+                    {{#records}}
+                      <tr role="row">
+                           <td style="padding: 3px">{{tissueName}}</td>
+                           <td style="padding: 3px">{{clpp}}</td>
+                           <td style="padding: 3px">{{var_id}}</td>
+                       </tr>
+
+                    {{/records}}
+                    {{#recordsExist}}
+                     </tbody>
+                    </table>
+                    {{/recordsExist}}
+               </div>
+            </div>
+</script>
+
+
+
+<script id="colocSubCategory"  type="x-tmpl-mustache">
+     <div significance_sortfield='{{index}}' class='subcategory initialLinearIndex_{{indexInOneDimensionalArray}}'
+      sortField='{{index}}' subSortField='-1'>
+     {{#dataAnnotation}}
+          {{displaySubcategory}}
+          <g:helpText title="gene.COLOC.help.header" placement="bottom" body="gene.COLOC.help.text"/>
+     {{/dataAnnotation}}
+     </div>
+</script>
+
+
+<script id="colocBody"  type="x-tmpl-mustache">
+             <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
+             class="tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
+               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'COLOC records referencing {{gene}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
+               data-target="#COLOC_{{gene}}" style="color:black">{{cellPresentationString}}</a>
+               <div  class="collapse openColocInGeneTable" id="COLOC_{{gene}}">
+                    {{#recordsExist}}
+                    <table class="openColocInGeneTable" style="border: 0">
+                     <thead>
+                      <tr role="row">
+                        <th style="border-top: 0;" class="text-center">tissue</th>
+                        <th style="border-top: 0;" class="text-center">pp coloc snp exists</th>
+                        <th style="border-top: 0;" class="text-center">pp snp coloc</th>
+                        <th style="border-top: 0;" class="text-center">var_id</th>
+                      </tr>
+                     </thead>
+                     <tbody>
+                    {{/recordsExist}}
+                    {{#records}}
+                      <tr role="row">
+                           <td style="padding: 3px">{{tissue}}</td>
+                           <td style="padding: 3px">{{prob_exists_coloc}}</td>
+                           <td style="padding: 3px">{{conditional_prob_snp_coloc}}</td>
+                           <td style="padding: 3px">{{var_id}}</td>
+                       </tr>
+
+                    {{/records}}
+                    {{#recordsExist}}
+                     </tbody>
+                    </table>
+                    {{/recordsExist}}
+               </div>
+            </div>
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%{--a new and reduced form of dynamicGeneTable initially for displayRefinedModContext--}%
+<script id="dynamicGeneTableEqtlHeader"  type="x-tmpl-mustache">
+
+            {{geneName}}
+
+</script>
+
+<script id="dynamicGeneTableEqtlBody"  type="x-tmpl-mustache">
+
+            {{#tissues}}
+                <div>
+                    {{tissueName}}
+                </div>
+            {{/tissues}}
+
+</script>
+
+
+<script id="dynamicGeneTableEmptyRecord"  type="x-tmpl-mustache">
+
+                <div class="{{initialLinearIndex}}" sortField=0 significance_sortfield='0.0'>
+                </div>
+
+
+</script>
+
+
+
+
+<script id="dynamicGeneTableEqtlSummaryBody"  type="x-tmpl-mustache">
+            <div significance_sortField="{{significanceValue}}" sortField={{numberOfTissues}}
+            class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
+               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'eQTLs for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget);"
+               class="cellExpander" data-target="#eqtl_{{geneName}}" style="color:black">{{cellPresentationString}}</a>
+               %{--<div  class="popup">--}%
+               <div  class="collapse openEqtlInGeneTable popuptext" id="eqtl_{{geneName}}">
+                    {{#tissuesExist}}
+                    <table class="openEqtlInGeneTable" style="border: 0">
+                     <thead>
+                      <tr role="row">
+                        <th style="border-right: 0;border-top: 0;" class="text-center">tissue</th>
+                        <th style="border-right: 0;" class="text-center">value</th>
+                      </tr>
+                     </thead>
+                     <tbody>
+                    {{/tissuesExist}}
+                    {{#tissues}}
+                       <tr role="row">
+                           <td style="padding: 3px">{{tissueName}}</td>
+                           <td style="border-right: 0; padding: 3px">{{value}}</td>
+                       </tr>
+                    {{/tissues}}
+                    {{#tissuesExist}}
+                     </tbody>
+                    </table>
+                    {{/tissuesExist}}
+               </div>
+               %{--</div>--}%
+            </div>
+</script>
+
+
+
+
+
+%{--Called from displayGenesPerTissueFromEqtl--}%
+
+<script id="dynamicTissueTable"  type="x-tmpl-mustache">
+    <table  class="table">
+    {{#tissuesExist}}
+    <tr>
+        <th>tissue</th>
+        {{/tissuesExist}}
+        {{#uniqueTissues}}
+            <th  scope="col">{{name}}</th>
+        {{/uniqueTissues}}
+        {{#tissuesExist}}
+    </tr>
+    {{/tissuesExist}}
+
+    {{#genesPositionsExist}}
+    <tr>
+        <th  scope="row">Position</th>
+        {{/genesPositionsExist}}
+        {{#genePositions}}
+            <td >{{name}}</td>
+        {{/genePositions}}
+        {{#genesPositionsExist}}
+    </tr>
+    {{/genesPositionsExist}}
+
+    {{#eqtlGenesExist}}
+    <tr>
+        <th  scope="row">Tissues with eQTLs</th>
+        {{/eqtlGenesExist}}
+        {{#geneTissueEqtls}}
+            <td >
+            {{#genes}}
+                <div>
+                    {{geneName}}
+                </div>
+            {{/genes}}
+            </td>
+        {{/geneTissueEqtls}}
+       {{#eqtlGenesExist}}
+    </tr>
+    {{/eqtlGenesExist}}
+
+    </table>
+</script>
+
+
+%{--Called from displayGenesPerTissueFromEqtl,displayGenesFromColocalization--}%
+<script id="dynamicColocalizationGeneTable"  type="x-tmpl-mustache">
+
+    <table  class="table">
+    {{#colocsExist}}
+    <tr>
+        <th  scope="row">Phenotypes</th>
+        {{/colocsExist}}
+        {{#phenotypesByColocalization}}
+            <th  scope="col">{{geneName}}</th>
+        {{/phenotypesByColocalization}}
+        {{#colocsExist}}
+    </tr>
+    {{/colocsExist}}
+
+    {{#colocsExist}}
+    <tr>
+        <th  scope="row">For each phenotype</th>
+        {{/colocsExist}}
+        {{#phenotypesByColocalization}}
+            <td >
+            <div><a data-toggle="collapse" class="cellExpander" data-target="#tissues_{{geneName}}">tissues={{numberOfTissues}}</a>
+               <div  class="collapse holdMultipleElements openTissues" id="tissues_{{geneName}}">
+                    {{#tissues}}
+                       <div>{{.}}</div>
+                    {{/tissues}}
+                    <div id="tooltip_tissues_{{geneName}}"></div>
+                    <div id="graphic_tissues_{{geneName}}"></div>
+               </div>
+            </div>
+            <div><a data-toggle="collapse" class="cellExpander" data-target="#phenotypes_{{geneName}}">phenotypes={{numberOfPhenotypes}}</a>
+               <div  class="collapse holdMultipleElements" id="phenotypes_{{geneName}}">
+                    {{#phenotypes}}
+                       <div>{{.}}</div>
+                    {{/phenotypes}}
+               </div>
+            </div>
+            <div><a data-toggle="collapse" class="cellExpander" data-target="#varId_{{geneName}}">variants={{numberOfVariants}}</a>
+               <div  class="collapse holdMultipleElements" id="varId_{{geneName}}">
+                    {{#varId}}
+                       <div>{{.}}</div>
+                    {{/varId}}
+               </div>
+            </div>
+            </td>
+        {{/phenotypesByColocalization}}
+        {{#colocsExist}}
+    </tr>
+    {{/colocsExist}}
+
+
+    </table>
+</script>
+
+
+
+%{--Called from displayGenesFromColocalization,displayTissuesFromColocalization--}%
+<script id="dynamicColocalizationTissueTable"  type="x-tmpl-mustache">
+
+    <table  class="table">
+    {{#colocsTissuesExist}}
+    <tr>
+        <th  scope="row">Tissues</th>
+        {{/colocsTissuesExist}}
+        {{#phenotypesByColocalization}}
+            <th  scope="col">{{tissueName}}</th>
+        {{/phenotypesByColocalization}}
+        {{#colocsTissuesExist}}
+    </tr>
+    {{/colocsTissuesExist}}
+
+    {{#phenotypeColocsExist}}
+    <tr>
+        <th  scope="row">For each tissue</th>
+        {{/phenotypeColocsExist}}
+        {{#phenotypesByColocalization}}
+            <td >
+            <div><a data-toggle="collapse" class="cellExpander" data-target="#tissues_{{tissueName}}">phenotypes={{numberOfPhenotypes}}</a>
+               <div  class="collapse holdMultipleElements" id="tissues_{{tissueName}}">
+                    {{#phenotypes}}
+                       <div>{{.}}</div>
+                    {{/phenotypes}}
+               </div>
+            </div>
+            <div><a data-toggle="collapse" class="cellExpander" data-target="#genes_{{tissueName}}">genes={{numberOfGenes}}</a>
+               <div  class="collapse holdMultipleElements" id="genes_{{tissueName}}">
+                    {{#genes}}
+                       <div>{{.}}</div>
+                    {{/genes}}
+               </div>
+            </div>
+            <div><a data-toggle="collapse" class="cellExpander" data-target="#varId_{{tissueName}}">variants={{numberOfVariants}}</a>
+               <div  class="collapse holdMultipleElements" id="varId_{{tissueName}}">
+                    {{#varId}}
+                       <div>{{.}}</div>
+                    {{/varId}}
+               </div>
+            </div>
+            </td>
+        {{/phenotypesByColocalization}}
+        {{#phenotypeColocsExist}}
+    </tr>
+    {{/phenotypeColocsExist}}
+
+
+    </table>
+</script>
+
+
+
+%{--Called from displayPhenotypesFromColocalization--}%
+<script id="dynamicColocalizationPhenotypeTable"  type="x-tmpl-mustache">
+
+    <table  class="table">
+    {{#phenotypesExist}}
+    <tr>
+        <th  scope="row">Phenotypes</th>
+        {{/phenotypesExist}}
+        {{#uniquePhenotypes}}
+            <th  scope="col">{{phenotypeName}}</th>
+        {{/uniquePhenotypes}}
+        {{#phenotypesExist}}
+    </tr>
+    {{/phenotypesExist}}
+
+    {{#phenotypeColocsExist}}
+    <tr>
+        <th  scope="row">For each phenotype</th>
+        {{/phenotypeColocsExist}}
+        {{#phenotypesByColocalization}}
+            <td >
+            <div><a data-toggle="collapse" class="cellExpander" data-target="#tissues_{{phenotypeName}}">tissues={{numberOfTissues}}</a>
+               <div  class="collapse holdMultipleElements" id="tissues_{{phenotypeName}}">
+                    {{#tissues}}
+                       <div>{{.}}</div>
+                    {{/tissues}}
+               </div>
+            </div>
+            <div><a data-toggle="collapse" class="cellExpander" data-target="#genes_{{phenotypeName}}">genes={{numberOfGenes}}</a>
+               <div  class="collapse holdMultipleElements" id="genes_{{phenotypeName}}">
+                    {{#genes}}
+                       <div>{{.}}</div>
+                    {{/genes}}
+               </div>
+            </div>
+            <div><a data-toggle="collapse" class="cellExpander" data-target="#varId_{{phenotypeName}}">variants={{numberOfVariants}}</a>
+               <div  class="collapse holdMultipleElements" id="varId_{{phenotypeName}}">
+                    {{#varId}}
+                       <div>{{.}}</div>
+                    {{/varId}}
+               </div>
+            </div>
+            </td>
+        {{/phenotypesByColocalization}}
+        {{#phenotypeColocsExist}}
+    </tr>
+    {{/phenotypeColocsExist}}
+
+
+    </table>
+</script>
+
+
+
+
+%{--Called from displayTissuesFromAbc--}%
+<script id="dynamicAbcTissueTable"  type="x-tmpl-mustache">
+    <table  class="table">
+    {{#abcTissuesExist}}
+    <tr>
+        <th  scope="row">Sources</th>
+        {{/abcTissuesExist}}
+        {{#tissuesByAbc}}
+            <th  scope="col">{{tissueName}}</th>
+        {{/tissuesByAbc}}
+        {{#abcTissuesExist}}
+    </tr>
+    {{/abcTissuesExist}}
+
+    {{#abcTissuesExist}}
+    <tr>
+        <th  scope="row"></th>
+        {{/abcTissuesExist}}
+        {{#tissuesByAbc}}
+            <td >
+            <div><a onclick="mpgSoftware.dynamicUi.showAttachedData(event)" class="cellExpander" data-target="#genes_{{tissueName}}">genes={{numberOfGenes}}</a>
+               <div  class="collapse holdMultipleElements" id="genes_{{tissueName}}">
+                    {{#gene}}
+                       <div>{{.}}</div>
+                    {{/gene}}
+               </div>
+            </div>
+
+            <div><a onclick="mpgSoftware.dynamicUi.showAttachedData(event)" class="cellExpander" data-target="#experiments_{{tissueName}}">experiments={{numberOfExperiments}}</a>
+               <div  class="collapse holdMultipleElements" id="experiments_{{tissueName}}">
+                    {{#experiment}}
+                       <div>{{.}}</div>
+                       <div id="chart2_{{tissueName}}"></div>
+                    {{/experiment}}
+               </div>
+            </div>
+
+            </td>
+        {{/tissuesByAbc}}
+        {{#abcTissuesExist}}
+    </tr>
+    {{/abcTissuesExist}}
+    </table>
+</script>
+
+
+
+%{--Called from displayGenesFromAbc--}%
+<script id="dynamicAbcGeneTable"  type="x-tmpl-mustache">
+    <table  class="table">
+    {{#abcGenesExist}}
+    <tr>
+        <th  scope="row">Genes</th>
+        {{/abcGenesExist}}
+        {{#genesByAbc}}
+            <th  scope="col"><div class="geneName text-center">{{geneName}}</div><div class="genePosition">chromosome {{chrom}}: {{regionStart}}-{{regionEnd}}</div></th>
+        {{/genesByAbc}}
+        {{#abcGenesExist}}
+    </tr>
+    {{/abcGenesExist}}
+
+    {{#abcGenesExist}}
+    <tr>
+        <th  scope="row"></th>
+        {{/abcGenesExist}}
+        {{#genesByAbc}}
+            <td >
+            <div><a onclick="mpgSoftware.dynamicUi.showAttachedData(event)" class="cellExpander" data-target="#tissues_{{geneName}}">tissues={{numberOfTissues}}</a>
+               <div  class="collapse holdMultipleElements openTissues" id="tissues_{{geneName}}">
+                    <div id="tooltip_tissues_{{geneName}}"></div>
+                    <div id="graphic_tissues_{{geneName}}"></div>
+               </div>
+            </div>
+
+            <div><a onclick="mpgSoftware.dynamicUi.showAttachedData(event)" class="cellExpander" data-target="#experiments_{{geneName}}">experiments={{numberOfExperiments}}</a>
+               <div  class="collapse holdMultipleElements" id="experiments_{{geneName}}">
+                    {{#experiment}}
+                       <div>{{.}}</div>
+                    {{/experiment}}
+               </div>
+            </div>
+
+            </td>
+        {{/genesByAbc}}
+        {{#abcGenesExist}}
+    </tr>
+    {{/abcGenesExist}}
+
+
+
+
+    {{#geneModsExist}}
+    <tr>
+        <th  scope="row">Associated mouse phenotypes</th>
+        {{/geneModsExist}}
+        {{#geneModTerms}}
+            <td >
+            {{#mods}}
+                <div>
+                    {{modName}}
+                </div>
+            {{/mods}}
+            </td>
+        {{/geneModTerms}}
+       {{#geneModsExist}}
+    </tr>
+    {{/geneModsExist}}
+
+
+
+
+    </table>
+</script>
+
+
+
+%{--Called from displayGenesFromAbc--}%
+<script id="dynamicGeneTableHeaderV2"  type="x-tmpl-mustache">
+
+            <div sortStrategy="alphabetical" sortField="-1"  sortTerm="{{name1}}" class="geneName text-center {{initialLinearIndex}}">
+            <div class="geneHeaderShifters text-center">
+                <span class="glyphicon glyphicon-step-backward" aria-hidden="true" onclick="mpgSoftware.dynamicUi.shiftColumnsByOne(event,this,'backward','table.combinedGeneTableHolder')"></span>
+                <span class="glyphicon glyphicon-step-forward" aria-hidden="true" onclick="mpgSoftware.dynamicUi.shiftColumnsByOne(event,this,'forward','table.combinedGeneTableHolder')"></span>
+            </div>
+             <span class="displayGeneName">{{name2}}</span>
+             </div>
+             <div class="genePosition text-center">
+             {{chromosome}}: {{addrStart}}-{{addrEnd}}
+             </div>
+ </div>
+</script>
+
+
+
+
+
+
+%{--Called from displayGenesFromAbc--}%
+<script id="dynamicAbcGeneTableHeader"  type="x-tmpl-mustache">
+
+            <div class="geneName">{{geneName}}</div><div class="genePosition">chromosome {{chrom}}: {{regionStart}}-{{regionEnd}}</div>
+
+</script>
+<script id="dynamicAbcGeneTableBody"  type="x-tmpl-mustache">
+            <div significance_sortField="{{significanceValue}}" sortField={{numberOfTissues}}
+            class="tissueCategory_{{tissueCategoryNumber}}  significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
+               <a
+               onclick="mpgSoftware.dynamicUi.showAttachedData(event,'ABC for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)"
+                class="cellExpander" data-target="#abc_{{geneName}}" style="color:black">{{cellPresentationString}}</a>
+               <a
+               onclick="mpgSoftware.dynamicUi.showAttachedData(event,'ABC for {{geneName}}',mpgSoftware.dynamicUi.createOutOfRegionGraphic)"
+                class="cellExpander" data-target="#tissues_{{geneName}}"  style="color:black">
+               <span class="glyphicon glyphicon-zoom-in" aria-hidden="true" data-target="#tissues_{{geneName}}"></span>
+               &nbsp;
+               </a>
+               <div  class="collapse holdMultipleElements openTissues" id="tissues_{{geneName}}">
+                    <div id="tooltip_tissues_{{geneName}}"></div>
+                    <div id="graphic_tissues_{{geneName}}"></div>
+               </div>
+               <div  class="collapse openAbcInGeneTable" id="abc_{{geneName}}">
+
+                    {{#tissuesExist}}
+                    <table class="openAbcInGeneTable" style="border: 0">
+                     <thead>
+                      <tr role="row">
+                        <th style="border-top: 0;" class="text-center">tissue</th>
+                        <th style="border-top: 0;border-right: 0;" class="text-center">value</th>
+                      </tr>
+                     </thead>
+                     <tbody>
+                    {{/tissuesExist}}
+                    {{#tissues}}
+                       <tr role="row">
+                           <td style="padding: 3px">{{tissueName}}</td>
+                           <td style="border-right: 0; padding: 3px">{{value}}</td>
+                       </tr>
+                    {{/tissues}}
+                    {{#tissuesExist}}
+                     </tbody>
+                    </table>
+                    {{/tissuesExist}}
+               </div>
+            </div>
+
+
+
+
+</script>
+
+
+<script id="depictGeneTableSubCategory"  type="x-tmpl-mustache">
+     <div significance_sortfield='{{index}}' class='subcategory initialLinearIndex_{{indexInOneDimensionalArray}}'
+      sortField='{{index}}' subSortField='-1'>
+     {{#dataAnnotation}}
+          {{displaySubcategory}}
+          <g:helpText title="gene.DEPICTprior.help.header" placement="bottom" body="gene.DEPICTprior.help.text"/>
+     {{/dataAnnotation}}
+     </div>
+</script>
+
+
+<script id="depictGeneTableBody"  type="x-tmpl-mustache">
+             <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
+             class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
+               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'DEPICT predictions for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)"
+               class="cellExpander" data-target="#depict_data_{{geneName}}" style="color:black">{{cellPresentationString}}</a>
+               <div  class="collapse openDepictInGeneTable" id="depict_data_{{geneName}}">
+                    {{#recordsExist}}
+                    <table class="openDepictInGeneTable" style="border: 0">
+                     <thead>
+                      <tr role="row">
+                        <th style="border-right: 0; border-top: 0"  class="text-center"></th>
+                      </tr>
+                     </thead>
+                     <tbody>
+                    {{/recordsExist}}
+                    {{#records}}
+                       <tr role="row">
+                           <td style="border-right: 0; padding: 3px">p-value = {{value}}</td>
+                       </tr>
+                    {{/records}}
+                    {{#recordsExist}}
+                     </tbody>
+                    </table>
+                    {{/recordsExist}}
+               </div>
+            </div>
+</script>
+
+
+<script id="geneAssociationTableSubCategory"  type="x-tmpl-mustache">
+     <div significance_sortfield='{{index}}' class='subcategory initialLinearIndex_{{indexInOneDimensionalArray}}'
+      sortField='{{index}}' subSortField='-1'>
+     {{#dataAnnotation}}
+          {{displaySubcategory}}
+          <g:helpText title="gene.MetaXcan.help.header" placement="bottom" body="gene.MetaXcan.help.text"/>
+     {{/dataAnnotation}}
+    </div>
+</script>
+
+<script id="geneAssociationTableBody"  type="x-tmpl-mustache">
+
+            <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
+            class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
+               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'MetaXcan for {{gene}}',mpgSoftware.dynamicUi.extractStraightFromTarget)"
+               class="cellExpander" data-target="#MetaXcan_{{gene}}"  style="color:black">{{cellPresentationString}}</a>
+               <div  class="collapse openMetaXcanInGeneTable" id="MetaXcan_{{gene}}">
+                    {{#tissuesExist}}
+                    <table class="openMetaXcanInGeneTable" style="border: 0">
+                     <thead>
+                      <tr role="row">
+                        <th style="border-top: 0" class="text-center">tissue</th>
+                        <th style="border-top: 0;border-right: 0;" class="text-center">p-value</th>
+                      </tr>
+                     </thead>
+                     <tbody>
+                    {{/tissuesExist}}
+                    {{#tissues}}
+                       <tr role="row">
+                           <td style="padding: 3px">{{tissueName}}</td>
+                           <td style="border-right: 0;padding: 3px">{{value}}</td>
+                       </tr>
+                    {{/tissues}}
+                    {{#tissuesExist}}
+                     </tbody>
+                    </table>
+                    {{/tissuesExist}}
+               </div>
+            </div>
+</script>
+
+
+<script id="geneSkatAssociationTableSubCategory"  type="x-tmpl-mustache">
+     <div significance_sortfield='{{index}}' class='subcategory initialLinearIndex_{{indexInOneDimensionalArray}}'
+      sortField='{{index}}' subSortField='-1'>
+     {{#dataAnnotation}}
+          {{displaySubcategory}}
+          <g:helpText title="gene.skat.help.header" placement="bottom" body="gene.skat.help.text"/>
+     {{/dataAnnotation}}
+    </div>
+</script>
+
+
+<script id="geneSkatAssociationTableBody"  type="x-tmpl-mustache">
+
+            <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
+            class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
+               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'SKAT associations for {{gene}}',mpgSoftware.dynamicUi.extractStraightFromTarget)"
+               class="cellExpander" data-target="#geneSkatAssociation_{{gene}}"  style="color:black">{{cellPresentationString}}</a>
+               <div  class="collapse opengeneSkatAssociationInGeneTable" id="geneSkatAssociation_{{gene}}">
+                    {{#tissuesExist}}
+                    <table class="openMetaXcanInGeneTable" style="border: 0">
+                     <thead>
+                      <tr role="row">
+                        <th style="border-top: 0" class="text-center">technique</th>
+                        <th style="border-top: 0;border-right: 0;" class="text-center">p-value</th>
+                      </tr>
+                     </thead>
+                     <tbody>
+                    {{/tissuesExist}}
+                    {{#tissues}}
+                       <tr role="row">
+                           <td style="padding: 3px">{{tissueName}}</td>
+                           <td style="border-right: 0;padding: 3px">{{value}}</td>
+                       </tr>
+                    {{/tissues}}
+                    {{#tissuesExist}}
+                     </tbody>
+                    </table>
+                    {{/tissuesExist}}
+               </div>
+            </div>
+</script>
+
+
+<script id="geneFirthAssociationTableSubCategory"  type="x-tmpl-mustache">
+     <div significance_sortfield='{{index}}' class='subcategory initialLinearIndex_{{indexInOneDimensionalArray}}'
+      sortField='{{index}}' subSortField='-1'>
+     {{#dataAnnotation}}
+          {{displaySubcategory}}
+          <g:helpText title="gene.firth.help.header" placement="bottom" body="gene.firth.help.text"/>
+     {{/dataAnnotation}}
+     </div>
+</script>
+
+
+<script id="geneFirthAssociationTableBody"  type="x-tmpl-mustache">
+
+            <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
+            class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
+               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'Firth associations for {{gene}}',mpgSoftware.dynamicUi.extractStraightFromTarget)"
+               class="cellExpander" data-target="#geneFirthAssociation_{{gene}}"  style="color:black">{{cellPresentationString}}</a>
+               <div  class="collapse opengeneFirthAssociationInGeneTable" id="geneFirthAssociation_{{gene}}">
+                    {{#tissuesExist}}
+                    <table class="openMetaXcanInGeneTable" style="border: 0">
+                     <thead>
+                      <tr role="row">
+                        <th style="border-top: 0" class="text-center">technique</th>
+                        <th style="border-top: 0;border-right: 0;" class="text-center">p-value</th>
+                      </tr>
+                     </thead>
+                     <tbody>
+                    {{/tissuesExist}}
+                    {{#tissues}}
+                       <tr role="row">
+                           <td style="padding: 3px">{{tissueName}}</td>
+                           <td style="border-right: 0;padding: 3px">{{value}}</td>
+                       </tr>
+                    {{/tissues}}
+                    {{#tissuesExist}}
+                     </tbody>
+                    </table>
+                    {{/tissuesExist}}
+               </div>
+            </div>
+</script>
+
+
+
+%{--Called from displayPhenotypeRecordsFromVariantQtlSearch--}%
+<script id="dynamicPhenotypeTable"  type="x-tmpl-mustache">
+
+    <table  class="table">
+    {{#phenotypesExist}}
+    <tr>
+        <th  scope="row">Phenotypes</th>
+        {{/phenotypesExist}}
+        {{#uniquePhenotypes}}
+            <th  scope="col">{{phenotypeName}}</th>
+        {{/uniquePhenotypes}}
+        {{#phenotypesExist}}
+    </tr>
+    {{/phenotypesExist}}
+
+    {{#phenotypeVariantsExist}}
+    <tr>
+        <th  scope="row">Variants</th>
+        {{/phenotypeVariantsExist}}
+        {{#phenotypeVariantQtl}}
+            <td >{{#variants}}
+            <div>{{variantName}}</div>
+            {{/variants}}
+            </td>
+        {{/phenotypeVariantQtl}}
+        {{#phenotypeVariantsExist}}
+    </tr>
+    {{/phenotypeVariantsExist}}
+
+
+    </table>
+</script>
+

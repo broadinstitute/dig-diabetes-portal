@@ -35,6 +35,7 @@ var baget = baget || {};  // encapsulating variable
             endColor = '#3498db',
             startRegion,
             endRegion,
+            colorByValue=0,
             renderCellText = 1;
 
         // private variables
@@ -55,8 +56,11 @@ var baget = baget || {};  // encapsulating variable
 
             var numrows = data.length;
 
-            var minValue = d3.min(data, function(layer) { return d3.max(layer, function(f) { return f.START; }); });
+            var minValue = d3.min(data, function(layer) { return d3.min(layer, function(f) { return f.START; }); });
             var maxValue = d3.max(data, function(layer) { return d3.max(layer, function(f) { return f.STOP; }); });
+            var minAssayValue = d3.min(data, function(layer) { return d3.min(layer, function(f) { return f.VALUE; }); });
+            var maxAssayValue = d3.max(data, function(layer) { return d3.max(layer, function(f) { return f.VALUE; }); });
+            var color_scale = d3.scale.linear().domain([minAssayValue, maxAssayValue]).range(['blue', 'red']);
 
             var svg = d3.select(container).append("svg")
                 .attr("width", width + margin.left + margin.right)
@@ -101,14 +105,45 @@ var baget = baget || {};  // encapsulating variable
                 .enter().append("g")
                 .attr("class", "element")
                 .attr("transform", function(d, i) { return "translate(" + xScale(d.START) + ", 0)"; });
+            if (colorByValue){  // color by scale
+                element.append('rect')
+                    .attr("width", function(v){
+                        return xScale(v.STOP)-xScale(v.START);})
+                    .attr("height", yScale.rangeBand()/2)
+                    .style("stroke-width", 1)
+                    .style("stroke",  function(v) {
+                        return color_scale(v.VALUE);
+                    })
+                    .style('fill', function(v) {
+                        return color_scale(v.VALUE);
+                    })
+                    .on("mouseover", function(d) {
 
-            element.append('rect')
-                .attr("width", function(v){
-                    return xScale(v.STOP)-xScale(v.START);})
-                .attr("height", yScale.rangeBand()/2)
-                .style("stroke-width", 1)
-                .style("stroke", "black");
-             //   .style("fill",endColor);
+                        div.transition()
+                            .duration(200)
+                            .style("opacity", .9);
+                        div	.html(formatTime(d.date) + "<br/>"  + d.close)
+                            .style("left", (d3.event.pageX) + "px")
+                            .style("top", (d3.event.pageY - 28) + "px");
+                    })
+                    .on("mouseover", function() {
+                    })
+                    .on("mouseout", function(d) {
+
+                        div.transition()
+                            .duration(500)
+                            .style("opacity", 0);
+                    });
+
+            } else { // no color for rectangles at all -- we will instead color on the basis of CSS class assignments
+                element.append('rect')
+                    .attr("width", function(v){
+                        return xScale(v.STOP)-xScale(v.START);})
+                    .attr("height", yScale.rangeBand()/2)
+                    .style("stroke-width", 1)
+                    .style("stroke", "black");
+            }
+
 
             var labels = svg.append('g')
                 .attr('class', "labels");
@@ -211,22 +246,22 @@ var baget = baget || {};  // encapsulating variable
                 .attr("height", height)
                 .on("mouseover", function() {
                     crosshair.style("display", null);
-                })
-                .on("mouseout", function() {
-                    crosshair.style("display", "none");
-                    label.text("");
-                })
-                .on("mousemove", function() {
-                    var mouse = d3.mouse(this);
-                    crosshair.select("#crosshairX")
-                        .attr("x1", mouse[0])
-                        .attr("y1", 0)
-                        .attr("x2", mouse[0])
-                        .attr("y2", height);
-                    label.text(function() {
-                        return "position = "+Math.round(xScale.invert(mouse[0]));
-                    });
                 });
+                //.on("mouseout", function() {
+                //    crosshair.style("display", "none");
+                //    label.text("");
+                //})
+                //.on("mousemove", function() {
+                //    var mouse = d3.mouse(this);
+                //    crosshair.select("#crosshairX")
+                //        .attr("x1", mouse[0])
+                //        .attr("y1", 0)
+                //        .attr("x2", mouse[0])
+                //        .attr("y2", height);
+                //    label.text(function() {
+                //        return "position = "+Math.round(xScale.invert(mouse[0]));
+                //    });
+                //});
 
 
 
@@ -344,6 +379,13 @@ var baget = baget || {};  // encapsulating variable
             startRegion = x;
             return instance;
         };
+        instance.colorByValue = function (x) {
+            if (!arguments.length) return colorByValue;
+            colorByValue = x;
+            return instance;
+        };
+
+
 
         /***
          * This is not a standard accessor.  The purpose of this method is to take a DOM element and to

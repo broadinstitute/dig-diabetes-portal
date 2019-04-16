@@ -77,6 +77,7 @@ class PortalConstants {
     public final static String JSON_BURDEN_VARIANTS_KEY                 = "variants";
     public final static String JSON_BURDEN_COVARIATES_KEY               = "covariates";
     public final static String JSON_BURDEN_SAMPLES_KEY                  = "samples";
+    public final static String JSON_BURDEN_ALLELE_TYPE_KEY              = "allele_type";
     public final static String JSON_BURDEN_FILTERS_KEY                  = "filters";
     public final static String JSON_BURDEN_DATASET_KEY                  = "study";
     public final static String JSON_BURDEN_DATA_VERSION_KEY             = "mdv";
@@ -87,6 +88,7 @@ class PortalConstants {
     public final static String JSON_BURDEN_OPERATION_KEY                = "operation"
     public final static String JSON_BURDEN_OPERATION_SUM_KEY            = "sum"
     public final static String JSON_BURDEN_OPERATION_MAX_KEY            = "max"
+    public final static String JSON_BURDEN_OPERATION_ALLELE_TYPE_KEY    = "multi"
 
     // constants for getData calls
     public final static String OPERATOR_LESS_THAN_EQUALS                 = "LTE";
@@ -242,6 +244,7 @@ class PortalConstants {
     public static final String PROPERTY_MEANING_P_VALUE_KEY                 = "P_VALUE";
     public static final String PROPERTY_MEANING_ODDS_RATIO_KEY              = "ODDS_RATIO";
     public static final String PROPERTY_MEANING_BETA_KEY                    = "BETA";
+    public final static String PROPERTY_MEANING_MULTI_ALLELE_KEY            = "MULTI_ALLELE";
 
     //  types of metadata
     public static final String METADATA_VARIANT                             = "VARIANT";

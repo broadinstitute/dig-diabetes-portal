@@ -1871,8 +1871,9 @@ mpgSoftware.burdenTestShared = (function () {
                 var protein_change = (variantRec.Protein_change) ? variantRec.Protein_change : '';
                 arrayOfRows.push(protein_change);
                 arrayOfRows.push((variantRec.Consequence) ? variantRec.Consequence : '');
-                $('#gaitTable').dataTable().fnAddData(arrayOfRows);
+                $('#gaitTable').dataTable().fnAddData(arrayOfRows,false);
             });
+            $('#gaitTable').dataTable().fnDraw();
             if (typeof rTrailerFunc !== 'undefined') {
                 rTrailerFunc();
             }

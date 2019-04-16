@@ -54,13 +54,13 @@ public class BurdenJsonBuilder {
      * @throws PortalException
      */
     public JSONObject getBurdenPostJson(String stringDataVersion, String phenotype, List<String> variantList, List<String> covariatesList,
-                                        List<String> sampleList, String filters, String dataSet, String variantSetId) throws PortalException {
+                                        List<String> sampleList, String filters, String dataSet, String variantSetId, String alleleType) throws PortalException {
         // local variables
         JSONObject finalObject;
 
         // create the json object
         try {
-            finalObject = new JSONObject(this.getBurdenPostJsonString( stringDataVersion, phenotype, variantList, covariatesList,  sampleList, filters, dataSet,  variantSetId));
+            finalObject = new JSONObject(this.getBurdenPostJsonString( stringDataVersion, phenotype, variantList, covariatesList,  sampleList, filters, dataSet,  variantSetId, alleleType));
 
         } catch (JSONException exception) {
             throw new PortalException(("got json creation exception for burden test payload generation: " + exception.getMessage()));
@@ -79,7 +79,7 @@ public class BurdenJsonBuilder {
      * @throws PortalException
      */
     public String getBurdenPostJsonString(String stringDataVersion , String phenotype, List<String> variantList, List<String> covariatesList,
-                                          List<String> sampleList, String filters, String dataSet, String variantSetId) throws PortalException {
+                                          List<String> sampleList, String filters, String dataSet, String variantSetId, String alleleType) throws PortalException {
         // local variables
         String finalString;
         StringBuilder stringBuilder = new StringBuilder();
@@ -180,6 +180,19 @@ public class BurdenJsonBuilder {
 
         stringBuilder.append("],");
         stringBuilder.append(filters);
+
+
+        // add in the phenotype
+        if ((alleleType != null)  && (alleleType.length()>0)) {
+            stringBuilder.append(", ");
+            stringBuilder.append("\"");
+            stringBuilder.append(PortalConstants.JSON_BURDEN_ALLELE_TYPE_KEY);
+            stringBuilder.append("\": \"");
+            stringBuilder.append(alleleType);
+            stringBuilder.append("\" ");
+        }
+
+        // close off the JSON
         stringBuilder.append("}");
 
         // create the filters list object string

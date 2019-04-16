@@ -621,7 +621,8 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
      */
     protected JSONObject getBurdenResultForVariantIdList(String stringDataVersion, String phenotype, List<String> burdenVariantList,
                                                          JSONObject covariateJsonObject, JSONObject sampleJsonObject, JSONObject filtersJsonObject,
-                                                         JSONArray phenotypeFilterValues, String dataset, Boolean explicitlySelectSamples, String variantSetId) throws PortalException {
+                                                         JSONArray phenotypeFilterValues, String dataset, Boolean explicitlySelectSamples,
+                                                         String variantSetId) throws PortalException {
         // local variables
         JSONObject jsonObject = null;
         JSONObject returnJson = null;
@@ -629,6 +630,15 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
 
 
         // TODO: remove this workaround when the backend can gather samples on its own
+
+
+        // Look at the samples data set, and determine if it has been marked in the database as having undergone
+        // an operation that converts multi-allelics broken into bi-jjjallelic
+        String alleleType = ""
+        SampleGroup sampleGroupObj = metaDataService.getSampleGroupByName(dataset,MetaDataService.METADATA_SAMPLE)
+        if (sampleGroupObj.getMeaningSet().contains(PortalConstants.PROPERTY_MEANING_MULTI_ALLELE_KEY)){
+            alleleType=  PortalConstants.JSON_BURDEN_OPERATION_ALLELE_TYPE_KEY;
+        }
 
         List<String> sampleList = []
         String goWithDataSet
@@ -657,10 +667,10 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
         }
 
         if (!explicitlySelectSamples){
-            jsonObject = this.getBurdenJsonBuilder().getBurdenPostJson(stringDataVersion, phenotype, burdenVariantList, covariateList, sampleList, filters,dataset, variantSetId);
+            jsonObject = this.getBurdenJsonBuilder().getBurdenPostJson(stringDataVersion, phenotype, burdenVariantList, covariateList, sampleList, filters,dataset, variantSetId,alleleType);
         } else {
             if (sampleList?.size()>MINIMUM_ALLOWABLE_NUMBER_OF_SAMPLES){
-                jsonObject = this.getBurdenJsonBuilder().getBurdenPostJson(stringDataVersion, phenotype, burdenVariantList, covariateList, sampleList, filters,dataset, variantSetId);
+                jsonObject = this.getBurdenJsonBuilder().getBurdenPostJson(stringDataVersion, phenotype, burdenVariantList, covariateList, sampleList, filters,dataset, variantSetId,alleleType);
             } else {
                 log.info("needed more samples than ${MINIMUM_ALLOWABLE_NUMBER_OF_SAMPLES}");
             }

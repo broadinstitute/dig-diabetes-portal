@@ -167,6 +167,43 @@ class RegionInfoController {
     }
 
 
+    def retrieveVariantsWithQtlRelationships(){
+        JSONObject jsonReturn
+        int startPosition =  0
+        int endPosition =  0
+        String chromosome = params.chromosome
+        String startString = params.startPos
+        String endString = params.endPos
+        def slurper = new JsonSlurper()
+        try{
+            startPosition = Integer.parseInt(startString)
+        } catch ( Exception e ) {
+            e.printStackTrace()
+        }
+        try{
+            endPosition = Integer.parseInt(endString)
+        } catch ( Exception e ) {
+            e.printStackTrace()
+        }
+
+
+        // We want to get a set of phenotypes to begin with.  Let's gather all of the variance with the strongest associations inside
+        //  of the current range, and pull out all of the phenotypes that match those variants
+        Map phenotypeViaVariantMap = restServerService.gatherBottomLinePhenotypesVariantsPerRange(chromosome, startPosition, endPosition )
+
+        String proposedJsonString = new JsonBuilder( phenotypeViaVariantMap ).toPrettyString()
+
+        jsonReturn =  slurper.parseText(proposedJsonString)
+
+        render(status: 200, contentType: "application/json") {jsonReturn}
+        return
+
+    }
+
+
+
+
+
 
     def calculateGeneRanking() {
         def slurper = new JsonSlurper()
@@ -177,8 +214,6 @@ class RegionInfoController {
         String endString = params.end; // ex "29937203"
         String maximumAssociationString = params.maximumAssociation; // ex ".0001"
         String minimumWeightString = params.minimumWeight; // ex "1"
-//        String defaultPhenotypeWeightingSchemeString = params.defaultPhenotypeWeightingScheme
-//        int defaultPhenotypeWeightingScheme = 0
         int startPosition =  0
         int endPosition =  0
         float maximumAssociation = 0.0
@@ -223,11 +258,6 @@ class RegionInfoController {
         } catch ( Exception e ) {
             e.printStackTrace()
         }
-//        try{
-//            defaultPhenotypeWeightingScheme = Integer.parseInt(defaultPhenotypeWeightingSchemeString)
-//        } catch ( Exception e ) {
-//            e.printStackTrace()
-//        }
 
 
         // We want to get a set of phenotypes to begin with.  Let's gather all of the variance with the strongest associations inside
@@ -445,6 +475,8 @@ class RegionInfoController {
         }
         if (!params.chromosome) {
             looksOkay = false
+        } else {
+            chromosome = params.chromosome
         }
 
         Map geneSearchResults
@@ -459,6 +491,567 @@ class RegionInfoController {
         String proposedJsonString = new JsonBuilder( geneSearchResults ).toPrettyString()
         def slurper = new JsonSlurper()
         JSONObject jsonReturn =  slurper.parseText(proposedJsonString);
+
+        render(status: 200, contentType: "application/json") {jsonReturn}
+        return
+    }
+
+
+
+
+    def retrieveEqtlData() {
+        String gene = ""
+        String tissue = ""
+        String variant = ""
+        boolean looksOkay = true
+        JSONArray jsonReturn
+
+        if (params.gene) {
+            gene = params.gene
+        }
+
+        if (params.tissue) {
+            tissue = params.tissue
+        }
+
+        if (params.variant) {
+            variant = params.variant
+        }
+
+        if (looksOkay){
+            jsonReturn = restServerService.gatherEqtlData( gene,  variant, tissue)
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+            def slurper = new JsonSlurper()
+            jsonReturn =  slurper.parseText(proposedJsonString) as JSONArray;
+        }
+
+        render(status: 200, contentType: "application/json") {jsonReturn}
+        return
+    }
+
+
+
+    def retrieveEqtlDataWithVariants() {
+        String gene = ""
+        String tissue = ""
+        boolean looksOkay = true
+        JSONArray jsonReturn
+        JSONArray variants
+        List <String> variantList = []
+        def slurper = new JsonSlurper()
+
+        if (params.gene) {
+            gene = params.gene
+        }
+
+        if (params.tissue) {
+            tissue = params.tissue
+        }
+
+        if (params.variants) {
+            variants = slurper.parseText( params.variants as String)  as JSONArray
+            variantList = variants as List <String>
+        }
+
+        if (looksOkay){
+            jsonReturn = restServerService.gatherEqtlDataForVariantList( gene,  variantList, tissue)
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+
+            jsonReturn =  slurper.parseText(proposedJsonString) as JSONArray;
+        }
+
+        render(status: 200, contentType: "application/json") {jsonReturn}
+        return
+    }
+
+
+
+
+    def retrieveAbcData() {
+        String gene = ""
+        String tissue = ""
+        int startPosition = -1
+        int endPosition = -1
+        String chromosome = ""
+        boolean looksOkay = true
+        JSONArray jsonReturn
+        JSONArray variants
+        List <String> variantList = []
+        def slurper = new JsonSlurper()
+
+        if (params.gene) {
+            gene = params.gene
+        }
+
+        if (params.tissue) {
+            tissue = params.tissue
+        }
+
+        if (params.startPos) {
+            try {
+                startPosition = Double.parseDouble(params.startPos).intValue()
+            } catch (Exception e) {
+                looksOkay = false
+                e.printStackTrace()
+                log.error("retrieveAbcData:failed to convert startPos value=${params.startPos}")
+            }
+        }
+        if (params.endPos) {
+            try {
+                endPosition = Double.parseDouble(params.endPos).intValue()
+            } catch (Exception e) {
+                looksOkay = false
+                e.printStackTrace()
+                log.error("retrieveAbcData:failed to convert endPos value=${params.startPos}")
+            }
+        }
+
+        if (params.variants) {
+            variants = slurper.parseText( params.variants as String)  as JSONArray
+            variantList = variants as List <String>
+        }
+
+        if (params.chromosome) {
+            chromosome = params.chromosome
+        }
+
+        if (looksOkay){
+            jsonReturn = restServerService.gatherAbcData( gene, tissue, startPosition, endPosition, chromosome, variantList )
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+            jsonReturn =  slurper.parseText(proposedJsonString) as JSONArray;
+        }
+
+        render(status: 200, contentType: "application/json") {jsonReturn}
+        return
+    }
+
+
+
+
+
+
+    def retrieveDepictData() {
+        String gene = ""
+        String phenotype = ""
+        int startPosition = -1
+        int endPosition = -1
+        String chromosome = ""
+        boolean looksOkay = true
+        JSONArray jsonArray
+        def slurper = new JsonSlurper()
+
+        if (params.gene) {
+            gene = params.gene
+        }
+
+        if (params.phenotype) {
+            phenotype = params.phenotype
+        }
+
+        if (params.startPos) {
+            try {
+                startPosition = Double.parseDouble(params.startPos).intValue()
+            } catch (Exception e) {
+                looksOkay = false
+                e.printStackTrace()
+                log.error("retrieveAbcData:failed to convert startPos value=${params.startPos}")
+            }
+        }
+        if (params.endPos) {
+            try {
+                endPosition = Double.parseDouble(params.endPos).intValue()
+            } catch (Exception e) {
+                looksOkay = false
+                e.printStackTrace()
+                log.error("retrieveAbcData:failed to convert endPos value=${params.startPos}")
+            }
+        }
+
+        if (params.chromosome) {
+            chromosome = params.chromosome
+        }
+
+        if (looksOkay){
+            jsonArray = restServerService.gatherDepictData( gene, phenotype, startPosition, endPosition, chromosome )
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+            jsonArray =  slurper.parseText(proposedJsonString) as JSONArray;
+        }
+
+        render(status: 200, contentType: "application/json") {jsonArray}
+        return
+    }
+
+
+
+
+
+    def retrieveDepictGeneSetData() {
+        String gene = ""
+        String phenotype = ""
+        float pValueThreshold = 0.0005
+        boolean looksOkay = true
+        JSONObject jsonReturn
+        def slurper = new JsonSlurper()
+
+        if (params.gene) {
+            gene = params.gene
+        }
+
+        if (params.phenotype) {
+            phenotype = params.phenotype
+        }
+
+        if (params.pValueThreshold) {
+            try {
+                pValueThreshold = Double.parseDouble(params.pValueThreshold).toFloat()
+            } catch (Exception e) {
+                looksOkay = false
+                e.printStackTrace()
+                log.error("retrieveAbcData:failed to convert pValueThreshold value=${params.pValueThreshold}")
+            }
+        }
+
+        if (looksOkay){
+            jsonReturn = restServerService.gatherDepictGeneSetData( gene, phenotype, pValueThreshold )
+            jsonReturn["gene"]=gene
+        } else {
+            String proposedJsonString = new JsonBuilder( "{is_error: true, error_message: \"calling parameter problem\"}" ).toPrettyString()
+            jsonReturn =  slurper.parseText(proposedJsonString)
+        }
+
+        render(status: 200, contentType: "application/json") {jsonReturn}
+        return
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    def retrieveECaviarData() {
+        String gene = ""
+        String tissue = ""
+        String variant = ""
+        String phenotype = ""
+        int startPosition = -1
+        int endPosition = -1
+        String chromosome = ""
+        boolean looksOkay = true
+        JSONArray jsonReturn
+        Map ensemblMapper
+        Map geneNameMap = [:]
+
+        if (params.gene) {
+            gene = params.gene
+        }
+
+        if (params.tissue) {
+            tissue = params.tissue
+        }
+
+        if (params.variant) {
+            variant = params.variant
+        }
+
+        if (params.phenotype) {
+            phenotype = params.phenotype
+        }
+
+        if (params.startPos) {
+            try {
+                startPosition = Double.parseDouble(params.startPos).intValue()
+            } catch (Exception e) {
+                looksOkay = false
+                e.printStackTrace()
+                log.error("retrieveAbcData:failed to convert startPos value=${params.startPos}")
+            }
+        }
+        if (params.endPos) {
+            try {
+                endPosition = Double.parseDouble(params.endPos).intValue()
+            } catch (Exception e) {
+                looksOkay = false
+                e.printStackTrace()
+                log.error("retrieveAbcData:failed to convert endPos value=${params.startPos}")
+            }
+        }
+
+        if (params.chromosome) {
+            chromosome = params.chromosome
+        }
+
+        if (looksOkay){
+            jsonReturn = restServerService.gatherECaviarData( gene, tissue, variant, phenotype,startPosition, endPosition, chromosome)
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+            def slurper = new JsonSlurper()
+            jsonReturn =  slurper.parseText(proposedJsonString) as JSONArray;
+        }
+
+        JSONArray jsonArray = new JSONArray()
+        for (JSONObject jsonObject in jsonReturn) {
+            jsonObject.put("common_name", geneNameMap[jsonObject.gene] ?: jsonObject.gene)
+            jsonObject.put("tissue_trans",g.message(code: "metadata.${jsonObject.tissue}", default: jsonObject.tissue))
+            jsonArray.put(jsonObject)
+        }
+
+        render(status: 200, contentType: "application/json") {jsonArray}
+        return
+    }
+
+
+
+
+
+    def retrieveColocData() {
+        String gene = ""
+        String tissue = ""
+        String variant = ""
+        String phenotype = ""
+        int startPosition = -1
+        int endPosition = -1
+        String chromosome = ""
+        boolean looksOkay = true
+        JSONArray jsonReturn
+        Map ensemblMapper
+        Map geneNameMap = [:]
+
+        if (params.gene) {
+            gene = params.gene
+        }
+
+        if (params.tissue) {
+            tissue = params.tissue
+        }
+
+        if (params.variant) {
+            variant = params.variant
+        }
+
+        if (params.phenotype) {
+            phenotype = params.phenotype
+        }
+
+        if (params.startPos) {
+            try {
+                startPosition = Double.parseDouble(params.startPos).intValue()
+            } catch (Exception e) {
+                looksOkay = false
+                e.printStackTrace()
+                log.error("retrieveAbcData:failed to convert startPos value=${params.startPos}")
+            }
+        }
+        if (params.endPos) {
+            try {
+                endPosition = Double.parseDouble(params.endPos).intValue()
+            } catch (Exception e) {
+                looksOkay = false
+                e.printStackTrace()
+                log.error("retrieveAbcData:failed to convert endPos value=${params.startPos}")
+            }
+        }
+
+        if (params.chromosome) {
+            chromosome = params.chromosome
+        }
+
+        if (looksOkay){
+            jsonReturn = restServerService.gatherEColocData( gene, tissue, variant, phenotype,startPosition, endPosition, chromosome)
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+            def slurper = new JsonSlurper()
+            jsonReturn =  slurper.parseText(proposedJsonString) as JSONArray;
+        }
+
+        JSONArray jsonArray = new JSONArray()
+        for (JSONObject jsonObject in jsonReturn) {
+            jsonObject.put("common_name", geneNameMap[jsonObject.gene] ?: jsonObject.gene)
+            jsonObject.put("tissue_trans",g.message(code: "metadata.${jsonObject.tissue}", default: jsonObject.tissue))
+            jsonArray.put(jsonObject)
+        }
+
+        render(status: 200, contentType: "application/json") {jsonArray}
+        return
+    }
+
+
+
+
+
+
+
+
+    def retrieveGeneLevelAssociations() {
+        String gene = ""
+        String phenotype = ""
+        boolean looksOkay = true
+        String preferredSampleGroup = ""
+
+        def slurper = new JsonSlurper()
+        List<String> propertyList = []
+        if (params.propertyNames) {
+            propertyList = slurper.parseText( params.propertyNames as String)  as JSONArray
+        }
+        JSONObject jsonReturn
+
+        if (params.preferredSampleGroup) {
+            preferredSampleGroup = params.preferredSampleGroup
+        }
+
+        if (params.gene) {
+            gene = params.gene
+        } else {
+            log.error("retrieveGeneLevelAssociations: did not receive the required gene parameter")
+            looksOkay = false
+        }
+
+        if (params.phenotype) {
+            phenotype = params.phenotype
+        } else {
+            log.error("retrieveGeneLevelAssociations: did not receive the required phenotype parameter")
+            looksOkay = false
+        }
+
+        if (looksOkay){
+            jsonReturn = restServerService.gatherGenePhenotypeAssociations( phenotype, gene, propertyList, preferredSampleGroup)
+            // insert translations if they exist
+            LinkedHashMap<String, String> tissueTranslations = [:] as LinkedHashMap
+            if ((jsonReturn?.variants)&&(jsonReturn?.variants?.size()>0)){
+                for (Map map in jsonReturn?.variants[0]){
+                    map.each{String k,v->
+                        if (k!="Gene"){
+                            String translation = g.message(code: "metadata.$k", default: "no translation")
+                            if ((!tissueTranslations.containsKey(k)) &&
+                                    (translation != "no translation")){
+                                tissueTranslations[k]=translation
+                            }
+//                            if (translation != "no translation"){
+//                                map[translation]=v
+//                                map.remove(k)
+//                            }
+                        }
+
+                    }
+                }
+                JSONObject translationTable = new JSONObject()
+                tissueTranslations.each{k,v->
+                    translationTable[k]=v
+                }
+                JSONObject holdTranslationTable = new JSONObject()
+                holdTranslationTable.put("TISSUE_TRANSLATIONS",translationTable)
+                jsonReturn?.variants[0] << holdTranslationTable
+            }
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+
+            jsonReturn =  slurper.parseText(proposedJsonString) as JSONArray;
+        }
+        render(status: 200, contentType: "application/json") {jsonReturn}
+        return
+    }
+
+
+
+
+
+
+
+
+    def retrieveModData() {
+        String gene = ""
+        boolean looksOkay = true
+        JSONObject jsonReturn = new JSONObject()
+
+
+        if (params.gene) {
+            gene = params.gene
+        }
+
+        jsonReturn['gene']=gene
+        jsonReturn['records']=new JSONArray()
+
+        if (looksOkay){
+            jsonReturn = restServerService.gatherModsData( gene )
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+            def slurper = new JsonSlurper()
+            jsonReturn =  slurper.parseText(proposedJsonString)
+        }
+
+        render(status: 200, contentType: "application/json") {jsonReturn}
+        return
+    }
+
+
+
+
+    def retrieveDnaseData() {
+        String tissue = ""
+        boolean looksOkay = true
+        JSONArray jsonReturn
+        JSONArray variants
+        List <String> variantList = []
+        def slurper = new JsonSlurper()
+
+        if (params.tissue) {
+            tissue = params.tissue
+        }
+
+        if (params.variants) {
+            variants = slurper.parseText( params.variants as String)  as JSONArray
+            variantList = variants as List <String>
+        } else {
+            looksOkay = false
+        }
+
+        if (looksOkay){
+            jsonReturn = restServerService.gatherDnaseData( tissue, variantList )
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+            jsonReturn =  slurper.parseText(proposedJsonString) as JSONArray;
+        }
+
+        render(status: 200, contentType: "application/json") {jsonReturn}
+        return
+    }
+
+
+
+    def retrieveH3k27acData() {
+        String tissue = ""
+        boolean looksOkay = true
+        JSONArray jsonReturn
+        JSONArray variants
+        List <String> variantList = []
+        def slurper = new JsonSlurper()
+
+        if (params.tissue) {
+            tissue = params.tissue
+        }
+
+        if (params.variants) {
+            variants = slurper.parseText( params.variants as String)  as JSONArray
+            variantList = variants as List <String>
+        } else {
+            looksOkay = false
+        }
+
+        if (looksOkay){
+            jsonReturn = restServerService.gatherH3k27acData( tissue, variantList )
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+            jsonReturn =  slurper.parseText(proposedJsonString) as JSONArray;
+        }
 
         render(status: 200, contentType: "application/json") {jsonReturn}
         return

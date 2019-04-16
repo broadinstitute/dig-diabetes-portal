@@ -6,6 +6,26 @@ span.credSetLevelHere{
     white-space: nowrap;
     font-size: 12px;
 }
+div.directorButtonHolder{
+    margin: 0 0 15px 20px;
+}
+button.directorButtonDetails{
+    margin: 5px;
+}
+div.holdMultipleElements{
+    padding: 4px 0 2px 10px;
+}
+div.geneName {
+    font-weight: bold;
+    color: blue;
+}
+div.genePosition{
+    font-style: italic;
+    font-size: 11px;
+}
+
+
+
 </style>
 
 <script id="genomeBrowserTemplate"  type="x-tmpl-mustache">
@@ -609,87 +629,448 @@ span.credSetLevelHere{
         </div>
         <div role="tabpanel" class="tab-pane exposeDynamicUiChooser" id="exposeDynamicUiTabHolder">
             {{#dynamicUiTab}}
-                <div class="row" style="border: none">
+                <div class="row" style="border: none; {{suppressionOfRange}}">
+                    <div id="configurableUiTabStorage" style="display: none"></div>
                     <div class="col-sm-12">
-                        <nav class="nav nav-pills nav-fill">
-                          <a class="nav-item nav-link active" href="#dynamicGeneHolder">Gene</a>
-                          <a class="nav-item nav-link" href="#dynamicVariantHolder">Variant</a>
-                          <a class="nav-item nav-link" href="#dynamicTissueHolder">Tissue</a>
-                          <a class="nav-item nav-link" href="#dynamicPhenotypeHolder">Phenotype</a>
-                        </nav>
+                    Current context:
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="contextHolder">
+                            <div id="contextDescription">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#collapseContextRefiner" aria-expanded="false" aria-controls="collapseContextRefiner">
+                            Refine context
+                         </button>
+                         <div class="collapse" id="collapseContextRefiner">
+                            <div  style="margin-top: 10px">
+                                <div class="card card-body">
+                                    <div id="contextControllersInDynamicUi">
+
+                                    </div>
+                                </div>
+                            </div>
+                         </div>
+                    </div>
+                    <div class="col-sm-2 text-right">
+                        <button class="btn btn-secondary" type="button" onclick="$('#retrieveMultipleRecordsTest').click()" aria-controls="collapseContextRefiner">
+                            Refresh table
+                         </button>
                     </div>
                 </div>
-                <div class="row" style="border: none">
+
+                <div class="row" style="border: none; {{suppressionOfAllDynamicUiTabs}}">
                     <div class="col-sm-12">
-                        <div role="tabpanel" class="tab-pane chromatinConfirmationChooser" id="dynamicGeneHolder">
-                            <h3>dynamicGeneHolder</h3>
-                        </div>
-                        <div role="tabpanel" class="tab-pane chromatinConfirmationChooser" id="dynamicVariantHolder">
-                            <h3>dynamicVariantHolder</h3>
-                        </div>
-                        <div role="tabpanel" class="tab-pane chromatinConfirmationChooser" id="dynamicTissueHolder">
-                            <h3>dynamicTissueHolder</h3>
-                        </div>
-                        <div role="tabpanel" class="tab-pane chromatinConfirmationChooser" id="dynamicPhenotypeHolder">
-                            <h3>dynamicPhenotypeHolder</h3>
-                        </div>
-                     </div>
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item active" style="{{suppressionOfGeneTable}}">
+                                <a class="nav-link sub-tab" href="#dynamicGeneHolder" role="tab" data-toggle="tab">Gene</a>
+                            </li>
+                            <li class="nav-item" style="{{suppressionOfVariantTable}}">
+                                <a class="nav-link sub-tab" href="#dynamicVariantHolder" role="tab" data-toggle="tab">Variant</a>
+                            </li>
+                            <li class="nav-item"  style="display: none">
+                                <a class="nav-link sub-tab" href="#dynamicTissueHolder" role="tab" data-toggle="tab">Tissue</a>
+                            </li>
+                            <li class="nav-item"  style="display: none">
+                                <a class="nav-link sub-tab" href="#dynamicPhenotypeHolder" role="tab" data-toggle="tab">Phenotype</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
+
+                <div class="tab-content sub-tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="dynamicGeneHolder">
+<div class="popup">Click me!
+  <span class="popuptext" id="myPopup"></span>
+</div>
+                        <div class="row">
+                            <div class="col-sm-12 sub-content">
+                                %{--<h3>Gene directors</h3>--}%
+                                <div class="row" style="display:block">
+                                    <div class="col-sm-12">
+                                        <div class="directorButtonHolder">
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div  style="margin: 0 0 -15px 10px"><p><g:message code="GenePrioritization.interface.help1"></g:message>
+<g:helpText title="gene.overall.help.header" placement="bottom" body="gene.overall.help.text"/>
+<g:message code="GenePrioritization.interface.help2"></g:message></p>
+
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                    <div class="datatable-control-box">
+                                        <div class="datatable-transpose-control">
+                                            <div class="tool-label">Transpose table&nbsp;&nbsp;<g:helpText title="table.transpose.help.header" placement="bottom" body="table.transpose.help.text"/></div>
+                                            <button class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table"
+                                            onclick = "mpgSoftware.dynamicUi.transposeThisTable('table.combinedGeneTableHolder')">
+                                                Transpose
+                                            </button>
+                                        </div>
+                                        <div class="datatable-cell-color-control">
+                                            <div class="tool-label">View:</div>
+
+
+                                            <button type="button" class="btn btn-secondary first-btn significance active" aria-label="click to organize by greatest significance"
+                                            title="click to organize by greatest significance" onclick="mpgSoftware.dynamicUi.setColorButtonActive(event,['tissues'],'table.combinedGeneTableHolder');">Significance
+                                            </button>
+
+                                            <button type="button" class="btn btn-secondary last-btn tissues" aria-label="click to organized by number of associated tissues"
+                                            title="click to organized by number of associated tissues" onclick="mpgSoftware.dynamicUi.setColorButtonActive(event,['significance'],'table.combinedGeneTableHolder');">Records
+
+                                            </button>
+                                        </div>
+
+
+                                        <div class="datatable-zoom-control">
+                                            <div class="tool-label">Zoom</div>
+                                            <button type="button" class="btn btn-default btn-secondary" aria-label="Zoom out"  title="click to zoom out"
+                                                onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicGeneHolder',false)">
+                                                <span class="glyphicon glyphicon-minus" aria-hidden="true"
+                                                onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicGeneHolder',false)"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-default btn-secondary" aria-label="Zoom in"  title="click to zoom in"
+                                                onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicGeneHolder',true)">
+                                                <span class="glyphicon glyphicon-plus" aria-hidden="true"
+                                                onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicGeneHolder',true)"></span>
+                                            </button>
+
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <table class="combinedGeneTableHolder">
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="dynamicVariantHolder">
+
+                        <div class="row" style="display:none">
+                            <div class="col-sm-12 sub-content">
+                                %{--<h3>Variant directors</h3>--}%
+                                <div class="directorButtonHolder">
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                                <div class="row">
+                                   %{--<div class="col-sm-12">--}%
+                                        %{--<h3> Results </h3>--}%
+                                    %{--</div>--}%
+                                    <div class="col-sm-12">
+                                        %{--<div class="refinementTable dynamicUiHolder">--}%
+
+                                        %{--</div>--}%
+                                        <div class="row">
+                                            <div class="col-sm-1">
+                                                <button type="button" class="btn btn-link transpose" title="click to transpose table"
+                                                style="font-size: 32pt"
+                                                onclick = "mpgSoftware.dynamicUi.transposeThisTable('table.combinedVariantTableHolder')">
+                                                    T
+                                                </button>
+                                            </div>
+                                            <div class="col-sm-9">
+
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <div class="datatable-zoom-control btn-vert-block">
+                                                    <button type="button" class="btn btn-default" aria-label="Zoom in"  title="click to zoom in"
+                                                        onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicVariantHolder',true)">
+                                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"
+                                                        onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicVariantHolder',true)"></span>
+                                                    </button>
+                                                    <button type="button" class="btn btn-default" aria-label="Zoom out"  title="click to zoom out"
+                                                        onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicVariantHolder',false)">
+                                                        <span class="glyphicon glyphicon-minus" aria-hidden="true"
+                                                        onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicVariantHolder',false)"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <table class="combinedVariantTableHolder" style="border:0">
+                                        </table>
+                                    </div>
+                               </div>
+
+
+                                        </div>
+                    <div role="tabpanel" class="tab-pane" id="dynamicTissueHolder" style="display: none">
+
+                        <div class="row">
+                            <div class="col-sm-12 sub-content">
+                                <h3>Tissue director</h3>
+                                <div class="directorButtonHolder">
+
+                                </div>
+                                <h3> Results </h3>
+                                <div class="resultsTableHolder">
+                                    <div class="dynamicUiHolder">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane " id="dynamicPhenotypeHolder"  style="display: none">
+
+                        <div class="row">
+                            <div class="col-sm-12 sub-content">
+                                <h3>Phenotype director</h3>
+                                <div class="directorButtonHolder">
+
+                                </div>
+                                <h3> Results </h3>
+                                <div class="resultsTableHolder">
+                                    <div class="dynamicUiHolder">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                 </div>
+
             {{/dynamicUiTab}}
         </div>
     </div>
 </script>
 
-<script id="organizeSignalSummaryHeader"  type="x-tmpl-mustache">
 
-            <div class="text-right" id="phenotypeLabel">{{pName}}</div>
-            <div class="row">
-                <div class="col-xs-12">
-                    <ul class="nav nav-tabs" role="tablist">
-                        {{#commonTab}}
-                            <li role="presentation" class="active variantTableLabels commonVariantChooser">
-                                <a href="#commonVariantTabHolder" aria-controls="commonVariantTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">Top variants: {{pName}}</a>
-                            </li>
-                        {{/commonTab}}
-                        {{#highImpactTab}}
-                            <li role="presentation" class="variantTableLabels highImpacVariantChooser">
-                                <a href="#highImpactVariantTabHolder" aria-controls="highImpactVariantTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">High-impact variants: {{pName}}</a>
-                            </li>
-                        {{/highImpactTab}}
-                        {{#credibleSetTab}}
-                            <li role="presentation" class="variantTableLabels credibleSetChooser">
-                               <a style="float:left;" href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">{{pName}}</a> <!--<span class='new-dataset-flag' style="display: inline-flex; margin:-3px 0 0 -30px">&nbsp;</span>-->
-                            </li>
-                        {{/credibleSetTab}}
-                        {{#incredibleSetTab}}
-                            <li role="presentation" class="variantTableLabels credibleSetChooser">
-                               <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">{{pName}}</a>
-                            </li>
-                        {{/incredibleSetTab}}
-                        {{#genePrioritizationTab}}
-                            <li role="presentation" class="variantTableLabels genePrioritizationChooser">
-                               <a href="#genePrioritizationTabHolder" aria-controls="genePrioritizationTabHolder" role="tab" data-toggle="tab">Gene prioritization</a>
-                            </li>
-                        {{/genePrioritizationTab}}
-                        {{#chromatinConformationTab}}
-                            <li role="presentation" class="variantTableLabels chromatinConformationChooser">
-                               <a href="#chromatinConformationTabHolder" aria-controls="chromatinConformationTabHolder" role="tab" data-toggle="tab">Chromatin conformation</a>
-                            </li>
-                        {{/chromatinConformationTab}}
-                        {{#dynamicUiTab}}
-                            <li role="presentation" class="variantTableLabels chromatinConformationChooser">
-                               <a href="#exposeDynamicUiTabHolder" aria-controls="exposeDynamicUiTabHolder" role="tab" data-toggle="tab">Dynamic UI</a>
-                            </li>
-                        {{/dynamicUiTab}}
-                    </ul>
-                </div>
+<script id="contextControllerDescriptionSection"  type="x-tmpl-mustache">
+       {{#directorButtons}}
+            <div class="row" style="border: none">
+                <button id="{{buttonId}}" class="btn btn-primary buttonsForManualContextRefinement" type="button" title="{{description}}">{{buttonName}}</button>
+                <input id="{{inputBoxId}}" value="" type="text" class="form-control input-default inputForInitiatingRefinementStep">
             </div>
-            <div id="cDataModalGoesHere"></div>
+            <div class="row" style="border: none; margin-top: 10px">
+            </div>
+        {{/directorButtons}}
+</script>
+
+
+
+
+
+<script id="contextDescriptionSection"  type="x-tmpl-mustache">
+ <div class="row" style="border: none">
+    <div class="col-sm-3 text-center">
+        chromosome
+    </div>
+    <div class="col-sm-9">
+        <span class="dynamicUiChromosome">{{chromosome}}</span>
+    </div>
+</div>
+<div class="row" style="border: none">
+    <div class="col-sm-3 text-center" >
+        starting extent
+    </div>
+    <div class="col-sm-9">
+        <button type="button" class="btn btn-secondary btn-xs" onclick="mpgSoftware.dynamicUi.adjustLowerExtent(-100000)"><<</button>
+        <button type="button" class="btn btn-secondary btn-xs" onclick="mpgSoftware.dynamicUi.adjustLowerExtent(-10000)"><</button>
+        <span class="dynamicUiGeneExtentBegin">{{extentBegin}}</span>
+        <button type="button" class="btn btn-secondary btn-xs" onclick="mpgSoftware.dynamicUi.adjustLowerExtent(10000)">></button>
+        <button type="button" class="btn btn-secondary btn-xs" onclick="mpgSoftware.dynamicUi.adjustLowerExtent(100000)">>></button>
+    </div>
+</div>
+ <div class="row" style="border: none">
+    <div class="col-sm-3 text-center">
+        ending position
+    </div>
+    <div class="col-sm-9">
+        <button type="button" class="btn btn-secondary btn-xs" onclick="mpgSoftware.dynamicUi.adjustUpperExtent(-100000)"><<</button>
+        <button type="button" class="btn btn-secondary btn-xs" onclick="mpgSoftware.dynamicUi.adjustUpperExtent(-10000)"><</button>
+        <span class="dynamicUiGeneExtentEnd">{{extentEnd}}</span>
+        <button type="button" class="btn btn-secondary btn-xs" onclick="mpgSoftware.dynamicUi.adjustUpperExtent(10000)">></button>
+        <button type="button" class="btn btn-secondary btn-xs" onclick="mpgSoftware.dynamicUi.adjustUpperExtent(100000)">>></button>
+    </div>
+</div>
+{{#additionalContext}}
+    <div class="col-sm-4">
+        {{name}}
+    </div>
+    <div class="col-sm-4">
+        {{value}}
+    </div>
+    <div class="col-sm-4">
+        {{qualifier}}
+    </div>
+{{/additionalContext}}
+</script>
+
+
+
+<script id="templateForDirectorButtonsOnATab"  type="x-tmpl-mustache">
+ <div class="row" style="border: none; margin-top: 10px; display: none">
+{{#directorButtons}}
+     <div class="row">
+        <div class="col-sm-2">
+            <button id="{{buttonId}}" class="btn btn-success directorButtonDetails"
+                                            type="button">{{buttonName}}</button>
+                                            <a href="{{reference}}"  target="_blank">
+                                            <span class="glyphicon glyphicon-link" aria-hidden="true"></span>
+                                            </a>
+        </div>
+        <div class="col-sm-10">
+            {{description}}
+        </div>
+     </div>
+{{/directorButtons}}
+</div>
+</script>
+
+
+
+
+
+<script id="organizeSignalSummaryHeader"  type="x-tmpl-mustache">
+            <div class="text-right" id="phenotypeLabel">{{pName}}</div>
+            {{#exposeGenesInRegionTab}}
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="row" style="margin-bottom: 20px">
+                            <div class="col-xs-2"></div>
+                            <div class="col-xs-8">
+                                <ul class="nav nav-justified nav-pills" role="tablist">
+                                    <li role="presentation" class="active variantTableLabels geneSpecificChooser">
+                                         <a href="#geneSpecificHolder" aria-controls="geneSpecificHolder" role="tab" data-toggle="tab"
+                                            onclick="mpgSoftware.traitsFilter.massageLZ();" class="top-level" style="margin: 20px">Gene specific data</a>
+                                    </li>
+                                    <li role="presentation" class=" variantTableLabels generalRangeChooser">
+                                           <a href="#generalRangeHolder" aria-controls="generalRangeHolder" role="tab" data-toggle="tab"
+                                            onclick="mpgSoftware.traitsFilter.massageLZ();" class="top-level" style="margin: 20px">Analyze genomic region</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="tab-content">
+
+                            <div role="tabpanel" class="active tab-pane geneSpecificHolder" id="geneSpecificHolder">
+
+                                <ul class="nav nav-tabs" role="tablist">
+                                    {{#commonTab}}
+                                        <li role="presentation" class="active variantTableLabels commonVariantChooser">
+                                            <a href="#commonVariantTabHolder" aria-controls="commonVariantTabHolder" role="tab" data-toggle="tab"
+                                            onclick="mpgSoftware.traitsFilter.massageLZ();">Top variants: {{pName}}</a>
+                                        </li>
+                                    {{/commonTab}}
+                                    {{#highImpactTab}}
+                                        <li role="presentation" class="variantTableLabels highImpacVariantChooser">
+                                            <a href="#highImpactVariantTabHolder" aria-controls="highImpactVariantTabHolder" role="tab" data-toggle="tab"
+                                            onclick="mpgSoftware.traitsFilter.massageLZ();">High-impact variants: {{pName}}</a>
+                                        </li>
+                                    {{/highImpactTab}}
+                                </ul>
+
+                            </div>
+
+                            <div role="tabpanel" class="tab-pane generalRangeHolder" id="generalRangeHolder">
+
+                                <ul class="nav nav-tabs" role="tablist">
+                                    {{#credibleSetTab}}
+                                        <li role="presentation" class="active variantTableLabels credibleSetChooser">
+                                           <a style="float:left;" href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab"
+                                           onclick="mpgSoftware.traitsFilter.massageLZ();">{{pName}}</a>
+                                           <!--<span class='new-dataset-flag' style="display: inline-flex; margin:-3px 0 0 -30px">&nbsp;</span>-->
+                                        </li>
+                                    {{/credibleSetTab}}
+                                    {{#incredibleSetTab}}
+                                        <li role="presentation" class="variantTableLabels credibleSetChooser">
+                                           <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab"
+                                           onclick="mpgSoftware.traitsFilter.massageLZ();">{{pName}}</a>
+                                        </li>
+                                    {{/incredibleSetTab}}
+                                    {{#genePrioritizationTab}}
+                                        <li role="presentation" class="variantTableLabels genePrioritizationChooser">
+                                           <a href="#genePrioritizationTabHolder" aria-controls="genePrioritizationTabHolder" role="tab"
+                                           data-toggle="tab">Gene prioritization</a>
+                                        </li>
+                                    {{/genePrioritizationTab}}
+                                    {{#chromatinConformationTab}}
+                                        <li role="presentation" class="variantTableLabels chromatinConformationChooser">
+                                           <a href="#chromatinConformationTabHolder" aria-controls="chromatinConformationTabHolder" role="tab"
+                                           data-toggle="tab">Chromatin conformation</a>
+                                        </li>
+                                    {{/chromatinConformationTab}}
+                                    {{#dynamicUiTab}}
+                                        <li role="presentation" class="variantTableLabels chromatinConformationChooser">
+                                           <a href="#exposeDynamicUiTabHolder" aria-controls="exposeDynamicUiTabHolder" role="tab"
+                                           data-toggle="tab">Genes in region: {{pName}}</a>
+                                        </li>
+                                    {{/dynamicUiTab}}
+                                </ul>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            {{/exposeGenesInRegionTab}}
+            {{^exposeGenesInRegionTab}}
+                <div class="row">
+                    <div class="col-xs-12">
+                        <ul class="nav nav-tabs" role="tablist">
+                            {{#commonTab}}
+                                <li role="presentation" class="active variantTableLabels commonVariantChooser">
+                                    <a href="#commonVariantTabHolder" aria-controls="commonVariantTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">Top variants: {{pName}}</a>
+                                </li>
+                            {{/commonTab}}
+                            {{#highImpactTab}}
+                                <li role="presentation" class="variantTableLabels highImpacVariantChooser">
+                                    <a href="#highImpactVariantTabHolder" aria-controls="highImpactVariantTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">High-impact variants: {{pName}}</a>
+                                </li>
+                            {{/highImpactTab}}
+                            {{#credibleSetTab}}
+                                <li role="presentation" class="variantTableLabels credibleSetChooser">
+                                   <a style="float:left;" href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">{{pName}}</a> <!--<span class='new-dataset-flag' style="display: inline-flex; margin:-3px 0 0 -30px">&nbsp;</span>-->
+                                </li>
+                            {{/credibleSetTab}}
+                            {{#incredibleSetTab}}
+                                <li role="presentation" class="variantTableLabels credibleSetChooser">
+                                   <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">{{pName}}</a>
+                                </li>
+                            {{/incredibleSetTab}}
+                            {{#genePrioritizationTab}}
+                                <li role="presentation" class="variantTableLabels genePrioritizationChooser">
+                                   <a href="#genePrioritizationTabHolder" aria-controls="genePrioritizationTabHolder" role="tab" data-toggle="tab">Gene prioritization</a>
+                                </li>
+                            {{/genePrioritizationTab}}
+                            {{#chromatinConformationTab}}
+                                <li role="presentation" class="variantTableLabels chromatinConformationChooser">
+                                   <a href="#chromatinConformationTabHolder" aria-controls="chromatinConformationTabHolder" role="tab" data-toggle="tab">Chromatin conformation</a>
+                                </li>
+                            {{/chromatinConformationTab}}
+                            {{#dynamicUiTab}}
+                                <li role="presentation" class="variantTableLabels chromatinConformationChooser">
+                                   <a href="#exposeDynamicUiTabHolder" aria-controls="exposeDynamicUiTabHolder" role="tab" data-toggle="tab">Genes in region: {{pName}}</a><span class="experimental-flag">&nbsp;</span>
+                                </li>
+                            {{/dynamicUiTab}}
+                        </ul>
+                    </div>
+                </div>
+            {{/exposeGenesInRegionTab}}
+            %{--<div id="cDataModalGoesHere"></div>--}%
+
+
+
+
+
 </script>
 <script id="organizeSignalSummaryCommon"  type="x-tmpl-mustache">
 
                 {{#commonTab}}
-
                         <div class="row"   style="border: none">
                             <div class="col-xs-12">
                                 <div class="variantCategoryHolder">
@@ -1046,8 +1427,11 @@ span.credSetLevelHere{
             <div class="row">
                 <div class="col-xs-12">
                     <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="variantTableLabels commonVariantChooser"><a href="#commonVariantTabHolder" aria-controls="commonVariantTabHolder" role="tab" data-toggle="tab">Top variants: {{pName}}</a></li>
-                        <li role="presentation" class="active variantTableLabels highImpacVariantChooser"><a href="#highImpactVariantTabHolder" aria-controls="highImpactVariantTabHolder" role="tab" data-toggle="tab">High-impact variants: {{pName}}</a></li>
+                        <li role="presentation" class="variantTableLabels commonVariantChooser">
+                            <a href="#commonVariantTabHolder" aria-controls="commonVariantTabHolder" role="tab" data-toggle="tab">Top variants: {{pName}}</a>
+                        </li>
+                            <li role="presentation" class="active variantTableLabels highImpacVariantChooser"><a href="#highImpactVariantTabHolder" aria-controls="highImpactVariantTabHolder" role="tab" data-toggle="tab">High-impact variants: {{pName}}</a>
+                        </li>
                     </ul>
                 </div>
             </div>

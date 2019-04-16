@@ -1913,6 +1913,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var exposeGeneComparisonIndicator = [];
         var exposeVariantComparisonIndicator = [];
         var exposeDynamicUiIndicator = [];
+        var exposeGenesInRegionTab = [];
 
         if (additionalParameters.exposePredictedGeneAssociations === "1"){
             genePrioritizationIndicator.push(1);
@@ -1921,7 +1922,44 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             chromatinConformationIndicator.push(1);
         }
         if (additionalParameters.exposeDynamicUi === "1"){
-            exposeDynamicUiIndicator.push(1);
+            var phenotype = additionalParameters.defaultPhenotype;
+            var chromosome =  (additionalParameters.geneChromosome.substr(0,3)==='chr')?
+                additionalParameters.geneChromosome.substr(3):
+                additionalParameters.geneChromosome;
+            if ( typeof additionalParameters.currentPhenotype !== 'undefined'){
+                phenotype =  additionalParameters.currentPhenotype;
+            }
+            var suppressionOfRange = "display: none";
+            if (additionalParameters.exposeRegionAdjustmentOnGenePage === "1"){
+                suppressionOfRange = "";
+            }
+            var suppressionOfGeneTable = "display: none";
+            if (additionalParameters.exposeGeneTableOnDynamicUi === "1"){
+                suppressionOfGeneTable = "";
+            }
+            var suppressionOfVariantTable = "display: none";
+            if (additionalParameters.exposeVariantTableOfDynamicUi === "1"){
+                suppressionOfVariantTable = "";
+            }
+            var suppressionOfAllDynamicUiTabs = "";
+            if ((additionalParameters.exposeGeneTableOnDynamicUi === "0") && (additionalParameters.exposeVariantTableOfDynamicUi === "0")){
+                suppressionOfAllDynamicUiTabs = "display: none";
+            }
+
+            exposeDynamicUiIndicator.push(
+                {
+                    suppressionOfRange:suppressionOfRange,
+                    suppressionOfGeneTable:suppressionOfGeneTable,
+                    suppressionOfVariantTable:suppressionOfVariantTable,
+                    suppressionOfAllDynamicUiTabs:suppressionOfAllDynamicUiTabs,
+                    generalizedInputId:additionalParameters.generalizedInputId,
+                    generalizedGoButtonId:additionalParameters.generalizedGoButtonId,
+                    geneExtentBegin:additionalParameters.geneExtentBegin,
+                    geneExtentEnd:additionalParameters.geneExtentEnd,
+                    chromosome:chromosome,
+                    pname: phenotype
+                }
+            );
         }
         if (additionalParameters.exposeGeneComparisonTable === "1"){
             exposeGeneComparisonIndicator.push(1);
@@ -1932,6 +1970,10 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         if ((true) &&(additionalParameters.exposeGeneComparisonTable === "1")) { // we only need tabs if we have both jeans and variant tables
              weNeedToPutTablesInTabs.push(1);
         }
+        if (additionalParameters.exposeGenesInRegionTab === "1"){
+            exposeGenesInRegionTab.push(1);
+        }
+
 
     return {commonTab: displayCommonTab,
         highImpactTab: displayHighImpactTab,
@@ -1943,11 +1985,10 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         exposeGeneComparisonSubTab:exposeGeneComparisonIndicator,
         exposeVariantComparisonSubTab:exposeVariantComparisonIndicator,
         dynamicUiTab:exposeDynamicUiIndicator,
-        weNeedToPutTablesInTabs:weNeedToPutTablesInTabs};
+        weNeedToPutTablesInTabs:weNeedToPutTablesInTabs,
+        exposeGenesInRegionTab:exposeGenesInRegionTab};
 
-}
-
-
+    }
 
 
 
@@ -2052,9 +2093,14 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             geneExtentEnd:additionalParameters.geneExtentEnd,
             pname:additionalParameters.pname
         }];
+        if (additionalParameters.exposeCommonVariantTab==="0"){
+            displayCommonTab = []; //don't display the common variant tab unless we want it
+        }
+        if (!additionalParameters.exposeRareVariantTab==="0"){
+            displayHighImpactTab = [];//don't display the high-impact variant tab unless want it
+        }
         if (regionSpecificVersion === 1){
-            //displayCommonTab = [];
-            displayHighImpactTab = [];
+            displayHighImpactTab = []; //don't display the high-impact variant tab in the case of a region search
         } else {
             if ((typeof data.userQueryContext !== 'undefined')&&
                 (!data.userQueryContext.gene)){
@@ -2083,8 +2129,24 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 genePageConfigurationParameters
                     ));
         }
+        $("ul.nav a.top-level").click(function (e) {
+            //$(this).tab('show');
+            if ($(this).attr('href') === "#generalRangeHolder"){
+                _.forEach($('div.generalRangeHolder ul li a'), function (element){
+                    var domElement = $(element);
+                    if (!domElement.hasClass('active')){
+                        domElement.click();
+                    }
+                });
+                $($('div.generalRangeHolder ul li.active a')).click();
+            } else if ($(this).attr('href') === "#geneSpecificHolder"){
+                $($('div.geneSpecificHolder ul li a')).click();
+                $($('div.geneSpecificHolder ul li.active a')).click();
+            }
+        });
 
-
+        mpgSoftware.dynamicUi.installDirectorButtonsOnTabs(additionalParameters);
+        mpgSoftware.dynamicUi.modifyScreenFields({},additionalParameters);
 
         $('div.credibleSetHeader input.credSetStartPos').val(""+additionalParameters.geneExtentBegin);
         $('div.credibleSetHeader input.credSetEndPos').val(""+additionalParameters.geneExtentEnd);

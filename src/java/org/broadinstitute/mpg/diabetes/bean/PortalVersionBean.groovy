@@ -42,6 +42,8 @@ class PortalVersionBean {
     private String genePageWarning=""
     private String credibleSetInfoCode=""
     private String blogId=""
+    private Integer exposeCommonVariantTab=0
+    private Integer exposeRareVariantTab=0
     private Integer variantAssociationsExists=0
     private Integer  geneLevelDataExists=0
     private Integer exposeGrsModule=0
@@ -62,6 +64,10 @@ class PortalVersionBean {
     private Integer exposeVariantAndAssociationTable=0
     private Integer exposeIgvDisplay=0
     private Integer exposeIndependentBurdenTest=0
+    private Integer exposeGenesInRegionTab=0
+    private Integer exposeRegionAdjustmentOnGenePage=0
+    private Integer exposeGeneTableOnDynamicUi=0
+    private Integer exposeVariantTableOfDynamicUi=0
 
 
 
@@ -93,6 +99,8 @@ class PortalVersionBean {
                              String genePageWarning,
                              String credibleSetInfoCode,
                              String blogId,
+                             Integer exposeCommonVariantTab,
+                             Integer exposeRareVariantTab,
                              Integer variantAssociationsExists,
                              Integer geneLevelDataExists,
                              Integer exposeGrsModule,
@@ -112,7 +120,11 @@ class PortalVersionBean {
                              Integer exposeDatasetHierarchy,
                              Integer exposeVariantAndAssociationTable,
                              Integer exposeIgvDisplay,
-                             Integer exposeIndependentBurdenTest
+                             Integer exposeIndependentBurdenTest,
+                             Integer exposeGenesInRegionTab,
+                             Integer exposeRegionAdjustmentOnGenePage,
+                             Integer exposeGeneTableOnDynamicUi,
+                             Integer exposeVariantTableOfDynamicUi
     ){
         this.portalType = portalType;
         this.portalDescription = portalDescription;
@@ -142,6 +154,8 @@ class PortalVersionBean {
         this.genePageWarning = genePageWarning
         this.credibleSetInfoCode = credibleSetInfoCode
         this.blogId = blogId
+        this.exposeCommonVariantTab = exposeCommonVariantTab
+        this.exposeRareVariantTab = exposeRareVariantTab
         this.variantAssociationsExists =  variantAssociationsExists
         this.geneLevelDataExists = geneLevelDataExists
         this.exposeGrsModule = exposeGrsModule
@@ -162,6 +176,10 @@ class PortalVersionBean {
         this.exposeVariantAndAssociationTable = exposeVariantAndAssociationTable
         this.exposeIgvDisplay = exposeIgvDisplay
         this.exposeIndependentBurdenTest = exposeIndependentBurdenTest
+        this.exposeGenesInRegionTab = exposeGenesInRegionTab
+        this.exposeRegionAdjustmentOnGenePage = exposeRegionAdjustmentOnGenePage
+        this.exposeGeneTableOnDynamicUi = exposeGeneTableOnDynamicUi
+        this.exposeVariantTableOfDynamicUi = exposeVariantTableOfDynamicUi
     }
 
 
@@ -292,6 +310,14 @@ class PortalVersionBean {
         return blogId
     }
 
+    public Integer getExposeCommonVariantTab() {
+        return exposeCommonVariantTab
+    }
+
+    public Integer getExposeRareVariantTab() {
+        return exposeRareVariantTab
+    }
+
     public Integer getVariantAssociationsExists() {
         return variantAssociationsExists
     }
@@ -365,6 +391,18 @@ class PortalVersionBean {
     public Integer getExposeIndependentBurdenTest(){
         return exposeIndependentBurdenTest
     }
+    public Integer getExposeGenesInRegionTab(){
+        return exposeGenesInRegionTab
+    }
+    public Integer getExposeRegionAdjustmentOnGenePage(){
+        return exposeRegionAdjustmentOnGenePage
+    }
+    public Integer getExposeGeneTableOnDynamicUi(){
+        return exposeGeneTableOnDynamicUi
+    }
+    public Integer getExposeVariantTableOfDynamicUi(){
+        return exposeVariantTableOfDynamicUi
+    }
 
 
 
@@ -412,7 +450,6 @@ class PortalVersionBean {
             }
         }
         return new JsonBuilder(objectWeAreBuilding).toPrettyString()
-//        return proposedJsonString
     }
 
 

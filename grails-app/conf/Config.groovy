@@ -136,6 +136,7 @@ toddTestServer = new ServerBean("KB-ToddTest-Broad","http://dig-prod.broadinstit
 digdevmarcin = new ServerBean("KB-dev-Broad", "http://dig-api-dev.broadinstitute.org/dev/gs/")
 digawsdevnewKB = new ServerBean("KB-dev-2017-aws", "http://ec2-34-229-106-174.compute-1.amazonaws.com:8090/dccservices/")
 digawsdevWorkflowKB = new ServerBean("KB-dev-2017-aws-8089", "http://ec2-34-229-106-174.compute-1.amazonaws.com:8089/dccservices/")
+digawsdevWorkflowKBrevised = new ServerBean("KB-dev-2017-aws-8090", "http://ec2-34-229-106-174.compute-1.amazonaws.com:8090/dccservices/")
 digawsdevnewKB_fed = new ServerBean("KB-dev-fed-2017-aws", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8085/dccservices/distributed/")
 digawsdevnewKB_fed = new ServerBean("KB-dev-fed-2017-aws", "http://ec2-34-229-106-174.compute-1.amazonaws.com:8085/dccservices/distributed/")
 digawsqanewKB = new ServerBean("KB-qa-2017-aws", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8090/dccservices/")
@@ -159,8 +160,9 @@ digawsqanewKB_fed_dedicated_EBIv2 = new ServerBean("Dedicated EBI QA fed KB - Us
 
 
 // this will be your default
-//defaultRestServer = digdevlocalServer
-defaultRestServer = digawsdevnewKB
+defaultRestServer = digawsdevWorkflowKBrevised
+
+
 
 
 getRestServerList = [
@@ -168,9 +170,10 @@ getRestServerList = [
         digdevlocalFederatedServer,
         digAWSKBV2prodServer,
         federatedAwsProdKBV2Server,
-        digawsdevnewKB,
+        //digawsdevnewKB,
         digawsqanewKB,
         digawsdevWorkflowKB,
+        digawsdevWorkflowKBrevised,
         digawsqanewKB_fed,
         digawsqanewKB_fed_dedicated,
         ebiKB1,
@@ -179,7 +182,6 @@ getRestServerList = [
         digawsprodmiKB,
         digawsprodstrokeKB,
         digawsdemoibdKB
-//>>>>>>> phewasForest
 ]
 
 
@@ -311,13 +313,14 @@ environments {
 
 //       grails.serverURL = "http://www.type2diabetesgenetics.org"
 //        grails.serverURL = "http://www.type2diabetesgenetics.org"
-//        grails.serverURL = "http://variant2function.org"
+        grails.serverURL = "http://variant2function.org"
 
 //        grails.serverURL = "http://demo52k.us-east-1.elasticbeanstalk.com"
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 
-     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+//     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+
 
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
 
@@ -620,6 +623,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                 "gene.genePage.warning",
                                                 "",
                                                 '5010306206573083521',
+                                                1, // expose the common variant tab have on the gene page
+                                                1, // expose the high-impact variant tab on the gene page
                                                 1, // do we have parent level associations to show
                                                 1, // Do we have gene level associations to show?
                                                 1, // add a link to the GRS module into the headers. Note that the GRS module is available whether or not the link is in place
@@ -635,12 +640,16 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                 0,  // access UC San Diego data remotely? I'm not sure if this works anymore
                                                 0, // LEDGE tab on the gene page
                                                 0, // Hi-C tab on the gene page
-                                                0, // expose dynamic UI
+                                                1, // expose dynamic UI
                                                 0, // expose the data set hierarchy in the sunburst visualization on the data page
                                                 0, // expose the old school variant and association table.  Potentially useful for debugging
                                                 0, // expose the IGV interface in its own accordion section
-                                                0  // expose an accordion section with the burden test on the gene page
-), // default data set used for a LocusZoom plot
+                                                0, // expose an accordion section with the burden test on the gene page
+                                                0, // expose the 'genes in region' tab on the gene page
+                                                0, // expose the region adjuster for the gene page
+                                                0, // expose the gene table on the dynamic UI
+                                                0  // expose the variant table on the dynamic UI
+                                            ),
                                   new PortalVersionBean("stroke",
                                                           "Stroke",
                                                           "mdv75",
@@ -669,6 +678,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "",
                                           "",
                                           '7961982646849648720',
+                                          1, // expose the common variant tab have on the gene page
+                                          1, // expose the high-impact variant tab on the gene page
                                           1,
                                           0,
                                           0,
@@ -684,7 +695,11 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0, // expose the data set hierarchy in the sunburst visualization on the data page
                                           0, // expose the old school variant and association table.  Potentially useful for debugging
                                           0, // expose the IGV interface in its own accordion section
-                                          0  // expose an accordion section with the burden test on the gene page
+                                          0,  // expose an accordion section with the burden test on the gene page
+                                          0,  // expose the 'genes in region' tab on the gene page
+                                          0, // expose the region adjuster for the gene page
+                                          0, // expose the gene table on the dynamic UI
+                                          0  // expose the variant table on the dynamic UI
                                   ),
                                   new PortalVersionBean("mi",
                                                           "Myocardial Infarction",
@@ -714,6 +729,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "",
                                           "",
                                           '3944203828206499294',
+                                          1, // expose the common variant tab have on the gene page
+                                          1, // expose the high-impact variant tab on the gene page
                                           1,
                                           0,
                                           0,
@@ -730,12 +747,16 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0, // expose the data set hierarchy in the sunburst visualization on the data page
                                           0, // expose the old school variant and association table.  Potentially useful for debugging
                                           0, // expose the IGV interface in its own accordion section
-                                          0  // expose an accordion section with the burden test on the gene page
+                                          0,  // expose an accordion section with the burden test on the gene page
+                                          0,  // expose the 'genes in region' tab on the gene page
+                                          0, // expose the region adjuster for the gene page
+                                          0, // expose the gene table on the dynamic UI
+                                          0  // expose the variant table on the dynamic UI
                                   ),
                                   new PortalVersionBean("ibd",
                                           //"Inflammatory Bowel Disease",
                                           "Variant to Function",
-                                                          "mdv80",
+                                                          "mdv37",//"mdv80",
                                           "T2DKP", // name of KB data we want
                                                           "CD",// another option would be "IBD"
                                                             "GWAS_IBDGenomics_eu_mdv80",
@@ -763,6 +784,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "",
                                           "",
                                           '7857348124942584918',
+                                          0, // expose the common variant tab have on the gene page
+                                          0, // expose the high-impact variant tab on the gene page
                                           1,
                                           0,
                                           0,
@@ -774,12 +797,16 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           0,
                                           0,
-                                          1,1, // Hi-C tab on the gene page
-                                          0,  // expose dynamic UI
+                                          0,0, // Hi-C tab on the gene page
+                                          1,  // expose dynamic UI
                                           0, // expose the data set hierarchy in the sunburst visualization on the data page
                                           0, // expose the old school variant and association table.  Potentially useful for debugging
                                           0, // expose the IGV interface in its own accordion section
-                                          0  // expose an accordion section with the burden test on the gene page
+                                          0,  // expose an accordion section with the burden test on the gene page
+                                          1,  // expose the 'genes in region' tab on the gene page
+                                          0, // expose the region adjuster for the gene page
+                                          0, // expose the gene table on the dynamic UI
+                                          0  // expose the variant table on the dynamic UI
                                   ),
                                   new PortalVersionBean("epilepsy",
                                           "Epilepsy",
@@ -809,6 +836,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "",
                                           "",
                                           '5414069947481666863',
+                                          1, // expose the common variant tab have on the gene page
+                                          1, // expose the high-impact variant tab on the gene page
                                           0,
                                           1,
                                           0,
@@ -825,7 +854,11 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0, // expose the data set hierarchy in the sunburst visualization on the data page
                                           0, // expose the old school variant and association table.  Potentially useful for debugging
                                           0, // expose the IGV interface in its own accordion section
-                                          0  // expose an accordion section with the burden test on the gene page
+                                          0,  // expose an accordion section with the burden test on the gene page
+                                          0,  // expose the 'genes in region' tab on the gene page
+                                          0, // expose the region adjuster for the gene page
+                                          0, // expose the gene table on the dynamic UI
+                                          0  // expose the variant table on the dynamic UI
                                   ),
                                   new PortalVersionBean("sleep",
                                           "Sleep",
@@ -855,6 +888,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "",
                                           "",
                                           '3616035242050290841',
+                                          1, // expose the common variant tab have on the gene page
+                                          1, // expose the high-impact variant tab on the gene page
                                           1,
                                           0,
                                           0,
@@ -870,8 +905,14 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0, // expose the data set hierarchy in the sunburst visualization on the data page
                                           0, // expose the old school variant and association table.  Potentially useful for debugging
                                           0, // expose the IGV interface in its own accordion section
-                                          0  // expose an accordion section with the burden test on the gene page
+                                          0,  // expose an accordion section with the burden test on the gene page
+                                          0,  // expose the 'genes in region' tab on the gene page
+                                          0, // expose the region adjuster for the gene page
+                                          0, // expose the gene table on the dynamic UI
+                                          0  // expose the variant table on the dynamic UI
                                   )
 ]
+
+
 
 

@@ -12,6 +12,7 @@ import org.broadinstitute.mpg.diabetes.bean.PortalVersionBean
 import org.broadinstitute.mpg.diabetes.bean.ServerBean
 import org.broadinstitute.mpg.diabetes.metadata.DataSet
 import org.broadinstitute.mpg.diabetes.metadata.Experiment
+import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean
 import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.PropertyBean
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
@@ -52,15 +53,26 @@ class RestServerService {
     private String GET_GENE_DATA_URL = "getGeneData"
     private String GET_DATA_AGGREGATION_URL = "getAggregatedData"
     private String GET_TEMPORARY_EQTL_URL = "http://ec2-34-237-63-26.compute-1.amazonaws.com:8083/dccgraph/"
-    private String  GET_DATA_AGGREGATION_BY_RANGE_URL= "getAggregatedData"
-    private String  GET_DATA_AGGREGATION_BY_RANGE_PHEWAS_URL= "getAggregatedData/PheWAS"
-    private String  GET_DATA_AGGREGATION_BY_RANGE_PHENOTYPES_URL= "getAggregatedData/phenotypes"
-    private String  GET_DATA_AGGREGATION_BY_RANGE_VARIANTS_URL= "getAggregatedData/variants"
-    private String  GET_DATA_AGGREGATION_PHEWAS_URL= "getAggregatedData/PheWAS"
-    private String  GET_BOTTOM_LINE_VARIANTS_URL= "gene/common"
-    private String  GET_BOTTOM_LINE_VARIANTS_BY_ID_URL= "gene/gtex_by_id"
-    private String  GET_BOTTOM_LINE_PHENOTYPES_VIA_VARIANTS_URL= "variant/phenotype/array"
-    private String  GET_TISSUE_ASSOCIATION_BASED_ON_LDSR_URL= "ld_score/by_phenotype/object"
+    private String GET_TEMPORARY_MODS_URL = "http://ec2-34-229-106-174.compute-1.amazonaws.com:8090/dccservices/"
+    private String GET_DATA_AGGREGATION_BY_RANGE_URL= "getAggregatedData"
+    private String GET_DATA_AGGREGATION_BY_RANGE_PHEWAS_URL= "getAggregatedData/PheWAS"
+    private String GET_DATA_AGGREGATION_BY_RANGE_PHENOTYPES_URL= "getAggregatedData/phenotypes"
+    private String GET_DATA_AGGREGATION_BY_RANGE_VARIANTS_URL= "getAggregatedData/variants"
+    private String GET_DATA_AGGREGATION_PHEWAS_URL= "getAggregatedData/PheWAS"
+    private String GET_BOTTOM_LINE_VARIANTS_URL= "gene/common"
+    private String GET_BOTTOM_LINE_VARIANTS_BY_ID_URL= "gene/gtex_by_id"
+    private String GET_BOTTOM_LINE_PHENOTYPES_VIA_VARIANTS_URL= "variant/phenotype/array"
+    private String GET_TISSUE_ASSOCIATION_BASED_ON_LDSR_URL= "ld_score/by_phenotype/object"
+    private String GET_VARIANT_GTEX_EQTL_FROM_URL= "ledge/gtex_eqtl/object"
+    private String GET_EQTLS_FOR_A_VARIANT_LIST_URL= "testcalls/ledge/eqtl/object"
+    private String GET_VARIANT_ECAVIAR_COLOCALIZATION_FROM_URL= "testcalls/ecaviar/colocalization_max/object"
+    private String GET_VARIANT_COLOC_COLOCALIZATION_FROM_URL= "testcalls/ecaviar/colocalization_expanded_max/object"
+    private String GET_REGION_FROM_ABC_URL= "testcalls/abc/region/object"
+    private String GET_GENE_BASED_RECORDS_FROM_DEPICT_URL= "testcalls/depict/region/object"
+    private String GET_GENE_BASED_RECORDS_FROM_MODS_URL= "testcalls/knockout/object"
+    private String GET_GENESET_RECORDS_FROM_DEPICT_URL= "testcalls/depict/genepathway/object"
+    private String GET_DNASE_RECORDS_URL= "testcalls/region/dnase/object"
+    private String GET_H3K27AC_RECORDS_URL= "testcalls/region/h3k27ac/object"
     private String GET_BOTTOM_LINE_RESULTS_URL= "graph/meta/variant/object"
     private String GET_HAIL_DATA_URL = "getHailData"
     private String GET_SAMPLE_DATA_URL = "getSampleData"
@@ -350,6 +362,8 @@ class RestServerService {
                     existingPortalVersionBean.getGenePageWarning(),
                     existingPortalVersionBean.getCredibleSetInfoCode(),
                     existingPortalVersionBean.getBlogId(),
+                    existingPortalVersionBean.getExposeCommonVariantTab(),
+                    existingPortalVersionBean.getExposeRareVariantTab(),
                     existingPortalVersionBean.getVariantAssociationsExists(),
                     existingPortalVersionBean.getGeneLevelDataExists(),
                     existingPortalVersionBean.getExposeGrsModule(),
@@ -369,8 +383,13 @@ class RestServerService {
                     existingPortalVersionBean.getExposeDatasetHierarchy(),
                     existingPortalVersionBean.getExposeVariantAndAssociationTable(),
                     existingPortalVersionBean.getExposeIgvDisplay(),
-                    existingPortalVersionBean.getExposeIndependentBurdenTest()
+                    existingPortalVersionBean.getExposeIndependentBurdenTest(),
+                    existingPortalVersionBean.getExposeGenesInRegionTab(),
+                    existingPortalVersionBean.getExposeRegionAdjustmentOnGenePage(),
+                    existingPortalVersionBean.getExposeGeneTableOnDynamicUi(),
+                    existingPortalVersionBean.getExposeVariantTableOfDynamicUi()
             )
+
             removePortalVersion(portalType)
         } else {
             newPortalVersionBean = new PortalVersionBean( portalType,  "",  mdvName )
@@ -643,26 +662,29 @@ class RestServerService {
         RestResponse response
         RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
         StringBuilder logStatus = new StringBuilder()
+        String completeUrl = currentRestServer + targetUrl
         try {
-            log.info("About to attempt call to ${targetUrl}")
-            response = rest.get(currentRestServer + targetUrl) {
+            log.info("About to attempt call to ${completeUrl}")
+            response = rest.get(completeUrl) {
                 contentType "text/plain"
             }
         } catch (Exception exception) {
-            log.error("NOTE: exception on post to backend. Target=${targetUrl}")
+            log.error("NOTE: exception on post to backend. Target=${completeUrl}")
             log.error(exception.toString())
-            logStatus << "NOTE: exception on post to backend. Target=${targetUrl}"
+            logStatus << "NOTE: exception on post to backend. Target=${completeUrl}"
         }
 
         if (response?.responseEntity?.statusCode?.value == 200) {
             returnValue = response.text
             logStatus << """status: ok""".toString()
         } else {
-            logStatus << """status: failed""".toString()
+            logStatus << """status: failed (${response?.responseEntity?.statusCode?.value}) on ${completeUrl}""".toString()
         }
         log.info(logStatus)
         return returnValue
     }
+
+
 
     /***
      * This is the underlying routine for every call to the rest backend.
@@ -675,24 +697,25 @@ class RestServerService {
         Date beforeCall = new Date()
         Date afterCall
         RestResponse response
+        String completeUrl = currentRestServer + targetUrl
         RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
         StringBuilder logStatus = new StringBuilder()
         try {
-            log.info("About to attempt call to ${targetUrl}")
-            response = rest.post(currentRestServer + targetUrl) {
+            log.info("About to attempt call to ${completeUrl}")
+            response = rest.post(completeUrl) {
                 contentType "application/json"
                 json drivingJson
             }
             afterCall = new Date()
         } catch (Exception exception) {
-            log.error("NOTE: exception on post to backend. Target=${targetUrl}, driving Json=${drivingJson}")
+            log.error("NOTE: exception on post to backend. Target=${completeUrl}, driving Json=${drivingJson}")
             log.error(exception.toString())
-            logStatus << "NOTE: exception on post to backend. Target=${targetUrl}, driving Json=${drivingJson}"
+            logStatus << "NOTE: exception on post to backend. Target=${completeUrl}, driving Json=${drivingJson}"
             afterCall = new Date()
         }
         logStatus << """
 SERVER POST:
-url=${currentRestServer + targetUrl},
+url=${completeUrl},
 parm=${drivingJson},
 time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 """.toString()
@@ -711,7 +734,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             }
             logStatus << """
 FAILED CALL:
-url=${currentRestServer + targetUrl},
+url=${completeUrl},
 parm=${drivingJson},
 time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 """.toString()
@@ -1665,7 +1688,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
     public String getSampleMetadata() {
         String retdat
-        retdat = getRestCallBase(GET_SAMPLE_METADATA_URL, currentRestServer())
+        retdat = getRestCallBase("${GET_SAMPLE_METADATA_URL}?mdv=${this.metaDataService?.getDataVersion()}", currentRestServer())
         return retdat
     }
 
@@ -2338,21 +2361,297 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
+    public JSONArray gatherEqtlDataForVariantList( String gene,List<String> variants,
+                                     String tissue ) {
+        List<String> specifyRequestList = []
+        if ((gene) && (gene.length() > 0)) {
+            specifyRequestList << "gene=${gene}"
+        }
+        if ((variants) && (variants.length() > 0)) {
+            specifyRequestList << "var_id=${variants.join(",").replace("\"","")}"
+        }
+        if ((tissue) && (tissue.length() > 0)) {
+            specifyRequestList << "tissue=${tissue}"
+        }
+        String rawReturnFromApi =  getRestCallBase("${GET_EQTLS_FOR_A_VARIANT_LIST_URL}?${specifyRequestList.join("&")}", currentRestServer())
+        JsonSlurper slurper = new JsonSlurper()
+        JSONArray jsonArray = slurper.parseText(rawReturnFromApi) as JSONArray
+        return jsonArray
+    }
 
 
-    public JSONObject gatherEqtlData( String gene,String variant,
+
+    public JSONArray gatherEqtlData( String gene,String variant,
     String tissue ) {
         List<String> specifyRequestList = []
         if ((gene) && (gene.length() > 0)) {
-            specifyRequestList << "\"gene\":\"${gene}\""
+            specifyRequestList << "gene=${gene}"
         }
         if ((variant) && (variant.length() > 0)) {
-            specifyRequestList << "\"variant\":\"${variant}\""
+            specifyRequestList << "variant=${variant}"
         }
         if ((tissue) && (tissue.length() > 0)) {
-            specifyRequestList << "\"tissue\":\"${tissue}\""
+            specifyRequestList << "tissue=${tissue}"
         }
-        return getRestCallBase("ledge/gtex_eqtl/object?${specifyRequestList.join("&")}", GET_TEMPORARY_EQTL_URL)
+        String rawReturnFromApi =  getRestCall("${GET_VARIANT_GTEX_EQTL_FROM_URL}?${specifyRequestList.join("&")}")
+        //String rawReturnFromApi =  getRestCallBase("ledge/gtex_eqtl/object?${specifyRequestList.join("&")}", GET_TEMPORARY_EQTL_URL)
+        JsonSlurper slurper = new JsonSlurper()
+        JSONArray jsonArray = slurper.parseText(rawReturnFromApi) as JSONArray
+        return jsonArray
+    }
+
+
+    public JSONArray gatherAbcData( String gene, String tissue,
+                                     int  startPosition, int  endPosition, String chromosome, List <String> variantList ) {
+        List<String> specifyRequestList = []
+        if ((gene) && (gene.length() > 0)) {
+            specifyRequestList << "gene=${gene}"
+        }
+        if ((tissue) && (tissue.length() > 0)) {
+            specifyRequestList << "tissue=${tissue}"
+        }
+        if ((chromosome) && (chromosome.length() > 0)) {
+            specifyRequestList << "chrom=${chromosome}"
+        }
+        if (startPosition > -1) {
+            specifyRequestList << "start_pos=${startPosition}"
+        }
+        if (endPosition > -1) {
+            specifyRequestList << "end_pos=${endPosition}"
+        }
+        if ((variantList) && (variantList.length() > 0)) {
+            specifyRequestList << "var_id=${variantList.join(",").replace("\"","")}"
+        }
+
+
+        String rawReturnFromApi =  getRestCall("${GET_REGION_FROM_ABC_URL}?${specifyRequestList.join("&")}".toString())
+        JsonSlurper slurper = new JsonSlurper()
+        JSONArray jsonArray = slurper.parseText(rawReturnFromApi) as JSONArray
+        return jsonArray
+    }
+
+
+
+
+    public JSONArray gatherDepictData( String gene, String phenotype,
+                                    int  startPosition, int  endPosition, String chromosome ) {
+        List<String> specifyRequestList = []
+        if ((gene) && (gene.length() > 0)) {
+            specifyRequestList << "gene=${gene}"
+        }
+        if ((phenotype) && (phenotype.length() > 0)) {
+            specifyRequestList << "phenotype=${phenotype}"
+        }
+        if ((chromosome) && (chromosome.length() > 0)) {
+            specifyRequestList << "chrom=${chromosome}"
+        }
+        if (startPosition > -1) {
+            specifyRequestList << "start_pos=${startPosition}"
+        }
+        if (endPosition > -1) {
+            specifyRequestList << "end_pos=${endPosition}"
+        }
+
+
+        String rawReturnFromApi =  getRestCall("${GET_GENE_BASED_RECORDS_FROM_DEPICT_URL}?${specifyRequestList.join("&")}".toString())
+        JsonSlurper slurper = new JsonSlurper()
+        JSONArray jsonArray
+        try{
+            jsonArray = slurper.parseText(rawReturnFromApi) as List
+        } catch(Exception e){
+            // are you telling me this stupid library interprets a list of one as not a list at all, but an object?  eat me, Java
+            jsonArray = [slurper.parseText(rawReturnFromApi)] as List
+        }
+        return jsonArray
+    }
+
+
+
+
+    public JSONObject gatherDepictGeneSetData( String gene, String phenotype, float pValueThreshold ) {
+        List<String> specifyRequestList = []
+        if ((gene) && (gene.length() > 0)) {
+            specifyRequestList << "gene=${gene}"
+        }
+        if ((phenotype) && (phenotype.length() > 0)) {
+            specifyRequestList << "phenotype=${phenotype}"
+        }
+        if ((pValueThreshold) ) {
+            specifyRequestList << "lt_value=${pValueThreshold}"
+        }
+
+        String rawReturnFromApi =  getRestCall("${GET_GENESET_RECORDS_FROM_DEPICT_URL}?${specifyRequestList.join("&")}".toString())
+        JsonSlurper slurper = new JsonSlurper()
+        JSONObject jsonObject
+        try{
+            jsonObject = slurper.parseText(rawReturnFromApi) as List
+        } catch(Exception e){
+            // are you telling me this stupid library interprets a list of one as not a list at all, but an object?  eat me, Java
+            jsonObject = [slurper.parseText(rawReturnFromApi)] as List
+        }
+        return jsonObject
+    }
+
+
+
+
+
+
+    public JSONArray gatherDnaseData(  String tissue, List <String> variantList ) {
+        List<String> specifyRequestList = []
+
+        if ((tissue) && (tissue.length() > 0)) {
+            specifyRequestList << "tissue=${tissue}"
+        }
+
+        if ((variantList) && (variantList.length() > 0)) {
+            specifyRequestList << "var_id=${variantList.join(",").replace("\"","")}"
+        }
+
+        String rawReturnFromApi =  getRestCall("${GET_DNASE_RECORDS_URL}?${specifyRequestList.join("&")}".toString())
+        JsonSlurper slurper = new JsonSlurper()
+        JSONArray jsonArray = slurper.parseText(rawReturnFromApi) as JSONArray
+        return jsonArray
+    }
+
+
+
+
+
+    public JSONArray gatherH3k27acData( String tissue, List <String> variantList ) {
+        List<String> specifyRequestList = []
+
+        if ((tissue) && (tissue.length() > 0)) {
+            specifyRequestList << "tissue=${tissue}"
+        }
+
+        if ((variantList) && (variantList.length() > 0)) {
+            specifyRequestList << "var_id=${variantList.join(",").replace("\"","")}"
+        }
+
+        String rawReturnFromApi =  getRestCall("${GET_H3K27AC_RECORDS_URL}?${specifyRequestList.join("&")}".toString())
+        JsonSlurper slurper = new JsonSlurper()
+        JSONArray jsonArray = slurper.parseText(rawReturnFromApi) as JSONArray
+        return jsonArray
+    }
+
+
+
+
+
+
+
+    public JSONArray gatherECaviarData( String gene, String tissue,
+                                         String variant, String phenotype,
+                                         int  startPosition, int  endPosition,
+                                        String chromosome) {
+        List<String> specifyRequestList = []
+        if ((gene) && (gene.length() > 0)) {
+            specifyRequestList << "gene=${gene}"
+        }
+        if ((tissue) && (tissue.length() > 0)) {
+            specifyRequestList << "tissue=${tissue}"
+        }
+        if ((phenotype) && (phenotype.length() > 0)) {
+            specifyRequestList << "phenotype=${phenotype}"
+        }
+        if ((variant) && (variant.length() > 0)) {
+            specifyRequestList << "variant=${variant}"
+        }
+
+        if ((chromosome) && (chromosome.length() > 0)) {
+            specifyRequestList << "chrom=${chromosome}"
+        }
+        if (startPosition > -1) {
+            specifyRequestList << "start_pos=${startPosition}"
+        }
+        if (endPosition > -1) {
+            specifyRequestList << "end_pos=${endPosition}"
+        }
+
+        String rawReturnFromApi =  getRestCall("${GET_VARIANT_ECAVIAR_COLOCALIZATION_FROM_URL}?${specifyRequestList.join("&")}".toString())
+        JsonSlurper slurper = new JsonSlurper()
+        JSONArray jsonArray
+        try{
+            jsonArray = slurper.parseText(rawReturnFromApi) as List
+        } catch(Exception e){
+            // are you telling me this stupid library interprets a list of one as not a list at all, but an object?  eat me, Java
+            jsonArray = [slurper.parseText(rawReturnFromApi)] as List
+        }
+        return jsonArray
+    }
+
+
+    public JSONObject gatherModsData( String gene ) {
+        List<String> specifyRequestList = []
+        if ((gene) && (gene.length() > 0)) {
+            specifyRequestList << "gene=${gene}"
+        }
+
+        String rawReturnFromApi =  getRestCall("${GET_GENE_BASED_RECORDS_FROM_MODS_URL}?${specifyRequestList.join("&")}")
+        JsonSlurper slurper = new JsonSlurper()
+        JSONArray jsonArray
+        JSONObject jsonObject
+        try {
+            try{
+                jsonArray = slurper.parseText(rawReturnFromApi) as List
+            } catch(Exception e){
+                // are you telling me this stupid library interprets a list of one as not a list at all, but an object?  eat me, Java
+                jsonArray = [slurper.parseText(rawReturnFromApi)] as List
+            }
+            jsonObject = new JSONObject()
+            jsonObject['gene']=gene
+            jsonObject['records']=jsonArray
+        } catch (Exception e){
+            e.printStackTrace()
+        }
+
+        return jsonObject
+    }
+
+
+
+
+
+
+
+    public JSONArray gatherEColocData( String gene, String tissue,
+                                        String variant, String phenotype,
+                                        int  startPosition, int  endPosition,
+                                        String chromosome) {
+        List<String> specifyRequestList = []
+        if ((gene) && (gene.length() > 0)) {
+            specifyRequestList << "gene=${gene}"
+        }
+        if ((tissue) && (tissue.length() > 0)) {
+            specifyRequestList << "tissue=${tissue}"
+        }
+        if ((phenotype) && (phenotype.length() > 0)) {
+            specifyRequestList << "phenotype=${phenotype}"
+        }
+        if ((variant) && (variant.length() > 0)) {
+            specifyRequestList << "variant=${variant}"
+        }
+
+        if ((chromosome) && (chromosome.length() > 0)) {
+            specifyRequestList << "chrom=${chromosome}"
+        }
+        if (startPosition > -1) {
+            specifyRequestList << "start_pos=${startPosition}"
+        }
+        if (endPosition > -1) {
+            specifyRequestList << "end_pos=${endPosition}"
+        }
+
+        String rawReturnFromApi =  getRestCall("${GET_VARIANT_COLOC_COLOCALIZATION_FROM_URL}?${specifyRequestList.join("&")}".toString())
+        JsonSlurper slurper = new JsonSlurper()
+        JSONArray jsonArray
+        try{
+            jsonArray = slurper.parseText(rawReturnFromApi) as List
+        } catch(Exception e){
+            jsonArray = [slurper.parseText(rawReturnFromApi)] as List
+        }
+        return jsonArray
     }
 
 
@@ -2576,18 +2875,137 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
-    public Map gatherBottomLineVariantsPerGene( String gene ) {
-        JsonSlurper slurper = new JsonSlurper()
+    /***
+     * We want to be able to pull back all of the gene level associations for a given phenotype/gene/desiredMeaning.  We will accept
+     * all of the properties that have their meaning matching the desiredMeaning parameter, which should give us back all of the different
+     * variant groupings used for burden testing, or alternatively all of the different tissues if we are pulling back
+     * metaXcan data.
+     *
+     * @param phenotypeName
+     * @return
+     */
+    public JSONObject gatherGenePhenotypeAssociations (String phenotypeName,String geneName,
+                                                       List<String> desiredMeanings, String preferredSampleGroup) {
 
-        Map retval = [:]
+        // Now we need to find the data sets that contain the phenotype we are interested in.  If I end up with more than one data set than
+        // I'll ignore every one other than the one with the largest sample size.
+        List<SampleGroup> listOfSampleGroupsToWorkWith = []
+        if (desiredMeanings?.size()>0){
+            for (String desiredMeaning in desiredMeanings){
+                List<SampleGroup> sampleGroupList = metaDataService.getSampleGroupsBasedOnPhenotypeAndMeaning(phenotypeName,desiredMeaning,
+                        MetaDataService.METADATA_GENE)
+                boolean sampleGroupChosen = false
+                if (preferredSampleGroup) { // if a specific sample group was requested then try to get it
+                    SampleGroup requestedSampleGroup =  sampleGroupList?.find{it.getSystemId()==preferredSampleGroup}
+                    if (requestedSampleGroup){
+                        listOfSampleGroupsToWorkWith << sampleGroupList?.first()
+                        sampleGroupChosen = true
+                    }
+                }
+                if (!sampleGroupChosen){ // either a specific sample group wasn't requested, or else we couldn't find it
+                    sampleGroupList = sampleGroupList?.sort{SampleGroup a,SampleGroup b->b.subjectsNumber<=>a.subjectsNumber}
+                    if ((sampleGroupList)&&(sampleGroupList.size()>0)){
+                        listOfSampleGroupsToWorkWith << sampleGroupList?.first()
+                    }
+
+                }
+            }
+        }
+
+        listOfSampleGroupsToWorkWith = listOfSampleGroupsToWorkWith.unique()
+        // we might legitimately have no Gene level data for this phenotype
+        String dataJsonObjectString
+        if (listOfSampleGroupsToWorkWith.size()==0){
+            dataJsonObjectString = """{
+            "is_error": true,
+            "error_message": "No gene level data for phenotype ${phenotypeName}"
+        }""".toString()
+        } else { // we have a sample group to work with
+            // Let's start putting together the query. We can use existing machinery for this work
+            LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["GENE" ])
+            List<String> codedFilters = ["7=${geneName}".toString()]
+            GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(codedFilters, searchBuilderService, metaDataService,MetaDataService.METADATA_GENE)
+
+            // now let's find our chosen phenotype in the sample group, and then stroll through that phenotypes properties and pull back every name
+            // which has our chosen meaning
+            for (SampleGroup sampleGroup in listOfSampleGroupsToWorkWith){
+                PhenotypeBean phenotype = sampleGroup.getPhenotypes().find{PhenotypeBean p->p.getName() == phenotypeName}
+                for (String desiredMeaning in desiredMeanings) {
+                    for(Property property in phenotype.getProperties().findAll{ PropertyBean p->p.hasMeaning(desiredMeaning)}){
+                        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, sampleGroup.getSystemId(), property.getName())
+                    }
+                }
+
+
+            }
+            getDataQueryHolder.addProperties(resultColumnsToDisplay)
+            getDataQueryHolder.getDataQuery.setLimit(5000)
+            // go and get the data from the KB
+            dataJsonObjectString = postGeneDataQueryRestCall(getDataQueryHolder)
+        }
+        JsonSlurper slurper = new JsonSlurper()
+        JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
+        return dataJsonObject
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public Map convertGeneCommonNameToEnsemblId( String gene, boolean removeTrailingDot ) {
+        Map returnValue = [:]
+
+        JsonSlurper slurper = new JsonSlurper()
 
         String combinedCommonNameUrl = GET_BOTTOM_LINE_VARIANTS_URL +"?id=" +gene
 
         String  retrieveGeneIdJsonAsString = getRestCall(combinedCommonNameUrl)
 
         List retrieveGeneIdArray =   slurper.parseText(retrieveGeneIdJsonAsString) as List
-        if (retrieveGeneIdArray[0]){
-            String combinedEnsemblNameUrl = GET_BOTTOM_LINE_VARIANTS_BY_ID_URL +"?id=" +(retrieveGeneIdArray[0]["GEN_ID"] as String)
+        if (retrieveGeneIdArray.size()>0){
+
+            String ensemblId = ""
+            String unmodifiedReturn = (retrieveGeneIdArray[0]["GEN_ID"] as String)
+            if (removeTrailingDot){
+                ensemblId = unmodifiedReturn - ~/\.([^\.]+)$/
+            } else {
+                ensemblId = unmodifiedReturn
+            }
+            returnValue ["GEN_ID"] = ensemblId
+            returnValue ["CHROM"] = retrieveGeneIdArray[0]["CHROM"]
+            returnValue ["START"] = retrieveGeneIdArray[0]["START"]
+            returnValue ["END"] = retrieveGeneIdArray[0]["END"]
+            returnValue ["GENE"] = retrieveGeneIdArray[0]["GENE"]
+
+        } else {
+            log.error("Problem:  we have an unrecognized gene common name == '${gene}'")
+        }
+        return returnValue
+    }
+
+
+
+
+    public Map gatherBottomLineVariantsPerGene( String gene ) {
+        JsonSlurper slurper = new JsonSlurper()
+
+        Map retval = [:]
+
+        Map ensemblMapper = convertGeneCommonNameToEnsemblId(gene,false)
+        String ensemblId = ensemblMapper.GEN_ID
+
+        if (ensemblId){
+            String combinedEnsemblNameUrl = GET_BOTTOM_LINE_VARIANTS_BY_ID_URL +"?id=" + ensemblId
 
             String  retrieveTissueExpressionInformationJsonAsString = getRestCall(combinedEnsemblNameUrl)
 
@@ -2600,6 +3018,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
     }
+
+
 
 
 

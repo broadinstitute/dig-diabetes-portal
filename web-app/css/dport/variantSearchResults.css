@@ -4,7 +4,7 @@ th.sorting_asc, th.sorting_desc {
     background-color: #7fc343;
     color: black;
 }
-td.sorting_1 {
+td.sorting_1:not('table.combinedGeneTableHolder td.sorting_1') {
     background-color: #ddf7d7 !important;
     background-color: #cce7b4 !important;
 }
