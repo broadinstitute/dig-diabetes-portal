@@ -112,7 +112,8 @@
 <g:render template="./data/GWAS_UKBB_eu" />
 <g:render template="./data/GWAS_OSA" />
 <g:render template="./data/GWAS_SpO2" />
-
+<g:render template="./data/GWAS_MAGIC_eu" />
+<g:render template="./data/GWAS_MAGIC-Metabochip_eu" />
 
 
 
