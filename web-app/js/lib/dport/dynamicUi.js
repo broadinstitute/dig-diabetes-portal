@@ -162,7 +162,7 @@ var mpgSoftware = mpgSoftware || {};
 }));
 
 
-
+var mpgSoftware = mpgSoftware || {};  // encapsulating variable
 mpgSoftware.dynamicUi = (function () {
     var loading = $('#rSpinner');
     var commonTable;
@@ -615,10 +615,11 @@ mpgSoftware.dynamicUi = (function () {
                             name: "getFirthGeneAssociationsForGeneTable",
                             retrieveDataUrl: additionalParameters.retrieveGeneLevelAssociationsUrl,
                             dataForCall: dataForCall,
-                            processEachRecord: processGeneFirthAssociationRecords,
+                            processEachRecord: mpgSoftware.dynamicUi.geneBurdenFirth.processGeneFirthAssociationRecords,
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
-                            actionId: nextActionId
+                            actionId: nextActionId,
+                            nameOfAccumulatorField:'rawGeneFirthRecords'
                         }));
                     }
                 };
@@ -2388,22 +2389,45 @@ mpgSoftware.dynamicUi = (function () {
 
 
     var displayGeneFirthAssociationsForGeneTable = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-        var dataAnnotationTypeCode = 'FIR';
+
+        displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
+            'FIR', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+            'rawGeneFirthRecords', // name of the persistent field where the data we received is stored
+            'P_MIN_P_FIRTH_NS_STRICT_NS_1PCT', // we may wish to pull out one record for summary purposes
+            function(records,tissueTranslations){
+                return _.map(_.sortBy(_.filter(records,function(t){return t.tissue.includes("FIRTH")}),['value']),function(tissueRecord){
+                    return {  tissueName:  translateATissueName(tissueTranslations,tissueRecord.tissue),
+                        tissue: tissueRecord.tissue,
+                        value: UTILS.realNumberFormatter(""+tissueRecord.value),
+                        numericalValue: tissueRecord.value };
+                })
+            } );
+
+    };
+
+
+
+
+
+
+    var displayForGeneTable = function (idForTheTargetDiv, // which table are we adding to
+                                        dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+                                        nameOfAccumulatorField, // name of the persistent field where the data we received is stored
+                                        preferredSummaryKey, // we may wish to pull out one record for summary purposes
+                                        mapSortAndFilterFunction ) { // sort and filter the records we will use.  Resulting array must have fields tissue, value, and numericalValue
+
+        var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode);
         var returnObject = createNewDisplayReturnObject();
-
-        // for each gene collect up the data we want to display
-        _.forEach(getAccumulatorObject("rawGeneFirthRecords"), function (value) {
-
-            returnObject.geneAssociations.push(value);
-
-        });
-
         var intermediateDataStructure = new IntermediateDataStructure();
 
+        // for each gene collect up the data we want to display
+        returnObject.geneAssociations = getAccumulatorObject(nameOfAccumulatorField);
+
+        // do we have any data at all?  If we do, then make a row
         if (( typeof returnObject.geneAssociations !== 'undefined') && ( returnObject.geneAssociations.length > 0)) {
             addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
 
-            // set up the headers, and give us an empty row of column cells
+            // set up the headers, even though we know we won't use them. Is this step necessary?
             var headerNames = [];
             if (accumulatorObjectFieldEmpty("geneNameArray")) {
                 console.log("We always have to have a record of the current gene names in depict display. We have a problem.");
@@ -2420,7 +2444,6 @@ mpgSoftware.dynamicUi = (function () {
 
 
             // fill in all of the column cells
-            var preferredSummaryKey = "P_MIN_P_FIRTH_NS_STRICT_NS_1PCT";
             _.forEach(returnObject.geneAssociations, function (recordsPerGene) {
                 var indexOfColumn = _.indexOf(headerNames, recordsPerGene.gene);
                 if (indexOfColumn === -1) {
@@ -2430,41 +2453,47 @@ mpgSoftware.dynamicUi = (function () {
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.gene,
                             {}, "tissue specific",'EMC');
                     } else {
-                        var significanceValue=0;
-                        var tissueTranslations = recordsPerGene["TISSUE_TRANSLATIONS"];
-                        var tissueRecords = _.map(_.sortBy(_.filter(recordsPerGene.tissues,function(t){return t.tissue.includes("FIRTH")}),['value']),function(tissueRecord){
-                            return {  tissueName:  translateATissueName(tissueTranslations,tissueRecord.tissue),
-                                tissue: tissueRecord.tissue,
-                                value: UTILS.realNumberFormatter(""+tissueRecord.value),
-                                numericalValue: tissueRecord.value };
+                        var tissueTranslations = recordsPerGene["TISSUE_TRANSLATIONS"]; // if no translations are provided, it is fine to leave this value as undefined
+                        var tissueRecords = mapSortAndFilterFunction (recordsPerGene.tissues,tissueTranslations);
+
+                        var recordsCellPresentationString = Mustache.render($('#'+dataAnnotationType.dataAnnotation.numberRecordsCellPresentationStringWriter)[0].innerHTML, {
+                            numberRecords:tissueRecords.length
                         });
-                        var recordsCellPresentationString = "records="+tissueRecords.length;
                         var significanceCellPresentationString = "0";
                         var significanceValue = 0;
                         if (( typeof recordsPerGene.tissues !== 'undefined')&&
                             (recordsPerGene.tissues.length>0)){
-                            var minPValue=_.find(recordsPerGene.tissues,function(t){return t.tissue.includes(preferredSummaryKey)})
-                            significanceValue = minPValue.value;
-                            significanceCellPresentationString = "p="+minPValue.value+" ("+translateATissueName(tissueTranslations,preferredSummaryKey)+")";
+                            var mostSignificantRecord;
+                            if (( typeof preferredSummaryKey !== 'undefined') && (preferredSummaryKey.length)){ // we have a key telling us which record to pick
+                                mostSignificantRecord=_.find(recordsPerGene.tissues,function(t){return t.tissue.includes(preferredSummaryKey)});
+                            }else{// no specific key, but we have sorted the keys in ascending order by value, so we can just pick the first one
+                                mostSignificantRecord=recordsPerGene.tissues[0];
+                             }
+                            significanceValue = mostSignificantRecord.value;
+                            significanceCellPresentationString = Mustache.render($('#'+dataAnnotationType.dataAnnotation.significanceCellPresentationStringWriter)[0].innerHTML,
+                                {significanceValue:significanceValue,recordDescription:translateATissueName(tissueTranslations,mostSignificantRecord.tissue)});
+
                         }
+                        //  this is the information we carry around each cell and that we will later use to display it
                         var renderData = {  numberOfRecords:tissueRecords.length,
                             cellPresentationStringMap:{ Records:recordsCellPresentationString,
                                 Significance:significanceCellPresentationString },
                             tissueCategoryNumber:categorizeTissueNumbers( tissueRecords.length ),
                             tissuesExist:(tissueRecords.length)?[1]:[],
                             gene:recordsPerGene.gene,
-                            significanceCategoryNumber:categorizeSignificanceNumbers( tissueRecords, "MET", significanceValue ),
+                            significanceCategoryNumber:categorizeSignificanceNumbers( tissueRecords, dataAnnotationTypeCode, significanceValue ),
                             significanceValue:significanceValue,
                             tissues:tissueRecords
                         };
-                        recordsPerGene["numberOfRecords"] = recordsPerGene.tissues.length;
+                        recordsPerGene["numberOfRecords"] = recordsPerGene.tissues.length;//not sure if this is used
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.gene,
                             renderData,"tissue specific",dataAnnotationTypeCode );
                     }
 
                 }
             });
-            intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
+           // intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
+            intermediateDataStructure.tableToUpdate = idForTheTargetDiv;
         }
 
 
@@ -2479,6 +2508,12 @@ mpgSoftware.dynamicUi = (function () {
 
 
     };
+
+
+
+
+
+
 
 
 
@@ -3808,7 +3843,11 @@ mpgSoftware.dynamicUi = (function () {
                     async: true
                 }).done(function (data, textStatus, jqXHR) {
 
-                    objectContainingRetrievedRecords = eachRemoteCallingParameter.processEachRecord( data );
+                    var accumulatorObject;
+                    if ( typeof collectionOfRemoteCallingParameters.nameOfAccumulatorField  !== 'undefined'){
+                        accumulatorObject =  getAccumulatorObject(collectionOfRemoteCallingParameters.nameOfAccumulatorField);
+                    }
+                    objectContainingRetrievedRecords = eachRemoteCallingParameter.processEachRecord( data, accumulatorObject);
 
                 }).fail(function (jqXHR, textStatus, errorThrown) {
                     loading.hide();
@@ -3872,7 +3911,7 @@ mpgSoftware.dynamicUi = (function () {
                 returnValue["displayRefinedContextFunction"] = startingMaterials.displayRefinedContextFunction;
                 returnValue["placeToDisplayData"] = startingMaterials.placeToDisplayData;
                 returnValue["actionId"] = startingMaterials.actionId;
-
+                returnValue["nameOfAccumulatorField"] = startingMaterials.nameOfAccumulatorField;
         } else {
                 console.log("Serious error: incorrect fields in startingMaterials = "+startingMaterials.name+".")
             };
@@ -5964,6 +6003,8 @@ var destroySharedTable = function (whereTheTableGoes) {
                 case "DEP":
                 case "MET":
                 case "EQT":
+                case "FIR":
+                case "SKA":
                     var valueToAssess;
                     if ( typeof  overrideValue !== 'undefined') {
                         valueToAssess = overrideValue

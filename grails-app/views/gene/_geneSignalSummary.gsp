@@ -211,7 +211,10 @@ td.tissueTable.informationIsPresent{
                             displaySubcategory: 'Firth gene associations',
                             cellBodyWriter:'geneFirthAssociationTableBody',
                             categoryWriter:'sharedCategoryWriter',
-                            subCategoryWriter:'geneFirthAssociationTableSubCategory' },
+                            subCategoryWriter:'geneFirthAssociationTableSubCategory',
+                            numberRecordsCellPresentationStringWriter:'geneFirthAssociationTableNumberRecordsCellPresentationString',
+                            significanceCellPresentationStringWriter:'geneFirthAssociationTableSignificanceCellPresentationString'
+                        },
                         {   code: 'SKA',
                             category: 'Annotation',
                             displayCategory: 'Significance of association',
