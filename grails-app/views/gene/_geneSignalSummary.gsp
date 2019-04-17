@@ -222,7 +222,10 @@ td.tissueTable.informationIsPresent{
                             displaySubcategory: 'SKAT gene associations',
                             cellBodyWriter:'geneSkatAssociationTableBody',
                             categoryWriter:'sharedCategoryWriter',
-                            subCategoryWriter:'geneSkatAssociationTableSubCategory' },
+                            subCategoryWriter:'geneSkatAssociationTableSubCategory',
+                            numberRecordsCellPresentationStringWriter:'geneSkatAssociationTableNumberRecordsCellPresentationString',
+                            significanceCellPresentationStringWriter:'geneSkatAssociationTableSignificanceCellPresentationString'
+                        },
                         {   code: 'MET',
                             category: 'Annotation',
                             displayCategory: 'Significance of association',

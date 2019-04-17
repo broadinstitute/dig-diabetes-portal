@@ -207,6 +207,8 @@ modules = {
         resource url: 'css/dport/dynamicUi.css'
 
         resource url: 'js/lib/dport/dynamicUi/geneBurdenFirth.js'
+        resource url: 'js/lib/dport/dynamicUi/geneBurdenSkat.js'
+        resource url: 'js/lib/dport/dynamicUi/metaXcan.js'
     }
     mustache {
         resource url: 'js/lib/mustache.js'

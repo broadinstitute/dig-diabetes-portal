@@ -1,13 +1,13 @@
 var mpgSoftware = mpgSoftware || {};  // encapsulating variable
 mpgSoftware.dynamicUi = mpgSoftware.dynamicUi || {};   // second level encapsulating variable
 
-mpgSoftware.dynamicUi.geneBurdenFirth = (function () {
+mpgSoftware.dynamicUi.geneBurdenSkat = (function () {
 
 
 
-    var processGeneFirthAssociationRecords = function (data,rawGeneAssociationRecords) {
+    var processGeneSkatAssociationRecords = function (data,rawGeneAssociationRecords) {
 
-         if ( ( typeof data !== 'undefined') &&
+        if ( ( typeof data !== 'undefined') &&
             (  data.is_error !== true ) &&
             (  data.numRecords > 0 ) &&
             ( typeof data.variants !== 'undefined' ) ){
@@ -19,7 +19,7 @@ mpgSoftware.dynamicUi.geneBurdenFirth = (function () {
                         geneRecord['tissues'] = [];
                     } else if (tissue==='TISSUE_TRANSLATIONS') {
                         geneRecord['TISSUE_TRANSLATIONS'] = sampleRecord;
-                    }  else {
+                    } else {
                         _.forEach(sampleRecord, function (phenotypeRecord, dataset) {
                             _.forEach(phenotypeRecord, function (number, phenotypeString) {
 
@@ -47,6 +47,6 @@ mpgSoftware.dynamicUi.geneBurdenFirth = (function () {
 
 // public routines are declared below
     return {
-        processGeneFirthAssociationRecords: processGeneFirthAssociationRecords
+        processGeneSkatAssociationRecords: processGeneSkatAssociationRecords
     }
 }());

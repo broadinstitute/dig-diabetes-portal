@@ -586,10 +586,11 @@ mpgSoftware.dynamicUi = (function () {
                             name: "getSkatGeneAssociationsForGeneTable",
                             retrieveDataUrl: additionalParameters.retrieveGeneLevelAssociationsUrl,
                             dataForCall: dataForCall,
-                            processEachRecord: processGeneSkatAssociationRecords,
+                            processEachRecord: mpgSoftware.dynamicUi.geneBurdenSkat.processGeneSkatAssociationRecords,
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
-                            actionId: nextActionId
+                            actionId: nextActionId,
+                            nameOfAccumulatorField:'rawGeneSkatRecords'
                         }));
                     }
                 };
@@ -1514,89 +1515,89 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
-    var processGeneSkatAssociationRecords = function (data) {
-
-        var rawGeneAssociationRecords = getAccumulatorObject('rawGeneSkatRecords');
-
-        if ( ( typeof data !== 'undefined') &&
-            (  data.is_error !== true ) &&
-            (  data.numRecords > 0 ) &&
-            ( typeof data.variants !== 'undefined' ) ){
-            var geneRecord = {};
-            _.forEach(data.variants[0], function (oneRec) {
-                _.forEach(oneRec, function(sampleRecord,tissue){
-                    if ((tissue==='GENE')||(tissue==='Gene')) {
-                        geneRecord['gene'] = sampleRecord;
-                        geneRecord['tissues'] = [];
-                    } else if (tissue==='TISSUE_TRANSLATIONS') {
-                        geneRecord['TISSUE_TRANSLATIONS'] = sampleRecord;
-                    } else {
-                        _.forEach(sampleRecord, function (phenotypeRecord, dataset) {
-                            _.forEach(phenotypeRecord, function (number, phenotypeString) {
-
-                                if (number !== null) {
-                                    geneRecord['tissues'].push({tissue: tissue, value: number});
-
-                                }
-                            })
-                        });
-                    }
-                });
-            });
-            if ((typeof geneRecord !== 'undefined')&&(typeof geneRecord.gene !== 'undefined')){
-                rawGeneAssociationRecords.push(geneRecord);
-            }
-        }
-
-
-
-        return rawGeneAssociationRecords;
-
-    };
-
-
-
-
-    var processGeneFirthAssociationRecords = function (data) {
-
-        var rawGeneAssociationRecords = getAccumulatorObject('rawGeneFirthRecords');
-
-        if ( ( typeof data !== 'undefined') &&
-            (  data.is_error !== true ) &&
-            (  data.numRecords > 0 ) &&
-            ( typeof data.variants !== 'undefined' ) ){
-            var geneRecord = {};
-            _.forEach(data.variants[0], function (oneRec) {
-                _.forEach(oneRec, function(sampleRecord,tissue){
-                    if ((tissue==='GENE')||(tissue==='Gene')) {
-                        geneRecord['gene'] = sampleRecord;
-                        geneRecord['tissues'] = [];
-                    } else if (tissue==='TISSUE_TRANSLATIONS') {
-                        geneRecord['TISSUE_TRANSLATIONS'] = sampleRecord;
-                    }  else {
-                        _.forEach(sampleRecord, function (phenotypeRecord, dataset) {
-                            _.forEach(phenotypeRecord, function (number, phenotypeString) {
-
-                                if (number !== null) {
-                                    geneRecord['tissues'].push({tissue: tissue, value: number});
-
-                                }
-                            })
-                        });
-                    }
-                });
-            });
-            if ((typeof geneRecord !== 'undefined')&&(typeof geneRecord.gene !== 'undefined')){
-                rawGeneAssociationRecords.push(geneRecord);
-            }
-        }
+    //var processGeneSkatAssociationRecords = function (data) {
+    //
+    //    var rawGeneAssociationRecords = getAccumulatorObject('rawGeneSkatRecords');
+    //
+    //    if ( ( typeof data !== 'undefined') &&
+    //        (  data.is_error !== true ) &&
+    //        (  data.numRecords > 0 ) &&
+    //        ( typeof data.variants !== 'undefined' ) ){
+    //        var geneRecord = {};
+    //        _.forEach(data.variants[0], function (oneRec) {
+    //            _.forEach(oneRec, function(sampleRecord,tissue){
+    //                if ((tissue==='GENE')||(tissue==='Gene')) {
+    //                    geneRecord['gene'] = sampleRecord;
+    //                    geneRecord['tissues'] = [];
+    //                } else if (tissue==='TISSUE_TRANSLATIONS') {
+    //                    geneRecord['TISSUE_TRANSLATIONS'] = sampleRecord;
+    //                } else {
+    //                    _.forEach(sampleRecord, function (phenotypeRecord, dataset) {
+    //                        _.forEach(phenotypeRecord, function (number, phenotypeString) {
+    //
+    //                            if (number !== null) {
+    //                                geneRecord['tissues'].push({tissue: tissue, value: number});
+    //
+    //                            }
+    //                        })
+    //                    });
+    //                }
+    //            });
+    //        });
+    //        if ((typeof geneRecord !== 'undefined')&&(typeof geneRecord.gene !== 'undefined')){
+    //            rawGeneAssociationRecords.push(geneRecord);
+    //        }
+    //    }
+    //
+    //
+    //
+    //    return rawGeneAssociationRecords;
+    //
+    //};
 
 
 
-        return rawGeneAssociationRecords;
 
-    };
-
+    //var processGeneFirthAssociationRecords = function (data) {
+    //
+    //    var rawGeneAssociationRecords = getAccumulatorObject('rawGeneFirthRecords');
+    //
+    //    if ( ( typeof data !== 'undefined') &&
+    //        (  data.is_error !== true ) &&
+    //        (  data.numRecords > 0 ) &&
+    //        ( typeof data.variants !== 'undefined' ) ){
+    //        var geneRecord = {};
+    //        _.forEach(data.variants[0], function (oneRec) {
+    //            _.forEach(oneRec, function(sampleRecord,tissue){
+    //                if ((tissue==='GENE')||(tissue==='Gene')) {
+    //                    geneRecord['gene'] = sampleRecord;
+    //                    geneRecord['tissues'] = [];
+    //                } else if (tissue==='TISSUE_TRANSLATIONS') {
+    //                    geneRecord['TISSUE_TRANSLATIONS'] = sampleRecord;
+    //                }  else {
+    //                    _.forEach(sampleRecord, function (phenotypeRecord, dataset) {
+    //                        _.forEach(phenotypeRecord, function (number, phenotypeString) {
+    //
+    //                            if (number !== null) {
+    //                                geneRecord['tissues'].push({tissue: tissue, value: number});
+    //
+    //                            }
+    //                        })
+    //                    });
+    //                }
+    //            });
+    //        });
+    //        if ((typeof geneRecord !== 'undefined')&&(typeof geneRecord.gene !== 'undefined')){
+    //            rawGeneAssociationRecords.push(geneRecord);
+    //        }
+    //    }
+    //
+    //
+    //
+    //    return rawGeneAssociationRecords;
+    //
+    //};
+    //
 
 
 
@@ -2291,95 +2292,112 @@ mpgSoftware.dynamicUi = (function () {
 
 
     var displayGeneSkatAssociationsForGeneTable = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-        var dataAnnotationTypeCode = 'SKA';
-        var returnObject = createNewDisplayReturnObject();
 
-        // for each gene collect up the data we want to display
-        _.forEach(getAccumulatorObject("rawGeneSkatRecords"), function (value) {
-
-            returnObject.geneAssociations.push(value);
-
-        });
-
-        var intermediateDataStructure = new IntermediateDataStructure();
-
-        if (( typeof returnObject.geneAssociations !== 'undefined') && ( returnObject.geneAssociations.length > 0)) {
-            addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
-
-            // set up the headers, and give us an empty row of column cells
-            var headerNames = [];
-            if (accumulatorObjectFieldEmpty("geneNameArray")) {
-                console.log("We always have to have a record of the current gene names in depict display. We have a problem.");
-            } else {
-                headerNames  = _.map(getAccumulatorObject("geneNameArray"),'name');
-                _.forEach(getAccumulatorObject("geneNameArray"), function (oneRecord) {
-                    intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
-                        {},"header",'EMC'));
-                });
-            }
+        displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
+            'SKA', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+            'rawGeneSkatRecords', // name of the persistent field where the data we received is stored
+            'P_MIN_P_SKAT_NS_STRICT_NS_1PCT', // we may wish to pull out one record for summary purposes
+            function(records,tissueTranslations){
+                return _.map(_.sortBy(_.filter(records,function(t){return t.tissue.includes("SKAT")}),['value']),function(tissueRecord){
+                    return {  tissueName:  translateATissueName(tissueTranslations,tissueRecord.tissue),
+                        tissue: tissueRecord.tissue,
+                        value: UTILS.realNumberFormatter(""+tissueRecord.value),
+                        numericalValue: tissueRecord.value };
+                })
+            } );
 
 
-            // set up the headers, and give us an empty row of column cells
 
-
-            // fill in all of the column cells
-            var preferredSummaryKey = "P_MIN_P_SKAT_NS_STRICT_NS_1PCT";
-            _.forEach(returnObject.geneAssociations, function (recordsPerGene) {
-                var indexOfColumn = _.indexOf(headerNames, recordsPerGene.gene);
-                if (indexOfColumn === -1) {
-                    console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
-                } else {
-                    if ((recordsPerGene.tissues.length === 0)) {
-                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.gene,
-                            {}, "tissue specific",'EMC');
-                    } else {
-                        var significanceValue=0;
-                        var tissueTranslations = recordsPerGene["TISSUE_TRANSLATIONS"];
-                        var tissueRecords = _.map(_.sortBy(_.filter(recordsPerGene.tissues,function(t){return t.tissue.includes("SKAT")}),['value']),function(tissueRecord){
-                            var tissueName  = translateATissueName(tissueTranslations,tissueRecord.tissue);
-                            return {  tissueName: tissueName,
-                                tissue:tissueRecord.tissue,
-                                value: UTILS.realNumberFormatter(""+tissueRecord.value),
-                                numericalValue: tissueRecord.value };
-                        });
-                        var recordsCellPresentationString = "records="+tissueRecords.length;
-                        var significanceCellPresentationString = "";
-                        var significanceValue = 0;
-                        if (( typeof tissueRecords !== 'undefined')&&
-                            (tissueRecords.length>0)){
-                            var minPValue=_.find(tissueRecords,function(t){return t.tissue.includes(preferredSummaryKey)});
-                            significanceCellPresentationString = "p="+minPValue.value+" ("+translateATissueName(tissueTranslations,preferredSummaryKey)+")";
-                            significanceValue = minPValue.value;
-                        }
-                        var renderData = {  numberOfRecords:tissueRecords.length,
-                            cellPresentationStringMap:{ Records:recordsCellPresentationString,
-                                Significance:significanceCellPresentationString },
-                            tissueCategoryNumber:categorizeTissueNumbers( tissueRecords.length ),
-                            tissuesExist:(tissueRecords.length)?[1]:[],
-                            gene:recordsPerGene.gene,
-                            significanceCategoryNumber:categorizeSignificanceNumbers( tissueRecords, "MET", significanceValue ),
-                            significanceValue:significanceValue,
-                            tissues:tissueRecords
-                        };
-                        recordsPerGene["numberOfRecords"] = recordsPerGene.tissues.length;
-                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.gene,
-                            renderData,"tissue specific", dataAnnotationTypeCode);
-                    }
-
-                }
-            });
-            intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
-        }
-
-
-        prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
-            '#dynamicAbcGeneTable',
-            returnObject,
-            clearBeforeStarting,
-            intermediateDataStructure,
-            true,
-            'geneTableGeneHeaders');
-
+        //
+        //var dataAnnotationTypeCode = 'SKA';
+        //var returnObject = createNewDisplayReturnObject();
+        //
+        //// for each gene collect up the data we want to display
+        //_.forEach(getAccumulatorObject("rawGeneSkatRecords"), function (value) {
+        //
+        //    returnObject.geneAssociations.push(value);
+        //
+        //});
+        //
+        //var intermediateDataStructure = new IntermediateDataStructure();
+        //
+        //if (( typeof returnObject.geneAssociations !== 'undefined') && ( returnObject.geneAssociations.length > 0)) {
+        //    addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
+        //
+        //    // set up the headers, and give us an empty row of column cells
+        //    var headerNames = [];
+        //    if (accumulatorObjectFieldEmpty("geneNameArray")) {
+        //        console.log("We always have to have a record of the current gene names in depict display. We have a problem.");
+        //    } else {
+        //        headerNames  = _.map(getAccumulatorObject("geneNameArray"),'name');
+        //        _.forEach(getAccumulatorObject("geneNameArray"), function (oneRecord) {
+        //            intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
+        //                {},"header",'EMC'));
+        //        });
+        //    }
+        //
+        //
+        //    // set up the headers, and give us an empty row of column cells
+        //
+        //
+        //    // fill in all of the column cells
+        //    var preferredSummaryKey = "P_MIN_P_SKAT_NS_STRICT_NS_1PCT";
+        //    _.forEach(returnObject.geneAssociations, function (recordsPerGene) {
+        //        var indexOfColumn = _.indexOf(headerNames, recordsPerGene.gene);
+        //        if (indexOfColumn === -1) {
+        //            console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
+        //        } else {
+        //            if ((recordsPerGene.tissues.length === 0)) {
+        //                intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.gene,
+        //                    {}, "tissue specific",'EMC');
+        //            } else {
+        //                var significanceValue=0;
+        //                var tissueTranslations = recordsPerGene["TISSUE_TRANSLATIONS"];
+        //                var tissueRecords = _.map(_.sortBy(_.filter(recordsPerGene.tissues,function(t){return t.tissue.includes("C")}),['value']),function(tissueRecord){
+        //                    var tissueName  = translateATissueName(tissueTranslations,tissueRecord.tissue);
+        //                    return {  tissueName: tissueName,
+        //                        tissue:tissueRecord.tissue,
+        //                        value: UTILS.realNumberFormatter(""+tissueRecord.value),
+        //                        numericalValue: tissueRecord.value };
+        //                });
+        //                var recordsCellPresentationString = "records="+tissueRecords.length;
+        //                var significanceCellPresentationString = "";
+        //                var significanceValue = 0;
+        //                if (( typeof tissueRecords !== 'undefined')&&
+        //                    (tissueRecords.length>0)){
+        //                    var minPValue=_.find(tissueRecords,function(t){return t.tissue.includes(preferredSummaryKey)});
+        //                    significanceCellPresentationString = "p="+minPValue.value+" ("+translateATissueName(tissueTranslations,preferredSummaryKey)+")";
+        //                    significanceValue = minPValue.value;
+        //                }
+        //                var renderData = {  numberOfRecords:tissueRecords.length,
+        //                    cellPresentationStringMap:{ Records:recordsCellPresentationString,
+        //                        Significance:significanceCellPresentationString },
+        //                    tissueCategoryNumber:categorizeTissueNumbers( tissueRecords.length ),
+        //                    tissuesExist:(tissueRecords.length)?[1]:[],
+        //                    gene:recordsPerGene.gene,
+        //                    significanceCategoryNumber:categorizeSignificanceNumbers( tissueRecords, "MET", significanceValue ),
+        //                    significanceValue:significanceValue,
+        //                    tissues:tissueRecords
+        //                };
+        //                recordsPerGene["numberOfRecords"] = recordsPerGene.tissues.length;
+        //                intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.gene,
+        //                    renderData,"tissue specific", dataAnnotationTypeCode);
+        //            }
+        //
+        //        }
+        //    });
+        //    intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
+        //}
+        //
+        //
+        //prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
+        //    '#dynamicAbcGeneTable',
+        //    returnObject,
+        //    clearBeforeStarting,
+        //    intermediateDataStructure,
+        //    true,
+        //    'geneTableGeneHeaders');
+        //
 
 
     };
