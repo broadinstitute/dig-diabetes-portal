@@ -36,8 +36,8 @@
 <tr><td>228</td><td>Multi-Ethnic Study of Atherosclerosis (MESA)</td><td>Asian American</td></tr>
 <tr><td>707</td><td>Multi-Ethnic Study of Atherosclerosis (MESA)</td><td>European</td></tr>
 <tr><td>458</td><td>Multi-Ethnic Study of Atherosclerosis (MESA)</td><td>Hispanic</td></tr>
-<tr><td>2,209</td><td>Starr County Health Studies (Starr)</td><td>European</td></tr>
-<tr><td>782</td><td>Multi-Ethnic Study of Atherosclerosis (MESA)</td><td>Hispanic</td></tr>
+<tr><td>782</td><td>Starr County Health Studies (Starr)</td><td>European</td></tr>
+<tr><td>2,209</td><td>Osteoporotic Fractures in Men Study (MrOS)</td><td>European</td></tr>
 </table>
 
 
