@@ -10,7 +10,17 @@ mpgSoftware.dynamicUi.depictGeneSets = (function () {
         var dataArrayToProcess = [];
         if ( typeof data !== 'undefined'){
             dataArrayToProcess = {  gene:data.gene,
-                                    tissues:data.data };
+                                    tissues:_.map(data.data,function(oneRec){
+                                        return {
+                                            gene:oneRec.gene,
+                                            gene_list:oneRec.gene,
+                                            pathway_description:oneRec.pathway_description,
+                                            pathway_id:oneRec.pathway_id,
+                                            tissue:oneRec.pathway_id,
+                                            value:oneRec.pvalue
+                                        };
+                                    })
+            };
         }
         rawGeneAssociationRecords.push(dataArrayToProcess);
 
