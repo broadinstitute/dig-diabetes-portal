@@ -93,6 +93,7 @@ Choose associations to view:
                     <div id="phewasplot"></div>
             </div>
         </div>
+    </div>
 
     {{/phewasTab}}
 
@@ -106,7 +107,7 @@ Choose associations to view:
         </div>
     {{/forestTab}}
 
-{{#forestTab}}
+{{#exposeGreenBoxes}}
    <div role="tabpanel" class="tab-pane" id="exposeGreenBoxesHolder">
     <div class="container content-wrapper">
         <g:if test="${g.portalTypeString()?.equals('stroke')}">
@@ -186,7 +187,7 @@ Choose associations to view:
     </div>
 
         </div>
-{{/forestTab}}
+{{/exposeGreenBoxes}}
 
     </div>
 

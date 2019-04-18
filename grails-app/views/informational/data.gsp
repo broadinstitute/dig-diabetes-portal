@@ -93,18 +93,18 @@
                 <h1 class="dk-page-title">Polygenic Scores</h1>
 
 
-                %{--<p style="font-weight: 300; font-size: 18px;"><g:message code="informational.about.PRS2"></g:message></p>--}%
-                %{--<p style="font-weight: 300; font-size: 15px;">--}%
-                    %{--<g:message code="informational.shared.publications.Khera_2019_Cell"></g:message><br>--}%
-                    %{--<g:message code="informational.shared.publications.Khera_2019_Cell.author"></g:message><g:message code="informational.shared.publications.etal"></g:message><br>--}%
-                    %{--<g:message code="informational.shared.publications.Khera_2019_Cell.citation"></g:message><br>--}%
-                %{--</p>--}%
-                %{--<p style="font-weight: 300; font-size: 15px;">--}%
-                    %{--<a href="" target="_blank">Body mass index and obesity (89 MB)</a>--}%
-                %{--</p>--}%
-                %{--<p>--}%
-                    %{--<i><g:message code="informational.mi.prsinfo"></g:message></i>--}%
-                %{--</p>--}%
+                <p style="font-weight: 300; font-size: 18px;"><g:message code="informational.about.PRS2"></g:message></p>
+                <p style="font-weight: 300; font-size: 15px;">
+                    <g:message code="informational.shared.publications.Khera_2019_Cell"></g:message><br>
+                    <g:message code="informational.shared.publications.Khera_2018_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message><br>
+                    <g:message code="informational.shared.publications.Khera_2019_Cell.citation"></g:message><br>
+                </p>
+                <p style="font-weight: 300; font-size: 15px;">
+                    <a href="https://personal.broadinstitute.org/mvon/Khera.et.al_GPS_BMI_Cell_2019.txt.zip" target="_blank">Body mass index and obesity (89 MB)</a>
+                </p>
+                <p>
+                    <i><g:message code="informational.mi.prsinfo"></g:message></i>
+                </p>
 
 
 
@@ -171,6 +171,11 @@
                 <div class="col-md-12">
                     <table class="table table-condensed table-responsive table-striped" border="1">
                         <tr><th><b>PubMed ID</b></th><th><b>Title</b></th><th><b>Download files</b></th><th><b>README files</b></th></tr>
+
+                        <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/30952852" target="_blank">PMID:30952852</a></td><td>Genetic studies of accelerometer-based sleep measures yield new insights into human sleep behaviour.</td>
+                            <td><a href="https://personal.broadinstitute.org/mvon/accel_GWAS_all_BOLT.output_HRC.only_plus.metrics_maf0.001_hwep1em12_info0.3.txt.zip" target="_blank">Download file</a>
+                            </td><td><a href="https://s3.amazonaws.com/broad-portal-resources/sleep/Accelerometer_GWAS_README.txt" target="_blank">README</a></td></tr>
+
 
 
                         <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/30846698" target="_blank">PMID:30846698</a></td><td>Genome-wide association study identifies genetic loci for self-reported habitual sleep duration supported by accelerometer-derived estimates.</td>
