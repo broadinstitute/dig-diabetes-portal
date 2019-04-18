@@ -981,10 +981,11 @@ mpgSoftware.dynamicUi = (function () {
                             name: "getDepictGeneSetForGenesTable",
                             retrieveDataUrl: additionalParameters.retrieveDepictGeneSetUrl,
                             dataForCall: dataForCall,
-                            processEachRecord: processRecordsFromDepictGeneSet,
+                            processEachRecord: mpgSoftware.dynamicUi.depictGeneSets.processRecordsFromDepictGeneSet,
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
-                            actionId: nextActionId
+                            actionId: nextActionId,
+                            nameOfAccumulatorField:'depictGeneSetInfo'
                         }));
                     }
                 };
@@ -1540,19 +1541,19 @@ mpgSoftware.dynamicUi = (function () {
     };
 
 
-    var processRecordsFromDepictGeneSet = function (data) {
-
-        var depictGeneSet = getAccumulatorObject('depictGeneSetInfo');
-
-        //_.forEach(data, function (oneRec) {
-        //    depictGeneSet.push(oneRec);
-        //});
-
-        depictGeneSet.push(data);
-
-
-        return depictGeneSet;
-    };
+    // var processRecordsFromDepictGeneSet = function (data) {
+    //
+    //     var depictGeneSet = getAccumulatorObject('depictGeneSetInfo');
+    //
+    //     //_.forEach(data, function (oneRec) {
+    //     //    depictGeneSet.push(oneRec);
+    //     //});
+    //
+    //     depictGeneSet.push(data);
+    //
+    //
+    //     return depictGeneSet;
+    // };
 
 
     var processRecordsFromQtl = function (data) {
@@ -1958,91 +1959,127 @@ mpgSoftware.dynamicUi = (function () {
 
 
     var displayGeneSetFromDepict = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-        var dataAnnotationTypeCode = 'DEP_GS';
-        var returnObject = createNewDisplayReturnObject();
-        var depictGeneSet = getAccumulatorObject('depictGeneSetInfo');
-        if (( typeof getAccumulatorObject("depictGeneSetInfo") !== 'undefined') &&
-            ( getAccumulatorObject("depictGeneSetInfo").length > 0 ) &&
-            ( typeof getAccumulatorObject("depictGeneSetInfo").data !== 'undefined') &&
-            ( getAccumulatorObject("depictGeneSetInfo").data.length > 0 ) ){
-            _.forEach(getAccumulatorObject("depictGeneSetInfo").data, function (informationForAPathway, index) {
-                depictGeneSet.push(informationForAPathway);
-            });
 
-        }
+        displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
+            'DEP_GS', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+            'depictGeneSetInfo', // name of the persistent field where the data we received is stored
+            '', // we may wish to pull out one record for summary purposes
+            function(records,tissueTranslations){
+                return _.map(_.sortBy(records,['pvalue']),function(oneRecord){
+                    return {    pathway_description:  oneRecord.pathway_description,
+                                gene_list: oneRecord.gene_list,
+                                pathway_id: oneRecord.pathway_id.includes(":")?
+                                            oneRecord.pathway_id.split(":")[1]:oneRecord.pathway_id,
+                                value: UTILS.realNumberFormatter(""+oneRecord.pvalue),
+                                numericalValue: oneRecord.pvalue };
+                            });
 
-        var intermediateDataStructure = new IntermediateDataStructure();
-
-        if (( typeof depictGeneSet !== 'undefined') && ( depictGeneSet.length > 0)) {
-            addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
-
-
-
-            // set up the headers, and give us an empty row of column cells
-            var headerNames = [];
-            if (accumulatorObjectFieldEmpty("geneNameArray")) {
-                console.log("We always have to have a record of the current gene names in depict gene set display. We have a problem.");
-            } else {
-                headerNames  = _.map(getAccumulatorObject("geneNameArray"),'name');
-                _.forEach(getAccumulatorObject("geneNameArray"), function (oneRecord) {
-                    intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
-                        {},"header",'EMC'));
-                });
-            }
-
-
-            // set up the headers, and give us an empty row of column cells
-
-
-            // fill in all of the column cells
-            _.forEach(depictGeneSet, function (recordsPerGene) {
-                var indexOfColumn = _.indexOf(headerNames, recordsPerGene.gene);
-                recordsPerGene["recordsExist"] =  [];
-                if (indexOfColumn === -1) {
-                    console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
-                } else {
-                    recordsPerGene["numberOfRecords"] =  recordsPerGene.data.length;
-                    if ((recordsPerGene.data.length === 0)) {
-                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
-                            {}, "tissue specific",'EMC');
-                    } else {
-                        recordsPerGene.data = _.sortBy(recordsPerGene.data,['pvalue']);
-
-                        recordsPerGene["recordsExist"] =  [1];
-                        recordsPerGene["tissueCategoryNumber"]=categorizeTissueNumbers( recordsPerGene.data.length );
-                        recordsPerGene["significanceCategoryNumber"]=categorizeSignificanceNumbers( recordsPerGene.data,"DEG" );
-                        recordsPerGene["significanceValue"]=recordsPerGene.data[0].pvalue;
-                        _.forEach(recordsPerGene.data,function(eachPathway){
-                            eachPathway["pvalue_str"] =  UTILS.realNumberFormatter(''+eachPathway.pvalue);
-                            if (eachPathway.pathway_id.includes(":")){
-                                eachPathway["pathway_id_str"] = eachPathway.pathway_id.split(":")[1];
-                            } else {
-                                eachPathway["pathway_id_str"] = eachPathway.pathway_id;
-                            }
-                            var recordsCellPresentationString = "records="+recordsPerGene.data.length;
-                            var significanceCellPresentationString = "0";
-                                significanceCellPresentationString  = "p="+recordsPerGene.data[0].pvalue_str+" ("+recordsPerGene.data[0].pathway_id+")";
-                            recordsPerGene["cellPresentationStringMap"] = { Records:recordsCellPresentationString,
-                                Significance:significanceCellPresentationString };
-                            eachPathway["number_genes"] = eachPathway.gene_list.length;
-                        });
-                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
-                            recordsPerGene,"tissue specific", dataAnnotationTypeCode);
-                    }
-
+            },
+            function(records, // all records
+                     recordsCellPresentationString,// record count cell text
+                     significanceCellPresentationString,// significance cell text
+                     dataAnnotationTypeCode,// driving code
+                     significanceValue,
+                     gene ){ // value of significance for sorting
+                return {  numberOfRecords:records.length,
+                    cellPresentationStringMap:{ Records:recordsCellPresentationString,
+                    Significance:significanceCellPresentationString },
+                    tissueCategoryNumber:categorizeTissueNumbers( records.length ),
+                    recordsExist:(records.length)?[1]:[],
+                    gene:gene,
+                    significanceCategoryNumber:categorizeSignificanceNumbers( records, dataAnnotationTypeCode, significanceValue ),
+                    significanceValue:significanceValue,
+                    tissues:records
                 }
-            });
-            intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
-        }
+            } );
 
 
-        prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
-            '#dynamicAbcGeneTable',
-            returnObject,
-            clearBeforeStarting,
-            intermediateDataStructure,
-            true,
-            'geneTableGeneHeaders');
+
+        // var dataAnnotationTypeCode = 'DEP_GS';
+        // var returnObject = createNewDisplayReturnObject();
+        // var depictGeneSet = getAccumulatorObject('depictGeneSetInfo');
+        // if (( typeof getAccumulatorObject("depictGeneSetInfo") !== 'undefined') &&
+        //     ( getAccumulatorObject("depictGeneSetInfo").length > 0 ) &&
+        //     ( typeof getAccumulatorObject("depictGeneSetInfo").data !== 'undefined') &&
+        //     ( getAccumulatorObject("depictGeneSetInfo").data.length > 0 ) ){
+        //     _.forEach(getAccumulatorObject("depictGeneSetInfo").data, function (informationForAPathway, index) {
+        //         depictGeneSet.push(informationForAPathway);
+        //     });
+        //
+        // }
+        //
+        // var intermediateDataStructure = new IntermediateDataStructure();
+        //
+        // if (( typeof depictGeneSet !== 'undefined') && ( depictGeneSet.length > 0)) {
+        //     addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
+        //
+        //
+        //
+        //     // set up the headers, and give us an empty row of column cells
+        //     var headerNames = [];
+        //     if (accumulatorObjectFieldEmpty("geneNameArray")) {
+        //         console.log("We always have to have a record of the current gene names in depict gene set display. We have a problem.");
+        //     } else {
+        //         headerNames  = _.map(getAccumulatorObject("geneNameArray"),'name');
+        //         _.forEach(getAccumulatorObject("geneNameArray"), function (oneRecord) {
+        //             intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
+        //                 {},"header",'EMC'));
+        //         });
+        //     }
+        //
+        //
+        //     // set up the headers, and give us an empty row of column cells
+        //
+        //
+        //     // fill in all of the column cells
+        //     _.forEach(depictGeneSet, function (recordsPerGene) {
+        //         var indexOfColumn = _.indexOf(headerNames, recordsPerGene.gene);
+        //         recordsPerGene["recordsExist"] =  [];
+        //         if (indexOfColumn === -1) {
+        //             console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
+        //         } else {
+        //             recordsPerGene["numberOfRecords"] =  recordsPerGene.data.length;
+        //             if ((recordsPerGene.data.length === 0)) {
+        //                 intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
+        //                     {}, "tissue specific",'EMC');
+        //             } else {
+        //                 recordsPerGene.data = _.sortBy(recordsPerGene.data,['pvalue']);
+        //
+        //                 recordsPerGene["recordsExist"] =  [1];
+        //                 recordsPerGene["tissueCategoryNumber"]=categorizeTissueNumbers( recordsPerGene.data.length );
+        //                 recordsPerGene["significanceCategoryNumber"]=categorizeSignificanceNumbers( recordsPerGene.data,"DEG" );
+        //                 recordsPerGene["significanceValue"]=recordsPerGene.data[0].pvalue;
+        //                 _.forEach(recordsPerGene.data,function(eachPathway){
+        //                     eachPathway["pvalue_str"] =  UTILS.realNumberFormatter(''+eachPathway.pvalue);
+        //                     if (eachPathway.pathway_id.includes(":")){
+        //                         eachPathway["pathway_id_str"] = eachPathway.pathway_id.split(":")[1];
+        //                     } else {
+        //                         eachPathway["pathway_id_str"] = eachPathway.pathway_id;
+        //                     }
+        //                     var recordsCellPresentationString = "records="+recordsPerGene.data.length;
+        //                     var significanceCellPresentationString = "0";
+        //                         significanceCellPresentationString  = "p="+recordsPerGene.data[0].pvalue_str+" ("+recordsPerGene.data[0].pathway_id+")";
+        //                     recordsPerGene["cellPresentationStringMap"] = { Records:recordsCellPresentationString,
+        //                         Significance:significanceCellPresentationString };
+        //                     eachPathway["number_genes"] = eachPathway.gene_list.length;
+        //                 });
+        //                 intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
+        //                     recordsPerGene,"tissue specific", dataAnnotationTypeCode);
+        //             }
+        //
+        //         }
+        //     });
+        //     intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
+        // }
+        //
+        //
+        // prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
+        //     '#dynamicAbcGeneTable',
+        //     returnObject,
+        //     clearBeforeStarting,
+        //     intermediateDataStructure,
+        //     true,
+        //     'geneTableGeneHeaders');
 
     };
 
@@ -2067,6 +2104,23 @@ mpgSoftware.dynamicUi = (function () {
                         value: UTILS.realNumberFormatter(""+tissueRecord.value),
                         numericalValue: tissueRecord.value };
                 })
+            },
+            function(records, // all records
+                     recordsCellPresentationString,// record count cell text
+                     significanceCellPresentationString,// significance cell text
+                     dataAnnotationTypeCode,// driving code
+                     significanceValue,
+                     gene){ // value of significance for sorting
+                return {  numberOfRecords:records.length,
+                    cellPresentationStringMap:{ Records:recordsCellPresentationString,
+                        Significance:significanceCellPresentationString },
+                    tissueCategoryNumber:categorizeTissueNumbers( records.length ),
+                    tissuesExist:(records.length)?[1]:[],
+                    gene:gene,
+                    significanceCategoryNumber:categorizeSignificanceNumbers( records, dataAnnotationTypeCode, significanceValue ),
+                    significanceValue:significanceValue,
+                    tissues:records
+                }
             } );
 
     };
@@ -2099,6 +2153,23 @@ mpgSoftware.dynamicUi = (function () {
                         value: UTILS.realNumberFormatter(""+tissueRecord.value),
                         numericalValue: tissueRecord.value };
                 })
+            },
+            function(records, // all records
+                     recordsCellPresentationString,// record count cell text
+                     significanceCellPresentationString,// significance cell text
+                     dataAnnotationTypeCode,// driving code
+                     significanceValue,
+                     gene ){ // value of significance for sorting
+                return {  numberOfRecords:records.length,
+                    cellPresentationStringMap:{ Records:recordsCellPresentationString,
+                        Significance:significanceCellPresentationString },
+                    tissueCategoryNumber:categorizeTissueNumbers(records.length ),
+                    tissuesExist:(records.length)?[1]:[],
+                    gene:gene,
+                    significanceCategoryNumber:categorizeSignificanceNumbers( records, dataAnnotationTypeCode, significanceValue ),
+                    significanceValue:significanceValue,
+                    tissues:records
+                }
             } );
 
 
@@ -2121,8 +2192,25 @@ mpgSoftware.dynamicUi = (function () {
                         value: UTILS.realNumberFormatter(""+tissueRecord.value),
                         numericalValue: tissueRecord.value };
                 })
-            } );
-
+            },
+            function(records, // all records
+                     recordsCellPresentationString,// record count cell text
+                     significanceCellPresentationString,// significance cell text
+                     dataAnnotationTypeCode,// driving code
+                     significanceValue,
+                     gene ){ // value of significance for sorting
+                return {  numberOfRecords:records.length,
+                    cellPresentationStringMap:{ Records:recordsCellPresentationString,
+                    Significance:significanceCellPresentationString },
+                    tissueCategoryNumber:categorizeTissueNumbers( records.length ),
+                        tissuesExist:(records.length)?[1]:[],
+                    gene:gene,
+                    significanceCategoryNumber:categorizeSignificanceNumbers( records, dataAnnotationTypeCode, significanceValue ),
+                    significanceValue:significanceValue,
+                    tissues:records
+                }
+            }
+        );
     };
 
 
@@ -2134,7 +2222,8 @@ mpgSoftware.dynamicUi = (function () {
                                         dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
                                         nameOfAccumulatorField, // name of the persistent field where the data we received is stored
                                         preferredSummaryKey, // we may wish to pull out one record for summary purposes
-                                        mapSortAndFilterFunction ) { // sort and filter the records we will use.  Resulting array must have fields tissue, value, and numericalValue
+                                        mapSortAndFilterFunction,
+                                        placeDataIntoRenderForm ) { // sort and filter the records we will use.  Resulting array must have fields tissue, value, and numericalValue
 
         var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode);
         var returnObject = createNewDisplayReturnObject();
@@ -2195,16 +2284,12 @@ mpgSoftware.dynamicUi = (function () {
 
                         }
                         //  this is the information we carry around each cell and that we will later use to display it
-                        var renderData = {  numberOfRecords:tissueRecords.length,
-                            cellPresentationStringMap:{ Records:recordsCellPresentationString,
-                                Significance:significanceCellPresentationString },
-                            tissueCategoryNumber:categorizeTissueNumbers( tissueRecords.length ),
-                            tissuesExist:(tissueRecords.length)?[1]:[],
-                            gene:recordsPerGene.gene,
-                            significanceCategoryNumber:categorizeSignificanceNumbers( tissueRecords, dataAnnotationTypeCode, significanceValue ),
-                            significanceValue:significanceValue,
-                            tissues:tissueRecords
-                        };
+                        var renderData = placeDataIntoRenderForm(   tissueRecords,
+                                                                    recordsCellPresentationString,
+                                                                    significanceCellPresentationString,
+                                                                    dataAnnotationTypeCode,
+                                                                    significanceValue,
+                                                                    recordsPerGene.gene );
                         recordsPerGene["numberOfRecords"] = recordsPerGene.tissues.length;//not sure if this is used
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.gene,
                             renderData,"tissue specific",dataAnnotationTypeCode );
@@ -3970,7 +4055,6 @@ mpgSoftware.dynamicUi = (function () {
         }
 
 
-       // $('#getVariantsFromQtlAndThenRetrieveEpigeneticData').click();
     };
 
 
