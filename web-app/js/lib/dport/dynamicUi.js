@@ -3968,7 +3968,7 @@ mpgSoftware.dynamicUi = (function () {
         if (additionalParameters.exposeDynamicUi === "1"){
             $('#retrieveMultipleRecordsTest').click();
         }
-        
+
 
        // $('#getVariantsFromQtlAndThenRetrieveEpigeneticData').click();
     };
