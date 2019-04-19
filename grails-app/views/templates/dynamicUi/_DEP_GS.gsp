@@ -4,7 +4,7 @@ records={{numberRecords}}
 </script>
 
 <script id="depictGeneSetTableSignificanceCellPresentationString"  type="x-tmpl-mustache">
-p={{significanceValue}} ({{recordDescription}})
+p={{significanceValueAsString}} ({{recordDescription}})
 </script>
 
 

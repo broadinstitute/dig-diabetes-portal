@@ -13,7 +13,7 @@ mpgSoftware.dynamicUi.depictGeneSets = (function () {
                                     tissues:_.map(data.data,function(oneRec){
                                         return {
                                             gene:oneRec.gene,
-                                            gene_list:oneRec.gene,
+                                            gene_list:oneRec.gene_list,
                                             pathway_description:oneRec.pathway_description,
                                             pathway_id:oneRec.pathway_id,
                                             tissue:oneRec.pathway_id,

@@ -1970,8 +1970,8 @@ mpgSoftware.dynamicUi = (function () {
                                 gene_list: oneRecord.gene_list,
                                 pathway_id: oneRecord.pathway_id.includes(":")?
                                             oneRecord.pathway_id.split(":")[1]:oneRecord.pathway_id,
-                                value: UTILS.realNumberFormatter(""+oneRecord.pvalue),
-                                numericalValue: oneRecord.pvalue };
+                                value: UTILS.realNumberFormatter(""+oneRecord.value),
+                                numericalValue: oneRecord.value };
                             });
 
             },
@@ -1989,7 +1989,7 @@ mpgSoftware.dynamicUi = (function () {
                     gene:gene,
                     significanceCategoryNumber:categorizeSignificanceNumbers( records, dataAnnotationTypeCode, significanceValue ),
                     significanceValue:significanceValue,
-                    tissues:records
+                    data:records
                 }
             } );
 
@@ -2280,7 +2280,9 @@ mpgSoftware.dynamicUi = (function () {
                              }
                             significanceValue = mostSignificantRecord.value;
                             significanceCellPresentationString = Mustache.render($('#'+dataAnnotationType.dataAnnotation.significanceCellPresentationStringWriter)[0].innerHTML,
-                                {significanceValue:significanceValue,recordDescription:translateATissueName(tissueTranslations,mostSignificantRecord.tissue)});
+                                {significanceValue:significanceValue,
+                                    significanceValueAsString:UTILS.realNumberFormatter(""+significanceValue),
+                                    recordDescription:translateATissueName(tissueTranslations,mostSignificantRecord.tissue)});
 
                         }
                         //  this is the information we carry around each cell and that we will later use to display it
