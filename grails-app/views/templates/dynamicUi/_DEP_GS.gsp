@@ -4,7 +4,7 @@ records={{numberRecords}}
 </script>
 
 <script id="depictGeneSetTableSignificanceCellPresentationString"  type="x-tmpl-mustache">
-p={{significanceValueAsString}} ({{recordDescription}})
+p={{value}} ({{recordDescription}})
 </script>
 
 
@@ -43,7 +43,7 @@ p={{significanceValueAsString}} ({{recordDescription}})
                       <tr role="row">
                            <td style="padding: 3px">{{pathway_id}}</td>
                            <td style="padding: 3px">{{pathway_description}}</td>
-                           <td style="padding: 3px">{{pvalue_str}}</td>
+                           <td style="padding: 3px">{{value}}</td>
                            <td style="padding: 3px">
                            <div>
                                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'DEPICT gene set',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander" data-target="#depict_geneset_d{{pathway_id_str}}" title="{{#gene_list}}{{.}},{{/gene_list}}">{{number_genes}} genes</a>

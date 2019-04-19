@@ -858,46 +858,6 @@
 </script>
 
 
-<script id="depictGeneTableSubCategory"  type="x-tmpl-mustache">
-     <div significance_sortfield='{{index}}' class='subcategory initialLinearIndex_{{indexInOneDimensionalArray}}'
-      sortField='{{index}}' subSortField='-1'>
-     {{#dataAnnotation}}
-          {{displaySubcategory}}
-          <g:helpText title="gene.DEPICTprior.help.header" placement="bottom" body="gene.DEPICTprior.help.text"/>
-     {{/dataAnnotation}}
-     </div>
-</script>
-
-
-<script id="depictGeneTableBody"  type="x-tmpl-mustache">
-             <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
-             class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
-               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'DEPICT predictions for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)"
-               class="cellExpander" data-target="#depict_data_{{geneName}}" style="color:black">{{cellPresentationString}}</a>
-               <div  class="collapse openDepictInGeneTable" id="depict_data_{{geneName}}">
-                    {{#recordsExist}}
-                    <table class="openDepictInGeneTable" style="border: 0">
-                     <thead>
-                      <tr role="row">
-                        <th style="border-right: 0; border-top: 0"  class="text-center"></th>
-                      </tr>
-                     </thead>
-                     <tbody>
-                    {{/recordsExist}}
-                    {{#records}}
-                       <tr role="row">
-                           <td style="border-right: 0; padding: 3px">p-value = {{value}}</td>
-                       </tr>
-                    {{/records}}
-                    {{#recordsExist}}
-                     </tbody>
-                    </table>
-                    {{/recordsExist}}
-               </div>
-            </div>
-</script>
-
-
 
 
 %{--Called from displayPhenotypeRecordsFromVariantQtlSearch--}%
