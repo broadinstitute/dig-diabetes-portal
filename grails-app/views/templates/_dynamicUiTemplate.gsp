@@ -236,54 +236,6 @@
 
 
 
-<script id="dynamicGeneTableModSubCategory"  type="x-tmpl-mustache">
-     <div significance_sortfield='{{index}}' class='subcategory initialLinearIndex_{{indexInOneDimensionalArray}}'
-      sortField='{{index}}' subSortField='-1'>
-     {{#dataAnnotation}}
-          {{displaySubcategory}}
-          <g:helpText title="gene.MOD.help.header" placement="bottom" body="gene.MOD.help.text"/>
-     {{/dataAnnotation}}
-     </div>
-</script>
-
-
-
-<script id="dynamicGeneTableModBody"  type="x-tmpl-mustache">
-             <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
-             class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
-               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'MOD matches for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)"
-               class="cellExpander" data-target="#mod_data_{{geneName}}"  style="color:black">{{cellPresentationString}}</a>
-               <div  class="collapse openModInGeneTable" id="mod_data_{{geneName}}">
-                    {{#recordsExist}}
-                    {{#geneName}}
-                     <div> {{.}}</div>
-                    {{/geneName}}
-                    {{#geneDescription}}
-                       <div> {{.}}</div>
-                    {{/geneDescription}}
-                    <table class="openModInGeneTable" style="border: 0">
-                     <thead>
-                      <tr role="row">
-                        <th style="border-top: 0;" class="text-center">term</th>
-                      </tr>
-                     </thead>
-                     <tbody>
-                    {{/recordsExist}}
-                    {{#modTerms}}
-                       <tr role="row">
-                           <td style="padding: 3px">{{modName}}</td>
-                       </tr>
-                    {{/modTerms}}
-                    {{#recordsExist}}
-                     </tbody>
-                    </table>
-                    {{/recordsExist}}
-               </div>
-            </div>
-</script>
-
-
-
 
 
 
@@ -806,3 +758,4 @@
 <g:render template="/templates/dynamicUi/DEP_GP" />
 <g:render template="/templates/dynamicUi/ECA" />
 <g:render template="/templates/dynamicUi/COL" />
+<g:render template="/templates/dynamicUi/MOD" />

@@ -284,7 +284,9 @@ td.tissueTable.informationIsPresent{
                             displaySubcategory: 'Mouse knockout phenotypes',
                             cellBodyWriter:'dynamicGeneTableModBody',
                             categoryWriter:'sharedCategoryWriter',
-                            subCategoryWriter:'dynamicGeneTableModSubCategory' }
+                            subCategoryWriter:'dynamicGeneTableModSubCategory',
+                            numberRecordsCellPresentationStringWriter:'modTableNumberRecordsCellPresentationString',
+                            significanceCellPresentationStringWriter:'modTableSignificanceCellPresentationString' }
                         // ,{   code: 'EQT',
                         //     category: 'Annotation',
                         //     displayCategory: 'Annotation',
