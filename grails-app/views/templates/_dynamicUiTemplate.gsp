@@ -41,6 +41,7 @@
 
 <script id="emptyRecord"  type="x-tmpl-mustache">
      <div class="{{initialLinearIndex}} {{otherClasses}}" sortField="A">
+                     <div>{{constText}}</div>
      </div>
 </script>
 
@@ -270,6 +271,7 @@
 <script id="dynamicGeneTableEmptyRecord"  type="x-tmpl-mustache">
 
                 <div class="{{initialLinearIndex}}" sortField=0 significance_sortfield='0.0'>
+                {{constText}}
                 </div>
 
 

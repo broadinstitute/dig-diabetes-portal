@@ -119,9 +119,11 @@ table.combinedGeneTableHolder td.sorting_1{
 }
 .glyphicon.glyphicon-step-backward {
     font-size: 10px;
+    color:lightblue;
 }
 .glyphicon.glyphicon-step-forward {
     font-size: 10px;
+    color:lightblue;
 }
 div.geneAnnotationShifters{
     padding: 0;

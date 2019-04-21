@@ -4434,7 +4434,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         case 'geneTableGeneHeaders':
                             addedColumns.push(new IntermediateStructureDataCell('farLeftCorner',
                                 {initialLinearIndex:"initialLinearIndex_0"},
-                                'categoryName','EMP'));
+                                'categoryNam','EMP'));
                             sortability.push(true);
                             addedColumns.push(new IntermediateStructureDataCell('b',
                                 {initialLinearIndex:"initialLinearIndex_1"},
@@ -4512,8 +4512,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                      }
 
 
-                     var noSorting = (((count+numberOfAddedColumns)===0)&&(typeOfHeader==='geneTableGeneHeaders'));
-                    // var noSorting = false;
+                    // var noSorting = (((count+numberOfAddedColumns)===0)&&(typeOfHeader==='geneTableGeneHeaders'));
+                     var noSorting = false;
                      headerDescriber.aoColumnDefs.push({
                         "title": contentOfHeader,
                         "targets": noSorting?'nosort':[count+numberOfAddedColumns],
@@ -4917,7 +4917,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             if ( typeof header.children[0] === 'undefined'){
                 // I'm completely unclear about why this special case is required.  It seems as if the first header in
                 // the gene table has no div.  But why?  All the other headers have DIVs.  Here's a workaround until I can figure it out.
-                divContents = '<div class="initialLinearIndex_0 geneFarLeftCorner"></div>'
+                divContents = '<div class="initialLinearIndex_0 geneFarLeftCorner">category X</div>'
             } else {
                 divContents = header.children[0].outerHTML;
             }
@@ -5349,7 +5349,7 @@ var destroySharedTable = function (whereTheTableGoes) {
             if ($(idName).length) { $("button"+className).removeClass("active") }
         });
         redrawTableOnClick('table.combinedGeneTableHolder',-1,-1);
-        refineTableRecords($(whereTheTableGoes).dataTable(),'geneTableGeneHeaders',[],false);
+        refineTableRecords($(whereTheTableGoes).dataTable(),sharedTable.currentForm,[],false);
     }
 
 
@@ -5605,7 +5605,15 @@ var destroySharedTable = function (whereTheTableGoes) {
             }
         });
         return indexOfClickedColumn;
+    };
+
+
+
+    var getCurrentTableFormat =function(whereTheTableGoes) {
+        var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
+        return sharedTable.currentForm;
     }
+
 
 
 
@@ -5614,16 +5622,8 @@ var destroySharedTable = function (whereTheTableGoes) {
         var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
         var identifyingNode = $(offeredThis).parent().parent().parent();
         var initialLinearIndex = extractClassBasedIndex(identifyingNode[0].innerHTML,"initialLinearIndex_");
-        //var dataTable = $(whereTheTableGoes).dataTable().DataTable();
         var numberOfHeaders = getNumberOfHeaders (whereTheTableGoes);
         var indexOfClickedColumn =retrieveCurrentIndexOfColumn (whereTheTableGoes,initialLinearIndex);
-        //_.each(_.range(0,numberOfHeaders),function(index) {
-        //    var header = dataTable.table().column(index).header();
-        //    var headerLinearIndex = extractClassBasedIndex($(header)[0].innerHTML,"initialLinearIndex_");
-        //    if (headerLinearIndex ===initialLinearIndex){
-        //        indexOfClickedColumn = index;
-        //    }
-        //});
         var leftBackstop;
         if ((sharedTable.currentForm === 'geneTableGeneHeaders') || (sharedTable.currentForm === 'variantTableVariantHeaders')){
             leftBackstop = 1;
@@ -5668,16 +5668,16 @@ var destroySharedTable = function (whereTheTableGoes) {
         }
 
         $( classNameToIdentifyHeader ).draggable({
-             axis: "x" ,
-            stop: function() {
-                //counts[ 2 ]++;
-                //updateCounterStatus( $stop_counter, counts[ 2 ] );
-            },opacity: 0.7,  containment: "parent"
+             axis: "x",
+            opacity: 0.8,
+            containment: "parent",
+            revert:"invalid"
         });
         $( classNameToIdentifyHeader).droppable({
             classes: {
                 "ui-droppable-hover": "ui-state-hover"
             },
+            accept:classNameToIdentifyHeader,
             drop: function( event, ui ) {
                 handleRequestToDropADraggableColumn(this,ui);
             }
