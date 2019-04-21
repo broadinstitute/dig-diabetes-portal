@@ -21,7 +21,7 @@
 <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
 
 <table class="table table-condensed table-responsive table-striped">
-    <tr><<th>Samples in analyses</th><th>Cohort</th><th>Ancestry</th><th>Technology</th></tr>
+    <tr><th>Samples in analyses</th><th>Cohort</th><th>Ancestry</th><th>Technology</th></tr>
 <tr><td>2375</td><td>Age, Gene/Environment Susceptibility (AGES)</td><td>European</td><td>GWAS</td></tr>
 <tr><td>850</td><td>The Old Order Amish (Amish)</td><td>European</td><td>GWAS</td></tr>
 <tr><td>624</td><td>Berlin Aging Study II BASE-II)</td><td>European</td><td>GWAS</td></tr>
