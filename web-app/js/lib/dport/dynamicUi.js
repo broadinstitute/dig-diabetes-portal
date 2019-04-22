@@ -5320,7 +5320,7 @@ var destroySharedTable = function (whereTheTableGoes) {
             $(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).css({"top":divTop,"left":divLeft});
 
             $(".dk-new-ui-data-wrapper").draggable({ handle:".closer-wrapper"});
-         //   $(".dk-new-ui-data-wrapper").resizable();
+            //$(".dk-new-ui-data-wrapper").resizable();
         }
 
 
