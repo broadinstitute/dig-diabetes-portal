@@ -41,6 +41,7 @@
 
 <script id="emptyRecord"  type="x-tmpl-mustache">
      <div class="{{initialLinearIndex}} {{otherClasses}}" sortField="A">
+                     <div>{{constText}}</div>
      </div>
 </script>
 
@@ -213,7 +214,7 @@
 
 
 <script id="sharedCategoryWriter"  type="x-tmpl-mustache">
-     <div significance_sortfield='0' sortField='{{index}}' subSortField='-1' class={{row.subcategory}} initialLinearIndex_{{indexInOneDimensionalArray}} geneRow'>
+     <div significance_sortfield='0' sortField='{{index}}' subSortField='-1' class='{{row.subcategory}} initialLinearIndex_{{indexInOneDimensionalArray}} categoryName'>
            <div class="geneAnnotationShifters text-center">
                 <span class="glyphicon glyphicon-step-backward" aria-hidden="true" onclick="mpgSoftware.dynamicUi.shiftColumnsByOne(event,this,'backward','table.combinedGeneTableHolder')"></span>
                 <span class="glyphicon glyphicon-step-forward" aria-hidden="true" onclick="mpgSoftware.dynamicUi.shiftColumnsByOne(event,this,'forward','table.combinedGeneTableHolder')"></span>
@@ -234,212 +235,6 @@
 
 </script>
 
-
-
-<script id="dynamicGeneTableModSubCategory"  type="x-tmpl-mustache">
-     <div significance_sortfield='{{index}}' class='subcategory initialLinearIndex_{{indexInOneDimensionalArray}}'
-      sortField='{{index}}' subSortField='-1'>
-     {{#dataAnnotation}}
-          {{displaySubcategory}}
-          <g:helpText title="gene.MOD.help.header" placement="bottom" body="gene.MOD.help.text"/>
-     {{/dataAnnotation}}
-     </div>
-</script>
-
-
-
-<script id="dynamicGeneTableModBody"  type="x-tmpl-mustache">
-             <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
-             class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
-               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'MOD matches for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)"
-               class="cellExpander" data-target="#mod_data_{{geneName}}"  style="color:black">{{cellPresentationString}}</a>
-               <div  class="collapse openModInGeneTable" id="mod_data_{{geneName}}">
-                    {{#recordsExist}}
-                    {{#geneName}}
-                     <div> {{.}}</div>
-                    {{/geneName}}
-                    {{#geneDescription}}
-                       <div> {{.}}</div>
-                    {{/geneDescription}}
-                    <table class="openModInGeneTable" style="border: 0">
-                     <thead>
-                      <tr role="row">
-                        <th style="border-top: 0;" class="text-center">term</th>
-                      </tr>
-                     </thead>
-                     <tbody>
-                    {{/recordsExist}}
-                    {{#modTerms}}
-                       <tr role="row">
-                           <td style="padding: 3px">{{modName}}</td>
-                       </tr>
-                    {{/modTerms}}
-                    {{#recordsExist}}
-                     </tbody>
-                    </table>
-                    {{/recordsExist}}
-               </div>
-            </div>
-</script>
-
-
-<script id="depictGeneSetSubCategory"  type="x-tmpl-mustache">
-     <div significance_sortfield='{{index}}' class='subcategory initialLinearIndex_{{indexInOneDimensionalArray}}'
-      sortField='{{index}}' subSortField='-1'>
-     {{#dataAnnotation}}
-          {{displaySubcategory}}
-          <g:helpText title="gene.DEPICTsets.help.header" placement="bottom" body="gene.DEPICTsets.help.text"/>
-     {{/dataAnnotation}}
-    </div>
-</script>
-
-
-<script id="depictGeneSetBody"  type="x-tmpl-mustache">
-
-             <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
-             class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
-               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'DEPICT gene set containing {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
-               data-target="#depict_geneset_{{gene}}" style="color:black">{{cellPresentationString}}</a>
-               <div  class="collapse openDepictGeneSetInGeneTable" id="depict_geneset_{{gene}}">
-                    {{#recordsExist}}
-                     <div>{{gene}}</div>
-                    <table class="openDepictGeneSetInGeneTable" style="border: 0">
-                     <thead>
-                      <tr role="row">
-                        <th style="border-top: 0;" class="text-center">pathway ID</th>
-                        <th style="border-top: 0;" class="text-center">description</th>
-                        <th style="border-top: 0;" class="text-center">p-value</th>
-                        <th style="border-top: 0;" class="text-center">genes</th>
-                      </tr>
-                     </thead>
-                     <tbody>
-                    {{/recordsExist}}
-                    {{#data}}
-                      <tr role="row">
-                           <td style="padding: 3px">{{pathway_id}}</td>
-                           <td style="padding: 3px">{{pathway_description}}</td>
-                           <td style="padding: 3px">{{pvalue_str}}</td>
-                           <td style="padding: 3px">
-                           <div>
-                               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'DEPICT gene set',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander" data-target="#depict_geneset_d{{pathway_id_str}}" title="{{#gene_list}}{{.}},{{/gene_list}}">{{number_genes}} genes</a>
-                               <div  class="collapse holdMultipleElements openTissues" id="depict_geneset_d{{pathway_id_str}}" >
-                               <table width=50>
-                               <th>{{pathway_id}}</th>
-                               <tbody>
-                                 {{#gene_list}}
-                                    <tr><td class="text-center">{{.}}</td></tr>
-                                 {{/gene_list}}
-                               </tbody>
-                               </table>
-                               </div>
-                           </div>
-                           </td>
-                       </tr>
-
-                    {{/data}}
-                    {{#recordsExist}}
-                     </tbody>
-                    </table>
-                    {{/recordsExist}}
-               </div>
-            </div>
-</script>
-
-
-
-<script id="eCaviarSubCategory"  type="x-tmpl-mustache">
-     <div significance_sortfield='{{index}}' class='subcategory initialLinearIndex_{{indexInOneDimensionalArray}}'
-      sortField='{{index}}' subSortField='-1'>
-      {{#dataAnnotation}}
-         {{displaySubcategory}}
-         <g:helpText title="gene.eCAVIAR.help.header" placement="bottom" body="gene.eCAVIAR.help.text"/>
-      {{/dataAnnotation}}
-     </div>
-</script>
-
-
-
-
-<script id="eCaviarBody"  type="x-tmpl-mustache">
-             <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
-             class="tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
-               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'eCAVIAR records referencing {{gene}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
-               data-target="#eCaviar_{{gene}}" style="color:black">{{cellPresentationString}}</a>
-               <div  class="collapse openDepictGeneSetInGeneTable" id="eCaviar_{{gene}}">
-                    {{#recordsExist}}
-                    <table class="openDepictGeneSetInGeneTable" style="border: 0">
-                     <thead>
-                      <tr role="row">
-                        <th style="border-top: 0;" class="text-center">tissue</th>
-                        <th style="border-top: 0;" class="text-center">post_prob</th>
-                        <th style="border-top: 0;" class="text-center">variant</th>
-                      </tr>
-                     </thead>
-                     <tbody>
-                    {{/recordsExist}}
-                    {{#records}}
-                      <tr role="row">
-                           <td style="padding: 3px">{{tissueName}}</td>
-                           <td style="padding: 3px">{{clpp}}</td>
-                           <td style="padding: 3px">{{var_id}}</td>
-                       </tr>
-
-                    {{/records}}
-                    {{#recordsExist}}
-                     </tbody>
-                    </table>
-                    {{/recordsExist}}
-               </div>
-            </div>
-</script>
-
-
-
-<script id="colocSubCategory"  type="x-tmpl-mustache">
-     <div significance_sortfield='{{index}}' class='subcategory initialLinearIndex_{{indexInOneDimensionalArray}}'
-      sortField='{{index}}' subSortField='-1'>
-     {{#dataAnnotation}}
-          {{displaySubcategory}}
-          <g:helpText title="gene.COLOC.help.header" placement="bottom" body="gene.COLOC.help.text"/>
-     {{/dataAnnotation}}
-     </div>
-</script>
-
-
-<script id="colocBody"  type="x-tmpl-mustache">
-             <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
-             class="tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
-               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'COLOC records referencing {{gene}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
-               data-target="#COLOC_{{gene}}" style="color:black">{{cellPresentationString}}</a>
-               <div  class="collapse openColocInGeneTable" id="COLOC_{{gene}}">
-                    {{#recordsExist}}
-                    <table class="openColocInGeneTable" style="border: 0">
-                     <thead>
-                      <tr role="row">
-                        <th style="border-top: 0;" class="text-center">tissue</th>
-                        <th style="border-top: 0;" class="text-center">pp coloc snp exists</th>
-                        <th style="border-top: 0;" class="text-center">pp snp coloc</th>
-                        <th style="border-top: 0;" class="text-center">var_id</th>
-                      </tr>
-                     </thead>
-                     <tbody>
-                    {{/recordsExist}}
-                    {{#records}}
-                      <tr role="row">
-                           <td style="padding: 3px">{{tissue}}</td>
-                           <td style="padding: 3px">{{prob_exists_coloc}}</td>
-                           <td style="padding: 3px">{{conditional_prob_snp_coloc}}</td>
-                           <td style="padding: 3px">{{var_id}}</td>
-                       </tr>
-
-                    {{/records}}
-                    {{#recordsExist}}
-                     </tbody>
-                    </table>
-                    {{/recordsExist}}
-               </div>
-            </div>
-</script>
 
 
 
@@ -476,6 +271,7 @@
 <script id="dynamicGeneTableEmptyRecord"  type="x-tmpl-mustache">
 
                 <div class="{{initialLinearIndex}}" sortField=0 significance_sortfield='0.0'>
+                {{constText}}
                 </div>
 
 
@@ -922,173 +718,6 @@
 </script>
 
 
-<script id="depictGeneTableSubCategory"  type="x-tmpl-mustache">
-     <div significance_sortfield='{{index}}' class='subcategory initialLinearIndex_{{indexInOneDimensionalArray}}'
-      sortField='{{index}}' subSortField='-1'>
-     {{#dataAnnotation}}
-          {{displaySubcategory}}
-          <g:helpText title="gene.DEPICTprior.help.header" placement="bottom" body="gene.DEPICTprior.help.text"/>
-     {{/dataAnnotation}}
-     </div>
-</script>
-
-
-<script id="depictGeneTableBody"  type="x-tmpl-mustache">
-             <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
-             class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
-               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'DEPICT predictions for {{geneName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)"
-               class="cellExpander" data-target="#depict_data_{{geneName}}" style="color:black">{{cellPresentationString}}</a>
-               <div  class="collapse openDepictInGeneTable" id="depict_data_{{geneName}}">
-                    {{#recordsExist}}
-                    <table class="openDepictInGeneTable" style="border: 0">
-                     <thead>
-                      <tr role="row">
-                        <th style="border-right: 0; border-top: 0"  class="text-center"></th>
-                      </tr>
-                     </thead>
-                     <tbody>
-                    {{/recordsExist}}
-                    {{#records}}
-                       <tr role="row">
-                           <td style="border-right: 0; padding: 3px">p-value = {{value}}</td>
-                       </tr>
-                    {{/records}}
-                    {{#recordsExist}}
-                     </tbody>
-                    </table>
-                    {{/recordsExist}}
-               </div>
-            </div>
-</script>
-
-
-<script id="geneAssociationTableSubCategory"  type="x-tmpl-mustache">
-     <div significance_sortfield='{{index}}' class='subcategory initialLinearIndex_{{indexInOneDimensionalArray}}'
-      sortField='{{index}}' subSortField='-1'>
-     {{#dataAnnotation}}
-          {{displaySubcategory}}
-          <g:helpText title="gene.MetaXcan.help.header" placement="bottom" body="gene.MetaXcan.help.text"/>
-     {{/dataAnnotation}}
-    </div>
-</script>
-
-<script id="geneAssociationTableBody"  type="x-tmpl-mustache">
-
-            <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
-            class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
-               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'MetaXcan for {{gene}}',mpgSoftware.dynamicUi.extractStraightFromTarget)"
-               class="cellExpander" data-target="#MetaXcan_{{gene}}"  style="color:black">{{cellPresentationString}}</a>
-               <div  class="collapse openMetaXcanInGeneTable" id="MetaXcan_{{gene}}">
-                    {{#tissuesExist}}
-                    <table class="openMetaXcanInGeneTable" style="border: 0">
-                     <thead>
-                      <tr role="row">
-                        <th style="border-top: 0" class="text-center">tissue</th>
-                        <th style="border-top: 0;border-right: 0;" class="text-center">p-value</th>
-                      </tr>
-                     </thead>
-                     <tbody>
-                    {{/tissuesExist}}
-                    {{#tissues}}
-                       <tr role="row">
-                           <td style="padding: 3px">{{tissueName}}</td>
-                           <td style="border-right: 0;padding: 3px">{{value}}</td>
-                       </tr>
-                    {{/tissues}}
-                    {{#tissuesExist}}
-                     </tbody>
-                    </table>
-                    {{/tissuesExist}}
-               </div>
-            </div>
-</script>
-
-
-<script id="geneSkatAssociationTableSubCategory"  type="x-tmpl-mustache">
-     <div significance_sortfield='{{index}}' class='subcategory initialLinearIndex_{{indexInOneDimensionalArray}}'
-      sortField='{{index}}' subSortField='-1'>
-     {{#dataAnnotation}}
-          {{displaySubcategory}}
-          <g:helpText title="gene.skat.help.header" placement="bottom" body="gene.skat.help.text"/>
-     {{/dataAnnotation}}
-    </div>
-</script>
-
-
-<script id="geneSkatAssociationTableBody"  type="x-tmpl-mustache">
-
-            <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
-            class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
-               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'SKAT associations for {{gene}}',mpgSoftware.dynamicUi.extractStraightFromTarget)"
-               class="cellExpander" data-target="#geneSkatAssociation_{{gene}}"  style="color:black">{{cellPresentationString}}</a>
-               <div  class="collapse opengeneSkatAssociationInGeneTable" id="geneSkatAssociation_{{gene}}">
-                    {{#tissuesExist}}
-                    <table class="openMetaXcanInGeneTable" style="border: 0">
-                     <thead>
-                      <tr role="row">
-                        <th style="border-top: 0" class="text-center">technique</th>
-                        <th style="border-top: 0;border-right: 0;" class="text-center">p-value</th>
-                      </tr>
-                     </thead>
-                     <tbody>
-                    {{/tissuesExist}}
-                    {{#tissues}}
-                       <tr role="row">
-                           <td style="padding: 3px">{{tissueName}}</td>
-                           <td style="border-right: 0;padding: 3px">{{value}}</td>
-                       </tr>
-                    {{/tissues}}
-                    {{#tissuesExist}}
-                     </tbody>
-                    </table>
-                    {{/tissuesExist}}
-               </div>
-            </div>
-</script>
-
-
-<script id="geneFirthAssociationTableSubCategory"  type="x-tmpl-mustache">
-     <div significance_sortfield='{{index}}' class='subcategory initialLinearIndex_{{indexInOneDimensionalArray}}'
-      sortField='{{index}}' subSortField='-1'>
-     {{#dataAnnotation}}
-          {{displaySubcategory}}
-          <g:helpText title="gene.firth.help.header" placement="bottom" body="gene.firth.help.text"/>
-     {{/dataAnnotation}}
-     </div>
-</script>
-
-
-<script id="geneFirthAssociationTableBody"  type="x-tmpl-mustache">
-
-            <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
-            class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
-               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'Firth associations for {{gene}}',mpgSoftware.dynamicUi.extractStraightFromTarget)"
-               class="cellExpander" data-target="#geneFirthAssociation_{{gene}}"  style="color:black">{{cellPresentationString}}</a>
-               <div  class="collapse opengeneFirthAssociationInGeneTable" id="geneFirthAssociation_{{gene}}">
-                    {{#tissuesExist}}
-                    <table class="openMetaXcanInGeneTable" style="border: 0">
-                     <thead>
-                      <tr role="row">
-                        <th style="border-top: 0" class="text-center">technique</th>
-                        <th style="border-top: 0;border-right: 0;" class="text-center">p-value</th>
-                      </tr>
-                     </thead>
-                     <tbody>
-                    {{/tissuesExist}}
-                    {{#tissues}}
-                       <tr role="row">
-                           <td style="padding: 3px">{{tissueName}}</td>
-                           <td style="border-right: 0;padding: 3px">{{value}}</td>
-                       </tr>
-                    {{/tissues}}
-                    {{#tissuesExist}}
-                     </tbody>
-                    </table>
-                    {{/tissuesExist}}
-               </div>
-            </div>
-</script>
-
 
 
 %{--Called from displayPhenotypeRecordsFromVariantQtlSearch--}%
@@ -1124,3 +753,11 @@
     </table>
 </script>
 
+<g:render template="/templates/dynamicUi/FIR" />
+<g:render template="/templates/dynamicUi/SKA" />
+<g:render template="/templates/dynamicUi/MET" />
+<g:render template="/templates/dynamicUi/DEP_GS" />
+<g:render template="/templates/dynamicUi/DEP_GP" />
+<g:render template="/templates/dynamicUi/ECA" />
+<g:render template="/templates/dynamicUi/COL" />
+<g:render template="/templates/dynamicUi/MOD" />

@@ -197,11 +197,23 @@ modules = {
         resource url: 'css/dport/tableViewer.css'
     }
     geneSignalSummary {
-        dependsOn 'variantSearchResults'
+        dependsOn 'variantSearchResults','dynamicUi'
         resource url: 'js/lib/dport/geneSignalSummary.js'
         resource url: 'css/dport/geneSignalSummary.css'
+
+    }
+    dynamicUi {
         resource url: 'js/lib/dport/dynamicUi.js'
         resource url: 'css/dport/dynamicUi.css'
+
+        resource url: 'js/lib/dport/dynamicUi/geneBurdenFirth.js'
+        resource url: 'js/lib/dport/dynamicUi/geneBurdenSkat.js'
+        resource url: 'js/lib/dport/dynamicUi/metaXcan.js'
+        resource url: 'js/lib/dport/dynamicUi/depictGeneSets.js'
+        resource url: 'js/lib/dport/dynamicUi/depictGenePriority.js'
+        resource url: 'js/lib/dport/dynamicUi/eCaviar.js'
+        resource url: 'js/lib/dport/dynamicUi/coloc.js'
+        resource url: 'js/lib/dport/dynamicUi/mouseKnockout.js'
     }
     mustache {
         resource url: 'js/lib/mustache.js'
