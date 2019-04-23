@@ -2276,114 +2276,6 @@ mpgSoftware.dynamicUi = (function () {
             } );
 
 
-        //
-        //
-        //var dataAnnotationTypeCode = 'COL';
-        //var returnObject = createNewDisplayReturnObject();
-        //var eColocInfo = getAccumulatorObject('eColocInfo');
-        //_.forEach(_.groupBy(getAccumulatorObject("rawColoInfo"), 'gene'), function (value, geneName) {
-        //    var geneObject = {gene: geneName};
-        //    geneObject['phenotypes'] = _.map(_.uniqBy(value, 'phenotype'), function (o) {
-        //        return o.phenotype
-        //    }).sort();
-        //    geneObject['tissues'] = _.map(_.uniqBy(value, 'tissue'), function (o) {
-        //        return o.tissue
-        //    }).sort();
-        //    geneObject['varId'] = _.map(_.uniqBy(value, 'var_id'), function (o) {
-        //        return o.var_id
-        //    }).sort();
-        //    geneObject['colocTissuesVector'] = function () {
-        //        return geneObject['tissue'];
-        //    };
-        //    geneObject['sourceByTissue'] = function () {
-        //        return _.groupBy(value, 'tissue');
-        //    };
-        //    geneObject['data'] = value;
-        //    eColocInfo.push(geneObject);
-        //});
-        //
-        //
-        //var intermediateDataStructure = new IntermediateDataStructure();
-        //
-        //if (( typeof eColocInfo !== 'undefined') && ( eColocInfo.length > 0)) {
-        //    addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
-        //
-        //    // set up the headers, and give us an empty row of column cells
-        //    var headerNames = [];
-        //    if (accumulatorObjectFieldEmpty("geneNameArray")) {
-        //        console.log("We always have to have a record of the current gene names in depict gene set display. We have a problem.");
-        //    } else {
-        //        headerNames  = _.map(getAccumulatorObject("geneNameArray"),'name');
-        //        _.forEach(getAccumulatorObject("geneNameArray"), function (oneRecord) {
-        //            intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
-        //                {},"header",'EMC'));
-        //        });
-        //    }
-        //
-        //
-        //    // set up the headers, and give us an empty row of column cells
-        //
-        //
-        //    // fill in all of the column cells
-        //    _.forEach(eColocInfo, function (recordsPerGene) {
-        //        var indexOfColumn = _.indexOf(headerNames, recordsPerGene.gene);
-        //        recordsPerGene["recordsExist"] =  [];
-        //        if (indexOfColumn === -1) {
-        //            console.log("Did not find index of gene name="+recordsPerGene.gene+" for eColocInfo.  Shouldn't we?")
-        //        } else {
-        //            var validRecords = _.filter(recordsPerGene.data,function(o){return true});
-        //            recordsPerGene["numberOfRecords"] =  validRecords.length;
-        //            if ((validRecords.length === 0)) {
-        //                intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
-        //                    {}, "tissue specific",'EMC');
-        //            } else {
-        //                var records =  _.map(_.orderBy(validRecords,["prob_exists_coloc"],["desc"]),function(tissueRecord){
-        //                    return {  tissue: tissueRecord.tissue,
-        //                        conditional_prob_snp_coloc: UTILS.realNumberFormatter(""+tissueRecord.conditional_prob_snp_coloc),
-        //                        unconditional_prob_snp_coloc: UTILS.realNumberFormatter(""+tissueRecord.unconditional_prob_snp_coloc),
-        //                        prob_exists_coloc: UTILS.realNumberFormatter(""+tissueRecord.prob_exists_coloc),
-        //                        var_id: tissueRecord.var_id,
-        //                        numericalValue: tissueRecord.prob_exists_coloc
-        //                    }});
-        //                var recordsCellPresentationString = "records="+validRecords.length;
-        //                var significanceCellPresentationString = 0;
-        //                var significanceValue = 0;
-        //                if (( typeof records !== 'undefined')&&
-        //                    (records.length>0)){
-        //                    significanceValue = records[0].prob_exists_coloc;
-        //                    significanceCellPresentationString = "CLPP="+records[0].prob_exists_coloc+" ("+records[0].tissue+")";
-        //                }
-        //
-        //                var renderData = {
-        //                    cellPresentationStringMap:{ Records:recordsCellPresentationString,
-        //                        Significance:significanceCellPresentationString },
-        //                    numberOfRecords:validRecords.length,
-        //                    tissueCategoryNumber:categorizeTissueNumbers( validRecords.length ),
-        //                    significanceCategoryNumber:categorizeSignificanceNumbers( records, "COL" ),
-        //                    recordsExist:(validRecords.length)?[1]:[],
-        //                    gene:recordsPerGene.gene,
-        //                    significanceValue:significanceValue,
-        //                    records:records
-        //                };
-        //                intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
-        //                    renderData,"tissue specific", dataAnnotationTypeCode);
-        //            }
-        //
-        //        }
-        //    });
-        //    intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
-        //}
-        //
-        //
-        //prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
-        //    '#dynamicAbcGeneTable',
-        //    returnObject,
-        //    clearBeforeStarting,
-        //    intermediateDataStructure,
-        //    true,
-        //    'geneTableGeneHeaders');
-        //prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder", '#dynamicColocalizationGeneTable', returnObject, clearBeforeStarting);
-        //
 
     };
 
@@ -4601,7 +4493,11 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                             $('div.significanceCategory_6').parents('td').css('background',CELL_COLORING_UNUSED);
                         }
                         $('div.subcategory').css('font-weight','normal');
-
+                        $('[data-toggle="popover"]').popover({
+                            animation: true,
+                            html: true,
+                            template: '<div class="popover" role="tooltip"><div class="arrow"></div><h5 class="popover-title"></h5><div class="popover-content"></div></div>'
+                        });
                     }
                     break;
                 case 'geneTableAnnotationHeaders':
@@ -4634,6 +4530,12 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                             $('div.significanceCategory_6').parents('td').css('background',CELL_COLORING_UNUSED);
                         }
                         $('div.subcategory').css('font-weight','bold');
+                        $('th>div>a[data-toggle="popover"]').hide();
+                        // $('[data-toggle="popover"]').popover({
+                        //     animation: true,
+                        //     html: true,
+                        //     template: '<div class="popover" role="tooltip"><div class="arrow"></div><h5 class="popover-title"></h5><div class="popover-content"></div></div>'
+                        // });
                     }
                   break;
                 case 'variantTableVariantHeaders':
