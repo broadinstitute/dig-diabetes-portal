@@ -114,9 +114,25 @@ table.combinedGeneTableHolder a:hover { cursor:pointer; }
 
 #highImpactTemplateHolder_wrapper.dataTables_wrapper { padding: 20px 20px 20px 20px; }
 #highImpactTemplateHolder_wrapper div.dt-buttons { margin-bottom: 15px; }
+
 table.combinedGeneTableHolder td.sorting_1{
 
 }
+
+table.combinedGeneTableHolder {
+    border-left: solid 1px #ccc;
+}
+
+table.combinedGeneTableHolder th.geneHeader{
+    background-position-x: right;
+    background-position-y: 30px;
+}
+
+table.combinedGeneTableHolder th.categoryName{
+    background-position-x: right;
+    background-position-y: 35px;
+}
+
 .glyphicon.glyphicon-step-backward {
     font-size: 10px;
     color:lightblue;
@@ -129,12 +145,38 @@ div.geneAnnotationShifters{
     padding: 0;
     margin: 0;
     height: 15px;
+    position: absolute;
+    right: 0;
+    top: 0px;
+    padding-top: 13px;
+    color: #ccc;
+    background-image: url("../images/D_a_D.png");
+    background-repeat: no-repeat;
+    background-position: right top;
 }
 div.geneHeaderShifters{
     padding: 0;
     margin: 0;
     height: 15px;
+    position: absolute;
+    right: 0;
+    top: 0px;
+    padding-top: 10px;
+    color: #ccc;
+    background-image: url("../images/D_a_D.png");
+    background-repeat: no-repeat;
+    background-position: right top;
 }
+
+div.geneAnnotationShifters span.glyphicon-step-forward, div.geneHeaderShifters span.glyphicon-step-forward {
+    color: #ccc;
+}
+
+div.geneAnnotationShifters span.glyphicon-step-backward, div.geneHeaderShifters span.glyphicon-step-backward {
+    margin-right: -4px;
+    color: #ccc;
+}
+
 span.displayGeneName{
     color: black;
     font-weight: bold;
