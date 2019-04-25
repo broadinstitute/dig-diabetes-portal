@@ -160,7 +160,7 @@ digawsqanewKB_fed_dedicated_EBIv2 = new ServerBean("Dedicated EBI QA fed KB - Us
 
 
 // this will be your default
-defaultRestServer = digawsdevWorkflowKBrevised
+defaultRestServer = digawsdevWorkflowKB
 
 
 
@@ -313,7 +313,7 @@ environments {
 
 //       grails.serverURL = "http://www.type2diabetesgenetics.org"
 //        grails.serverURL = "http://www.type2diabetesgenetics.org"
-        grails.serverURL = "http://variant2function.org"
+//        grails.serverURL = "http://variant2function.org"
 
 //        grails.serverURL = "http://demo52k.us-east-1.elasticbeanstalk.com"
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
@@ -337,7 +337,7 @@ environments {
 //        grails.serverURL = "http://strokeprodnew.us-east-1.elasticbeanstalk.com"
 
 //         grails.serverURL = "http://broadcvdi.org"                                             // CVDKP (MI portal) production
-//        grails.serverURL = "http://mi-qasrvr.us-east-1.elasticbeanstalk.com"                    // CVDKP (MI portal) test site
+        grails.serverURL = "http://mi-qasrvr.us-east-1.elasticbeanstalk.com"                    // CVDKP (MI portal) test site
 //        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"
 //        grails.serverURL = "http://miprod-env.us-east-1.elasticbeanstalk.com"
 
@@ -440,6 +440,56 @@ grails {
 //security stuff
 grails.plugin.springsecurity.securityConfigType = "InterceptUrlMap"
 grails.plugin.springsecurity.interceptUrlMap = [
+//        '/':                        ['permitAll'],
+//        '/index':                   ['permitAll'],
+//        '/index.gsp':               ['permitAll'],
+//        '/home':                    ['permitAll'],
+//        '/home/**':                 ['permitAll'],
+//        '/articles/**':             ['permitAll'],
+//        '/resultsfilter/**':             ['permitAll'],
+//        '/about/**':                ['permitAll'],
+//        '/projects/**':             ['permitAll'],
+//        '/system/**':               ['ROLE_SYSTEM'],
+//        '/system/determineVersion':               ['permitAll'],
+//        '/admin/resetPassword':     ['permitAll'],
+//        '/admin/resetPasswordInteractive/**':     ['permitAll'],
+//        '/admin/updatePasswordInteractive/**':     ['permitAll'],
+//        '/admin/updatePassword/**': ['permitAll'],
+//        '/admin/**':            ['ROLE_ADMIN'],
+//        '/user/**':            ['ROLE_ADMIN'],
+//        '/geneData/**':            ['ROLE_ADMIN'],
+//        '/gene/index':          ['permitAll'],
+//        '/gene/**':             ['ROLE_USER'],
+//        '/informational/**':    ['permitAll'],
+//        '/region/**':           ['ROLE_USER'],
+//        '/trait/**':            ['ROLE_USER'],
+//        '/variant/**':          ['ROLE_USER'],
+//        '/variantInfo/**':      ['ROLE_USER'],
+//        '/grs/**':              ['ROLE_USER'],
+//        '/variantSearch/retrieveGwasSpecificPhenotypesAjax':    ['permitAll'],
+//        '/variantSearch/**':    ['ROLE_USER'],
+//        '/beacon/*':          ['permitAll'],
+//        '/assets/**':         ['permitAll'],
+//        '/**/js/**':          ['permitAll'],
+//        '/**/fonts/**':       ['permitAll'],
+//        '/**/css/**':         ['permitAll'],
+//        '/**/images/**':      ['permitAll'],
+//        '/**/*.ico':          ['permitAll'],
+//        '/login/**':          ['permitAll'],
+//        '/logout/**':         ['permitAll'],
+//        '/hypothesisGen/**':  ['ROLE_USER'],
+//        '/oauth/**':          ['permitAll'],
+//        '/springSecurityOAuth/**':          ['permitAll'],
+//        '/dbconsole/**':      ['ROLE_ADMIN'],
+//        '/localization/**':   ['ROLE_ADMIN'],
+//        '/metadatainfo/**':       ['ROLE_USER'],
+//        '/regionInfo/**':      ['ROLE_USER']
+
+
+
+
+
+
         '/':                        ['permitAll'],
         '/index':                   ['permitAll'],
         '/index.gsp':               ['permitAll'],
@@ -449,25 +499,25 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/resultsfilter/**':             ['permitAll'],
         '/about/**':                ['permitAll'],
         '/projects/**':             ['permitAll'],
-        '/system/**':               ['ROLE_SYSTEM'],
+        '/system/**':               ['permitAll'],
         '/system/determineVersion':               ['permitAll'],
         '/admin/resetPassword':     ['permitAll'],
         '/admin/resetPasswordInteractive/**':     ['permitAll'],
         '/admin/updatePasswordInteractive/**':     ['permitAll'],
         '/admin/updatePassword/**': ['permitAll'],
-        '/admin/**':            ['ROLE_ADMIN'],
-        '/user/**':            ['ROLE_ADMIN'],
-        '/geneData/**':            ['ROLE_ADMIN'],
+        '/admin/**':            ['permitAll'],
+        '/user/**':            ['permitAll'],
+        '/geneData/**':            ['permitAll'],
         '/gene/index':          ['permitAll'],
-        '/gene/**':             ['ROLE_USER'],
+        '/gene/**':             ['permitAll'],
         '/informational/**':    ['permitAll'],
-        '/region/**':           ['ROLE_USER'],
-        '/trait/**':            ['ROLE_USER'],
-        '/variant/**':          ['ROLE_USER'],
-        '/variantInfo/**':      ['ROLE_USER'],
-        '/grs/**':              ['ROLE_USER'],
+        '/region/**':           ['permitAll'],
+        '/trait/**':            ['permitAll'],
+        '/variant/**':          ['permitAll'],
+        '/variantInfo/**':      ['permitAll'],
+        '/grs/**':              ['permitAll'],
         '/variantSearch/retrieveGwasSpecificPhenotypesAjax':    ['permitAll'],
-        '/variantSearch/**':    ['ROLE_USER'],
+        '/variantSearch/**':    ['permitAll'],
         '/beacon/*':          ['permitAll'],
         '/assets/**':         ['permitAll'],
         '/**/js/**':          ['permitAll'],
@@ -477,13 +527,14 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/**/*.ico':          ['permitAll'],
         '/login/**':          ['permitAll'],
         '/logout/**':         ['permitAll'],
-        '/hypothesisGen/**':  ['ROLE_USER'],
+        '/hypothesisGen/**':  ['permitAll'],
         '/oauth/**':          ['permitAll'],
         '/springSecurityOAuth/**':          ['permitAll'],
-        '/dbconsole/**':      ['ROLE_ADMIN'],
-        '/localization/**':   ['ROLE_ADMIN'],
-        '/metadatainfo/**':       ['ROLE_USER'],
-        '/regionInfo/**':      ['ROLE_USER']
+        '/dbconsole/**':      ['permitAll'],
+        '/localization/**':   ['permitAll'],
+        '/metadatainfo/**':       ['permitAll'],
+        '/regionInfo/**':      ['permitAll']
+
 ]
 grails.plugin.auth.loginFormUrl='/Security/auth2'
 grails.plugin.springsecurity.logout.postOnly = false
@@ -912,7 +963,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0  // expose the variant table on the dynamic UI
                                   )
 ]
-
+auth.providers.twitter.secret = 'l3dJBs3w9QraAuivcfaqdjVGkJ4cxQSMMNNkZ6v9bwz8nXBCXQ'
+oauth.providers.google.secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'
 
 
 

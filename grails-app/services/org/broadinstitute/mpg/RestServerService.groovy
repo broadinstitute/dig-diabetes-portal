@@ -663,6 +663,9 @@ class RestServerService {
         RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
         StringBuilder logStatus = new StringBuilder()
         String completeUrl = currentRestServer + targetUrl
+        long startTime = System.nanoTime()
+        long endTime
+        Calendar date = Calendar.getInstance()
         try {
             log.info("About to attempt call to ${completeUrl}")
             response = rest.get(completeUrl) {
@@ -676,11 +679,15 @@ class RestServerService {
 
         if (response?.responseEntity?.statusCode?.value == 200) {
             returnValue = response.text
-            logStatus << """status: ok""".toString()
+            logStatus << "status: ok on ${completeUrl}".toString()
+            endTime = System.nanoTime()
         } else {
             logStatus << """status: failed (${response?.responseEntity?.statusCode?.value}) on ${completeUrl}""".toString()
+            endTime = System.nanoTime()
         }
         log.info(logStatus)
+        long duration = (endTime - startTime)/1000000L
+        println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& GET ${completeUrl} ${duration} ${date.getTimeInMillis()}")
         return returnValue
     }
 
@@ -700,6 +707,9 @@ class RestServerService {
         String completeUrl = currentRestServer + targetUrl
         RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
         StringBuilder logStatus = new StringBuilder()
+        long startTime = System.nanoTime()
+        long endTime
+        Calendar date = Calendar.getInstance()
         try {
             log.info("About to attempt call to ${completeUrl}")
             response = rest.post(completeUrl) {
@@ -721,7 +731,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 """.toString()
         if (response?.responseEntity?.statusCode?.value == 200) {
             returnValue = response.json
-            logStatus << """status: ok""".toString()
+            logStatus << "status: ok  on ${completeUrl}".toString()
+            endTime = System.nanoTime()
         } else {
             JSONObject tempValue = response.json
             logStatus << """***************************************failed call***************************************************""".toString()
@@ -738,8 +749,11 @@ url=${completeUrl},
 parm=${drivingJson},
 time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 """.toString()
+            endTime = System.nanoTime()
         }
         log.info(logStatus)
+        long duration = (endTime - startTime)/1000000L
+        println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& POST ${completeUrl} ${duration} ${date.getTimeInMillis()}")
         return returnValue
     }
 
