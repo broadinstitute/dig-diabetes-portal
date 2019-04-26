@@ -2,21 +2,13 @@
 <html>
 <head>
     <meta name="layout" content="t2dGenesCore"/>
-    <r:require modules="core"/>
-    <r:require modules="datatables"/>
     <r:require modules="geneInfo"/>
-    <r:require modules="crossMap"/>
-    <r:require modules="igv"/>
     <r:require module="locusZoom"/>
-    <r:require module="mustache"/>
-    <r:require modules="boxwhisker"/>
-    <r:require modules="burdenTest"/>
-    <r:require modules="traitsFilter"/>
-    <r:require modules="higlass"/>
-    <r:require modules="gnomad"/>
+    %{--<r:require modules="higlass"/>--}%
+
     %{--Need to call directly or else the images don't come out right--}%
     <link rel="stylesheet" type="text/css"  href="../../css/lib/locuszoom.css">
-    <script type="text/javascript" src="../../js/lib/gnomadt2d.js"></script>
+    %{--<script type="text/javascript" src="../../js/lib/gnomadt2d.js"></script>--}%
     <r:layoutResources/>
     <%@ page import="org.broadinstitute.mpg.RestServerService" %>
 
@@ -26,13 +18,6 @@
     <link type="font/opentype">
 
     <g:set var="restServer" bean="restServerService"/>
-
-
-
-    %{--Let's try an experiment--}%
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    %{--experiment ends here--}%
-
 
 
 
@@ -85,27 +70,6 @@
     </script>
 
 
-    <style>
-    /* for Ben's dynamic UI */
-    /*.dynamicUiHolder { width: 100%; overflow: auto; border-right:solid 1px #70cAdB; border-left:solid 1px #70cAdB; }*/
-
-    /*.dynamicUiHolder table { margin: 0 !important; }*/
-
-    /*.dynamicUiHolder th, .dynamicUiHolder td { outline: none !important; border: solid 1px #70cAdB !important;}*/
-
-    /*.chromatinConformationChooser.active > a {background-color: #eee !important;}*/
-
-    /*a.nav-link.sub-tab { background-color: #5cb85c;}*/
-    /*a.nav-link.sub-tab:hover { background-color: #449d44;}*/
-
-    /*#exposeDynamicUiTabHolder > .row { border:solid 1px #ddd; border-bottom: none; border-top-left-radius: 5px; border-top-right-radius: 5px; margin-top: -1px; background-color: #eee;}*/
-    /*#exposeDynamicUiTabHolder > .row.sub-tabs { border: solid 1px #ddd;border-top:  none;border-bottom:  none; background-color: #eee; }*/
-    /*.sub-tab-content > .tab-pane > .row { border: solid 1px #ddd; border-top:  none; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; margin-top: -20px;}*/
-    /*.sub-tab-content > .tab-pane.active > .row { background-color: #eee; padding: 20px 5px 20px 5px !important;}*/
-    /*.sub-tab-content > .tab-pane > .row > .sub-content { background-color: #fff; padding-bottom: 10px; margin-top: -20px; margin-bottom: -15px; }*/
-    /*.sub-tab-content h3 { }*/
-    /*div.contextHolder { border: solid 1px #aaa !important; padding: 5px; background-color: #fff;}*/
-    </style>
 
 </head>
 

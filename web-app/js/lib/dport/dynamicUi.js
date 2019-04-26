@@ -4300,8 +4300,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     "dom": '<"top">rt<"bottom"iplB>',
                     "buttons": [
                         {extend: "copy", text: "Copy all to clipboard"},
-                        {extend: "csv", text: "Copy all to csv"},
-                        {extend: "pdf", text: "Copy all to pdf"}
+                        {extend: "csv", text: "Copy all to csv"}
                     ],
                     "aLengthMenu": [
                         [100, 500, -1],

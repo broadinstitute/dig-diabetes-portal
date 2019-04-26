@@ -13,7 +13,7 @@
     <head>
         <title><g:message code="${restServer.retrieveBeanForCurrentPortal().getTabLabel()}"/></title>
 
-        <r:require modules="core"/>
+        %{--<r:require modules="core"/>--}%
         <r:layoutResources/>
 
         <link href="https://fonts.googleapis.com/css?family=Lato|Oswald" rel="stylesheet">
@@ -413,13 +413,13 @@
 
             /* copy URL function end */
 
-            $( window ).load( function() {
-
-            });
-
-            $( window ).ready( function() {
-
-            });
+            // $( window ).load( function() {
+            //
+            // });
+            //
+            // $( window ).ready( function() {
+            //
+            // });
 
 
             $( window ).resize(function() {

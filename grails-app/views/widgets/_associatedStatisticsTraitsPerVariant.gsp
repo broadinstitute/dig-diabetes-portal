@@ -93,7 +93,6 @@ button.expandoButton:visited {
             <div id="dkPhePlot"></div>
         </div>
 
-    <r:require modules="core"/>
     <r:require modules="tableViewer,traitInfo"/>
 
 
