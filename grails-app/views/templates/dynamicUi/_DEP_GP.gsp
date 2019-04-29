@@ -29,7 +29,7 @@ p={{significanceValueAsString}}
                     <table class="expandableDrillDownTable openDepictInGeneTable" style="border: 0">
                      <thead>
                       <tr role="row">
-                        <th class="text-center onlyCol"></th>
+                        <th class="text-center onlyCol">p-value</th>
                       </tr>
                      </thead>
                      <tbody>

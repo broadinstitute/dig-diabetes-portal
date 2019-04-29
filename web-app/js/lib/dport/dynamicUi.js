@@ -4082,6 +4082,12 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     'table':'table.combinedGeneTableHolder'
                 };
                 break;
+            case 'Mouse':
+                currentSortRequestObject = {
+                    'currentSort':'MOD',
+                    'table':'table.combinedGeneTableHolder'
+                };
+                break;
             case 'MetaXcan':
                 currentSortRequestObject = {
                     'currentSort':oneClass,
@@ -4671,7 +4677,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         indexInOneDimensionalArray = (numberOfExistingRows*numberOfColumns);
                         rowDescriber.push( new IntermediateStructureDataCell(row.category,
                             displayCategoryHtml(row.code,indexInOneDimensionalArray),
-                            row.subcategory+" categoryName","LIT")) ;
+                            row.subcategory+" categoryNameToUse","LIT")) ;
                         indexInOneDimensionalArray++;
                         rowDescriber.push( new IntermediateStructureDataCell(row.subcategory,
                             displaySubcategoryHtml(row.code,indexInOneDimensionalArray),
@@ -4717,20 +4723,18 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 }
             });
 
-
+            var weHaveDataWorthDisplaying = false;
             _.forEach(row.columnCells, function (val, index) {
-                // if (( typeof val !== 'undefined') &&
-                //     ( typeof val.content !== 'undefined')){
                     var valContent =  getDisplayableCellContent(val);
                     var initialLinearIndex = extractClassBasedIndex(valContent,"initialLinearIndex_");
                     if (initialLinearIndex === -1){
-                        var domContent = $(valContent);
+
                         indexInOneDimensionalArray = (numberOfExistingRows*numberOfColumns)+index + numberOfColumnsAdded;
                         val.renderData['initialLinearIndex'] = "initialLinearIndex_"+indexInOneDimensionalArray;
-                        //domContent.addClass("initialLinearIndex_"+indexInOneDimensionalArray);
-                        //valContent = domContent[0].outerHTML;
                     }
                     rowDescriber.push(val);
+                var domContent = $(valContent);
+                if (domContent.text().trim().length>0){weHaveDataWorthDisplaying = true;}
                     if (storeRecordsInDataStructure){
                         storeCellInMemoryRepresentationOfSharedTable(whereTheTableGoes,
                             val,
@@ -4742,8 +4746,11 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
                 // }
             });
+            // push the data into the table if we have at least one cell that contains text
+            if (weHaveDataWorthDisplaying){
+                $(whereTheTableGoes).dataTable().fnAddData(_.map(rowDescriber,function(o){return getDisplayableCellContent(o)}));
+            }
 
-            $(whereTheTableGoes).dataTable().fnAddData(_.map(rowDescriber,function(o){return getDisplayableCellContent(o)}));
 
         });
         return rememberCategories;
@@ -5566,7 +5573,7 @@ var destroySharedTable = function (whereTheTableGoes) {
         if ((sharedTable.currentForm === 'geneTableGeneHeaders') || (sharedTable.currentForm === 'variantTableVariantHeaders')){
             classNameToIdentifyHeader =  "th.geneHeader";
         } else if ((sharedTable.currentForm === 'geneTableAnnotationHeaders') || (sharedTable.currentForm === 'variantTableAnnotationHeaders')){
-            classNameToIdentifyHeader =  "th.categoryName";
+            classNameToIdentifyHeader =  "th.categoryNameToUse";
         }
 
         $( classNameToIdentifyHeader ).draggable({

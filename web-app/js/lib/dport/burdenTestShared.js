@@ -1798,7 +1798,7 @@ mpgSoftware.burdenTestShared = (function () {
             dataSet = metadata.conversion[datasetFilter];
 
 
-            $('#rSpinner').show();
+            // $('#rSpinner').show();
             var promise = $.ajax({
                 cache: false,
                 type: "post",
@@ -1844,7 +1844,7 @@ mpgSoftware.burdenTestShared = (function () {
             dataSet = metadata.conversion[datasetFilter];
 
 
-            $('#rSpinner').show();
+            // $('#rSpinner').show();
             var promise = $.ajax({
                 cache: false,
                 type: "post",

@@ -1239,7 +1239,6 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             async: true,
             success: function (data) {
                 rememberCallBack(data,rememberParams);
-                loading.show();
             },
             error: function (jqXHR, exception) {
                 core.errorReporter(jqXHR, exception);
@@ -1368,7 +1367,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
 
     var processGeneRankingInfo = function ( callBack, params ) {
-        loading.show();
+
 
         var rememberCallBack = callBack;
         var rememberParams = params;
@@ -1395,7 +1394,6 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             async: true,
             success: function (data) {
                 rememberCallBack(data,rememberParams);
-                loading.show();
             },
             error: function (jqXHR, exception) {
                 core.errorReporter(jqXHR, exception);
@@ -1558,7 +1556,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
 
     var buildNewCredibleSetPresentation = function (){
-        loading.show();
+
         var signalSummarySectionVariables = getSignalSummarySectionVariables();
         var additionalData = signalSummarySectionVariables;
         var sampleGroupsWithCredibleSetNames = mpgSoftware.regionInfo.getSampleGroupsWithCredibleSetNames();
@@ -1599,7 +1597,6 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
 
     var buildOutSetPresentation = function (data,additionalData,createGeneTable, propertyToRequest){
-        loading.show();
         var signalSummarySectionVariables = getSignalSummarySectionVariables();
         var sampleGroupsWithCredibleSetNames = ['data.sampleGroupsWithCredibleSetNames'];
         var dataSet = additionalData.ds;
@@ -1636,7 +1633,6 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             );
 
         //}
-        loading.hide();
     };
 
 
@@ -1648,7 +1644,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
 
     var buildOutCredibleSetPresentation = function (data,additionalData){
-        loading.show();
+
         var signalSummarySectionVariables = getSignalSummarySectionVariables();
         if ((data.sampleGroupsWithCredibleSetNames)&&(data.sampleGroupsWithCredibleSetNames.length>0)){
             mpgSoftware.regionInfo.setSampleGroupsWithCredibleSetNames(data.sampleGroupsWithCredibleSetNames);  // save, in case we need this information later
@@ -1686,7 +1682,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
 
     var buildOutIncredibleSetPresentation = function (data,additionalData){
-        loading.show();
+
         var signalSummarySectionVariables = getSignalSummarySectionVariables();
         // if ((data.sampleGroupsWithCredibleSetNames)&&(data.sampleGroupsWithCredibleSetNames.length>0)){
         //     mpgSoftware.regionInfo.setSampleGroupsWithCredibleSetNames(data.sampleGroupsWithCredibleSetNames);  // save, in case we need this information later
@@ -2213,7 +2209,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             weHaveAnIncredibleSet = false;
             propertyToRequest = 'P_VALUE';
         }
-        buildOutSetPresentation (data, additionalParameters, false, propertyToRequest);
+        //buildOutSetPresentation (data, additionalParameters, false, propertyToRequest);
+        additionalParameters['rememberOriginalData'] = data;
         if (additionalParameters.exposeGeneComparisonTable === "1") {
             buildOutSetPresentation(data, additionalParameters, true, propertyToRequest);
         }
@@ -2290,10 +2287,10 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 mpgSoftware.locusZoom.setNewDefaultLzPlot('#lz-'+additionalParameters.lzCommon);
                 mpgSoftware.locusZoom.rescaleSVG(mpgSoftware.locusZoom.getNewDefaultLzPlot());
             });
-            $('a[href="#credibleSetTabHolder"]').on('shown.bs.tab', function (e) {
-                mpgSoftware.locusZoom.setNewDefaultLzPlot('#lz-'+additionalParameters.lzCredSet);
-                mpgSoftware.locusZoom.rescaleSVG(mpgSoftware.locusZoom.getNewDefaultLzPlot());
-            });
+            // $('a[href="#credibleSetTabHolder"]').on('shown.bs.tab', function (e) {
+            //     mpgSoftware.locusZoom.setNewDefaultLzPlot('#lz-'+additionalParameters.lzCredSet);
+            //     mpgSoftware.locusZoom.rescaleSVG(mpgSoftware.locusZoom.getNewDefaultLzPlot());
+            // });
         }
         if (( typeof sampleBasedPhenotypeName !== 'undefined') &&
             ( sampleBasedPhenotypeName.length > 0)&&
@@ -2340,10 +2337,22 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             $('#commonVariantsLocationHolder').dataTable().fnAdjustColumnSizing();
             mpgSoftware.regionInfo.removeAllCredSetHeaderPopUps();
         });
+        // $('a[href="#credibleSetTabHolder"]').on('shown.bs.tab', function (e) {
+        //     mpgSoftware.regionInfo.removeAllCredSetHeaderPopUps();
+        //  });
+        // $('a[href="#credibleSetTabHolder"]').on('shown.bs.tab', function (e) {
+        //     mpgSoftware.locusZoom.setNewDefaultLzPlot('#lz-'+additionalParameters.lzCredSet);
+        //     mpgSoftware.locusZoom.rescaleSVG(mpgSoftware.locusZoom.getNewDefaultLzPlot());
+        // });
         $('a[href="#credibleSetTabHolder"]').on('shown.bs.tab', function (e) {
+            var signalSummarySectionVariables = getSignalSummarySectionVariables();
+            buildOutSetPresentation(signalSummarySectionVariables['rememberOriginalData'],
+                signalSummarySectionVariables,
+                false,'P_VALUE');
+            mpgSoftware.locusZoom.setNewDefaultLzPlot('#lz-'+additionalParameters.lzCredSet);
+           // mpgSoftware.locusZoom.rescaleSVG(mpgSoftware.locusZoom.getNewDefaultLzPlot());
             mpgSoftware.regionInfo.removeAllCredSetHeaderPopUps();
-         });
-
+        });
         if (!commonSectionShouldComeFirst) {
             $('.commonVariantChooser').removeClass('active');
             $('.highImpacVariantChooser').addClass('active');
