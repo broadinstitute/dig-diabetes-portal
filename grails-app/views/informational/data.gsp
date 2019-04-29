@@ -196,7 +196,7 @@
 
 
 
-                        <tr><td>Cade <i>et al</i>. 2019, in press</td><td>Associations of Variants In the Hexokinase 1 and Interleukin 18 Receptor Regions with Oxyhemoglobin Saturation During Sleep.</td>
+                        <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/30990817" target="_blank">PMID:30696823</a></td><td>Associations of Variants In the Hexokinase 1 and Interleukin 18 Receptor Regions with Oxyhemoglobin Saturation During Sleep.</td>
                             <td>Associations with average oxyhemoglobin saturation during sleep (average SpO2): <a href="https://personal.broadinstitute.org/mvon/cade_et_al_2018_average_spo2_multiethnic_discovery_replication.txt.zip" target="_blank">Download</a><br>
                                 Associations with minimum oxyhemoglobin saturation during sleep (minimum SpO2): <a href="https://personal.broadinstitute.org/mvon/cade_et_al_2018_minimum_spo2_multiethnic_discovery_replication.txt.zip" target="_blank">Download</a><br>
                                 Associations with the percentage of sleep with SpO2 < 90% (Per90): <a href="https://personal.broadinstitute.org/mvon/cade_et_al_2018_percent_sleep_under_90_percent_spo2_multiethnic_discovery_replication.txt.zip" target="_blank">Download</a>
