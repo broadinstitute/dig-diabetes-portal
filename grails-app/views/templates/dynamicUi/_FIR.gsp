@@ -29,19 +29,19 @@ p={{significanceValue}} ({{recordDescription}})
                class="cellExpander" data-target="#geneFirthAssociation_{{gene}}"  style="color:black">{{cellPresentationString}}</a>
                <div  class="collapse opengeneFirthAssociationInGeneTable" id="geneFirthAssociation_{{gene}}">
                     {{#tissuesExist}}
-                    <table class="openMetaXcanInGeneTable" style="border: 0">
+                    <table class="expandableDrillDownTable openFirthInGeneTable" >
                      <thead>
                       <tr role="row">
-                        <th style="border-top: 0" class="text-center">technique</th>
-                        <th style="border-top: 0;border-right: 0;" class="text-center">p-value</th>
+                        <th class="text-center leftMostCol">technique</th>
+                        <th class="text-center otherCols">p-value</th>
                       </tr>
                      </thead>
                      <tbody>
                     {{/tissuesExist}}
                     {{#tissues}}
                        <tr role="row">
-                           <td style="padding: 3px">{{tissueName}}</td>
-                           <td style="border-right: 0;padding: 3px">{{value}}</td>
+                           <td class="leftMostCol">{{tissueName}}</td>
+                           <td class="otherCols">{{value}}</td>
                        </tr>
                     {{/tissues}}
                     {{#tissuesExist}}

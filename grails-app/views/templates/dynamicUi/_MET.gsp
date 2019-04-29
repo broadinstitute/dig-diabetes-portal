@@ -4,7 +4,7 @@ records={{numberRecords}}
 </script>
 
 <script id="metaxcanTableSignificanceCellPresentationString"  type="x-tmpl-mustache">
-p={{significanceValueAsString}} ({{recordDescription}})
+p={{significanceValueAsString}}
 </script>
 
 
@@ -27,19 +27,19 @@ p={{significanceValueAsString}} ({{recordDescription}})
                class="cellExpander" data-target="#MetaXcan_{{gene}}"  style="color:black">{{cellPresentationString}}</a>
                <div  class="collapse openMetaXcanInGeneTable" id="MetaXcan_{{gene}}">
                     {{#tissuesExist}}
-                    <table class="openMetaXcanInGeneTable" style="border: 0">
+                    <table class="expandableDrillDownTable openMetaXcanInGeneTable">
                      <thead>
                       <tr role="row">
-                        <th style="border-top: 0" class="text-center">tissue</th>
-                        <th style="border-top: 0;border-right: 0;" class="text-center">p-value</th>
+                        <th class="text-center leftMostCol">tissue</th>
+                        <th class="text-center otherCols">p-value</th>
                       </tr>
                      </thead>
                      <tbody>
                     {{/tissuesExist}}
                     {{#tissues}}
                        <tr role="row">
-                           <td style="padding: 3px">{{tissueName}}</td>
-                           <td style="border-right: 0;padding: 3px">{{value}}</td>
+                           <td class="leftMostCol">{{tissueName}}</td>
+                           <td class="otherCols">{{value}}</td>
                        </tr>
                     {{/tissues}}
                     {{#tissuesExist}}

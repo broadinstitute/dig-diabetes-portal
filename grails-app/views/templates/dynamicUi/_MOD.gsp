@@ -33,23 +33,21 @@ records={{numberRecords}}
                     {{#geneDescription}}
                        <div> {{.}}</div>
                     {{/geneDescription}}
-                    <table class="openModInGeneTable" style="border: 0">
+                    <table class="expandableDrillDownTable openModInGeneTable">
                      <thead>
                       <tr role="row">
-                        <th style="border-top: 0;" class="text-center">ID</th>
-                        <th style="border-top: 0;" class="text-center">Name</th>
-                        <th style="border-top: 0;" class="text-center">Term</th>
-                        <th style="border-top: 0;" class="text-center">Feature</th>
+                        <th class="text-center leftMostCol">ID</th>
+                        <th class="text-center otherCols">Name</th>
+                        <th class="text-center otherCols">Term</th>
                       </tr>
                      </thead>
                      <tbody>
                     {{/recordsExist}}
                     {{#records}}
                        <tr role="row">
-                           <td style="padding: 3px">{{MGI_Gene_Marker_ID}}</td>
-                           <td style="padding: 3px">{{Name}}</td>
-                           <td style="padding: 3px">{{Term}}</td>
-                           <td style="padding: 3px">{{Feature_Type}}</td>
+                           <td class="leftMostCol">{{MGI_Gene_Marker_ID}}</td>
+                           <td class="otherCols">{{Name}}</td>
+                           <td class="otherCols">{{Term}}</td>
                        </tr>
                     {{/records}}
                     {{#recordsExist}}

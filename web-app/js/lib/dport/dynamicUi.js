@@ -5192,8 +5192,8 @@ var destroySharedTable = function (whereTheTableGoes) {
         if($(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).length) { // if we already have a window then get rid of it.
             $(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).remove();
         } else {
-            var dataWrapper = '<div class="dk-new-ui-data-wrapper wrapper-'+dataTarget+'"><div class="closer-wrapper" style="text-align: center;"><spna style="">'+title+
-                '</spna><span style="float:right; font-size: 12px; color: #888;" onclick="mpgSoftware.dynamicUi.removeWrapper(event);" class="glyphicon glyphicon-remove" aria-hidden="true">\n' +
+            var dataWrapper = '<div class="dk-new-ui-data-wrapper wrapper-'+dataTarget+'"><div class="closer-wrapper" style="text-align: center;"><span style="">'+title+
+                '</span><span style="float:right; font-size: 12px; color: #888;" onclick="mpgSoftware.dynamicUi.removeWrapper(event);" class="glyphicon glyphicon-remove" aria-hidden="true">\n' +
                 '</span></div><div class="content-wrapper" id="'+uniqueId+'"></div></div>';
             $('body').append(dataWrapper);  // add the div to the DOM
             var dataTargetContent = functionToGenerateContents(event);  // either gather data, and append it, or else insert it right into the div.
@@ -5217,11 +5217,12 @@ var destroySharedTable = function (whereTheTableGoes) {
             var divTop = $(event.target).offset().top;
             var divLeft = $(event.target).offset().left + $(event.target).width();
 
-            $(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).find(".content-wrapper").css({"width":contentWidth, "height":contentHeight});
+            //$(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).find(".content-wrapper").css({"width":contentWidth, "height":contentHeight});
+            $(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).find(".content-wrapper").css({"width":"100%", "height":"100%"});
             $(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).css({"top":divTop,"left":divLeft});
 
             $(".dk-new-ui-data-wrapper").draggable({ handle:".closer-wrapper"});
-            //$(".dk-new-ui-data-wrapper").resizable();
+            $(".dk-new-ui-data-wrapper").resizable();
         }
 
 
