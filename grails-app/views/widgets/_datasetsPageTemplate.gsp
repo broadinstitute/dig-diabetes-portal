@@ -114,6 +114,9 @@
 <g:render template="./data/GWAS_SpO2" />
 <g:render template="./data/GWAS_MAGIC_eu" />
 <g:render template="./data/GWAS_MAGIC-Metabochip_eu" />
+<g:render template="./data/GWAS_BBJmales_ea" />
+<g:render template="./data/GWAS_BBJfemales_ea" />
+<g:render template="./data/GWAS_BBJ_ea" />
 
 
 
