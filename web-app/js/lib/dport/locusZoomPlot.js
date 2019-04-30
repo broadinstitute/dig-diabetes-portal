@@ -1585,8 +1585,6 @@ var mpgSoftware = mpgSoftware || {};
                         "propertyName=" + propertyName + "&" +
                         "datatype="+ makeDynamic  ;
 
-                    //console.log("position marker?  start=" + state.start  +"end=" + state.end + "&")
-
                     if ((typeof state.model !== 'undefined')&&(state.model.covariates.length)){
                         var covariant_ids = "";
                         state.model.covariates.forEach(function(covariant){
@@ -1685,8 +1683,20 @@ var mpgSoftware = mpgSoftware || {};
 
                     return records;
                  };
+                this.params = {sort:false};
             }, "BroadT2Da");
-            dataSources.add(phenotype, new broadAssociationSource(geneGetLZ, rawPhenotype,dataSetName,propertyName,makeDynamic));
+            broadAssociationSource.prototype.normalizeResponse = function (data) {
+                // Some association sources do not sort their data in a predictable order, which makes it hard to reliably
+                //  align with other sources (such as LD). For performance reasons, sorting is an opt-in argument.
+                // TODO: Consider more fine grained sorting control in the future
+                data = LocusZoom.Data.Source.prototype.normalizeResponse.call(this, data);
+                if (this.params && this.params.sort && data.length && data[0]['position']) {
+                    data.sort(function (a, b) { return a['position'] - b['position']; });
+                }
+                return data;
+            };
+            var customAssociationSource = new broadAssociationSource(geneGetLZ, rawPhenotype,dataSetName,propertyName,makeDynamic);
+            dataSources.add(phenotype, customAssociationSource );
         };
 
         var buildIntervalSource = function(dataSources,retrieveFunctionalDataAjaxUrl,rawTissue,intervalPanelName,assayName,assayIdList){

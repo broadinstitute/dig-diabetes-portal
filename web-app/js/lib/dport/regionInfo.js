@@ -1366,6 +1366,7 @@ var mpgSoftware = mpgSoftware || {};
         };
 
         var fillRegionInfoTable = function(vars,additionalParameters) {
+            loading.show();
             setIncludeRecordBasedOnUserChoice(additionalParameters.assayIdList);
             var currentSequenceExtents = getCurrentSequenceExtents();
             var geneTablePresentation = false;
@@ -1599,11 +1600,12 @@ var mpgSoftware = mpgSoftware || {};
                         buttonWidth: '60%'});
                     // $('#credSetDisplayChoice').val(mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters,1));
                     $('#toggleVarianceTableLink').click();
-
+                    loading.hide();
 
                 }
             );
             promise.fail(function( jqXHR, textStatus, errorThrown ) {
+                loading.hide();
                 console.log('error');
             });
 
