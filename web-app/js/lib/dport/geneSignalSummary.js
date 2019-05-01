@@ -1087,21 +1087,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
     };
 
 
-    // var getSingleBestPhenotypeAndLaunchInterface = function (data,params) {
-    //     if ((typeof data !== 'undefined') &&
-    //         (typeof data.variants !== 'undefined') &&
-    //         (!data.variants.is_error ) &&
-    //         (typeof data.variants.variants !== 'undefined') &&
-    //         (data.variants.variants.length > 0)) {
-    //         var variant = data.variants.variants[0];
-    //         var phenocode = variant.phenotype;
-    //         var ds = variant.dataset;
-    //         var dsr = variant.dsr;
-    //         var phenoName = variant.pname;
-    //         var favoredPhenotype = params.favoredPhenotype;
-    //         launchUpdateSignalSummaryBasedOnPhenotype(phenocode, ds, phenoName, dsr);
-    //     }
-    // };
+
     var getSingleBestPhenotypeAndLaunchInterface = function (data,params) {
         if ((typeof data !== 'undefined') &&
             (typeof data.variants !== 'undefined') &&
@@ -1123,12 +1109,12 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 } else {
                     // the default phenotype is not sufficiently interesting -- let's take another card from the deck
                     mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.getSingleBestNonFavoredPhenotypeAndLaunchInterface,
-                        {favoredPhenotype:params.favoredPhenotype,limit:1});
+                        {favoredPhenotype:params.favoredPhenotype,limit:1,useMinimalCall: true});
                 }
             } else {
                 // there were no variants for the default phenotype at all in this gene. Let's look across all phenotypes
                 mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.getSingleBestNonFavoredPhenotypeAndLaunchInterface,
-                    {favoredPhenotype:params.favoredPhenotype,limit:1});
+                    {favoredPhenotype:params.favoredPhenotype,limit:1,useMinimalCall: true});
             }
         }
      };
@@ -1230,16 +1216,19 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         callingObj ["geneChromosome"] = params.geneChromosome;
         callingObj ["geneExtentBegin"] =params.geneExtentBegin;
         callingObj ["geneExtentEnd"] = params.geneExtentEnd;
+        var callingUrl = signalSummarySectionVariables.retrieveTopVariantsAcrossSgsUrl;
+        if (params.useMinimalCall){
+            callingUrl = signalSummarySectionVariables.retrieveTopVariantsAcrossSgsMinUrl;
+        }
 
         $.ajax({
             cache: false,
             type: "post",
-            url: params.retrieveTopVariantsAcrossSgsUrl,
+            url: callingUrl,
             data: callingObj,
             async: true,
             success: function (data) {
                 rememberCallBack(data,rememberParams);
-                loading.show();
             },
             error: function (jqXHR, exception) {
                 core.errorReporter(jqXHR, exception);
@@ -1368,7 +1357,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
 
     var processGeneRankingInfo = function ( callBack, params ) {
-        loading.show();
+
 
         var rememberCallBack = callBack;
         var rememberParams = params;
@@ -1395,7 +1384,6 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             async: true,
             success: function (data) {
                 rememberCallBack(data,rememberParams);
-                loading.show();
             },
             error: function (jqXHR, exception) {
                 core.errorReporter(jqXHR, exception);
@@ -1558,7 +1546,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
 
     var buildNewCredibleSetPresentation = function (){
-        loading.show();
+
         var signalSummarySectionVariables = getSignalSummarySectionVariables();
         var additionalData = signalSummarySectionVariables;
         var sampleGroupsWithCredibleSetNames = mpgSoftware.regionInfo.getSampleGroupsWithCredibleSetNames();
@@ -1599,7 +1587,6 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
 
     var buildOutSetPresentation = function (data,additionalData,createGeneTable, propertyToRequest){
-        loading.show();
         var signalSummarySectionVariables = getSignalSummarySectionVariables();
         var sampleGroupsWithCredibleSetNames = ['data.sampleGroupsWithCredibleSetNames'];
         var dataSet = additionalData.ds;
@@ -1636,7 +1623,6 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             );
 
         //}
-        loading.hide();
     };
 
 
@@ -1648,7 +1634,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
 
     var buildOutCredibleSetPresentation = function (data,additionalData){
-        loading.show();
+
         var signalSummarySectionVariables = getSignalSummarySectionVariables();
         if ((data.sampleGroupsWithCredibleSetNames)&&(data.sampleGroupsWithCredibleSetNames.length>0)){
             mpgSoftware.regionInfo.setSampleGroupsWithCredibleSetNames(data.sampleGroupsWithCredibleSetNames);  // save, in case we need this information later
@@ -1686,7 +1672,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
 
     var buildOutIncredibleSetPresentation = function (data,additionalData){
-        loading.show();
+
         var signalSummarySectionVariables = getSignalSummarySectionVariables();
         // if ((data.sampleGroupsWithCredibleSetNames)&&(data.sampleGroupsWithCredibleSetNames.length>0)){
         //     mpgSoftware.regionInfo.setSampleGroupsWithCredibleSetNames(data.sampleGroupsWithCredibleSetNames);  // save, in case we need this information later
@@ -1739,16 +1725,17 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             propertiesToInclude: propertiesToIncludeQuoted.join(","),
             propertiesToRemove: propertiesToRemoveQuoted.join(",")
         };
-        callingObj ["geneChromosome"] = parameter.geneChromosome;
-        callingObj ["geneExtentBegin"] =parameter.geneExtentBegin;
-        callingObj ["geneExtentEnd"] = parameter.geneExtentEnd;
         if (typeof parameter.limit !== 'undefined') {
             callingObj["limit"] = parameter.limit;
         };
+        var callingUrl = coreVariables.retrieveTopVariantsAcrossSgsUrl;
+        if (parameter.useMinimalCall){
+            callingUrl = coreVariables.retrieveTopVariantsAcrossSgsMinUrl;
+        }
         $.ajax({
             cache: false,
             type: "post",
-            url: coreVariables.retrieveTopVariantsAcrossSgsUrl,
+            url: callingUrl,
             data: callingObj,
             async: true,
             success: function (data) {
@@ -2213,7 +2200,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             weHaveAnIncredibleSet = false;
             propertyToRequest = 'P_VALUE';
         }
-        buildOutSetPresentation (data, additionalParameters, false, propertyToRequest);
+        //buildOutSetPresentation (data, additionalParameters, false, propertyToRequest);
+        additionalParameters['rememberOriginalData'] = data;
         if (additionalParameters.exposeGeneComparisonTable === "1") {
             buildOutSetPresentation(data, additionalParameters, true, propertyToRequest);
         }
@@ -2290,10 +2278,10 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 mpgSoftware.locusZoom.setNewDefaultLzPlot('#lz-'+additionalParameters.lzCommon);
                 mpgSoftware.locusZoom.rescaleSVG(mpgSoftware.locusZoom.getNewDefaultLzPlot());
             });
-            $('a[href="#credibleSetTabHolder"]').on('shown.bs.tab', function (e) {
-                mpgSoftware.locusZoom.setNewDefaultLzPlot('#lz-'+additionalParameters.lzCredSet);
-                mpgSoftware.locusZoom.rescaleSVG(mpgSoftware.locusZoom.getNewDefaultLzPlot());
-            });
+            // $('a[href="#credibleSetTabHolder"]').on('shown.bs.tab', function (e) {
+            //     mpgSoftware.locusZoom.setNewDefaultLzPlot('#lz-'+additionalParameters.lzCredSet);
+            //     mpgSoftware.locusZoom.rescaleSVG(mpgSoftware.locusZoom.getNewDefaultLzPlot());
+            // });
         }
         if (( typeof sampleBasedPhenotypeName !== 'undefined') &&
             ( sampleBasedPhenotypeName.length > 0)&&
@@ -2340,10 +2328,22 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             $('#commonVariantsLocationHolder').dataTable().fnAdjustColumnSizing();
             mpgSoftware.regionInfo.removeAllCredSetHeaderPopUps();
         });
+        // $('a[href="#credibleSetTabHolder"]').on('shown.bs.tab', function (e) {
+        //     mpgSoftware.regionInfo.removeAllCredSetHeaderPopUps();
+        //  });
+        // $('a[href="#credibleSetTabHolder"]').on('shown.bs.tab', function (e) {
+        //     mpgSoftware.locusZoom.setNewDefaultLzPlot('#lz-'+additionalParameters.lzCredSet);
+        //     mpgSoftware.locusZoom.rescaleSVG(mpgSoftware.locusZoom.getNewDefaultLzPlot());
+        // });
         $('a[href="#credibleSetTabHolder"]').on('shown.bs.tab', function (e) {
+            var signalSummarySectionVariables = getSignalSummarySectionVariables();
+            buildOutSetPresentation(signalSummarySectionVariables['rememberOriginalData'],
+                signalSummarySectionVariables,
+                false,'P_VALUE');
+            mpgSoftware.locusZoom.setNewDefaultLzPlot('#lz-'+additionalParameters.lzCredSet);
+           // mpgSoftware.locusZoom.rescaleSVG(mpgSoftware.locusZoom.getNewDefaultLzPlot());
             mpgSoftware.regionInfo.removeAllCredSetHeaderPopUps();
-         });
-
+        });
         if (!commonSectionShouldComeFirst) {
             $('.commonVariantChooser').removeClass('active');
             $('.highImpacVariantChooser').addClass('active');

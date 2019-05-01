@@ -27,23 +27,23 @@ CLPP={{significanceValueAsString}} ({{recordDescription}})
                data-target="#COLOC_{{gene}}" style="color:black">{{cellPresentationString}}</a>
                <div  class="collapse openColocInGeneTable" id="COLOC_{{gene}}">
                     {{#recordsExist}}
-                    <table class="openColocInGeneTable" style="border: 0">
+                    <table class="expandableDrillDownTable openColocInGeneTable">
                      <thead>
                       <tr role="row">
-                        <th style="border-top: 0;" class="text-center">tissue</th>
-                        <th style="border-top: 0;" class="text-center">pp coloc snp exists</th>
-                        <th style="border-top: 0;" class="text-center">pp snp coloc</th>
-                        <th style="border-top: 0;" class="text-center">var_id</th>
+                        <th class="text-center leftMostCol">tissue</th>
+                        <th class="text-center otherCols">pp coloc snp exists</th>
+                        <th class="text-center otherCols">pp snp coloc</th>
+                        <th class="text-center otherCols">var_id</th>
                       </tr>
                      </thead>
                      <tbody>
                     {{/recordsExist}}
                     {{#records}}
                       <tr role="row">
-                           <td style="padding: 3px">{{tissue}}</td>
-                           <td style="padding: 3px">{{prob_exists_coloc}}</td>
-                           <td style="padding: 3px">{{conditional_prob_snp_coloc}}</td>
-                           <td style="padding: 3px">{{var_id}}</td>
+                           <td class="leftMostCol">{{tissue}}</td>
+                           <td class="otherCols">{{prob_exists_coloc}}</td>
+                           <td class="otherCols">{{conditional_prob_snp_coloc}}</td>
+                           <td class="otherCols">{{var_id}}</td>
                        </tr>
 
                     {{/records}}

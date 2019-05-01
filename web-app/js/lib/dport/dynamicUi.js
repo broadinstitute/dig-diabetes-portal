@@ -4082,6 +4082,12 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     'table':'table.combinedGeneTableHolder'
                 };
                 break;
+            case 'Mouse':
+                currentSortRequestObject = {
+                    'currentSort':'MOD',
+                    'table':'table.combinedGeneTableHolder'
+                };
+                break;
             case 'MetaXcan':
                 currentSortRequestObject = {
                     'currentSort':oneClass,
@@ -4300,8 +4306,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     "dom": '<"top">rt<"bottom"iplB>',
                     "buttons": [
                         {extend: "copy", text: "Copy all to clipboard"},
-                        {extend: "csv", text: "Copy all to csv"},
-                        {extend: "pdf", text: "Copy all to pdf"}
+                        {extend: "csv", text: "Copy all to csv"}
                     ],
                     "aLengthMenu": [
                         [100, 500, -1],
@@ -4672,7 +4677,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         indexInOneDimensionalArray = (numberOfExistingRows*numberOfColumns);
                         rowDescriber.push( new IntermediateStructureDataCell(row.category,
                             displayCategoryHtml(row.code,indexInOneDimensionalArray),
-                            row.subcategory+" categoryName","LIT")) ;
+                            row.subcategory+" categoryNameToUse","LIT")) ;
                         indexInOneDimensionalArray++;
                         rowDescriber.push( new IntermediateStructureDataCell(row.subcategory,
                             displaySubcategoryHtml(row.code,indexInOneDimensionalArray),
@@ -4718,20 +4723,18 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 }
             });
 
-
+            var weHaveDataWorthDisplaying = false;
             _.forEach(row.columnCells, function (val, index) {
-                // if (( typeof val !== 'undefined') &&
-                //     ( typeof val.content !== 'undefined')){
                     var valContent =  getDisplayableCellContent(val);
                     var initialLinearIndex = extractClassBasedIndex(valContent,"initialLinearIndex_");
                     if (initialLinearIndex === -1){
-                        var domContent = $(valContent);
+
                         indexInOneDimensionalArray = (numberOfExistingRows*numberOfColumns)+index + numberOfColumnsAdded;
                         val.renderData['initialLinearIndex'] = "initialLinearIndex_"+indexInOneDimensionalArray;
-                        //domContent.addClass("initialLinearIndex_"+indexInOneDimensionalArray);
-                        //valContent = domContent[0].outerHTML;
                     }
                     rowDescriber.push(val);
+                var domContent = $(valContent);
+                if (domContent.text().trim().length>0){weHaveDataWorthDisplaying = true;}
                     if (storeRecordsInDataStructure){
                         storeCellInMemoryRepresentationOfSharedTable(whereTheTableGoes,
                             val,
@@ -4743,8 +4746,11 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
                 // }
             });
+            // push the data into the table if we have at least one cell that contains text
+            if (weHaveDataWorthDisplaying){
+                $(whereTheTableGoes).dataTable().fnAddData(_.map(rowDescriber,function(o){return getDisplayableCellContent(o)}));
+            }
 
-            $(whereTheTableGoes).dataTable().fnAddData(_.map(rowDescriber,function(o){return getDisplayableCellContent(o)}));
 
         });
         return rememberCategories;
@@ -5193,8 +5199,8 @@ var destroySharedTable = function (whereTheTableGoes) {
         if($(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).length) { // if we already have a window then get rid of it.
             $(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).remove();
         } else {
-            var dataWrapper = '<div class="dk-new-ui-data-wrapper wrapper-'+dataTarget+'"><div class="closer-wrapper" style="text-align: center;"><spna style="">'+title+
-                '</spna><span style="float:right; font-size: 12px; color: #888;" onclick="mpgSoftware.dynamicUi.removeWrapper(event);" class="glyphicon glyphicon-remove" aria-hidden="true">\n' +
+            var dataWrapper = '<div class="dk-new-ui-data-wrapper wrapper-'+dataTarget+'"><div class="closer-wrapper" style="text-align: center;"><span style="">'+title+
+                '</span><span style="float:right; font-size: 12px; color: #888;" onclick="mpgSoftware.dynamicUi.removeWrapper(event);" class="glyphicon glyphicon-remove" aria-hidden="true">\n' +
                 '</span></div><div class="content-wrapper" id="'+uniqueId+'"></div></div>';
             $('body').append(dataWrapper);  // add the div to the DOM
             var dataTargetContent = functionToGenerateContents(event);  // either gather data, and append it, or else insert it right into the div.
@@ -5218,11 +5224,12 @@ var destroySharedTable = function (whereTheTableGoes) {
             var divTop = $(event.target).offset().top;
             var divLeft = $(event.target).offset().left + $(event.target).width();
 
-            $(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).find(".content-wrapper").css({"width":contentWidth, "height":contentHeight});
+            //$(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).find(".content-wrapper").css({"width":contentWidth, "height":contentHeight});
+            $(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).find(".content-wrapper").css({"width":"100%", "height":"100%"});
             $(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).css({"top":divTop,"left":divLeft});
 
             $(".dk-new-ui-data-wrapper").draggable({ handle:".closer-wrapper"});
-            //$(".dk-new-ui-data-wrapper").resizable();
+            $(".dk-new-ui-data-wrapper").resizable();
         }
 
 
@@ -5566,7 +5573,7 @@ var destroySharedTable = function (whereTheTableGoes) {
         if ((sharedTable.currentForm === 'geneTableGeneHeaders') || (sharedTable.currentForm === 'variantTableVariantHeaders')){
             classNameToIdentifyHeader =  "th.geneHeader";
         } else if ((sharedTable.currentForm === 'geneTableAnnotationHeaders') || (sharedTable.currentForm === 'variantTableAnnotationHeaders')){
-            classNameToIdentifyHeader =  "th.categoryName";
+            classNameToIdentifyHeader =  "th.categoryNameToUse";
         }
 
         $( classNameToIdentifyHeader ).draggable({

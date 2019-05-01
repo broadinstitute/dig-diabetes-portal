@@ -28,21 +28,21 @@ CLPP={{significanceValueAsString}} ({{recordDescription}})
                data-target="#eCaviar_{{gene}}" style="color:black">{{cellPresentationString}}</a>
                <div  class="collapse openDepictGeneSetInGeneTable" id="eCaviar_{{gene}}">
                     {{#recordsExist}}
-                    <table class="openDepictGeneSetInGeneTable" style="border: 0">
+                    <table class="expandableDrillDownTable openDepictGeneSetInGeneTable" style="border: 0">
                      <thead>
                       <tr role="row">
-                        <th style="border-top: 0;" class="text-center">tissue</th>
-                        <th style="border-top: 0;" class="text-center">post_prob</th>
-                        <th style="border-top: 0;" class="text-center">variant</th>
+                        <th class="text-center leftMostCol">tissue</th>
+                        <th class="text-center otherCols">post_prob</th>
+                        <th class="text-center otherCols">variant</th>
                       </tr>
                      </thead>
                      <tbody>
                     {{/recordsExist}}
                     {{#records}}
                       <tr role="row">
-                           <td style="padding: 3px">{{tissue}}</td>
-                           <td style="padding: 3px">{{clpp}}</td>
-                           <td style="padding: 3px">{{var_id}}</td>
+                           <td class="leftMostCol">{{tissue}}</td>
+                           <td class="otherCols">{{clpp}}</td>
+                           <td class="otherCols">{{var_id}}</td>
                        </tr>
 
                     {{/records}}

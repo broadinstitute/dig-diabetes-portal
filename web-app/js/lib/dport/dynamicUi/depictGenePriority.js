@@ -7,9 +7,21 @@ mpgSoftware.dynamicUi.depictGenePvalue = (function () {
 
     var processRecordsFromDepictGenePvalue = function (data, rawGeneAssociationRecords) {
 
+        var dataArrayToProcess = [];
+        if ( typeof data !== 'undefined'){
+            _.forEach(data,function(oneRec){
+                dataArrayToProcess = {
+                    gene: oneRec.gene,
+                    tissues: [{
+                        gene: oneRec.gene,
+                        value: oneRec.pvalue
+                    }]
+                };
+            });
 
 
-        return rawGeneAssociationRecords;
+        }
+        rawGeneAssociationRecords.push(dataArrayToProcess);
     }
 
 

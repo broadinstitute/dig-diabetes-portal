@@ -26,17 +26,17 @@ p={{significanceValueAsString}}
                class="cellExpander" data-target="#depict_data_{{gene}}" style="color:black">{{cellPresentationString}}</a>
                <div  class="collapse openDepictInGeneTable" id="depict_data_{{gene}}">
                     {{#recordsExist}}
-                    <table class="openDepictInGeneTable" style="border: 0">
+                    <table class="expandableDrillDownTable openDepictInGeneTable" style="border: 0">
                      <thead>
                       <tr role="row">
-                        <th style="border-right: 0; border-top: 0"  class="text-center"></th>
+                        <th class="text-center onlyCol">p-value</th>
                       </tr>
                      </thead>
                      <tbody>
                     {{/recordsExist}}
                     {{#data}}
                        <tr role="row">
-                           <td style="border-right: 0; padding: 3px">p-value = {{value}}</td>
+                           <td class="text-center onlyCol">p-value = {{value}}</td>
                        </tr>
                     {{/data}}
                     {{#recordsExist}}

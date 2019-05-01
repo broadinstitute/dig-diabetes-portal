@@ -1,32 +1,4 @@
 
-<style>
-span.credSetLevelHere{
-    border: 2px solid black;
-    padding: 5px 5px 5px 12px;
-    white-space: nowrap;
-    font-size: 12px;
-}
-div.directorButtonHolder{
-    margin: 0 0 15px 20px;
-}
-button.directorButtonDetails{
-    margin: 5px;
-}
-div.holdMultipleElements{
-    padding: 4px 0 2px 10px;
-}
-div.geneName {
-    font-weight: bold;
-    color: blue;
-}
-div.genePosition{
-    font-style: italic;
-    font-size: 11px;
-}
-
-
-
-</style>
 
 <script id="genomeBrowserTemplate"  type="x-tmpl-mustache">
 <div class="row">
@@ -981,7 +953,7 @@ div.genePosition{
                                     {{#credibleSetTab}}
                                         <li role="presentation" class="active variantTableLabels credibleSetChooser">
                                            <a style="float:left;" href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab"
-                                           onclick="mpgSoftware.traitsFilter.massageLZ();">{{pName}}</a>
+                                           onclick="mpgSoftware.traitsFilter.massageLZ();">{{pName}}gggg</a>
                                            <!--<span class='new-dataset-flag' style="display: inline-flex; margin:-3px 0 0 -30px">&nbsp;</span>-->
                                         </li>
                                     {{/credibleSetTab}}
@@ -1034,12 +1006,12 @@ div.genePosition{
                             {{/highImpactTab}}
                             {{#credibleSetTab}}
                                 <li role="presentation" class="variantTableLabels credibleSetChooser">
-                                   <a style="float:left;" href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">{{pName}}</a> <!--<span class='new-dataset-flag' style="display: inline-flex; margin:-3px 0 0 -30px">&nbsp;</span>-->
+                                   <a style="float:left;" href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">Credible sets: {{pName}}</a> <!--<span class='new-dataset-flag' style="display: inline-flex; margin:-3px 0 0 -30px">&nbsp;</span>-->
                                 </li>
                             {{/credibleSetTab}}
                             {{#incredibleSetTab}}
                                 <li role="presentation" class="variantTableLabels credibleSetChooser">
-                                   <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">{{pName}}</a>
+                                   <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">Credible sets: {{pName}}</a>
                                 </li>
                             {{/incredibleSetTab}}
                             {{#genePrioritizationTab}}
