@@ -1366,6 +1366,7 @@ var mpgSoftware = mpgSoftware || {};
         };
 
         var fillRegionInfoTable = function(vars,additionalParameters) {
+            loading.show();
             setIncludeRecordBasedOnUserChoice(additionalParameters.assayIdList);
             var currentSequenceExtents = getCurrentSequenceExtents();
             var geneTablePresentation = false;
@@ -1483,8 +1484,7 @@ var mpgSoftware = mpgSoftware || {};
                     if (allCredibleSets.length > 0){
 
                         if (allCredibleSets[0].credibleSetId===""){
-                            //var oldTabName = $('a[href=#credibleSetTabHolder]').text();
-                            $('a[href=#credibleSetTabHolder]').text("Calculated credible set: " +additionalParameters.pname);
+                            $('a[href="#credibleSetTabHolder"]').text("Calculated credible set: " +additionalParameters.pname);
                         } else {
                             $(".credibleSetChooserGoesHere").empty().append(
                                 Mustache.render( $('#organizeCredibleSetChooserTemplate')[0].innerHTML,{allCredibleSets:allCredibleSets,
@@ -1494,12 +1494,11 @@ var mpgSoftware = mpgSoftware || {};
                                         return credibleSetPresenceIndicator;
                                     }})
                             );
-                           // var oldTabName = $('a[href=#credibleSetTabHolder]').text();
-                            $('a[href=#credibleSetTabHolder]').text("Credible sets: " +additionalParameters.pname);
+                            $('a[href="#credibleSetTabHolder"]').text("Credible sets: " +additionalParameters.pname);
                         }
                     } else if (!geneTablePresentation) {
-                        var oldTabName = $('a[href=#credibleSetTabHolder]').text();
-                        $('a[href=#credibleSetTabHolder]').text("Calculated credible set: " +additionalParameters.pname);
+                        var oldTabName = $('a[href="#credibleSetTabHolder"]').text();
+                        $('a[href="#credibleSetTabHolder"]').text("Calculated credible set: " +additionalParameters.pname);
                     }
 
                     $.data($('#dataHolderForCredibleSets')[0],'assayIdList',assayIdList);
@@ -1601,11 +1600,12 @@ var mpgSoftware = mpgSoftware || {};
                         buttonWidth: '60%'});
                     // $('#credSetDisplayChoice').val(mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters,1));
                     $('#toggleVarianceTableLink').click();
-
+                    loading.hide();
 
                 }
             );
             promise.fail(function( jqXHR, textStatus, errorThrown ) {
+                loading.hide();
                 console.log('error');
             });
 

@@ -137,23 +137,7 @@ var mpgSoftware = mpgSoftware || {};
                 url: parms.retrieveAllPortalsAjaxUrl,
                 async: true
             }).done(function (data) {
-                // var menuHeaderLine =
-                //     "{{#.}}" +
-                //     "<div class=\"container-fluid\" id=\"header-bottom\" style=\"background-image:url('{{menuHeader}}'); background-size: 100% 100%; font-size: 14px; font-weight:300; padding:0; margin:0; \">" +
-                //     "{{/.}}";
-                // var substitutedMenuHeaderLine = Mustache.render(menuHeaderLine, data);
-                // $("#menuHeaderGoesHere").empty().append(substitutedMenuHeaderLine);
-                //
-                // var logoCodeLine =
-                //     "{{#.}}" +
-                //     "<div class=\"dk-logo-wrapper\" style=\"position:relative; z-index: 1001; float: left; width:350px; padding:12px 0 14px 0;\">" +
-                //     "<a href=\"${createLink(controller:'home',action:'portalHome')}\">" +
-                //     "<img src=\"{{logoCode}}\" style=\" width: 450px; margin-left: 10px;\" />" +
-                //     "</a></div>" +
-                //     "{{/.}}";
-                // var substitutedLogoLine = Mustache.render(logoCodeLine, data);
-                // $("#logoGoesHere").empty().append(substitutedMenuHeaderLine);
-                var portal_typeSelector = $("#portal_typeSelector");
+                 var portal_typeSelector = $("#portal_typeSelector");
                 _.forEach(data, function(eachPortal){
                     var option = new Option( eachPortal.PortalDescription,eachPortal.PortalType);
                     if  (parms.currentPortalType===eachPortal.PortalType){

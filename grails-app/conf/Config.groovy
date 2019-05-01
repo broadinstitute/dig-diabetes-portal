@@ -313,13 +313,13 @@ environments {
 
 //       grails.serverURL = "http://www.type2diabetesgenetics.org"
 //        grails.serverURL = "http://www.type2diabetesgenetics.org"
-        grails.serverURL = "http://variant2function.org"
+//        grails.serverURL = "http://variant2function.org"
 
 //        grails.serverURL = "http://demo52k.us-east-1.elasticbeanstalk.com"
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 
-//     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
 
 
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
@@ -484,6 +484,37 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/localization/**':   ['ROLE_ADMIN'],
         '/metadatainfo/**':       ['ROLE_USER'],
         '/regionInfo/**':      ['ROLE_USER']
+
+
+//        '/admin/**':            ['ROLE_ADMIN'],
+//        '/user/**':            ['ROLE_ADMIN'],
+//        '/geneData/**':            ['permitAll'],
+//        '/gene/index':          ['permitAll'],
+//        '/gene/**':             ['permitAll'],
+//        '/informational/**':    ['permitAll'],
+//        '/region/**':           ['permitAll'],
+//        '/trait/**':            ['permitAll'],
+//        '/variant/**':          ['permitAll'],
+//        '/variantInfo/**':      ['permitAll'],
+//        '/grs/**':              ['permitAll'],
+//        '/variantSearch/retrieveGwasSpecificPhenotypesAjax':    ['permitAll'],
+//        '/variantSearch/**':    ['permitAll'],
+//        '/beacon/*':          ['permitAll'],
+//        '/assets/**':         ['permitAll'],
+//        '/**/js/**':          ['permitAll'],
+//        '/**/fonts/**':       ['permitAll'],
+//        '/**/css/**':         ['permitAll'],
+//        '/**/images/**':      ['permitAll'],
+//        '/**/*.ico':          ['permitAll'],
+//        '/login/**':          ['permitAll'],
+//        '/logout/**':         ['permitAll'],
+//        '/hypothesisGen/**':  ['permitAll'],
+//        '/oauth/**':          ['permitAll'],
+//        '/springSecurityOAuth/**':          ['permitAll'],
+//        '/dbconsole/**':      ['permitAll'],
+//        '/localization/**':   ['permitAll'],
+//        '/metadatainfo/**':       ['permitAll'],
+//        '/regionInfo/**':      ['permitAll']
 ]
 grails.plugin.auth.loginFormUrl='/Security/auth2'
 grails.plugin.springsecurity.logout.postOnly = false
@@ -912,7 +943,6 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0  // expose the variant table on the dynamic UI
                                   )
 ]
-
 
 
 

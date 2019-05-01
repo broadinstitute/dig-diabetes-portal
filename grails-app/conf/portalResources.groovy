@@ -1,42 +1,31 @@
 modules = {
     jquery {
-        resource url: 'js/lib/jquery-1.11.0.min.js'
-        resource url: 'js/lib/jstree.min.js'
-        resource url: 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js'
+        resource url: 'https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js'
+        resource url: 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js'
+        resource url: 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css'
+        resource url: 'https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css'
+        resource url: 'https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.js'
     }
-    gnomad{
-//        resource url: 'js/lib/gnomadt2d.js'
-        resource url: 'https://cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react.js'
-        resource url: 'https://cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react-dom.js'
+    variantInfoPage{
+        dependsOn 'jquery'
+        resource url: 'https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css'
+        resource url: 'https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js'
+        resource url: 'js/lib/dport/multiTrack.js'
+        resource url: 'css/dport/multiTrack.css'
     }
     datatables {
         dependsOn 'jquery'
-        resource url: 'js/lib/datatables/jquery.dataTables.js'
-        resource url: 'js/lib/dport/datatablesSorting.js'
-
-        resource url: 'js/lib/datatables/pdfmake.js'
-        resource url: 'js/lib/datatables/vfs_fonts.js'
-        resource url: 'js/lib/datatables/buttons.html5.js'
-        resource url: 'js/lib/datatables/buttons.print.js'
-        resource url: 'js/lib/datatables/dataTables.buttons.js'
-        resource url: 'js/lib/datatables/dataTables.select.js'
-        resource url: 'js/lib/dport/datatablesSorting.js'
-
-        resource url: 'css/lib/datatables/buttons.dataTables.css'
-        resource url: 'css/lib/datatables/jquery.dataTables.css'
-        resource url: 'css/lib/datatables/select.dataTables.css'
-
-        resource url: 'css/dport/jqDataTables.css'
+         resource url: 'js/lib/dport/datatablesSorting.js'
     }
     scroller {
-        resource url: 'js/lib/dport/jquery.li-scroller.1.0.js'
         resource url: 'css/lib/li-scroller.css'
     }
     portalHome {
+        dependsOn 'core'
         resource url: 'js/lib/dport/portalHome.js'
     }
     grsInfo {
-        dependsOn "core", "mbar", "bootstrapMultiselect", "mustache","burdenTest","boxwhisker"
+        dependsOn "core", "mbar", "bootstrapMultiselect", "burdenTest","boxwhisker"
 
 
         resource url: 'js/lib/dport/grsInfo.js'
@@ -45,7 +34,6 @@ modules = {
 
     regionInfo {
         resource url: 'js/lib/dport/regionInfo.js'
-        resource url: 'css/dport/jqDataTables.css'
         resource url: 'css/dport/regionInfo.css'
     }
     informational {
@@ -97,12 +85,6 @@ modules = {
         resource url: 'js/lib/dport/matrix.js'
         resource url: 'css/dport/matrix.css'
     }
-    multiTrack {
-        dependsOn "core"
-
-        resource url: 'js/lib/dport/multiTrack.js'
-        resource url: 'css/dport/multiTrack.css'
-    }
     varsImpacter {
         dependsOn "core"
 
@@ -126,7 +108,7 @@ modules = {
         resource url: 'js/lib/dport/phenotype.js'
     }
     geneInfo {
-        dependsOn "core", "mbar", "multiTrack","varsImpacter","bootstrapMultiselect", "igv","burdenTest", "geneSignalSummary", "tableViewer","regionInfo"
+        dependsOn "core", "portalHome","dynamicUi"
 
         resource url: 'css/dport/geneInfo.css'
         resource url: 'css/dport/barchart.css'
@@ -134,10 +116,42 @@ modules = {
         resource url: 'js/lib/dport/geneInfo.js'
         resource url: 'js/lib/dport/barchart.js'
 
+        resource url: 'js/lib/dport/boxWhiskerPlot.js'
+        resource url: 'css/dport/boxWhiskerPlot.css'
+
+        resource url: 'css/dport/mbarchart.css'
+        resource url: 'js/lib/dport/mbarchart.js'
+
+        resource url: 'js/lib/dport/varsImpacter.js'
+        resource url: 'css/dport/varsImpacter.css'
+
+        resource url: 'js/lib/bootstrap-multiselect.js'
+        resource url: 'css/lib/bootstrap-multiselect.css'
+
+        resource url: 'css/lib/bootstrap-select.css'
+        resource url: 'js/lib/bootstrap-select.js'
+        resource url: 'js/lib/dport/traitsFilter.js'
+
+        resource url: 'css/dport/burdenTest.css'
+        resource url: 'js/lib/dport/burdenTest.js'
+        resource url: 'js/lib/dport/burdenTestShared.js'
+
+        resource url: 'js/lib/dport/datatablesSorting.js'
+        resource url: 'js/lib/dport/tableViewer.js'
+        resource url: 'css/dport/tableViewer.css'
+
+        resource url: 'js/lib/dport/regionInfo.js'
+        resource url: 'css/dport/regionInfo.css'
+
+        resource url: 'css/dport/variantSearchResults.css'
+        resource url: 'js/lib/dport/variantSearchResults.js'
+
+        resource url: 'js/lib/dport/geneSignalSummary.js'
+        resource url: 'css/dport/geneSignalSummary.css'
     }
     variantInfo {
 
-        dependsOn "core", "mbar", "bootstrapMultiselect", "igv","burdenTest", "matrix"
+        dependsOn "core", "mbar", "bootstrapMultiselect","burdenTest", "matrix", "portalHome"
 
         resource url: 'css/images/controls.png'
 
@@ -150,18 +164,14 @@ modules = {
         resource url: 'js/lib/dport/geneInfo.js'
         resource url: 'js/lib/dport/variantInfo.js'
         resource url: 'js/lib/dport/barchart.js'
-        resource url: 'js/lib/dport/igvLaunch.js'
         resource url: 'js/lib/dport/associationStatistics.js'
     }
     variantWF {
-        //dependsOn "portalHome"
-
         resource url: 'css/dport/variantWorkflow.css'
         resource url: 'js/lib/dport/variantWorkflow.js'
     }
 
     datasetsPage {
-       // dependsOn "portalHome"
         resource url: 'css/dport/datasets.css'
         resource url: 'js/lib/dport/datasetsPage.js'
     }
@@ -171,22 +181,7 @@ modules = {
         resource url: 'css/dport/variantSearchResults.css'
         resource url: 'js/lib/dport/variantSearchResults.js'
     }
-    igv {
-        dependsOn "jquery"
 
-        resource url: 'js/lib/dport/igvLaunch.js'
-
-        resource url: 'images/ajaxLoadingAnimation.gif'
-        resource url: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'
-
-//        resource url: 'https://igv.org/web/release/1.0.5/igv-1.0.5.css'
-//        resource url: 'https://igv.org/web/release/1.0.5/igv-1.0.5.js'
-////        resource url: 'https://igv.org/web/release/1.0.9/igv-1.0.9.css'
-//        resource url: 'https://igv.org/web/release/1.0.9/igv-1.0.9.js'
-        resource url: 'css/igv/igv-1.0.5.css'
-        resource url: 'js/igv/igv-1.0.5.js'
-
-    }
     bootstrapMultiselect {
         resource url: 'js/lib/bootstrap-multiselect.js'
         resource url: 'css/lib/bootstrap-multiselect.css'
@@ -219,13 +214,14 @@ modules = {
         resource url: 'js/lib/mustache.js'
     }
     core {
-        dependsOn "jquery", "portalHome"
+        dependsOn "jquery"
 
         resource url: 'images/ajax-loader.gif'
-        resource url: 'images/icons/dna-strands.ico'
 
         resource url: 'css/lib/bootstrap.min.css'
         resource url: 'js/lib/bootstrap.min.js'
+
+        resource url: 'https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js'
 
         resource url: 'css/lib/style.css'
         resource url: 'css/lib/dkstyle.css'
@@ -237,29 +233,21 @@ modules = {
 
         resource url: 'js/lib/lodash.min.js'
 
-
+        resource url: 'js/lib/dport/portalHome.js'
     }
     igvNarrow {  // IGV on a page with core
         resource url: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'
 
         resource url: 'css/igv/igv-1.0.5.css'
         resource url: 'js/igv/igv-1.0.5.js'
-//        resource url: 'https://igv.org/web/release/1.0.5/igv-1.0.7.css'
-//        resource url: 'https://igv.org/web/release/1.0.5/igv-1.0.7.js'
-//        resource url: 'https://igv.org/web/release/1.0.5/igv-1.0.5.css'
-//        resource url: 'https://igv.org/web/release/1.0.5/igv-1.0.5.js'
-//        resource url: 'https://igv.org/web/release/1.0.9/igv-1.0.9.css'
-//        resource url: 'https://igv.org/web/release/1.0.9/igv-1.0.9.js'
     }
     sigma {  // sigma site
         resource url: 'css/dport/sigma.css'
-        resource url: 'js/lib/jquery-1.11.0.min.js'
     }
     locusZoom {
         resource url: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'
         resource url: 'js/lib/locuszoom.vendor.min.js'
         resource url: 'js/lib/locuszoom.app.js'
-        //resource url: 'css/lib/locuszoom.css' // some of these functions fail if called in a bundle.  Unfortunately will need to call this directly from each page were LZ is used
         resource url: 'js/lib/gwas-credible-sets.js'
 
         resource url: 'js/lib/dport/locusZoomPlot.js'

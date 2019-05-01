@@ -4,7 +4,7 @@
     <link href='http://fonts.googleapis.com/css?family=Lato:100,300,400' rel='stylesheet' type='text/css'>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <r:require modules="core"/>
-    <r:require modules="sigma"/>
+    <r:require modules="portalHome"/>
     <r:layoutResources/>
     <title>T2D-GENES</title>
     <g:layoutHead/>

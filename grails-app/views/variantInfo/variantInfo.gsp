@@ -2,14 +2,10 @@
 <html>
 <head>
     <meta name="layout" content="t2dGenesCore"/>
-    <r:require modules="variantInfo, igv"/>
+    <r:require modules="variantInfo, variantInfoPage"/>
     <r:require modules="tableViewer,traitInfo"/>
     <r:require modules="boxwhisker"/>
     <r:require module="locusZoom"/>
-    <r:require modules="core, mustache"/>
-    <r:require modules="burdenTest"/>
-    <r:require modules="multiTrack"/>
-    <r:require modules="matrix"/>
     <r:require modules="traitSample"/>
     <r:require modules="traitsFilter"/>
     <link rel="stylesheet" type="text/css"  href="../../css/lib/locuszoom.css">
@@ -21,12 +17,6 @@
     <link type="application/x-font-ttf">
     <link type="font/opentype">
 
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
 
     <!-- Google fonts -->
     <link rel="stylesheet" type="text/css" href='//fonts.googleapis.com/css?family=PT+Sans:400,700'>
@@ -50,18 +40,20 @@
 
     // generate the texts here so that the appropriate one can be selected in initializePage
     // the keys (1,2,3,4) map to the assignments for MOST_DEL_SCORE
-    var variantSummaryText = {
-        1: "${g.message(code: "variant.summaryText.proteinTruncating")}",
-        2: "${g.message(code: "variant.summaryText.missense")}",
-        3: "${g.message(code: "variant.summaryText.synonymous")}",
-        4: "${g.message(code: "variant.summaryText.noncoding")}"
-    };
+
 
 
 
     // sometimes the headers weren't fully loaded before the initializePage function was called,
     // so don't run it until the DOM is ready
     $(document).ready(function () {
+
+        var variantSummaryText = {
+            1: "${g.message(code: "variant.summaryText.proteinTruncating")}",
+            2: "${g.message(code: "variant.summaryText.missense")}",
+            3: "${g.message(code: "variant.summaryText.synonymous")}",
+            4: "${g.message(code: "variant.summaryText.noncoding")}"
+        };
         var configDetails = {  'exposeGreenBoxes':'${portalVersionBean.getExposeGreenBoxes()}',
             'exposeForestPlot': '${portalVersionBean.getExposeForestPlot()}',
             'exposePhewasModule':'${portalVersionBean.getExposePhewasModule()}'};
@@ -81,12 +73,13 @@
 
 
         var loading = $('#spinner').show();
+
         $.ajax({
             cache: false,
             type: "get",
             url: ('<g:createLink controller="variantInfo" action="variantAjax"/>' + '/${variantToSearch}'),
             async: true
-        }).done(function (data, textStatus, jqXHR) {
+        }).done(function (data) {
 
                 mpgSoftware.variantInfo.initializePage(data,
                     "<%=variantToSearch%>",
@@ -114,18 +107,13 @@
                 }
 
 
-        }).fail(function (jqXHR, textStatus, errorThrown) {
+        //}).fail(function (jqXHR, textStatus, errorThrown) {
+            }).fail(function () {
             loading.hide();
-            core.errorReporter(jqXHR, errorThrown)
+            core.errorReporter("jqXHR", "unidentified problem")
         });
     });
 
-    $(window).load( function() {
-
-        /* massage LocusZoom UI */
-        if(mpgSoftware.traitsFilter) mpgSoftware.traitsFilter.massageLZ();
-
-    });
 
     $(window).resize(function() {
         mpgSoftware.traitSample.filterTraitsTable();
