@@ -148,6 +148,7 @@ td.tissueTable.informationIsPresent{
                     variantInfoUrl: '${createLink(controller: "VariantInfo", action: "variantInfo")}',
                     currentPhenotype: $('.chosenPhenotype').attr('id'),
                     retrieveTopVariantsAcrossSgsUrl: '${createLink(controller: "VariantSearch", action: "retrieveTopVariantsAcrossSgs")}',
+                    retrieveTopVariantsAcrossSgsMinUrl: '${createLink(controller: "VariantSearch", action: "retrieveTopVariantsAcrossSgsMin")}',
                     burdenTestAjaxUrl:'${createLink(controller: "gene", action: "burdenTestAjax")}',
                     preferIgv:($('input[name=genomeBrowser]:checked').val()==='2'),
                     sampleMetadataExperimentAjaxUrl: '${createLink(controller: 'VariantInfo', action: 'sampleMetadataExperimentAjax')}',
@@ -309,7 +310,7 @@ td.tissueTable.informationIsPresent{
                 mpgSoftware.geneSignalSummaryMethods.setSignalSummarySectionVariables(drivingVariables);
                 mpgSoftware.geneSignalSummaryMethods.initialPageSetUp(drivingVariables);
                 mpgSoftware.geneSignalSummaryMethods.refreshTopVariantsDirectlyByPhenotype(drivingVariables.defaultPhenotype,
-                    mpgSoftware.geneSignalSummaryMethods.getSingleBestPhenotypeAndLaunchInterface,{favoredPhenotype:drivingVariables['defaultPhenotype'],limit:1});
+                    mpgSoftware.geneSignalSummaryMethods.getSingleBestPhenotypeAndLaunchInterface,{favoredPhenotype:drivingVariables['defaultPhenotype'],limit:1,useMinimalCall:true});
                 mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.displayInterestingPhenotypes,
                     {favoredPhenotype:drivingVariables['defaultPhenotype']});
                 if (${portalVersionBean.getExposePredictedGeneAssociations()}){

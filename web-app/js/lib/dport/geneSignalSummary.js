@@ -1087,21 +1087,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
     };
 
 
-    // var getSingleBestPhenotypeAndLaunchInterface = function (data,params) {
-    //     if ((typeof data !== 'undefined') &&
-    //         (typeof data.variants !== 'undefined') &&
-    //         (!data.variants.is_error ) &&
-    //         (typeof data.variants.variants !== 'undefined') &&
-    //         (data.variants.variants.length > 0)) {
-    //         var variant = data.variants.variants[0];
-    //         var phenocode = variant.phenotype;
-    //         var ds = variant.dataset;
-    //         var dsr = variant.dsr;
-    //         var phenoName = variant.pname;
-    //         var favoredPhenotype = params.favoredPhenotype;
-    //         launchUpdateSignalSummaryBasedOnPhenotype(phenocode, ds, phenoName, dsr);
-    //     }
-    // };
+
     var getSingleBestPhenotypeAndLaunchInterface = function (data,params) {
         if ((typeof data !== 'undefined') &&
             (typeof data.variants !== 'undefined') &&
@@ -1123,12 +1109,12 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 } else {
                     // the default phenotype is not sufficiently interesting -- let's take another card from the deck
                     mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.getSingleBestNonFavoredPhenotypeAndLaunchInterface,
-                        {favoredPhenotype:params.favoredPhenotype,limit:1});
+                        {favoredPhenotype:params.favoredPhenotype,limit:1,useMinimalCall: true});
                 }
             } else {
                 // there were no variants for the default phenotype at all in this gene. Let's look across all phenotypes
                 mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.getSingleBestNonFavoredPhenotypeAndLaunchInterface,
-                    {favoredPhenotype:params.favoredPhenotype,limit:1});
+                    {favoredPhenotype:params.favoredPhenotype,limit:1,useMinimalCall: true});
             }
         }
      };
@@ -1230,11 +1216,15 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         callingObj ["geneChromosome"] = params.geneChromosome;
         callingObj ["geneExtentBegin"] =params.geneExtentBegin;
         callingObj ["geneExtentEnd"] = params.geneExtentEnd;
+        var callingUrl = signalSummarySectionVariables.retrieveTopVariantsAcrossSgsUrl;
+        if (params.useMinimalCall){
+            callingUrl = signalSummarySectionVariables.retrieveTopVariantsAcrossSgsMinUrl;
+        }
 
         $.ajax({
             cache: false,
             type: "post",
-            url: params.retrieveTopVariantsAcrossSgsUrl,
+            url: callingUrl,
             data: callingObj,
             async: true,
             success: function (data) {
@@ -1735,16 +1725,17 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             propertiesToInclude: propertiesToIncludeQuoted.join(","),
             propertiesToRemove: propertiesToRemoveQuoted.join(",")
         };
-        callingObj ["geneChromosome"] = parameter.geneChromosome;
-        callingObj ["geneExtentBegin"] =parameter.geneExtentBegin;
-        callingObj ["geneExtentEnd"] = parameter.geneExtentEnd;
         if (typeof parameter.limit !== 'undefined') {
             callingObj["limit"] = parameter.limit;
         };
+        var callingUrl = coreVariables.retrieveTopVariantsAcrossSgsUrl;
+        if (parameter.useMinimalCall){
+            callingUrl = coreVariables.retrieveTopVariantsAcrossSgsMinUrl;
+        }
         $.ajax({
             cache: false,
             type: "post",
-            url: coreVariables.retrieveTopVariantsAcrossSgsUrl,
+            url: callingUrl,
             data: callingObj,
             async: true,
             success: function (data) {

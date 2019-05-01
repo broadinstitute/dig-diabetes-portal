@@ -468,28 +468,98 @@ class VariantSearchController {
 
 
 
+    def retrieveTopVariantsAcrossSgsMin (){
+
+        UserQueryContext userQueryContext = widgetService.generateUserQueryContext(params.geneToSummarize)
+
+
+        String phenotypeName = ''
+        String geneName
+        int limit = -1 // how many records to pull back.  -1 = no limit
+        if (params.limit) {
+            limit = Integer.parseInt(params.limit)
+        } else {
+            limit = RestServerService.DEFAULT_NUMBER_OF_RESULTS_FROM_TOPVARIANTS
+        }
+        log.debug "variantSearch params.limit = ${params.limit}"
+
+
+        if (params.phenotype) {
+            phenotypeName = params.phenotype
+            log.debug "variantSearch params.phenotype = ${params.phenotype}"
+        }
+        if (params.geneToSummarize) {
+            geneName = params.geneToSummarize
+            log.debug "variantSearch params.geneToSummarize = ${params.geneToSummarize}"
+        }
+
+
+        String currentVersion = metaDataService.getDataVersion()
+        List<String> allTechnologies =  metaDataService.getTechnologyListByVersion(currentVersion)
+
+        JSONObject dataJsonObject
+
+        if (userQueryContext.range){
+            dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTablesByRange(  phenotypeName,
+                    userQueryContext.startOriginalExtent,
+                    userQueryContext.endOriginalExtent,
+                    userQueryContext.chromosome,
+                    -1,limit,currentVersion)
+        }else {
+
+                dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTablesByRange(  phenotypeName,
+                        userQueryContext.startExpandedExtent,
+                        userQueryContext.endExpandedExtent,
+                        userQueryContext.chromosome,
+                        -1,limit,currentVersion)
+        }
+
+
+        if (dataJsonObject?.variants) {
+            for (Map pval in dataJsonObject.variants){
+                //for (Map pval in result) {
+                if (pval.containsKey("Consequence")){
+                    List<String> consequenceList = pval["Consequence"]?.tokenize(",")
+                    List<String> translatedConsequenceList = []
+                    for (String consequence in consequenceList){
+                        translatedConsequenceList << g.message(code: "metadata." + consequence, default: consequence)
+                    }
+                    pval["Consequence"] = translatedConsequenceList.join(", ")
+                }
+                if (pval.containsKey("dataset")){
+                    pval["dsr"] = g.message(code: "metadata." + pval["dataset"], default: pval["dataset"])
+                }
+                if (pval.containsKey("BETA")&&(pval["BETA"])){
+                    Double beta = pval["BETA"] as Double
+                    if ((beta!=null)&&(beta!=Double.NaN)){
+                        pval["BETA"] = Math.exp(beta)
+                    }
+
+                }
+                if (pval.containsKey("phenotype")){
+                    pval["pname"] = g.message(code: "metadata." + pval["phenotype"], default: pval["phenotype"])
+                }
+                //}
+            }
+
+        }
+
+        render(status: 200, contentType: "application/json") {
+            [variants: dataJsonObject
+            ]
+        }
+
+    }
+
+
+
+
+
+
 
     def retrieveTopVariantsAcrossSgs (){
         String portalType = g.portalTypeString() as String
         UserQueryContext userQueryContext = widgetService.generateUserQueryContext(params.geneToSummarize)
-//        String geneChromosome = sharedToolsService.parseChromosome(params.geneChromosome)
-//        Long geneExtentBegin = 0L
-//        Long geneExtentEnd = 0l
-//        try {
-//            geneExtentBegin = Long.parseLong(params.geneExtentBegin)
-//            geneExtentEnd = Long.parseLong(params.geneExtentEnd)
-//        } catch(e){
-//            ;
-//        }
-//        if ((geneExtentEnd==0L)&&(params.geneToSummarize)&&(params.geneToSummarize.contains(':'))){
-//            LinkedHashMap extractedNumbers =  restServerService.parseARange(params.geneToSummarize)
-//            if (!extractedNumbers.error){
-//                geneChromosome = extractedNumbers.chromosome
-//                geneExtentBegin = extractedNumbers.start
-//                geneExtentEnd = extractedNumbers.end
-//            }
-//
-//        }
 
 
 

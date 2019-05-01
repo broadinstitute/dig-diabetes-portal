@@ -1683,7 +1683,7 @@ var mpgSoftware = mpgSoftware || {};
 
                     return records;
                  };
-                this.params = {sort:false};
+                this.params = {sort:true};
             }, "BroadT2Da");
             broadAssociationSource.prototype.normalizeResponse = function (data) {
                 // Some association sources do not sort their data in a predictable order, which makes it hard to reliably
