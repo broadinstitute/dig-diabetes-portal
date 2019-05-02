@@ -192,7 +192,7 @@
                         //var menuWidth = $(".dk-user-menu").width() + $(".dk-general-menu").width()+50;
 
                         var menuWidth = $(".dk-general-menu").width()+50;
-                        
+
                         $(".dk-menu-wrapper").css({"width":menuWidth,"margin-top":"0","border-bottom":"solid 1px #ffffff"})
                         setMenuTriangle(".home-btn");
                         addFilterToTraitslist();
