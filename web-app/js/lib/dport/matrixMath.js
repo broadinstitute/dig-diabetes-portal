@@ -85,6 +85,40 @@ mpgSoftware.matrixMath = (function(){
     };
 
 
+    /***
+     * building identity matrix, except move the colSource column to the location of the old location
+     * of the colTarget column, and shift the other columns around as necessary.
+     * @param matrix
+     * @param colSource
+     * @param colTarget
+     * @returns {*}
+     */
+    var buildMatrixToMoveOneColumn  = function(matrix,colSource,colTarget){
+        if ((colSource>=matrix.numberOfColumns) || (colTarget>=matrix.numberOfColumns)){
+            alert("buildMatrixToMoveOneColumn problem with number of columns requested.")
+        }
+        var shifter = 0;
+        _.times(matrix.numberOfColumns,function(column){
+            if ((column===colSource) || (column===colTarget)) {
+                if (colSource < colTarget) {// we are moving a column to the right
+                    shifter++;
+                } else if (colSource > colTarget) {// we are moving a column to the left
+                    shifter--;
+                }
+                if (column===colSource){
+                    setElement (matrix,column,column+shifter,1);
+                } else { //(column===colTarget)
+                    setElement (matrix,column,colTarget,1);
+                }
+            } else {
+                setElement (matrix,column,column+shifter,1);
+            }
+        });
+        return matrix;
+    };
+
+
+
     var getRowFromMatrix = function(matrix,rowNumber){
         return _.slice(matrix.dataArray,rowNumber*matrix.numberOfColumns,(1+rowNumber)*matrix.numberOfColumns);
     };
@@ -140,7 +174,14 @@ mpgSoftware.matrixMath = (function(){
         return multiplyMatrices(matrixToManipulate,multiplierMatrix).dataArray;
     };
 
+    var moveColumnsInDataStructure = function(dataArray,numberOfRows,numberOfColumns,colSource,colTarget){
+        var matrixToManipulate = new Matrix(dataArray,numberOfRows,numberOfColumns);
+        var multiplierMatrix = buildMatrixToMoveOneColumn (buildArrayOfZeros(numberOfColumns,numberOfColumns),colSource,colTarget);
+        return multiplyMatrices(matrixToManipulate,multiplierMatrix).dataArray;
+    };
+
     return {
-        swapColumnsInDataStructure:swapColumnsInDataStructure
+        swapColumnsInDataStructure:swapColumnsInDataStructure,
+        moveColumnsInDataStructure:moveColumnsInDataStructure
     }
 }());

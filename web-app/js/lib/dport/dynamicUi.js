@@ -5168,7 +5168,8 @@ var destroySharedTable = function (whereTheTableGoes) {
 
         var sortedData = extractSortedDataFromTable(whereTheTableGoes, numberOfRows, numberOfColumns, sharedTable.currentForm);
         if ((swapColA !== -1) && (swapColB !== -1)){
-            sortedData=mpgSoftware.matrixMath.swapColumnsInDataStructure(sortedData,numberOfRows,numberOfColumns,swapColA,swapColB);
+            //sortedData=mpgSoftware.matrixMath.swapColumnsInDataStructure(sortedData,numberOfRows,numberOfColumns,swapColA,swapColB);
+            sortedData=mpgSoftware.matrixMath.moveColumnsInDataStructure(sortedData,numberOfRows,numberOfColumns,swapColA,swapColB);
         }
 
 
