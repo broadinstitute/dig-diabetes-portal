@@ -1,3 +1,15 @@
+/***
+ * mouse knockout data
+ *
+ * The following externally visible functions are required:
+ *          a function to process records
+ *          a function to display the processed records
+ * As well as the following private functions:
+ *          categorizeTissueNumbers
+*           categorizeSignificanceNumbers
+ * @type {*|{}}
+ */
+
 
 var mpgSoftware = mpgSoftware || {};  // encapsulating variable
 mpgSoftware.dynamicUi = mpgSoftware.dynamicUi || {};   // second level encapsulating variable
@@ -61,7 +73,8 @@ mpgSoftware.dynamicUi.mouseKnockout = (function () {
     }
 
     var categorizeSignificanceNumbers = function ( significance, datatype, overrideValue ){
-        return mpgSoftware.dynamicUi.categorizeSignificanceNumbers(significance, datatype, overrideValue);
+        // significance is not a meaningful concept, so return a 6, which means make the background white
+        return 6;
     }
 
 
