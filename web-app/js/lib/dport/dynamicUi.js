@@ -270,7 +270,7 @@ mpgSoftware.dynamicUi = (function () {
                 break;
 
             case "getAnnotationsFromModForGenesTable":
-                defaultFollowUp.displayRefinedContextFunction = displayRefinedModContext;
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.mouseKnockout.displayRefinedModContext;
                 defaultFollowUp.placeToDisplayData = '#dynamicPhenotypeHolder div.dynamicUiHolder';
                 break;
 
@@ -1048,44 +1048,44 @@ mpgSoftware.dynamicUi = (function () {
         }
         return returnObject;
     };
-    var displayRefinedModContext = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-
-
-
-        displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
-            'MOD', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            'modNameArray', // name of the persistent field where the data we received is stored
-            '', // we may wish to pull out one record for summary purposes
-            function(records,tissueTranslations){
-                return _.map(_.orderBy(records,["symbol"],["asc"]),function(tissueRecord){
-                    return {  Feature_Type: tissueRecord.Feature_Type,
-                        Human_gene: tissueRecord.Human_gene,
-                        Term: tissueRecord.Term,
-                        MGI_Gene_Marker_ID:tissueRecord.MGI_Gene_Marker_ID,
-                        Name: tissueRecord.Name,
-                        Symbol: tissueRecord.Symbol
-                    }});
-            },
-            function(records, // all records
-                     recordsCellPresentationString,// record count cell text
-                     significanceCellPresentationString,// significance cell text
-                     dataAnnotationTypeCode,// driving code
-                     significanceValue,
-                     gene ){ // value of significance for sorting
-                return {
-                    cellPresentationStringMap:{ Records:recordsCellPresentationString,
-                        Significance:significanceCellPresentationString },
-                    numberOfRecords:records.length,
-                    tissueCategoryNumber:categorizeTissueNumbers( records.length ),
-                    significanceCategoryNumber:categorizeSignificanceNumbers( records, "COL" ),
-                    recordsExist:(records.length)?[1]:[],
-                    gene:gene,
-                    significanceValue:significanceValue,
-                    records:records
-                }
-            } );
-
-    };
+    // var displayRefinedModContext = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+    //
+    //
+    //
+    //     displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
+    //         'MOD', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+    //         'modNameArray', // name of the persistent field where the data we received is stored
+    //         '', // we may wish to pull out one record for summary purposes
+    //         function(records,tissueTranslations){
+    //             return _.map(_.orderBy(records,["symbol"],["asc"]),function(tissueRecord){
+    //                 return {  Feature_Type: tissueRecord.Feature_Type,
+    //                     Human_gene: tissueRecord.Human_gene,
+    //                     Term: tissueRecord.Term,
+    //                     MGI_Gene_Marker_ID:tissueRecord.MGI_Gene_Marker_ID,
+    //                     Name: tissueRecord.Name,
+    //                     Symbol: tissueRecord.Symbol
+    //                 }});
+    //         },
+    //         function(records, // all records
+    //                  recordsCellPresentationString,// record count cell text
+    //                  significanceCellPresentationString,// significance cell text
+    //                  dataAnnotationTypeCode,// driving code
+    //                  significanceValue,
+    //                  gene ){ // value of significance for sorting
+    //             return {
+    //                 cellPresentationStringMap:{ Records:recordsCellPresentationString,
+    //                     Significance:significanceCellPresentationString },
+    //                 numberOfRecords:records.length,
+    //                 tissueCategoryNumber:categorizeTissueNumbers( records.length ),
+    //                 significanceCategoryNumber:categorizeSignificanceNumbers( records, "COL" ),
+    //                 recordsExist:(records.length)?[1]:[],
+    //                 gene:gene,
+    //                 significanceValue:significanceValue,
+    //                 records:records
+    //             }
+    //         } );
+    //
+    // };
 
     /***
      * The object is passed into mustache and describes the display that will be presented to users
@@ -5485,6 +5485,7 @@ var destroySharedTable = function (whereTheTableGoes) {
 
 // public routines are declared below
     return {
+        displayForGeneTable:displayForGeneTable,
         shiftColumnsByOne:shiftColumnsByOne,
         extractStraightFromTarget:extractStraightFromTarget,
         showAttachedData:showAttachedData,
@@ -5499,7 +5500,9 @@ var destroySharedTable = function (whereTheTableGoes) {
         installDirectorButtonsOnTabs: installDirectorButtonsOnTabs,
         modifyScreenFields: modifyScreenFields,
         adjustLowerExtent: adjustLowerExtent,
-        adjustUpperExtent: adjustUpperExtent
+        adjustUpperExtent: adjustUpperExtent,
+        categorizeTissueNumbers:categorizeTissueNumbers,
+        categorizeSignificanceNumbers:categorizeSignificanceNumbers
     }
 }());
 
