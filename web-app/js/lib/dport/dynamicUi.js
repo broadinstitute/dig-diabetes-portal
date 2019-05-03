@@ -5169,7 +5169,7 @@ var destroySharedTable = function (whereTheTableGoes) {
         var sortedData = extractSortedDataFromTable(whereTheTableGoes, numberOfRows, numberOfColumns, sharedTable.currentForm);
         if ((swapColA !== -1) && (swapColB !== -1)){
             //sortedData=mpgSoftware.matrixMath.swapColumnsInDataStructure(sortedData,numberOfRows,numberOfColumns,swapColA,swapColB);
-            sortedData=mpgSoftware.matrixMath.moveColumnsInDataStructure(sortedData,numberOfRows,numberOfColumns,swapColA,swapColB);
+            sortedData=mpgSoftware.matrixMath.moveColumnsInDataStructure(sortedData,numberOfRows,numberOfColumns,swapColB,swapColA);
         }
 
 
@@ -5428,11 +5428,11 @@ var destroySharedTable = function (whereTheTableGoes) {
         }
         if (direction==="forward"){
             if ((indexOfClickedColumn>leftBackstop) &&(indexOfClickedColumn<(numberOfHeaders-1))){
-                redrawTableOnClick('table.combinedGeneTableHolder',indexOfClickedColumn,numberOfHeaders-1);
+                redrawTableOnClick('table.combinedGeneTableHolder',numberOfHeaders-1,indexOfClickedColumn);
             }
         }else if (direction==="backward") {
             if ((indexOfClickedColumn>(leftBackstop+1)) &&(indexOfClickedColumn<(numberOfHeaders))){
-                redrawTableOnClick('table.combinedGeneTableHolder',indexOfClickedColumn,leftBackstop+1);
+                redrawTableOnClick('table.combinedGeneTableHolder',leftBackstop+1,indexOfClickedColumn);
             }
         }
 
