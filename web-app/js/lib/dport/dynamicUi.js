@@ -290,22 +290,22 @@ mpgSoftware.dynamicUi = (function () {
                 break;
 
             case "getSkatGeneAssociationsForGeneTable":
-                defaultFollowUp.displayRefinedContextFunction = displayGeneSkatAssociationsForGeneTable;
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.geneBurdenSkat.displayGeneSkatAssociationsForGeneTable;
                 defaultFollowUp.placeToDisplayData = '#dynamicGeneHolder div.dynamicUiHolder';
                 break;
 
             case "getFirthGeneAssociationsForGeneTable":
-                defaultFollowUp.displayRefinedContextFunction = displayGeneFirthAssociationsForGeneTable;
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.geneBurdenFirth.displayGeneFirthAssociationsForGeneTable;
                 defaultFollowUp.placeToDisplayData = '#dynamicGeneHolder div.dynamicUiHolder';
                 break;
 
             case "getInformationFromDepictForGenesTable":
-                defaultFollowUp.displayRefinedContextFunction = displayGenesFromDepict;
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.depictGenePvalue.displayGenesFromDepict;
                 defaultFollowUp.placeToDisplayData = '#dynamicGeneHolder div.dynamicUiHolder';
                 break;
 
             case "getDepictGeneSetForGenesTable":
-                defaultFollowUp.displayRefinedContextFunction = displayGeneSetFromDepict;
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.depictGeneSets.displayGeneSetFromDepict;
                 defaultFollowUp.placeToDisplayData = '#dynamicGeneHolder div.dynamicUiHolder';
                 break;
 
@@ -1710,85 +1710,7 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
-    var displayGeneSetFromDepict = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
 
-        displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
-            'DEP_GS', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            'depictGeneSetInfo', // name of the persistent field where the data we received is stored
-            '', // we may wish to pull out one record for summary purposes
-            function(records,tissueTranslations){
-                return _.map(_.sortBy(records,['pvalue']),function(oneRecord){
-                    return {    pathway_description:  oneRecord.pathway_description,
-                                gene_list: oneRecord.gene_list,
-                                pathway_id: oneRecord.pathway_id.includes(":")?
-                                            oneRecord.pathway_id.split(":")[1]:oneRecord.pathway_id,
-                                value: UTILS.realNumberFormatter(""+oneRecord.value),
-                        tissue: oneRecord.tissue,
-                        numericalValue: oneRecord.value };
-                            });
-
-            },
-            function(records, // all records
-                     recordsCellPresentationString,// record count cell text
-                     significanceCellPresentationString,// significance cell text
-                     dataAnnotationTypeCode,// driving code
-                     significanceValue,
-                     gene ){ // value of significance for sorting
-                return {  numberOfRecords:records.length,
-                    cellPresentationStringMap:{ Records:recordsCellPresentationString,
-                    Significance:significanceCellPresentationString },
-                    tissueCategoryNumber:categorizeTissueNumbers( records.length ),
-                    recordsExist:(records.length)?[1]:[],
-                    gene:gene,
-                    significanceCategoryNumber:categorizeSignificanceNumbers( records, dataAnnotationTypeCode, significanceValue ),
-                    significanceValue:significanceValue,
-                    data:records
-                }
-            } );
-
-    };
-
-
-
-
-
-
-
-
-    //var displayGenePhenotypeAssociations = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-    //
-    //
-    //    displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
-    //        'MET', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-    //        'rawGeneAssociationRecords', // name of the persistent field where the data we received is stored
-    //        '', // we may wish to pull out one record for summary purposes
-    //        function(records,tissueTranslations){
-    //            return _.map(_.sortBy(records,['value']),function(tissueRecord){
-    //                return {  tissueName:  translateATissueName(tissueTranslations,tissueRecord.tissue),
-    //                    tissue: tissueRecord.tissue,
-    //                    value: UTILS.realNumberFormatter(""+tissueRecord.value),
-    //                    numericalValue: tissueRecord.value };
-    //            })
-    //        },
-    //        function(records, // all records
-    //                 recordsCellPresentationString,// record count cell text
-    //                 significanceCellPresentationString,// significance cell text
-    //                 dataAnnotationTypeCode,// driving code
-    //                 significanceValue,
-    //                 gene){ // value of significance for sorting
-    //            return {  numberOfRecords:records.length,
-    //                cellPresentationStringMap:{ Records:recordsCellPresentationString,
-    //                    Significance:significanceCellPresentationString },
-    //                tissueCategoryNumber:categorizeTissueNumbers( records.length ),
-    //                tissuesExist:(records.length)?[1]:[],
-    //                gene:gene,
-    //                significanceCategoryNumber:categorizeSignificanceNumbers( records, dataAnnotationTypeCode, significanceValue ),
-    //                significanceValue:significanceValue,
-    //                tissues:records
-    //            }
-    //        } );
-    //
-    //};
 
 
     var translateATissueName = function(tissueTranslations,tissueKey){
@@ -1801,83 +1723,6 @@ mpgSoftware.dynamicUi = (function () {
         }
         return returnValue
     }
-
-
-
-
-    var displayGeneSkatAssociationsForGeneTable = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-
-        displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
-            'SKA', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            'rawGeneSkatRecords', // name of the persistent field where the data we received is stored
-            'P_MIN_P_SKAT_NS_STRICT_NS_1PCT', // we may wish to pull out one record for summary purposes
-            function(records,tissueTranslations){
-                return _.map(_.sortBy(_.filter(records,function(t){return t.tissue.includes("SKAT")}),['value']),function(tissueRecord){
-                    return {  tissueName:  translateATissueName(tissueTranslations,tissueRecord.tissue),
-                        tissue: tissueRecord.tissue,
-                        value: UTILS.realNumberFormatter(""+tissueRecord.value),
-                        numericalValue: tissueRecord.value };
-                })
-            },
-            function(records, // all records
-                     recordsCellPresentationString,// record count cell text
-                     significanceCellPresentationString,// significance cell text
-                     dataAnnotationTypeCode,// driving code
-                     significanceValue,
-                     gene ){ // value of significance for sorting
-                return {  numberOfRecords:records.length,
-                    cellPresentationStringMap:{ Records:recordsCellPresentationString,
-                        Significance:significanceCellPresentationString },
-                    tissueCategoryNumber:categorizeTissueNumbers(records.length ),
-                    tissuesExist:(records.length)?[1]:[],
-                    gene:gene,
-                    significanceCategoryNumber:categorizeSignificanceNumbers( records, dataAnnotationTypeCode, significanceValue ),
-                    significanceValue:significanceValue,
-                    tissues:records
-                }
-            } );
-
-
-    };
-
-
-
-
-
-    var displayGeneFirthAssociationsForGeneTable = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-
-        displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
-            'FIR', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            'rawGeneFirthRecords', // name of the persistent field where the data we received is stored
-            'P_MIN_P_FIRTH_NS_STRICT_NS_1PCT', // we may wish to pull out one record for summary purposes
-            function(records,tissueTranslations){
-                return _.map(_.sortBy(_.filter(records,function(t){return t.tissue.includes("FIRTH")}),['value']),function(tissueRecord){
-                    return {  tissueName:  translateATissueName(tissueTranslations,tissueRecord.tissue),
-                        tissue: tissueRecord.tissue,
-                        value: UTILS.realNumberFormatter(""+tissueRecord.value),
-                        numericalValue: tissueRecord.value };
-                })
-            },
-            function(records, // all records
-                     recordsCellPresentationString,// record count cell text
-                     significanceCellPresentationString,// significance cell text
-                     dataAnnotationTypeCode,// driving code
-                     significanceValue,
-                     gene ){ // value of significance for sorting
-                return {  numberOfRecords:records.length,
-                    cellPresentationStringMap:{ Records:recordsCellPresentationString,
-                    Significance:significanceCellPresentationString },
-                    tissueCategoryNumber:categorizeTissueNumbers( records.length ),
-                        tissuesExist:(records.length)?[1]:[],
-                    gene:gene,
-                    significanceCategoryNumber:categorizeSignificanceNumbers( records, dataAnnotationTypeCode, significanceValue ),
-                    significanceValue:significanceValue,
-                    tissues:records
-                }
-            }
-        );
-    };
-
 
 
 
@@ -2081,87 +1926,6 @@ mpgSoftware.dynamicUi = (function () {
 
 
     };
-
-
-    //var displayGenesFromECaviar = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-    //    displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
-    //        'ECA', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-    //        'rawColocalizationInfo', // name of the persistent field where the data we received is stored
-    //        '', // we may wish to pull out one record for summary purposes
-    //        function(records,tissueTranslations){
-    //            return _.map(_.orderBy( records,["clpp"],["desc"]),function(tissueRecord){
-    //                return {  tissue: tissueRecord.tissue_trans,
-    //                    clpp: UTILS.realNumberFormatter(""+tissueRecord.clpp),
-    //                    prob_in_causal_set: UTILS.realNumberFormatter(""+tissueRecord.prob_in_causal_set),
-    //                    gwas_z_score: UTILS.realNumberFormatter(""+tissueRecord.gwas_z_score),
-    //                    eqtl_z_score: UTILS.realNumberFormatter(""+tissueRecord.eqtl_z_score),
-    //                    var_id:tissueRecord.var_id,
-    //                    value:tissueRecord.clpp,
-    //                    numericalValue: tissueRecord.clpp
-    //                }});
-    //            },
-    //        function(records, // all records
-    //                 recordsCellPresentationString,// record count cell text
-    //                 significanceCellPresentationString,// significance cell text
-    //                 dataAnnotationTypeCode,// driving code
-    //                 significanceValue,
-    //                 gene ){ // value of significance for sorting
-    //            return {
-    //                cellPresentationStringMap:{ Records:recordsCellPresentationString,
-    //                                            Significance:significanceCellPresentationString },
-    //                numberOfRecords:records.length,
-    //                tissueCategoryNumber:categorizeTissueNumbers( records.length ),
-    //                significanceCategoryNumber:categorizeSignificanceNumbers( records, "ECA" ),
-    //                recordsExist:(records.length)?[1]:[],
-    //                gene:gene,
-    //                significanceValue:significanceValue,
-    //                records:records
-    //            }
-    //        } );
-    //
-    //};
-
-
-
-
-
-    //var displayGenesFromColoc = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-    //
-    //    displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
-    //        'COL', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-    //        'rawColoInfo', // name of the persistent field where the data we received is stored
-    //        '', // we may wish to pull out one record for summary purposes
-    //        function(records,tissueTranslations){
-    //            return _.map(_.orderBy(records,["prob_exists_coloc"],["desc"]),function(tissueRecord){
-    //                return {  tissue: tissueRecord.tissue_trans,
-    //                    conditional_prob_snp_coloc: UTILS.realNumberFormatter(""+tissueRecord.conditional_prob_snp_coloc),
-    //                    unconditional_prob_snp_coloc: UTILS.realNumberFormatter(""+tissueRecord.unconditional_prob_snp_coloc),
-    //                    prob_exists_coloc: UTILS.realNumberFormatter(""+tissueRecord.prob_exists_coloc),
-    //                    var_id: tissueRecord.var_id,
-    //                    value:tissueRecord.prob_exists_coloc,
-    //                    numericalValue: tissueRecord.prob_exists_coloc
-    //                }});
-    //        },
-    //        function(records, // all records
-    //                 recordsCellPresentationString,// record count cell text
-    //                 significanceCellPresentationString,// significance cell text
-    //                 dataAnnotationTypeCode,// driving code
-    //                 significanceValue,
-    //                 gene ){ // value of significance for sorting
-    //            return {
-    //                cellPresentationStringMap:{ Records:recordsCellPresentationString,
-    //                    Significance:significanceCellPresentationString },
-    //                numberOfRecords:records.length,
-    //                tissueCategoryNumber:categorizeTissueNumbers( records.length ),
-    //                significanceCategoryNumber:categorizeSignificanceNumbers( records, "COL" ),
-    //                recordsExist:(records.length)?[1]:[],
-    //                gene:gene,
-    //                significanceValue:significanceValue,
-    //                records:records
-    //            }
-    //        } );
-    //};
-
 
 
 
@@ -5341,9 +5105,9 @@ var destroySharedTable = function (whereTheTableGoes) {
                         returnValue = 2;
                     } else if ((valueToAssess>0.5E-4) &&(valueToAssess<=0.05)) {
                         returnValue = 3;
-                    } else if ((valueToAssess>0.05) &&(valueToAssess<=0.4)) {
+                    } else if ((valueToAssess>0.05) &&(valueToAssess<=0.1)) {
                         returnValue = 4;
-                    } else if (valueToAssess>0.4) {
+                    } else if (valueToAssess>0.1) {
                         returnValue = 5;
                     }
                     break;
@@ -5371,9 +5135,9 @@ var destroySharedTable = function (whereTheTableGoes) {
             returnValue = 2;
         } else if ((valueToAssess > 0.5E-4) && (valueToAssess <= 0.05)) {
             returnValue = 3;
-        } else if ((valueToAssess > 0.05) && (valueToAssess <= 0.4)) {
+        } else if ((valueToAssess > 0.05) && (valueToAssess <= 0.1)) {
             returnValue = 4;
-        } else if (valueToAssess > 0.4) {
+        } else if (valueToAssess > 0.1) {
             returnValue = 5;
         }
         return returnValue;
