@@ -52,10 +52,6 @@ class RestServerService {
     private String GET_DATA_URL = "getData"
     private String GET_GENE_DATA_URL = "getGeneData"
     private String GET_DATA_AGGREGATION_URL = "getAggregatedData"
-    private String GET_TEMPORARY_EQTL_URL = "http://ec2-34-237-63-26.compute-1.amazonaws.com:8083/dccgraph/"
-    private String GET_TEMPORARY_MODS_URL = "http://ec2-34-229-106-174.compute-1.amazonaws.com:8090/dccservices/"
-    private String GET_DATA_AGGREGATION_BY_RANGE_URL= "getAggregatedData"
-    private String GET_DATA_AGGREGATION_BY_RANGE_PHEWAS_URL= "getAggregatedData/PheWAS"
     private String GET_DATA_AGGREGATION_BY_RANGE_PHENOTYPES_URL= "getAggregatedData/phenotypes"
     private String GET_DATA_AGGREGATION_BY_RANGE_VARIANTS_URL= "getAggregatedData/variants"
     private String GET_DATA_AGGREGATION_PHEWAS_URL= "getAggregatedData/PheWAS"
@@ -64,6 +60,7 @@ class RestServerService {
     private String GET_BOTTOM_LINE_PHENOTYPES_VIA_VARIANTS_URL= "variant/phenotype/array"
     private String GET_TISSUE_ASSOCIATION_BASED_ON_LDSR_URL= "ld_score/by_phenotype/object"
     private String GET_VARIANT_GTEX_EQTL_FROM_URL= "ledge/gtex_eqtl/object"
+    private String GET_EFFECTOR_GENE_INFO_URL= "testcalls/genepriority/gene/object"
     private String GET_EQTLS_FOR_A_VARIANT_LIST_URL= "testcalls/ledge/eqtl/object"
     private String GET_VARIANT_ECAVIAR_COLOCALIZATION_FROM_URL= "testcalls/ecaviar/colocalization_max/object"
     private String GET_VARIANT_COLOC_COLOCALIZATION_FROM_URL= "testcalls/ecaviar/colocalization_expanded_max/object"
@@ -2537,6 +2534,18 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
+    public JSONObject gatherEffectorGeneData(  List <String> geneList ) {
+        List<String> specifyRequestList = []
+
+        if ((geneList) && (geneList.length() > 0)) {
+            specifyRequestList << "gene=${geneList.join(",").replace("\"","")}"
+        }
+
+        String rawReturnFromApi =  getRestCall("${GET_EFFECTOR_GENE_INFO_URL}?${specifyRequestList.join("&")}".toString())
+        JsonSlurper slurper = new JsonSlurper()
+        JSONObject jsonObject = slurper.parseText(rawReturnFromApi) as JSONObject
+        return jsonObject
+    }
 
 
 

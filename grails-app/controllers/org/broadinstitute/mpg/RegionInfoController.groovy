@@ -886,6 +886,26 @@ class RegionInfoController {
 
 
 
+    def retrieveEffectorGeneInformation() {
+        boolean looksOkay = false
+
+        def slurper = new JsonSlurper()
+        List<String> geneList = []
+        if (params.geneList) {
+            geneList = slurper.parseText( params.geneList as String)  as JSONArray
+            looksOkay = true
+        }
+
+        JSONObject jsonReturn
+        if (looksOkay){
+            jsonReturn = restServerService.gatherEffectorGeneData( geneList )
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+            jsonReturn =  slurper.parseText(proposedJsonString)
+        }
+        render(status: 200, contentType: "application/json") {jsonReturn}
+        return
+}
 
 
 

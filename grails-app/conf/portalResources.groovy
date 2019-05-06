@@ -213,6 +213,7 @@ modules = {
         resource url: 'js/lib/dport/dynamicUi/eCaviar.js'
         resource url: 'js/lib/dport/dynamicUi/coloc.js'
         resource url: 'js/lib/dport/dynamicUi/mouseKnockout.js'
+        resource url: 'js/lib/dport/dynamicUi/effectorGene.js'
     }
     mustache {
         resource url: 'js/lib/mustache.js'

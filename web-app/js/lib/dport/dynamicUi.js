@@ -309,6 +309,12 @@ mpgSoftware.dynamicUi = (function () {
                 defaultFollowUp.placeToDisplayData = '#dynamicGeneHolder div.dynamicUiHolder';
                 break;
 
+            case "getInformationFromEffectorGeneListTable":
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.effectorGene.displayGenesFromEffectorGene;
+                defaultFollowUp.placeToDisplayData = '#dynamicGeneHolder div.dynamicUiHolder';
+                break;
+
+
             case "getRecordsFromAbcForTissueTable":
                 defaultFollowUp.displayRefinedContextFunction = displayTissuesFromAbc;
                 defaultFollowUp.placeToDisplayData = '#dynamicTissueHolder div.dynamicUiHolder';
@@ -512,6 +518,36 @@ mpgSoftware.dynamicUi = (function () {
                     }
                 };
                 break;
+
+
+            case "getInformationFromEffectorGeneListTable":
+                functionToLaunchDataRetrieval = function () {
+                    if (accumulatorObjectFieldEmpty("geneNameArray")) {
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getInformationFromEffectorGeneListTable"});
+                        actionToUndertake();
+                    } else {
+                        var phenotype = $('li.chosenPhenotype').attr('id');
+                        var dataForCall = _.map(getAccumulatorObject("geneNameArray"), function (o) {
+                            return {
+                                geneList: "[\""+o.name+"\"]",
+                                phenotype: phenotype,
+                                propertyNames: "[\"P_VALUE\"]"
+                            }
+                        });
+                        retrieveRemotedContextInformation(buildRemoteContextArray({
+                            name: "getInformationFromEffectorGeneListTable",
+                            retrieveDataUrl: additionalParameters.retrieveEffectorGeneInformationUrl,
+                            dataForCall: dataForCall,
+                            processEachRecord: mpgSoftware.dynamicUi.effectorGene.processRecordsFromEffectorGene,
+                            displayRefinedContextFunction: displayFunction,
+                            placeToDisplayData: displayLocation,
+                            actionId: nextActionId,
+                            nameOfAccumulatorField:'rawEffectorGeneRecords'
+                        }));
+                    }
+                };
+                break;
+
 
 
 
@@ -1662,47 +1698,6 @@ mpgSoftware.dynamicUi = (function () {
     };
 
 
-
-
-
-
-
-
-
-
-    var displayGenesFromDepict = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-
-        displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
-            'DEP_GP', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            'rawDepictInfo', // name of the persistent field where the data we received is stored
-            '', // we may wish to pull out one record for summary purposes
-            function(records,tissueTranslations){
-                return _.map(_.sortBy(records,['value']),function(tissueRecord){
-                    return {    value:UTILS.realNumberFormatter(''+tissueRecord.value),
-                        numericalValue:tissueRecord.value,
-                        dataset: tissueRecord.dataset };
-                });
-
-            },
-            function(records, // all records
-                     recordsCellPresentationString,// record count cell text
-                     significanceCellPresentationString,// significance cell text
-                     dataAnnotationTypeCode,// driving code
-                     significanceValue,
-                     gene ){ // value of significance for sorting
-                return {  numberOfRecords:records.length,
-                    cellPresentationStringMap:{ Records:recordsCellPresentationString,
-                        Significance:significanceCellPresentationString },
-                    tissueCategoryNumber:categorizeTissueNumbers( records.length ),
-                    recordsExist:(records.length)?[1]:[],
-                    gene:gene,
-                    significanceCategoryNumber:categorizeSignificanceNumbers( records, dataAnnotationTypeCode, significanceValue ),
-                    significanceValue:significanceValue,
-                    data:records
-                }
-            } );
-
-    };
 
 
 
@@ -3289,6 +3284,9 @@ mpgSoftware.dynamicUi = (function () {
 
             arrayOfRoutinesToUndertake.push( actionContainer('getFirthGeneAssociationsForGeneTable',
                 actionDefaultFollowUp("getFirthGeneAssociationsForGeneTable")));
+
+            arrayOfRoutinesToUndertake.push( actionContainer('getInformationFromEffectorGeneListTable',
+                actionDefaultFollowUp("getInformationFromEffectorGeneListTable")));
 
 
             _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});

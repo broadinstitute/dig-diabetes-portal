@@ -761,3 +761,4 @@
 <g:render template="/templates/dynamicUi/ECA" />
 <g:render template="/templates/dynamicUi/COL" />
 <g:render template="/templates/dynamicUi/MOD" />
+<g:render template="/templates/dynamicUi/EFF" />
