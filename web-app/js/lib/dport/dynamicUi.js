@@ -260,12 +260,12 @@ mpgSoftware.dynamicUi = (function () {
                 break;
 
             case "getRecordsFromECaviarForGeneTable":
-                defaultFollowUp.displayRefinedContextFunction = displayGenesFromECaviar;
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.eCaviar.displayGenesFromECaviar;
                 defaultFollowUp.placeToDisplayData = '#dynamicPhenotypeHolder div.dynamicUiHolder';
                 break;
 
             case "getRecordsFromColocForGeneTable":
-                defaultFollowUp.displayRefinedContextFunction = displayGenesFromColoc;
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.coloc.displayGenesFromColoc;
                 defaultFollowUp.placeToDisplayData = '#dynamicPhenotypeHolder div.dynamicUiHolder';
                 break;
 
@@ -285,7 +285,7 @@ mpgSoftware.dynamicUi = (function () {
                 break;
 
             case "getGeneAssociationsForGenesTable":
-                defaultFollowUp.displayRefinedContextFunction = displayGenePhenotypeAssociations;
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.metaXcan.displayGenePhenotypeAssociations;
                 defaultFollowUp.placeToDisplayData = '#dynamicGeneHolder div.dynamicUiHolder';
                 break;
 
@@ -1755,40 +1755,40 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
-    var displayGenePhenotypeAssociations = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-
-
-        displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
-            'MET', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            'rawGeneAssociationRecords', // name of the persistent field where the data we received is stored
-            '', // we may wish to pull out one record for summary purposes
-            function(records,tissueTranslations){
-                return _.map(_.sortBy(records,['value']),function(tissueRecord){
-                    return {  tissueName:  translateATissueName(tissueTranslations,tissueRecord.tissue),
-                        tissue: tissueRecord.tissue,
-                        value: UTILS.realNumberFormatter(""+tissueRecord.value),
-                        numericalValue: tissueRecord.value };
-                })
-            },
-            function(records, // all records
-                     recordsCellPresentationString,// record count cell text
-                     significanceCellPresentationString,// significance cell text
-                     dataAnnotationTypeCode,// driving code
-                     significanceValue,
-                     gene){ // value of significance for sorting
-                return {  numberOfRecords:records.length,
-                    cellPresentationStringMap:{ Records:recordsCellPresentationString,
-                        Significance:significanceCellPresentationString },
-                    tissueCategoryNumber:categorizeTissueNumbers( records.length ),
-                    tissuesExist:(records.length)?[1]:[],
-                    gene:gene,
-                    significanceCategoryNumber:categorizeSignificanceNumbers( records, dataAnnotationTypeCode, significanceValue ),
-                    significanceValue:significanceValue,
-                    tissues:records
-                }
-            } );
-
-    };
+    //var displayGenePhenotypeAssociations = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+    //
+    //
+    //    displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
+    //        'MET', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+    //        'rawGeneAssociationRecords', // name of the persistent field where the data we received is stored
+    //        '', // we may wish to pull out one record for summary purposes
+    //        function(records,tissueTranslations){
+    //            return _.map(_.sortBy(records,['value']),function(tissueRecord){
+    //                return {  tissueName:  translateATissueName(tissueTranslations,tissueRecord.tissue),
+    //                    tissue: tissueRecord.tissue,
+    //                    value: UTILS.realNumberFormatter(""+tissueRecord.value),
+    //                    numericalValue: tissueRecord.value };
+    //            })
+    //        },
+    //        function(records, // all records
+    //                 recordsCellPresentationString,// record count cell text
+    //                 significanceCellPresentationString,// significance cell text
+    //                 dataAnnotationTypeCode,// driving code
+    //                 significanceValue,
+    //                 gene){ // value of significance for sorting
+    //            return {  numberOfRecords:records.length,
+    //                cellPresentationStringMap:{ Records:recordsCellPresentationString,
+    //                    Significance:significanceCellPresentationString },
+    //                tissueCategoryNumber:categorizeTissueNumbers( records.length ),
+    //                tissuesExist:(records.length)?[1]:[],
+    //                gene:gene,
+    //                significanceCategoryNumber:categorizeSignificanceNumbers( records, dataAnnotationTypeCode, significanceValue ),
+    //                significanceValue:significanceValue,
+    //                tissues:records
+    //            }
+    //        } );
+    //
+    //};
 
 
     var translateATissueName = function(tissueTranslations,tissueKey){
@@ -2083,87 +2083,84 @@ mpgSoftware.dynamicUi = (function () {
     };
 
 
-    var displayGenesFromECaviar = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-        displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
-            'ECA', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            'rawColocalizationInfo', // name of the persistent field where the data we received is stored
-            '', // we may wish to pull out one record for summary purposes
-            function(records,tissueTranslations){
-                return _.map(_.orderBy( records,["clpp"],["desc"]),function(tissueRecord){
-                    return {  tissue: tissueRecord.tissue_trans,
-                        clpp: UTILS.realNumberFormatter(""+tissueRecord.clpp),
-                        prob_in_causal_set: UTILS.realNumberFormatter(""+tissueRecord.prob_in_causal_set),
-                        gwas_z_score: UTILS.realNumberFormatter(""+tissueRecord.gwas_z_score),
-                        eqtl_z_score: UTILS.realNumberFormatter(""+tissueRecord.eqtl_z_score),
-                        var_id:tissueRecord.var_id,
-                        value:tissueRecord.clpp,
-                        numericalValue: tissueRecord.clpp
-                    }});
-                },
-            function(records, // all records
-                     recordsCellPresentationString,// record count cell text
-                     significanceCellPresentationString,// significance cell text
-                     dataAnnotationTypeCode,// driving code
-                     significanceValue,
-                     gene ){ // value of significance for sorting
-                return {
-                    cellPresentationStringMap:{ Records:recordsCellPresentationString,
-                                                Significance:significanceCellPresentationString },
-                    numberOfRecords:records.length,
-                    tissueCategoryNumber:categorizeTissueNumbers( records.length ),
-                    significanceCategoryNumber:categorizeSignificanceNumbers( records, "ECA" ),
-                    recordsExist:(records.length)?[1]:[],
-                    gene:gene,
-                    significanceValue:significanceValue,
-                    records:records
-                }
-            } );
-
-    };
-
-
+    //var displayGenesFromECaviar = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+    //    displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
+    //        'ECA', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+    //        'rawColocalizationInfo', // name of the persistent field where the data we received is stored
+    //        '', // we may wish to pull out one record for summary purposes
+    //        function(records,tissueTranslations){
+    //            return _.map(_.orderBy( records,["clpp"],["desc"]),function(tissueRecord){
+    //                return {  tissue: tissueRecord.tissue_trans,
+    //                    clpp: UTILS.realNumberFormatter(""+tissueRecord.clpp),
+    //                    prob_in_causal_set: UTILS.realNumberFormatter(""+tissueRecord.prob_in_causal_set),
+    //                    gwas_z_score: UTILS.realNumberFormatter(""+tissueRecord.gwas_z_score),
+    //                    eqtl_z_score: UTILS.realNumberFormatter(""+tissueRecord.eqtl_z_score),
+    //                    var_id:tissueRecord.var_id,
+    //                    value:tissueRecord.clpp,
+    //                    numericalValue: tissueRecord.clpp
+    //                }});
+    //            },
+    //        function(records, // all records
+    //                 recordsCellPresentationString,// record count cell text
+    //                 significanceCellPresentationString,// significance cell text
+    //                 dataAnnotationTypeCode,// driving code
+    //                 significanceValue,
+    //                 gene ){ // value of significance for sorting
+    //            return {
+    //                cellPresentationStringMap:{ Records:recordsCellPresentationString,
+    //                                            Significance:significanceCellPresentationString },
+    //                numberOfRecords:records.length,
+    //                tissueCategoryNumber:categorizeTissueNumbers( records.length ),
+    //                significanceCategoryNumber:categorizeSignificanceNumbers( records, "ECA" ),
+    //                recordsExist:(records.length)?[1]:[],
+    //                gene:gene,
+    //                significanceValue:significanceValue,
+    //                records:records
+    //            }
+    //        } );
+    //
+    //};
 
 
 
-    var displayGenesFromColoc = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-
-        displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
-            'COL', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            'rawColoInfo', // name of the persistent field where the data we received is stored
-            '', // we may wish to pull out one record for summary purposes
-            function(records,tissueTranslations){
-                return _.map(_.orderBy(records,["prob_exists_coloc"],["desc"]),function(tissueRecord){
-                    return {  tissue: tissueRecord.tissue_trans,
-                        conditional_prob_snp_coloc: UTILS.realNumberFormatter(""+tissueRecord.conditional_prob_snp_coloc),
-                        unconditional_prob_snp_coloc: UTILS.realNumberFormatter(""+tissueRecord.unconditional_prob_snp_coloc),
-                        prob_exists_coloc: UTILS.realNumberFormatter(""+tissueRecord.prob_exists_coloc),
-                        var_id: tissueRecord.var_id,
-                        value:tissueRecord.prob_exists_coloc,
-                        numericalValue: tissueRecord.prob_exists_coloc
-                    }});
-            },
-            function(records, // all records
-                     recordsCellPresentationString,// record count cell text
-                     significanceCellPresentationString,// significance cell text
-                     dataAnnotationTypeCode,// driving code
-                     significanceValue,
-                     gene ){ // value of significance for sorting
-                return {
-                    cellPresentationStringMap:{ Records:recordsCellPresentationString,
-                        Significance:significanceCellPresentationString },
-                    numberOfRecords:records.length,
-                    tissueCategoryNumber:categorizeTissueNumbers( records.length ),
-                    significanceCategoryNumber:categorizeSignificanceNumbers( records, "COL" ),
-                    recordsExist:(records.length)?[1]:[],
-                    gene:gene,
-                    significanceValue:significanceValue,
-                    records:records
-                }
-            } );
 
 
-
-    };
+    //var displayGenesFromColoc = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+    //
+    //    displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
+    //        'COL', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+    //        'rawColoInfo', // name of the persistent field where the data we received is stored
+    //        '', // we may wish to pull out one record for summary purposes
+    //        function(records,tissueTranslations){
+    //            return _.map(_.orderBy(records,["prob_exists_coloc"],["desc"]),function(tissueRecord){
+    //                return {  tissue: tissueRecord.tissue_trans,
+    //                    conditional_prob_snp_coloc: UTILS.realNumberFormatter(""+tissueRecord.conditional_prob_snp_coloc),
+    //                    unconditional_prob_snp_coloc: UTILS.realNumberFormatter(""+tissueRecord.unconditional_prob_snp_coloc),
+    //                    prob_exists_coloc: UTILS.realNumberFormatter(""+tissueRecord.prob_exists_coloc),
+    //                    var_id: tissueRecord.var_id,
+    //                    value:tissueRecord.prob_exists_coloc,
+    //                    numericalValue: tissueRecord.prob_exists_coloc
+    //                }});
+    //        },
+    //        function(records, // all records
+    //                 recordsCellPresentationString,// record count cell text
+    //                 significanceCellPresentationString,// significance cell text
+    //                 dataAnnotationTypeCode,// driving code
+    //                 significanceValue,
+    //                 gene ){ // value of significance for sorting
+    //            return {
+    //                cellPresentationStringMap:{ Records:recordsCellPresentationString,
+    //                    Significance:significanceCellPresentationString },
+    //                numberOfRecords:records.length,
+    //                tissueCategoryNumber:categorizeTissueNumbers( records.length ),
+    //                significanceCategoryNumber:categorizeSignificanceNumbers( records, "COL" ),
+    //                recordsExist:(records.length)?[1]:[],
+    //                gene:gene,
+    //                significanceValue:significanceValue,
+    //                records:records
+    //            }
+    //        } );
+    //};
 
 
 
@@ -5252,6 +5249,14 @@ var destroySharedTable = function (whereTheTableGoes) {
 
 
 
+
+
+
+
+
+
+
+
     /***
      * provide a category number which we will use to decide what class will use for coloring.  In this case
      * we are coloring by the number of tissues.
@@ -5285,9 +5290,9 @@ var destroySharedTable = function (whereTheTableGoes) {
             ( significance.length>0 ) ){
             var recordToAssess = significance[0];
             switch (datatype){
-                case "MOD": // significance is not a meaningful concept
-                    returnValue = 6;
-                    break;
+                //case "MOD": // significance is not a meaningful concept
+                //    returnValue = 6;
+                //    break;
                 case "ABC": // activity by contact predictions -- higher numbers are good
                     var valueToAssess = significance[0].value;
                     if ((valueToAssess>0) &&(valueToAssess<=0.2)) {
@@ -5302,36 +5307,7 @@ var destroySharedTable = function (whereTheTableGoes) {
                         returnValue = 1;
                     }
                     break
-                //pvalues -- lower numbers are good
-                case "ECA":
-                    var valueToAssess = significance[0].clpp;
-                    if ((valueToAssess>0) &&(valueToAssess<=0.2)) {
-                        returnValue = 5;
-                    } else if ((valueToAssess>0.2) &&(valueToAssess<=0.4)) {
-                        returnValue = 4;
-                    } else if ((valueToAssess>0.4) &&(valueToAssess<=0.6)) {
-                        returnValue = 3;
-                    } else if ((valueToAssess>0.6) &&(valueToAssess<=0.8)) {
-                        returnValue = 2;
-                    } else if (valueToAssess>0.9) {
-                        returnValue = 1;
-                    }
-                    break;
-                case "COL":
-                    var valueToAssess = significance[0].prob_exists_coloc;
-                    if ((valueToAssess>0) &&(valueToAssess<=0.2)) {
-                        returnValue = 5;
-                    } else if ((valueToAssess>0.2) &&(valueToAssess<=0.4)) {
-                        returnValue = 4;
-                    } else if ((valueToAssess>0.4) &&(valueToAssess<=0.6)) {
-                        returnValue = 3;
-                    } else if ((valueToAssess>0.6) &&(valueToAssess<=0.8)) {
-                        returnValue = 2;
-                    } else if (valueToAssess>0.9) {
-                        returnValue = 1;
-                    }
-                    break;
-                case "DEG":
+                 case "DEG":
                     var valueToAssess = significance[0].pvalue;
                     if ((valueToAssess>0) &&(valueToAssess<=0.5E-8)) {
                         returnValue = 1;
@@ -5347,7 +5323,7 @@ var destroySharedTable = function (whereTheTableGoes) {
                     break;
 
                 case "DEP":
-                case "MET":
+                //case "MET":
                 case "EQT":
                 case "FIR":
                 case "SKA":
@@ -5379,6 +5355,47 @@ var destroySharedTable = function (whereTheTableGoes) {
 
         return returnValue;
     };
+
+
+
+    var Categorizor = function(){
+
+    };
+    Categorizor.prototype.genePValueSignificance = function ( valueToAssess ) {
+        var returnValue = 0;
+        if (valueToAssess === 0) {
+            returnValue = 6;
+        } else if ((valueToAssess > 0) && (valueToAssess <= 0.5E-8)) {
+            returnValue = 1;
+        } else if ((valueToAssess > 0.5E-8) && (valueToAssess <= 0.5E-4)) {
+            returnValue = 2;
+        } else if ((valueToAssess > 0.5E-4) && (valueToAssess <= 0.05)) {
+            returnValue = 3;
+        } else if ((valueToAssess > 0.05) && (valueToAssess <= 0.4)) {
+            returnValue = 4;
+        } else if (valueToAssess > 0.4) {
+            returnValue = 5;
+        }
+        return returnValue;
+    }
+    Categorizor.prototype.posteriorProbabilitySignificance = function ( valueToAssess, datatype, overrideValue ){
+        var returnValue = 0;
+        if ((valueToAssess>0) &&(valueToAssess<=0.2)) {
+            returnValue = 5;
+        } else if ((valueToAssess>0.2) &&(valueToAssess<=0.4)) {
+            returnValue = 4;
+        } else if ((valueToAssess>0.4) &&(valueToAssess<=0.6)) {
+            returnValue = 3;
+        } else if ((valueToAssess>0.6) &&(valueToAssess<=0.8)) {
+            returnValue = 2;
+        } else if (valueToAssess>0.9) {
+            returnValue = 1;
+        }
+        return returnValue;
+    };
+    Categorizor.prototype.categorizeTissueNumbers = categorizeTissueNumbers;
+    Categorizor.prototype.categorizeSignificanceNumbers = categorizeSignificanceNumbers;
+
 
 
     var getNumberOfHeaders =function(whereTheTableGoes) {
@@ -5501,8 +5518,8 @@ var destroySharedTable = function (whereTheTableGoes) {
         modifyScreenFields: modifyScreenFields,
         adjustLowerExtent: adjustLowerExtent,
         adjustUpperExtent: adjustUpperExtent,
-        categorizeTissueNumbers:categorizeTissueNumbers,
-        categorizeSignificanceNumbers:categorizeSignificanceNumbers
+        Categorizor:Categorizor,
+        translateATissueName:translateATissueName
     }
 }());
 

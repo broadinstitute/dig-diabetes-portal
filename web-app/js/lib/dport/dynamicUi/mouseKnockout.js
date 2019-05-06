@@ -4,9 +4,10 @@
  * The following externally visible functions are required:
  *          a function to process records
  *          a function to display the processed records
- * As well as the following private functions:
+ * As well, always create a 'new mpgSoftware.dynamicUi.Categorizor()', and try to use its prototype functions.
+ * If you like, you can always override the definitions for:
  *          categorizeTissueNumbers
-*           categorizeSignificanceNumbers
+ *           categorizeSignificanceNumbers
  * @type {*|{}}
  */
 
@@ -19,7 +20,6 @@ mpgSoftware.dynamicUi.mouseKnockout = (function () {
 
 
     var processRecordsFromMod = function (data, rawGeneAssociationRecords) {
-
         var dataArrayToProcess = [];
         if ( typeof data !== 'undefined'){
             dataArrayToProcess = {  gene:data.gene,
@@ -29,10 +29,9 @@ mpgSoftware.dynamicUi.mouseKnockout = (function () {
         rawGeneAssociationRecords.push(dataArrayToProcess);
     };
 
+
+
     var displayRefinedModContext = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-
-
-
         mpgSoftware.dynamicUi.displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
             'MOD', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
             'modNameArray', // name of the persistent field where the data we received is stored
@@ -57,8 +56,8 @@ mpgSoftware.dynamicUi.mouseKnockout = (function () {
                     cellPresentationStringMap:{ Records:recordsCellPresentationString,
                         Significance:significanceCellPresentationString },
                     numberOfRecords:records.length,
-                    tissueCategoryNumber:categorizeTissueNumbers( records.length ),
-                    significanceCategoryNumber:categorizeSignificanceNumbers( records, "MOD" ),
+                    tissueCategoryNumber:categorizor.categorizeTissueNumbers( records.length ),
+                    significanceCategoryNumber:categorizor.categorizeSignificanceNumbers( records, "MOD" ),
                     recordsExist:(records.length)?[1]:[],
                     gene:gene,
                     significanceValue:significanceValue,
@@ -68,14 +67,14 @@ mpgSoftware.dynamicUi.mouseKnockout = (function () {
 
     };
 
-    var categorizeTissueNumbers = function (numberOfTissues){
-        return mpgSoftware.dynamicUi.categorizeTissueNumbers(numberOfTissues);
-    }
 
-    var categorizeSignificanceNumbers = function ( significance, datatype, overrideValue ){
-        // significance is not a meaningful concept, so return a 6, which means make the background white
+    var categorizor = new mpgSoftware.dynamicUi.Categorizor();
+
+    categorizor.categorizeSignificanceNumbers = function ( significance, datatype, overrideValue ){
+        // significance is not a meaningful concept for the mouse knockout data, so return a 6, which means make the background white
         return 6;
     }
+
 
 
 // public routines are declared below
