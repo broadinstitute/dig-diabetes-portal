@@ -4902,14 +4902,14 @@ var destroySharedTable = function (whereTheTableGoes) {
             if ($(className).length) { $("button"+className).removeClass("active") }
             if ($(idName).length) { $("button"+className).removeClass("active") }
         });
-        redrawTableOnClick('table.combinedGeneTableHolder',-1,-1);
+        redrawTableOnClick('table.combinedGeneTableHolder',function(sortedData){return sortedData},{});
         refineTableRecords($(whereTheTableGoes).dataTable(),sharedTable.currentForm,[],false);
     }
 
 
 
 
-    var redrawTableOnClick = function (whereTheTableGoes,swapColA,swapColB) {
+    var redrawTableOnClick = function (whereTheTableGoes, manipulationFunction, manipulationFunctionArgs ) {
         var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
         var numberOfColumns;
         var numberOfRows;
@@ -4926,10 +4926,13 @@ var destroySharedTable = function (whereTheTableGoes) {
         }
 
         var sortedData = extractSortedDataFromTable(whereTheTableGoes, numberOfRows, numberOfColumns, sharedTable.currentForm);
-        if ((swapColA !== -1) && (swapColB !== -1)){
+        // if ((swapColA !== -1) && (swapColB !== -1)){
             //sortedData=mpgSoftware.matrixMath.swapColumnsInDataStructure(sortedData,numberOfRows,numberOfColumns,swapColA,swapColB);
-            sortedData=mpgSoftware.matrixMath.moveColumnsInDataStructure(sortedData,numberOfRows,numberOfColumns,swapColB,swapColA);
-        }
+            //sortedData=mpgSoftware.matrixMath.moveColumnsInDataStructure(sortedData,numberOfRows,numberOfColumns,swapColB,swapColA);
+            sortedData=manipulationFunction(sortedData,numberOfRows,numberOfColumns,manipulationFunctionArgs);
+                                            // manipulationFunctionArgs.sourceColumn,
+                                            // manipulationFunctionArgs.targetColumn );
+        // }
 
 
 
@@ -5207,11 +5210,22 @@ var destroySharedTable = function (whereTheTableGoes) {
         }
         if (direction==="forward"){
             if ((indexOfClickedColumn>leftBackstop) &&(indexOfClickedColumn<(numberOfHeaders-1))){
-                redrawTableOnClick('table.combinedGeneTableHolder',numberOfHeaders-1,indexOfClickedColumn);
+                redrawTableOnClick('table.combinedGeneTableHolder',
+                    function(sortedData,numberOfRows,numberOfColumns,arguments){
+                        return mpgSoftware.matrixMath.moveColumnsInDataStructure(sortedData,numberOfRows,numberOfColumns,
+                            arguments.sourceColumn,arguments.targetColumn);
+                    },
+                {targetColumn:numberOfHeaders-1,sourceColumn:indexOfClickedColumn});
             }
         }else if (direction==="backward") {
             if ((indexOfClickedColumn>(leftBackstop+1)) &&(indexOfClickedColumn<(numberOfHeaders))){
-                redrawTableOnClick('table.combinedGeneTableHolder',leftBackstop+1,indexOfClickedColumn);
+                redrawTableOnClick('table.combinedGeneTableHolder',
+                    function(sortedData,numberOfRows,numberOfColumns,arguments){
+                        return mpgSoftware.matrixMath.moveColumnsInDataStructure(sortedData,numberOfRows,numberOfColumns,
+                            arguments.sourceColumn,arguments.targetColumn);
+                    },
+                    {targetColumn:leftBackstop+1,sourceColumn:indexOfClickedColumn});
+                // redrawTableOnClick('table.combinedGeneTableHolder',leftBackstop+1,indexOfClickedColumn);
             }
         }
 
@@ -5227,7 +5241,13 @@ var destroySharedTable = function (whereTheTableGoes) {
         var initialLinearIndexColumnBeingDragged = extractClassBasedIndex(draggedColumn[0].innerHTML,"initialLinearIndex_");
         var currentIndexTargetColumn = retrieveCurrentIndexOfColumn ('table.combinedGeneTableHolder',initialLinearIndexTargetColumn);
         var currentIndexColumnBeingDragged = retrieveCurrentIndexOfColumn ('table.combinedGeneTableHolder',initialLinearIndexColumnBeingDragged);
-        redrawTableOnClick('table.combinedGeneTableHolder',currentIndexTargetColumn,currentIndexColumnBeingDragged);
+        redrawTableOnClick('table.combinedGeneTableHolder',
+            function(sortedData,numberOfRows,numberOfColumns,arguments){
+                return mpgSoftware.matrixMath.moveColumnsInDataStructure(sortedData,numberOfRows,numberOfColumns,
+                    arguments.sourceColumn,arguments.targetColumn);
+            },
+            {targetColumn:currentIndexTargetColumn,sourceColumn:currentIndexColumnBeingDragged});
+        //redrawTableOnClick('table.combinedGeneTableHolder',currentIndexTargetColumn,currentIndexColumnBeingDragged);
     };
 
 

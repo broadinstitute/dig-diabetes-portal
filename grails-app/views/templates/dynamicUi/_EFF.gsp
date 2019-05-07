@@ -1,8 +1,10 @@
-<script id="effectorGeneTableSignificanceCellPresentationString"  type="x-tmpl-mustache">
-CLPP={{significanceValueAsString}} ({{recordDescription}})
+<script id="effectorGeneTableNumberRecordsCellPresentationString"  type="x-tmpl-mustache">
+records={{numberRecords}}
 </script>
 
-
+<script id="effectorGeneTableSignificanceCellPresentationString"  type="x-tmpl-mustache">
+{{significanceValue}} {{value}}
+</script>
 
 <script id="dynamicGeneTableEffectorGeneSubCategory"  type="x-tmpl-mustache">
      <div significance_sortfield='{{index}}' class='subcategory initialLinearIndex_{{indexInOneDimensionalArray}}'
@@ -18,9 +20,9 @@ CLPP={{significanceValueAsString}} ({{recordDescription}})
 <script id="dynamicGeneTableEffectorGeneBody"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
              class="tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
-               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'COLOC records referencing {{gene}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
-               data-target="#COLOC_{{gene}}" style="color:black">{{cellPresentationString}}</a>
-               <div  class="collapse openColocInGeneTable" id="COLOC_{{gene}}">
+               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'effector gene records {{gene}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
+               data-target="#effector_gene_{{gene}}" style="color:black">{{cellPresentationString}}</a>
+               <div  class="collapse openColocInGeneTable" id="effector_gene_{{gene}}">
                     {{#recordsExist}}
                     <table class="expandableDrillDownTable openColocInGeneTable">
                      <thead>

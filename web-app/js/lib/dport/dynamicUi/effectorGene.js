@@ -49,14 +49,16 @@ mpgSoftware.dynamicUi.effectorGene = (function () {
     var displayGenesFromEffectorGene = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
 
         mpgSoftware.dynamicUi.displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
-            'DEP_GP', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            'rawDepictInfo', // name of the persistent field where the data we received is stored
+            'EFF', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+            'rawEffectorGeneRecords', // name of the persistent field where the data we received is stored
             '', // we may wish to pull out one record for summary purposes
             function(records,tissueTranslations){
-                return _.map(_.sortBy(records,['value']),function(tissueRecord){
-                    return {    value:UTILS.realNumberFormatter(''+tissueRecord.value),
-                        numericalValue:tissueRecord.value,
-                        dataset: tissueRecord.dataset };
+                return _.map(records,function(oneRecord){
+                    return {    gene:oneRecord.gene,
+                                value:oneRecord.value};
+                    // return {    value:UTILS.realNumberFormatter(''+tissueRecord.value),
+                    //     numericalValue:tissueRecord.value,
+                    //     dataset: tissueRecord.dataset };
                 });
 
             },
