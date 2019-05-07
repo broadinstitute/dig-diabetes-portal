@@ -134,6 +134,22 @@ mpgSoftware.matrixMath = (function(){
 
 
 
+    var buildMatrixToDeleteColumns  = function(matrix,columnsToDelete){
+        if ((colA>=matrix.numberOfColumns) || (colB>=matrix.numberOfColumns)){
+            alert("buildMatrixToSwapColumns problem with number of columns requested.")
+        }
+        _.times(matrix.numberOfColumns,function(column){
+
+            if (!_.includes(columnsToDelete, column )){
+                setElement (matrix,column,column,1);
+            }
+
+        });
+        return matrix;
+    };
+
+
+
     var getRowFromMatrix = function(matrix,rowNumber){
         return _.slice(matrix.dataArray,rowNumber*matrix.numberOfColumns,(1+rowNumber)*matrix.numberOfColumns);
     };
@@ -195,8 +211,19 @@ mpgSoftware.matrixMath = (function(){
         return multiplyMatrices(matrixToManipulate,multiplierMatrix).dataArray;
     };
 
+
+    var deleteColumnsInDataStructure = function(dataArray,numberOfRows,numberOfColumns,columnListToDelelete){
+        var revisedNumberOfColumns = numberOfColumns-columnList.length;
+        var matrixToManipulate = new Matrix(dataArray,numberOfRows,revisedNumberOfColumns);
+        var multiplierMatrix = buildMatrixToDeleteColumns (buildArrayOfZeros(numberOfRows,revisedNumberOfColumns),columnListToDelelete);
+        return multiplyMatrices(matrixToManipulate,multiplierMatrix).dataArray;
+    };
+
+
+
     return {
         swapColumnsInDataStructure:swapColumnsInDataStructure,
-        moveColumnsInDataStructure:moveColumnsInDataStructure
+        moveColumnsInDataStructure:moveColumnsInDataStructure,
+        deleteColumnsInDataStructure:deleteColumnsInDataStructure
     }
 }());
