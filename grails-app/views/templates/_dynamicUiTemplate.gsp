@@ -753,6 +753,28 @@
     </table>
 </script>
 
+
+
+<script id="headerInteractivity"  type="x-tmpl-mustache">
+ <span class="title-collapsed title-genetic-evidence">GENETIC EVIDENCE</span>
+ <span class="effector-ui-wrapper">
+  <span class="glyphicon glyphicon-resize-full expand-trigger" aria-hidden="true" title="View collapsed columns" onclick="expandColumns('genetic-evidence');"></span>
+  <span class="glyphicon glyphicon-resize-small collapse-trigger inactive" aria-hidden="true" title="Collapse columns" onclick="collapseColumns('genetic-evidence');"></span>
+  <span class="glyphicon glyphicon-move" aria-hidden="true" title="Drag and drop cell"></span>
+  <span class="glyphicon glyphicon-step-backward" aria-hidden="true" title="Move cell to far left"></span>
+  <span class="glyphicon glyphicon-step-forward" aria-hidden="true" title="Move cell to far right"></span>
+  <span class="glyphicon glyphicon-sort" aria-hidden="true" title="Sort table by the column"></span>
+  <span class="glyphicon glyphicon-cog" aria-hidden="true" title="Open column filter" onclick="openFilter('genetic-evidence');"></span>
+ </span>
+ <span class="options-icon"><span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
+
+
+</script>
+
+
+
+
+
 <g:render template="/templates/dynamicUi/FIR" />
 <g:render template="/templates/dynamicUi/SKA" />
 <g:render template="/templates/dynamicUi/MET" />
