@@ -135,13 +135,17 @@ mpgSoftware.matrixMath = (function(){
 
 
     var buildMatrixToDeleteColumns  = function(matrix,columnsToDelete){
-        if ((colA>=matrix.numberOfColumns) || (colB>=matrix.numberOfColumns)){
-            alert("buildMatrixToSwapColumns problem with number of columns requested.")
-        }
-        _.times(matrix.numberOfColumns,function(column){
+        _.forEach(columnsToDelete, function(columnIndex){
+            if ((columnIndex>matrix.numberOfColumns) || (columnIndex < 0)){
+                alert("buildMatrixToDeleteColumns problem with number of columns requested.")
+            }
+        });
+        var columnsFilledIn = 0;
+        _.times(matrix.numberOfColumns+columnsToDelete.length,function(counter){
 
-            if (!_.includes(columnsToDelete, column )){
-                setElement (matrix,column,column,1);
+            if (!_.includes(columnsToDelete, counter )){
+                setElement (matrix,counter,columnsFilledIn,1);
+                columnsFilledIn++;
             }
 
         });
@@ -202,28 +206,32 @@ mpgSoftware.matrixMath = (function(){
     var swapColumnsInDataStructure = function(dataArray,numberOfRows,numberOfColumns,colA,colB){
         var matrixToManipulate = new Matrix(dataArray,numberOfRows,numberOfColumns);
         var multiplierMatrix = buildMatrixToSwapColumns (buildArrayOfZeros(numberOfColumns,numberOfColumns),colA,colB);
-        return multiplyMatrices(matrixToManipulate,multiplierMatrix).dataArray;
+        return multiplyMatrices(matrixToManipulate,multiplierMatrix);
     };
 
     var moveColumnsInDataStructure = function(dataArray,numberOfRows,numberOfColumns,colSource,colTarget){
         var matrixToManipulate = new Matrix(dataArray,numberOfRows,numberOfColumns);
         var multiplierMatrix = buildMatrixToMoveOneColumn (buildArrayOfZeros(numberOfColumns,numberOfColumns),colSource,colTarget);
-        return multiplyMatrices(matrixToManipulate,multiplierMatrix).dataArray;
+        return multiplyMatrices(matrixToManipulate,multiplierMatrix);
     };
 
 
     var deleteColumnsInDataStructure = function(dataArray,numberOfRows,numberOfColumns,columnListToDelelete){
-        var revisedNumberOfColumns = numberOfColumns-columnList.length;
-        var matrixToManipulate = new Matrix(dataArray,numberOfRows,revisedNumberOfColumns);
-        var multiplierMatrix = buildMatrixToDeleteColumns (buildArrayOfZeros(numberOfRows,revisedNumberOfColumns),columnListToDelelete);
-        return multiplyMatrices(matrixToManipulate,multiplierMatrix).dataArray;
+        var revisedNumberOfColumns = numberOfColumns-columnListToDelelete.length;
+        var matrixToManipulate = new Matrix(dataArray,numberOfRows,numberOfColumns);
+        var multiplierMatrix = buildMatrixToDeleteColumns (buildArrayOfZeros(numberOfColumns,revisedNumberOfColumns),columnListToDelelete);
+        return multiplyMatrices(matrixToManipulate,multiplierMatrix);
     };
 
-
+    var doNothing = function(dataArray,numberOfRows,numberOfColumns){
+        return new  Matrix(dataArray,numberOfRows,numberOfColumns);
+    }
 
     return {
         swapColumnsInDataStructure:swapColumnsInDataStructure,
         moveColumnsInDataStructure:moveColumnsInDataStructure,
-        deleteColumnsInDataStructure:deleteColumnsInDataStructure
+        deleteColumnsInDataStructure:deleteColumnsInDataStructure,
+        doNothing:doNothing,
+        Matrix:Matrix
     }
 }());

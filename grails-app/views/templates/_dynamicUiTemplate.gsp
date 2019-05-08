@@ -646,18 +646,30 @@
 
 %{--Called from displayGenesFromAbc--}%
 <script id="dynamicGeneTableHeaderV2"  type="x-tmpl-mustache">
-
+       %{--<span class="title-collapsed title-genetic-evidence">--}%
             <div sortStrategy="alphabetical" sortField="-1"  sortTerm="{{name1}}" class="geneName text-center {{initialLinearIndex}}">
-            <div class="geneHeaderShifters text-center">
-                <span class="glyphicon glyphicon-step-backward" aria-hidden="true" onclick="mpgSoftware.dynamicUi.shiftColumnsByOne(event,this,'backward','table.combinedGeneTableHolder')"></span>
-                <span class="glyphicon glyphicon-step-forward" aria-hidden="true" onclick="mpgSoftware.dynamicUi.shiftColumnsByOne(event,this,'forward','table.combinedGeneTableHolder')"></span>
+               <div class="geneHeaderShifters text-center">
+                   <span class="glyphicon glyphicon-step-backward" aria-hidden="true" onclick="mpgSoftware.dynamicUi.shiftColumnsByOne(event,this,'backward','table.combinedGeneTableHolder')"></span>
+                   <span class="glyphicon glyphicon-step-forward" aria-hidden="true" onclick="mpgSoftware.dynamicUi.shiftColumnsByOne(event,this,'forward','table.combinedGeneTableHolder')"></span>
+                                  <span class="glyphicon glyphicon-remove pull-right" aria-hidden="true" onclick="mpgSoftware.dynamicUi.removeColumn(event,this,'forward','table.combinedGeneTableHolder')" style="padding: 0 8px 0 0"></span>
+               </div>
+               <span class="displayGeneName">{{name2}}</span>
             </div>
-             <span class="displayGeneName">{{name2}}</span>
-             </div>
-             <div class="genePosition text-center">
-             {{chromosome}}: {{addrStart}}-{{addrEnd}}
-             </div>
- </div>
+            <div class="genePosition text-center">
+            {{chromosome}}: {{addrStart}}-{{addrEnd}}
+            </div>
+       %{--</span>--}%
+       %{--<span class="effector-ui-wrapper">--}%
+            %{--<span class="glyphicon glyphicon-resize-full expand-trigger" aria-hidden="true" title="View collapsed columns" onclick="expandColumns('genetic-evidence');"></span>--}%
+            %{--<span class="glyphicon glyphicon-resize-small collapse-trigger inactive" aria-hidden="true" title="Collapse columns" onclick="collapseColumns('genetic-evidence');"></span>--}%
+            %{--<span class="glyphicon glyphicon-move" aria-hidden="true" title="Drag and drop cell"></span>--}%
+            %{--<span class="glyphicon glyphicon-step-backward" aria-hidden="true" title="Move cell to far left"></span>--}%
+            %{--<span class="glyphicon glyphicon-step-forward" aria-hidden="true" title="Move cell to far right"></span>--}%
+            %{--<span class="glyphicon glyphicon-sort" aria-hidden="true" title="Sort table by the column"></span>--}%
+            %{--<span class="glyphicon glyphicon-cog" aria-hidden="true" title="Open column filter" onclick="openFilter('genetic-evidence');"></span>--}%
+        %{--</span>--}%
+        %{--<span class="options-icon"><span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>--}%
+
 </script>
 
 
@@ -767,8 +779,6 @@
   <span class="glyphicon glyphicon-cog" aria-hidden="true" title="Open column filter" onclick="openFilter('genetic-evidence');"></span>
  </span>
  <span class="options-icon"><span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
-
-
 </script>
 
 

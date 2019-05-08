@@ -237,3 +237,104 @@ th.onlyCol{
     border-right: 0;
     font-weight: bold;
 }
+
+//  newest addition
+
+    .effector-table th {
+        position:relative;
+        overflow: hidden;
+        min-width: 100px;
+        text-align:center;
+    }
+
+.effector-table th > span.effector-ui-wrapper {
+    display: block;
+    position:absolute;
+    font-size: 12px;
+    width: 100%;
+    height: 50px;
+    top: -50px;
+    left: 0;
+    padding-top: 7px;
+    background-color:rgba(16,45,201,.75);
+    color: #fff;
+    z-index: 10;
+    -webkit-transition: top 0.5s;
+    transition: top 0.5s;
+}
+
+.effector-table th > span.options-icon {
+    display: block;
+    position:absolute;
+    font-size: 12px;
+    height: 100%;
+    width: 12px;
+    top: 0;
+    right: -2px;
+    vertical-align: middle;
+    padding-top: 8px;
+    color: rgba(16,45,201,.35);
+    z-index: 1000;
+    -webkit-transition: top 0.5s;
+    transition: right 0.5s;
+}
+
+.effector-table th > span.title-collapsed {
+    display: block;
+}
+
+.effector-table th:hover > span.effector-ui-wrapper {
+    top: 0;
+}
+
+.effector-table th:hover > span.options-icon {
+    right: -12px;
+}
+
+.effector-table th > span.effector-ui-wrapper >span.glyphicon {
+    margin: 0 2px;
+}
+
+.effector-table th > span.effector-ui-wrapper >span.glyphicon:hover {
+    cursor:pointer;
+}
+
+.effector-table th > span.effector-ui-wrapper >span.glyphicon.inactive {
+    display: none;
+}
+
+.effector-table th > span.effector-ui-wrapper >span.glyphicon.expand-trigger, .effector-table th > span.effector-ui-wrapper >span.glyphicon.collapse-trigger {
+    font-size: 14px;
+    color:#FFCB00;
+}
+
+.effector-table th.effector-sub-th, .effector-table td {
+    display: none;
+}
+
+.effector-table th.effector-sub-th.active-th, .effector-table td.active-td {
+    display: table-cell;
+}
+
+#filter_modal {
+    position: absolute;
+    top: 100px;
+    left: 100px;
+    background-color: #ddd;
+    padding: 5px;
+    border: solid 1px #bbb;
+    border-radius: 5px;
+    -moz-box-shadow: 3px 3px 3px 0 #ddd;
+    -webkit-box-shadow: 3px 3px 3px 0 #ddd;
+    box-shadow: 3px 3px 3px 0 #ddd;
+    z-index: 1000;
+}
+
+#filter_modal > .content-wrapper {
+    background-color: #fff;
+    padding: 5px;
+    width: 200px;
+    height: 300px;
+    overflow: auto;
+    font-size: 12px;
+}

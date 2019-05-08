@@ -4060,7 +4060,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         "title": contentOfHeader,
                         "targets": noSorting?'nosort':[count+numberOfAddedColumns],
                         "name": header.title,
-                        "className": header.annotation+" "+classesToPromote.join(" "),
+                        "className": header.annotation+" effector-top-th "+classesToPromote.join(" "),
                         "sortable": !noSorting,
                         "type": "generalSort"
                     });
@@ -4902,7 +4902,9 @@ var destroySharedTable = function (whereTheTableGoes) {
             if ($(className).length) { $("button"+className).removeClass("active") }
             if ($(idName).length) { $("button"+className).removeClass("active") }
         });
-        redrawTableOnClick('table.combinedGeneTableHolder',function(sortedData){return sortedData},{});
+        redrawTableOnClick('table.combinedGeneTableHolder',function(sortedData, numberOfRows, numberOfColumns){
+            return mpgSoftware.matrixMath.doNothing (sortedData, numberOfRows, numberOfColumns);
+        },{});
         refineTableRecords($(whereTheTableGoes).dataTable(),sharedTable.currentForm,[],false);
     }
 
@@ -4915,24 +4917,27 @@ var destroySharedTable = function (whereTheTableGoes) {
         var numberOfRows;
         var transposeNec = false;
         numberOfColumns = sharedTable.numberOfColumns;
-        numberOfRows = sharedTable.dataCells.length / numberOfColumns;
+        numberOfRows = sharedTable.numberOfRows;
         if ((sharedTable.currentForm === 'geneTableGeneHeaders') || (sharedTable.currentForm === 'variantTableVariantHeaders')) {
              numberOfColumns = sharedTable.numberOfColumns;
              numberOfRows = sharedTable.dataCells.length / numberOfColumns;
         } else {
             numberOfColumns = sharedTable.numberOfRows;
-            numberOfRows = sharedTable.dataCells.length / numberOfColumns;
+            numberOfRows = sharedTable.numberOfRows;
             transposeNec = true;
         }
 
         var sortedData = extractSortedDataFromTable(whereTheTableGoes, numberOfRows, numberOfColumns, sharedTable.currentForm);
-        // if ((swapColA !== -1) && (swapColB !== -1)){
-            //sortedData=mpgSoftware.matrixMath.swapColumnsInDataStructure(sortedData,numberOfRows,numberOfColumns,swapColA,swapColB);
-            //sortedData=mpgSoftware.matrixMath.moveColumnsInDataStructure(sortedData,numberOfRows,numberOfColumns,swapColB,swapColA);
-            sortedData=manipulationFunction(sortedData,numberOfRows,numberOfColumns,manipulationFunctionArgs);
-                                            // manipulationFunctionArgs.sourceColumn,
-                                            // manipulationFunctionArgs.targetColumn );
-        // }
+        var revisedMatrix = manipulationFunction(sortedData,numberOfRows,numberOfColumns,manipulationFunctionArgs);
+        if ((sharedTable.currentForm === 'geneTableGeneHeaders') || (sharedTable.currentForm === 'variantTableVariantHeaders')) {
+            numberOfColumns = sharedTable["numberOfColumns"] = revisedMatrix.numberOfColumns;
+            numberOfRows = sharedTable["numberOfRows"] = revisedMatrix.numberOfRows;
+        } else {
+            numberOfColumns = sharedTable["numberOfColumns"] = revisedMatrix.numberOfRows;
+            numberOfRows = sharedTable["numberOfRows"]= revisedMatrix.numberOfColumns;
+        }
+        sortedData=revisedMatrix.dataArray;
+
 
 
 
@@ -4952,7 +4957,7 @@ var destroySharedTable = function (whereTheTableGoes) {
 
             var transposedTableDescription = new TempSharedTableObject( numberOfRows, numberOfColumns,new Array(numberOfColumns * numberOfRows));
 
-            transposedTableDescription.dataCells = sortedData;
+            transposedTableDescription.dataCells  = sharedTable["dataCells"]= sortedData;
 
             //  Now we should be all done fiddling with the data order.
             var additionalDetailsForHeaders = [];
@@ -5234,6 +5239,27 @@ var destroySharedTable = function (whereTheTableGoes) {
 
 
 
+    var removeColumn = function ( event, offeredThis, direction, whereTheTableGoes) {
+        event.stopPropagation();
+        var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
+        var identifyingNode = $(offeredThis).parent().parent().parent();
+        var initialLinearIndex = extractClassBasedIndex(identifyingNode[0].innerHTML,"initialLinearIndex_");
+        var numberOfHeaders = getNumberOfHeaders (whereTheTableGoes);
+        var indexOfClickedColumn =retrieveCurrentIndexOfColumn (whereTheTableGoes,initialLinearIndex);
+                redrawTableOnClick('table.combinedGeneTableHolder',
+                    function(sortedData,numberOfRows,numberOfColumns,arguments){
+                        return mpgSoftware.matrixMath.deleteColumnsInDataStructure(sortedData,numberOfRows,numberOfColumns,
+                            arguments.columnsToDelete);
+                    },
+                    {columnsToDelete:[indexOfClickedColumn]});
+
+    };
+
+
+
+
+
+
     var handleRequestToDropADraggableColumn = function (offeredThis,originatingObject){
         var targetColumn =$(offeredThis) ;
         var draggedColumn = $(originatingObject.draggable);
@@ -5301,7 +5327,8 @@ var destroySharedTable = function (whereTheTableGoes) {
         adjustLowerExtent: adjustLowerExtent,
         adjustUpperExtent: adjustUpperExtent,
         Categorizor:Categorizor,
-        translateATissueName:translateATissueName
+        translateATissueName:translateATissueName,
+        removeColumn:removeColumn
     }
 }());
 
