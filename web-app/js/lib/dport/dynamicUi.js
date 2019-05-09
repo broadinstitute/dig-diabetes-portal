@@ -186,7 +186,145 @@ mpgSoftware.dynamicUi = (function () {
     var CELL_COLORING_UNUSED = '#FFFFFF';
 
 
+    /***
+     * Constructor for the object which will be passed to addContent and addHeader routines.  Effectively we are
+     * taking the information we received from the 'processor' routine, and, in the course of the 'display' routine,
+     * and putting that information in a form that we can actually display.
+     *
+     * @returns {{headerNames: Array, headerContents: Array, headers: Array, rowsToAdd: Array, tableToUpdate: string}}
+     * @constructor
+     */
+    var IntermediateDataStructure = function() {
+        return {
+            headerNames : [],
+            headerContents:[],
+            headers : [],
+            rowsToAdd:[],
+            tableToUpdate : ""
+        }
+    };
 
+
+    /***
+     * Default constructor of the shared accumulator object
+     * @param additionalParameters
+     * @returns {{extentBegin: (*|jQuery), extentEnd: (*|jQuery), chromosome: string, originalGeneName: *, geneNameArray: Array, tissueNameArray: Array, modNameArray: Array, mods: Array, contextDescr: {chromosome: string, extentBegin: (*|jQuery), extentEnd: (*|jQuery), moreContext: Array}}}
+     */
+    var AccumulatorObject = function (additionalParameters) {
+        var chrom = (additionalParameters.geneChromosome.indexOf('chr') > -1) ?
+            additionalParameters.geneChromosome.substr(3) :
+            additionalParameters.geneChromosome;
+        return {
+            extentBegin: additionalParameters.geneExtentBegin,
+            extentEnd: additionalParameters.geneExtentEnd,
+            chromosome: chrom,
+            originalGeneName: additionalParameters.geneName
+        };
+    };
+
+
+    /***
+     * Default constructor of the SharedTableObject
+     * @param additionalParameters
+     * @returns {{extentBegin: (*|jQuery), extentEnd: (*|jQuery), chromosome: string, originalGeneName: *, geneNameArray: Array, tissueNameArray: Array, modNameArray: Array, mods: Array, contextDescr: {chromosome: string, extentBegin: (*|jQuery), extentEnd: (*|jQuery), moreContext: Array}}}
+     */
+    var SharedTableObject = function (annotation,numberOfColumn,numberOfRows){
+        return {
+            originalForm: annotation,
+            currentForm: annotation,
+            numberOfColumns: numberOfColumn,
+            numberOfRows: numberOfRows,
+            mostRecentHeaders : [],
+            dataCells: new Array(),
+            matrix: new mpgSoftware.matrixMath.Matrix(new Array(),0,0),
+            assignDataToMatrix: function(cell,rowIndex,
+                                          columnIndex,
+                                          numberOfColumns,
+                                          indexInOneDimensionalArray){
+                var indexInOneDimensionalArray = (rowIndex*numberOfColumns)+columnIndex;
+                this.matrix.numberOfColumns = numberOfColumns;
+                this.matrix.dataArray[indexInOneDimensionalArray] = new SharedTableDataCell(    null ,
+                    cell ,
+                    null ,
+                    indexInOneDimensionalArray,
+                    null
+                );
+                this.matrix.numberOfRows =  Math.floor(this.matrix.dataArray.length/this.matrix.numberOfColumns);
+            }
+        };
+    };
+    SharedTableObject.prototype.addDataToMatrix = function(numberOfColumns){
+        this.dataCells.push.apply(this.dataCells, new Array(numberOfColumns));
+        this.matrix.dataArray.push.apply(this.matrix.dataArray, new Array(numberOfColumns));
+        if (numberOfColumns!==this.matrix.numberOfColumns){
+            alert('mismatched attempt to add data');
+        } else {
+            this.matrix.numberOfRows++;
+        }
+    };
+    SharedTableObject.prototype.assignDataToMatrix = function(rowIndex,
+                                                              columnIndex,
+                                                              numberOfColumns,
+                                                              indexInOneDimensionalArray){
+        var indexInOneDimensionalArray = (rowIndex*numberOfColumns)+columnIndex;
+        this.matrix.dataArray[indexInOneDimensionalArray] = new SharedTableDataCell(    null ,
+             null ,
+             null ,
+            indexInOneDimensionalArray,
+             null
+        );
+        this.matrix.numberOfRows =  Math.floor(this.matrix.dataArray.length/this.matrix.numberOfColumns);
+    };
+
+    /***
+     *
+     * @param numberOfRows
+     * @param numberOfColumn
+     * @param dataCells
+     * @returns {{numberOfColumns: *, numberOfRows: *, dataCells: *}}
+     * @constructor
+     */
+    var TempSharedTableObject = function (numberOfRows,numberOfColumn,dataCells){
+        return {
+            numberOfColumns: numberOfColumn,
+            numberOfRows: numberOfRows,
+            dataCells: dataCells
+        };
+    };
+
+    /***
+     * TWe no longer store anything other than the Ascension number.  Instead we get all of
+     * the data from the table on screen each time we need to manipulate it.
+     * @param title
+     * @param renderData
+     * @param annotation
+     * @param ascensionNumber
+     * @param dataAnnotationTypeCode
+     * @returns {*}
+     * @constructor
+     */
+    var SharedTableDataCell = function (title,renderData,annotation, ascensionNumber, dataAnnotationTypeCode){
+        renderData["ascensionNumber"] = ascensionNumber;
+        return renderData;
+    };
+
+    /***
+     *
+     * @param name
+     * @param renderData
+     * @param annotation
+     * @param dataAnnotationTypeCode
+     * @returns {{dataAnnotationTypeCode: *, renderData: *, title: *, annotation: *}}
+     * @constructor
+     */
+    var IntermediateStructureDataCell = function (name,renderData, annotation, dataAnnotationTypeCode){
+        return {
+            dataAnnotationTypeCode:dataAnnotationTypeCode,
+            renderData:renderData,
+            title: name,
+            annotation:  annotation
+        };
+    };
 
 
 
@@ -1180,22 +1318,7 @@ mpgSoftware.dynamicUi = (function () {
         };
     };
 
-    /***
-     * Default constructor of the shared accumulator object
-     * @param additionalParameters
-     * @returns {{extentBegin: (*|jQuery), extentEnd: (*|jQuery), chromosome: string, originalGeneName: *, geneNameArray: Array, tissueNameArray: Array, modNameArray: Array, mods: Array, contextDescr: {chromosome: string, extentBegin: (*|jQuery), extentEnd: (*|jQuery), moreContext: Array}}}
-     */
-    var AccumulatorObject = function (additionalParameters) {
-        var chrom = (additionalParameters.geneChromosome.indexOf('chr') > -1) ?
-            additionalParameters.geneChromosome.substr(3) :
-            additionalParameters.geneChromosome;
-        return {
-            extentBegin: additionalParameters.geneExtentBegin,
-            extentEnd: additionalParameters.geneExtentEnd,
-            chromosome: chrom,
-            originalGeneName: additionalParameters.geneName
-        };
-    };
+
 
     /***
      * retrieve the accumulator object, pulling back a specified field if requested
@@ -1291,13 +1414,6 @@ mpgSoftware.dynamicUi = (function () {
         return returnValue;
     };
 
-    function IntermediateDataStructure() {
-        this.headerNames = [];
-        this.headerContents = [];
-        this.headers = [];
-        this.rowsToAdd = [];
-        this.tableToUpdate = "";
-    };
 
 
     /***
@@ -3408,47 +3524,6 @@ mpgSoftware.dynamicUi = (function () {
     };
 
 
-    /***
-     * Default constructor of the SharedTableObject
-     * @param additionalParameters
-     * @returns {{extentBegin: (*|jQuery), extentEnd: (*|jQuery), chromosome: string, originalGeneName: *, geneNameArray: Array, tissueNameArray: Array, modNameArray: Array, mods: Array, contextDescr: {chromosome: string, extentBegin: (*|jQuery), extentEnd: (*|jQuery), moreContext: Array}}}
-     */
-    var SharedTableObject = function (annotation,numberOfColumn,numberOfRows){
-        return {
-            originalForm: annotation,
-            currentForm: annotation,
-            numberOfColumns: numberOfColumn,
-            numberOfRows: numberOfRows,
-            mostRecentHeaders : [],
-            dataCells: new Array()
-        };
-    };
-    var TempSharedTableObject = function (numberOfRows,numberOfColumn,dataCells){
-        return {
-            numberOfColumns: numberOfColumn,
-            numberOfRows: numberOfRows,
-            dataCells: dataCells
-        };
-    };
-    var SharedTableDataCell = function (title,renderData,annotation, ascensionNumber, dataAnnotationTypeCode){
-        renderData["ascensionNumber"] = ascensionNumber;
-        return renderData;
-        // return {
-        //     title: title,
-        //     renderData: renderData,
-        //     annotation: annotation,
-        //     ascensionNumber:ascensionNumber,
-        //     dataAnnotationTypeCode:dataAnnotationTypeCode
-        // };
-    };
-    var IntermediateStructureDataCell = function (name,renderData, annotation, dataAnnotationTypeCode){
-        return {
-            dataAnnotationTypeCode:dataAnnotationTypeCode,
-            renderData:renderData,
-            title: name,
-            annotation:  annotation
-        };
-    };
 
 
     var storeCellInMemoryRepresentationOfSharedTable = function (   whichTable,
@@ -3466,7 +3541,9 @@ mpgSoftware.dynamicUi = (function () {
         }
         if (indexInOneDimensionalArray > sharedTable.length){
             // we must be on a new row. We know that rows are added sequentially
+
             sharedTable.dataCells.push.apply(sharedTable.dataCells, new Array(numberOfColumns));
+            sharedTable.addDataToMatrix(numberOfColumns);
         }
         sharedTable.dataCells [indexInOneDimensionalArray] = new SharedTableDataCell(   cell.title,
                                                                                         cell,
@@ -3474,6 +3551,11 @@ mpgSoftware.dynamicUi = (function () {
                                                                                         indexInOneDimensionalArray,
                                                                                         cell.dataAnnotationTypeCode
             );
+        sharedTable.assignDataToMatrix(cell,
+            rowIndex,
+            columnIndex,
+            numberOfColumns,
+            indexInOneDimensionalArray);
         // update the row count
         var maximumLinearDataLength = sharedTable.dataCells.length;
         sharedTable.numberOfRows = Math.floor(maximumLinearDataLength/numberOfColumns);
@@ -4537,13 +4619,15 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
         var numberOfColumns;
         var numberOfRows;
-        if ((sharedTable.currentForm === 'geneTableGeneHeaders') || (sharedTable.currentForm === 'variantTableVariantHeaders')) {
-            numberOfColumns = sharedTable.numberOfColumns;
-            numberOfRows = sharedTable.dataCells.length / numberOfColumns;
-        } else {
-            numberOfColumns = sharedTable.numberOfRows;
-            numberOfRows = sharedTable.dataCells.length / numberOfColumns;
-        }
+        numberOfColumns = sharedTable.matrix.numberOfColumns;
+        numberOfRows = sharedTable.matrix.numberOfRows;
+        // if ((sharedTable.currentForm === 'geneTableGeneHeaders') || (sharedTable.currentForm === 'variantTableVariantHeaders')) {
+        //     numberOfColumns = sharedTable.numberOfColumns;
+        //     numberOfRows = sharedTable.dataCells.length / numberOfColumns;
+        // } else {
+        //     numberOfColumns = sharedTable.numberOfRows;
+        //     numberOfRows = sharedTable.dataCells.length / numberOfColumns;
+        // }
         var sortedData = extractSortedDataFromTable(whereTheTableGoes, numberOfRows, numberOfColumns, sharedTable.currentForm);
 
         destroySharedTable(whereTheTableGoes);
@@ -4561,28 +4645,73 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             }
 
             var arrayIndex = 0;
-            var transposedTableDescription = {};
+            // var transposedTableDescription = {};
+            // sharedTable.currentForm = formConversionOfATranspose(sharedTable.currentForm);
+            // transposedTableDescription = new TempSharedTableObject(numberOfColumns, numberOfRows, new Array(numberOfColumns * numberOfRows));
+            // transposedTableDescription.dataCells = linearDataTransposor(sortedData, numberOfRows, numberOfColumns, function (x, y, rows, cols) {
+            //     return (x * cols) + y
+            // });
+            //
+            //
+            // //  Now we should be all done fiddling with the data order.
+            // var additionalDetailsForHeaders = [];
+            // var currentLocationInArray = 0;
+            // var headers = _.slice(transposedTableDescription.dataCells, currentLocationInArray, transposedTableDescription.numberOfColumns);
+            // currentLocationInArray += transposedTableDescription.numberOfColumns;
+            // if (sharedTable.currentForm === 'variantTableAnnotationHeaders') { // collapse the first row into the header
+            //     additionalDetailsForHeaders = _.slice(transposedTableDescription.dataCells, currentLocationInArray,
+            //         (currentLocationInArray + transposedTableDescription.numberOfColumns));
+            //     currentLocationInArray += transposedTableDescription.numberOfColumns;
+            // }
+            // if (sharedTable.currentForm === 'geneTableAnnotationHeaders') { // collapse the first row into the header
+            //    additionalDetailsForHeaders = _.slice(transposedTableDescription.dataCells, currentLocationInArray,
+            //        (currentLocationInArray + transposedTableDescription.numberOfColumns));
+            //    currentLocationInArray += transposedTableDescription.numberOfColumns;
+            // }
+            // var datatable = buildHeadersForTable(whereTheTableGoes, headers, false,
+            //     sharedTable.currentForm, false, additionalDetailsForHeaders);
+            // refineTableRecords(datatable, sharedTable.currentForm, [], true);
+            //
+            // // build the body
+            // var rowsToAdd = [];
+            // var content = _.slice(transposedTableDescription.dataCells, currentLocationInArray);
+            //
+            // _.forEach(content, function (datacell, index) {
+            //     var modulus = index % transposedTableDescription.numberOfColumns;
+            //     if (modulus === 0) {
+            //         rowsToAdd.push({category: datacell.title, columnCells: new Array()});
+            //     }
+            //     var lastRow = rowsToAdd[rowsToAdd.length - 1];
+            //     return lastRow.columnCells.push(datacell);
+            // });
+            // datatable = $(whereTheTableGoes).dataTable();
+            // var rememberCategories = addContentToTable(whereTheTableGoes, rowsToAdd, false, sharedTable.currentForm, false);
+            // refineTableRecords(datatable, sharedTable.currentForm, rememberCategories, false);
+            var transposedTableDescription = new mpgSoftware.matrixMath.Matrix(
+                linearDataTransposor(sortedData, numberOfRows, numberOfColumns, function (x, y, rows, cols) {
+                        return (x * cols) + y
+                }),numberOfColumns,numberOfRows);
             sharedTable.currentForm = formConversionOfATranspose(sharedTable.currentForm);
-            transposedTableDescription = new TempSharedTableObject(numberOfColumns, numberOfRows, new Array(numberOfColumns * numberOfRows));
-            transposedTableDescription.dataCells = linearDataTransposor(sortedData, numberOfRows, numberOfColumns, function (x, y, rows, cols) {
-                return (x * cols) + y
-            });
+            // transposedTableDescription = new TempSharedTableObject(numberOfColumns, numberOfRows, new Array(numberOfColumns * numberOfRows));
+            // transposedTableDescription.dataCells = linearDataTransposor(sortedData, numberOfRows, numberOfColumns, function (x, y, rows, cols) {
+            //     return (x * cols) + y
+            // });
 
 
             //  Now we should be all done fiddling with the data order.
             var additionalDetailsForHeaders = [];
             var currentLocationInArray = 0;
-            var headers = _.slice(transposedTableDescription.dataCells, currentLocationInArray, transposedTableDescription.numberOfColumns);
+            var headers = _.slice(transposedTableDescription.dataArray, currentLocationInArray, transposedTableDescription.numberOfColumns);
             currentLocationInArray += transposedTableDescription.numberOfColumns;
             if (sharedTable.currentForm === 'variantTableAnnotationHeaders') { // collapse the first row into the header
-                additionalDetailsForHeaders = _.slice(transposedTableDescription.dataCells, currentLocationInArray,
+                additionalDetailsForHeaders = _.slice(transposedTableDescription.dataArray, currentLocationInArray,
                     (currentLocationInArray + transposedTableDescription.numberOfColumns));
                 currentLocationInArray += transposedTableDescription.numberOfColumns;
             }
             if (sharedTable.currentForm === 'geneTableAnnotationHeaders') { // collapse the first row into the header
-               additionalDetailsForHeaders = _.slice(transposedTableDescription.dataCells, currentLocationInArray,
-                   (currentLocationInArray + transposedTableDescription.numberOfColumns));
-               currentLocationInArray += transposedTableDescription.numberOfColumns;
+                additionalDetailsForHeaders = _.slice(transposedTableDescription.dataArray, currentLocationInArray,
+                    (currentLocationInArray + transposedTableDescription.numberOfColumns));
+                currentLocationInArray += transposedTableDescription.numberOfColumns;
             }
             var datatable = buildHeadersForTable(whereTheTableGoes, headers, false,
                 sharedTable.currentForm, false, additionalDetailsForHeaders);
@@ -4590,7 +4719,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
             // build the body
             var rowsToAdd = [];
-            var content = _.slice(transposedTableDescription.dataCells, currentLocationInArray);
+            var content = _.slice(transposedTableDescription.dataArray, currentLocationInArray);
 
             _.forEach(content, function (datacell, index) {
                 var modulus = index % transposedTableDescription.numberOfColumns;
@@ -4603,7 +4732,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             datatable = $(whereTheTableGoes).dataTable();
             var rememberCategories = addContentToTable(whereTheTableGoes, rowsToAdd, false, sharedTable.currentForm, false);
             refineTableRecords(datatable, sharedTable.currentForm, rememberCategories, false);
-
+            sharedTable['matrix']=transposedTableDescription;
         }
 
     };
@@ -4916,8 +5045,8 @@ var destroySharedTable = function (whereTheTableGoes) {
         var numberOfColumns;
         var numberOfRows;
         var transposeNec = false;
-        numberOfColumns = sharedTable.numberOfColumns;
-        numberOfRows = sharedTable.numberOfRows;
+        numberOfColumns = sharedTable.matrix.numberOfColumns;
+        numberOfRows = sharedTable.matrix.numberOfRows;
         if ((sharedTable.currentForm === 'geneTableGeneHeaders') || (sharedTable.currentForm === 'variantTableVariantHeaders')) {
              numberOfColumns = sharedTable.numberOfColumns;
              numberOfRows = sharedTable.dataCells.length / numberOfColumns;
@@ -4936,6 +5065,8 @@ var destroySharedTable = function (whereTheTableGoes) {
             numberOfColumns = sharedTable["numberOfColumns"] = revisedMatrix.numberOfRows;
             numberOfRows = sharedTable["numberOfRows"]= revisedMatrix.numberOfColumns;
         }
+        sharedTable["matrix"] = new mpgSoftware.matrixMath.Matrix(revisedMatrix.dataArray,numberOfRows,numberOfColumns);
+        // sharedTable["matrix"] = revisedMatrix;
         sortedData=revisedMatrix.dataArray;
 
 

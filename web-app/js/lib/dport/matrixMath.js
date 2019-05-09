@@ -14,12 +14,12 @@ mpgSoftware.matrixMath = (function(){
      */
     var Matrix = function(dataArray,numberOfRows,numberOfColumns){
         if (( typeof dataArray === 'undefined') ||
-            (!$.isArray(dataArray))||
-            (dataArray.length<1)){
+            (!$.isArray(dataArray))){
             alert(" No data array to work with")
-        } else if ((dataArray.length % numberOfColumns) !== 0) {  // sanity check 1
+        } else if ((dataArray.length>0)&&(numberOfColumns>0)&&
+                   ((dataArray.length % numberOfColumns) !== 0) ){  // sanity check 1
             alert(" CRITICAL ERROR in matrix constructor.  Consistency check (dataArray.length % numberOfColumns) === 0) has failed.")
-        } else if ((dataArray.length % numberOfRows) !== 0) {  // sanity check 2
+        } else if ((dataArray.length>0)&&(numberOfRows>0)&&((dataArray.length % numberOfRows) !== 0)) {  // sanity check 2
             console.log(" CRITICAL ERROR in matrix constructor.  Consistency check (dataArray.length % numberOfRows) === 0) has failed.")
         }
         return {
