@@ -651,7 +651,9 @@
                <div class="geneHeaderShifters text-center">
                    <span class="glyphicon glyphicon-step-backward" aria-hidden="true" onclick="mpgSoftware.dynamicUi.shiftColumnsByOne(event,this,'backward','table.combinedGeneTableHolder')"></span>
                    <span class="glyphicon glyphicon-step-forward" aria-hidden="true" onclick="mpgSoftware.dynamicUi.shiftColumnsByOne(event,this,'forward','table.combinedGeneTableHolder')"></span>
-                                  <span class="glyphicon glyphicon-remove pull-right" aria-hidden="true" onclick="mpgSoftware.dynamicUi.removeColumn(event,this,'forward','table.combinedGeneTableHolder')" style="padding: 0 8px 0 0"></span>
+               </div>
+               <div class="pull-right">
+                   <span class="glyphicon glyphicon-remove" aria-hidden="true" onclick="mpgSoftware.dynamicUi.removeColumn(event,this,'forward','table.combinedGeneTableHolder')" style="padding: 0 8px 0 0"></span>
                </div>
                <span class="displayGeneName">{{name2}}</span>
             </div>

@@ -5241,10 +5241,8 @@ var destroySharedTable = function (whereTheTableGoes) {
 
     var removeColumn = function ( event, offeredThis, direction, whereTheTableGoes) {
         event.stopPropagation();
-        var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
         var identifyingNode = $(offeredThis).parent().parent().parent();
         var initialLinearIndex = extractClassBasedIndex(identifyingNode[0].innerHTML,"initialLinearIndex_");
-        var numberOfHeaders = getNumberOfHeaders (whereTheTableGoes);
         var indexOfClickedColumn =retrieveCurrentIndexOfColumn (whereTheTableGoes,initialLinearIndex);
                 redrawTableOnClick('table.combinedGeneTableHolder',
                     function(sortedData,numberOfRows,numberOfColumns,arguments){
