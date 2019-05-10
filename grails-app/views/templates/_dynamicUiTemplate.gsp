@@ -787,6 +787,7 @@
 
 
 
+<g:render template="/templates/dynamicUi/GHDR" />
 <g:render template="/templates/dynamicUi/FIR" />
 <g:render template="/templates/dynamicUi/SKA" />
 <g:render template="/templates/dynamicUi/MET" />

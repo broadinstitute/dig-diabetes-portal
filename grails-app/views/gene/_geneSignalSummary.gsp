@@ -206,6 +206,17 @@ td.tissueTable.informationIsPresent{
                     exposeGeneTableOnDynamicUi:"${portalVersionBean.getExposeGeneTableOnDynamicUi()}",
                     exposeVariantTableOfDynamicUi:"${portalVersionBean.getExposeVariantTableOfDynamicUi()}",
                     dataAnnotationTypes: [
+                        {   code: 'GHDR',
+                            category: 'blank',
+                            displayCategory: 'Genes',
+                            subcategory: 'Genes subcategory',
+                            displaySubcategory: 'Genes subcategory',
+                            cellBodyWriter:'dynamicGeneTableHeaderV3',
+                            categoryWriter:'no category writer',
+                            subCategoryWriter:'no subcategory writer',
+                            numberRecordsCellPresentationStringWriter:'geneFirthAssociationTableNumberRecordsCellPresentationString',
+                            significanceCellPresentationStringWriter:'geneFirthAssociationTableSignificanceCellPresentationString'
+                        },
                         {   code: 'FIR',
                             category: 'Annotation',
                             displayCategory: 'Significance of association',

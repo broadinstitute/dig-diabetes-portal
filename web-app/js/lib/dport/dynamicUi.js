@@ -349,7 +349,7 @@ mpgSoftware.dynamicUi = (function () {
         switch (actionId) {
 
             case "getTissuesFromProximityForLocusContext":
-                defaultFollowUp.displayRefinedContextFunction = displayRefinedGenesInARange;
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.geneHeaders.displayRefinedGenesInARange;
                 defaultFollowUp.placeToDisplayData = '#dynamicGeneHolder div.dynamicUiHolder';
                 break;
 
@@ -498,17 +498,18 @@ mpgSoftware.dynamicUi = (function () {
                             startPos: startPos,
                             endPos: endPos
                         },
-                        processEachRecord: processRecordsFromProximitySearch,
+                        processEachRecord: mpgSoftware.dynamicUi.geneHeaders.processRecordsFromProximitySearch,
                         displayRefinedContextFunction: displayFunction,
                         placeToDisplayData: displayLocation,
-                        actionId: nextActionId
+                        actionId: nextActionId,
+                        nameOfAccumulatorField:'geneInfoArray'
                     }));
                 };
                 break;
 
             case "getTissuesFromEqtlsForTissuesTable":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("geneNameArray")) {
+                    if (accumulatorObjectFieldEmpty("geneInfoArray")) {
                         var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getTissuesFromEqtlsForTissuesTable"});
                         actionToUndertake();
                     } else {
@@ -533,14 +534,14 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getTissuesFromEqtlsForGenesTable":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("geneNameArray")) {
+                    if (accumulatorObjectFieldEmpty("geneInfoArray")) {
                         var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getTissuesFromEqtlsForGenesTable"});
                         actionToUndertake();
                     } else {
                         resetAccumulatorObject("tissueNameArray");
                         resetAccumulatorObject("genesForEveryTissue");
                         resetAccumulatorObject("tissuesForEveryGene");
-                        var geneNameArray = _.map(getAccumulatorObject("geneNameArray"), function (o) {
+                        var geneNameArray = _.map(getAccumulatorObject("geneInfoArray"), function (o) {
                             return {gene: o.name}
                         });
                         retrieveRemotedContextInformation(buildRemoteContextArray({
@@ -558,12 +559,12 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getGeneAssociationsForGenesTable":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("geneNameArray")) {
+                    if (accumulatorObjectFieldEmpty("geneInfoArray")) {
                         var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getGeneAssociationsForGenesTable"});
                         actionToUndertake();
                     } else {
                         var phenotype = $('li.chosenPhenotype').attr('id');
-                        var dataForCall = _.map(getAccumulatorObject("geneNameArray"), function (o) {
+                        var dataForCall = _.map(getAccumulatorObject("geneInfoArray"), function (o) {
                             return {
                                 gene: o.name,
                                 phenotype: phenotype,
@@ -586,12 +587,12 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getSkatGeneAssociationsForGeneTable":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("geneNameArray")) {
+                    if (accumulatorObjectFieldEmpty("geneInfoArray")) {
                         var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getSkatGeneAssociationsForGeneTable"});
                         actionToUndertake();
                     } else {
                         var phenotype = $('li.chosenPhenotype').attr('id');
-                        var dataForCall = _.map(getAccumulatorObject("geneNameArray"), function (o) {
+                        var dataForCall = _.map(getAccumulatorObject("geneInfoArray"), function (o) {
                             return {
                                 gene: o.name,
                                 phenotype: phenotype,
@@ -616,12 +617,12 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getFirthGeneAssociationsForGeneTable":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("geneNameArray")) {
+                    if (accumulatorObjectFieldEmpty("geneInfoArray")) {
                         var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getFirthGeneAssociationsForGeneTable"});
                         actionToUndertake();
                     } else {
                         var phenotype = $('li.chosenPhenotype').attr('id');
-                        var dataForCall = _.map(getAccumulatorObject("geneNameArray"), function (o) {
+                        var dataForCall = _.map(getAccumulatorObject("geneInfoArray"), function (o) {
                             return {
                                 gene: o.name,
                                 phenotype: phenotype,
@@ -646,12 +647,12 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getInformationFromEffectorGeneListTable":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("geneNameArray")) {
+                    if (accumulatorObjectFieldEmpty("geneInfoArray")) {
                         var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getInformationFromEffectorGeneListTable"});
                         actionToUndertake();
                     } else {
                         var phenotype = $('li.chosenPhenotype').attr('id');
-                        var dataForCall = _.map(getAccumulatorObject("geneNameArray"), function (o) {
+                        var dataForCall = _.map(getAccumulatorObject("geneInfoArray"), function (o) {
                             return {
                                 geneList: "[\""+o.name+"\"]",
                                 phenotype: phenotype,
@@ -727,7 +728,7 @@ mpgSoftware.dynamicUi = (function () {
                     var chromosome = getAccumulatorObject("chromosome");
                     var startPos = getAccumulatorObject("extentBegin");
                     var endPos = getAccumulatorObject("extentEnd");
-                    var geneNameArray = _.map(getAccumulatorObject("geneNameArray"), function (o) {
+                    var geneNameArray = _.map(getAccumulatorObject("geneInfoArray"), function (o) {
                         return {gene: o.name}
                     });
                     retrieveRemotedContextInformation(buildRemoteContextArray({
@@ -744,11 +745,11 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getPhenotypesFromECaviarForTissueTable":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("geneNameArray")) {
+                    if (accumulatorObjectFieldEmpty("geneInfoArray")) {
                         var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getPhenotypesFromECaviarForTissueTable"});
                         actionToUndertake();
                     } else {
-                        var geneNameArray = _.map(getAccumulatorObject("geneNameArray"), function (o) {
+                        var geneNameArray = _.map(getAccumulatorObject("geneInfoArray"), function (o) {
                             return {gene: o.name}
                         });
                         retrieveRemotedContextInformation(buildRemoteContextArray({
@@ -767,12 +768,12 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getRecordsFromECaviarForGeneTable":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("geneNameArray")) {
+                    if (accumulatorObjectFieldEmpty("geneInfoArray")) {
                         var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getRecordsFromECaviarForGeneTable"});
                         actionToUndertake();
                     } else {
                         var phenotype = $('li.chosenPhenotype').attr('id');
-                        var geneNameArray = _.map(getAccumulatorObject("geneNameArray"), function (o) {
+                        var geneNameArray = _.map(getAccumulatorObject("geneInfoArray"), function (o) {
                             return {gene: o.name,
                                 phenotype:phenotype}
                         });
@@ -792,12 +793,12 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getRecordsFromColocForGeneTable":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("geneNameArray")) {
+                    if (accumulatorObjectFieldEmpty("geneInfoArray")) {
                         var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getRecordsFromColocForGeneTable"});
                         actionToUndertake();
                     } else {
                         var phenotype = $('li.chosenPhenotype').attr('id');
-                        var geneNameArray = _.map(getAccumulatorObject("geneNameArray"), function (o) {
+                        var geneNameArray = _.map(getAccumulatorObject("geneInfoArray"), function (o) {
                             return {gene: o.name,
                                 phenotype:phenotype}
                         });
@@ -819,11 +820,11 @@ mpgSoftware.dynamicUi = (function () {
             case "getAnnotationsFromModForGenesTable":
                 functionToLaunchDataRetrieval = function () {
 
-                    if (accumulatorObjectFieldEmpty("geneNameArray")) {
+                    if (accumulatorObjectFieldEmpty("geneInfoArray")) {
                         var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getAnnotationsFromModForGenesTable"});
                         actionToUndertake();
                     } else {
-                        var geneNameArray = _.map(getAccumulatorObject("geneNameArray"), function (o) {
+                        var geneNameArray = _.map(getAccumulatorObject("geneInfoArray"), function (o) {
                             return {gene: o.name}
                         });
                         retrieveRemotedContextInformation(buildRemoteContextArray({
@@ -842,6 +843,7 @@ mpgSoftware.dynamicUi = (function () {
 
             case "replaceGeneContext":
                 functionToLaunchDataRetrieval = function () {
+                    alert(" the function replaced gene context has been deactivated");
                     var somethingSymbol = $('#inputBoxForDynamicContextId').val();
                     somethingSymbol = somethingSymbol.replace(/\//g, "_");
                     setAccumulatorObject("geneNameArray", [{name: somethingSymbol}]);
@@ -859,14 +861,11 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getTissuesFromAbcForGenesTable":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("geneNameArray")) {
+                    if (accumulatorObjectFieldEmpty("geneInfoArray")) {
                         var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getTissuesFromAbcForGenesTable"});
                         actionToUndertake();
                     } else {
-                        var geneNameArray = _.map(getAccumulatorObject("geneNameArray"), function (o) {
-                            return {gene: o.name}
-                        });
-                        geneNameArray = _.map(getAccumulatorObject("geneInfoArray"), function (o) {
+                        var geneNameArray = _.map(getAccumulatorObject("geneInfoArray"), function (o) {
                             return {gene: o.name}
                         });
                         retrieveRemotedContextInformation(buildRemoteContextArray({
@@ -884,11 +883,11 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getRecordsFromAbcForTissueTable":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("geneNameArray")) {
+                    if (accumulatorObjectFieldEmpty("geneInfoArray")) {
                         var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getRecordsFromAbcForTissueTable"});
                         actionToUndertake();
                     } else {
-                        var geneNameArray = _.map(getAccumulatorObject("geneNameArray"), function (o) {
+                        var geneNameArray = _.map(getAccumulatorObject("geneInfoArray"), function (o) {
                             return {gene: o.name}
                         });
                         retrieveRemotedContextInformation(buildRemoteContextArray({
@@ -987,12 +986,12 @@ mpgSoftware.dynamicUi = (function () {
                 break;
             case "getInformationFromDepictForGenesTable":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("geneNameArray")) {
+                    if (accumulatorObjectFieldEmpty("geneInfoArray")) {
                         var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getInformationFromDepictForGenesTable"});
                         actionToUndertake();
                     } else {
                         var phenotype = $('li.chosenPhenotype').attr('id');
-                        var dataForCall = _.map(getAccumulatorObject("geneNameArray"), function (o) {
+                        var dataForCall = _.map(getAccumulatorObject("geneInfoArray"), function (o) {
                             return {
                                 gene: o.name,
                                 phenotype: phenotype
@@ -1015,12 +1014,12 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getDepictGeneSetForGenesTable":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("geneNameArray")) {
+                    if (accumulatorObjectFieldEmpty("geneInfoArray")) {
                         var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getDepictGeneSetForGenesTable"});
                         actionToUndertake();
                     } else {
                         var phenotype = $('li.chosenPhenotype').attr('id');
-                        var dataForCall = _.map(getAccumulatorObject("geneNameArray"), function (o) {
+                        var dataForCall = _.map(getAccumulatorObject("geneInfoArray"), function (o) {
                             return {
                                 gene: o.name,
                                 phenotype: phenotype
@@ -1208,44 +1207,7 @@ mpgSoftware.dynamicUi = (function () {
         }
         return returnObject;
     };
-    // var displayRefinedModContext = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-    //
-    //
-    //
-    //     displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
-    //         'MOD', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-    //         'modNameArray', // name of the persistent field where the data we received is stored
-    //         '', // we may wish to pull out one record for summary purposes
-    //         function(records,tissueTranslations){
-    //             return _.map(_.orderBy(records,["symbol"],["asc"]),function(tissueRecord){
-    //                 return {  Feature_Type: tissueRecord.Feature_Type,
-    //                     Human_gene: tissueRecord.Human_gene,
-    //                     Term: tissueRecord.Term,
-    //                     MGI_Gene_Marker_ID:tissueRecord.MGI_Gene_Marker_ID,
-    //                     Name: tissueRecord.Name,
-    //                     Symbol: tissueRecord.Symbol
-    //                 }});
-    //         },
-    //         function(records, // all records
-    //                  recordsCellPresentationString,// record count cell text
-    //                  significanceCellPresentationString,// significance cell text
-    //                  dataAnnotationTypeCode,// driving code
-    //                  significanceValue,
-    //                  gene ){ // value of significance for sorting
-    //             return {
-    //                 cellPresentationStringMap:{ Records:recordsCellPresentationString,
-    //                     Significance:significanceCellPresentationString },
-    //                 numberOfRecords:records.length,
-    //                 tissueCategoryNumber:categorizeTissueNumbers( records.length ),
-    //                 significanceCategoryNumber:categorizeSignificanceNumbers( records, "COL" ),
-    //                 recordsExist:(records.length)?[1]:[],
-    //                 gene:gene,
-    //                 significanceValue:significanceValue,
-    //                 records:records
-    //             }
-    //         } );
-    //
-    // };
+
 
     /***
      * The object is passed into mustache and describes the display that will be presented to users
@@ -1620,11 +1582,11 @@ mpgSoftware.dynamicUi = (function () {
 
             // set up the headers, and give us an empty row of column cells
             var headerNames = [];
-            if (accumulatorObjectFieldEmpty("geneNameArray")) {
+            if (accumulatorObjectFieldEmpty("geneInfoArray")) {
                 console.log("We always have to have a record of the current gene names in ABC display. We have a problem.");
             } else {
-                headerNames  = _.map(getAccumulatorObject("geneNameArray"),'name');
-                _.forEach(getAccumulatorObject("geneNameArray"), function (oneRecord) {
+                headerNames  = _.map(getAccumulatorObject("geneInfoArray"),'name');
+                _.forEach(getAccumulatorObject("geneInfoArray"), function (oneRecord) {
                     intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell("",
                         {}, "header of some sort",'EMC' ));
                 });
@@ -1823,9 +1785,47 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
+    var displayHeaderForGeneTable = function (idForTheTargetDiv, // which table are we adding to
+                                        dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+                                        nameOfAccumulatorField, // name of the persistent field where the data we received is stored
+                                        preferredSummaryKey, // we may wish to pull out one record for summary purposes
+                                        mapSortAndFilterFunction,
+                                        placeDataIntoRenderForm ) { // sort and filter the records we will use.  Resulting array must have fields tissue, value, and numericalValue
+        var selectorForIidForTheTargetDiv = idForTheTargetDiv;
+        $(selectorForIidForTheTargetDiv).empty();
+        var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode);
+        var objectContainingRetrievedRecords = getAccumulatorObject(nameOfAccumulatorField);
+
+        var intermediateDataStructure = new IntermediateDataStructure();
+
+        if (typeof objectContainingRetrievedRecords !== 'undefined') {
+            // set up the headers, and give us an empty row of column cells
+            _.forEach(objectContainingRetrievedRecords, function (oneRecord,index) {
+                intermediateDataStructure.headerNames.push(oneRecord.name);
+                intermediateDataStructure.headerContents.push(Mustache.render($('#'+dataAnnotationType.dataAnnotation.cellBodyWriter)[0].innerHTML, oneRecord));
+                intermediateDataStructure.headers.push(new IntermediateStructureDataCell(oneRecord.name,
+                    Mustache.render($('#'+dataAnnotationType.dataAnnotation.cellBodyWriter)[0].innerHTML, oneRecord),"geneHeader asc ",'LIT'));
+            });
+
+            intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
+        }
 
 
-    var displayForGeneTable = function (idForTheTargetDiv, // which table are we adding to
+        prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
+            '#dynamicGeneTable',
+            objectContainingRetrievedRecords,
+            clearBeforeStarting,
+            intermediateDataStructure,
+            true,
+            'geneTableGeneHeaders');
+    }
+
+
+
+
+
+
+        var displayForGeneTable = function (idForTheTargetDiv, // which table are we adding to
                                         dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
                                         nameOfAccumulatorField, // name of the persistent field where the data we received is stored
                                         preferredSummaryKey, // we may wish to pull out one record for summary purposes
@@ -1845,11 +1845,11 @@ mpgSoftware.dynamicUi = (function () {
 
             // set up the headers, even though we know we won't use them. Is this step necessary?
             var headerNames = [];
-            if (accumulatorObjectFieldEmpty("geneNameArray")) {
+            if (accumulatorObjectFieldEmpty("geneInfoArray")) {
                 console.log("We always have to have a record of the current gene names in depict display. We have a problem.");
             } else {
-                headerNames  = _.map(getAccumulatorObject("geneNameArray"),'name');
-                _.forEach(getAccumulatorObject("geneNameArray"), function (oneRecord) {
+                headerNames  = _.map(getAccumulatorObject("geneInfoArray"),'name');
+                _.forEach(getAccumulatorObject("geneInfoArray"), function (oneRecord) {
                     intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
                         {},"header",'EMC'));
                 });
@@ -1970,9 +1970,7 @@ mpgSoftware.dynamicUi = (function () {
 
         addAdditionalResultsObject({phenotypesFromColocalizatio: returnObject});
         prepareToPresentToTheScreen(idForTheTargetDiv, '#dynamicColocalizationPhenotypeTable', returnObject, clearBeforeStarting);
-        // $("#dynamicPhenotypeHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicColocalizationPhenotypeTable')[0].innerHTML,
-        //     returnObject
-        // ));
+
 
 
     };
@@ -2345,11 +2343,11 @@ mpgSoftware.dynamicUi = (function () {
 
              //set up the headers, and give us an empty row of column cells
             var headerNames = [];
-            if (accumulatorObjectFieldEmpty("geneNameArray")) {
+            if (accumulatorObjectFieldEmpty("geneInfoArray")) {
                 console.log("We always have to have a record of the current gene names in eqtl display. We have a problem.");
             } else {
-                headerNames  = _.map(getAccumulatorObject("geneNameArray"),'name');
-                _.forEach(getAccumulatorObject("geneNameArray"), function (oneRecord) {
+                headerNames  = _.map(getAccumulatorObject("geneInfoArray"),'name');
+                _.forEach(getAccumulatorObject("geneInfoArray"), function (oneRecord) {
                     intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell('eQTL',
                         {},'eQTL for genes','EMC'));
                 });
@@ -2440,83 +2438,83 @@ mpgSoftware.dynamicUi = (function () {
      * @param data
      * @returns {{rawData: Array, uniqueGenes: Array, uniqueTissues: Array}}
      */
-    var processRecordsFromProximitySearch = function (data) {
-        var returnObject = {
-            rawData: [],
-            uniqueGenes: [],
-            genePositions: [],
-            uniqueTissues: [],
-            genesPositionsExist: function () {
-                return (this.genePositions.length > 0) ? [1] : [];
-            },
-            genesExist: function () {
-                return (this.uniqueGenes.length > 0) ? [1] : [];
-            }
-        };
-        var geneInfoArray = [];
-        if (( typeof data !== 'undefined') &&
-            ( data !== null ) &&
-            (data.is_error === false ) &&
-            ( typeof data.listOfGenes !== 'undefined')) {
-            if (data.listOfGenes.length === 0) {
-                alert(' No genes in the specified region')
-            } else {
-                _.forEach(data.listOfGenes, function (geneRec) {
-                    returnObject.rawData.push(geneRec);
-                    if (!returnObject.uniqueGenes.includes(geneRec.name2)) {
-                        returnObject.uniqueGenes.push({name: geneRec.name2});
-                        returnObject.genePositions.push({name: geneRec.chromosome + ":" + geneRec.addrStart + "-" + geneRec.addrEnd});
-                        var chromosomeString = _.includes(geneRec.chromosome, "chr") ? geneRec.chromosome.substr(3) : geneRec.chromosome;
-                        geneInfoArray.push({
-                                chromosome: chromosomeString,
-                                startPos: geneRec.addrStart,
-                                endPos: geneRec.addrEnd,
-                                name: geneRec.name2,
-                                id: geneRec.id
-                            }
-                        );
-                    }
-                    ;
-                });
-            }
-        }
-        // we have a list of all the genes in the range.  Let's remember that information.
-        setAccumulatorObject("geneNameArray", returnObject.uniqueGenes);
-        setAccumulatorObject("geneInfoArray", geneInfoArray);
-        return returnObject;
-    };
-    var displayRefinedGenesInARange = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-        var selectorForIidForTheTargetDiv = idForTheTargetDiv;
-        $(selectorForIidForTheTargetDiv).empty();
-
-        addAdditionalResultsObject({refinedGenesInARange: objectContainingRetrievedRecords});
-
-
-        var intermediateDataStructure = new IntermediateDataStructure();
-
-        if (typeof objectContainingRetrievedRecords.rawData !== 'undefined') {
-            // set up the headers, and give us an empty row of column cells
-            _.forEach(objectContainingRetrievedRecords.rawData, function (oneRecord,index) {
-                intermediateDataStructure.headerNames.push(oneRecord.name1);
-                intermediateDataStructure.headerContents.push(Mustache.render($("#dynamicGeneTableHeaderV2")[0].innerHTML, oneRecord));
-                // alert('needs to be fixed 1');
-                intermediateDataStructure.headers.push(new IntermediateStructureDataCell(oneRecord.name1,
-                    Mustache.render($("#dynamicGeneTableHeaderV2")[0].innerHTML, oneRecord),"geneHeader asc ",'LIT'));
-            });
-
-            intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
-        }
-
-
-        prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
-            '#dynamicGeneTable',
-            objectContainingRetrievedRecords,
-            clearBeforeStarting,
-            intermediateDataStructure,
-            true,
-            'geneTableGeneHeaders');
-
-    };
+    //var processRecordsFromProximitySearch = function (data) {
+    //    var returnObject = {
+    //        rawData: [],
+    //        uniqueGenes: [],
+    //        genePositions: [],
+    //        uniqueTissues: [],
+    //        genesPositionsExist: function () {
+    //            return (this.genePositions.length > 0) ? [1] : [];
+    //        },
+    //        genesExist: function () {
+    //            return (this.uniqueGenes.length > 0) ? [1] : [];
+    //        }
+    //    };
+    //    var geneInfoArray = [];
+    //    if (( typeof data !== 'undefined') &&
+    //        ( data !== null ) &&
+    //        (data.is_error === false ) &&
+    //        ( typeof data.listOfGenes !== 'undefined')) {
+    //        if (data.listOfGenes.length === 0) {
+    //            alert(' No genes in the specified region')
+    //        } else {
+    //            _.forEach(data.listOfGenes, function (geneRec) {
+    //                returnObject.rawData.push(geneRec);
+    //                if (!returnObject.uniqueGenes.includes(geneRec.name2)) {
+    //                    returnObject.uniqueGenes.push({name: geneRec.name2});
+    //                    returnObject.genePositions.push({name: geneRec.chromosome + ":" + geneRec.addrStart + "-" + geneRec.addrEnd});
+    //                    var chromosomeString = _.includes(geneRec.chromosome, "chr") ? geneRec.chromosome.substr(3) : geneRec.chromosome;
+    //                    geneInfoArray.push({
+    //                            chromosome: chromosomeString,
+    //                            startPos: geneRec.addrStart,
+    //                            endPos: geneRec.addrEnd,
+    //                            name: geneRec.name2,
+    //                            id: geneRec.id
+    //                        }
+    //                    );
+    //                }
+    //                ;
+    //            });
+    //        }
+    //    }
+    //    // we have a list of all the genes in the range.  Let's remember that information.
+    //    //setAccumulatorObject("geneNameArray", returnObject.uniqueGenes);
+    //    setAccumulatorObject("geneInfoArray", geneInfoArray);
+    //    return returnObject;
+    //};
+    //var displayRefinedGenesInARange = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+    //    var selectorForIidForTheTargetDiv = idForTheTargetDiv;
+    //    $(selectorForIidForTheTargetDiv).empty();
+    //
+    //    addAdditionalResultsObject({refinedGenesInARange: objectContainingRetrievedRecords});
+    //
+    //
+    //    var intermediateDataStructure = new IntermediateDataStructure();
+    //
+    //    if (typeof objectContainingRetrievedRecords.rawData !== 'undefined') {
+    //        // set up the headers, and give us an empty row of column cells
+    //        _.forEach(objectContainingRetrievedRecords.rawData, function (oneRecord,index) {
+    //            intermediateDataStructure.headerNames.push(oneRecord.name1);
+    //            intermediateDataStructure.headerContents.push(Mustache.render($("#dynamicGeneTableHeaderV2")[0].innerHTML, oneRecord));
+    //            // alert('needs to be fixed 1');
+    //            intermediateDataStructure.headers.push(new IntermediateStructureDataCell(oneRecord.name1,
+    //                Mustache.render($("#dynamicGeneTableHeaderV2")[0].innerHTML, oneRecord),"geneHeader asc ",'LIT'));
+    //        });
+    //
+    //        intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
+    //    }
+    //
+    //
+    //    prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
+    //        '#dynamicGeneTable',
+    //        objectContainingRetrievedRecords,
+    //        clearBeforeStarting,
+    //        intermediateDataStructure,
+    //        true,
+    //        'geneTableGeneHeaders');
+    //
+    //};
 
 
     var processRecordsFromVariantQtlSearch = function (data) {
@@ -3336,7 +3334,7 @@ mpgSoftware.dynamicUi = (function () {
         $('#retrieveMultipleRecordsTest').on('click', function () {
             var arrayOfRoutinesToUndertake = [];
 
-            resetAccumulatorObject("geneNameArray");
+//            resetAccumulatorObject("geneNameArray");
             resetAccumulatorObject("geneInfoArray");
 //
             resetAccumulatorObject("tissuesForEveryGene");
@@ -3452,7 +3450,7 @@ mpgSoftware.dynamicUi = (function () {
         }
         setAccumulatorObject(storageField,extentBegin);
         $(spanClass).html(""+extentBegin);
-        resetAccumulatorObject("geneNameArray");
+   //     resetAccumulatorObject("geneNameArray");
         resetAccumulatorObject("geneInfoArray");
         resetAccumulatorObject("tissueNameArray");
     };
@@ -3971,14 +3969,6 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             case 'GHD':  // the first two columns are always empty, but contains some information in render data
                 returnValue = Mustache.render($('#dynamicGeneTableHeaderV2')[0].innerHTML,intermediateStructureDataCell.renderData);
                 break;
-            // case 'CAT':  // the first two columns on each annotation row
-            //     displayDetails["indexInOneDimensionalArray"]=indexInOneDimensionalArray;
-            //     var returnValue = Mustache.render($('#'+displayDetails.dataAnnotation.categoryWriter)[0].innerHTML,displayDetails);
-            //     break;
-            // case 'SUB':
-            //     displayDetails["indexInOneDimensionalArray"]=indexInOneDimensionalArray;
-            //     var returnValue = Mustache.render($('#'+displayDetails.dataAnnotation.subCategoryWriter)[0].innerHTML,displayDetails);
-            //     break;
 
             default:  //  the standard case, where a cell renders its own data using its chosen mustache template
                 var cellColoringScheme ="records";
@@ -4686,122 +4676,19 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
 
 
-var destroySharedTable = function (whereTheTableGoes) {
-    if ( $.fn.DataTable.isDataTable( whereTheTableGoes ) ) {
-        var datatable = $(whereTheTableGoes).dataTable();
-        try{
-            datatable.fnDestroy(false);
-        } catch (e){
-            // this routine throws a JavaScript error, but doesn't seem to indicate any trouble
+    var destroySharedTable = function (whereTheTableGoes) {
+        if ( $.fn.DataTable.isDataTable( whereTheTableGoes ) ) {
+            var datatable = $(whereTheTableGoes).dataTable();
+            try{
+                datatable.fnDestroy(false);
+            } catch (e){
+                // this routine throws a JavaScript error, but doesn't seem to indicate any trouble
+            }
+            $(whereTheTableGoes).empty()
         }
-        $(whereTheTableGoes).empty()
-    }
-}
-
-
-        var addToCombinedTable = function (variantAndDsAjaxUrl, variantInfoUrl,
-                                       whereTheTableGoes) {
-        // var proposedVariant = $('#proposedVariant').val();
-        // var metadata = getStoredSampleMetadata();
-        var rememberVariantInfoUrl = variantInfoUrl;
-        // if (proposedVariant.length < 1) {
-        //     proposedVariant = $('#proposedMultiVariant').val();
-        // }
-        // var allVariants = proposedVariant.split(",");
-        // if (allVariants.length < 2) {
-        //     allVariants = proposedVariant.split('\n');
-        // }
-        var datatable = $(whereTheTableGoes).DataTable();
-        var deferreds = [];
-        var unrecognizedVariants = [];
-        var duplicateVariants = [];
-        // var datasetFilter = $('#datasetFilter').val();
-        // var dataSet = metadata.conversion[datasetFilter];
-        _.forEach(allVariants, function (oneVariantRaw) {
-            var oneVariant = oneVariantRaw.trim();
-            if (oneVariant.length > 0) {
-                var oneCall = function (curVariant, unrecognized, duplicate) {
-                    var d = $.Deferred();
-                    var promise = $.ajax({
-                        cache: false,
-                        type: "get",
-                        url: ( variantAndDsAjaxUrl + "?varid=" + curVariant + "&dataSet=" + dataSet),
-                        async: true
-                    });
-                    promise.done(
-                        function (data) {
-                            if ((typeof data !== 'undefined') &&
-                                (data) &&
-                                (data.variant) &&
-                                (!(data.variant.is_error))) {
-                                if (data.variant.numRecords > 0) {
-                                    var args = _.flatten([{}, data.variant.variants[0]]);
-                                    var variantObject = _.merge.apply(_, args);
-                                    var mac = '';
-                                    var macObject = variantObject['MAC'];
-                                    if (typeof macObject !== 'undefined') {
-                                        _.forEach(macObject, function (v, k) {
-                                            mac = v;
-                                        })
-                                    }
-                                    if (_.findIndex(datatable.rows().data(), function (oneRow) {
-                                        return oneRow[0] === variantObject.VAR_ID;
-                                    }) > -1) {
-                                        duplicate.push(curVariant);
-                                    } else {
-                                        datatable.row.add([variantObject.VAR_ID,
-                                            '<a href="' + rememberVariantInfoUrl + '/' + variantObject.VAR_ID + '" class="boldItlink">' +
-                                            variantObject.CHROM + ':' + variantObject.POS + '</a>',
-                                            variantObject.DBSNP_ID,
-                                            variantObject.CHROM,
-                                            variantObject.POS,
-                                            mac,
-                                            variantObject.PolyPhen_PRED,
-                                            variantObject.SIFT_PRED,
-                                            variantObject.Protein_change,
-                                            variantObject.Consequence
-                                        ]).draw(false);
-                                    }
-
-                                } else {
-                                    unrecognized.push(curVariant);
-                                }
-
-                            }
-                            d.resolve(data);
-                        }
-                    );
-                    promise.fail(d.reject);
-                    return d.promise();
-                };
-                deferreds.push(oneCall(oneVariant, unrecognizedVariants, duplicateVariants));
-            }
-        });
-        $.when.apply($, deferreds).then(function () {
-            $('#rSpinner').hide();
-            var reportError = "";
-            if (unrecognizedVariants.length > 0) {
-                if (unrecognizedVariants.length > 1) {
-                    reportError += ('The following variants were unrecognized: ' + unrecognizedVariants.join(", "));
-                } else {
-                    reportError += ('Variant ' + unrecognizedVariants[0] + ' unrecognized.');
-                }
-            }
-            if (duplicateVariants.length > 0) {
-                if (reportError.length > 0) {
-                    reportError += '\n\n';
-                }
-                if (duplicateVariants.length > 1) {
-                    reportError += ('The following variants were already in the table: ' + duplicateVariants.join(", "));
-                } else {
-                    reportError += ('Variant ' + duplicateVariants[0] + ' already in the table.');
-                }
-            }
-            if (reportError.length > 0) {
-                alert(reportError);
-            }
-        });
     };
+
+
 
     var displayTissuesForAnnotation = function (annotationId,nameOfAccumulatorObject,tableToUpdate){
         var recordsAggregatedPerVariant = getAccumulatorObject("sharedTable_"+tableToUpdate);
@@ -4970,15 +4857,6 @@ var destroySharedTable = function (whereTheTableGoes) {
 
         rebuildTableOnPageFromMatrix(sharedTable["matrix"],sharedTable.currentForm,whereTheTableGoes);
     };
-
-
-
-
-
-
-
-
-
 
 
 
@@ -5266,6 +5144,7 @@ var destroySharedTable = function (whereTheTableGoes) {
 // public routines are declared below
     return {
         displayForGeneTable:displayForGeneTable,
+        displayHeaderForGeneTable:displayHeaderForGeneTable,
         shiftColumnsByOne:shiftColumnsByOne,
         extractStraightFromTarget:extractStraightFromTarget,
         showAttachedData:showAttachedData,
