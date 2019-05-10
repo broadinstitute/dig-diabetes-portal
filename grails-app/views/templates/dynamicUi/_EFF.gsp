@@ -3,7 +3,7 @@ records={{numberRecords}}
 </script>
 
 <script id="effectorGeneTableSignificanceCellPresentationString"  type="x-tmpl-mustache">
-{{significanceValue}} {{value}}
+{{Combined_category}}
 </script>
 
 <script id="dynamicGeneTableEffectorGeneSubCategory"  type="x-tmpl-mustache">
@@ -21,33 +21,36 @@ records={{numberRecords}}
              <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
              class="tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'effector gene records {{gene}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
-               data-target="#effector_gene_{{gene}}" style="color:black">{{cellPresentationString}}</a>
-               <div  class="collapse openColocInGeneTable" id="effector_gene_{{gene}}">
-                    {{#recordsExist}}
-                    <table class="expandableDrillDownTable openColocInGeneTable">
+               data-target="#effector_gene_{{gene}}" style="color:black">
+               {{#data}}
+               {{value.Combined_category}}
+               {{/data}}
+               </a>
+               <div  class="collapse openEffectorGeneInformationInGeneTable" id="effector_gene_{{gene}}">
+                    {{#data}}
+                    <table class="expandableDrillDownTable openEffectorGeneInformationInGeneTable">
                      <thead>
                       <tr role="row">
-                        <th class="text-center leftMostCol">tissue</th>
-                        <th class="text-center otherCols">pp coloc snp exists</th>
-                        <th class="text-center otherCols">pp snp coloc</th>
-                        <th class="text-center otherCols">var_id</th>
+                        <th class="text-center leftMostCol">category</th>
+                        <th class="text-center otherCols">value</th>
                       </tr>
                      </thead>
                      <tbody>
-                    {{/recordsExist}}
-                    {{#records}}
                       <tr role="row">
-                           <td class="leftMostCol">{{tissue}}</td>
-                           <td class="otherCols">{{prob_exists_coloc}}</td>
-                           <td class="otherCols">{{conditional_prob_snp_coloc}}</td>
-                           <td class="otherCols">{{var_id}}</td>
+                           <td class="leftMostCol">Genetic combined</td>
+                           <td class="otherCols">{{value.Genetic_combined}}</td>
                        </tr>
-
-                    {{/records}}
-                    {{#recordsExist}}
+                       <tr role="row">
+                           <td class="leftMostCol">Genomic combined</td>
+                           <td class="otherCols">{{value.Genomic_combined}}</td>
+                       </tr>
+                       <tr role="row">
+                           <td class="leftMostCol">Perturbation combined</td>
+                           <td class="otherCols">{{value.Perturbation_combined}}</td>
+                       </tr>
                      </tbody>
                     </table>
-                    {{/recordsExist}}
+                    {{/data}}
                </div>
             </div>
 </script>

@@ -206,7 +206,7 @@ td.tissueTable.informationIsPresent{
                     exposeGeneTableOnDynamicUi:"${portalVersionBean.getExposeGeneTableOnDynamicUi()}",
                     exposeVariantTableOfDynamicUi:"${portalVersionBean.getExposeVariantTableOfDynamicUi()}",
                     dataAnnotationTypes: [
-                        {   code: 'GHDR',
+                        {   code: 'GHDR', // manages the header.  Most of the records in this particular category have no match in the code, unlike all of the other categories
                             category: 'blank',
                             displayCategory: 'Genes',
                             subcategory: 'Genes subcategory',
@@ -214,8 +214,9 @@ td.tissueTable.informationIsPresent{
                             cellBodyWriter:'dynamicGeneTableHeaderV3',
                             categoryWriter:'no category writer',
                             subCategoryWriter:'no subcategory writer',
-                            numberRecordsCellPresentationStringWriter:'geneFirthAssociationTableNumberRecordsCellPresentationString',
-                            significanceCellPresentationStringWriter:'geneFirthAssociationTableSignificanceCellPresentationString'
+                            numberRecordsCellPresentationStringWriter:'no record numbers string writer',
+                            significanceCellPresentationStringWriter:'no significance string writer',
+                            internalIdentifierString:'getTissuesFromProximityForLocusContext'
                         },
                         {   code: 'FIR',
                             category: 'Annotation',
@@ -226,7 +227,8 @@ td.tissueTable.informationIsPresent{
                             categoryWriter:'sharedCategoryWriter',
                             subCategoryWriter:'geneFirthAssociationTableSubCategory',
                             numberRecordsCellPresentationStringWriter:'geneFirthAssociationTableNumberRecordsCellPresentationString',
-                            significanceCellPresentationStringWriter:'geneFirthAssociationTableSignificanceCellPresentationString'
+                            significanceCellPresentationStringWriter:'geneFirthAssociationTableSignificanceCellPresentationString',
+                            internalIdentifierString:'getFirthGeneAssociationsForGeneTable'
                         },
                         {   code: 'SKA',
                             category: 'Annotation',
@@ -237,7 +239,8 @@ td.tissueTable.informationIsPresent{
                             categoryWriter:'sharedCategoryWriter',
                             subCategoryWriter:'geneSkatAssociationTableSubCategory',
                             numberRecordsCellPresentationStringWriter:'geneSkatAssociationTableNumberRecordsCellPresentationString',
-                            significanceCellPresentationStringWriter:'geneSkatAssociationTableSignificanceCellPresentationString'
+                            significanceCellPresentationStringWriter:'geneSkatAssociationTableSignificanceCellPresentationString',
+                            internalIdentifierString:'getSkatGeneAssociationsForGeneTable'
                         },
                         {   code: 'MET',
                             category: 'Annotation',
@@ -248,7 +251,8 @@ td.tissueTable.informationIsPresent{
                             categoryWriter:'sharedCategoryWriter',
                             subCategoryWriter:'metaxcanTableSubCategory',
                             numberRecordsCellPresentationStringWriter:'metaxcanTableNumberRecordsCellPresentationString',
-                            significanceCellPresentationStringWriter:'metaxcanTableSignificanceCellPresentationString'
+                            significanceCellPresentationStringWriter:'metaxcanTableSignificanceCellPresentationString',
+                            internalIdentifierString:'getGeneAssociationsForGenesTable'
                         },
                         {   code: 'DEP_GS',
                             category: 'Annotation',
@@ -259,7 +263,9 @@ td.tissueTable.informationIsPresent{
                             categoryWriter:'sharedCategoryWriter',
                             subCategoryWriter:'depictGeneSetSubCategory',
                             numberRecordsCellPresentationStringWriter:'depictGeneSetTableNumberRecordsCellPresentationString',
-                            significanceCellPresentationStringWriter:'depictGeneSetTableSignificanceCellPresentationString' },
+                            significanceCellPresentationStringWriter:'depictGeneSetTableSignificanceCellPresentationString',
+                            internalIdentifierString:'getDepictGeneSetForGenesTable'
+                        },
                         {   code: 'DEP_GP',
                             category: 'Annotation',
                             displayCategory: 'Significance of association',
@@ -269,7 +275,9 @@ td.tissueTable.informationIsPresent{
                             categoryWriter:'sharedCategoryWriter',
                             subCategoryWriter:'depictGeneTableSubCategory',
                             numberRecordsCellPresentationStringWriter:'depictGenePvalueTableNumberRecordsCellPresentationString',
-                            significanceCellPresentationStringWriter:'depictGenePvalueTableSignificanceCellPresentationString' },
+                            significanceCellPresentationStringWriter:'depictGenePvalueTableSignificanceCellPresentationString',
+                            internalIdentifierString:'getInformationFromDepictForGenesTable'
+                        },
                         {   code: 'ECA',
                             category: 'Annotation',
                             displayCategory: 'Posterior probability',
@@ -279,7 +287,9 @@ td.tissueTable.informationIsPresent{
                             categoryWriter:'sharedCategoryWriter',
                             subCategoryWriter:'eCaviarSubCategory',
                             numberRecordsCellPresentationStringWriter:'eCaviarTableNumberRecordsCellPresentationString',
-                            significanceCellPresentationStringWriter:'eCaviarTableSignificanceCellPresentationString' },
+                            significanceCellPresentationStringWriter:'eCaviarTableSignificanceCellPresentationString',
+                            internalIdentifierString:'getRecordsFromECaviarForGeneTable'
+                        },
                         {   code: 'COL',
                             category: 'Annotation',
                             displayCategory: 'Posterior probability',
@@ -289,7 +299,9 @@ td.tissueTable.informationIsPresent{
                             categoryWriter:'sharedCategoryWriter',
                             subCategoryWriter:'colocSubCategory',
                             numberRecordsCellPresentationStringWriter:'colocTableNumberRecordsCellPresentationString',
-                            significanceCellPresentationStringWriter:'colocTableSignificanceCellPresentationString' },
+                            significanceCellPresentationStringWriter:'colocTableSignificanceCellPresentationString',
+                            internalIdentifierString:'getRecordsFromColocForGeneTable'
+                        },
                         {   code: 'MOD',
                             category: 'Annotation',
                             displayCategory: 'Annotation',
@@ -299,7 +311,9 @@ td.tissueTable.informationIsPresent{
                             categoryWriter:'sharedCategoryWriter',
                             subCategoryWriter:'dynamicGeneTableModSubCategory',
                             numberRecordsCellPresentationStringWriter:'modTableNumberRecordsCellPresentationString',
-                            significanceCellPresentationStringWriter:'modTableSignificanceCellPresentationString' },
+                            significanceCellPresentationStringWriter:'modTableSignificanceCellPresentationString',
+                            internalIdentifierString:'getAnnotationsFromModForGenesTable'
+                        },
                         {   code: 'EFF',
                             category: 'Annotation',
                             displayCategory: 'Annotation',
@@ -309,7 +323,9 @@ td.tissueTable.informationIsPresent{
                             categoryWriter:'sharedCategoryWriter',
                             subCategoryWriter:'dynamicGeneTableEffectorGeneSubCategory',
                             numberRecordsCellPresentationStringWriter:'effectorGeneTableNumberRecordsCellPresentationString',
-                            significanceCellPresentationStringWriter:'effectorGeneTableSignificanceCellPresentationString' }
+                            significanceCellPresentationStringWriter:'effectorGeneTableSignificanceCellPresentationString',
+                            internalIdentifierString:'getInformationFromEffectorGeneListTable'
+                        }
                         // ,{   code: 'EQT',
                         //     category: 'Annotation',
                         //     displayCategory: 'Annotation',

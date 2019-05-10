@@ -3234,162 +3234,35 @@ mpgSoftware.dynamicUi = (function () {
         });
 
 
-        // manually set the range
-        $('#topLevelContextOfTheDynamicUiButton').on('click', function () {
-
-            var actionToUndertake = actionContainer("replaceGeneContext", actionDefaultFollowUp("replaceGeneContext"));
-            actionToUndertake();
-        });
-
-        // pull back mouse annotations
-        $('#modAnnotationButtonId').on('click', function () {
-      //      resetAccumulatorObject("modNameArray");
-
-            var actionToUndertake = actionContainer('getAnnotationsFromModForGenesTable', actionDefaultFollowUp("getAnnotationsFromModForGenesTable"));
-            actionToUndertake();
-
-
-        });
-
-        // perform an eQTL based lookup
-        $('#getTissuesFromEqtlsForGenesTable').on('click', function () {
-
-            var actionToUndertake = actionContainer('getTissuesFromEqtlsForGenesTable', actionDefaultFollowUp("getTissuesFromEqtlsForGenesTable"));
-            actionToUndertake();
-        });
-
-
-
-        $('#getTissuesFromAbcForGenesTable').on('click', function () {
-
-            var actionToUndertake = actionContainer("getTissuesFromAbcForGenesTable", actionDefaultFollowUp("getTissuesFromAbcForGenesTable"));
-            actionToUndertake();
-
-        });
-
-
-
-        // assign the correct response to the proximity range go button
-        $('#getTissuesFromProximityForLocusContext').on('click', function () {
-
-            var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", actionDefaultFollowUp("getTissuesFromProximityForLocusContext"));
-            actionToUndertake();
-
-        });
-
-
-        $('#getVariantsFromQtlForContextDescription').on('click', function () {
-
-            var actionToUndertake = actionContainer("getVariantsFromQtlForContextDescription", actionDefaultFollowUp("getVariantsFromQtlForContextDescription"));
-            actionToUndertake();
-
-        });
-
-
-        $('#getTissuesFromEqtlsForTissuesTable').on('click', function () {
-
-            var actionToUndertake = actionContainer("getTissuesFromEqtlsForTissuesTable", actionDefaultFollowUp("getTissuesFromEqtlsForTissuesTable"));
-            actionToUndertake();
-
-        });
-
-
-        $('#getPhenotypesFromQtlForPhenotypeTable').on('click', function () {
-
-            var actionToUndertake = actionContainer("getPhenotypesFromQtlForPhenotypeTable", actionDefaultFollowUp("getPhenotypesFromQtlForPhenotypeTable"));
-            actionToUndertake();
-
-        });
-
-
-
-        $('#getPhenotypesFromECaviarForPhenotypeTable').on('click', function () {
-
-            var actionToUndertake = actionContainer("getPhenotypesFromECaviarForPhenotypeTable", actionDefaultFollowUp("getPhenotypesFromECaviarForPhenotypeTable"));
-            actionToUndertake();
-
-        });
-
-        $('#getPhenotypesFromECaviarForTissueTable').on('click', function () {
-            var actionToUndertake = actionContainer("getPhenotypesFromECaviarForTissueTable", actionDefaultFollowUp("getPhenotypesFromECaviarForTissueTable"));
-            actionToUndertake();
-        });
-
-
-
-        $('#getRecordsFromECaviarForGeneTable').on('click', function () {
-            var actionToUndertake = actionContainer("getRecordsFromECaviarForGeneTable", actionDefaultFollowUp("getRecordsFromECaviarForGeneTable"));
-            actionToUndertake();
-        });
-
-
-
-        $('#getRecordsFromAbcForTissueTable').on('click', function () {
-            var actionToUndertake = actionContainer("getRecordsFromAbcForTissueTable", actionDefaultFollowUp("getRecordsFromAbcForTissueTable"));
-            actionToUndertake();
-        });
-
-
         // Everything that happens on the gene table
         $('#retrieveMultipleRecordsTest').on('click', function () {
             var arrayOfRoutinesToUndertake = [];
 
-//            resetAccumulatorObject("geneNameArray");
+            //  If we ever want to update this page without reloading it then were going to need to get rid of the information in the accumulators
             resetAccumulatorObject("geneInfoArray");
-//
             resetAccumulatorObject("tissuesForEveryGene");
             resetAccumulatorObject("genesForEveryTissue");
-//
             resetAccumulatorObject("rawDepictInfo");
-//
             resetAccumulatorObject("abcAggregatedPerVariant");
             resetAccumulatorObject("sharedTable_table.combinedGeneTableHolder");
-
             resetAccumulatorObject("modNameArray");
 
 
             destroySharedTable('table.combinedGeneTableHolder');
 
-            arrayOfRoutinesToUndertake.push( actionContainer("getTissuesFromProximityForLocusContext",
-                actionDefaultFollowUp("getTissuesFromProximityForLocusContext")));
+            _.forEach(additionalParameters.dataAnnotationTypes, function (oneAnnotationType){
+                arrayOfRoutinesToUndertake.push( actionContainer(oneAnnotationType.internalIdentifierString,
+                    actionDefaultFollowUp(oneAnnotationType.internalIdentifierString)));
+            });
 
+            _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
+
+            // some old ones...
             // arrayOfRoutinesToUndertake.push( actionContainer("getTissuesFromAbcForGenesTable",
             //    actionDefaultFollowUp("getTissuesFromAbcForGenesTable")));
-
             // arrayOfRoutinesToUndertake.push( actionContainer('getTissuesFromEqtlsForGenesTable',
             //    actionDefaultFollowUp("getTissuesFromEqtlsForGenesTable")));
 
-            arrayOfRoutinesToUndertake.push( actionContainer('getGeneAssociationsForGenesTable',
-                actionDefaultFollowUp("getGeneAssociationsForGenesTable")));
-
-            arrayOfRoutinesToUndertake.push( actionContainer('getInformationFromDepictForGenesTable',
-                actionDefaultFollowUp("getInformationFromDepictForGenesTable")));
-
-            arrayOfRoutinesToUndertake.push( actionContainer('getAnnotationsFromModForGenesTable',
-                 actionDefaultFollowUp("getAnnotationsFromModForGenesTable")));
-
-
-
-            arrayOfRoutinesToUndertake.push( actionContainer('getDepictGeneSetForGenesTable',
-                actionDefaultFollowUp("getDepictGeneSetForGenesTable")));
-
-            arrayOfRoutinesToUndertake.push( actionContainer('getRecordsFromECaviarForGeneTable',
-                actionDefaultFollowUp("getRecordsFromECaviarForGeneTable")));
-
-            arrayOfRoutinesToUndertake.push( actionContainer('getRecordsFromColocForGeneTable',
-                actionDefaultFollowUp("getRecordsFromColocForGeneTable")));
-
-            arrayOfRoutinesToUndertake.push( actionContainer('getSkatGeneAssociationsForGeneTable',
-                actionDefaultFollowUp("getSkatGeneAssociationsForGeneTable")));
-
-            arrayOfRoutinesToUndertake.push( actionContainer('getFirthGeneAssociationsForGeneTable',
-                actionDefaultFollowUp("getFirthGeneAssociationsForGeneTable")));
-
-            arrayOfRoutinesToUndertake.push( actionContainer('getInformationFromEffectorGeneListTable',
-                actionDefaultFollowUp("getInformationFromEffectorGeneListTable")));
-
-
-            _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
 
 
         });

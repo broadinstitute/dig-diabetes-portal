@@ -32,7 +32,10 @@ mpgSoftware.dynamicUi.effectorGene = (function () {
                     gene: oneRec.Gene_name,
                     tissues: [{
                         gene: oneRec.Gene_name,
-                        value: oneRec.gene_ensemble_id
+                        Combined_category: oneRec.Combined_category,
+                        Perturbation_combined: oneRec.Perturbation_combined,
+                        Genomic_combined: oneRec.Genomic_combined,
+                        Genetic_combined: oneRec.Genetic_combined
                     }]
                 };
             });
@@ -55,7 +58,7 @@ mpgSoftware.dynamicUi.effectorGene = (function () {
             function(records,tissueTranslations){
                 return _.map(records,function(oneRecord){
                     return {    gene:oneRecord.gene,
-                                value:oneRecord.value};
+                                value:oneRecord};
                     // return {    value:UTILS.realNumberFormatter(''+tissueRecord.value),
                     //     numericalValue:tissueRecord.value,
                     //     dataset: tissueRecord.dataset };
