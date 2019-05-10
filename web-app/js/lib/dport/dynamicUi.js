@@ -165,7 +165,7 @@ var mpgSoftware = mpgSoftware || {};
 var mpgSoftware = mpgSoftware || {};  // encapsulating variable
 mpgSoftware.dynamicUi = (function () {
     var loading = $('#rSpinner');
-    var commonTable;
+    var nameOfDomToStoreAccumulatorInformation;
     var dyanamicUiVariables;
     var clearBeforeStarting = false;
 
@@ -211,15 +211,20 @@ mpgSoftware.dynamicUi = (function () {
      * @returns {{extentBegin: (*|jQuery), extentEnd: (*|jQuery), chromosome: string, originalGeneName: *, geneNameArray: Array, tissueNameArray: Array, modNameArray: Array, mods: Array, contextDescr: {chromosome: string, extentBegin: (*|jQuery), extentEnd: (*|jQuery), moreContext: Array}}}
      */
     var AccumulatorObject = function (additionalParameters) {
-        var chrom = (additionalParameters.geneChromosome.indexOf('chr') > -1) ?
-            additionalParameters.geneChromosome.substr(3) :
-            additionalParameters.geneChromosome;
-        return {
-            extentBegin: additionalParameters.geneExtentBegin,
-            extentEnd: additionalParameters.geneExtentEnd,
-            chromosome: chrom,
-            originalGeneName: additionalParameters.geneName
-        };
+        var returnObject = {};
+        if (( typeof additionalParameters.geneChromosome !== 'undefined') &&
+            ( typeof additionalParameters.geneExtentBegin !== 'undefined') &&
+            ( typeof additionalParameters.geneExtentEnd !== 'undefined') &&
+            ( typeof additionalParameters.geneName !== 'undefined') ){
+            var chrom = (additionalParameters.geneChromosome.indexOf('chr') > -1) ?
+                additionalParameters.geneChromosome.substr(3) :
+                additionalParameters.geneChromosome;
+            returnObject['extentBegin'] = additionalParameters.geneExtentBegin;
+            returnObject['extentEnd'] = additionalParameters.geneExtentEnd;
+            returnObject['chromosome'] = chrom;
+            returnObject['originalGeneName'] = additionalParameters.geneName;
+        }
+        return returnObject;
     };
 
 
@@ -333,6 +338,11 @@ mpgSoftware.dynamicUi = (function () {
 
     var setDyanamicUiVariables = function (incomingDyanamicUiVariables) {
         dyanamicUiVariables = incomingDyanamicUiVariables;
+        if (( typeof dyanamicUiVariables === 'undefined') || (typeof dyanamicUiVariables.dynamicTableConfiguration === 'undefined')){
+            alert(dyanamicUiVariables.dynamicTableConfiguration);
+        } else {
+            nameOfDomToStoreAccumulatorInformation = dyanamicUiVariables.dynamicTableConfiguration.domSpecificationForAccumulatorStorage;
+        }
     };
 
     var getDyanamicUiVariables = function () {
@@ -1336,7 +1346,12 @@ mpgSoftware.dynamicUi = (function () {
             }
             setAccumulatorObject(specificField, []);
         } else {
-            $("#configurableUiTabStorage").data("dataHolder", filledOutSharedAccumulatorObject);
+            if ( typeof nameOfDomToStoreAccumulatorInformation === 'undefined'){
+                alert(' initialization failure: the variable nameOfDomToStoreAccumulatorInformation needs to have a value')
+            } else {
+                $(nameOfDomToStoreAccumulatorInformation).data("dataHolder", filledOutSharedAccumulatorObject);
+            }
+
         }
     };
 
@@ -3221,6 +3236,7 @@ mpgSoftware.dynamicUi = (function () {
     var modifyScreenFields = function (data, additionalParameters) {
 
         setDyanamicUiVariables(additionalParameters);
+
 
         $('#inputBoxForDynamicContextId').typeahead({
             source: function (query, process) {

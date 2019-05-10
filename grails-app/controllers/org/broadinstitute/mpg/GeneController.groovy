@@ -66,7 +66,10 @@ class GeneController {
     }
 
 
-
+    def effectorGeneTable(){
+        render (view: 'geneEffectorTable', model:[portalVersionBean:restServerService.retrieveBeanForCurrentPortal()
+        ])
+    }
 
 
     /***

@@ -343,7 +343,10 @@ td.tissueTable.informationIsPresent{
                         //     categoryWriter:'sharedCategoryWriter',
                         //     subCategoryWriter:'dynamicAbcGeneTableSubCategory' }
 
-                    ]
+                    ],
+                    dynamicTableConfiguration: {
+                        domSpecificationForAccumulatorStorage:'#configurableUiTabStorage'
+                    }
                 };
                 mpgSoftware.geneSignalSummaryMethods.setSignalSummarySectionVariables(drivingVariables);
                 mpgSoftware.geneSignalSummaryMethods.initialPageSetUp(drivingVariables);

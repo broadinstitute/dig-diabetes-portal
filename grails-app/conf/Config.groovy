@@ -485,36 +485,6 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/metadatainfo/**':       ['ROLE_USER'],
         '/regionInfo/**':      ['ROLE_USER']
 
-
-//        '/admin/**':            ['ROLE_ADMIN'],
-//        '/user/**':            ['ROLE_ADMIN'],
-//        '/geneData/**':            ['permitAll'],
-//        '/gene/index':          ['permitAll'],
-//        '/gene/**':             ['permitAll'],
-//        '/informational/**':    ['permitAll'],
-//        '/region/**':           ['permitAll'],
-//        '/trait/**':            ['permitAll'],
-//        '/variant/**':          ['permitAll'],
-//        '/variantInfo/**':      ['permitAll'],
-//        '/grs/**':              ['permitAll'],
-//        '/variantSearch/retrieveGwasSpecificPhenotypesAjax':    ['permitAll'],
-//        '/variantSearch/**':    ['permitAll'],
-//        '/beacon/*':          ['permitAll'],
-//        '/assets/**':         ['permitAll'],
-//        '/**/js/**':          ['permitAll'],
-//        '/**/fonts/**':       ['permitAll'],
-//        '/**/css/**':         ['permitAll'],
-//        '/**/images/**':      ['permitAll'],
-//        '/**/*.ico':          ['permitAll'],
-//        '/login/**':          ['permitAll'],
-//        '/logout/**':         ['permitAll'],
-//        '/hypothesisGen/**':  ['permitAll'],
-//        '/oauth/**':          ['permitAll'],
-//        '/springSecurityOAuth/**':          ['permitAll'],
-//        '/dbconsole/**':      ['permitAll'],
-//        '/localization/**':   ['permitAll'],
-//        '/metadatainfo/**':       ['permitAll'],
-//        '/regionInfo/**':      ['permitAll']
 ]
 grails.plugin.auth.loginFormUrl='/Security/auth2'
 grails.plugin.springsecurity.logout.postOnly = false
@@ -679,7 +649,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                 0, // expose the 'genes in region' tab on the gene page
                                                 0, // expose the region adjuster for the gene page
                                                 0, // expose the gene table on the dynamic UI
-                                                0  // expose the variant table on the dynamic UI
+                                                0,  // expose the variant table on the dynamic UI
+                                                1  // expose the effector gene table
                                             ),
                                   new PortalVersionBean("stroke",
                                                           "Stroke",
@@ -730,7 +701,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,  // expose the 'genes in region' tab on the gene page
                                           0, // expose the region adjuster for the gene page
                                           0, // expose the gene table on the dynamic UI
-                                          0  // expose the variant table on the dynamic UI
+                                          0, // expose the variant table on the dynamic UI
+                                          1  // expose the effector gene table
                                   ),
                                   new PortalVersionBean("mi",
                                                           "Myocardial Infarction",
@@ -782,7 +754,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,  // expose the 'genes in region' tab on the gene page
                                           0, // expose the region adjuster for the gene page
                                           0, // expose the gene table on the dynamic UI
-                                          0  // expose the variant table on the dynamic UI
+                                          0, // expose the variant table on the dynamic UI
+                                          1  // expose the effector gene table
                                   ),
                                   new PortalVersionBean("ibd",
                                           //"Inflammatory Bowel Disease",
@@ -837,8 +810,9 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           1,  // expose the 'genes in region' tab on the gene page
                                           0, // expose the region adjuster for the gene page
                                           0, // expose the gene table on the dynamic UI
-                                          0  // expose the variant table on the dynamic UI
-                                  ),
+                                          0, // expose the variant table on the dynamic UI
+                                          1  // expose the effector gene table
+                                 ),
                                   new PortalVersionBean("epilepsy",
                                           "Epilepsy",
                                           "mdv100",
@@ -889,7 +863,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,  // expose the 'genes in region' tab on the gene page
                                           0, // expose the region adjuster for the gene page
                                           0, // expose the gene table on the dynamic UI
-                                          0  // expose the variant table on the dynamic UI
+                                          0, // expose the variant table on the dynamic UI
+                                          1  // expose the effector gene table
                                   ),
                                   new PortalVersionBean("sleep",
                                           "Sleep",
@@ -940,7 +915,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,  // expose the 'genes in region' tab on the gene page
                                           0, // expose the region adjuster for the gene page
                                           0, // expose the gene table on the dynamic UI
-                                          0  // expose the variant table on the dynamic UI
+                                          0, // expose the variant table on the dynamic UI
+                                          1  // expose the effector gene table
                                   )
 ]
 

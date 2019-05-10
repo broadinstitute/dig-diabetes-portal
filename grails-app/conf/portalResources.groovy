@@ -216,6 +216,15 @@ modules = {
         resource url: 'js/lib/dport/dynamicUi/effectorGene.js'
         resource url: 'js/lib/dport/dynamicUi/geneHeaders.js'
     }
+    geneEffectorTable {
+        dependsOn "core", "portalHome"
+
+        resource url: 'js/lib/dport/effectorGeneTable.js'
+
+        resource url: 'js/lib/dport/dynamicUi.js'
+        resource url: 'css/dport/dynamicUi.css'
+        resource url: 'js/lib/dport/dynamicUi/effectorGene.js'
+    }
     mustache {
         resource url: 'js/lib/mustache.js'
     }
