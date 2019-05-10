@@ -46,18 +46,6 @@
                         retrieveListOfGenesInARangeUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveListOfGenesInARange")}',
                         retrieveEffectorGeneInformationUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveEffectorGeneInformation")}',
                         dataAnnotationTypes: [
-                            {   code: 'GHDR', // manages the header.  Most of the records in this particular category have no match in the code, unlike all of the other categories
-                                category: 'blank',
-                                displayCategory: 'Genes',
-                                subcategory: 'Genes subcategory',
-                                displaySubcategory: 'Genes subcategory',
-                                cellBodyWriter:'dynamicGeneTableHeaderV3',
-                                categoryWriter:'no category writer',
-                                subCategoryWriter:'no subcategory writer',
-                                numberRecordsCellPresentationStringWriter:'no record numbers string writer',
-                                significanceCellPresentationStringWriter:'no significance string writer',
-                                internalIdentifierString:'getTissuesFromProximityForLocusContext'
-                            },
                             {   code: 'EFF',
                                 category: 'Annotation',
                                 displayCategory: 'Annotation',
@@ -68,7 +56,7 @@
                                 subCategoryWriter:'dynamicGeneTableEffectorGeneSubCategory',
                                 numberRecordsCellPresentationStringWriter:'effectorGeneTableNumberRecordsCellPresentationString',
                                 significanceCellPresentationStringWriter:'effectorGeneTableSignificanceCellPresentationString',
-                                internalIdentifierString:'getInformationFromEffectorGeneListTable'
+                                internalIdentifierString:'getFullFromEffectorGeneListTable'
                             }
 
                         ],
@@ -109,7 +97,7 @@
                <h2>Gene effector table</h2>
             </div>
             <div class="col-md-12" style="padding-top: 30px;">
-                <div id="effectiveGeneTableHolder">
+                <div id="effectiveGeneTableHolder" class="mainEffectorDiv">
 
                 </div>
             </div>

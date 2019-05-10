@@ -1,5 +1,5 @@
 /***
- * the effector gene table information for some limited number of genes
+ * the entire effector gene table
  *
  * The following externally visible functions are required:
  *         1) a function to process records
@@ -14,7 +14,7 @@
 var mpgSoftware = mpgSoftware || {};  // encapsulating variable
 mpgSoftware.dynamicUi = mpgSoftware.dynamicUi || {};   // second level encapsulating variable
 
-mpgSoftware.dynamicUi.effectorGene = (function () {
+mpgSoftware.dynamicUi.fullEffectorGeneTable = (function () {
     "use strict";
 
 
@@ -24,7 +24,7 @@ mpgSoftware.dynamicUi.effectorGene = (function () {
      * @param rawGeneAssociationRecords
      * @returns {*}
      */
-    var processRecordsFromEffectorGene = function (data, rawGeneAssociationRecords) {
+    var processRecordsFromFullEffectorGeneTable = function (data, rawGeneAssociationRecords) {
         var dataArrayToProcess = [];
         if ( typeof data !== 'undefined'){
             _.forEach(data.data,function(oneRec){
@@ -49,7 +49,7 @@ mpgSoftware.dynamicUi.effectorGene = (function () {
      * @param idForTheTargetDiv
      * @param objectContainingRetrievedRecords
      */
-    var displayGenesFromEffectorGene = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+        var displayFullEffectorGeneTable = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
 
         mpgSoftware.dynamicUi.displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
             'EFF', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
@@ -58,7 +58,7 @@ mpgSoftware.dynamicUi.effectorGene = (function () {
             function(records,tissueTranslations){
                 return _.map(records,function(oneRecord){
                     return {    gene:oneRecord.gene,
-                                value:oneRecord};
+                        value:oneRecord};
                     // return {    value:UTILS.realNumberFormatter(''+tissueRecord.value),
                     //     numericalValue:tissueRecord.value,
                     //     dataset: tissueRecord.dataset };
@@ -98,7 +98,7 @@ mpgSoftware.dynamicUi.effectorGene = (function () {
 
 // public routines are declared below
     return {
-        processRecordsFromEffectorGene: processRecordsFromEffectorGene,
-        displayGenesFromEffectorGene:displayGenesFromEffectorGene
+        processRecordsFromFullEffectorGeneTable: processRecordsFromFullEffectorGeneTable,
+        displayFullEffectorGeneTable:displayFullEffectorGeneTable
     }
 }());

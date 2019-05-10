@@ -363,6 +363,11 @@ mpgSoftware.dynamicUi = (function () {
                 defaultFollowUp.placeToDisplayData = '#dynamicGeneHolder div.dynamicUiHolder';
                 break;
 
+            case "getFullFromEffectorGeneListTable":
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.fullEffectorGeneTable.displayFullEffectorGeneTable;
+                defaultFollowUp.placeToDisplayData = '#mainEffectorDiv div.mainEffectorDiv';
+                break;
+
             case "getTissuesFromEqtlsForTissuesTable":
                 defaultFollowUp.displayRefinedContextFunction = displayGenesPerTissueFromEqtl;
                 defaultFollowUp.placeToDisplayData = '#dynamicTissueHolder div.dynamicUiHolder';
@@ -517,6 +522,20 @@ mpgSoftware.dynamicUi = (function () {
                 };
                 break;
 
+            case "getFullFromEffectorGeneListTable":
+                functionToLaunchDataRetrieval = function () {
+                    retrieveRemotedContextInformation(buildRemoteContextArray({
+                        name: "getFullFromEffectorGeneListTable",
+                        retrieveDataUrl: additionalParameters.retrieveEffectorGeneInformationUrl,
+                        dataForCall: {},
+                        processEachRecord: mpgSoftware.dynamicUi.fullEffectorGeneTable.processRecordsFromFullEffectorGeneTable,
+                        displayRefinedContextFunction: displayFunction,
+                        placeToDisplayData: displayLocation,
+                        actionId: nextActionId,
+                        nameOfAccumulatorField:'fullEffectorGeneTable'
+                    }));
+                };
+                break;
             case "getTissuesFromEqtlsForTissuesTable":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty("geneInfoArray")) {
@@ -1284,7 +1303,7 @@ mpgSoftware.dynamicUi = (function () {
      * @returns {jQuery}
      */
     var getAccumulatorObject = function (chosenField) {
-        var accumulatorObject = $("#configurableUiTabStorage").data("dataHolder");
+        var accumulatorObject = $(nameOfDomToStoreAccumulatorInformation).data("dataHolder");
         var returnValue;
         if (typeof accumulatorObject === 'undefined') {
             alert('Fatal error.  Malfunction is imminent. Missing accumulator object.');
@@ -1426,39 +1445,6 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
-    //
-    //var processRecordsFromECaviar = function (data) {
-    //    // build up an object to describe this
-    //    var returnObject = {
-    //        rawData: []
-    //    };
-    //
-    //    var rawColocalizationInfo = getAccumulatorObject('rawColocalizationInfo');
-    //
-    //    _.forEach(data, function (oneRec) {
-    //
-    //        rawColocalizationInfo.push(oneRec);
-    //
-    //    });
-    //
-    //    return rawColocalizationInfo;
-    //};
-    //
-    //
-    //
-    //
-    //
-    //var processRecordsFromColoc = function (data) {
-    //    var rawColocalizationInfo = getAccumulatorObject('rawColoInfo');
-    //
-    //    _.forEach(data, function (oneRec) {
-    //        rawColocalizationInfo.push(oneRec);
-    //    });
-    //
-    //    return rawColocalizationInfo;
-    //};
-
-
 
 
     var processRecordsFromAbc = function (data) {
@@ -1477,24 +1463,6 @@ mpgSoftware.dynamicUi = (function () {
 
         return rawAbcInfo;
     };
-
-
-    //var processRecordsFromDepict = function (data) {
-    //    // build up an object to describe this
-    //    var returnObject = {
-    //        rawData: []
-    //    };
-    //
-    //    var rawAbcInfo = getAccumulatorObject('rawDepictInfo');
-    //
-    //    _.forEach(data, function (oneRec) {
-    //
-    //        rawAbcInfo.push(oneRec);
-    //
-    //    });
-    //
-    //    return rawAbcInfo;
-    //};
 
 
 
@@ -2448,88 +2416,6 @@ mpgSoftware.dynamicUi = (function () {
 
     };
 
-    /***
-     * Gene proximity search
-     * @param data
-     * @returns {{rawData: Array, uniqueGenes: Array, uniqueTissues: Array}}
-     */
-    //var processRecordsFromProximitySearch = function (data) {
-    //    var returnObject = {
-    //        rawData: [],
-    //        uniqueGenes: [],
-    //        genePositions: [],
-    //        uniqueTissues: [],
-    //        genesPositionsExist: function () {
-    //            return (this.genePositions.length > 0) ? [1] : [];
-    //        },
-    //        genesExist: function () {
-    //            return (this.uniqueGenes.length > 0) ? [1] : [];
-    //        }
-    //    };
-    //    var geneInfoArray = [];
-    //    if (( typeof data !== 'undefined') &&
-    //        ( data !== null ) &&
-    //        (data.is_error === false ) &&
-    //        ( typeof data.listOfGenes !== 'undefined')) {
-    //        if (data.listOfGenes.length === 0) {
-    //            alert(' No genes in the specified region')
-    //        } else {
-    //            _.forEach(data.listOfGenes, function (geneRec) {
-    //                returnObject.rawData.push(geneRec);
-    //                if (!returnObject.uniqueGenes.includes(geneRec.name2)) {
-    //                    returnObject.uniqueGenes.push({name: geneRec.name2});
-    //                    returnObject.genePositions.push({name: geneRec.chromosome + ":" + geneRec.addrStart + "-" + geneRec.addrEnd});
-    //                    var chromosomeString = _.includes(geneRec.chromosome, "chr") ? geneRec.chromosome.substr(3) : geneRec.chromosome;
-    //                    geneInfoArray.push({
-    //                            chromosome: chromosomeString,
-    //                            startPos: geneRec.addrStart,
-    //                            endPos: geneRec.addrEnd,
-    //                            name: geneRec.name2,
-    //                            id: geneRec.id
-    //                        }
-    //                    );
-    //                }
-    //                ;
-    //            });
-    //        }
-    //    }
-    //    // we have a list of all the genes in the range.  Let's remember that information.
-    //    //setAccumulatorObject("geneNameArray", returnObject.uniqueGenes);
-    //    setAccumulatorObject("geneInfoArray", geneInfoArray);
-    //    return returnObject;
-    //};
-    //var displayRefinedGenesInARange = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-    //    var selectorForIidForTheTargetDiv = idForTheTargetDiv;
-    //    $(selectorForIidForTheTargetDiv).empty();
-    //
-    //    addAdditionalResultsObject({refinedGenesInARange: objectContainingRetrievedRecords});
-    //
-    //
-    //    var intermediateDataStructure = new IntermediateDataStructure();
-    //
-    //    if (typeof objectContainingRetrievedRecords.rawData !== 'undefined') {
-    //        // set up the headers, and give us an empty row of column cells
-    //        _.forEach(objectContainingRetrievedRecords.rawData, function (oneRecord,index) {
-    //            intermediateDataStructure.headerNames.push(oneRecord.name1);
-    //            intermediateDataStructure.headerContents.push(Mustache.render($("#dynamicGeneTableHeaderV2")[0].innerHTML, oneRecord));
-    //            // alert('needs to be fixed 1');
-    //            intermediateDataStructure.headers.push(new IntermediateStructureDataCell(oneRecord.name1,
-    //                Mustache.render($("#dynamicGeneTableHeaderV2")[0].innerHTML, oneRecord),"geneHeader asc ",'LIT'));
-    //        });
-    //
-    //        intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
-    //    }
-    //
-    //
-    //    prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
-    //        '#dynamicGeneTable',
-    //        objectContainingRetrievedRecords,
-    //        clearBeforeStarting,
-    //        intermediateDataStructure,
-    //        true,
-    //        'geneTableGeneHeaders');
-    //
-    //};
 
 
     var processRecordsFromVariantQtlSearch = function (data) {
@@ -2607,9 +2493,7 @@ mpgSoftware.dynamicUi = (function () {
     };
     var displayVariantRecordsFromVariantQtlSearch = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
         $(idForTheTargetDiv).empty();
-        // _.forEach(objectContainingRetrievedRecords.uniqueVarIds,function(oneTissue) {
-        //     $(idForTheTargetDiv).append('<div class="resultElementPerLine">'+oneTissue+'</div>');
-        // });
+
 
         var returnObject = createNewDisplayReturnObject();
         var selectorForIidForTheTargetDiv = idForTheTargetDiv;
@@ -2638,9 +2522,6 @@ mpgSoftware.dynamicUi = (function () {
     };
     var displayPhenotypeRecordsFromVariantQtlSearch = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
         $(idForTheTargetDiv).empty();
-        // _.forEach(objectContainingRetrievedRecords.uniquePhenotypes,function(onePhenotype) {
-        //     $(idForTheTargetDiv).append('<div class="resultElementPerLine">'+onePhenotype+'</div>');
-        // });
 
         var returnObject = createNewDisplayReturnObject();
         var selectorForIidForTheTargetDiv = idForTheTargetDiv;
@@ -2657,9 +2538,7 @@ mpgSoftware.dynamicUi = (function () {
         });
         addAdditionalResultsObject({phenotypeRecordsFromVariantQtlSearch: returnObject});
         prepareToPresentToTheScreen(idForTheTargetDiv, '#dynamicPhenotypeTable', returnObject, clearBeforeStarting);
-        // $(idForTheTargetDiv).empty().append(Mustache.render($('#dynamicPhenotypeTable')[0].innerHTML,
-        //     returnObject
-        // ));
+
 
     };
 
@@ -3236,7 +3115,7 @@ mpgSoftware.dynamicUi = (function () {
     var modifyScreenFields = function (data, additionalParameters) {
 
         setDyanamicUiVariables(additionalParameters);
-
+        resetAccumulatorObject();
 
         $('#inputBoxForDynamicContextId').typeahead({
             source: function (query, process) {
@@ -3251,7 +3130,7 @@ mpgSoftware.dynamicUi = (function () {
 
 
         // Everything that happens on the gene table
-        $('#retrieveMultipleRecordsTest').on('click', function () {
+        //$('#retrieveMultipleRecordsTest').on('click', function () {
             var arrayOfRoutinesToUndertake = [];
 
             //  If we ever want to update this page without reloading it then were going to need to get rid of the information in the accumulators
@@ -3281,7 +3160,7 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
-        });
+        //});
 
 
         // Everything that happens on the variant table
@@ -3316,14 +3195,12 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
-        resetAccumulatorObject();
 
 
-        //displayContext('#contextDescription',getAccumulatorObject());
 
-        if (additionalParameters.exposeDynamicUi === "1"){
-            $('#retrieveMultipleRecordsTest').click();
-        }
+        // if (additionalParameters.exposeDynamicUi === "1"){
+        //    $('#retrieveMultipleRecordsTest').click();
+        //}
 
 
     };

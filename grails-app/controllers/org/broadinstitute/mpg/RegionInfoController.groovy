@@ -887,7 +887,7 @@ class RegionInfoController {
 
 
     def retrieveEffectorGeneInformation() {
-        boolean looksOkay = false
+        boolean looksOkay = true
 
         def slurper = new JsonSlurper()
         List<String> geneList = []
