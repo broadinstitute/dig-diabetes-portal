@@ -1831,7 +1831,7 @@ mpgSoftware.dynamicUi = (function () {
             // set up the headers
             _.forEach(returnObject.headers, function (oneRecord) {
                 intermediateDataStructure.headers.push(new IntermediateStructureDataCell(oneRecord,
-                    Mustache.render($('#'+dataAnnotationType.dataAnnotation.headerWriter)[0].innerHTML, oneRecord),"fegtHeader",'LIT'));
+                    Mustache.render($('#'+dataAnnotationType.dataAnnotation.headerWriter)[0].innerHTML, {name:oneRecord}),"fegtHeader",'LIT'));
                 intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord,
                     Mustache.render($('#'+dataAnnotationType.dataAnnotation.headerWriter)[0].innerHTML, oneRecord),"fegtHeader",'LIT'));
             });
@@ -1854,14 +1854,6 @@ mpgSoftware.dynamicUi = (function () {
                         console.log("Did not find index of indexOfPreassignedColumnName "+header+" for FEGT.  Shouldn't we?")
                     } else {
 
-                        // var categoryRecord = _.map(dataAnnotationType.dataAnnotation.customColumnOrdering.topLevelColumns, function (category, index){
-                        //     var categoryString = category;
-                        //     if (index===constituentColRecs[indexOfPreassignedColumnName].pos){
-                        //         return {[categoryString]:[{textToDisplay:valueInGeneRecord}]};
-                        //     } else {
-                        //         return {[categoryString]:[]};
-                        //     }
-                        // });
                         var categoryRecord = {};
                         _.forEach(dataAnnotationType.dataAnnotation.customColumnOrdering.topLevelColumns, function (category, index){
                             if (index===constituentColRecs[indexOfPreassignedColumnName].pos){
@@ -1888,7 +1880,7 @@ mpgSoftware.dynamicUi = (function () {
             clearBeforeStarting,
             intermediateDataStructure,
             true,
-            'geneTableGeneHeaders', false);
+            'fegtAnnotationHeaders', false);
 
 
 
@@ -4351,15 +4343,25 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
          case 'geneTableGeneHeaders':
              currentForm = 'geneTableAnnotationHeaders';
              break;
-         case 'variantTableVariantHeaders':
-             currentForm = 'variantTableAnnotationHeaders';
-             break;
          case 'geneTableAnnotationHeaders':
              currentForm = 'geneTableGeneHeaders';
              break;
-         case 'variantTableAnnotationHeaders':
+
+         case 'variantTableVariantHeaders':
+             currentForm = 'variantTableAnnotationHeaders';
+             break;
+          case 'variantTableAnnotationHeaders':
              currentForm = 'variantTableVariantHeaders';
              break;
+
+         case 'fegtAnnotationHeaders':
+             currentForm = 'fegtGeneNameHeaders';
+             break;
+         case 'fegtGeneNameHeaders':
+             currentForm = 'fegtAnnotationHeaders';
+             break;
+
+
          default:
              console.log("CRITICAL ERROR: unrecognized table form = "+ originalForm +"." );
 
