@@ -25,22 +25,22 @@ mpgSoftware.dynamicUi.fullEffectorGeneTable = (function () {
      * @returns {*}
      */
     var processRecordsFromFullEffectorGeneTable = function (data, rawGeneAssociationRecords) {
-        var dataArrayToProcess = [];
+
         if ( typeof data !== 'undefined'){
+            var headersExtracted = false;
+            var headers = [];
+            var contents = [];
             _.forEach(data.data,function(oneRec){
-                dataArrayToProcess = {
-                    gene: oneRec.Gene_name,
-                    tissues: [{
-                        gene: oneRec.Gene_name,
-                        Combined_category: oneRec.Combined_category,
-                        Perturbation_combined: oneRec.Perturbation_combined,
-                        Genomic_combined: oneRec.Genomic_combined,
-                        Genetic_combined: oneRec.Genetic_combined
-                    }]
-                };
+                if (!headersExtracted) {
+                    _.forEach(oneRec, function (v, k){
+                        headers.push(k);
+                    });
+                    headersExtracted = true;
+                }
+                contents.push(oneRec);
             });
         }
-        rawGeneAssociationRecords.push(dataArrayToProcess);
+        rawGeneAssociationRecords.push({headers:  headers, contents: contents});
     };
 
 
@@ -49,11 +49,11 @@ mpgSoftware.dynamicUi.fullEffectorGeneTable = (function () {
      * @param idForTheTargetDiv
      * @param objectContainingRetrievedRecords
      */
-        var displayFullEffectorGeneTable = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+    var displayFullEffectorGeneTable = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
 
-        mpgSoftware.dynamicUi.displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
-            'EFF', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            'rawEffectorGeneRecords', // name of the persistent field where the data we received is stored
+        mpgSoftware.dynamicUi.displayForFullEffectorGeneTable('table.fullEffectorGeneTableHolder', // which table are we adding to
+            'FEGT', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+            'fullEffectorGeneTable', // name of the persistent field where the data we received is stored
             '', // we may wish to pull out one record for summary purposes
             function(records,tissueTranslations){
                 return _.map(records,function(oneRecord){

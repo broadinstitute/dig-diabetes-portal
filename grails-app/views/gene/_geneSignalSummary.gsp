@@ -211,6 +211,7 @@ td.tissueTable.informationIsPresent{
                             displayCategory: 'Genes',
                             subcategory: 'Genes subcategory',
                             displaySubcategory: 'Genes subcategory',
+                            headerWriter:'dynamicGeneTableHeaderV3',
                             cellBodyWriter:'dynamicGeneTableHeaderV3',
                             categoryWriter:'no category writer',
                             subCategoryWriter:'no subcategory writer',

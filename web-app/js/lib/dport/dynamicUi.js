@@ -1419,7 +1419,8 @@ mpgSoftware.dynamicUi = (function () {
                                                 clearBeforeStarting,
                                                 intermediateDataStructure,
                                                 storeRecords,
-                                                typeOfRecord) {
+                                                typeOfRecord,
+                                                prependRecords) {
         if (clearBeforeStarting) {
             $(idForTheTargetDiv).empty();
         }
@@ -1429,7 +1430,7 @@ mpgSoftware.dynamicUi = (function () {
             buildOrExtendDynamicTable(intermediateDataStructure.tableToUpdate,
                 intermediateDataStructure,
                 storeRecords,
-                typeOfRecord);
+                typeOfRecord,prependRecords);
 
         } else {
 
@@ -1635,7 +1636,7 @@ mpgSoftware.dynamicUi = (function () {
             clearBeforeStarting,
             intermediateDataStructure,
             true,
-            'geneTableGeneHeaders');
+            'geneTableGeneHeaders', true);
 
 
         _.forEach(returnObject.genesByAbc, function (value) {
@@ -1800,15 +1801,106 @@ mpgSoftware.dynamicUi = (function () {
             clearBeforeStarting,
             intermediateDataStructure,
             true,
-            'geneTableGeneHeaders');
-    }
+            'geneTableGeneHeaders', true);
+    };
 
 
 
 
 
 
-        var displayForGeneTable = function (idForTheTargetDiv, // which table are we adding to
+    var displayForFullEffectorGeneTable = function (idForTheTargetDiv, // which table are we adding to
+                                        dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+                                        nameOfAccumulatorField, // name of the persistent field where the data we received is stored
+                                        preferredSummaryKey, // we may wish to pull out one record for summary purposes
+                                        mapSortAndFilterFunction,
+                                        placeDataIntoRenderForm ) { // sort and filter the records we will use.  Resulting array must have fields tissue, value, and numericalValue
+
+        var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode);
+        var intermediateDataStructure = new IntermediateDataStructure();
+
+        // for each gene collect up the data we want to display
+        var incomingData = getAccumulatorObject(nameOfAccumulatorField);
+
+        // do we have any data at all?  If we do, then make a row
+        if (( typeof incomingData !== 'undefined') &&
+            ( incomingData.length > 0)) {
+            var returnObject = incomingData[0];
+            addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
+
+            // set up the headers
+            _.forEach(returnObject.headers, function (oneRecord) {
+                intermediateDataStructure.headers.push(new IntermediateStructureDataCell(oneRecord,
+                    Mustache.render($('#'+dataAnnotationType.dataAnnotation.headerWriter)[0].innerHTML, oneRecord),"fegtHeader",'LIT'));
+                intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord,
+                    Mustache.render($('#'+dataAnnotationType.dataAnnotation.headerWriter)[0].innerHTML, oneRecord),"fegtHeader",'LIT'));
+            });
+
+            var constituentColumns = _.map(dataAnnotationType.dataAnnotation.customColumnOrdering.constituentColumns,function(val){
+                return val.key;
+            });
+            var constituentColRecs = dataAnnotationType.dataAnnotation.customColumnOrdering.constituentColumns;
+            // fill in all of the column cells
+            _.forEach(returnObject.contents, function (recordsPerGene,rowNumber) {
+                if ($.isEmptyObject(recordsPerGene)) {
+                    alert('empty records not allowed in the FEGT')
+                }
+                _.forEach(recordsPerGene, function (valueInGeneRecord,header) {
+                    var indexOfColumn = _.indexOf(returnObject.headers, header );
+                    var indexOfPreassignedColumnName = _.indexOf(constituentColumns, header );
+                    if (indexOfColumn === -1) {
+                        console.log("Did not find index of header "+header+" for FEGT.  Shouldn't we?")
+                    } else if (indexOfPreassignedColumnName === -1) {
+                        console.log("Did not find index of indexOfPreassignedColumnName "+header+" for FEGT.  Shouldn't we?")
+                    } else {
+
+                        // var categoryRecord = _.map(dataAnnotationType.dataAnnotation.customColumnOrdering.topLevelColumns, function (category, index){
+                        //     var categoryString = category;
+                        //     if (index===constituentColRecs[indexOfPreassignedColumnName].pos){
+                        //         return {[categoryString]:[{textToDisplay:valueInGeneRecord}]};
+                        //     } else {
+                        //         return {[categoryString]:[]};
+                        //     }
+                        // });
+                        var categoryRecord = {};
+                        _.forEach(dataAnnotationType.dataAnnotation.customColumnOrdering.topLevelColumns, function (category, index){
+                            if (index===constituentColRecs[indexOfPreassignedColumnName].pos){
+                                categoryRecord[category]=[{textToDisplay:valueInGeneRecord}];
+                            } else {
+                                categoryRecord[category]=[];
+                            }
+                        });
+                        var displayableRecord = Mustache.render($('#'+dataAnnotationType.dataAnnotation.cellBodyWriter)[0].innerHTML, categoryRecord);
+                        intermediateDataStructure.rowsToAdd[rowNumber].columnCells[indexOfColumn] = new IntermediateStructureDataCell(displayableRecord,
+                            displayableRecord,"egftRecord","LIT" );
+                    }
+
+                });
+                addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
+            });
+            intermediateDataStructure.tableToUpdate = idForTheTargetDiv;
+        }
+
+
+        prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
+            '#dynamicAbcGeneTable',
+            returnObject,
+            clearBeforeStarting,
+            intermediateDataStructure,
+            true,
+            'geneTableGeneHeaders', false);
+
+
+
+    };
+
+
+
+
+
+
+
+    var displayForGeneTable = function (idForTheTargetDiv, // which table are we adding to
                                         dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
                                         nameOfAccumulatorField, // name of the persistent field where the data we received is stored
                                         preferredSummaryKey, // we may wish to pull out one record for summary purposes
@@ -1900,7 +1992,7 @@ mpgSoftware.dynamicUi = (function () {
             clearBeforeStarting,
             intermediateDataStructure,
             true,
-            'geneTableGeneHeaders');
+            'geneTableGeneHeaders', true);
 
 
 
@@ -1952,7 +2044,7 @@ mpgSoftware.dynamicUi = (function () {
 
 
         addAdditionalResultsObject({phenotypesFromColocalizatio: returnObject});
-        prepareToPresentToTheScreen(idForTheTargetDiv, '#dynamicColocalizationPhenotypeTable', returnObject, clearBeforeStarting);
+        prepareToPresentToTheScreen(idForTheTargetDiv, '#dynamicColocalizationPhenotypeTable', returnObject, clearBeforeStarting, true);
 
 
 
@@ -1997,7 +2089,7 @@ mpgSoftware.dynamicUi = (function () {
         };
 
         addAdditionalResultsObject({tissuesFromColocalization: returnObject});
-        prepareToPresentToTheScreen("#dynamicTissueHolder div.dynamicUiHolder", '#dynamicColocalizationTissueTable', returnObject, clearBeforeStarting);
+        prepareToPresentToTheScreen("#dynamicTissueHolder div.dynamicUiHolder", '#dynamicColocalizationTissueTable', returnObject, clearBeforeStarting, true);
         // $("#dynamicTissueHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicColocalizationTissueTable')[0].innerHTML,
         //     returnObject
         // ));
@@ -2389,7 +2481,7 @@ mpgSoftware.dynamicUi = (function () {
             clearBeforeStarting,
             intermediateDataStructure,
             true,
-            'geneTableGeneHeaders');
+            'geneTableGeneHeaders', true);
     };
     var displayGenesPerTissueFromEqtl = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
 
@@ -2412,7 +2504,7 @@ mpgSoftware.dynamicUi = (function () {
             returnObject,
             clearBeforeStarting, null,
             true,
-            'geneTableGeneHeaders');
+            'geneTableGeneHeaders', true);
 
     };
 
@@ -2516,7 +2608,7 @@ mpgSoftware.dynamicUi = (function () {
             returnObject,
             clearBeforeStarting, null,
             true,
-            'variantTableVariantHeaders');
+            'variantTableVariantHeaders', true);
 
 
     };
@@ -2537,7 +2629,7 @@ mpgSoftware.dynamicUi = (function () {
 
         });
         addAdditionalResultsObject({phenotypeRecordsFromVariantQtlSearch: returnObject});
-        prepareToPresentToTheScreen(idForTheTargetDiv, '#dynamicPhenotypeTable', returnObject, clearBeforeStarting);
+        prepareToPresentToTheScreen(idForTheTargetDiv, '#dynamicPhenotypeTable', returnObject, clearBeforeStarting, true);
 
 
     };
@@ -2768,7 +2860,7 @@ mpgSoftware.dynamicUi = (function () {
             clearBeforeStarting,
             intermediateDataStructure,
             true,
-            typeOfTable);
+            typeOfTable, true);
     }
 
 
@@ -2894,7 +2986,7 @@ mpgSoftware.dynamicUi = (function () {
             clearBeforeStarting,
             intermediateDataStructure,
             true,
-            'variantTableVariantHeaders');
+            'variantTableVariantHeaders', true);
 
     };
 
@@ -4229,14 +4321,14 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
 
     var buildOrExtendDynamicTable = function (whereTheTableGoes,intermediateStructure,
-                                              storeRecords,typeOfRecord) {
+                                              storeRecords,typeOfRecord, prependColumns) {
         var datatable;
 
         if (( typeof intermediateStructure !== 'undefined') &&
             ( typeof intermediateStructure.headers !== 'undefined') &&
             (intermediateStructure.headers.length > 0)){
                 datatable = buildHeadersForTable(whereTheTableGoes,intermediateStructure.headers,
-                    storeRecords,typeOfRecord, true, []);
+                    storeRecords,typeOfRecord, prependColumns, []);
                 refineTableRecords(datatable,typeOfRecord,[], true);
         }
 
@@ -4245,7 +4337,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             (intermediateStructure.rowsToAdd.length > 0)){
             datatable =  $(whereTheTableGoes).dataTable();
             var rememberCategories = addContentToTable(whereTheTableGoes,intermediateStructure.rowsToAdd,
-                                                    storeRecords,typeOfRecord, true);
+                                                    storeRecords,typeOfRecord, prependColumns);
             refineTableRecords(datatable,typeOfRecord,rememberCategories, false);
         }
 
@@ -4910,6 +5002,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 // public routines are declared below
     return {
         displayForGeneTable:displayForGeneTable,
+        displayForFullEffectorGeneTable:displayForFullEffectorGeneTable,
         displayHeaderForGeneTable:displayHeaderForGeneTable,
         shiftColumnsByOne:shiftColumnsByOne,
         extractStraightFromTarget:extractStraightFromTarget,

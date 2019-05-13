@@ -46,17 +46,68 @@
                         retrieveListOfGenesInARangeUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveListOfGenesInARange")}',
                         retrieveEffectorGeneInformationUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveEffectorGeneInformation")}',
                         dataAnnotationTypes: [
-                            {   code: 'EFF',
+                            {   code: 'FEGT',
                                 category: 'Annotation',
                                 displayCategory: 'Annotation',
                                 subcategory: 'Effector gene list',
                                 displaySubcategory: 'Effector gene list',
-                                cellBodyWriter:'dynamicGeneTableEffectorGeneBody',
+                                headerWriter:'dynamicFullEffectorGeneTableHeader',
+                                cellBodyWriter:'fegtCellBody',
                                 categoryWriter:'sharedCategoryWriter',
                                 subCategoryWriter:'dynamicGeneTableEffectorGeneSubCategory',
                                 numberRecordsCellPresentationStringWriter:'effectorGeneTableNumberRecordsCellPresentationString',
                                 significanceCellPresentationStringWriter:'effectorGeneTableSignificanceCellPresentationString',
-                                internalIdentifierString:'getFullFromEffectorGeneListTable'
+                                internalIdentifierString:'getFullFromEffectorGeneListTable',
+                                customColumnOrdering:{
+                                    topLevelColumns:[
+                                        "Combined_category",
+                                        "Genetic_combined",
+                                        "Genomic_combined",
+                                        "Perturbation_combined",
+                                        "external_evidence",
+                                        "homologous_gene",
+                                        "additional_reference"
+                                    ],
+                                    constituentColumns:[
+                                        { key: "EXTRA_NonT2D_locus",pos:0},
+                                        { key: "Combined_category",pos:0},
+                                        { key: "Combined_category_noNames",pos:0},
+                                        { key: "Perturbation_combined",pos:0},
+                                        { key: "Genomic_combined",pos:0},
+                                        { key: "Genetic_combined",pos:0},
+                                        { key: "Gene_name",pos:0},
+                                        { key: "Locus_name",pos:0},
+                                        { key: "GWAS_coding_causal",pos:1},
+                                        { key: "Exome_array_coding_causal",pos:1},
+                                        { key: "Exome_sequence_burden",pos:1},
+                                        { key: "Monogenic",pos:1},
+                                        { key: "Other_genetic",pos:1},
+                                        { key: "COMBINED",pos:1},
+                                        { key: "ciseQTL_islet",pos:2},
+                                        { key: "ciseQTL_fat_muscle_liver",pos:2},
+                                        { key: "Capture_C_or_hiC_Islet",pos:2},
+                                        { key: "Allelic_imbalance",pos:2},
+                                        { key: "Ottosson_Laakso",pos:2},
+                                        { key: "Other_genomics",pos:2},
+                                        { key: "Annas_screen",pos:3},
+                                        { key: "Zebra_Fish",pos:3},
+                                        { key: "Mouse_Knockout_viability",pos:3},
+                                        { key: "Mouse_MGI",pos:3},
+                                        { key: "Drosophila_Heshan_2018",pos:3},
+                                        { key: "Rat",pos:3},
+                                        { key: "Other_perturbation",pos:3},
+                                        { key: "Semantic_score",pos:4},
+                                        { key: "Candidacy_score",pos:4},
+                                        { key: "OMIM",pos:4},
+                                        { key: "FishHomo",pos:5},
+                                        { key: "MouseHomo",pos:5},
+                                        { key: "RatHomo",pos:5},
+                                        { key: "Additional_reference",pos:6},
+                                        { key: "GENE",pos:47},
+                                        { key: "Gene_Ensemble_ID",pos:47},
+
+                                    ]
+                                }
                             }
 
                         ],
@@ -85,28 +136,27 @@
 
 </script>
 
-        </head>
+</head>
 
 <body>
+
 <div id="mainEffectorDiv">
-
     <div class="container">
-
         <div class="row">
             <div class="center-text">
                <h2>Gene effector table</h2>
             </div>
             <div class="col-md-12" style="padding-top: 30px;">
                 <div id="effectiveGeneTableHolder" class="mainEffectorDiv">
-
+                    <table class="fullEffectorGeneTableHolder">
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<g:render template="../templates/dynamicUi/FEGT" />
 
-
-                    <!--
 </body>
 </html>

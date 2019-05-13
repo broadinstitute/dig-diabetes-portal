@@ -225,6 +225,7 @@ modules = {
         resource url: 'css/dport/dynamicUi.css'
 
         resource url: 'js/lib/dport/dynamicUi/fullEffectorGeneTable.js'
+        resource url: 'js/lib/dport/matrixMath.js'
     }
     mustache {
         resource url: 'js/lib/mustache.js'
