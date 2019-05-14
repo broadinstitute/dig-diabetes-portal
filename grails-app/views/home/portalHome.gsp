@@ -290,6 +290,14 @@
                     <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">22 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">59 traits</span></h1>
 
                 </g:elseif>
+                    <g:elseif test="${g.portalTypeString()?.equals('lung')}">
+                        <div class="col-md-12" style="padding-top:40px;">
+                            <img src="${resource(dir: 'images', file: 'data_icon3.png')}" style="width: 200px; margin-right: -50px;" align="right" >
+                        <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData" default="About the data" /></h2>
+                        <p><g:message code="portal.lung.about.the.data.text" />
+                        %{--<h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">22 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">59 traits</span></h1>--}%
+
+                    </g:elseif>
                 <g:else>
                     <div class="col-md-12" style="padding-top:40px;">
                         <img src="${resource(dir: 'images', file: 'data_icon3.png')}" style="width: 200px; margin-right: -50px;" align="right" >
@@ -576,7 +584,12 @@
                             <p><g:message code="about.the.epi.portal.text"/></p>
                         </g:elseif>
 
-                        <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
+                    <g:elseif test="${g.portalTypeString()?.equals('lung')}"> 
+                        <p><g:message code="about.the.lung.portal.text1"/></p>
+                         </g:elseif>
+
+
+                    <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
                             <p><g:message code="about.the.sleep.portal.text"/></p>
                             <h3 style="margin-top: 0px;font-weight:700; font-size:30px; font-family:'Oswald'"><g:message code="sleep.portal.faqs.header"/></h3>
                             <p><g:message code="sleep.portal.faqs"/></p>
