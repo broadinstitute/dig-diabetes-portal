@@ -1837,12 +1837,13 @@ mpgSoftware.dynamicUi = (function () {
                         withinGroupNum:expectedColumns[index].subPos
                 }
             });
-            returnObject.headers = _.map(_.sortBy(headersObjects,['groupNum','withinGroupNum','name']),function(o){return o.name});
+            var sortedHeaderObjects = _.sortBy(headersObjects,['groupNum','withinGroupNum','name'])
+            returnObject.headers = _.map(sortedHeaderObjects,function(o){return o.name});
 
             // set up the headers
-            _.forEach(returnObject.headers, function (oneRecord) {
+            _.forEach(sortedHeaderObjects, function (oneRecord) {
                 intermediateDataStructure.headers.push(new IntermediateStructureDataCell(oneRecord,
-                    Mustache.render($('#'+dataAnnotationType.dataAnnotation.headerWriter)[0].innerHTML, {name:oneRecord}),"fegtHeader",'LIT'));
+                    Mustache.render($('#'+dataAnnotationType.dataAnnotation.headerWriter)[0].innerHTML, oneRecord),"fegtHeader",'LIT'));
                 intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord,
                     Mustache.render($('#'+dataAnnotationType.dataAnnotation.headerWriter)[0].innerHTML, oneRecord),"fegtHeader",'LIT'));
             });
@@ -4950,12 +4951,44 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         var identifyingNode = $(offeredThis).parent().parent().parent();
         var initialLinearIndex = extractClassBasedIndex(identifyingNode[0].innerHTML,"initialLinearIndex_");
         var indexOfClickedColumn =retrieveCurrentIndexOfColumn (whereTheTableGoes,initialLinearIndex);
-                redrawTableOnClick('table.combinedGeneTableHolder',
+                redrawTableOnClick(whereTheTableGoes,
                     function(sortedData,numberOfRows,numberOfColumns,arguments){
                         return mpgSoftware.matrixMath.deleteColumnsInDataStructure(sortedData,numberOfRows,numberOfColumns,
                             arguments.columnsToDelete);
                     },
                     {columnsToDelete:[indexOfClickedColumn]});
+
+    };
+
+    var contractColumns = function ( event, offeredThis, direction, whereTheTableGoes) {
+        event.stopPropagation();
+        var identifyingNode = $(offeredThis).parent().parent().parent();
+        var dataAnnotationType= getDatatypeInformation('FEGT');
+        var expectedColumns = dataAnnotationType.dataAnnotation.customColumnOrdering.constituentColumns;
+        var initialLinearIndex = extractClassBasedIndex(identifyingNode[0].innerHTML,"initialLinearIndex_");
+        var groupNumber = extractClassBasedIndex(identifyingNode[0].innerHTML,"groupNum");
+        var columnsToDelete = _.filter(expectedColumns,[pos:groupNumber]);
+        var indexOfClickedColumn =retrieveCurrentIndexOfColumn (whereTheTableGoes,initialLinearIndex);
+        redrawTableOnClick(whereTheTableGoes,
+            function(sortedData,numberOfRows,numberOfColumns,arguments){
+                return mpgSoftware.matrixMath.deleteColumnsInDataStructure(sortedData,numberOfRows,numberOfColumns,
+                    arguments.columnsToDelete);
+            },
+            {columnsToDelete:[indexOfClickedColumn]});
+
+    };
+
+    var expandColumns = function ( event, offeredThis, direction, whereTheTableGoes) {
+        event.stopPropagation();
+        var identifyingNode = $(offeredThis).parent().parent().parent();
+        var initialLinearIndex = extractClassBasedIndex(identifyingNode[0].innerHTML,"initialLinearIndex_");
+        var indexOfClickedColumn =retrieveCurrentIndexOfColumn (whereTheTableGoes,initialLinearIndex);
+        redrawTableOnClick(whereTheTableGoes,
+            function(sortedData,numberOfRows,numberOfColumns,arguments){
+                return mpgSoftware.matrixMath.deleteColumnsInDataStructure(sortedData,numberOfRows,numberOfColumns,
+                    arguments.columnsToDelete);
+            },
+            {columnsToDelete:[indexOfClickedColumn]});
 
     };
 
@@ -5034,7 +5067,9 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         adjustUpperExtent: adjustUpperExtent,
         Categorizor:Categorizor,
         translateATissueName:translateATissueName,
-        removeColumn:removeColumn
+        removeColumn:removeColumn,
+        contractColumns:contractColumns,
+        expandColumns:expandColumns
     }
 }());
 

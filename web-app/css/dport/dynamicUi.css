@@ -338,3 +338,6 @@ th.onlyCol{
     overflow: auto;
     font-size: 12px;
 }
+div.fegtHeaderStyling{
+    color: #999999;
+}
