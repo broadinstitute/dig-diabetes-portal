@@ -420,19 +420,25 @@
 
             /* copy URL function end */
 
-            // $( window ).load( function() {
-            //
-            // });
-            //
-            // $( window ).ready( function() {
-            //
-            // });
+
+
+            function adjustTableWrapperWidth(TABLE) {
+
+                var windowWidth = $(window).width();
+                var mainContainerWidth = $(".container").eq(0).width();
+
+                var sideMargin = ((mainContainerWidth - windowWidth)/2)*0.9;
+
+                $(TABLE).parent().css({"margin-left": sideMargin+"px", "margin-right": sideMargin+"px"});
+            }
 
 
             $( window ).resize(function() {
                 menuHeaderSet();
-
+                adjustTableWrapperWidth(".combinedGeneTableHolder");
             })
+
+            adjustTableWrapperWidth(".combinedGeneTableHolder");
 
         </script>
 
