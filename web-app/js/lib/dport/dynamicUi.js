@@ -1828,6 +1828,17 @@ mpgSoftware.dynamicUi = (function () {
             var returnObject = incomingData[0];
             addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
 
+            var expectedColumns = dataAnnotationType.dataAnnotation.customColumnOrdering.constituentColumns;
+            var headersObjects = _.map(returnObject.headers,function(o){
+                var index=_.findIndex( expectedColumns,{'key':o});
+                return {
+                        name:expectedColumns[index].key,
+                        groupNum:expectedColumns[index].pos,
+                        withinGroupNum:expectedColumns[index].subPos
+                }
+            });
+            returnObject.headers = _.map(_.sortBy(headersObjects,['groupNum','withinGroupNum','name']),function(o){return o.name});
+
             // set up the headers
             _.forEach(returnObject.headers, function (oneRecord) {
                 intermediateDataStructure.headers.push(new IntermediateStructureDataCell(oneRecord,
