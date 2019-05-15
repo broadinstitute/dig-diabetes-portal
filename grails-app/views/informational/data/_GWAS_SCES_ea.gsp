@@ -3,19 +3,16 @@
 <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
 <p><div class="paper">
-<g:message code="informational.shared.publications.Lavanya_2009_OphthalmicEpidemiol"></g:message><br>
-<g:message code="informational.shared.publications.Lavanya_2009_OphthalmicEpidemiol.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
-<div class="citation"><g:message code="informational.shared.publications.Lavanya_2009_OphthalmicEpidemiol.citation"></g:message> </div>
-</div></p>
-
-<h4><g:message code="informational.shared.headers.publications"></g:message></h4>
-
-<p><div class="paper">
 <g:message code="informational.shared.publications.Chen_2013_PLoSOne"></g:message><br>
 <g:message code="informational.shared.publications.Chen_2013_PLoSOne.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
 <div class="citation"><g:message code="informational.shared.publications.Chen_2013_PLoSOne.citation"></g:message> </div>
 </div></p>
 
+<p><div class="paper">
+<g:message code="informational.shared.publications.Lavanya_2009_OphthalmicEpidemiol"></g:message><br>
+<g:message code="informational.shared.publications.Lavanya_2009_OphthalmicEpidemiol.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.Lavanya_2009_OphthalmicEpidemiol.citation"></g:message> </div>
+</div></p>
 
         <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
 
