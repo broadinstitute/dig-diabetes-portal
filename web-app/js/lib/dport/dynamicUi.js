@@ -1840,6 +1840,7 @@ mpgSoftware.dynamicUi = (function () {
         // for each gene collect up the data we want to display
         var incomingData = getAccumulatorObject(nameOfAccumulatorField);
         var initialLinearIndex = 0;
+        var headersObjects;
 
         // do we have any data at all?  If we do, then make a row
         if (( typeof incomingData !== 'undefined') &&
@@ -1848,7 +1849,7 @@ mpgSoftware.dynamicUi = (function () {
             addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
 
             var expectedColumns = dataAnnotationType.dataAnnotation.customColumnOrdering.constituentColumns;
-            var headersObjects = _.map(returnObject.headers,function(o){
+            headersObjects = _.map(returnObject.headers,function(o){
                 var index=_.findIndex( expectedColumns,{'key':o});
                 return {
                         name:expectedColumns[index].key,
@@ -1905,6 +1906,23 @@ mpgSoftware.dynamicUi = (function () {
             intermediateDataStructure.tableToUpdate = idForTheTargetDiv;
         }
 
+        //// Set the default exclusions
+        //var sharedTable = getAccumulatorObject("sharedTable_" + idForTheTargetDiv);
+        //var deleter = {};
+        //_.forEach(headersObjects, function (o,index){
+        //    if (o.withinGroupNum === 0){
+        //        if (!$.isEmptyObject(deleter)){
+        //            sharedTable.addColumnExclusionGroup(deleter.groupNumber,deleter.columnIndexes);
+        //        }
+        //        deleter['groupNumber'] = o.groupNum;
+        //        deleter['columnIndexes'] = [];
+        //    } else {
+        //        deleter.columnIndexes.push(index);
+        //    }
+        //});
+        //if (!$.isEmptyObject(deleter)){
+        //    sharedTable.addColumnExclusionGroup(deleter.groupNumber,deleter.columnIndexes);
+        //}
 
         prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
             '#dynamicAbcGeneTable',
@@ -4000,7 +4018,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         "title": contentOfHeader,
                         "targets": noSorting?'nosort':[count+numberOfAddedColumns],
                         "name": header.title,
-                        "className": header.annotation+" effector-top-th "+classesToPromote.join(" "),
+                        "className": header.annotation+" "+classesToPromote.join(" "),
                         "sortable": !noSorting,
                         "type": "generalSort"
                     });
@@ -4766,13 +4784,6 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
     var redrawTableOnClick = function (whereTheTableGoes, manipulationFunction, manipulationFunctionArgs ) {
         var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
         var dyanamicUiVariables = getDyanamicUiVariables();
-        //var sortedData;
-        //if (dyanamicUiVariables.dynamicTableConfiguration.formOfStorage ==='loadOnce') { // get the table straight from memory
-        //     sortedData =sharedTable.dataCells;
-        //}else{ // collect the table cells dynamically from the on-screen presentation of the table
-        //    sortedData = extractSortedDataFromTable(whereTheTableGoes, sharedTable.matrix.numberOfRows, sharedTable.matrix.numberOfColumns, sharedTable.currentForm);
-        //}
-        //var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
         var sortedData = retrieveSortedDataForTable(whereTheTableGoes);
         if (dyanamicUiVariables.dynamicTableConfiguration.formOfStorage ==='loadOnce') {
             sharedTable["matrix"]= manipulationFunction(sortedData.dataArray,sortedData.numberOfRows,sortedData.numberOfColumns,manipulationFunctionArgs);

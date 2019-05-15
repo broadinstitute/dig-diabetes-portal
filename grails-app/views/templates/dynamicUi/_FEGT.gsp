@@ -21,39 +21,42 @@
 <script id="fegtCellBody"  type="x-tmpl-mustache">
 <div class="initialLinearIndex_{{initialLinearIndex}}">
 {{#Combined_category}}
- <div>
+<div style="height:100px">
     {{textToDisplay}}
-        </div>
+    </div>
+ <div class="fedt groupNum0">
+
+</div>
 {{/Combined_category}}
 {{#Genetic_combined}}
- <div>
+ <div class="fedt groupNum1">
     {{textToDisplay}}
-    </div>
+</div>
 {{/Genetic_combined}}
 {{#Genomic_combined}}
-<div>
+<div class="fedt groupNum2">
     {{textToDisplay}}
-    </div>
+</div>
 {{/Genomic_combined}}
 {{#Perturbation_combined}}
- <div>
+ <div class="fedt groupNum3">
     {{textToDisplay}}
-        </div>
+</div>
 {{/Perturbation_combined}}
 {{#external_evidence}}
- <div>
+ <div class="fedt groupNum4">
     {{textToDisplay}}
-        </div>
+</div>
 {{/external_evidence}}
 {{#homologous_gene}}
- <div>
+ <div class="fedt groupNum6">
     {{textToDisplay}}
-        </div>
+</div>
 {{/homologous_gene}}
 {{#additional_reference}}
- <div>
+ <div class="fedt groupNum7">
     {{textToDisplay}}
-        </div>
+</div>
 {{/additional_reference}}
 </div>
 </script>

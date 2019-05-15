@@ -346,3 +346,19 @@ th.onlyCol{
 div.fegtHeaderStyling{
     color: #999999;
 }
+div.fedt{
+
+}
+div.fedt.groupNum0 {
+
+}
+div.fedt.groupNum1 {
+    border-color: pink;
+}
+.dataTables_wrapper tbody td.fegtHeader {
+    border-left: solid 1px #ccc;
+    border-right: solid 1px #ccc;
+}
+.dataTables_wrapper tbody td.fegtHeader div.fedt.groupNum0 {
+    border-bottom: solid 5px blue;
+}
