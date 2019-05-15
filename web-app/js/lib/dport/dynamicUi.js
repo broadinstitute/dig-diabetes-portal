@@ -1907,22 +1907,24 @@ mpgSoftware.dynamicUi = (function () {
         }
 
         //// Set the default exclusions
-        //var sharedTable = getAccumulatorObject("sharedTable_" + idForTheTargetDiv);
-        //var deleter = {};
-        //_.forEach(headersObjects, function (o,index){
-        //    if (o.withinGroupNum === 0){
-        //        if (!$.isEmptyObject(deleter)){
-        //            sharedTable.addColumnExclusionGroup(deleter.groupNumber,deleter.columnIndexes);
-        //        }
-        //        deleter['groupNumber'] = o.groupNum;
-        //        deleter['columnIndexes'] = [];
-        //    } else {
-        //        deleter.columnIndexes.push(index);
-        //    }
-        //});
-        //if (!$.isEmptyObject(deleter)){
-        //    sharedTable.addColumnExclusionGroup(deleter.groupNumber,deleter.columnIndexes);
-        //}
+        
+        var sharedTable = new SharedTableObject( 'fegtAnnotationHeaders',headersObjects.length,0);
+        setAccumulatorObject("sharedTable_"+idForTheTargetDiv,sharedTable);
+        var deleter = {};
+        _.forEach(headersObjects, function (o,index){
+            if (o.withinGroupNum === 0){
+                if (!$.isEmptyObject(deleter)){
+                    sharedTable.addColumnExclusionGroup(deleter.groupNumber,deleter.columnIndexes);
+                }
+                deleter['groupNumber'] = o.groupNum;
+                deleter['columnIndexes'] = [];
+            } else {
+                deleter.columnIndexes.push(index);
+            }
+        });
+        if (!$.isEmptyObject(deleter)){
+            sharedTable.addColumnExclusionGroup(deleter.groupNumber,deleter.columnIndexes);
+        }
 
         prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
             '#dynamicAbcGeneTable',
