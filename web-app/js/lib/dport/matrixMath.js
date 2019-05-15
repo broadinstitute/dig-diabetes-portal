@@ -136,7 +136,9 @@ mpgSoftware.matrixMath = (function(){
 
     var buildMatrixToDeleteColumns  = function(matrix,columnsToDelete){
         _.forEach(columnsToDelete, function(columnIndex){
-            if ((columnIndex>matrix.numberOfColumns) || (columnIndex < 0)){
+            if (
+                //(columnIndex>matrix.numberOfColumns) ||
+                (columnIndex < 0)){
                 alert("buildMatrixToDeleteColumns problem with number of columns requested.")
             }
         });

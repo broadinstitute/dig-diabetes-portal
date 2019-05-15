@@ -346,7 +346,8 @@ td.tissueTable.informationIsPresent{
 
                     ],
                     dynamicTableConfiguration: {
-                        domSpecificationForAccumulatorStorage:'#configurableUiTabStorage'
+                        domSpecificationForAccumulatorStorage:'#configurableUiTabStorage',
+                        formOfStorage: 'loadFromTable'
                     }
                 };
                 mpgSoftware.geneSignalSummaryMethods.setSignalSummarySectionVariables(drivingVariables);

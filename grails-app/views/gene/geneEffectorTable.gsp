@@ -112,7 +112,8 @@
 
                         ],
                         dynamicTableConfiguration: {
-                            domSpecificationForAccumulatorStorage:'#mainEffectorDiv'
+                            domSpecificationForAccumulatorStorage:'#mainEffectorDiv',
+                            formOfStorage: 'loadOnce'
                         }
                     };
                     mpgSoftware.effectorGeneTable.setVariablesToRemember(drivingVariables);

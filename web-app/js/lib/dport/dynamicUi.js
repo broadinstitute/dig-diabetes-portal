@@ -241,6 +241,7 @@ mpgSoftware.dynamicUi = (function () {
             numberOfRows: numberOfRows,
             mostRecentHeaders : [],
             dataCells: new Array(),
+            staticDataExclusions: [], // an array of objects containing data to be excluded.  Form={groupNumber:0,excludedColumns:[3,4,5]}
             matrix: new mpgSoftware.matrixMath.Matrix(new Array(),0,0),
             assignDataToMatrix: function(cell,rowIndex,
                                           columnIndex,
@@ -255,18 +256,35 @@ mpgSoftware.dynamicUi = (function () {
                     null
                 );
                 this.matrix.numberOfRows =  Math.floor(this.matrix.dataArray.length/this.matrix.numberOfColumns);
+            },
+            addColumnExclusionGroup:function(groupNumber,
+                                             columnsToExclude) {
+                _.remove(this.staticDataExclusions, function (o) {
+                    return o.groupNumber === groupNumber
+                });
+                this.staticDataExclusions.push({groupNumber: groupNumber, excludedColumns: columnsToExclude});
+            },
+            getAllColumnsToExclude:function() {
+                var returnValue = [];
+                _.forEach(this.staticDataExclusions, function (o){
+                    _.forEach(o.excludedColumns, function (p){
+                        returnValue.push(p);
+                    });
+                });
+                return returnValue;
             }
+
         };
     };
-    SharedTableObject.prototype.addDataToMatrix = function(numberOfColumns){
-        this.dataCells.push.apply(this.dataCells, new Array(numberOfColumns));
-        this.matrix.dataArray.push.apply(this.matrix.dataArray, new Array(numberOfColumns));
-        if (numberOfColumns!==this.matrix.numberOfColumns){
-            alert('mismatched attempt to add data');
-        } else {
-            this.matrix.numberOfRows++;
-        }
-    };
+    //SharedTableObject.prototype.addDataToMatrix = function(numberOfColumns){
+    //    this.dataCells.push.apply(this.dataCells, new Array(numberOfColumns));
+    //    this.matrix.dataArray.push.apply(this.matrix.dataArray, new Array(numberOfColumns));
+    //    if (numberOfColumns!==this.matrix.numberOfColumns){
+    //        alert('mismatched attempt to add data');
+    //    } else {
+    //        this.matrix.numberOfRows++;
+    //    }
+    //};
     SharedTableObject.prototype.assignDataToMatrix = function(rowIndex,
                                                               columnIndex,
                                                               numberOfColumns,
@@ -3876,8 +3894,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         {extend: "csv", text: "Copy all to csv"}
                     ],
                     "aLengthMenu": [
-                        [100, 500, -1],
-                        [100, 500, "All"]
+                        [25, 500, -1],
+                        [25, 500, "All"]
                     ],
                     "bDestroy": true,
                     "bSort": true,
@@ -4434,7 +4452,30 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             returnValue.push(associatedData);
         });
         return returnValue;
+    };
+
+
+    var retrieveSortedDataForTable = function (whereTheTableGoes) {
+        var returnValue;
+        var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
+        var dyanamicUiVariables = getDyanamicUiVariables();
+        var sortedData;
+        if (dyanamicUiVariables.dynamicTableConfiguration.formOfStorage ==='loadOnce') { // get the table straight from memory
+            sortedData =sharedTable.dataCells;
+            returnValue = new mpgSoftware.matrixMath.Matrix(sortedData,
+                                                                sharedTable.numberOfRows,
+                                                                sharedTable.numberOfColumns);
+        }else{ // collect the table cells dynamically from the on-screen presentation of the table
+            sortedData = extractSortedDataFromTable(whereTheTableGoes, sharedTable.matrix.numberOfRows, sharedTable.matrix.numberOfColumns, sharedTable.currentForm);
+            returnValue = new mpgSoftware.matrixMath.Matrix( sortedData,
+                                                                sharedTable.matrix.numberOfRows,
+                                                                sharedTable.matrix.numberOfColumns);
+
+        }
+        return returnValue;
     }
+
+
 
 
     var linearDataTransposor = function (linearArray,numberOfRows,numberOfColumns,mapper){
@@ -4468,9 +4509,10 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
     var transposeThisTable = function (whereTheTableGoes) {
         var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
 
-        var sortedData = extractSortedDataFromTable(whereTheTableGoes, sharedTable.matrix.numberOfRows, sharedTable.matrix.numberOfColumns, sharedTable.currentForm);
+      //  var sortedData = extractSortedDataFromTable(whereTheTableGoes, sharedTable.matrix.numberOfRows, sharedTable.matrix.numberOfColumns, sharedTable.currentForm);
+        var sortedData = retrieveSortedDataForTable(whereTheTableGoes);
         sharedTable['matrix'] = new mpgSoftware.matrixMath.Matrix(
-            linearDataTransposor(sortedData, sharedTable.matrix.numberOfRows, sharedTable.matrix.numberOfColumns, function (x, y, rows, cols) {
+            linearDataTransposor(sortedData.dataArray, sharedTable.matrix.numberOfRows, sharedTable.matrix.numberOfColumns, function (x, y, rows, cols) {
                 return (x * cols) + y
             }),sharedTable.matrix.numberOfColumns,sharedTable.matrix.numberOfRows);
         sharedTable.currentForm = formConversionOfATranspose(sharedTable.currentForm);
@@ -4723,9 +4765,20 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
     var redrawTableOnClick = function (whereTheTableGoes, manipulationFunction, manipulationFunctionArgs ) {
         var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
-
-        var sortedData = extractSortedDataFromTable(whereTheTableGoes, sharedTable.matrix.numberOfRows, sharedTable.matrix.numberOfColumns, sharedTable.currentForm);
-        sharedTable["matrix"]= manipulationFunction(sortedData,sharedTable.matrix.numberOfRows,sharedTable.matrix.numberOfColumns,manipulationFunctionArgs);
+        var dyanamicUiVariables = getDyanamicUiVariables();
+        //var sortedData;
+        //if (dyanamicUiVariables.dynamicTableConfiguration.formOfStorage ==='loadOnce') { // get the table straight from memory
+        //     sortedData =sharedTable.dataCells;
+        //}else{ // collect the table cells dynamically from the on-screen presentation of the table
+        //    sortedData = extractSortedDataFromTable(whereTheTableGoes, sharedTable.matrix.numberOfRows, sharedTable.matrix.numberOfColumns, sharedTable.currentForm);
+        //}
+        //var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
+        var sortedData = retrieveSortedDataForTable(whereTheTableGoes);
+        if (dyanamicUiVariables.dynamicTableConfiguration.formOfStorage ==='loadOnce') {
+            sharedTable["matrix"]= manipulationFunction(sortedData.dataArray,sortedData.numberOfRows,sortedData.numberOfColumns,manipulationFunctionArgs);
+        } else{
+            sharedTable["matrix"]= manipulationFunction(sortedData.dataArray,sharedTable.matrix.numberOfRows,sharedTable.matrix.numberOfColumns,manipulationFunctionArgs);
+        }
 
         destroySharedTable(whereTheTableGoes);
 
@@ -4965,11 +5018,10 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
     var retrieveIndexesOfColumnsWithMatchingNames  = function(whereTheTableGoes,arrayOfMatchingNames){
         var indexesOfIdentifiedColumns = [];
-        var dataTable = $(whereTheTableGoes).dataTable().DataTable();
-        var numberOfHeaders = dataTable.table().columns()[0].length;
-        _.each(_.range(0,numberOfHeaders),function(index) {
-            var header = dataTable.table().column(index).header();
-            if (_.includes(arrayOfMatchingNames,$(header).find('span.displayMethodName').text())){
+        var staticDataForTable = retrieveSortedDataForTable(whereTheTableGoes);
+        _.each(_.range(0,staticDataForTable.numberOfColumns),function(index) {
+            var cellContent = staticDataForTable.dataArray[index];
+            if (_.includes(arrayOfMatchingNames,$(cellContent.renderData).find('span.displayMethodName').attr('methodKey'))){
                 indexesOfIdentifiedColumns.push(index);
             }
         });
@@ -4984,15 +5036,16 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         var identifyingNode = $(offeredThis).parent().parent().parent();
         var dataAnnotationType= getDatatypeInformation('FEGT');
         var expectedColumns = dataAnnotationType.dataAnnotation.customColumnOrdering.constituentColumns;
-        var initialLinearIndex = extractClassBasedIndex(identifyingNode[0].innerHTML,"initialLinearIndex_");
         var groupNumber = extractClassBasedIndex(identifyingNode[0].innerHTML,"groupNum");
-        var columnsToDelete = _.filter(expectedColumns,{pos:groupNumber});
+        var columnsToDelete = _.filter(expectedColumns,function (o){return ((o.pos===groupNumber) && (o.subPos!==0))});
         var columnsNamesToDelete = _.map(columnsToDelete,function(o){return o.key});
         var indexesOfColumnsToDelete =retrieveIndexesOfColumnsWithMatchingNames (whereTheTableGoes,columnsNamesToDelete);
+        var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
+        sharedTable.addColumnExclusionGroup(groupNumber,indexesOfColumnsToDelete);
         redrawTableOnClick(whereTheTableGoes,
             function(sortedData,numberOfRows,numberOfColumns,arguments){
                 return mpgSoftware.matrixMath.deleteColumnsInDataStructure(sortedData,numberOfRows,numberOfColumns,
-                    arguments.columnsToDelete);
+                    sharedTable.getAllColumnsToExclude());
             },
             {columnsToDelete:indexesOfColumnsToDelete});
 

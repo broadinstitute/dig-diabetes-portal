@@ -14,7 +14,7 @@
                <span class="glyphicon glyphicon-remove" aria-hidden="true"
                onclick="mpgSoftware.dynamicUi.removeColumn(event,this,'forward','table.fullEffectorGeneTableHolder')" style="padding: 0 8px 0 0"></span>
            </div>
-           <span class="displayMethodName">{{name}}</span>
+           <span class="displayMethodName" methodKey="{{name}}">{{name}}</span>
         </div>
 </script>
 
