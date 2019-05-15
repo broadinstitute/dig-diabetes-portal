@@ -21,8 +21,10 @@
         align="left">
 </p>
 
-<h4>Singapore Epidemiology of Eye Disease (SEED) <small><a href="https://www.snec.com.sg/research-innovation/key-programme-singapore-epidemiology-of-eye-diseases" target="_blank">Learn more ></a></small></h4>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p><br><br>
+<h5>Singapore Epidemiology of Eye Disease (SEED) <small><a href="https://www.snec.com.sg/research-innovation/key-programme-singapore-epidemiology-of-eye-diseases" target="_blank">Learn more ></a></small></h5>
+
+<p><g:message code="informational.data.project.SEED"></g:message></p>
+
 
     <h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
 <p><g:message code="informational.data.exptsumm.SiMES"></g:message></p>
