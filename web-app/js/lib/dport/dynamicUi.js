@@ -1821,6 +1821,7 @@ mpgSoftware.dynamicUi = (function () {
 
         // for each gene collect up the data we want to display
         var incomingData = getAccumulatorObject(nameOfAccumulatorField);
+        var initialLinearIndex = 0;
 
         // do we have any data at all?  If we do, then make a row
         if (( typeof incomingData !== 'undefined') &&
@@ -1837,7 +1838,8 @@ mpgSoftware.dynamicUi = (function () {
                         withinGroupNum:expectedColumns[index].subPos
                 }
             });
-            var sortedHeaderObjects = _.sortBy(headersObjects,['groupNum','withinGroupNum','name'])
+            var sortedHeaderObjects = _.sortBy(headersObjects,['groupNum','withinGroupNum','name']);
+            _.forEach(sortedHeaderObjects, function(sortedHeaderObject){sortedHeaderObject['initialLinearIndex']=initialLinearIndex++;})
             returnObject.headers = _.map(sortedHeaderObjects,function(o){return o.name});
 
             // set up the headers
@@ -1866,7 +1868,7 @@ mpgSoftware.dynamicUi = (function () {
                         console.log("Did not find index of indexOfPreassignedColumnName "+header+" for FEGT.  Shouldn't we?")
                     } else {
 
-                        var categoryRecord = {};
+                        var categoryRecord = {initialLinearIndex:initialLinearIndex++};
                         _.forEach(dataAnnotationType.dataAnnotation.customColumnOrdering.topLevelColumns, function (category, index){
                             if (index===constituentColRecs[indexOfPreassignedColumnName].pos){
                                 categoryRecord[category]=[{textToDisplay:valueInGeneRecord}];
@@ -4960,6 +4962,23 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
     };
 
+
+    var retrieveIndexesOfColumnsWithMatchingNames  = function(whereTheTableGoes,arrayOfMatchingNames){
+        var indexesOfIdentifiedColumns = [];
+        var dataTable = $(whereTheTableGoes).dataTable().DataTable();
+        var numberOfHeaders = dataTable.table().columns()[0].length;
+        _.each(_.range(0,numberOfHeaders),function(index) {
+            var header = dataTable.table().column(index).header();
+            if (_.includes(arrayOfMatchingNames,$(header).find('span.displayMethodName').text())){
+                indexesOfIdentifiedColumns.push(index);
+            }
+        });
+        return indexesOfIdentifiedColumns;
+    };
+
+
+
+
     var contractColumns = function ( event, offeredThis, direction, whereTheTableGoes) {
         event.stopPropagation();
         var identifyingNode = $(offeredThis).parent().parent().parent();
@@ -4967,14 +4986,15 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         var expectedColumns = dataAnnotationType.dataAnnotation.customColumnOrdering.constituentColumns;
         var initialLinearIndex = extractClassBasedIndex(identifyingNode[0].innerHTML,"initialLinearIndex_");
         var groupNumber = extractClassBasedIndex(identifyingNode[0].innerHTML,"groupNum");
-        var columnsToDelete = _.filter(expectedColumns,[pos:groupNumber]);
-        var indexOfClickedColumn =retrieveCurrentIndexOfColumn (whereTheTableGoes,initialLinearIndex);
+        var columnsToDelete = _.filter(expectedColumns,{pos:groupNumber});
+        var columnsNamesToDelete = _.map(columnsToDelete,function(o){return o.key});
+        var indexesOfColumnsToDelete =retrieveIndexesOfColumnsWithMatchingNames (whereTheTableGoes,columnsNamesToDelete);
         redrawTableOnClick(whereTheTableGoes,
             function(sortedData,numberOfRows,numberOfColumns,arguments){
                 return mpgSoftware.matrixMath.deleteColumnsInDataStructure(sortedData,numberOfRows,numberOfColumns,
                     arguments.columnsToDelete);
             },
-            {columnsToDelete:[indexOfClickedColumn]});
+            {columnsToDelete:indexesOfColumnsToDelete});
 
     };
 

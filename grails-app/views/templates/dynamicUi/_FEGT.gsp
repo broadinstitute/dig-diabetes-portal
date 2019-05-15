@@ -1,7 +1,7 @@
 
 <script id="dynamicFullEffectorGeneTableHeader"  type="x-tmpl-mustache">
         <div sortStrategy="alphabetical" sortField="-1"  sortTerm="{{name1}}"
-        class="geneName groupNum{{groupNum}} withinGroupNum{{withinGroupNum}} text-center {{initialLinearIndex}}">
+        class="geneName groupNum{{groupNum}} withinGroupNum{{withinGroupNum}} text-center initialLinearIndex_{{initialLinearIndex}}">
            <div class="geneHeaderShifters text-center">
                <span class="glyphicon glyphicon-step-backward" aria-hidden="true" onclick="mpgSoftware.dynamicUi.shiftColumnsByOne(event,this,'backward','table.combinedGeneTableHolder')"></span>
                <span class="glyphicon glyphicon-step-forward" aria-hidden="true" onclick="mpgSoftware.dynamicUi.shiftColumnsByOne(event,this,'forward','table.combinedGeneTableHolder')"></span>
@@ -14,12 +14,12 @@
                <span class="glyphicon glyphicon-remove" aria-hidden="true"
                onclick="mpgSoftware.dynamicUi.removeColumn(event,this,'forward','table.fullEffectorGeneTableHolder')" style="padding: 0 8px 0 0"></span>
            </div>
-           <span class="displayGeneName">{{name}}</span>
+           <span class="displayMethodName">{{name}}</span>
         </div>
 </script>
 
 <script id="fegtCellBody"  type="x-tmpl-mustache">
-<div>
+<div class="initialLinearIndex_{{initialLinearIndex}}">
 {{#Combined_category}}
  <div>
     {{textToDisplay}}

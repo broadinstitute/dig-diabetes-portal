@@ -181,6 +181,11 @@ span.displayGeneName{
     color: black;
     font-weight: bold;
 }
+span.displayMethodName{
+    color: black;
+    font-weight: bold;
+}
+
 .dynamicUiHolder { width: 100%; overflow: auto; border-right:solid 1px #70cAdB; border-left:solid 1px #70cAdB; }
 
 .dynamicUiHolder table { margin: 0 !important; }
@@ -238,7 +243,7 @@ th.onlyCol{
     font-weight: bold;
 }
 
-//  newest addition
+
 
     .effector-table th {
         position:relative;
