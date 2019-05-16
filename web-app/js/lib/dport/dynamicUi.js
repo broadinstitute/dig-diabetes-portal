@@ -5129,10 +5129,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         sharedTable.addColumnExclusionGroup(groupNumber,indexesOfColumnsToDelete);
         redrawTableOnClick(whereTheTableGoes,
             function(sortedData,numberOfRows,numberOfColumns,arguments){
-            //     return mpgSoftware.matrixMath.deleteColumnsInDataStructure(sortedData,numberOfRows,numberOfColumns,
-            //         sharedTable.getAllColumnsToExclude());
-            // },
-            // {columnsToDelete:indexesOfColumnsToDelete});
+                // I had previously deleted the columns here, but now I do it when the headers and the body are added every time
                 return mpgSoftware.matrixMath.doNothing (sortedData, numberOfRows, numberOfColumns);
             },{});
     };
@@ -5149,10 +5146,6 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         var indexOfClickedColumn =retrieveCurrentIndexOfColumn (whereTheTableGoes,initialLinearIndex);
         redrawTableOnClick(whereTheTableGoes,
             function(sortedData,numberOfRows,numberOfColumns,arguments){
-            //     return mpgSoftware.matrixMath.deleteColumnsInDataStructure(sortedData,numberOfRows,numberOfColumns,
-            //         arguments.columnsToDelete);
-            // },
-            // {columnsToDelete:[]});
                 return mpgSoftware.matrixMath.doNothing (sortedData, numberOfRows, numberOfColumns);
             },{});
     };
@@ -5208,7 +5201,27 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
     }
 
+    var openFilter = function(TARGETCLMID) {
 
+        var filterModalContent = '<div id="filter_modal" ><div class="closer-wrapper" style="text-align: center;">Filter\
+                <span style="float:right; font-size: 12px; color: #888;" onclick="mpgSoftware.dynamicUi.closeFilterModal(event);" class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>\
+                <div class="content-wrapper" style="width: auto; height:auto; min-width: 300px; min-height: 200px;"></div></div>';
+
+        if(!$("#filter_modal").length) {
+            $("body").append(filterModalContent);
+            $("#filter_modal").find(".content-wrapper").append(TARGETCLMID);
+        } else {
+            $("#filter_modal").find(".content-wrapper").html("").append(TARGETCLMID);
+        }
+
+        var filterModalLeft = ($(window).width() - $("#filter_modal").width())/2;
+        var filterModalTop = ($(window).height() - $("#filter_modal").height())/2;
+        $("#filter_modal").css({"top":filterModalTop,"left":filterModalLeft});
+    };
+
+    var closeFilterModal = function(event) {
+        $("#filter_modal").remove();
+    };
 
 // public routines are declared below
     return {
@@ -5234,7 +5247,9 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         translateATissueName:translateATissueName,
         removeColumn:removeColumn,
         contractColumns:contractColumns,
-        expandColumns:expandColumns
+        expandColumns:expandColumns,
+        openFilter:openFilter,
+        closeFilterModal:closeFilterModal
     }
 }());
 
