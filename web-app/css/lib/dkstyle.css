@@ -1250,3 +1250,48 @@ span.new-dataset-flag {
 	top: -3px;
 	right: -2px;
 }
+
+/* 2019 Portal Style */
+
+#header-bottom {
+	text-transform: capitalize;
+	font-size: 14px;
+	font-weight: 300;
+	padding: 0;
+	margin: 0;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	height: 50px;
+	z-index: 100;
+}
+
+.front-logo-wrapper {
+	margin-left: auto;
+	margin-right: auto;
+	width: 830px;
+}
+
+.front-logo-img {
+	width: 400px;
+	padding-right: 30px;
+	border-right: solid 1px #fff;
+	margin-right: 30px;
+	float: left;
+}
+
+.front-logo-tagline {
+	width: 400px;
+	font-size: 25px;
+	display: block;
+	float: left;
+	transform: translate(0%,43%);
+}
+
+.dk-front-search-wrapper {
+	width: 500px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+	margin-top: 30px;
+}

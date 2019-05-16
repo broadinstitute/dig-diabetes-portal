@@ -622,7 +622,7 @@ grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'org.broadinsti
 grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.people.Role'
 
 
-portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", "ibd", "epilepsy", or "sleep".   What is the portal type for all nonsystem users?
+portal.type.override = "lung"     // options are "t2d", "stroke", "mi", "ibd", "epilepsy", or "sleep".   What is the portal type for all nonsystem users?
 
 
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
@@ -955,7 +955,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           [],
                                           "[3]",
                                           "GWAS_UKBiobank_ModLeic_eu_mdv130",
-                                          "images/sleep/front_sleep_logo_2018.svg",
+                                          "images/lung/front_LDKP_logo_2019.svg",
                                           "portal.lung.header.tagline",
                                           "portal.lung.header.title.short",
                                           [],
@@ -964,7 +964,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["chr2:113,873,524-114,136,577"],
                                           "images/sleep/sleep_banner_2018.png",
                                           "",
-                                          "images/sleep/sleep_menu_logo_2018.svg",
+                                          "images/lung/header_LDKP_logo2.svg",
                                           "images/menu_bg_2017_5.png",
                                           "false",
                                           "",
