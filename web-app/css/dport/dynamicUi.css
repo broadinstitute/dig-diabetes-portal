@@ -348,16 +348,65 @@ div.fegtHeaderStyling{
 div.fedt{
 
 }
-div.fedt.groupNum0 {
 
+div.groupNum0, div.groupNum1, div.groupNum2, div.groupNum3, div.groupNum4, div.groupNum5, div.groupNum6, div.groupNum7, div.groupNum8, div.groupNum9 {
+    border: none;
 }
-div.fedt.groupNum1 {
-    border-color: pink;
+
+div.groupNum0 {
+    border-bottom: solid 3px #000;
 }
+
+div.groupNum1 {
+    border-bottom: solid 3px #222;
+}
+
+div.groupNum2 {
+    border-bottom: solid 3px #444;
+}
+
+div.groupNum3 {
+    border-bottom: solid 3px #666;
+}
+
+div.groupNum4 {
+    border-bottom: solid 3px #888;
+}
+
+div.groupNum5 {
+    border-bottom: solid 3px #aaa;
+}
+
+div.groupNum6 {
+    border-bottom: solid 3px #bbb;
+}
+
+div.groupNum7 {
+    border-bottom: solid 3px #ddd;
+}
+
+div.groupNum8 {
+    border-bottom: solid 3px #0f0;
+}
+
+div.groupNum9 {
+    border-bottom: solid 3px #ff0;
+}
+
 .dataTables_wrapper tbody td.fegtHeader {
-    border-left: solid 1px #ccc;
-    border-right: solid 1px #ccc;
+    border: none;
+    border-left: solid 1px #ddd;
+    border-top: solid 1px #ddd;
+    padding: 0;
 }
-.dataTables_wrapper tbody td.fegtHeader div.fedt.groupNum0 {
-    border-bottom: solid 5px blue;
+
+.dataTables_wrapper tbody > tr > td.fegtHeader:last-child {
+    border-right: solid 1px #ddd;
+}
+
+.dataTables_wrapper tbody td.fegtHeader > div, .dataTables_wrapper tbody td.fegtHeader > div > div {
+    height: 100%;
+}
+.dataTables_wrapper tbody div.fedt {
+    padding: 5px;
 }

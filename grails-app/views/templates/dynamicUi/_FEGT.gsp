@@ -50,37 +50,37 @@
 <div class="initialLinearIndex_{{initialLinearIndex}} groupNum{{groupNumber}}">
 {{#Combined_category}}
 <div class="fedt">
-    {{textToDisplay}}
+    {{textToDisplay}}&nbsp;
     </div>
 {{/Combined_category}}
 {{#Genetic_combined}}
  <div class="fedt">
-    {{textToDisplay}}
+    {{textToDisplay}}&nbsp;
 </div>
 {{/Genetic_combined}}
 {{#Genomic_combined}}
 <div class="fedt groupNum2">
-    {{textToDisplay}}
+    {{textToDisplay}}&nbsp;
 </div>
 {{/Genomic_combined}}
 {{#Perturbation_combined}}
  <div class="fedt groupNum3">
-    {{textToDisplay}}
+    {{textToDisplay}}&nbsp;
 </div>
 {{/Perturbation_combined}}
 {{#external_evidence}}
  <div class="fedt groupNum4">
-    {{textToDisplay}}
+    {{textToDisplay}}&nbsp;
 </div>
 {{/external_evidence}}
 {{#homologous_gene}}
  <div class="fedt groupNum6">
-    {{textToDisplay}}
+    {{textToDisplay}}&nbsp;
 </div>
 {{/homologous_gene}}
 {{#additional_reference}}
  <div class="fedt groupNum7">
-    {{textToDisplay}}
+    {{textToDisplay}}&nbsp;
 </div>
 {{/additional_reference}}
 </div>
