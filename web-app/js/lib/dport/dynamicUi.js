@@ -1911,7 +1911,7 @@ mpgSoftware.dynamicUi = (function () {
         var sharedTable = new SharedTableObject( 'fegtAnnotationHeaders',headersObjects.length,0);
         setAccumulatorObject("sharedTable_"+idForTheTargetDiv,sharedTable);
         var deleter = {};
-        _.forEach(headersObjects, function (o,index){
+        _.forEach(sortedHeaderObjects, function (o,index){
             if (o.withinGroupNum === 0){
                 if (!$.isEmptyObject(deleter)){
                     sharedTable.addColumnExclusionGroup(deleter.groupNumber,deleter.columnIndexes);
@@ -3902,10 +3902,20 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                                             typeOfHeader,
                                             prependColumns,
                                             additionalDetailsForHeaders ){
+
+        var NewColumn = function(contentOfHeader,header,classesToPromote,intermediateStructureDataCell){
+            return {contentOfHeader:contentOfHeader,
+                header:header,
+                classesToPromote:classesToPromote,
+                intermediateStructureDataCell:intermediateStructureDataCell}
+        };
+
         if (( typeof headers !== 'undefined') &&
             (headers.length > 0)){
             var datatable;
             if ( ! $.fn.DataTable.isDataTable( whereTheTableGoes ) ) {
+                var sharedTable = getAccumulatorObject("sharedTable_"+whereTheTableGoes);
+                var dyanamicUiVariables = getDyanamicUiVariables();
                 var headerDescriber = {
                    // "aaSorting": [[ 1, "asc" ]],
                     "dom": '<"top">rt<"bottom"iplB>',
@@ -3914,8 +3924,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         {extend: "csv", text: "Copy all to csv"}
                     ],
                     "aLengthMenu": [
-                        [25, 500, -1],
-                        [25, 500, "All"]
+                        [15, 500, -1],
+                        [15, 500, "All"]
                     ],
                     "bDestroy": true,
                     "bSort": true,
@@ -3934,16 +3944,26 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     var sortability = [];
                     switch(typeOfHeader){
                         case 'geneTableGeneHeaders':
-                            addedColumns.push(new IntermediateStructureDataCell('farLeftCorner',
+                            var isdc = new IntermediateStructureDataCell('farLeftCorner',
                                 {initialLinearIndex:"initialLinearIndex_0"},
-                                'categoryNam','EMP'));
-                            sortability.push(true);
-                            addedColumns.push(new IntermediateStructureDataCell('b',
+                                'categoryNam','EMP');
+                            var header = {title:isdc.title, annotation:isdc.annotation};
+                            addedColumns.push(new NewColumn(    getDisplayableCellContent(isdc),
+                                                                header,
+                                                                ['initialLinearIndex_0'],
+                                                                isdc));
+                            var isdc2 = new IntermediateStructureDataCell('b',
                                 {initialLinearIndex:"initialLinearIndex_1"},
-                                'geneMethods','EMP'));
+                                'geneMethods','EMP');
+                            var header2 = {title:isdc.title, annotation:isdc.annotation};
+                            addedColumns.push(new NewColumn(    getDisplayableCellContent(isdc2),
+                                header2,
+                                ['initialLinearIndex_1'],
+                                isdc2));
                             sortability.push(true);
                             break;
                         case 'variantTableVariantHeaders':
+                            alert('needs to be fixed');
                             addedColumns.push(new IntermediateStructureDataCell('farLeftCorner',
                                 {initialLinearIndex:"initialLinearIndex_0"},
                                 'variantAnnotationCategory','EMP'));
@@ -3959,15 +3979,15 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                             break;
                     }
                     _.forEach(addedColumns, function (column, index){
-                        var contentOfHeader = getDisplayableCellContent(column);
-                        headerDescriber.aoColumnDefs.push({
-                            "title": contentOfHeader,
-                            "targets": (sortability[index])?[0,index]:'nosort',
-                            "name": column.title,
-                            "className": column.annotation+" initialLinearIndex_"+index,
-                            "sortable": sortability[index],
-                            "type": "generalSort"
-                        });
+                        // var contentOfHeader = getDisplayableCellContent(column);
+                        // headerDescriber.aoColumnDefs.push({
+                        //     "title": contentOfHeader,
+                        //     "targets": (sortability[index])?[0,index]:'nosort',
+                        //     "name": column.title,
+                        //     "className": column.annotation+" initialLinearIndex_"+index,
+                        //     "sortable": sortability[index],
+                        //     "type": "generalSort"
+                        // });
                     });
 
                 }
@@ -4013,48 +4033,86 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                          //contentOfHeader = domContent[0].outerHTML;
                      }
 
-
-                    // var noSorting = (((count+numberOfAddedColumns)===0)&&(typeOfHeader==='geneTableGeneHeaders'));
                      var noSorting = false;
-                     headerDescriber.aoColumnDefs.push({
-                        "title": contentOfHeader,
-                        "targets": noSorting?'nosort':[count+numberOfAddedColumns],
-                        "name": header.title,
-                        "className": header.annotation+" "+classesToPromote.join(" "),
+                    //  headerDescriber.aoColumnDefs.push({
+                    //     "title": contentOfHeader,
+                    //     "targets": noSorting?'nosort':[count+numberOfAddedColumns],
+                    //     "name": header.title,
+                    //     "className": header.annotation+" "+classesToPromote.join(" "),
+                    //     "sortable": !noSorting,
+                    //     "type": "generalSort"
+                    // });
+                     addedColumns.push({contentOfHeader:contentOfHeader,
+                                         header:header,
+                                         classesToPromote:classesToPromote,
+                                        intermediateStructureDataCell:
+                                            new IntermediateStructureDataCell(header.title,contentOfHeader,header.annotation,'LIT')
+                     });
+                });
+
+                var noSorting = false;
+                if (storeHeadersInDataStructure){
+                    _.forEach(addedColumns,function(oneCol,columnIndex){
+                        storeCellInMemoryRepresentationOfSharedTable(whereTheTableGoes,
+                            oneCol.intermediateStructureDataCell,
+                            typeOfHeader,
+                            0,
+                            columnIndex,
+                            addedColumns.length );
+                    });
+                }
+
+                var revisedHeaderList = addedColumns;
+                if (dyanamicUiVariables.dynamicTableConfiguration.formOfStorage ==='loadOnce') {
+                    // what we display and what we store may be different in the static case
+                    //
+                    // let's restrict the headers based on our notion of which columns we want to see
+                     revisedHeaderList = mpgSoftware.matrixMath.deleteColumnsInDataStructure(addedColumns,1,addedColumns.length,
+                        sharedTable.getAllColumnsToExclude()).dataArray;
+                }
+
+                // We have built up all the data we need.  Now we can make the headers themselves,
+                _.forEach(revisedHeaderList,function(oneCol,count){
+                    headerDescriber.aoColumnDefs.push({
+                        "title": oneCol.contentOfHeader,
+                        "targets": noSorting?'nosort':[count],
+                        "name": oneCol.header.title,
+                        "className": oneCol.header.annotation+" "+oneCol.classesToPromote.join(" "),
                         "sortable": !noSorting,
                         "type": "generalSort"
                     });
-                     addedColumns.push(new IntermediateStructureDataCell(header.title,contentOfHeader,header.annotation,'LIT'));
                 });
-                var headerContents = _.map(headerDescriber.aoColumnDefs,function(o){return
-                    o.title
-                });
+
                 datatable = $(whereTheTableGoes).DataTable(headerDescriber);
 
+                var headerContents = _.map(headerDescriber.aoColumnDefs,function(o){
+                    return o.title
+                });
+                var numberOfHeaders = headerContents.length;
 
-                $(whereTheTableGoes+' th').unbind('click.DT');
+                // here is where we define the table
+
 
                 //create your own click handler for the header
-
+                $(whereTheTableGoes+' th').unbind('click.DT');
                 $(whereTheTableGoes+' th').click(function(e){howToHandleSorting(e,this,typeOfHeader,datatable)});
 
 
                 if (storeHeadersInDataStructure){
                     // do we need to store these headers?
-                    var numberOfHeaders = datatable.table().columns().length;
-                    _.forEach(datatable.table().columns().header(),function(o,columnIndex){
-                        var domElement = $(o);
-                        storeCellInMemoryRepresentationOfSharedTable(whereTheTableGoes,
-                            addedColumns[columnIndex],
-                            typeOfHeader,
-                            0,
-                            columnIndex,
-                            headerDescriber.aoColumnDefs.length );
-                    });
+
+                    // _.each(_.range(0,numberOfHeaders),function(columnIndex) {
+                    //     var domElement = $(o);
+                    //     storeCellInMemoryRepresentationOfSharedTable(whereTheTableGoes,
+                    //         addedColumns[columnIndex],
+                    //         typeOfHeader,
+                    //         0,
+                    //         columnIndex,
+                    //         numberOfHeaders );
+                    // });
                 }
             }
             // update our notion of the header contents
-            var sharedTable = getAccumulatorObject("sharedTable_"+whereTheTableGoes);
             sharedTable.mostRecentHeaders  =headerContents;
         }
         return $(whereTheTableGoes).dataTable();
@@ -4353,7 +4411,16 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             });
             // push the data into the table if we have at least one cell that contains text
             if (weHaveDataWorthDisplaying){
-                $(whereTheTableGoes).dataTable().fnAddData(_.map(rowDescriber,function(o){return getDisplayableCellContent(o)}));
+                var revisedRowDescriber = rowDescriber;
+                if (dyanamicUiVariables.dynamicTableConfiguration.formOfStorage ==='loadOnce') {
+                    // what we display and what we store may be different in the static case
+                    //
+                    // let's restrict the headers based on our notion of which columns we want to see
+                    revisedRowDescriber = mpgSoftware.matrixMath.deleteColumnsInDataStructure(rowDescriber,1,rowDescriber.length,
+                        sharedTable.getAllColumnsToExclude()).dataArray;
+                }
+
+                $(whereTheTableGoes).dataTable().fnAddData(_.map(revisedRowDescriber,function(o){return getDisplayableCellContent(o)}));
             }
 
 
