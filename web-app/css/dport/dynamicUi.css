@@ -313,7 +313,7 @@ th.onlyCol{
 }
 
 .effector-table th.effector-sub-th, .effector-table td {
-    display: none;
+
 }
 
 .effector-table th.effector-sub-th.active-th, .effector-table td.active-td {

@@ -47,17 +47,14 @@
 </script>
 
 <script id="fegtCellBody"  type="x-tmpl-mustache">
-<div class="initialLinearIndex_{{initialLinearIndex}}">
+<div class="initialLinearIndex_{{initialLinearIndex}} groupNum{{groupNumber}}">
 {{#Combined_category}}
-<div style="height:100px">
+<div class="fedt">
     {{textToDisplay}}
     </div>
- <div class="fedt groupNum0">
-
-</div>
 {{/Combined_category}}
 {{#Genetic_combined}}
- <div class="fedt groupNum1">
+ <div class="fedt">
     {{textToDisplay}}
 </div>
 {{/Genetic_combined}}

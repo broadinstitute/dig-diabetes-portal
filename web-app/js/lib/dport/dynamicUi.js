@@ -1892,7 +1892,8 @@ mpgSoftware.dynamicUi = (function () {
                         console.log("Did not find index of indexOfPreassignedColumnName "+header+" for FEGT.  Shouldn't we?")
                     } else {
 
-                        var categoryRecord = {initialLinearIndex:initialLinearIndex++};
+                        var categoryRecord = {initialLinearIndex:initialLinearIndex++,
+                                                groupNumber:indexOfPreassignedColumnName};
                         _.forEach(dataAnnotationType.dataAnnotation.customColumnOrdering.topLevelColumns, function (category, index){
                             if (index===constituentColRecs[indexOfPreassignedColumnName].pos){
                                 categoryRecord[category]=[{textToDisplay:valueInGeneRecord}];
