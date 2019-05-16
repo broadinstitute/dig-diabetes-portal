@@ -25,7 +25,7 @@
             <span class="title-genetic-evidence displayMethodName effector-ui-wrapper" methodKey="{{name}}">{{name}}
                 <span class="glyphicon glyphicon-resize-full expand-trigger" aria-hidden="true" title="View collapsed columns"
                 onclick="mpgSoftware.dynamicUi.expandColumns(event,this,'forward','table.fullEffectorGeneTableHolder');"></span>
-                <span class="glyphicon glyphicon-resize-small collapse-trigger inactive" aria-hidden="true" title="Collapse columns"
+                <span class="glyphicon glyphicon-resize-small collapse-trigger" aria-hidden="true" title="Collapse columns"
                 onclick="mpgSoftware.dynamicUi.contractColumns(event,this,'forward','table.fullEffectorGeneTableHolder');"></span>
             </span>
             <span class="effector-ui-wrapper">

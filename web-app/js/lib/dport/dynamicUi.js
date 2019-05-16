@@ -263,11 +263,12 @@ mpgSoftware.dynamicUi = (function () {
                 });
             },
             addColumnExclusionGroup:function(groupNumber,
+                                             groupName,
                                              columnsToExclude) {
                 _.remove(this.staticDataExclusions, function (o) {
                     return o.groupNumber === groupNumber
                 });
-                this.staticDataExclusions.push({groupNumber: groupNumber, excludedColumns: columnsToExclude});
+                this.staticDataExclusions.push({groupNumber: groupNumber, groupName:groupName, excludedColumns: columnsToExclude});
             },
             getAllColumnsToExclude:function() {
                 var returnValue = [];
@@ -277,19 +278,15 @@ mpgSoftware.dynamicUi = (function () {
                     });
                 });
                 return returnValue;
+            },
+            getAllCompressedGroups:function() {
+                return _.map(this.staticDataExclusions, 'groupName');
             }
+
 
         };
     };
-    //SharedTableObject.prototype.addDataToMatrix = function(numberOfColumns){
-    //    this.dataCells.push.apply(this.dataCells, new Array(numberOfColumns));
-    //    this.matrix.dataArray.push.apply(this.matrix.dataArray, new Array(numberOfColumns));
-    //    if (numberOfColumns!==this.matrix.numberOfColumns){
-    //        alert('mismatched attempt to add data');
-    //    } else {
-    //        this.matrix.numberOfRows++;
-    //    }
-    //};
+
     SharedTableObject.prototype.assignDataToMatrix = function(rowIndex,
                                                               columnIndex,
                                                               numberOfColumns,
@@ -1856,9 +1853,11 @@ mpgSoftware.dynamicUi = (function () {
             var expectedColumns = dataAnnotationType.dataAnnotation.customColumnOrdering.constituentColumns;
             headersObjects = _.map(returnObject.headers,function(o){
                 var index=_.findIndex( expectedColumns,{'key':o});
+                var groupName = dataAnnotationType.dataAnnotation.customColumnOrdering.topLevelColumns[expectedColumns[index].pos];
                 return {
                         name:expectedColumns[index].key,
                         groupNum:expectedColumns[index].pos,
+                        groupName:groupName,
                         withinGroupNum:expectedColumns[index].subPos
                 }
             });
@@ -1893,7 +1892,7 @@ mpgSoftware.dynamicUi = (function () {
                     } else {
 
                         var categoryRecord = {initialLinearIndex:initialLinearIndex++,
-                                                groupNumber:indexOfPreassignedColumnName};
+                                                groupNumber:constituentColRecs[indexOfPreassignedColumnName].pos};
                         _.forEach(dataAnnotationType.dataAnnotation.customColumnOrdering.topLevelColumns, function (category, index){
                             if (index===constituentColRecs[indexOfPreassignedColumnName].pos){
                                 categoryRecord[category]=[{textToDisplay:valueInGeneRecord}];
@@ -1920,16 +1919,17 @@ mpgSoftware.dynamicUi = (function () {
         _.forEach(sortedHeaderObjects, function (o,index){
             if (o.withinGroupNum === 0){
                 if (!$.isEmptyObject(deleter)){
-                    sharedTable.addColumnExclusionGroup(deleter.groupNumber,deleter.columnIndexes);
+                    sharedTable.addColumnExclusionGroup(deleter.groupNumber,deleter.groupName,deleter.columnIndexes);
                 }
                 deleter['groupNumber'] = o.groupNum;
+                deleter['groupName'] = o.groupName;
                 deleter['columnIndexes'] = [];
             } else {
                 deleter.columnIndexes.push(index);
             }
         });
         if (!$.isEmptyObject(deleter)){
-            sharedTable.addColumnExclusionGroup(deleter.groupNumber,deleter.columnIndexes);
+            sharedTable.addColumnExclusionGroup(deleter.groupNumber,deleter.groupName,deleter.columnIndexes);
         }
 
         prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
@@ -5123,11 +5123,12 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         var dataAnnotationType= getDatatypeInformation('FEGT');
         var expectedColumns = dataAnnotationType.dataAnnotation.customColumnOrdering.constituentColumns;
         var groupNumber = extractClassBasedIndex(identifyingNode[0].innerHTML,"groupNum");
+        var groupName = dataAnnotationType.dataAnnotation.customColumnOrdering.topLevelColumns[groupNumber];
         var columnsToDelete = _.filter(expectedColumns,function (o){return ((o.pos===groupNumber) && (o.subPos!==0))});
         var columnsNamesToDelete = _.map(columnsToDelete,function(o){return o.key});
         var indexesOfColumnsToDelete =retrieveIndexesOfColumnsWithMatchingNames (whereTheTableGoes,columnsNamesToDelete);
         var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
-        sharedTable.addColumnExclusionGroup(groupNumber,indexesOfColumnsToDelete);
+        sharedTable.addColumnExclusionGroup(groupNumber,groupName,indexesOfColumnsToDelete);
         redrawTableOnClick(whereTheTableGoes,
             function(sortedData,numberOfRows,numberOfColumns,arguments){
                 // I had previously deleted the columns here, but now I do it when the headers and the body are added every time
