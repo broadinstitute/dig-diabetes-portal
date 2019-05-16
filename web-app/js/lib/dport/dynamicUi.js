@@ -257,6 +257,11 @@ mpgSoftware.dynamicUi = (function () {
                 );
                 this.matrix.numberOfRows =  Math.floor(this.matrix.dataArray.length/this.matrix.numberOfColumns);
             },
+            removeColumnExclusionGroup:function(groupNumber) {
+                _.remove(this.staticDataExclusions, function (o) {
+                    return o.groupNumber === groupNumber
+                });
+            },
             addColumnExclusionGroup:function(groupNumber,
                                              columnsToExclude) {
                 _.remove(this.staticDataExclusions, function (o) {
@@ -5124,25 +5129,32 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         sharedTable.addColumnExclusionGroup(groupNumber,indexesOfColumnsToDelete);
         redrawTableOnClick(whereTheTableGoes,
             function(sortedData,numberOfRows,numberOfColumns,arguments){
-                return mpgSoftware.matrixMath.deleteColumnsInDataStructure(sortedData,numberOfRows,numberOfColumns,
-                    sharedTable.getAllColumnsToExclude());
-            },
-            {columnsToDelete:indexesOfColumnsToDelete});
-
+            //     return mpgSoftware.matrixMath.deleteColumnsInDataStructure(sortedData,numberOfRows,numberOfColumns,
+            //         sharedTable.getAllColumnsToExclude());
+            // },
+            // {columnsToDelete:indexesOfColumnsToDelete});
+                return mpgSoftware.matrixMath.doNothing (sortedData, numberOfRows, numberOfColumns);
+            },{});
     };
 
     var expandColumns = function ( event, offeredThis, direction, whereTheTableGoes) {
         event.stopPropagation();
         var identifyingNode = $(offeredThis).parent().parent().parent();
+        var groupNumber = extractClassBasedIndex(identifyingNode[0].innerHTML,"groupNum");
+        var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
+        sharedTable.removeColumnExclusionGroup(groupNumber);
+
+
         var initialLinearIndex = extractClassBasedIndex(identifyingNode[0].innerHTML,"initialLinearIndex_");
         var indexOfClickedColumn =retrieveCurrentIndexOfColumn (whereTheTableGoes,initialLinearIndex);
         redrawTableOnClick(whereTheTableGoes,
             function(sortedData,numberOfRows,numberOfColumns,arguments){
-                return mpgSoftware.matrixMath.deleteColumnsInDataStructure(sortedData,numberOfRows,numberOfColumns,
-                    arguments.columnsToDelete);
-            },
-            {columnsToDelete:[indexOfClickedColumn]});
-
+            //     return mpgSoftware.matrixMath.deleteColumnsInDataStructure(sortedData,numberOfRows,numberOfColumns,
+            //         arguments.columnsToDelete);
+            // },
+            // {columnsToDelete:[]});
+                return mpgSoftware.matrixMath.doNothing (sortedData, numberOfRows, numberOfColumns);
+            },{});
     };
 
 
