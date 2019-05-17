@@ -21,7 +21,6 @@
 
 
         <div class="menu-wrapper" style="float:right;">
-            ${g.portalTypeString()}
 
             <ul class="dk-general-menu" style="list-style: none; float:right; margin:0; padding:10px 0 0 15px; text-align: right;  ">
                 <li class="home-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="${createLink(controller:'home',action:'portalHome')}"><g:message code="localized.home"/></a></li>
