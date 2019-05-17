@@ -387,43 +387,43 @@ div.BigGroupNum7 {
 
 
 div.groupNum0 {
-    border-bottom: solid 3px #bbb;
+    border-top: solid 3px #bbb;
 }
 
 div.groupNum1 {
-    border-bottom: solid 3px #F4F73F;
+    border-top: solid 3px #F4F73F;
 }
 
 div.groupNum2 {
-    border-bottom: solid 3px #F6B11C;
+    border-top: solid 3px #F6B11C;
 }
 
 div.groupNum3 {
-    border-bottom: solid 3px #66E54D;
+    border-top: solid 3px #66E54D;
 }
 
 div.groupNum4 {
-    border-bottom: solid 3px #4DA9E5;
+    border-top: solid 3px #4DA9E5;
 }
 
 div.groupNum5 {
-    border-bottom: solid 3px #A9E54D;
+    border-top: solid 3px #A9E54D;
 }
 
 div.groupNum6 {
-    border-bottom: solid 3px #E5A54D;
+    border-top: solid 3px #E5A54D;
 }
 
 div.groupNum7 {
-    border-bottom: solid 3px #ddd;
+    border-top: solid 3px #ddd;
 }
 
 div.groupNum8 {
-    border-bottom: solid 3px #0f0;
+    border-top: solid 3px #0f0;
 }
 
 div.groupNum9 {
-    border-bottom: solid 3px #ff0;
+    border-top: solid 3px #ff0;
 }
 
 .dataTables_wrapper tbody td.fegtHeader {
@@ -431,6 +431,7 @@ div.groupNum9 {
     border-left: solid 1px #ddd;
     border-top: solid 1px #ddd;
     padding: 0;
+    vertical-align: top;
 }
 
 .dataTables_wrapper tbody > tr > td.fegtHeader:last-child {
