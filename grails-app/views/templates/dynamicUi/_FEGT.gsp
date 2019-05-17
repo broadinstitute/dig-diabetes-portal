@@ -20,7 +20,7 @@
 
 
         <div sortStrategy="alphabetical" sortField="-1"  sortTerm="{{name1}}"
-        class="geneName groupNum{{groupNum}} withinGroupNum{{withinGroupNum}} text-center initialLinearIndex_{{initialLinearIndex}}">
+        class="{{groupName}} BigGroupNum{{groupNum}} groupNum{{groupNum}} withinGroupNum{{withinGroupNum}} text-center initialLinearIndex_{{initialLinearIndex}}">
 
             <span class="title-genetic-evidence displayMethodName {{name}}" methodKey="{{name}}">{{name}}
                 <span class="glyphicon glyphicon-resize-full expand-trigger" aria-hidden="true" title="View collapsed columns"
@@ -49,7 +49,7 @@
 </script>
 
 <script id="fegtCellBody"  type="x-tmpl-mustache">
-<div class="initialLinearIndex_{{initialLinearIndex}} groupNum{{groupNumber}}">
+<div class="initialLinearIndex_{{initialLinearIndex}} groupNum{{groupNumber}}" sortField="{{categoryName}}">
 {{#Combined_category}}
 <div class="fedt">
     {{textToDisplay}}&nbsp;

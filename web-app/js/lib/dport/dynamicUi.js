@@ -1836,6 +1836,27 @@ mpgSoftware.dynamicUi = (function () {
                                         mapSortAndFilterFunction,
                                         placeDataIntoRenderForm ) { // sort and filter the records we will use.  Resulting array must have fields tissue, value, and numericalValue
 
+        var categorizor = function(groupNumber,valueToCategorize){
+            var returnValue = 0;
+            switch(groupNumber){
+                case 0:
+                    if (valueToCategorize.length===0){
+                        returnValue = 99;
+                    } else {
+
+                    }
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                default: break;
+            }
+        }
+
+
         var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode);
         var intermediateDataStructure = new IntermediateDataStructure();
 
@@ -1892,7 +1913,8 @@ mpgSoftware.dynamicUi = (function () {
                     } else {
 
                         var categoryRecord = {initialLinearIndex:initialLinearIndex++,
-                                                groupNumber:constituentColRecs[indexOfPreassignedColumnName].pos};
+                                                groupNumber:constituentColRecs[indexOfPreassignedColumnName].pos,
+                                                categoryName:valueInGeneRecord};
                         _.forEach(dataAnnotationType.dataAnnotation.customColumnOrdering.topLevelColumns, function (category, index){
                             if (index===constituentColRecs[indexOfPreassignedColumnName].pos){
                                 categoryRecord[category]=[{textToDisplay:valueInGeneRecord}];
@@ -3563,11 +3585,43 @@ mpgSoftware.dynamicUi = (function () {
                     var textB = b.trim().toUpperCase();
                     return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
                     break;
+
                 case 'straightAlphabetic':
                     var textA = a.trim().toUpperCase();
                     var textB = b.trim().toUpperCase();
                     return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
                     break;
+                case 'fegtHeader':
+                    var textA = $(a).attr(defaultSearchField).toUpperCase();
+                    var textAEmpty = (textA.length===0);
+                    var textB = $(b).attr(defaultSearchField).toUpperCase();
+                    var textBEmpty = (textB.length===0);
+                    if ( textAEmpty && textBEmpty ) {
+                        return 0;
+                    }
+                    else if ( textAEmpty ) {
+                        if (direction==='desc') {
+                            return -1;
+                        } else {
+                            return 1;
+                        }
+                    }else if ( textBEmpty )
+                    {
+                        if (direction==='desc') {
+                            return 1;
+                        } else {
+                            return -1;
+                        }
+                    }
+                    return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+                    break;
+
+                case 'Combined_category':
+                case 'Genetic_combined':
+                case 'Genomic_combined':
+                case 'Perturbation_combined':
+                case 'external_evidence':
+                case 'homologous_gene':
                 case 'straightAlphabeticWithSpacesOnTop':
                     var textA = a.trim().toUpperCase();
                     var textAEmpty = (textA.length===0);
@@ -3830,6 +3884,48 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 currentSortRequestObject = {
                     'currentSort':oneClass,
                     'table':'table.combinedGeneTableHolder'
+                };
+                break;
+            case 'Combined_category':
+                currentSortRequestObject = {
+                    'currentSort':oneClass,
+                    'table':'table.combinedGeneTableHolder'
+                };
+                break;
+            case 'Genetic_combined':
+                currentSortRequestObject = {
+                    'currentSort':oneClass,
+                    'table':'table.combinedGeneTableHolder'
+                };
+                break;
+            case 'Genomic_combined':
+                currentSortRequestObject = {
+                    'currentSort':oneClass,
+                    'table':'table.combinedGeneTableHolder'
+                };
+                break;
+            case 'Perturbation_combined':
+                currentSortRequestObject = {
+                    'currentSort':oneClass,
+                    'table':'table.combinedGeneTableHolder'
+                };
+                break;
+            case 'external_evidence':
+                currentSortRequestObject = {
+                    'currentSort':oneClass,
+                    'table':'table.combinedGeneTableHolder'
+                };
+                break;
+            case 'homologous_gene':
+                currentSortRequestObject = {
+                    'currentSort':oneClass,
+                    'table':'table.combinedGeneTableHolder'
+                };
+                break;
+            case 'fegtHeader':
+                currentSortRequestObject = {
+                    'currentSort':oneClass,
+                    'table':'table.fullEffectorGeneTableHolder'
                 };
                 break;
 
