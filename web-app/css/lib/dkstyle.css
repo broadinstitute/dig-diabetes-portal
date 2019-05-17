@@ -1288,10 +1288,31 @@ span.new-dataset-flag {
 	transform: translate(0%,43%);
 }
 
-.dk-front-search-wrapper {
+.front-banner-ui-tabs {
+	width: 700px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+	margin-top: 30px;
+}
+
+.front-banner-ui-tabs a {
+	color: #fff;
+}
+
+.front-banner-ui-tabs-content {
 	width: 500px;
 	margin-left: auto;
 	margin-right: auto;
 	text-align: center;
 	margin-top: 30px;
+}
+
+.dk-front-search-wrapper {
+
+}
+
+.front-banner-btn {
+	border-radius: 30px;
+	width: 250px;
 }

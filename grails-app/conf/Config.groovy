@@ -962,7 +962,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["HHIP"],
                                           ["rs62158211"],
                                           ["chr2:113,873,524-114,136,577"],
-                                          "images/sleep/sleep_banner_2018.png",
+                                          "images/lung/front_LDKP_banner_bg.png",
                                           "",
                                           "images/lung/header_LDKP_logo2.svg",
                                           "images/menu_bg_2017_5.png",

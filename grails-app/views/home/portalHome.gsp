@@ -61,7 +61,7 @@
     });
 </script>
 <g:if test="${g.portalTypeString()?.equals('lung')}">
-    <div class="fluid" style="font-size:16px; background-image:linear-gradient(#7ACCC8, #08B89D);padding-bottom: 70px; padding-top:0px; margin-top: 50px;">
+    <div class="fluid" style="font-size:16px; background-image:url(${resource(file: g.message(code: portalVersionBean.backgroundGraphic, default:portalVersionBean.backgroundGraphic))}), linear-gradient(#7ACCC8, #08B89D); background-repeat: no-repeat; background-position: -130px 130px, top left; padding-bottom: 70px; padding-top:0px; margin-top: 50px;">
 </g:if >
 <g:else >
     <div class="fluid" style="font-size:16px; background-image:url(${resource(file: g.message(code: portalVersionBean.backgroundGraphic, default:portalVersionBean.backgroundGraphic))});background-position: left top; padding-bottom: 70px; padding-top:0px;">
@@ -78,61 +78,77 @@
                 </div>
 
                 <div class="col-md-12">
-                    <div class="dk-front-search-wrapper">
-                        <div class="gene-search-wrapper" style="padding-bottom:20px; font-weight: 300;">
-                            <g:if test="${!portalVersionBean.regionSpecificVersion}">
-                                <h2 style="font-size:20px; font-weight:300;"><g:message code="primary.text.input.header"/></h2>
-                            </g:if>
-                            <g:else>
-                                <h2 style="font-size:20px; font-weight:300;"><g:message code="regionSpecificVersion.text.input.header"/></h2>
-                            </g:else>
-                            <div style="font-size: 14px;">
-                                <span><g:message code="site.shared.phrases.examples" />: </span>
-                                <g:each in="${portalVersionBean.geneExamples}">
-                                    <a class="front-search-example" href='<g:createLink controller="gene" action="geneInfo"
-                                                                                        params="[id:it]"/>'>${it}</a>
-                                    <g:helpText title="input.searchTerm.geneExample.help.header" placement="bottom"
-                                                body="input.searchTerm.geneExample.help.text"/>,
-                                </g:each>
-                                <g:each in="${portalVersionBean.variantExamples}">
-                                    <a class="front-search-example" href='<g:createLink controller="gene" action="findTheRightDataPage" params="[id:it]"/>'>${it}</a>,
-                                    <g:helpText title="input.searchTerm.variantExample.help.header" placement="right"
-                                                body="input.searchTerm.variantExample.help.text" qplacer="0 0 0 2px"/>,
-                                </g:each>
-                                <g:each in="${portalVersionBean.rangeExamples}">
-                                    <g:if test="${!portalVersionBean.regionSpecificVersion}">
-                                        <a class="front-search-example" href='<g:createLink controller="gene" action="findTheRightDataPage"
-                                                                                            params="[id:it]"/>'>${it}</a>
-                                    </g:if>
-                                    <g:else>
-                                        <a class="front-search-example" href='<g:createLink controller="gene" action="findTheRightDataPage"
-                                                                                            params="[id:it]"/>'>${it}</a>
-                                    </g:else>
+                    <ul class="nav nav-tabs front-banner-ui-tabs" role="tablist">
+                        <li role="presentation" class="active">
+                            <a href="#search-box" aria-controls="seach-box" role="tab" data-toggle="tab">
+                                <g:if test="${!portalVersionBean.regionSpecificVersion}">
+                                    <g:message code="primary.text.input.header"/>
+                                </g:if>
+                                <g:else>
+                                    <g:message code="regionSpecificVersion.text.input.header"/>
+                                </g:else>
+                            </a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#drop-down" aria-controls="drop-down" role="tab" data-toggle="tab">
+                                <g:message code="trait.search.header" default="View full GWAS results for a phenotype" />
+                            </a>
+                        </li>
+                    </ul>
 
-                                    <g:helpText title="input.searchTerm.rangeExample.help.header" placement="bottom"
-                                                body="input.searchTerm.rangeExample.help.text"/>
-                                </g:each>
+                    <!-- Tab panes -->
+                    <div class="tab-content front-banner-ui-tabs">
+                        <div role="tabpanel" class="tab-pane active" id="search-box">
+                            <div class="dk-front-search-wrapper">
+                                <div class="gene-search-wrapper" style="padding-bottom:20px; font-weight: 300;">
+                                    <div style="font-size: 14px;">
+                                        <span><g:message code="site.shared.phrases.examples" />: </span>
+                                        <g:each in="${portalVersionBean.geneExamples}">
+                                            <a class="front-search-example" href='<g:createLink controller="gene" action="geneInfo"
+                                                                                                params="[id:it]"/>'>${it}</a>
+                                            <g:helpText title="input.searchTerm.geneExample.help.header" placement="bottom"
+                                                        body="input.searchTerm.geneExample.help.text"/>,
+                                        </g:each>
+                                        <g:each in="${portalVersionBean.variantExamples}">
+                                            <a class="front-search-example" href='<g:createLink controller="gene" action="findTheRightDataPage" params="[id:it]"/>'>${it}</a>,
+                                            <g:helpText title="input.searchTerm.variantExample.help.header" placement="right"
+                                                        body="input.searchTerm.variantExample.help.text" qplacer="0 0 0 2px"/>,
+                                        </g:each>
+                                        <g:each in="${portalVersionBean.rangeExamples}">
+                                            <g:if test="${!portalVersionBean.regionSpecificVersion}">
+                                                <a class="front-search-example" href='<g:createLink controller="gene" action="findTheRightDataPage"
+                                                                                                    params="[id:it]"/>'>${it}</a>
+                                            </g:if>
+                                            <g:else>
+                                                <a class="front-search-example" href='<g:createLink controller="gene" action="findTheRightDataPage"
+                                                                                                    params="[id:it]"/>'>${it}</a>
+                                            </g:else>
+
+                                            <g:helpText title="input.searchTerm.rangeExample.help.header" placement="bottom"
+                                                        body="input.searchTerm.rangeExample.help.text"/>
+                                        </g:each>
+                                    </div>
+                                    <div class="form-inline" style="padding-top: 10px;">
+                                        <input id="generalized-input" type="text" class="form-control input-sm" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 5px; margin:0; font-size: 16px;">
+                                        <button id="generalized-go" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
+                                        <div class="errorReporter">${errorText}</div>
+                                    </div>
+
+                                </div>
 
                             </div>
-
-
-                            <div class="form-inline" style="padding-top: 10px;">
-                                <input id="generalized-input" type="text" class="form-control input-sm" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 5px; margin:0; font-size: 16px;">
-                                <button id="generalized-go" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
-                                <div class="errorReporter">${errorText}</div>
-                            </div>
-
                         </div>
-
+                        <div role="tabpanel" class="tab-pane" id="drop-down">Office</div>
                     </div>
+
                 </div>
 
                 <div class="col-md-12" style="padding-top: 70px;">
                     <div class="col-md-6" style="text-align: center">
-                        <a href="" class="btn btn-lg btn-default">Run analysis</a>
+                        <a href="" class="btn btn-lg btn-default front-banner-btn" style="color: #08B89D;">Run analysis</a>
                     </div>
                     <div class="col-md-6" style="text-align: center">
-                        <a href="" class="btn btn-lg btn-default">Learn about the portal</a>
+                        <a href="" class="btn btn-lg btn-default front-banner-btn" style="color: #08B89D;">Learn about the portal</a>
                     </div>
                 </div>
             </g:if >
