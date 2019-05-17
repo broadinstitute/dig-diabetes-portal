@@ -253,7 +253,7 @@ th.onlyCol{
     white-space:nowrap;
 }
 
-.effector-table th > span.effector-ui-wrapper {
+.effector-table th > div> span.effector-ui-wrapper {
     display: block;
     position:absolute;
     font-size: 12px;
@@ -354,31 +354,31 @@ div.groupNum0, div.groupNum1, div.groupNum2, div.groupNum3, div.groupNum4, div.g
 }
 
 div.groupNum0 {
-    border-bottom: solid 3px #000;
+    border-bottom: solid 3px #bbb;
 }
 
 div.groupNum1 {
-    border-bottom: solid 3px #222;
+    border-bottom: solid 3px #FFDAB9;
 }
 
 div.groupNum2 {
-    border-bottom: solid 3px #444;
+    border-bottom: solid 3px #F6B11C;
 }
 
 div.groupNum3 {
-    border-bottom: solid 3px #666;
+    border-bottom: solid 3px #66E54D;
 }
 
 div.groupNum4 {
-    border-bottom: solid 3px #888;
+    border-bottom: solid 3px #4DA9E5;
 }
 
 div.groupNum5 {
-    border-bottom: solid 3px #aaa;
+    border-bottom: solid 3px #A9E54D;
 }
 
 div.groupNum6 {
-    border-bottom: solid 3px #bbb;
+    border-bottom: solid 3px #E5A54D;
 }
 
 div.groupNum7 {

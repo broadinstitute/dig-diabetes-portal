@@ -3984,17 +3984,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         default:
                             break;
                     }
-                    _.forEach(addedColumns, function (column, index){
-                        // var contentOfHeader = getDisplayableCellContent(column);
-                        // headerDescriber.aoColumnDefs.push({
-                        //     "title": contentOfHeader,
-                        //     "targets": (sortability[index])?[0,index]:'nosort',
-                        //     "name": column.title,
-                        //     "className": column.annotation+" initialLinearIndex_"+index,
-                        //     "sortable": sortability[index],
-                        //     "type": "generalSort"
-                        // });
-                    });
+
 
                 }
 
@@ -4039,15 +4029,6 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                          //contentOfHeader = domContent[0].outerHTML;
                      }
 
-                     var noSorting = false;
-                    //  headerDescriber.aoColumnDefs.push({
-                    //     "title": contentOfHeader,
-                    //     "targets": noSorting?'nosort':[count+numberOfAddedColumns],
-                    //     "name": header.title,
-                    //     "className": header.annotation+" "+classesToPromote.join(" "),
-                    //     "sortable": !noSorting,
-                    //     "type": "generalSort"
-                    // });
                      addedColumns.push({contentOfHeader:contentOfHeader,
                                          header:header,
                                          classesToPromote:classesToPromote,
@@ -4104,19 +4085,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 $(whereTheTableGoes+' th').click(function(e){howToHandleSorting(e,this,typeOfHeader,datatable)});
 
 
-                if (storeHeadersInDataStructure){
-                    // do we need to store these headers?
 
-                    // _.each(_.range(0,numberOfHeaders),function(columnIndex) {
-                    //     var domElement = $(o);
-                    //     storeCellInMemoryRepresentationOfSharedTable(whereTheTableGoes,
-                    //         addedColumns[columnIndex],
-                    //         typeOfHeader,
-                    //         0,
-                    //         columnIndex,
-                    //         numberOfHeaders );
-                    // });
-                }
             }
             // update our notion of the header contents
             sharedTable.mostRecentHeaders  =headerContents;
@@ -4126,7 +4095,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
     };
 
 
-    var refineTableRecords = function (datatable,headerType,adjustVisibilityCategories,headerSpecific){
+    var refineTableRecords = function (whereTheTableGoes,datatable,headerType,adjustVisibilityCategories,headerSpecific){
         if( typeof datatable === 'undefined'){
             console.log(" ERROR: failed to receive a valid datatable parameter");
         } else if (( typeof datatable.DataTable() === 'undefined') ||
@@ -4134,7 +4103,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             ( typeof datatable.DataTable().columns().header() === 'undefined') ) {
             console.log(" ERROR: invalid parameter in refineTableRecords");
         } else {
-            var whereTheTableGoes = 'table.combinedGeneTableHolder';
+            //var whereTheTableGoes = 'table.combinedGeneTableHolder';
             var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
 
             switch(headerType){
@@ -4282,6 +4251,16 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     }
 
                      break;
+                case 'fegtAnnotationHeaders':
+                    var compressedGroups = sharedTable.getAllCompressedGroups();
+                    _.forEach(compressedGroups,function(groupName){
+                        var domspecCollapse = "span."+groupName+" span.collapse-trigger";
+                        $(domspecCollapse).hide()
+                        var domspecExpand = "span."+groupName+" span.expand-trigger";
+                        $(domspecExpand).show()
+                    });
+
+                    break;
 
                 default:
                     break;
@@ -4446,7 +4425,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             (intermediateStructure.headers.length > 0)){
                 datatable = buildHeadersForTable(whereTheTableGoes,intermediateStructure.headers,
                     storeRecords,typeOfRecord, prependColumns, []);
-                refineTableRecords(datatable,typeOfRecord,[], true);
+                refineTableRecords(whereTheTableGoes,datatable,typeOfRecord,[], true);
         }
 
 
@@ -4455,7 +4434,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             datatable =  $(whereTheTableGoes).dataTable();
             var rememberCategories = addContentToTable(whereTheTableGoes,intermediateStructure.rowsToAdd,
                                                     storeRecords,typeOfRecord, prependColumns);
-            refineTableRecords(datatable,typeOfRecord,rememberCategories, false);
+            refineTableRecords(whereTheTableGoes,datatable,typeOfRecord,rememberCategories, false);
         }
 
 
@@ -4639,7 +4618,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         }
         var datatable = buildHeadersForTable(whereTheTableGoes, headers, false,
             currentForm, false, additionalDetailsForHeaders);
-        refineTableRecords(datatable, currentForm, [], true);
+        refineTableRecords(whereTheTableGoes,datatable, currentForm, [], true);
 
         // build the body
         var rowsToAdd = [];
@@ -4655,7 +4634,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         });
         datatable = $(whereTheTableGoes).dataTable();
         var rememberCategories = addContentToTable(whereTheTableGoes, rowsToAdd, false, currentForm, false);
-        refineTableRecords(datatable, currentForm, rememberCategories, false);
+        refineTableRecords(whereTheTableGoes,datatable, currentForm, rememberCategories, false);
     }
 
 
@@ -4850,7 +4829,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         redrawTableOnClick('table.combinedGeneTableHolder',function(sortedData, numberOfRows, numberOfColumns){
             return mpgSoftware.matrixMath.doNothing (sortedData, numberOfRows, numberOfColumns);
         },{});
-        refineTableRecords($(whereTheTableGoes).dataTable(),sharedTable.currentForm,[],false);
+        refineTableRecords(whereTheTableGoes,$(whereTheTableGoes).dataTable(),sharedTable.currentForm,[],false);
     }
 
 

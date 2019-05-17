@@ -22,11 +22,13 @@
         <div sortStrategy="alphabetical" sortField="-1"  sortTerm="{{name1}}"
         class="geneName groupNum{{groupNum}} withinGroupNum{{withinGroupNum}} text-center initialLinearIndex_{{initialLinearIndex}}">
 
-            <span class="title-genetic-evidence displayMethodName effector-ui-wrapper" methodKey="{{name}}">{{name}}
+            <span class="title-genetic-evidence displayMethodName {{name}}" methodKey="{{name}}">{{name}}
                 <span class="glyphicon glyphicon-resize-full expand-trigger" aria-hidden="true" title="View collapsed columns"
-                onclick="mpgSoftware.dynamicUi.expandColumns(event,this,'forward','table.fullEffectorGeneTableHolder');"></span>
+                onclick="mpgSoftware.dynamicUi.expandColumns(event,this,'forward','table.fullEffectorGeneTableHolder');"
+                style="display: none"></span>
                 <span class="glyphicon glyphicon-resize-small collapse-trigger" aria-hidden="true" title="Collapse columns"
-                onclick="mpgSoftware.dynamicUi.contractColumns(event,this,'forward','table.fullEffectorGeneTableHolder');"></span>
+                onclick="mpgSoftware.dynamicUi.contractColumns(event,this,'forward','table.fullEffectorGeneTableHolder');"
+                ></span>
             </span>
             <span class="effector-ui-wrapper">
                 %{--<span class="glyphicon glyphicon-move" aria-hidden="true" title="Drag and drop cell"></span>--}%
@@ -59,27 +61,27 @@
 </div>
 {{/Genetic_combined}}
 {{#Genomic_combined}}
-<div class="fedt groupNum2">
+<div class="fedt ">
     {{textToDisplay}}&nbsp;
 </div>
 {{/Genomic_combined}}
 {{#Perturbation_combined}}
- <div class="fedt groupNum3">
+ <div class="fedt ">
     {{textToDisplay}}&nbsp;
 </div>
 {{/Perturbation_combined}}
 {{#external_evidence}}
- <div class="fedt groupNum4">
+ <div class="fedt ">
     {{textToDisplay}}&nbsp;
 </div>
 {{/external_evidence}}
 {{#homologous_gene}}
- <div class="fedt groupNum6">
+ <div class="fedt ">
     {{textToDisplay}}&nbsp;
 </div>
 {{/homologous_gene}}
 {{#additional_reference}}
- <div class="fedt groupNum7">
+ <div class="fedt ">
     {{textToDisplay}}&nbsp;
 </div>
 {{/additional_reference}}
