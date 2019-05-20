@@ -184,10 +184,10 @@
 
                 <div class="col-md-12" style="padding-top: 70px;">
                     <div class="col-md-6" style="text-align: center">
-                        <a href="" class="btn btn-lg btn-default front-banner-btn" style="color: #08B89D;">Run analysis</a>
+                        <a href="${createLink(controller:'informational', action:'modules')}" class="btn btn-lg btn-default front-banner-btn" style="color: #08B89D;">Run analysis</a>
                     </div>
                     <div class="col-md-6" style="text-align: center">
-                        <a href="" class="btn btn-lg btn-default front-banner-btn" style="color: #08B89D;">Learn about the portal</a>
+                        <a href="http://3.208.176.209/resources/${g.portalTypeString()}" target="_blank" class="btn btn-lg btn-default front-banner-btn" style="color: #08B89D;">Learn about the portal</a>
                     </div>
                 </div>
             </g:if >
