@@ -717,7 +717,7 @@
 <p><g:message code="informational.project.descr.ESP"></g:message></p>
 <p>&nbsp;</p>
 
-<h5><b>Genetics of Type 2 Diabetes (GoT2D) <small><a href="http://www.type2diabetesgenetics.org/projects/got2d" target="_blank">Learn more ></a></small></b></h5>
+<h5><b>Genetics of Type 2 Diabetes (GoT2D) <small><a href="${createLink(controller:"projects", action:"got2d")}" target="_blank">Learn more ></a></small></b></h5>
 <p><g:message code="informational.project.descr.GoT2D"></g:message></p>
 <p>&nbsp;</p>
 
@@ -726,12 +726,12 @@
 <p><g:message code="informational.data.project.LuCamp"></g:message></p>
 <p>&nbsp;</p>
 
-<h5><b>Slim Initiative in Genomic Medicine for the Americas (SIGMA T2D) <small><a href="http://www.type2diabetesgenetics.org/projects/sigma" target="_blank">Learn more ></a></small>
+<h5><b>Slim Initiative in Genomic Medicine for the Americas (SIGMA T2D) <small><a href="${createLink(controller:"projects", action:"sigma")}" target="_blank">Learn more ></a></small></b></h5>
 </b></h5>
 <p><g:message code="informational.project.descr.SIGMA"></g:message></p>
 <p>&nbsp;</p>
 
-<h5><b>Type 2 Diabetes Genetic Exploration by Next-Generation Sequencing in Ethnic Samples (T2D-GENES) <small><a href="http://www.type2diabetesgenetics.org/projects/t2dGenes" target="_blank">Learn more ></a></small></b></h5>
+<h5><b>Type 2 Diabetes Genetic Exploration by Next-Generation Sequencing in Ethnic Samples (T2D-GENES) <small><a href="${createLink(controller:"projects", action:"t2dGenes")}" target="_blank">Learn more ></a></small></b></h5>
 <p><g:message code="informational.project.descr.T2D-GENES"></g:message></p>
 <p>&nbsp;</p>
 
