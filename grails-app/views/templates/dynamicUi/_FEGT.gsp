@@ -1,22 +1,5 @@
 
 <script id="dynamicFullEffectorGeneTableHeader"  type="x-tmpl-mustache">
-        %{--<div sortStrategy="alphabetical" sortField="-1"  sortTerm="{{name1}}"--}%
-        %{--class="geneName groupNum{{groupNum}} withinGroupNum{{withinGroupNum}} text-center initialLinearIndex_{{initialLinearIndex}}">--}%
-           %{--<div class="geneHeaderShifters text-center">--}%
-               %{--<span class="glyphicon glyphicon-step-backward" aria-hidden="true" onclick="mpgSoftware.dynamicUi.shiftColumnsByOne(event,this,'backward','table.combinedGeneTableHolder')"></span>--}%
-               %{--<span class="glyphicon glyphicon-step-forward" aria-hidden="true" onclick="mpgSoftware.dynamicUi.shiftColumnsByOne(event,this,'forward','table.combinedGeneTableHolder')"></span>--}%
-           %{--</div>--}%
-           %{--<div class="pull-right fegtHeaderStyling">--}%
-               %{--<span class="glyphicon glyphicon-resize-full" aria-hidden="true" title="View collapsed columns"--}%
-               %{--onclick="mpgSoftware.dynamicUi.expandColumns(event,this,'forward','table.fullEffectorGeneTableHolder');"></span>--}%
-               %{--<span class="glyphicon glyphicon-resize-small" aria-hidden="true" title="Collapse columns"--}%
-               %{--onclick="mpgSoftware.dynamicUi.contractColumns(event,this,'forward','table.fullEffectorGeneTableHolder');"></span>--}%
-               %{--<span class="glyphicon glyphicon-remove" aria-hidden="true"--}%
-               %{--onclick="mpgSoftware.dynamicUi.removeColumn(event,this,'forward','table.fullEffectorGeneTableHolder')" style="padding: 0 8px 0 0"></span>--}%
-           %{--</div>--}%
-           %{--<span class="displayMethodName" methodKey="{{name}}">{{name}}</span>--}%
-        %{--</div>--}%
-
 
 
         <div sortStrategy="alphabetical" sortField="-1"  sortTerm="{{name1}}"
@@ -32,7 +15,7 @@
             </span>
             <span class="effector-ui-wrapper">
                 %{--<span class="glyphicon glyphicon-move" aria-hidden="true" title="Drag and drop cell"></span>--}%
-                <span class="glyphicon glyphicon-sort" aria-hidden="true" title="Sort table by the column"></span>
+                %{--<span class="glyphicon glyphicon-sort" aria-hidden="true" title="Sort table by the column"></span>--}%
 
             </span>
             <span class="glyphicon glyphicon-option-vertical options-icon" aria-hidden="true" title="Open column filter"

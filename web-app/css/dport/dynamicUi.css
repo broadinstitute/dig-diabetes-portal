@@ -444,3 +444,12 @@ div.groupNum9 {
 .dataTables_wrapper tbody div.fedt {
     padding: 5px;
 }
+table.dataTable.fullEffectorGeneTableHolder  thead .sorting_asc {
+    background: url("http://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
+}
+table.dataTable.fullEffectorGeneTableHolder  thead .sorting_desc {
+    background: url("http://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
+}
+table.dataTable.fullEffectorGeneTableHolder  thead .sorting {
+    background: url("http://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+}
