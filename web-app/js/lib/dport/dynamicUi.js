@@ -1874,14 +1874,17 @@ mpgSoftware.dynamicUi = (function () {
             var expectedColumns = dataAnnotationType.dataAnnotation.customColumnOrdering.constituentColumns;
             headersObjects = _.map(returnObject.headers,function(o){
                 var index=_.findIndex( expectedColumns,{'key':o});
-                var groupName = dataAnnotationType.dataAnnotation.customColumnOrdering.topLevelColumns[expectedColumns[index].pos];
-                return {
+                if (index>-1){
+                    var groupName = dataAnnotationType.dataAnnotation.customColumnOrdering.topLevelColumns[expectedColumns[index].pos];
+                    return {
                         name:expectedColumns[index].key,
                         groupNum:expectedColumns[index].pos,
                         groupName:groupName,
                         withinGroupNum:expectedColumns[index].subPos
+                    }
                 }
             });
+            headersObjects = _.compact(headersObjects);
             var sortedHeaderObjects = _.sortBy(headersObjects,['groupNum','withinGroupNum','name']);
             _.forEach(sortedHeaderObjects, function(sortedHeaderObject){sortedHeaderObject['initialLinearIndex']=initialLinearIndex++;})
             returnObject.headers = _.map(sortedHeaderObjects,function(o){return o.name});

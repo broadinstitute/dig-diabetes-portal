@@ -61,6 +61,7 @@
                                 customColumnOrdering:{
                                     topLevelColumns:[
                                         "Combined_category",
+                                        "Gene_name",
                                         "Genetic_combined",
                                         "Genomic_combined",
                                         "Perturbation_combined",
@@ -70,48 +71,50 @@
                                     ],
                                     constituentColumns:[
 
-                                        { key: "Gene_name",pos:0,subPos:0},
-                                        { key: "Locus_name",pos:0,subPos:1},
-                                        { key: "EXTRA_NonT2D_locus",pos:0,subPos:2},
-                                        { key: "Combined_category",pos:0,subPos:3},
-                                        { key: "Combined_category_noNames",pos:0,subPos:4},
+                                        { key: "Combined_category",pos:0,subPos:0},
 
-                                        { key: "Genetic_combined",pos:1,subPos:0},
-                                        { key: "GWAS_coding_causal",pos:1,subPos:1},
-                                        { key: "Exome_array_coding_causal",pos:1,subPos:2},
-                                        { key: "Exome_sequence_burden",pos:1,subPos:3},
-                                        { key: "Monogenic",pos:1,subPos:4},
-                                        { key: "Other_genetic",pos:1,subPos:5},
-                                        { key: "COMBINED",pos:1,subPos:6},
+                                        { key: "Gene_name",pos:1,subPos:0},
+                                        { key: "Locus_name",pos:1,subPos:1},
+                                        // { key: "EXTRA_NonT2D_locus",pos:0,subPos:3},
+                                        // { key: "Combined_category",pos:0,subPos:3},
+                                        // { key: "Combined_category_noNames",pos:0,subPos:4},
 
-                                        { key: "Genomic_combined",pos:2,subPos:0},
-                                        { key: "ciseQTL_islet",pos:2,subPos:1},
-                                        { key: "ciseQTL_fat_muscle_liver",pos:2,subPos:2},
+                                        { key: "Genetic_combined",pos:2,subPos:0},
+                                        { key: "GWAS_coding_causal",pos:2,subPos:1},
+                                        { key: "Exome_array_coding_causal",pos:2,subPos:2},
+                                        { key: "Exome_sequence_burden",pos:2,subPos:3},
+                                        { key: "Monogenic",pos:2,subPos:4},
+                                        { key: "Other_genetic",pos:2,subPos:5},
+                                        { key: "COMBINED",pos:2,subPos:6},
+
+                                        { key: "Genomic_combined",pos:3,subPos:0},
+                                        { key: "ciseQTL_islet",pos:3,subPos:1},
+                                        { key: "ciseQTL_fat_muscle_liver",pos:3,subPos:2},
                                         { key: "Capture_C_or_hiC_Islet",pos:2,subPos:3},
                                         { key: "Allelic_imbalance",pos:2,subPos:4},
                                         { key: "Ottosson_Laakso",pos:2,subPos:5},
                                         { key: "Other_genomics",pos:2,subPos:6},
 
-                                        { key: "Perturbation_combined",pos:3,subPos:0},
-                                        { key: "Annas_screen",pos:3,subPos:1},
-                                        { key: "Zebra_Fish",pos:3,subPos:2},
-                                        { key: "Mouse_Knockout_viability",pos:3,subPos:3},
-                                        { key: "Mouse_MGI",pos:3,subPos:4},
-                                        { key: "Drosophila_Heshan_2018",pos:3,subPos:5},
-                                        { key: "Rat",pos:3,subPos:6},
-                                        { key: "Other_perturbation",pos:3,subPos:7},
+                                        { key: "Perturbation_combined",pos:4,subPos:0},
+                                        { key: "Annas_screen",pos:4,subPos:1},
+                                        { key: "Zebra_Fish",pos:4,subPos:2},
+                                        { key: "Mouse_Knockout_viability",pos:4,subPos:3},
+                                        { key: "Mouse_MGI",pos:4,subPos:4},
+                                        { key: "Drosophila_Heshan_2018",pos:4,subPos:5},
+                                        { key: "Rat",pos:4,subPos:6},
+                                        { key: "Other_perturbation",pos:4,subPos:7},
 
-                                        { key: "Semantic_score",pos:4,subPos:0},
-                                        { key: "Candidacy_score",pos:4,subPos:1},
-                                        { key: "OMIM",pos:4,subPos:2},
+                                        { key: "Semantic_score",pos:5,subPos:0},
+                                        { key: "Candidacy_score",pos:5,subPos:1},
+                                        { key: "OMIM",pos:5,subPos:2},
 
-                                        { key: "FishHomo",pos:5,subPos:0},
-                                        { key: "MouseHomo",pos:5,subPos:1},
-                                        { key: "RatHomo",pos:5,subPos:2},
+                                        { key: "FishHomo",pos:6,subPos:0},
+                                        { key: "MouseHomo",pos:6,subPos:1},
+                                        { key: "RatHomo",pos:6,subPos:2},
 
-                                        { key: "Additional_reference",pos:6,subPos:0},
-                                        { key: "GENE",pos:47,subPos:0},
-                                        { key: "Gene_Ensemble_ID",pos:47,subPos:1}
+                                        { key: "Additional_reference",pos:7,subPos:0}
+                                        // { key: "GENE",pos:47,subPos:0},
+                                        // { key: "Gene_Ensemble_ID",pos:47,subPos:1}
 
                                     ]
                                 }

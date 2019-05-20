@@ -38,6 +38,12 @@
     {{textToDisplay}}&nbsp;
     </div>
 {{/Combined_category}}
+{{#Gene_name}}
+<div class="fedt">
+    {{textToDisplay}}&nbsp;
+    </div>
+{{/Gene_name}}
+
 {{#Genetic_combined}}
  <div class="fedt">
     {{textToDisplay}}&nbsp;
