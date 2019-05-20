@@ -353,36 +353,36 @@ div.groupNum0, div.groupNum1, div.groupNum2, div.groupNum3, div.groupNum4, div.g
     border: none;
 }
 
-div.BigGroupNum0 {
-    background-color:  #bbb;
+th.BigGroupNum0 {
+    background: #bbb;
 }
 
-div.BigGroupNum1 {
-    background-color: #F4F73F;
+th.BigGroupNum1 {
+    border-top: solid 3px #F4F73F;
 }
 
-div.BigGroupNum2 {
-    background-color: #F6B11C;
+th.BigGroupNum2 {
+    bborder-top: solid 3px #F6B11C;
 }
 
-div.BigGroupNum3 {
-    background-color: #66E54D;
+th.BigGroupNum3 {
+    border-top: solid 3px #66E54D;
 }
 
-div.BigGroupNum4 {
-    background-color: #4DA9E5;
+th.BigGroupNum4 {
+    border-top: solid 3px #4DA9E5;
 }
 
-div.BigGroupNum5 {
-    background-color: #A9E54D;
+th.BigGroupNum5 {
+    border-top: solid 3px #A9E54D;
 }
 
-div.BigGroupNum6 {
-    background-color: #E5A54D;
+th.BigGroupNum6 {
+    border-top: solid 3px #E5A54D;
 }
 
-div.BigGroupNum7 {
-    background-color: #ddd;
+th.BigGroupNum7 {
+    border-top: solid 3px #ddd;
 }
 
 

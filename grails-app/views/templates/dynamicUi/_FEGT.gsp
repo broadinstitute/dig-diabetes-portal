@@ -4,20 +4,23 @@
 
         <div sortStrategy="alphabetical" sortField="-1"  sortTerm="{{name1}}"
         class="{{groupName}} BigGroupNum{{groupNum}} groupNum{{groupNum}} withinGroupNum{{withinGroupNum}} text-center initialLinearIndex_{{initialLinearIndex}}">
-
-            <span class="title-genetic-evidence displayMethodName {{name}}" methodKey="{{name}}">{{name}}
+            <span class="groupDisplayName displayMethodName {{name}}" methodKey="{{name}}" style="display:none">{{groupDisplayName}}
                 <span class="glyphicon glyphicon-resize-full expand-trigger" aria-hidden="true" title="View collapsed columns"
                 onclick="mpgSoftware.dynamicUi.expandColumns(event,this,'forward','table.fullEffectorGeneTableHolder');"
                 style="display: none"></span>
                 <span class="glyphicon glyphicon-resize-small collapse-trigger" aria-hidden="true" title="Collapse columns"
-                onclick="mpgSoftware.dynamicUi.contractColumns(event,this,'forward','table.fullEffectorGeneTableHolder');"
-                ></span>
+                onclick="mpgSoftware.dynamicUi.contractColumns(event,this,'forward','table.fullEffectorGeneTableHolder');"></span>
             </span>
-            <span class="effector-ui-wrapper">
-                %{--<span class="glyphicon glyphicon-move" aria-hidden="true" title="Drag and drop cell"></span>--}%
-                %{--<span class="glyphicon glyphicon-sort" aria-hidden="true" title="Sort table by the column"></span>--}%
 
+            <span class="columnDisplayName displayMethodName {{name}}" methodKey="{{name}}">{{columnDisplayName}}
+                <span class="glyphicon glyphicon-resize-full expand-trigger" aria-hidden="true" title="View collapsed columns"
+                onclick="mpgSoftware.dynamicUi.expandColumns(event,this,'forward','table.fullEffectorGeneTableHolder');"
+                style="display: none"></span>
+                <span class="glyphicon glyphicon-resize-small collapse-trigger" aria-hidden="true" title="Collapse columns"
+                onclick="mpgSoftware.dynamicUi.contractColumns(event,this,'forward','table.fullEffectorGeneTableHolder');"></span>
             </span>
+
+
             <span class="glyphicon glyphicon-option-vertical options-icon" aria-hidden="true" title="Open column filter"
             onclick="mpgSoftware.dynamicUi.openFilter('genetic-evidence');"></span>
 
@@ -59,16 +62,16 @@
     {{textToDisplay}}&nbsp;
 </div>
 {{/Perturbation_combined}}
-{{#external_evidence}}
+{{#Semantic_score}}
  <div class="fedt ">
     {{textToDisplay}}&nbsp;
 </div>
-{{/external_evidence}}
-{{#homologous_gene}}
+{{/Semantic_score}}
+{{#FishHomo}}
  <div class="fedt ">
     {{textToDisplay}}&nbsp;
 </div>
-{{/homologous_gene}}
+{{/FishHomo}}
 {{#additional_reference}}
  <div class="fedt ">
     {{textToDisplay}}&nbsp;
