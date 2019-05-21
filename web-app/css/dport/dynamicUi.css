@@ -352,77 +352,79 @@ div.fedt{
 div.groupNum0, div.groupNum1, div.groupNum2, div.groupNum3, div.groupNum4, div.groupNum5, div.groupNum6, div.groupNum7, div.groupNum8, div.groupNum9 {
     border: none;
 }
+/*table.dataTable thead th.BigGroupNum1 {*/
+    /*background: blue;*/
+/*}*/
+/*th.BigGroupNum0 {*/
+    /*background-color  : #bbb;*/
+/*}*/
 
-th.BigGroupNum0 {
-    background: #bbb;
+/*th.BigGroupNum1 {*/
+    /*background-color:  #F4F73F;*/
+/*}*/
+
+/*th.BigGroupNum2 {*/
+    /*border-top: solid 3px #F6B11C;*/
+/*}*/
+
+/*th.BigGroupNum3 {*/
+    /*border-top: solid 3px #66E54D;*/
+/*}*/
+
+/*th.BigGroupNum4 {*/
+    /*border-top: solid 3px #4DA9E5;*/
+/*}*/
+
+/*th.BigGroupNum5 {*/
+    /*border-top: solid 3px #A9E54D;*/
+/*}*/
+
+/*th.BigGroupNum6 {*/
+    /*border-top: solid 3px #E5A54D;*/
+/*}*/
+
+/*th.BigGroupNum7 {*/
+    /*border-top: solid 3px #ddd;*/
+/*}*/
+
+
+div.fedtCell.groupNum0 {
+    /*border-top: solid 3px #bbb;*/
 }
 
-th.BigGroupNum1 {
+div.fedtCell.groupNum1 {
     border-top: solid 3px #F4F73F;
 }
 
-th.BigGroupNum2 {
-    bborder-top: solid 3px #F6B11C;
-}
-
-th.BigGroupNum3 {
-    border-top: solid 3px #66E54D;
-}
-
-th.BigGroupNum4 {
-    border-top: solid 3px #4DA9E5;
-}
-
-th.BigGroupNum5 {
-    border-top: solid 3px #A9E54D;
-}
-
-th.BigGroupNum6 {
-    border-top: solid 3px #E5A54D;
-}
-
-th.BigGroupNum7 {
-    border-top: solid 3px #ddd;
-}
-
-
-div.groupNum0 {
-    border-top: solid 3px #bbb;
-}
-
-div.groupNum1 {
-    border-top: solid 3px #F4F73F;
-}
-
-div.groupNum2 {
+div.fedtCell.groupNum2 {
     border-top: solid 3px #F6B11C;
 }
 
-div.groupNum3 {
+div.fedtCell.groupNum3 {
     border-top: solid 3px #66E54D;
 }
 
-div.groupNum4 {
+div.fedtCell.groupNum4 {
     border-top: solid 3px #4DA9E5;
 }
 
-div.groupNum5 {
+div.fedtCell.groupNum5 {
     border-top: solid 3px #A9E54D;
 }
 
-div.groupNum6 {
+div.fedtCell.groupNum6 {
     border-top: solid 3px #E5A54D;
 }
 
-div.groupNum7 {
+div.fedtCell.groupNum7 {
     border-top: solid 3px #ddd;
 }
 
-div.groupNum8 {
+div.fedtCell.groupNum8 {
     border-top: solid 3px #0f0;
 }
 
-div.groupNum9 {
+div.fedtCell.groupNum9 {
     border-top: solid 3px #ff0;
 }
 
@@ -452,4 +454,25 @@ table.dataTable.fullEffectorGeneTableHolder  thead .sorting_desc {
 }
 table.dataTable.fullEffectorGeneTableHolder  thead .sorting {
     background: url("http://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+}
+table.dataTable.fullEffectorGeneTableHolder  thead th.BigGroupNum1 {
+    border-top: solid 3px #F4F73F;
+}
+table.dataTable.fullEffectorGeneTableHolder  thead th.BigGroupNum2 {
+    border-top: solid 3px #F6B11C;
+}
+table.dataTable.fullEffectorGeneTableHolder  thead th.BigGroupNum3 {
+    border-top: solid 3px #66E54D;
+}
+table.dataTable.fullEffectorGeneTableHolder  thead th.BigGroupNum4 {
+    border-top: solid 3px #4DA9E5;
+}
+table.dataTable.fullEffectorGeneTableHolder  thead th.BigGroupNum5 {
+    border-top: solid 3px #A9E54D;
+}
+table.dataTable.fullEffectorGeneTableHolder  thead th.BigGroupNum6 {
+    border-top: solid 3px #E5A54D;
+}
+table.dataTable.fullEffectorGeneTableHolder  thead th.BigGroupNum7 {
+    border-top: solid 3px #F6B11C;
 }

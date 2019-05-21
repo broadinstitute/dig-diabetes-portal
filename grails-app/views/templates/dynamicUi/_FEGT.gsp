@@ -35,7 +35,7 @@
 </script>
 
 <script id="fegtCellBody"  type="x-tmpl-mustache">
-<div class="initialLinearIndex_{{initialLinearIndex}} groupNum{{groupNumber}}" sortField="{{categoryName}}">
+<div class="initialLinearIndex_{{initialLinearIndex}} groupNum{{groupNumber}} fedtCell" sortField="{{categoryName}}">
 {{#Combined_category}}
 <div class="fedt">
     {{textToDisplay}}&nbsp;
@@ -48,27 +48,27 @@
 {{/Gene_name}}
 
 {{#Genetic_combined}}
- <div class="fedt">
+ <div class="fedt text-center">
     {{textToDisplay}}&nbsp;
 </div>
 {{/Genetic_combined}}
 {{#Genomic_combined}}
-<div class="fedt ">
+<div class="fedt text-center">
     {{textToDisplay}}&nbsp;
 </div>
 {{/Genomic_combined}}
 {{#Perturbation_combined}}
- <div class="fedt ">
+ <div class="fedt text-center">
     {{textToDisplay}}&nbsp;
 </div>
 {{/Perturbation_combined}}
 {{#Semantic_score}}
- <div class="fedt ">
+ <div class="fedt text-center">
     {{textToDisplay}}&nbsp;
 </div>
 {{/Semantic_score}}
 {{#FishHomo}}
- <div class="fedt ">
+ <div class="fedt">
     {{textToDisplay}}&nbsp;
 </div>
 {{/FishHomo}}

@@ -1917,9 +1917,6 @@ mpgSoftware.dynamicUi = (function () {
                 _.forEach(recordsPerGene, function (valueInGeneRecord,header) {
                     var indexOfColumn = _.indexOf(returnObject.headers, header );
                     var indexOfPreassignedColumnName = _.indexOf(constituentColumns, header );
-                    if (header==="Semantic_score"){
-                        console.log('Semantic_score');
-                    }
                     if (indexOfColumn === -1) {
 
                     } else if (indexOfPreassignedColumnName === -1) {
