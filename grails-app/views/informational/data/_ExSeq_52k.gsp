@@ -1,14 +1,18 @@
 <script class="panel-body" id="ExSeq_52k_script" type="x-tmpl-mustache">
+
+<p><img src="${resource(dir: 'images/organizations', file: 'AMP_T2D-GENES.png')}" style="width: 130px; margin-right: 15px"
+        align="left">
+</p>
     <h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
 <p><g:message code="informational.data.overlaps.52K"></g:message></p>
 
-
+<br>
 <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
-<p><div class="paper">
-<g:message code="informational.shared.publications.Flannick_2018_submitted"></g:message><br>
-<g:message code="informational.shared.publications.Flannick_2018_submitted.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
-<div class="citation"><g:message code="informational.shared.publications.Flannick_2018_submitted.citation"></g:message> </div>
+    <p><div class="paper">
+    <g:message code="informational.shared.publications.Flannick_2019_Nature"></g:message><br>
+    <g:message code="informational.shared.publications.Flannick_2019_Nature.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+    <div class="citation"><g:message code="informational.shared.publications.Flannick_2019_Nature.citation"></g:message> </div>
 </div></p>
 
 <p><div class="paper">
@@ -717,7 +721,7 @@
 <p><g:message code="informational.project.descr.ESP"></g:message></p>
 <p>&nbsp;</p>
 
-<h5><b>Genetics of Type 2 Diabetes (GoT2D) <small><a href="http://www.type2diabetesgenetics.org/projects/got2d" target="_blank">Learn more ></a></small></b></h5>
+<h5><b>Genetics of Type 2 Diabetes (GoT2D) <small><a href="${createLink(controller:"projects", action:"got2d")}" target="_blank">Learn more ></a></small></b></h5>
 <p><g:message code="informational.project.descr.GoT2D"></g:message></p>
 <p>&nbsp;</p>
 
@@ -726,12 +730,12 @@
 <p><g:message code="informational.data.project.LuCamp"></g:message></p>
 <p>&nbsp;</p>
 
-<h5><b>Slim Initiative in Genomic Medicine for the Americas (SIGMA T2D) <small><a href="http://www.type2diabetesgenetics.org/projects/sigma" target="_blank">Learn more ></a></small>
+<h5><b>Slim Initiative in Genomic Medicine for the Americas (SIGMA T2D) <small><a href="${createLink(controller:"projects", action:"sigma")}" target="_blank">Learn more ></a></small></b></h5>
 </b></h5>
 <p><g:message code="informational.project.descr.SIGMA"></g:message></p>
 <p>&nbsp;</p>
 
-<h5><b>Type 2 Diabetes Genetic Exploration by Next-Generation Sequencing in Ethnic Samples (T2D-GENES) <small><a href="http://www.type2diabetesgenetics.org/projects/t2dGenes" target="_blank">Learn more ></a></small></b></h5>
+<h5><b>Type 2 Diabetes Genetic Exploration by Next-Generation Sequencing in Ethnic Samples (T2D-GENES) <small><a href="${createLink(controller:"projects", action:"t2dGenes")}" target="_blank">Learn more ></a></small></b></h5>
 <p><g:message code="informational.project.descr.T2D-GENES"></g:message></p>
 <p>&nbsp;</p>
 
@@ -745,7 +749,7 @@
 <p><g:message code="informational.data.overview.52K-3"></g:message></p>
 <p>&nbsp;</p>
 
-<h4>Accessing AMP T2D-GENES exome sequence analysis data</h4>
+<h4>Accessing AMP T2D-GENES exome sequence analysis results</h4>
     <p><g:message code="informational.data.accessing.52K1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.52K2"></g:message></p>
 
 

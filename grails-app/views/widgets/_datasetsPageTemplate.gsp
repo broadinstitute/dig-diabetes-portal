@@ -117,7 +117,13 @@
 <g:render template="./data/GWAS_BBJmales_ea" />
 <g:render template="./data/GWAS_BBJfemales_ea" />
 <g:render template="./data/GWAS_BBJ_ea" />
-
+<g:render template="./data/GWAS_SINDI_sa" />
+<g:render template="./data/GWAS_SCES_ea" />
+<g:render template="./data/GWAS_SiMES_ea" />
+<g:render template="./data/GWAS_LivingBiobank_MAS_ea" />
+<g:render template="./data/GWAS_LivingBiobank_CHS_ea" />
+<g:render template="./data/GWAS_UKBiobankModLeic_eu" />
+<g:render template="./data/GWAS_Accel_eu" />
 
 
 <script id="metaData2" type="x-tmpl-mustache">

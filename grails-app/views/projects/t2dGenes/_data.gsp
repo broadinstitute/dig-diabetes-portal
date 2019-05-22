@@ -3,6 +3,8 @@
 <ul>
 <li>13K exome sequence analysis</li>
 <li>17K exome sequence analysis</li>
+    <li>19K exome sequence analysis</li>
+    <li>AMP T2D-GENES exome sequence analysis</li>
 </ul>
 
 </div>

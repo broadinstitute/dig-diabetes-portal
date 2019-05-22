@@ -160,7 +160,7 @@ digawsqanewKB_fed_dedicated_EBIv2 = new ServerBean("Dedicated EBI QA fed KB - Us
 
 
 // this will be your default
-defaultRestServer = digawsdevWorkflowKBrevised
+defaultRestServer = digawsdevnewKB
 
 
 
@@ -597,7 +597,7 @@ portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", "ibd", "e
 
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
                                                         "T2D",  // displayable label for this portal type
-                                                        "mdv37",    // the MDV number for this portal
+                                                        "mdv38",    // the MDV number for this portal
                                                         "T2DKP", // name of KB data we want
                                                         "T2D",      // the default phenotype for this portal
                                                         "ExSeq_19k_mdv28",  // default data set.  Used rarely.
@@ -702,7 +702,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0, // expose the region adjuster for the gene page
                                           0, // expose the gene table on the dynamic UI
                                           0, // expose the variant table on the dynamic UI
-                                          1  // expose the effector gene table
+                                          0  // expose the effector gene table
                                   ),
                                   new PortalVersionBean("mi",
                                                           "Myocardial Infarction",
@@ -755,7 +755,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0, // expose the region adjuster for the gene page
                                           0, // expose the gene table on the dynamic UI
                                           0, // expose the variant table on the dynamic UI
-                                          1  // expose the effector gene table
+                                          0  // expose the effector gene table
                                   ),
                                   new PortalVersionBean("ibd",
                                           //"Inflammatory Bowel Disease",
@@ -811,7 +811,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0, // expose the region adjuster for the gene page
                                           0, // expose the gene table on the dynamic UI
                                           0, // expose the variant table on the dynamic UI
-                                          1  // expose the effector gene table
+                                          0  // expose the effector gene table
                                  ),
                                   new PortalVersionBean("epilepsy",
                                           "Epilepsy",
@@ -864,7 +864,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0, // expose the region adjuster for the gene page
                                           0, // expose the gene table on the dynamic UI
                                           0, // expose the variant table on the dynamic UI
-                                          1  // expose the effector gene table
+                                          0  // expose the effector gene table
                                   ),
                                   new PortalVersionBean("sleep",
                                           "Sleep",
@@ -916,7 +916,60 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0, // expose the region adjuster for the gene page
                                           0, // expose the gene table on the dynamic UI
                                           0, // expose the variant table on the dynamic UI
-                                          1  // expose the effector gene table
+                                          0  // expose the effector gene table
+
+                                  ),
+                                  new PortalVersionBean("lung",
+                                          "Lung",
+                                          "mdv130",
+                                          "LDKP", // name of KB data we want
+                                          "COPD", // make sure your default phenotype exists in your default data set
+                                          "GWAS_UKBiobank_ModLeic_eu_mdv130",// used to pick a default data set for a gene query
+                                          ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
+                                          ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
+                                          ["NHLF"],
+                                          ["OTHER", "GLYCEMIC", "ANTHROPOMETRIC"], // most important phenotype group name
+                                          [],
+                                          "[3]",
+                                          "GWAS_UKBiobank_ModLeic_eu_mdv130",
+                                          "images/sleep/front_sleep_logo_2018.svg",
+                                          "portal.lung.header.tagline",
+                                          "portal.lung.header.title.short",
+                                          [],
+                                          ["HHIP"],
+                                          ["rs62158211"],
+                                          ["chr2:113,873,524-114,136,577"],
+                                          "images/sleep/sleep_banner_2018.png",
+                                          "",
+                                          "images/sleep/sleep_menu_logo_2018.svg",
+                                          "images/menu_bg_2017_5.png",
+                                          "false",
+                                          "",
+                                          "",
+                                          '8578131941543427205',
+                                          1, // expose the common variant tab have on the gene page
+                                          1, // expose the high-impact variant tab on the gene page
+                                          1,
+                                          0,
+                                          0,
+                                          1,
+                                          0,
+                                          1,1,1,
+                                          0,
+                                          0,
+                                          0,
+                                          0,
+                                          0,0,0, // Hi-C tab on the gene page
+                                          0,  // expose dynamic UI
+                                          0, // expose the data set hierarchy in the sunburst visualization on the data page
+                                          0, // expose the old school variant and association table.  Potentially useful for debugging
+                                          0, // expose the IGV interface in its own accordion section
+                                          0,  // expose an accordion section with the burden test on the gene page
+                                          0,  // expose the 'genes in region' tab on the gene page
+                                          0, // expose the region adjuster for the gene page
+                                          0, // expose the gene table on the dynamic UI
+                                          0,  // expose the variant table on the dynamic UI
+                                          0  // expose the effector gene table
                                   )
 ]
 
