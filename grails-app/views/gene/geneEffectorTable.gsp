@@ -145,7 +145,7 @@
                                     pos:3,subPos:3},
                                 { key: "Allelic_imbalance",
                                     display:"Allelic imbalance",
-                                    pos:2,subPos:4},
+                                    pos:3,subPos:4},
                                 { key: "Ottosson_Laakso",
                                     display:"Ottosson Laakso",
                                     pos:3,subPos:5},
@@ -237,7 +237,7 @@
     <div class="container">
         <div class="row">
             <div class="text-center">
-               <h2>Effector gene table</h2>
+               <h2>Predicted type 2 diabetes effector genes</h2>
             </div>
             <div class="col-md-12" style="padding-top: 30px;">
                 <div id="effectiveGeneTableHolder" class="mainEffectorDiv">
