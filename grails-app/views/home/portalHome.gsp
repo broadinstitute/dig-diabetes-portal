@@ -63,6 +63,9 @@
 <g:if test="${g.portalTypeString()?.equals('lung')}">
     <div class="fluid front-top-banner" style="background-image:url(${resource(file: g.message(code: portalVersionBean.backgroundGraphic, default:portalVersionBean.backgroundGraphic))}), linear-gradient(#7ACCC8, #08B89D);">
 </g:if >
+<g:elseif test="${g.portalTypeString()?.equals('t2d')}">
+    <div class="fluid front-top-banner" style="background-image:url(${resource(file: g.message(code: portalVersionBean.backgroundGraphic, default:portalVersionBean.backgroundGraphic))}), linear-gradient(#3399cc, #3C80BD);">
+</g:elseif >
 <g:else >
     <div class="fluid" style="font-size:16px; background-image:url(${resource(file: g.message(code: portalVersionBean.backgroundGraphic, default:portalVersionBean.backgroundGraphic))});background-position: left top; padding-bottom: 70px; padding-top:0px;">
 </g:else>
@@ -390,7 +393,7 @@
 
                     <g:elseif test="${g.portalTypeString()?.equals('mi')}">
                         <div class="col-md-12" style="padding-top:40px;">
-                            <img src="${resource(dir: 'images', file: 'data_icon3.png')}" style="width: 200px; margin-right: -50px;" align="right" >
+                            <img src="${resource(dir: 'images', file: 'data_icon4.png')}" style="width: 200px; margin-right: -50px;" align="right" >
                         <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData" default="About the data" /></h2>
                         <p><g:message code="portal.mi.about.the.data.text" />
                         <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">28 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">52 traits</span></h1>
@@ -403,19 +406,19 @@
                     </g:elseif>
                     <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
                         <div class="col-md-12" style="padding-top:40px;">
-                            <img src="${resource(dir: 'images', file: 'data_icon3.png')}" style="width: 200px; margin-right: -50px;" align="right" >
+                            <img src="${resource(dir: 'images', file: 'data_icon4.png')}" style="width: 200px; margin-right: -50px;" align="right" >
                         <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData" default="About the data" /></h2>
                     <p><g:message code="portal.ibd.about.the.data.text" />
                 </g:elseif>
                 <g:elseif test="${g.portalTypeString()?.equals('epilepsy')}">
                     <div class="col-md-12" style="padding-top:40px;">
-                        <img src="${resource(dir: 'images', file: 'data_icon3.png')}" style="width: 200px; margin-right: -50px;" align="right" >
+                        <img src="${resource(dir: 'images', file: 'data_icon4.png')}" style="width: 200px; margin-right: -50px;" align="right" >
                         <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData" default="About the data" /></h2>
                     <p><g:message code="portal.epi.about.the.data.text" />
                 </g:elseif>
                 <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
                     <div class="col-md-12" style="padding-top:40px;">
-                        <img src="${resource(dir: 'images', file: 'data_icon3.png')}" style="width: 200px; margin-right: -50px;" align="right" >
+                        <img src="${resource(dir: 'images', file: 'data_icon4.png')}" style="width: 200px; margin-right: -50px;" align="right" >
                         <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData" default="About the data" /></h2>
                     <p><g:message code="portal.sleep.about.the.data.text" />
                     <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">22 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">59 traits</span></h1>
@@ -423,7 +426,7 @@
                 </g:elseif>
                     <g:elseif test="${g.portalTypeString()?.equals('lung')}">
                         <div class="col-md-12" style="padding-top:40px;">
-                            <img src="${resource(dir: 'images', file: 'data_icon3.png')}" style="width: 200px; margin-right: -50px;" align="right" >
+                            <img src="${resource(dir: 'images', file: 'data_icon4.png')}" style="width: 230px; margin-right: -80px;" align="right" >
                         <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData" default="About the data" /></h2>
                         <p><g:message code="portal.lung.about.the.data.text" />
                         %{--<h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">22 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">59 traits</span></h1>--}%
@@ -431,7 +434,7 @@
                     </g:elseif>
                 <g:else>
                     <div class="col-md-12" style="padding-top:40px;">
-                        <img src="${resource(dir: 'images', file: 'data_icon3.png')}" style="width: 200px; margin-right: -50px;" align="right" >
+                        <img src="${resource(dir: 'images', file: 'data_icon4.png')}" style="width: 200px; margin-right: -50px;" align="right" >
                         <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData" default="About the data" /></h2>
                     <p><g:message code="about.the.portal.data.text" />
                     <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">67 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">164 traits</span></h1>

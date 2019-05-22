@@ -1253,17 +1253,29 @@ span.new-dataset-flag {
 
 /* 2019 Portal Style */
 
-#header-bottom {
-	text-transform: capitalize;
-	font-size: 14px;
-	font-weight: 300;
-	padding: 0;
-	margin: 0;
-	position: fixed;
-	top: 0;
-	width: 100%;
-	height: 50px;
-	z-index: 100;
+#header-bottom-lung, #header-bottom-stroke {
+      text-transform: capitalize;
+      font-size: 14px;
+      font-weight: 300;
+      padding: 0;
+      margin: 0;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      height: 50px;
+      z-index: 100;
+  }
+
+#header-bottom-t2d {
+    text-transform: capitalize;
+    font-size: 14px;
+    font-weight: 300;
+    padding: 0;
+    margin: 0;
+    top: 0;
+    width: 100%;
+    height: 50px;
+    z-index: 100;
 }
 
 .front-top-banner {
@@ -1302,7 +1314,7 @@ span.new-dataset-flag {
 	margin-left: auto;
 	margin-right: auto;
 	text-align: center;
-	margin-top: 30px;
+	margin-top: 70px;
     border-bottom: solid 1px rgba(255,255,255, 0.55);
 }
 
@@ -1338,3 +1350,27 @@ span.new-dataset-flag {
 	border-radius: 30px;
 	width: 250px;
 }
+
+.portal-settings-menu {
+    position: absolute;
+    right: 10px;
+    background-color: rgba(0,0,0,0.25);
+    padding: 0px 10px;
+    border-radius: 5px;
+    color: #fff;
+}
+
+.portal-settings-menu > ul {
+    display: none;
+}
+
+.portal-settings-menu:hover > ul {
+    display: block;
+}
+
+.portal-settings-menu > ul > li{
+    display: block;
+    list-style: none;
+    padding-bottom: 5px;
+}
+
