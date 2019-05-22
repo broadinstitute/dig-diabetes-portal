@@ -12,7 +12,7 @@
     <g:set var="restServer" bean="restServerService"/>
 </script>
 
-    <div class="container-fluid" id="header-bottom-${g.portalTypeString()}" style="background-color:#7ACCC8;">
+    <div class="container-fluid header-bottom" id="header-bottom-${g.portalTypeString()}">
         <div class="logo-wrapper" style="position:relative; z-index: 1001; float: left;">
             <a href="${createLink(controller:'home',action:'portalHome')}">
                 <img src="${resource( file:restServer.retrieveBeanForCurrentPortal().getLogoCode())}" style=" height: 50px; margin-left: 10px;" />
@@ -65,29 +65,12 @@
                 </g:else>
                 <sec:ifLoggedIn>
 
-                    <g:if test="${g.portalTypeString()?.equals('stroke')}">
-                        <li id="usernameDisplay" class="dk-user-name" style="display:inline-block; margin-right:-1px; margin-bottom:-1px; padding: 5px 0 5px 15px; text-shadow: #333 0 1px 2px; border-left:solid 1px #aaaaaa;"><span class="user-name-initial" style="background-color: #93806c;"><sec:loggedInUserInfo field="username"/></span></li>
-                        <li id="userLogoutDisplay" title ="Log out" style="display:inline-block; margin-right:15px; border-radius: 0 5px 5px 0; padding: 2px 5px 2px 5px; font-size: 12px;text-shadow: none; background-color:#7fc343; "><g:link controller='logout'><g:message code="mainpage.log.out"/></g:link></li>
-                    </g:if>
-                    <g:elseif test="${g.portalTypeString()?.equals('mi')}">
-                        <li id="usernameDisplay" class="dk-user-name" style="display:inline-block; margin-right:-1px; margin-bottom:-1px; padding: 5px 0 5px 15px; text-shadow: #333 0 1px 2px; border-left:solid 1px #aaaaaa;"><span class="user-name-initial" style="background-color: #00b1f0;"><sec:loggedInUserInfo field="username"/></span></li>
-                        <li id="userLogoutDisplay" title ="Log out" style="display:inline-block; margin-right:15px; border-radius: 0 5px 5px 0; padding: 2px 5px 2px 5px; font-size: 12px;text-shadow: none; background-color:#7fc343; "><g:link controller='logout'><g:message code="mainpage.log.out"/></g:link></li>
-                    </g:elseif>
-                    <g:elseif  test="${g.portalTypeString()?.equals('t2d')}">
-                        <li id="usernameDisplay" class="dk-user-name" style="display:inline-block; margin-right:-1px; margin-bottom:-1px; padding: 5px 0 5px 15px; text-shadow: #333 0 1px 2px; border-left:solid 1px #aaaaaa;"><span class="user-name-initial dk-t2d-green"><sec:loggedInUserInfo field="username"/></span></li>
-                        <li id="userLogoutDisplay" title ="Log out" style="display:inline-block; margin-right:15px; border-radius: 0 5px 5px 0; padding: 2px 5px 2px 5px; font-size: 12px;text-shadow: none; " class="dk-t2d-blue"><g:link controller='logout'><g:message code="mainpage.log.out"/></g:link></li>
-                    </g:elseif>
-                    <g:elseif test="${g.portalTypeString()?.equals('lung')}">
-                        <li id="usernameDisplay" class="dk-user-name" style="display:inline-block; margin-right:-1px; margin-bottom:-1px; padding: 5px 0 5px 15px; text-shadow: #333 0 1px 2px; border-left:solid 1px #ffffff;"><span class="user-name-initial" style="background-color: #93806c;"><sec:loggedInUserInfo field="username"/></span></li>
-                        <li id="userLogoutDisplay" title ="Log out" style="display:inline-block; margin-right:15px; border-radius: 0 5px 5px 0; padding: 2px 5px 2px 5px; font-size: 12px;text-shadow: none; background-color:#7fc343; "><g:link controller='logout'><g:message code="mainpage.log.out"/></g:link></li>
-                    </g:elseif>
-                    <g:else>
-                        <li id="usernameDisplay" class="dk-user-name" style="display:inline-block; margin-right:-1px; margin-bottom:-1px; padding: 5px 0 5px 15px; text-shadow: #333 0 1px 2px; border-left:solid 1px #aaaaaa;"><span class="user-name-initial dk-t2d-green"><sec:loggedInUserInfo field="username"/></span></li>
-                        <li id="userLogoutDisplay" title ="Log out" style="display:inline-block; margin-right:15px; border-radius: 0 5px 5px 0; padding: 2px 5px 2px 5px; font-size: 12px;text-shadow: none; " class="dk-t2d-blue"><g:link controller='logout'><g:message code="mainpage.log.out"/></g:link></li>
-                    </g:else>
+
+                    <li id="usernameDisplay" class="dk-user-name" style="display:inline-block; margin-right:-1px; margin-bottom:-1px; padding: 5px 0 5px 15px; text-shadow: #333 0 1px 2px; border-left:solid 1px #aaaaaa;"><span class="user-name-initial" style="background-color: #93806c;"><sec:loggedInUserInfo field="username"/></span></li>
+                    <li id="userLogoutDisplay" title ="Log out" style="display:inline-block; margin-right:15px; border-radius: 0 5px 5px 0; padding: 2px 5px 2px 5px; font-size: 12px;text-shadow: none; background-color:#7fc343; "><g:link controller='logout'><g:message code="mainpage.log.out"/></g:link></li>
 
                     <sec:ifAllGranted roles="ROLE_ADMIN">
-                        <li class="portal-settings-menu"><h5>Portal settings </h5><ul>
+                        <li class="portal-settings-menu"><h5><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></h5><ul>
                         <li><g:link controller='admin' action="users" class="mgr"><g:message code='site.layouts.option.manage_users'/></g:link></li>
                         <li>
                             <script>

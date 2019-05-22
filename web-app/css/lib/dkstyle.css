@@ -1253,29 +1253,26 @@ span.new-dataset-flag {
 
 /* 2019 Portal Style */
 
-#header-bottom-lung, #header-bottom-stroke {
-      text-transform: capitalize;
-      font-size: 14px;
-      font-weight: 300;
-      padding: 0;
-      margin: 0;
-      position: fixed;
-      top: 0;
-      width: 100%;
-      height: 50px;
-      z-index: 100;
-  }
-
-#header-bottom-t2d {
+.header-bottom {
     text-transform: capitalize;
     font-size: 14px;
     font-weight: 300;
     padding: 0;
     margin: 0;
+    position: fixed;
     top: 0;
     width: 100%;
     height: 50px;
     z-index: 100;
+}
+
+#header-bottom-lung {
+    background-color: #7ACCC8;
+  }
+
+#header-bottom-t2d {
+    position: relative;
+    background-color: #3399cc;
 }
 
 .front-top-banner {
@@ -1285,6 +1282,26 @@ span.new-dataset-flag {
     padding-bottom: 70px;
     padding-top:0px;
     margin-top: 50px;
+}
+
+/* banner setting for Lung portal */
+.front-top-banner-lung {
+    background-image:url(../../images/lung/front_LDKP_banner_bg.png), linear-gradient(#7ACCC8, #08B89D);
+}
+
+.front-top-banner-lung .front-banner-btn {
+    color: #08B89D;
+}
+
+/* banner setting for T2D portal */
+
+.front-top-banner-t2d {
+    background-image:url(../../images/t2d/T2DKP_bg_2019.png), linear-gradient(#3399cc, #3C80BD);
+    margin-top: 0;
+}
+
+.front-top-banner-t2d .front-banner-btn {
+    color: #3399cc;
 }
 
 .front-logo-wrapper {
@@ -1306,7 +1323,14 @@ span.new-dataset-flag {
 	font-size: 25px;
 	display: block;
 	float: left;
-	transform: translate(0%,43%);
+}
+
+.front-logo-tagline-lung {
+    transform: translate(0%,43%);
+}
+
+.front-logo-tagline-t2d {
+    transform: translate(0%,5%);
 }
 
 .front-banner-ui-tabs {
