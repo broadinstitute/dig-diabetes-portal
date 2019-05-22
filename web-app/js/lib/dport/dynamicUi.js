@@ -1836,51 +1836,9 @@ mpgSoftware.dynamicUi = (function () {
     var displayForFullEffectorGeneTable = function (idForTheTargetDiv, // which table are we adding to
                                         dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
                                         nameOfAccumulatorField, // name of the persistent field where the data we received is stored
-                                        preferredSummaryKey, // we may wish to pull out one record for summary purposes
+                                        insertAnyHeaderRecords, // we may wish to pull out one record for summary purposes
                                         mapSortAndFilterFunction,
-                                        placeDataIntoRenderForm ) { // sort and filter the records we will use.  Resulting array must have fields tissue, value, and numericalValue
-
-        var categorizor = function(groupNumber,valueToCategorize){
-            var returnValue = 0;
-            switch(groupNumber){
-                case 0:
-                    switch (valueToCategorize){
-                        case 'LIMITED_extra':
-                            returnValue = 1;
-                            break;
-                        case 'LIMITED':
-                            returnValue = 2;
-                            break;
-                        case 'PLAUSIBLE_extra':
-                            returnValue = 3;
-                            break;
-                        case 'PLAUSIBLE':
-                            returnValue = 4;
-                            break;
-                        case 'POTENTIAL_extra':
-                            returnValue = 5;
-                            break;
-                        case 'POTENTIAL':
-                            returnValue = 6;
-                            break;
-                        case 'STRONG_extra':
-                            returnValue = 7;
-                            break;
-                        case 'STRONG':
-                            returnValue = 8;
-                            break;
-                        case 'CAUSAL_extra':
-                            returnValue = 9;
-                            break;
-                        case 'CAUSAL':
-                            returnValue = 10;
-                            break;
-                    }
-                    break;
-                default: break;
-            }
-            return returnValue;
-        };
+                                        placeContentRowsIntoIntermediateObject ) { // sort and filter the records we will use.  Resulting array must have fields tissue, value, and numericalValue
 
 
         var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode);
@@ -1888,93 +1846,22 @@ mpgSoftware.dynamicUi = (function () {
 
         // for each gene collect up the data we want to display
         var incomingData = getAccumulatorObject(nameOfAccumulatorField);
-        var initialLinearIndex = 0;
-        var headersObjects;
-
-        // do we have any data at all?  If we do, then make a row
+        var returnObject={headers:[], content:{}};
         if (( typeof incomingData !== 'undefined') &&
             ( incomingData.length > 0)) {
-            var returnObject = incomingData[0];
-            addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
+             returnObject = incomingData[0];
+        }
+        var sortedHeaderObjects = insertAnyHeaderRecords(incomingData,dataAnnotationType,intermediateDataStructure,returnObject);
+        var initialLinearIndex = sortedHeaderObjects.length;
 
-            var expectedColumns = dataAnnotationType.dataAnnotation.customColumnOrdering.constituentColumns;
-            headersObjects = _.map(returnObject.headers,function(o){
-                var index=_.findIndex( expectedColumns,{'key':o});
-                if (index>-1){
-                    var grouping = dataAnnotationType.dataAnnotation.customColumnOrdering.topLevelColumns[expectedColumns[index].pos];
-                    return {
-                        name:expectedColumns[index].key,
-                        groupNum:expectedColumns[index].pos,
-                        groupKey:grouping.key,
-                        groupDisplayName:grouping.displayName,
-                        columnDisplayName:expectedColumns[index].display,
-                        groupHelpText:grouping.helptext,
-                        columnHelpText:expectedColumns[index].helptext,
-                        groupOrder:grouping.order,
-                        withinGroupNum:expectedColumns[index].subPos
-                    }
-                }
-            });
-            headersObjects = _.compact(headersObjects);
-            var sortedHeaderObjects = _.sortBy(headersObjects,['groupOrder','withinGroupNum','name']);
-            _.forEach(sortedHeaderObjects, function(sortedHeaderObject){sortedHeaderObject['initialLinearIndex']=initialLinearIndex++;})
-            returnObject.headers = _.map(sortedHeaderObjects,function(o){return o.name});
-
-            // set up the headers
-            _.forEach(sortedHeaderObjects, function (oneRecord) {
-                intermediateDataStructure.headers.push(new IntermediateStructureDataCell(oneRecord,
-                    Mustache.render($('#'+dataAnnotationType.dataAnnotation.headerWriter)[0].innerHTML, oneRecord),"fegtHeader",'LIT'));
-                intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord,
-                    Mustache.render($('#'+dataAnnotationType.dataAnnotation.headerWriter)[0].innerHTML, oneRecord),"fegtHeader",'LIT'));
-            });
-
-            var constituentColumns = _.map(dataAnnotationType.dataAnnotation.customColumnOrdering.constituentColumns,function(val){
-                return val.key;
-            });
-            var constituentColRecs = dataAnnotationType.dataAnnotation.customColumnOrdering.constituentColumns;
-            // fill in all of the column cells
-            _.forEach(returnObject.contents, function (recordsPerGene,rowNumber) {
-                if ($.isEmptyObject(recordsPerGene)) {
-                    alert('empty records not allowed in the FEGT')
-                }
-                _.forEach(recordsPerGene, function (valueInGeneRecord,header) {
-                    var indexOfColumn = _.indexOf(returnObject.headers, header );
-                    var indexOfPreassignedColumnName = _.indexOf(constituentColumns, header );
-                    if (indexOfColumn === -1) {
-
-                    } else if (indexOfPreassignedColumnName === -1) {
-                        console.log("Did not find index of indexOfPreassignedColumnName "+header+" for FEGT.  Shouldn't we?")
-                    } else {
-                        var groupNumber = constituentColRecs[indexOfPreassignedColumnName].pos;
-                        var sortNumber = categorizor(groupNumber, valueInGeneRecord );
-                        var linkSafeText = valueInGeneRecord.replace(/\/.$/g, '').replace(/or /g, '');
-                        var textWithoutQuotes = valueInGeneRecord.replace(/\"/g, '');
-                        var categoryRecord = {initialLinearIndex:initialLinearIndex++,
-                                                groupNumber:constituentColRecs[indexOfPreassignedColumnName].pos,
-                                                categoryName:textWithoutQuotes,
-                                                sortNumber:sortNumber,
-                                                linkSafeText:linkSafeText};
-                        _.forEach(dataAnnotationType.dataAnnotation.customColumnOrdering.topLevelColumns, function (grouping, index){
-                            if (grouping.order===constituentColRecs[indexOfPreassignedColumnName].pos){
-                                categoryRecord[grouping.key]=[{textToDisplay:textWithoutQuotes}];
-                            } else {
-                                categoryRecord[grouping.key]=[];
-                            }
-                        });
-                        var displayableRecord = Mustache.render($('#'+dataAnnotationType.dataAnnotation.cellBodyWriter)[0].innerHTML, categoryRecord);
-                        intermediateDataStructure.rowsToAdd[rowNumber].columnCells[indexOfColumn] = new IntermediateStructureDataCell(displayableRecord,
-                            displayableRecord,"egftRecord","LIT" );
-                    }
-
-                });
-                addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
-            });
+        if (returnObject.headers.length > 0){
+            placeContentRowsIntoIntermediateObject(returnObject,dataAnnotationType,intermediateDataStructure,initialLinearIndex);
             intermediateDataStructure.tableToUpdate = idForTheTargetDiv;
         }
 
-        //// Set the default exclusions
-        
-        var sharedTable = new SharedTableObject( 'fegtAnnotationHeaders',headersObjects.length,0);
+        // Set the default exclusions.  We need to do this because we have to find every column in the table, but we don't want
+        // to display every column.  Instead we exclude some of them unless a user specifically requests that a column be expanded.
+         var sharedTable = new SharedTableObject( 'fegtAnnotationHeaders',sortedHeaderObjects.length,0);
         setAccumulatorObject("sharedTable_"+idForTheTargetDiv,sharedTable);
         var deleter = {};
         _.forEach(sortedHeaderObjects, function (o,index){
@@ -4261,6 +4148,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 case 'geneTableGeneHeaders':
                     if (headerSpecific){
                         setUpDraggable();
+                        $('div.geneName span.glyphicon-remove').show();
                     } else{
                         $('div.geneAnnotationShifters').hide ();
                         $('div.geneHeaderShifters').show ();
@@ -4325,11 +4213,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         }
                         $('div.subcategory').css('font-weight','bold');
                         $('th>div>a[data-toggle="popover"]').hide();
-                        // $('[data-toggle="popover"]').popover({
-                        //     animation: true,
-                        //     html: true,
-                        //     template: '<div class="popover" role="tooltip"><div class="arrow"></div><h5 class="popover-title"></h5><div class="popover-content"></div></div>'
-                        // });
+                        $('div.geneName span.glyphicon-remove').hide();
                     }
                   break;
                 case 'variantTableVariantHeaders':
@@ -4895,6 +4779,18 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         $('button.hider.'+annotationId).hide();
     };
 
+    var retrieveDataFromServer = function(event){
+        var dataTarget = $(event.target).attr('data-target').substring(1).trim();
+        if (dataTarget.indexOf("tissues_")>=0){
+            var geneName = dataTarget.substring("tissues_".length);
+            var uniqueId  = dataTarget+'_uniquifier';
+
+        }
+        return "<h1>howdy!</h1>";
+    }
+
+
+
 
     /***
      * helper function for showAttachedData.  This one creates a nice big D3 graphic.  I built it for ABC data, but it should work
@@ -4965,7 +4861,6 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             var divTop = $(event.target).offset().top;
             var divLeft = $(event.target).offset().left + $(event.target).width();
 
-            //$(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).find(".content-wrapper").css({"width":contentWidth, "height":contentHeight});
             $(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).find(".content-wrapper").css({"width":"100%", "height":"100%"});
             $(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).css({"top":divTop,"left":divLeft});
 
@@ -5399,6 +5294,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         displayForGeneTable:displayForGeneTable,
         displayForFullEffectorGeneTable:displayForFullEffectorGeneTable,
         displayHeaderForGeneTable:displayHeaderForGeneTable,
+        addRowHolderToIntermediateDataStructure:addRowHolderToIntermediateDataStructure,
+        IntermediateStructureDataCell:IntermediateStructureDataCell,
         shiftColumnsByOne:shiftColumnsByOne,
         extractStraightFromTarget:extractStraightFromTarget,
         showAttachedData:showAttachedData,
