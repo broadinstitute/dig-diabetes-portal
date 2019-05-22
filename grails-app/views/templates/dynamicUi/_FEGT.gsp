@@ -44,13 +44,23 @@
 {{/Combined_category}}
 {{#Gene_name}}
 <div class="fedt">
-        <a href="../gene/geneInfo/{{linkSafeText}}">{{textToDisplay}}</a>
+        <a target="_blank" href="../gene/geneInfo/{{linkSafeText}}">{{textToDisplay}}</a>
     </div>
 {{/Gene_name}}
 
 {{#Genetic_combined}}
  <div class="fedt text-center">
-{{textToDisplay}}
+ {{#exomeSequenceCallOut}}
+                <a
+               onclick="mpgSoftware.dynamicUi.showAttachedData(event,'T2D gene burden for {{geneName}}',mpgSoftware.dynamicUi.retrieveDataFromServer)"
+                class="cellExpander" data-target="#tissues_{{geneName}}"  style="color:black">
+               <span class="glyphicon glyphicon-zoom-in" aria-hidden="true" data-target="#tissues_{{geneName}}"></span>
+               &nbsp;
+               </a>
+ {{/exomeSequenceCallOut}}
+ {{^exomeSequenceCallOut}}
+    {{textToDisplay}}
+ {{/exomeSequenceCallOut}}
 </div>
 {{/Genetic_combined}}
 {{#Genomic_combined}}

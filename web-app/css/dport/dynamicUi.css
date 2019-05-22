@@ -248,8 +248,8 @@ th.onlyCol{
 .effector-table th {
     position:relative;
     text-align:center;
-    padding-left: 40px !important;
-    padding-right: 30px !important;
+    /*padding-left: 40px !important;*/
+    /*padding-right: 30px !important;*/
     white-space:nowrap;
 }
 
