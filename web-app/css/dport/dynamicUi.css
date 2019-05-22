@@ -476,3 +476,6 @@ table.dataTable.fullEffectorGeneTableHolder  thead th.BigGroupNum6 {
 table.dataTable.fullEffectorGeneTableHolder  thead th.BigGroupNum7 {
     border-top: solid 3px #F6B11C;
 }
+td.Combined_category div.fedtCell div.fedt {
+    font-weight: bold;
+}

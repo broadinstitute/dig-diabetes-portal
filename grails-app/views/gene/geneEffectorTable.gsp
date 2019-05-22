@@ -196,10 +196,6 @@
                                     display:"Rat homologous genes",
                                     pos:6,subPos:2}
 
-                                // { key: "Additional_reference",pos:7,subPos:0}
-                                // // { key: "GENE",pos:47,subPos:0},
-                                // // { key: "Gene_Ensemble_ID",pos:47,subPos:1}
-                                //
                                     ]
                                 }
                             }
@@ -238,7 +234,7 @@
 <div id="mainEffectorDiv">
     <div class="container">
         <div class="row">
-            <div class="center-text">
+            <div class="text-center">
                <h2>Effector gene table</h2>
             </div>
             <div class="col-md-12" style="padding-top: 30px;">

@@ -1844,21 +1844,43 @@ mpgSoftware.dynamicUi = (function () {
             var returnValue = 0;
             switch(groupNumber){
                 case 0:
-                    if (valueToCategorize.length===0){
-                        returnValue = 99;
-                    } else {
-
+                    switch (valueToCategorize){
+                        case 'LIMITED_extra':
+                            returnValue = 1;
+                            break;
+                        case 'LIMITED':
+                            returnValue = 2;
+                            break;
+                        case 'PLAUSIBLE_extra':
+                            returnValue = 3;
+                            break;
+                        case 'PLAUSIBLE':
+                            returnValue = 4;
+                            break;
+                        case 'POTENTIAL_extra':
+                            returnValue = 5;
+                            break;
+                        case 'POTENTIAL':
+                            returnValue = 6;
+                            break;
+                        case 'STRONG_extra':
+                            returnValue = 7;
+                            break;
+                        case 'STRONG':
+                            returnValue = 8;
+                            break;
+                        case 'CAUSAL_extra':
+                            returnValue = 9;
+                            break;
+                        case 'CAUSAL':
+                            returnValue = 10;
+                            break;
                     }
-                    break;
-                case 1:
-                    break;
-                case 2:
-                    break;
-                case 3:
                     break;
                 default: break;
             }
-        }
+            return returnValue;
+        };
 
 
         var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode);
@@ -1922,13 +1944,18 @@ mpgSoftware.dynamicUi = (function () {
                     } else if (indexOfPreassignedColumnName === -1) {
                         console.log("Did not find index of indexOfPreassignedColumnName "+header+" for FEGT.  Shouldn't we?")
                     } else {
-
+                        var groupNumber = constituentColRecs[indexOfPreassignedColumnName].pos;
+                        var sortNumber = categorizor(groupNumber, valueInGeneRecord );
+                        var linkSafeText = valueInGeneRecord.replace(/\/.$/g, '').replace(/or /g, '');
+                        var textWithoutQuotes = valueInGeneRecord.replace(/\"/g, '');
                         var categoryRecord = {initialLinearIndex:initialLinearIndex++,
                                                 groupNumber:constituentColRecs[indexOfPreassignedColumnName].pos,
-                                                categoryName:valueInGeneRecord};
+                                                categoryName:textWithoutQuotes,
+                                                sortNumber:sortNumber,
+                                                linkSafeText:linkSafeText};
                         _.forEach(dataAnnotationType.dataAnnotation.customColumnOrdering.topLevelColumns, function (grouping, index){
                             if (grouping.order===constituentColRecs[indexOfPreassignedColumnName].pos){
-                                categoryRecord[grouping.key]=[{textToDisplay:valueInGeneRecord}];
+                                categoryRecord[grouping.key]=[{textToDisplay:textWithoutQuotes}];
                             } else {
                                 categoryRecord[grouping.key]=[];
                             }
@@ -3303,6 +3330,11 @@ mpgSoftware.dynamicUi = (function () {
             }
         });
 
+        $( window ).resize(function() {
+            adjustTableWrapperWidth("table.fullEffectorGeneTableHolder");
+        })
+
+
 
         // Everything that happens on the gene table
         //$('#retrieveMultipleRecordsTest').on('click', function () {
@@ -3628,6 +3660,9 @@ mpgSoftware.dynamicUi = (function () {
                     break;
 
                 case 'Combined_category':
+                    var x = parseInt($(a).attr("sortnumber"));
+                    var y = parseInt($(b).attr("sortnumber"));
+                    return ((x < y) ? -1 : ((x > y) ? 1 : 0));
                 case 'Genetic_combined':
                 case 'Genomic_combined':
                 case 'Perturbation_combined':
@@ -4037,8 +4072,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         {extend: "csv", text: "Copy all to csv"}
                     ],
                     "aLengthMenu": [
-                        [15, 500, -1],
-                        [15, 500, "All"]
+                        [150,15, -1],
+                        [150,15, "All"]
                     ],
                     "bDestroy": true,
                     "bSort": true,
@@ -4109,10 +4144,14 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                          _.forEach(classList, function (oneClass){
                              var sortOrderDesignation = "sorting_";
                              var bigGroupDesignation = "BigGroupNum";
+                             var combinedCategory = "Combined_category";
                              if ( oneClass.substr(0,sortOrderDesignation.length) === sortOrderDesignation ){
                                  classesToPromote.push (oneClass);
                              }
                              if ( oneClass.substr(0,bigGroupDesignation.length) === bigGroupDesignation ){
+                                 classesToPromote.push (oneClass);
+                             }
+                             if ( oneClass.substr(0,combinedCategory.length) === combinedCategory ){
                                  classesToPromote.push (oneClass);
                              }
                          });
@@ -4380,7 +4419,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
 
                     });
-
+                    adjustTableWrapperWidth("table.fullEffectorGeneTableHolder");
                     break;
 
                 default:
@@ -5302,6 +5341,24 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         });
 
     }
+
+
+    function adjustTableWrapperWidth(TABLE) {
+
+        var windowWidth = $(window).width();
+        var mainContainerWidth = $(".container").eq(0).width();
+
+        var sideMargin = ((mainContainerWidth - windowWidth)/2)*0.9;
+
+        $(TABLE).parent().css({"margin-left": sideMargin+"px", "margin-right": sideMargin+"px"});
+    }
+
+
+
+
+
+
+
 
     var openFilter = function(TARGETCLMID) {
 

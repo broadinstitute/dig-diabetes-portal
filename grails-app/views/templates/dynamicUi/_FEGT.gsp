@@ -3,7 +3,7 @@
 
 
         <div sortStrategy="alphabetical" sortField="-1"  sortTerm="{{name1}}"
-        class="{{groupName}} BigGroupNum{{groupNum}} groupNum{{groupNum}} withinGroupNum{{withinGroupNum}} text-center initialLinearIndex_{{initialLinearIndex}}">
+        class="{{groupKey}} {{groupName}} BigGroupNum{{groupNum}} groupNum{{groupNum}} withinGroupNum{{withinGroupNum}} text-center initialLinearIndex_{{initialLinearIndex}}">
             <span class="groupDisplayName displayMethodName {{name}}" methodKey="{{name}}" style="display:none">{{groupDisplayName}}
                 <span class="glyphicon glyphicon-resize-full expand-trigger" aria-hidden="true" title="View collapsed columns"
                 onclick="mpgSoftware.dynamicUi.expandColumns(event,this,'forward','table.fullEffectorGeneTableHolder');"
@@ -21,8 +21,8 @@
             </span>
 
 
-            <span class="glyphicon glyphicon-option-vertical options-icon" aria-hidden="true" title="Open column filter"
-            onclick="mpgSoftware.dynamicUi.openFilter('genetic-evidence');"></span>
+            %{--<span class="glyphicon glyphicon-option-vertical options-icon" aria-hidden="true" title="Open column filter"--}%
+            %{--onclick="mpgSoftware.dynamicUi.openFilter('genetic-evidence');"></span>--}%
 
 
 
@@ -35,21 +35,21 @@
 </script>
 
 <script id="fegtCellBody"  type="x-tmpl-mustache">
-<div class="initialLinearIndex_{{initialLinearIndex}} groupNum{{groupNumber}} fedtCell" sortField="{{categoryName}}">
+<div class="initialLinearIndex_{{initialLinearIndex}} groupNum{{groupNumber}} fedtCell" sortField="{{categoryName}}" sortNumber="{{sortNumber}}">
 {{#Combined_category}}
-<div class="fedt">
+<div class="accentuate fedt">
     {{textToDisplay}}&nbsp;
     </div>
 {{/Combined_category}}
 {{#Gene_name}}
 <div class="fedt">
-    {{textToDisplay}}&nbsp;
+        <a href="../gene/geneInfo/{{linkSafeText}}">{{textToDisplay}}</a>
     </div>
 {{/Gene_name}}
 
 {{#Genetic_combined}}
  <div class="fedt text-center">
-    {{textToDisplay}}&nbsp;
+{{textToDisplay}}
 </div>
 {{/Genetic_combined}}
 {{#Genomic_combined}}
