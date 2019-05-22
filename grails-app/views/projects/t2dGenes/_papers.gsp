@@ -1,10 +1,18 @@
 <div class="sigma-detail">
 <div class="section" style="display : block">
-<div class="paper">
-<a href="http://www.ncbi.nlm.nih.gov/pubmed/27398621" target="_blank">The genetic architecture of type 2 diabetes.</a><br/>
-Fuchsberger C, Flannick J, Teslovich TM, Mahajan A, Agarwala V, Gaulton KJ, Ma C, Fontanillas P, Moutsianas L, McCarthy DJ, Rivas MA, Perry JR, Sim X, Blackwell TW, Robertson NR, Rayner NW, Cingolani P, Locke AE, Tajes JF, Highland HM, Dupuis J, Chines PS, Lindgren CM, Hartl C, Jackson AU, Chen H, Huyghe JR, van de Bunt M, Pearson RD, Kumar A, Müller-Nurasyid M, Grarup N, Stringham HM, Gamazon ER, Lee J, Chen Y, Scott RA, Below JE, Chen P, Huang J, Go MJ, Stitzel ML, Pasko D, Parker SC, Varga TV, Green T, Beer NL, Day-Williams AG, Ferreira T, Fingerlin T,  Horikoshi M, Hu C, Huh I, Ikram MK, Kim BJ, Kim Y, Kim YJ, Kwon MS, Lee J, Lee S, Lin KH, Maxwell TJ, Nagai Y, Wang X, Welch RP, Yoon J, Zhang W, Barzilai N, Voight BF, Han BG, Jenkinson CP, Kuulasmaa T, Kuusisto J, Manning A, Ng MC, Palmer ND, Balkau B, Stančáková A, Abboud HE, Boeing H, Giedraitis V, Prabhakaran D, Gottesman O, Scott J, Carey J, Kwan P, Grant G, Smith JD, Neale BM, Purcell S, Butterworth AS, Howson JM, Lee HM, Lu Y, Kwak SH, Zhao W, Danesh J, Lam VK, Park  KS, Saleheen D, So WY, Tam CH, Afzal U, Aguilar D, Arya R, Aung T, Chan E, Navarro C, Cheng CY, Palli D, Correa A, Curran JE, Rybin D, Farook VS, Fowler SP, Freedman BI, Griswold M, Hale DE, Hicks PJ, Khor CC, Kumar S, Lehne B, Thuillier  D, Lim WY, Liu J, van der Schouw YT, Loh M, Musani SK, Puppala S, Scott WR, Yengo L, Tan ST, Taylor HA Jr, Thameem F, Wilson G, Wong TY, Njølstad PR, Levy JC, Mangino M, Bonnycastle LL, Schwarzmayr T, Fadista J, Surdulescu GL, Herder C, Groves CJ, Wieland T, Bork-Jensen J, Brandslund I, Christensen C, Koistinen HA, Doney AS, Kinnunen L, Esko T, Farmer AJ, Hakaste L, Hodgkiss D, Kravic J, Lyssenko V, Hollensted M, Jørgensen ME, Jørgensen T, Ladenvall C, Justesen JM, Käräjämäki A, Kriebel J, Rathmann W, Lannfelt L, Lauritzen T, Narisu N, Linneberg A, Melander O, Milani L, Neville M, Orho-Melander M, Qi L, Qi Q, Roden M, Rolandsson O, Swift A, Rosengren AH, Stirrups K, Wood AR, Mihailov E, Blancher C, Carneiro MO, Maguire J, Poplin R, Shakir K, Fennell T, DePristo M, Hrabé de Angelis M, Deloukas P, Gjesing AP, Jun G, Nilsson P, Murphy J, Onofrio R, Thorand B, Hansen T, Meisinger C, Hu FB, Isomaa B, Karpe F, Liang L, Peters A, Huth C, O'Rahilly SP, Palmer CN, Pedersen O, Rauramaa R, Tuomilehto J, Salomaa V, Watanabe RM, Syvänen AC, Bergman RN, Bharadwaj D, Bottinger EP, Cho YS, Chandak GR, Chan JC, Chia KS, Daly MJ, Ebrahim SB, Langenberg C, Elliott P, Jablonski KA, Lehman DM, Jia W, Ma RC, Pollin TI, Sandhu M, Tandon N, Froguel P, Barroso I, Teo YY, Zeggini E, Loos RJ, Small KS, Ried JS, DeFronzo RA, Grallert H, Glaser B, Metspalu A, Wareham NJ, Walker M, Banks E, Gieger C, Ingelsson E, Im HK, Illig T, Franks PW, Buck G, Trakalo J, Buck D, Prokopenko I, Mägi R, Lind L, Farjoun Y, Owen KR, Gloyn AL, Strauch K, Tuomi T, Kooner JS, Lee JY, Park T, Donnelly P, Morris AD, Hattersley AT, Bowden DW, Collins FS, Atzmon G, Chambers JC, Spector TD, Laakso M, Strom TM, Bell GI, Blangero J, Duggirala R, Tai ES, McVean G, Hanis CL, Wilson JG, Seielstad M, Frayling TM, Meigs JB, Cox NJ, Sladek R, Lander ES, Gabriel S, Burtt NP, Mohlke KL, Meitinger T, Groop L, Abecasis G, Florez JC, Scott LJ, Morris AP, Kang HM, Boehnke M, Altshuler D, McCarthy MI.
-<div class="citation">Nature. 2016 Jul 11. doi: 10.1038/nature18642.</div>
-</div>
+
+    <p><div class="paper">
+    <g:message code="informational.shared.publications.Flannick_2019_Nature"></g:message><br>
+    <g:message code="informational.shared.publications.Flannick_2019_Nature.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+    <div class="citation"><g:message code="informational.shared.publications.Flannick_2019_Nature.citation"></g:message> </div>
+</div></p>
+
+    <p><div class="paper">
+    <g:message code="informational.shared.publications.Fuchsberger_2016_Nature"></g:message><br>
+    <g:message code="informational.shared.publications.Fuchsberger_2016_Nature.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+    <div class="citation"><g:message code="informational.shared.publications.Fuchsberger_2016_Nature.citation"></g:message> </div>
+</div></p>
+
     <div class="paper">
         <a href="http://www.ncbi.nlm.nih.gov/pubmed/27260402" target="_blank">Differential burden of rare protein truncating variants in Alzheimer's disease patients compared to centenarians.</a><br/>
         Freudenberg-Hua Y, Li W, Abhyankar A, Vacic V, Cortes V, Ben-Avraham D, Koppel J, Greenwald B, Germer S; T2D_GENES Consortium, Darnell RB, Barzilai N, Freudenberg J, Atzmon G, Davies P.
@@ -30,16 +38,19 @@ Fuchsberger C, Flannick J, Teslovich TM, Mahajan A, Agarwala V, Gaulton KJ, Ma C
         Williams AL, Genovese G, Dyer T, Altemose N, Truax K, Jun G, Patterson N, Myers SR, Curran JE, Duggirala R, Blangero J, Reich D, Przeworski M; T2D-GENES Consortium.
         <div class="citation">Elife. 2015 Mar 25;4. doi: 10.7554/eLife.04637.</div>
     </div>
-     <div class="paper">
-        <a href="http://www.ncbi.nlm.nih.gov/pubmed/25625282" target="_blank"><g:message code="informational.shared.publications.Mahajan_2015_PLOS_Genet" />.</a> <br/>
-        Mahajan A, Sim X, Ng HJ, Manning A, Rivas MA, Highland HM, Locke AE, Grarup N, Im HK, Cingolani P, Flannick J, Fontanillas P, Fuchsberger C, Gaulton KJ, Teslovich TM, Rayner NW, Robertson NR, Beer NL, Rundle JK, Bork-Jensen J, Ladenvall C, Blancher C, Buck D, Buck G, Burtt NP, Gabriel S, Gjesing AP, Groves CJ, Hollensted M, Huyghe JR, Jackson AU, Jun G, Justesen JM, Mangino M, Murphy J, Neville M, Onofrio R, Small KS, Stringham HM, Syvänen AC, Trakalo J, Abecasis G, Bell GI, Blangero J, Cox NJ, Duggirala R, Hanis CL, Seielstad M, Wilson JG, Christensen C, Brandslund I, Rauramaa R, Surdulescu GL, Doney AS, Lannfelt L, Linneberg A, Isomaa B, Tuomi T, Jørgensen ME, Jørgensen T, Kuusisto J, Uusitupa M, Salomaa V, Spector TD, Morris AD, Palmer CN, Collins FS, Mohlke KL, Bergman RN, Ingelsson E, Lind L, Tuomilehto J, Hansen T, Watanabe RM, Prokopenko I, Dupuis J, Karpe F, Groop L, Laakso M, Pedersen O, Florez JC, Morris AP, Altshuler D, Meigs JB, Boehnke M, McCarthy MI, Lindgren CM, Gloyn AL; T2D-GENES consortium and GoT2D consortium.
-        <div class="citation">PLoS Genet. 2015 Jan 27;11(1):e1004876. doi: 10.1371/journal.pgen.1004876. eCollection 2015 Jan. </div>
-    </div>
+
+    <p><div class="paper">
+    <g:message code="informational.shared.publications.Mahajan_2015_PLOS_Genet"></g:message><br>
+    <g:message code="informational.shared.publications.Mahajan_2018_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+    <div class="citation"><g:message code="informational.shared.publications.Mahajan_2015_PLOS_Genet.citation"></g:message> </div>
+</div></p>
+
     <div class="paper">
         <a href=" http://www.ncbi.nlm.nih.gov/pubmed/25426837" target="_blank"><g:message code="informational.shared.publications.Jaiswal_2014_NEJM" />. </a> <br/>
         Jaiswal S, Fontanillas P, Flannick J, Manning A, Grauman PV, Mar BG, Lindsley RC, Mermel CH,Burtt N, Chavez A, Higgins JM, Moltchanov V, Kuo FC, Kluk MJ, Henderson B, Kinnunen L, Koistinen HA, Ladenvall C, Getz G, Correa A, Banahan BF, Gabriel S, Kathiresan S, Stringham HM, McCarthy MI, Boehnke M, Tuomilehto J, Haiman C, Groop L, Atzmon G, Wilson JG, Neuberg D, Altshuler D, Ebert BL.
         <div class="citation">N Engl J Med. 2014 Dec 25;371(26):2488-98. doi: 10.1056/NEJMoa1408617. Epub 2014 Nov 26. </div>
     </div>
+
     <div class="paper">
         <a href=" http://www.ncbi.nlm.nih.gov/pubmed/25157153" target="_blank"><g:message code="informational.shared.publications.Majithia_2014_PNAS" />.</a> <br/>
         Majithia AR, Flannick J, Shahinian P, Guo M, Bray MA, Fontanillas P, Gabriel SB; GoT2D Consortium; NHGRI JHS/FHS Allelic Spectrum Project; SIGMA T2D Consortium; T2D-GENES Consortium, Rosen ED, Altshuler D.

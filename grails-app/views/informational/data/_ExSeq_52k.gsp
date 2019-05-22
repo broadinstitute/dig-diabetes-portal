@@ -1,14 +1,18 @@
 <script class="panel-body" id="ExSeq_52k_script" type="x-tmpl-mustache">
+
+<p><img src="${resource(dir: 'images/organizations', file: 'AMP_T2D-GENES.png')}" style="width: 130px; margin-right: 15px"
+        align="left">
+</p>
     <h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
 <p><g:message code="informational.data.overlaps.52K"></g:message></p>
 
-
+<br>
 <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
-<p><div class="paper">
-<g:message code="informational.shared.publications.Flannick_2018_submitted"></g:message><br>
-<g:message code="informational.shared.publications.Flannick_2018_submitted.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
-<div class="citation"><g:message code="informational.shared.publications.Flannick_2018_submitted.citation"></g:message> </div>
+    <p><div class="paper">
+    <g:message code="informational.shared.publications.Flannick_2019_Nature"></g:message><br>
+    <g:message code="informational.shared.publications.Flannick_2019_Nature.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+    <div class="citation"><g:message code="informational.shared.publications.Flannick_2019_Nature.citation"></g:message> </div>
 </div></p>
 
 <p><div class="paper">
@@ -745,7 +749,7 @@
 <p><g:message code="informational.data.overview.52K-3"></g:message></p>
 <p>&nbsp;</p>
 
-<h4>Accessing AMP T2D-GENES exome sequence analysis data</h4>
+<h4>Accessing AMP T2D-GENES exome sequence analysis results</h4>
     <p><g:message code="informational.data.accessing.52K1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.52K2"></g:message></p>
 
 
