@@ -61,12 +61,12 @@
                                 customColumnOrdering:{
                                     topLevelColumns:[
                                         {   key:"Combined_category",
-                                            displayName:"Combined category",
-                                            helptext: '',
+                                            displayName:"Combined prediction",
+                                            helptext: '<g:helpText title="effectorTable.combined-prediction.help.header" placement="bottom" body="effectorTable.combined-prediction.help.text"/>',
                                             order: 0 },
                                         {   key:"Gene_name",
                                             displayName:"Gene and locus",
-                                            helptext: '<g:helpText title="geneTable.ukbb.phewas.help.header" placement="bottom" body="geneTable.ukbb.phewas.help.text"/>',
+                                            helptext: '<g:helpText title="effectorTable.gene-locus.help.header" placement="bottom" body="effectorTable.gene-locus.help.text"/>',
                                             order: 1 },
                                         {   key:"Genetic_combined",
                                             displayName:"Genetic combined",
