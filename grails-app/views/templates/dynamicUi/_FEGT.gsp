@@ -1,9 +1,10 @@
 
 <script id="dynamicFullEffectorGeneTableHeader"  type="x-tmpl-mustache">
 
-
         <div sortStrategy="alphabetical" sortField="-1"  sortTerm="{{name1}}"
         class="{{groupKey}} {{groupName}} BigGroupNum{{groupNum}} groupNum{{groupNum}} withinGroupNum{{withinGroupNum}} text-center initialLinearIndex_{{initialLinearIndex}}">
+            <span class="groupHelpText {{name}}" style="display:none">{{{groupHelpText}}}</span>
+            <span class="columnHelpText {{name}}">{{{columnHelpText}}}</span>
             <span class="groupDisplayName displayMethodName {{name}}" methodKey="{{name}}" style="display:none">{{groupDisplayName}}
                 <span class="glyphicon glyphicon-resize-full expand-trigger" aria-hidden="true" title="View collapsed columns"
                 onclick="mpgSoftware.dynamicUi.expandColumns(event,this,'forward','table.fullEffectorGeneTableHolder');"

@@ -1909,6 +1909,7 @@ mpgSoftware.dynamicUi = (function () {
                         groupDisplayName:grouping.displayName,
                         columnDisplayName:expectedColumns[index].display,
                         groupHelpText:grouping.helptext,
+                        columnHelpText:expectedColumns[index].helptext,
                         groupOrder:grouping.order,
                         withinGroupNum:expectedColumns[index].subPos
                     }
@@ -4402,23 +4403,34 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
                      break;
                 case 'fegtAnnotationHeaders':
-                    var compressedGroups = sharedTable.getAllCompressedGroups();
+                    if (headerSpecific){
+                        var compressedGroups = sharedTable.getAllCompressedGroups();
 
-                    _.forEach(compressedGroups,function(groupspecifier){
-                        var domspecCollapse = "span."+groupspecifier.groupName+" span.collapse-trigger";
-                        var domspecExpand = "span."+groupspecifier.groupName+" span.expand-trigger";
-                        if (groupspecifier.expansionPossible){
-                            $(domspecCollapse).hide();
-                            $(domspecExpand).show();
-                            $("span."+groupspecifier.groupName+".groupDisplayName").show();
-                            $("span."+groupspecifier.groupName+".columnDisplayName").hide();
-                        } else {
-                            $(domspecCollapse).hide();
-                            $(domspecExpand).hide();
-                        }
+                        _.forEach(compressedGroups,function(groupspecifier){
+                            var domspecCollapse = "span."+groupspecifier.groupName+" span.collapse-trigger";
+                            var domspecExpand = "span."+groupspecifier.groupName+" span.expand-trigger";
+                            var domspecGroupHelpText = "span."+groupspecifier.groupName+".groupHelpText";
+                            var domspecColumnHelpText = "span."+groupspecifier.groupName+".columnHelpText";
+                            if (groupspecifier.expansionPossible){
+                                $(domspecCollapse).hide();
+                                $(domspecExpand).show();
+                                $("span."+groupspecifier.groupName+".groupDisplayName").show();
+                                $("span."+groupspecifier.groupName+".columnDisplayName").hide();
+                                $(domspecGroupHelpText).show();
+                                $(domspecColumnHelpText).hide();
+                            } else {
+                                $(domspecCollapse).hide();
+                                $(domspecExpand).hide();
+                                $(domspecGroupHelpText).hide();
+                                $(domspecColumnHelpText).show();
+                            }
 
 
-                    });
+                        });
+
+                        $('[data-toggle="popover"]').popover();
+
+                    }
                     adjustTableWrapperWidth("table.fullEffectorGeneTableHolder");
                     break;
 
