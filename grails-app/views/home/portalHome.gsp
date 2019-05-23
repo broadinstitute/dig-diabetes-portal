@@ -191,12 +191,16 @@
                     <g:if test="${portalVersionBean.geneLevelDataExists}">
 
                         <div class="radio-inline">
-                            <label><input type="radio" name="radio-gene-association" class="radio" onchange="mpgSoftware.homePage.switchVisibility(['variant-association-ui-wrapper'],['gene-association-ui-wrapper']);" checked> View variant associations</label>
+                            <label><input type="radio" name="radio-gene-association" class="radio" onchange="mpgSoftware.homePage.switchVisibility(['variant-association-ui-wrapper'],['gene-association-ui-wrapper','effector-gene-list-ui-wrapper']);" checked> View variant associations</label>
                         </div>
                         <div class="radio-inline">
-                            <label><input type="radio" name="radio-gene-association" class="radio" onchange="mpgSoftware.homePage.switchVisibility(['gene-association-ui-wrapper'], ['variant-association-ui-wrapper']);" > View gene-level T2D associations</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class='new-dataset-flag' style="display: inline-flex; margin:-3px 0 0 -30px">&nbsp;</span>
+                            <label><input type="radio" name="radio-gene-association" class="radio" onchange="mpgSoftware.homePage.switchVisibility(['gene-association-ui-wrapper'], ['variant-association-ui-wrapper','effector-gene-list-ui-wrapper']);" > <span style="float: left;">View gene-level T2D associations </span> <span class='new-dataset-flag' style="display: inline-flex; margin:-3px 0 0 5px; width: 30px; background-size: 30px;">&nbsp;</span></label>
                         </div>
-
+                        <g:if test="${portalVersionBean.getExposeEffectorGeneTableUi()}">
+                            <div class="radio-inline">
+                                <label><input type="radio" name="radio-gene-association" class="radio" onchange="mpgSoftware.homePage.switchVisibility(['effector-gene-list-ui-wrapper'], ['variant-association-ui-wrapper', 'gene-association-ui-wrapper']);" > <span style="float: left;">View predicted T2D effector genes</span> <span class='new-dataset-flag' style="display: inline-flex; margin:-3px 0 0 5px; width: 30px; background-size: 30px;">&nbsp;</span></label>
+                            </div>
+                        </g:if>
                     </g:if>
 
                     <g:if test="${portalVersionBean.variantAssociationsExists}">
@@ -220,6 +224,14 @@
                                 <select name="" id="gene-trait-input" class="form-control input-sm gene-trait-input selectpicker" data-live-search="true" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 0; border-top-left-radius: 3px; border-bottom-left-radius: 3px; margin:0; font-size: 16px;">
                                 </select>
                                 <button id="geneTraitSearchLaunch" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
+                            </div>
+                        </div>
+                    </g:if>
+                    <g:if test="${portalVersionBean.getExposeEffectorGeneTableUi()}">
+                        <div class="form-inline effector-gene-list-ui-wrapper" style="display:none;">
+                            <div class="gene-association-ui">
+                                <a href="${createLink(controller:'gene', action:'effectorGeneTable')}">
+                                    <button id="geneTraitSearchLaunch" class="btn btn-primary btn-sm" type="button" style="width:30%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; margin-left: 30px; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; font-size: 14px;" >View Table&nbsp;&nbsp;&nbsp;</button></a>
                             </div>
                         </div>
                     </g:if>

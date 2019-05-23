@@ -1250,3 +1250,8 @@ span.new-dataset-flag {
 	top: -3px;
 	right: -2px;
 }
+
+div.traits-filter-wrapper > .radio-inline {
+    display: block;
+    margin-left: 10px;
+}
