@@ -230,8 +230,27 @@
                     <g:if test="${portalVersionBean.getExposeEffectorGeneTableUi()}">
                         <div class="form-inline effector-gene-list-ui-wrapper" style="display:none;">
                             <div class="gene-association-ui">
+                                <div class="btn-group bootstrap-select form-control input-sm gene-trait-input dropup">
+                                    <button type="button" class="btn dropdown-toggle btn-default" data-toggle="dropdown" role="button" data-id="gene-trait-input" title="&amp;nbsp;&amp;nbsp;&amp;nbsp;Type 2 diabetes">
+                                        <span class="filter-option pull-left">&nbsp;&nbsp;&nbsp;Type 2 diabetes</span>&nbsp;<span class="bs-caret"><span class="caret"></span></span></button>
+
+                                    <div class="dropdown-menu open" role="combobox" style="max-height: 463px; overflow: hidden; min-height: 42px;">
+                                        <div class="bs-searchbox">
+                                            <input type="text" class="form-control" autocomplete="off" role="textbox" aria-label="Search">
+                                        </div>
+                                        <ul class="dropdown-menu inner" role="listbox" aria-expanded="false" style="max-height: 409px; overflow-y: auto; min-height: 0px;">
+                                            <li class="divider" data-optgroup="0div"></li>
+                                            <li data-original-index="0" class="selected active">
+                                                <a tabindex="0" class="" data-tokens="null" role="option" aria-disabled="false" aria-selected="true">
+                                                    <span class="text">&nbsp;&nbsp;&nbsp;Type 2 diabetes</span>
+                                                    <span class="glyphicon glyphicon-ok check-mark"></span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
                                 <a href="${createLink(controller:'gene', action:'effectorGeneTable')}">
-                                    <button id="geneTraitSearchLaunch" class="btn btn-primary btn-sm" type="button" style="width:30%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; margin-left: 30px; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; font-size: 14px;" >View Table&nbsp;&nbsp;&nbsp;</button></a>
+                                    <button id="geneTraitSearchLaunch" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; font-size: 14px;" ><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button></a>
                             </div>
                         </div>
                     </g:if>
