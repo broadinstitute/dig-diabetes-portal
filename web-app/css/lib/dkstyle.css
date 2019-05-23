@@ -1266,15 +1266,6 @@ span.new-dataset-flag {
     z-index: 100;
 }
 
-#header-bottom-lung {
-    background-color: #7ACCC8;
-  }
-
-#header-bottom-t2d {
-    position: relative;
-    background-color: #3399cc;
-}
-
 .front-top-banner {
     font-size:16px;
     background-repeat: no-repeat;
@@ -1293,16 +1284,42 @@ span.new-dataset-flag {
     color: #08B89D;
 }
 
+#header-bottom-lung {
+    background-color: #7ACCC8;
+}
+
 /* banner setting for T2D portal */
 
 .front-top-banner-t2d {
-    background-image:url(../../images/t2d/T2DKP_bg_2019.png), linear-gradient(#3399cc, #3C80BD);
+    background-image:url(../../images/t2d/T2DKP_bg_2019_3.png), linear-gradient(#55AAEE, #3C80BD);
     margin-top: 0;
 }
 
 .front-top-banner-t2d .front-banner-btn {
     color: #3399cc;
 }
+
+#header-bottom-t2d {
+    position: relative;
+    background-color: #55AAEE;
+}
+
+/* banner setting for Stroke portal */
+
+.front-top-banner-stroke {
+    background-image:url(../../images/t2d/T2DKP_bg_2019_3.png), linear-gradient(#53d268, #2d944d);
+    margin-top: 0;
+}
+
+.front-top-banner-stroke .front-banner-btn {
+    color: #53d268;
+}
+
+#header-bottom-stroke {
+    position: relative;
+    background-color: #53d268;
+}
+
 
 .front-logo-wrapper {
 	margin-left: auto;

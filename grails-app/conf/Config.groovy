@@ -703,7 +703,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["chr7:18,100,000-18,300,000"],
                                           "images/stroke/front_stroke_bg_2018.png",
                                           "stroke.pheno.help.text",
-                                          "images/stroke/stroke_header_logo.svg",
+                                          "images/stroke/STROKEKP_header_logo_2019.svg",
                                           "images/stroke/menu_bg_2017_stroke.png",
                                           "false",
                                           "",
