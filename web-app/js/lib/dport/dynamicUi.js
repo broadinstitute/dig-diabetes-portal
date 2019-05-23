@@ -3554,6 +3554,29 @@ mpgSoftware.dynamicUi = (function () {
                 case 'Genetic_combined':
                 case 'Genomic_combined':
                 case 'Perturbation_combined':
+                    // var textA = a.trim().toUpperCase();
+                    // var textAEmpty = (textA.length===0);
+                    // var textB = b.trim().toUpperCase();
+                    // var textBEmpty = (textB.length===0);
+                    // if ( textAEmpty && textBEmpty ) {
+                    //     return 0;
+                    // }
+                    // else if ( textAEmpty ) {
+                    //     if (direction==='asc') {
+                    //         return 1;
+                    //     } else {
+                    //         return -1;
+                    //     }
+                    // }else if ( textBEmpty )
+                    // {
+                    //     if (direction==='asc') {
+                    //         return -1;
+                    //     } else {
+                    //         return 1;
+                    //     }
+                    // }
+                    // return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+                    // break;
                 case 'external_evidence':
                 case 'homologous_gene':
                 case 'straightAlphabeticWithSpacesOnTop':
@@ -4033,15 +4056,25 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                              var sortOrderDesignation = "sorting_";
                              var bigGroupDesignation = "BigGroupNum";
                              var combinedCategory = "Combined_category";
-                             if ( oneClass.substr(0,sortOrderDesignation.length) === sortOrderDesignation ){
+                             var  geneticCombined = 'Genetic_combined';
+                             var genomicCombined = 'Genomic_combined';
+                             var perturbationCombined = 'Perturbation_combined';
+                             if (
+                                 ( oneClass.substr(0,sortOrderDesignation.length) === sortOrderDesignation )||
+                                 ( oneClass.substr(0,bigGroupDesignation.length) === bigGroupDesignation )||
+                                 ( oneClass.substr(0,combinedCategory.length) === combinedCategory )
+                                 // ( oneClass.substr(0,geneticCombined.length) === geneticCombined )||
+                                 // ( oneClass.substr(0,genomicCombined.length) === genomicCombined )||
+                                 // ( oneClass.substr(0,perturbationCombined.length) === perturbationCombined )
+                             ){
                                  classesToPromote.push (oneClass);
                              }
-                             if ( oneClass.substr(0,bigGroupDesignation.length) === bigGroupDesignation ){
-                                 classesToPromote.push (oneClass);
-                             }
-                             if ( oneClass.substr(0,combinedCategory.length) === combinedCategory ){
-                                 classesToPromote.push (oneClass);
-                             }
+                             // if ( oneClass.substr(0,bigGroupDesignation.length) === bigGroupDesignation ){
+                             //     classesToPromote.push (oneClass);
+                             // }
+                             // if ( oneClass.substr(0,combinedCategory.length) === combinedCategory ){
+                             //     classesToPromote.push (oneClass);
+                             // }
                          });
                      }
                      var contentOfHeader = headerContent;
