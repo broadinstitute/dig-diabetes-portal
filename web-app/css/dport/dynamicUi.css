@@ -250,7 +250,7 @@ th.onlyCol{
     text-align:center;
     /*padding-left: 40px !important;*/
     /*padding-right: 30px !important;*/
-    /*white-space:nowrap;*/
+    white-space:nowrap;
 }
 
 .effector-table th > div> span.effector-ui-wrapper {
