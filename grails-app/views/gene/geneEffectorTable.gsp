@@ -260,7 +260,7 @@
     <div class="container">
         <div class="row">
             <div class="text-center">
-               <h2>Predicted type 2 diabetes effector genes</h2>
+                <h1 class="dk-page-title">Predicted type 2 diabetes effector genes</h1>
             </div>
             <div class="col-md-12" style="padding-top: 30px;">
                 <div id="effectiveGeneTableHolder" class="mainEffectorDiv">
