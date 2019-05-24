@@ -2,7 +2,7 @@
 <script id="dynamicFullEffectorGeneTableHeader"  type="x-tmpl-mustache">
 
         <div sortStrategy="alphabetical" sortField="-1"  sortTerm="{{name1}}"
-        class="{{groupKey}} {{groupName}} BigGroupNum{{groupNum}} groupNum{{groupNum}} withinGroupNum{{withinGroupNum}} text-center initialLinearIndex_{{initialLinearIndex}}">
+        class="sortClass_{{name}} {{groupKey}} {{groupName}} BigGroupNum{{groupNum}} groupNum{{groupNum}} withinGroupNum{{withinGroupNum}} text-center initialLinearIndex_{{initialLinearIndex}}">
             <span class="groupHelpText {{name}}" style="display:none">{{{groupHelpText}}}</span>
             <span class="columnHelpText {{name}}">{{{columnHelpText}}}</span>
             <span class="groupDisplayName displayMethodName {{name}}" methodKey="{{name}}" style="display:none">{{groupDisplayName}}

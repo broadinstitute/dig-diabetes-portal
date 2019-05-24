@@ -3551,32 +3551,33 @@ mpgSoftware.dynamicUi = (function () {
                     var x = parseInt($(a).attr("sortnumber"));
                     var y = parseInt($(b).attr("sortnumber"));
                     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+                    break;
                 case 'Genetic_combined':
                 case 'Genomic_combined':
                 case 'Perturbation_combined':
-                    // var textA = a.trim().toUpperCase();
-                    // var textAEmpty = (textA.length===0);
-                    // var textB = b.trim().toUpperCase();
-                    // var textBEmpty = (textB.length===0);
-                    // if ( textAEmpty && textBEmpty ) {
-                    //     return 0;
-                    // }
-                    // else if ( textAEmpty ) {
-                    //     if (direction==='asc') {
-                    //         return 1;
-                    //     } else {
-                    //         return -1;
-                    //     }
-                    // }else if ( textBEmpty )
-                    // {
-                    //     if (direction==='asc') {
-                    //         return -1;
-                    //     } else {
-                    //         return 1;
-                    //     }
-                    // }
-                    // return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-                    // break;
+                     var textA = $(a).text().trim().toUpperCase();
+                     var textAEmpty = (textA.length===0);
+                     var textB = $(b).text().trim().toUpperCase();
+                     var textBEmpty = (textB.length===0);
+                     if ( textAEmpty && textBEmpty ) {
+                         return 0;
+                     }
+                     else if ( textAEmpty ) {
+                         if (direction==='asc') {
+                             return 1;
+                         } else {
+                             return -1;
+                         }
+                     }else if ( textBEmpty )
+                     {
+                         if (direction==='asc') {
+                             return -1;
+                         } else {
+                             return 1;
+                         }
+                     }
+                     return (textA < textB) ? 1 : (textA > textB) ? -1 : 0;
+                     break;
                 case 'external_evidence':
                 case 'homologous_gene':
                 case 'straightAlphabeticWithSpacesOnTop':
@@ -4056,18 +4057,18 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                              var sortOrderDesignation = "sorting_";
                              var bigGroupDesignation = "BigGroupNum";
                              var combinedCategory = "Combined_category";
-                             var  geneticCombined = 'Genetic_combined';
-                             var genomicCombined = 'Genomic_combined';
-                             var perturbationCombined = 'Perturbation_combined';
+                             var  sortingClass = 'sortClass_';
                              if (
                                  ( oneClass.substr(0,sortOrderDesignation.length) === sortOrderDesignation )||
                                  ( oneClass.substr(0,bigGroupDesignation.length) === bigGroupDesignation )||
                                  ( oneClass.substr(0,combinedCategory.length) === combinedCategory )
-                                 // ( oneClass.substr(0,geneticCombined.length) === geneticCombined )||
-                                 // ( oneClass.substr(0,genomicCombined.length) === genomicCombined )||
-                                 // ( oneClass.substr(0,perturbationCombined.length) === perturbationCombined )
                              ){
                                  classesToPromote.push (oneClass);
+                             }
+                             if (
+                                 ( oneClass.substr(0,sortingClass.length) === sortingClass )
+                             ){
+                                 classesToPromote.push ( oneClass.substr(sortingClass.length));
                              }
                              // if ( oneClass.substr(0,bigGroupDesignation.length) === bigGroupDesignation ){
                              //     classesToPromote.push (oneClass);
