@@ -80,19 +80,19 @@
 
                                             displayName:"Combined perturbation evidence",
                                             helptext: '<g:helpText title="effectorTable.combined-perturbation-collapsed.help.header" placement="bottom" body="effectorTable.combined-perturbation-collapsed.help.text"/>',
-                                            order: 4 },
-                                        {   key:"Semantic_score",
-                                            displayName:"External evidence",
-                                            helptext: '',
-                                            order: 5 },
-                                        {   key:"FishHomo",
-                                            displayName:"Homologous genes",
-                                            helptext: '',
-                                            order: 6 },
-                                        {   key:"additional_reference",
-                                            displayName:"additional reference",
-                                            helptext: '',
-                                            order: 7 }
+                                            order: 4 }
+//                                        {   key:"Semantic_score",
+//                                            displayName:"External evidence",
+//                                            helptext: '',
+//                                            order: 5 },
+//                                        {   key:"FishHomo",
+//                                            displayName:"Homologous genes",
+//                                            helptext: '',
+//                                            order: 6 },
+//                                        {   key:"additional_reference",
+//                                            displayName:"additional reference",
+//                                            helptext: '',
+//                                            order: 7 }
 
                                     ],
                                     constituentColumns:[
@@ -180,9 +180,9 @@
                                     display:"Zebrafish mutant phenotype",
                                     pos:4,subPos:2,
                                     helptext: '<g:helpText title="effectorTable.zfin.help.header" placement="bottom" body="effectorTable.zfin.help.text"/>'},
-                                { key: "Mouse_Knockout_viability",
-                                    display:"Mouse Knockout viability",
-                                    pos:4,subPos:3},
+//                                { key: "Mouse_Knockout_viability",
+//                                    display:"Mouse Knockout viability",
+//                                    pos:4,subPos:3},
                                 { key: "Mouse_MGI",
                                     display:"Mouse mutant phenotype",
                                     pos:4,subPos:4,
@@ -200,17 +200,6 @@
                                     display:"Other perturbation evidence",
                                     pos:4,subPos:7,
                                     helptext: '<g:helpText title="effectorTable.other-perturbation.help.header" placement="bottom" body="effectorTable.other-perturbation.help.text"/>'},
-
-                                { key: "Semantic_score",
-                                    display:"Semantic score",
-                                    pos:5,subPos:0},
-                                { key: "Candidacy_score",
-                                    display:"Candidacy score",
-                                    pos:5,subPos:1},
-                                { key: "OMIM",
-                                    display:"OMIM",
-                                    pos:5,subPos:2}
-
 
                                 // { key: "Semantic_score",
                                 //     display:"Semantic score",
