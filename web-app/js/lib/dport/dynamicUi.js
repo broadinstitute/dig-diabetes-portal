@@ -4815,12 +4815,50 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
     var retrieveDataFromServer = function(event){
         var dataTarget = $(event.target).attr('data-target').substring(1).trim();
-        if (dataTarget.indexOf("tissues_")>=0){
-            var geneName = dataTarget.substring("tissues_".length);
+        if (dataTarget.indexOf("geneBurdenTest_")>=0){
+            var geneName = dataTarget.substring("geneBurdenTest_".length);
             var uniqueId  = dataTarget+'_uniquifier';
+            var additionalParameters = getDyanamicUiVariables();
+            var dataSaver = [];
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: additionalParameters.retrieveGeneLevelAssociationsUrl,
+                data: {
+                    gene: geneName,
+                    phenotype: 'T2D',
+                    propertyNames: "[\"P_VALUE\"]",
+                    preferredSampleGroup: "ExSeq_52k_mdv37"
+                },
+                async: true
+            }).done(function (data, textStatus, jqXHR) {
+                mpgSoftware.dynamicUi.geneBurdenSkat.processGeneSkatAssociationRecords(data,dataSaver);
+                var tissueTranslations = [];
+                if (dataSaver.length>0){
+                    tissueTranslations = dataSaver[0].TISSUE_TRANSLATIONS;
+                }
+                var sortedDisplayableRecords;
+                _.forEach(dataSaver,function(allRecords){
+                    sortedDisplayableRecords = _.map(_.sortBy(allRecords.tissues,['value']),function(tissueRecord){
+                        return {  tissueName:  translateATissueName(tissueTranslations,tissueRecord.tissue),
+                            tissue: tissueRecord.tissue,
+                            value: UTILS.realNumberFormatter(""+tissueRecord.value),
+                            numericalValue: tissueRecord.value };
+                    })
+                });
+                $('#'+uniqueId).empty().append(Mustache.render($('#fillUpTheGeneBurdenSpecifics')[0].innerHTML,
+                    {tissuesExist:(sortedDisplayableRecords.length>0)?[1]:[],
+                        tissues:sortedDisplayableRecords}
+                ));
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                loading.hide();
+                alert("Ajax call failed, url="+rememberUrl+", data="+rememberData+".");
+                core.errorReporter(jqXHR, errorThrown)
+            })
 
         }
-        return "<h1>howdy!</h1>";
+        return "";
     }
 
 
@@ -5351,7 +5389,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         contractColumns:contractColumns,
         expandColumns:expandColumns,
         openFilter:openFilter,
-        closeFilterModal:closeFilterModal
+        closeFilterModal:closeFilterModal,
+        retrieveDataFromServer:retrieveDataFromServer
     }
 }());
 

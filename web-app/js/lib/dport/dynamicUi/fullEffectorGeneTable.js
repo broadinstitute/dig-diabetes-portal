@@ -125,6 +125,7 @@ mpgSoftware.dynamicUi.fullEffectorGeneTable = (function () {
                         if ($.isEmptyObject(recordsPerGene)) {
                             alert('empty records not allowed in the FEGT')
                         }
+                        var geneName = recordsPerGene["Gene_name"];
                         _.forEach(recordsPerGene, function (valueInGeneRecord,header) {
                             var indexOfColumn = _.indexOf(returnObject.headers, header );
                             var indexOfPreassignedColumnName = _.indexOf(constituentColumns, header );
@@ -137,11 +138,18 @@ mpgSoftware.dynamicUi.fullEffectorGeneTable = (function () {
                                 var sortNumber = categorizor.categorizeRowsInEfgt(groupNumber, valueInGeneRecord );
                                 var linkSafeText = valueInGeneRecord.replace(/\/.$/g, '').replace(/or /g, '');
                                 var textWithoutQuotes = valueInGeneRecord.replace(/\"/g, '');
-                                var categoryRecord = {initialLinearIndex:initialLinearIndex++,
+                                var exomeSequenceCallOut = [];
+                                if ((header === 'Exome_sequence_burden') &&
+                                    (valueInGeneRecord.length>0) )  {
+                                    exomeSequenceCallOut = [{geneName:geneName,displayValue:linkSafeText}]
+                                }
+                                var categoryRecord = {
+                                    initialLinearIndex:initialLinearIndex++,
                                     groupNumber:constituentColRecs[indexOfPreassignedColumnName].pos,
                                     categoryName:textWithoutQuotes,
                                     sortNumber:sortNumber,
-                                    linkSafeText:linkSafeText};
+                                    linkSafeText:linkSafeText,
+                                    exomeSequenceCallOut:exomeSequenceCallOut};
                                 _.forEach(dataAnnotationType.dataAnnotation.customColumnOrdering.topLevelColumns, function (grouping, index){
                                     if (grouping.order===constituentColRecs[indexOfPreassignedColumnName].pos){
                                         categoryRecord[grouping.key]=[{textToDisplay:textWithoutQuotes}];

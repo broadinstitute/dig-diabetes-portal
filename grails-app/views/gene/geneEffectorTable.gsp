@@ -123,7 +123,7 @@
                                     pos:2,subPos:2,
                                     helptext: '<g:helpText title="effectorTable.ExChip-evidence.help.header" placement="bottom" body="effectorTable.ExChip-evidence.help.text"/>'},
                                 { key: "Exome_sequence_burden",
-                                    display:"Exome sequence evidence",
+                                    display:"Burden test evidence",
                                     pos:2,subPos:3,
                                     helptext: '<g:helpText title="effectorTable.ExSeq-evidence.help.header" placement="bottom" body="effectorTable.ExSeq-evidence.help.text"/>'},
                                 { key: "Monogenic",

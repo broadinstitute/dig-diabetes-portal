@@ -51,12 +51,16 @@
 {{#Genetic_combined}}
  <div class="fedt text-center">
  {{#exomeSequenceCallOut}}
+
                 <a
                onclick="mpgSoftware.dynamicUi.showAttachedData(event,'T2D gene burden for {{geneName}}',mpgSoftware.dynamicUi.retrieveDataFromServer)"
-                class="cellExpander" data-target="#tissues_{{geneName}}"  style="color:black">
-               <span class="glyphicon glyphicon-zoom-in" aria-hidden="true" data-target="#tissues_{{geneName}}"></span>
-               &nbsp;
+                class="cellExpander" data-target="#geneBurdenTest_{{geneName}}"  style="color:black">
+               <span class="glyphicon glyphicon-zoom-in" aria-hidden="true" data-target="#geneBurdenTest_{{geneName}}"></span>&nbsp;
+               {{displayValue}}
                </a>
+               <div  class="collapse opengeneSkatAssociationInGeneTable" id="geneBurdenTest_{{geneName}}">
+                        <div  id="geneBurdenTestDetails_{{geneName}}"></div>
+               </div>
  {{/exomeSequenceCallOut}}
  {{^exomeSequenceCallOut}}
     {{textToDisplay}}
@@ -142,4 +146,29 @@
                     {{/data}}
                </div>
             </div>
+</script>
+
+<script id="fillUpTheGeneBurdenSpecifics"  type="x-tmpl-mustache">
+<div  class=" opengeneSkatAssociationInGeneTable" id="geneSkatAssociation_{{gene}}">
+    {{#tissuesExist}}
+    <table class="expandableDrillDownTable openSkatInGeneTable" style="border: 0">
+        <thead>
+        <tr role="row">
+            <th class="text-center leftMostCol">technique</th>
+            <th class="text-center otherCols">p-value</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{/tissuesExist}}
+        {{#tissues}}
+        <tr role="row">
+            <td class="leftMostCol">{{tissueName}}</td>
+            <td class="otherCols">{{value}}</td>
+        </tr>
+        {{/tissues}}
+        {{#tissuesExist}}
+        </tbody>
+    </table>
+    {{/tissuesExist}}
+</div>
 </script>
