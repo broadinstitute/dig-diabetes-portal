@@ -4813,6 +4813,81 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         $('button.hider.'+annotationId).hide();
     };
 
+
+
+
+
+    var retrieveGwasCodingCredibleSetFromServer = function(event){
+        var dataTarget = $(event.target).attr('data-target').substring(1).trim();
+        if (dataTarget.indexOf("gwasCoding_")>=0){
+            var geneName = dataTarget.substring("gwasCoding_".length);
+            var uniqueId  = dataTarget+'_uniquifier';
+            var additionalParameters = getDyanamicUiVariables();
+            var dataSaver = [];
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: additionalParameters.getVariantsForNearbyCredibleSetsUrl,
+                data: {
+                    gene: geneName,
+                    phenotype: 'T2D'
+                },
+                async: true
+            }).done(function (data, textStatus, jqXHR) {
+                mpgSoftware.dynamicUi.fullEffectorGeneTable.processRecordsFromGetData(data,dataSaver);
+                var tissueTranslations = [];
+                if (dataSaver.length>0){
+                    tissueTranslations = dataSaver[0].TISSUE_TRANSLATIONS;
+                }
+                var sortedDisplayableRecords;
+                var uniqueCodingSetIds;
+                var credibleSetsWithCodingVariants=[];
+                    // figure out which credible sets have a coding variant
+                _.forEach(dataSaver,function(allRecords) {
+                    if (allRecords.posteriorsAvailable){
+                        var codingSets = _.map(_.filter(allRecords.contents, function (o) {
+                            return o.mds < 3;
+                        }), function (recToKeep) {
+                            return recToKeep.credibleSetId;
+                        });
+                        uniqueCodingSetIds = _.uniq(codingSets);
+                        credibleSetsWithCodingVariants = _.filter(allRecords.contents, function (o) {
+                            return ($.inArray(o.credibleSetId, uniqueCodingSetIds)!== -1);
+                        });
+                    }
+                });
+                _.forEach(dataSaver,function(allRecords){
+                    sortedDisplayableRecords = _.map(_.orderBy(credibleSetsWithCodingVariants,['posteriorProbability','pValue'],['desc','asc']),function(record){
+                        return { varId:record.varId,
+                            credibleSetId: record.credibleSetId,
+                            pValue: UTILS.realNumberFormatter(""+record.pValue),
+                            coding:(record.mds<=2)?'yes':'',
+                            posteriorProbability: UTILS.realNumberFormatter(""+record.posteriorProbability) };
+                    })
+                });
+                $('#'+uniqueId).empty().append(Mustache.render($('#fillUpTheCodingGwasCredibleSet')[0].innerHTML,
+                    {variantsExist:(sortedDisplayableRecords.length>0)?[1]:[],
+                        variants:sortedDisplayableRecords}
+                ));
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                loading.hide();
+                alert("Ajax call failed, url="+rememberUrl+", data="+rememberData+".");
+                core.errorReporter(jqXHR, errorThrown)
+            })
+
+        }
+        return;
+    };
+
+
+
+
+
+
+
+
+
     var retrieveDataFromServer = function(event){
         var dataTarget = $(event.target).attr('data-target').substring(1).trim();
         if (dataTarget.indexOf("geneBurdenTest_")>=0){
@@ -4839,7 +4914,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 }
                 var sortedDisplayableRecords;
                 _.forEach(dataSaver,function(allRecords){
-                    sortedDisplayableRecords = _.map(_.sortBy(allRecords.tissues,['value']),function(tissueRecord){
+                    sortedDisplayableRecords = _.map(_.sortBy(_.filter(allRecords.tissues,function(t){return t.tissue.includes("FIRTH")}),['value']),function(tissueRecord){
                         return {  tissueName:  translateATissueName(tissueTranslations,tissueRecord.tissue),
                             tissue: tissueRecord.tissue,
                             value: UTILS.realNumberFormatter(""+tissueRecord.value),
@@ -4858,8 +4933,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             })
 
         }
-        return "";
-    }
+        return;
+    };
 
 
 
@@ -5390,7 +5465,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         expandColumns:expandColumns,
         openFilter:openFilter,
         closeFilterModal:closeFilterModal,
-        retrieveDataFromServer:retrieveDataFromServer
+        retrieveDataFromServer:retrieveDataFromServer,
+        retrieveGwasCodingCredibleSetFromServer: retrieveGwasCodingCredibleSetFromServer
     }
 }());
 

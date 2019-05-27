@@ -29,6 +29,7 @@
                         getGRSListOfVariantsAjaxUrl:"${createLink(controller:'grs',action: 'getGRSListOfVariantsAjax')}",
                         getLocusZoomFilledPlotUrl: '${createLink(controller:"gene", action:"getLocusZoomFilledPlot")}',
                         fillCredibleSetTableUrl: '${g.createLink(controller: "RegionInfo", action: "fillCredibleSetTable")}',
+                        getVariantsForNearbyCredibleSetsUrl: '${g.createLink(controller: "RegionInfo", action: "getVariantsForNearbyCredibleSets")}',
                         fillGeneComparisonTableUrl: '${g.createLink(controller: "RegionInfo", action: "fillGeneComparisonTable")}',
                         availableAssayIdsJsonUrl: '${g.createLink(controller: "RegionInfo", action: "availableAssayIdsJson")}',
                         calculateGeneRankingUrl: '${g.createLink(controller: "RegionInfo", action: "calculateGeneRanking")}',
@@ -45,7 +46,7 @@
                         retrieveGeneLevelAssociationsUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveGeneLevelAssociations")}',
                         retrieveListOfGenesInARangeUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveListOfGenesInARange")}',
                         retrieveEffectorGeneInformationUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveEffectorGeneInformation")}',
-                        dataAnnotationTypes: [
+                         dataAnnotationTypes: [
                             {   code: 'FEGT',
                                 category: 'Annotation',
                                 displayCategory: 'Annotation',
@@ -115,7 +116,7 @@
                                     pos:2,subPos:0,
                                     helptext: '<g:helpText title="effectorTable.expanded-combined-genetic.help.header" placement="bottom" body="effectorTable.expanded-combined-genetic.help.text"/>'},
                                 { key: "GWAS_coding_causal",
-                                    display:"GWAS evidence",
+                                    display:"GWAS coding evidence",
                                     pos:2,subPos:1,
                                     helptext: '<g:helpText title="effectorTable.GWAS-evidence.help.header" placement="bottom" body="effectorTable.GWAS-evidence.help.text"/>'},
                                 { key: "Exome_array_coding_causal",

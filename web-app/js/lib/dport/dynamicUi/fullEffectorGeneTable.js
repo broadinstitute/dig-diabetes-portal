@@ -139,9 +139,14 @@ mpgSoftware.dynamicUi.fullEffectorGeneTable = (function () {
                                 var linkSafeText = valueInGeneRecord.replace(/\/.$/g, '').replace(/or /g, '');
                                 var textWithoutQuotes = valueInGeneRecord.replace(/\"/g, '');
                                 var exomeSequenceCallOut = [];
+                                var gwasCodingCallOut = [];
                                 if ((header === 'Exome_sequence_burden') &&
                                     (valueInGeneRecord.length>0) )  {
                                     exomeSequenceCallOut = [{geneName:geneName,displayValue:linkSafeText}]
+                                }
+                                if ((header === 'GWAS_coding_causal') &&
+                                    (valueInGeneRecord.length>0) )  {
+                                    gwasCodingCallOut = [{geneName:geneName,displayValue:linkSafeText}]
                                 }
                                 var categoryRecord = {
                                     initialLinearIndex:initialLinearIndex++,
@@ -149,7 +154,8 @@ mpgSoftware.dynamicUi.fullEffectorGeneTable = (function () {
                                     categoryName:textWithoutQuotes,
                                     sortNumber:sortNumber,
                                     linkSafeText:linkSafeText,
-                                    exomeSequenceCallOut:exomeSequenceCallOut};
+                                    exomeSequenceCallOut:exomeSequenceCallOut,
+                                    gwasCodingCallOut:gwasCodingCallOut};
                                 _.forEach(dataAnnotationType.dataAnnotation.customColumnOrdering.topLevelColumns, function (grouping, index){
                                     if (grouping.order===constituentColRecs[indexOfPreassignedColumnName].pos){
                                         categoryRecord[grouping.key]=[{textToDisplay:textWithoutQuotes}];
@@ -221,10 +227,67 @@ mpgSoftware.dynamicUi.fullEffectorGeneTable = (function () {
 
 
 
+    var processRecordsFromGetData = function (data, rawGeneAssociationRecords) {
+
+        if ( typeof data !== 'undefined'){
+            var headersExtracted = false;
+            var headers = [];
+            var contents = [];
+            var posteriorsAvailable = false;
+            _.forEach(data.variants,function(eachVariant){
+                var recordToSave = {};
+                _.forEach(eachVariant,function(fieldObj){
+                    _.forEach(fieldObj,function(value,key){
+                        console.log('key='+key);
+                        switch (key) {
+                            case "VAR_ID":
+                                recordToSave["varId"] = value;
+                                break;
+                            case "MOST_DEL_SCORE":
+                                recordToSave["mds"] = parseInt(value) ;
+                                break;
+                            case "CREDIBLE_SET_ID":
+                                _.forEach(value,function(dataSetRecord,dataSetName){
+                                    _.forEach(dataSetRecord,function(dataSetValue,phenotype){
+                                        recordToSave["phenotype"] = phenotype;
+                                        recordToSave["credibleSetId"] = dataSetValue;
+                                    });
+                                });
+                                break;
+                            case "P_VALUE":
+                                _.forEach(value,function(dataSetRecord){
+                                    _.forEach(dataSetRecord,function(dataSetValue,phenotype){
+                                        recordToSave["pValue"] = dataSetValue;
+                                    });
+                                });
+                                break;
+                            case "POSTERIOR_PROBABILITY":
+                                posteriorsAvailable =true;
+                                _.forEach(value,function(dataSetRecord){
+                                    _.forEach(dataSetRecord,function(dataSetValue,phenotype){
+                                        recordToSave["posteriorProbability"] = dataSetValue;
+                                    });
+                                });
+                                break;
+                            default:
+                            break;
+                        }
+                    });
+                });
+                if (!$.isEmptyObject(recordToSave) ){
+                    contents.push (recordToSave);
+                }
+            });
+        }
+        rawGeneAssociationRecords.push({posteriorsAvailable: posteriorsAvailable, headers:  headers, contents: contents});
+    };
+
+
 
 // public routines are declared below
     return {
         processRecordsFromFullEffectorGeneTable: processRecordsFromFullEffectorGeneTable,
-        displayFullEffectorGeneTable:displayFullEffectorGeneTable
+        displayFullEffectorGeneTable:displayFullEffectorGeneTable,
+        processRecordsFromGetData:processRecordsFromGetData
     }
 }());
