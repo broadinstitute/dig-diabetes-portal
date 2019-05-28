@@ -1,19 +1,15 @@
 package org.broadinstitute.mpg
 
+
 import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.codehaus.groovy.grails.web.json.JSONObject
 
-class GrsController {
+class GaitController {
     RestServerService  restServerService
 
     def index() {
-        forward grsInfo()
-    }
-
-
-    def grsInfo(){
-        render (view: 'grsInfo', model:[])
+        forward gaitInfo()
     }
 
     def gaitInfo(){
@@ -36,10 +32,10 @@ class GrsController {
         for (String varId in variantList){
             List <String> idPieces = varId.split("_")
             recordPerVariants << "{\"d\":1,\"dataset\":1,\"pVals\":[{\"count\":\"${idPieces[0]}\",\"level\":\"CHROM\"},"+
-                                    "{\"count\":\"${idPieces[1]}\",\"level\":\"POS\"},"+
-                                    "{\"count\":\"${idPieces[2]}\",\"level\":\"Reference_Allele\"},"+
-                                    "{\"count\":\"${varId}\",\"level\":\"VAR_ID\"},"+
-                                    "{\"count\":\"${idPieces[3]}\",\"level\":\"Effect_Allele\"}]}".toString()
+                    "{\"count\":\"${idPieces[1]}\",\"level\":\"POS\"},"+
+                    "{\"count\":\"${idPieces[2]}\",\"level\":\"Reference_Allele\"},"+
+                    "{\"count\":\"${varId}\",\"level\":\"VAR_ID\"},"+
+                    "{\"count\":\"${idPieces[3]}\",\"level\":\"Effect_Allele\"}]}".toString()
         }
 
         JsonSlurper slurper = new JsonSlurper()

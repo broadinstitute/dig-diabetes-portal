@@ -1044,10 +1044,19 @@ mpgSoftware.burdenTestShared = (function () {
             }
 
 
+
+
             //
             // set up the section where the filters will go
             //
             renderData.sectionNumber++;
+            var temp = Mustache.render($('#chooseFiltersTemplate')[0].innerHTML, renderData,
+                {
+                    allFiltersTemplate: $('#allFiltersTemplate')[0].innerHTML,
+                    filterFloatTemplate: $('#filterFloatTemplate')[0].innerHTML,
+                    filterCategoricalTemplate: $('#filterCategoricalTemplate')[0].innerHTML
+                });
+           console.log(temp)
             $("#chooseFiltersLocation").empty().append(Mustache.render($('#chooseFiltersTemplate')[0].innerHTML, renderData,
                 {
                     allFiltersTemplate: $('#allFiltersTemplate')[0].innerHTML,

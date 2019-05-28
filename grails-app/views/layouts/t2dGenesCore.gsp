@@ -210,6 +210,10 @@
                         setMenuTriangle(".analysis-modules-btn");
                         break;
 
+                    case "gaitinfo":
+                        setMenuTriangle(".analysis-modules-btn");
+                        break;
+
                     case "variantsearchwf":
                         setMenuTriangle(".analysis-modules-btn");
                         break;

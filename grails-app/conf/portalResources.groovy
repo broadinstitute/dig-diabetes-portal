@@ -32,6 +32,13 @@ modules = {
         resource url: 'css/dport/grsInfo.css'
     }
 
+    gaitInfo {
+        dependsOn "core", "mbar", "bootstrapMultiselect", "burdenTest","boxwhisker"
+
+        resource url: 'js/lib/dport/gaitInfo.js'
+        resource url: 'css/dport/grsInfo.css'
+    }
+
     regionInfo {
         resource url: 'js/lib/dport/regionInfo.js'
         resource url: 'css/dport/regionInfo.css'
