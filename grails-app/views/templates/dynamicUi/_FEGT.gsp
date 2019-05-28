@@ -62,7 +62,7 @@
  {{/exomeSequenceCallOut}}
  {{^exomeSequenceCallOut}}
      {{#gwasCodingCallOut}}
-                    <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'Credible sets from Diamante with coding variant {{geneName}}',mpgSoftware.dynamicUi.retrieveGwasCodingCredibleSetFromServer)"
+                    <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'DIAMANTE credible sets with coding variant {{geneName}}',mpgSoftware.dynamicUi.retrieveGwasCodingCredibleSetFromServer)"
                     class="cellExpander" data-target="#gwasCoding_{{geneName}}"  style="color:black">
                        <span class="glyphicon glyphicon-zoom-in" aria-hidden="true" data-target="#gwasCoding_{{geneName}}"></span>&nbsp;
                        {{displayValue}}
