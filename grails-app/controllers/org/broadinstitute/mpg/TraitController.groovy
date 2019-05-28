@@ -208,6 +208,15 @@ class TraitController {
 
     }
 
+
+    def tissueTable(){
+        render (view: 'tissue', model:[portalVersionBean:restServerService.retrieveBeanForCurrentPortal()
+        ])
+    }
+
+
+
+
     /***
      *  search for a single trait from the main page and this will be the page frame.  The resulting Ajax call is  phenotypeAjax
      * @return

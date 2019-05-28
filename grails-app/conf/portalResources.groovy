@@ -228,6 +228,18 @@ modules = {
         resource url: 'js/lib/dport/dynamicUi/geneBurdenSkat.js'
         resource url: 'js/lib/dport/matrixMath.js'
     }
+    tissueTable {
+        dependsOn "core", "portalHome"
+
+        resource url: 'js/lib/dport/effectorGeneTable.js'
+
+        resource url: 'js/lib/dport/dynamicUi.js'
+        resource url: 'css/dport/dynamicUi.css'
+
+        resource url: 'js/lib/dport/dynamicUi/fullEffectorGeneTable.js'
+        resource url: 'js/lib/dport/dynamicUi/geneBurdenSkat.js'
+        resource url: 'js/lib/dport/matrixMath.js'
+    }
     mustache {
         resource url: 'js/lib/mustache.js'
     }

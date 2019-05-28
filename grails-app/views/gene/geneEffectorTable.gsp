@@ -228,7 +228,7 @@
 
                         ],
                         dynamicTableConfiguration: {
-                            domSpecificationForAccumulatorStorage:'#mainEffectorDiv',
+                            domSpecificationForAccumulatorStorage:'#mainTissueDiv',
                             formOfStorage: 'loadOnce'
                         }
                     };
@@ -257,13 +257,13 @@
 
 <body>
 
-<div id="mainEffectorDiv">
+<div id="mainTissueDiv">
     <div class="container">
         <div class="row">
             <div class="text-center">
                 <h1 class="dk-page-title">Predicted type 2 diabetes effector genes</h1>
             </div>
-            <div class="col-md-12" style="padding-top: 30px;">
+            <div class="col-md-12">
                 <div id="effectiveGeneTableHolder" class="mainEffectorDiv">
                     <table class="fullEffectorGeneTableHolder effector-table">
                     </table>

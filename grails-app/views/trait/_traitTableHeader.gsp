@@ -26,6 +26,12 @@
     });
 </script>
 
+<p><g:message code="informational.traitTableHeader.help1"></g:message></p>
+<p><g:message code="informational.traitTableHeader.help2"></g:message></p>
+<p><g:message code="informational.traitTableHeader.help3"></g:message></p>
+<p><g:message code="informational.traitTableHeader.help4"></g:message></p>
+<p>&nbsp;</p>
+
 <div style = "width: 30%; float: left; padding-right: 15px">
     <p class= "dk-footnote" style="width:83%;">Phenotype</p>
     <select  style = " width:100%; overflow: hidden; text-overflow: ellipsis;" id="phenotypeVFChoser" selected = "selected" name="phenotypeVFChoser" onchange="mpgSoftware.manhattanplotTableHeader.onCLickPhenotype(this.value)">
@@ -52,44 +58,22 @@
 
 </div>
 
-<div style="margin-top: 20px">
-    <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" href="#tissueTable">Tissue table</a></li>
-        <li><a data-toggle="tab" href="#variantTable">Variant table</a></li>
-        <li><a data-toggle="tab" href="#manhattanPlot">Manhattan plot</a></li>
-    </ul>
-</div>
+<style>
+.mychart {width:100% !important; height:740px !important;}
+</style>
+<div style="text-align: right; clear: left">Scroll to zoom. Roll over dots for variant information.</div>
+<div id="manhattanPlot1" style="border:solid 1px #999; margin-bottom: 30px; min-width:1000px; clear:left;"></div>
 
-
-<div class="tab-content">
-    <div id="tissueTable" class="tab-pane fade in active">
-        <h3>tissue table will go here</h3>
-
-    </div>
-    <div id="variantTable" class="tab-pane fade" style="padding-top: 20px">
-        <table id="phenotypeTraits" class="table  dk-t2d-general-table basictable table-striped">
-            <thead>
-            <tr>
-                <th><g:message code="variantTable.columnHeaders.shared.rsid" /></th>
-                <th><g:message code="variantTable.columnHeaders.shared.nearestGene" /></th>
-                <th><g:message code="variantTable.columnHeaders.exomeChip.pValue" /></th>
-                <th id="effectTypeHeader"></th>
-                <th><g:message code="variantTable.columnHeaders.shared.maf" /></th>
-            </tr>
-            </thead>
-            <tbody id="traitTableBody">
-            </tbody>
-        </table>
-    </div>
-    <div id="manhattanPlot" class="tab-pane fade" style="padding-top: 20px">
-        <p><g:message code="informational.traitTableHeader.help1"></g:message></p>
-        <p><g:message code="informational.traitTableHeader.help2"></g:message></p>
-        <p><g:message code="informational.traitTableHeader.help3"></g:message></p>
-        <p><g:message code="informational.traitTableHeader.help4"></g:message></p>
-        <p>&nbsp;</p>
-
-        <div>Scroll to zoom. Roll over dots for variant information.</div>
-        <div id="manhattanPlot1"></div>
-    </div>
-</div>
-
+<table id="phenotypeTraits" class="table  dk-t2d-general-table basictable table-striped">
+    <thead>
+    <tr>
+        <th><g:message code="variantTable.columnHeaders.shared.rsid" /></th>
+        <th><g:message code="variantTable.columnHeaders.shared.nearestGene" /></th>
+        <th><g:message code="variantTable.columnHeaders.exomeChip.pValue" /></th>
+        <th id="effectTypeHeader"></th>
+        <th><g:message code="variantTable.columnHeaders.shared.maf" /></th>
+    </tr>
+    </thead>
+    <tbody id="traitTableBody">
+    </tbody>
+</table>
