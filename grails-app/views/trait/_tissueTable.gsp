@@ -13,6 +13,7 @@
                     getGRSListOfVariantsAjaxUrl:"${createLink(controller:'grs',action: 'getGRSListOfVariantsAjax')}",
                     getLocusZoomFilledPlotUrl: '${createLink(controller:"gene", action:"getLocusZoomFilledPlot")}',
                     fillCredibleSetTableUrl: '${g.createLink(controller: "RegionInfo", action: "fillCredibleSetTable")}',
+                    retrieveGregorDataUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveGregorData")}',
                     getVariantsForNearbyCredibleSetsUrl: '${g.createLink(controller: "RegionInfo", action: "getVariantsForNearbyCredibleSets")}',
                     fillGeneComparisonTableUrl: '${g.createLink(controller: "RegionInfo", action: "fillGeneComparisonTable")}',
                     availableAssayIdsJsonUrl: '${g.createLink(controller: "RegionInfo", action: "availableAssayIdsJson")}',
@@ -31,49 +32,27 @@
                     retrieveListOfGenesInARangeUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveListOfGenesInARange")}',
                     retrieveEffectorGeneInformationUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveEffectorGeneInformation")}',
                     dataAnnotationTypes: [
-                        {   code: 'FEGT',
+                        {
+                            code: 'TITA',
                             category: 'Annotation',
                             displayCategory: 'Annotation',
-                            subcategory: 'Effector gene list',
-                            displaySubcategory: 'Effector gene list',
-                            headerWriter:'dynamicFullEffectorGeneTableHeader',
-                            cellBodyWriter:'fegtCellBody',
+                            subcategory: 'Gregor list',
+                            displaySubcategory: 'Gregor list',
+                            cellBodyWriter:'dynamicGeneTableEffectorGeneBody',
                             categoryWriter:'sharedCategoryWriter',
-                            subCategoryWriter:'dynamicGeneTableEffectorGeneSubCategory',
-                            numberRecordsCellPresentationStringWriter:'effectorGeneTableNumberRecordsCellPresentationString',
-                            significanceCellPresentationStringWriter:'effectorGeneTableSignificanceCellPresentationString',
-                            internalIdentifierString:'getFullFromEffectorGeneListTable',
-                            customColumnOrdering:{
-                                topLevelColumns:[
-                                    {   key:"Perturbation_combined",
-
-                                        displayName:"Combined perturbation evidence",
-                                        helptext: '<g:helpText title="effectorTable.combined-perturbation-collapsed.help.header" placement="bottom" body="effectorTable.combined-perturbation-collapsed.help.text"/>',
-                                        order: 4 }
-
-
-                                ],
-                                constituentColumns:[
-
-                                    {   key: "Combined_category",
-                                        display:"Combined prediction",
-                                        pos:0,subPos:0,
-                                        helptext:'<g:helpText title="effectorTable.combined-prediction.help.header" placement="bottom" body="effectorTable.combined-prediction.help.text"/>'}
-
-
-
-                                ]
-                            }
+                            subCategoryWriter:'gregorTissueTableSubCategory',
+                            numberRecordsCellPresentationStringWriter:'gregorTissueTableNumberRecordsCellPresentationString',
+                            significanceCellPresentationStringWriter:'gregorTissueTableSignificanceCellPresentationString',
+                            internalIdentifierString:'getInformationFromGregorForTissueTable'
                         }
-
                     ],
                     dynamicTableConfiguration: {
                         domSpecificationForAccumulatorStorage:'#mainTissueDiv',
-                        formOfStorage: 'loadOnce'
+                        formOfStorage: 'loadFromTable'
                     }
                 };
-                mpgSoftware.effectorGeneTable.setVariablesToRemember(drivingVariables);
-                mpgSoftware.effectorGeneTable.initialPageSetUp();
+                mpgSoftware.tissueTable.setVariablesToRemember(drivingVariables);
+                mpgSoftware.tissueTable.initialPageSetUp();
             };
 
 
@@ -90,34 +69,18 @@
 
 
 
-
-
-
-    var drivingVariables = {
-        phenotypeName: '<%=phenotypeKey%>',
-        ajaxClumpDataUrl: '${createLink(controller: "trait", action: "ajaxClumpData")}',
-        traitSearchUrl: "${createLink(controller: 'trait', action: 'traitSearch')}",
-        retrievePhenotypesAjaxUrl:'<g:createLink controller="variantSearch" action="retrievePhenotypesAjax" />',
-        ajaxSampleGroupsPerTraitUrl: '${createLink(controller: "trait", action: "ajaxSampleGroupsPerTrait")}',
-        phenotypeAjaxUrl: '${createLink(controller: "trait", action: "phenotypeAjax")}',
-        variantInfoUrl: '${createLink(controller: "variantInfo", action: "variantInfo")}',
-        requestedSignificance:'<%=requestedSignificance%>',
-        local:"${locale}",
-        copyMsg:'<g:message code="table.buttons.copyText" default="Copy" />',
-        printMsg:'<g:message code="table.buttons.printText" default="Print me!" />'
-    };
-    mpgSoftware.manhattanplotTableHeader.setMySavedVariables(drivingVariables);
-
     $( document ).ready(function() {
         mpgSoftware.effectorTissueTableInitializer.effectorTissueTableConfiguration();
     });
 </script>
 
+<g:render template="/templates/tissueTableTemplate" />
+
 <div id="mainTissueDiv">
     <div class="container">
         <div class="row">
             <div class="text-center">
-                <h1 class="dk-page-title">Predicted type 2 diabetes effector genes</h1>
+                <h1 class="dk-page-title">Tissue table for <span class="phenotypeSpecifier">${phenotype}</span></h1>
             </div>
             <div class="col-md-12">
                 <div id="tissueTableHolder" class="mainEffectorDiv">

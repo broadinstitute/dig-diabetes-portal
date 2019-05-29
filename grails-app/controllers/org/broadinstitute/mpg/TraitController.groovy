@@ -210,7 +210,11 @@ class TraitController {
 
 
     def tissueTable(){
-        render (view: 'tissue', model:[portalVersionBean:restServerService.retrieveBeanForCurrentPortal()
+        String phenotypeString = params.trait ?: 'T2D'
+
+        render (view: 'tissue', model:[
+                portalVersionBean:restServerService.retrieveBeanForCurrentPortal(),
+                phenotype:phenotypeString
         ])
     }
 

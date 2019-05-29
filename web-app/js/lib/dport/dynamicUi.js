@@ -477,6 +477,11 @@ mpgSoftware.dynamicUi = (function () {
                 defaultFollowUp.placeToDisplayData = '#dynamicGeneHolder div.dynamicUiHolder';
                 break;
 
+            case "getInformationFromGregorForTissueTable":
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.gregorTissueTable.displayGregorDataForTissueTable;
+                defaultFollowUp.placeToDisplayData = '#mainTissueDiv div.tissueTableHolder';
+                break;
+
 
             case "getRecordsFromAbcForTissueTable":
                 defaultFollowUp.displayRefinedContextFunction = displayTissuesFromAbc;
@@ -523,6 +528,23 @@ mpgSoftware.dynamicUi = (function () {
         var functionToLaunchDataRetrieval;
 
         switch (actionId) {
+
+            case "getInformationFromGregorForTissueTable":
+                functionToLaunchDataRetrieval = function () {
+                    retrieveRemotedContextInformation(buildRemoteContextArray({
+                        name: "getInformationFromGregorForTissueTable",
+                        retrieveDataUrl: additionalParameters.retrieveGregorDataUrl,
+                        dataForCall: {
+                            phenotype: phenotype
+                        },
+                        processEachRecord: mpgSoftware.dynamicUi.gregorTissueTable.processGregorDataForTissueTable,
+                        displayRefinedContextFunction: displayFunction,
+                        placeToDisplayData: displayLocation,
+                        actionId: nextActionId,
+                        nameOfAccumulatorField:'gregorTissueArray'
+                    }));
+                };
+                break;
 
             case "getTissuesFromProximityForLocusContext":
                 functionToLaunchDataRetrieval = function () {

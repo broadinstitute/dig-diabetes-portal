@@ -71,6 +71,7 @@ class RestServerService {
     private String GET_DNASE_RECORDS_URL= "testcalls/region/dnase/object"
     private String GET_H3K27AC_RECORDS_URL= "testcalls/region/h3k27ac/object"
     private String GET_BOTTOM_LINE_RESULTS_URL= "graph/meta/variant/object"
+    private String GET_TISSUES_FROM_GREGOR_URL= "graph/gregor/phenotype/object"
     private String GET_HAIL_DATA_URL = "getHailData"
     private String GET_SAMPLE_DATA_URL = "getSampleData"
     private String GET_SAMPLE_METADATA_URL = "getSampleMetadata"
@@ -2461,6 +2462,25 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             jsonArray = [slurper.parseText(rawReturnFromApi)] as List
         }
         return jsonArray
+    }
+
+
+
+    public JSONObject gatherGregorData(  String phenotype ) {
+        List<String> specifyRequestList = []
+        if ((phenotype) && (phenotype.length() > 0)) {
+            specifyRequestList << "phenotype=${phenotype}"
+        }
+
+        String rawReturnFromApi =  getRestCall("${GET_TISSUES_FROM_GREGOR_URL}?${specifyRequestList.join("&")}".toString())
+        JsonSlurper slurper = new JsonSlurper()
+        JSONObject jsonObject
+        try{
+            jsonObject = slurper.parseText(rawReturnFromApi)
+        } catch(Exception e){
+            log.error("ERROR: gatherGregorData. problem parsing the data we received from the KB")
+        }
+        return jsonObject
     }
 
 
