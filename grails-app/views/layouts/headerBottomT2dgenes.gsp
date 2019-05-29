@@ -8,8 +8,8 @@
         );
     });
     <%@ page import="org.broadinstitute.mpg.RestServerService" %>
-
     <g:set var="restServer" bean="restServerService"/>
+
 </script>
 
 <div class="container-fluid floop" id="header-bottom" style="background-image:url(${resource( file:restServer.retrieveBeanForCurrentPortal().getBackgroundGraphic())}); background-position: left bottom; font-size: 14px; font-weight:300; padding:0; margin:0; ">
@@ -36,7 +36,7 @@
 
                 </ul>
             </li>
-            <g:if test="${portalVersionBean.getExposeEffectorGeneTableUi()}">
+            <g:if test="${restServer.retrieveBeanForCurrentPortal().getExposeEffectorGeneTableUi()}">
                 <li class="data-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="${createLink(controller:'gene', action:'effectorGeneTable')}"><g:message code="portal.header.effector.gene.table"/></a></li>
             </g:if>
             <li class="about-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="${createLink(controller:'informational', action:'about')}"><g:message code="portal.header.nav.about"/></a></li>

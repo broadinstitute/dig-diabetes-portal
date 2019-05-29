@@ -384,7 +384,8 @@ class RestServerService {
                     existingPortalVersionBean.getExposeGenesInRegionTab(),
                     existingPortalVersionBean.getExposeRegionAdjustmentOnGenePage(),
                     existingPortalVersionBean.getExposeGeneTableOnDynamicUi(),
-                    existingPortalVersionBean.getExposeVariantTableOfDynamicUi()
+                    existingPortalVersionBean.getExposeVariantTableOfDynamicUi(),
+                    existingPortalVersionBean.getExposeEffectorGeneTableUi()
             )
 
             removePortalVersion(portalType)

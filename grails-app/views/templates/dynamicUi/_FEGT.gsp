@@ -2,7 +2,7 @@
 <script id="dynamicFullEffectorGeneTableHeader"  type="x-tmpl-mustache">
 
         <div sortStrategy="alphabetical" sortField="-1"  sortTerm="{{name1}}"
-        class="{{groupKey}} {{groupName}} BigGroupNum{{groupNum}} groupNum{{groupNum}} withinGroupNum{{withinGroupNum}} text-center initialLinearIndex_{{initialLinearIndex}}">
+        class="sortClass_{{name}} {{groupKey}} {{groupName}} BigGroupNum{{groupNum}} groupNum{{groupNum}} withinGroupNum{{withinGroupNum}} text-center initialLinearIndex_{{initialLinearIndex}}">
             <span class="groupHelpText {{name}}" style="display:none">{{{groupHelpText}}}</span>
             <span class="columnHelpText {{name}}">{{{columnHelpText}}}</span>
             <span class="groupDisplayName displayMethodName {{name}}" methodKey="{{name}}" style="display:none">{{groupDisplayName}}
@@ -51,15 +51,29 @@
 {{#Genetic_combined}}
  <div class="fedt text-center">
  {{#exomeSequenceCallOut}}
-                <a
-               onclick="mpgSoftware.dynamicUi.showAttachedData(event,'T2D gene burden for {{geneName}}',mpgSoftware.dynamicUi.retrieveDataFromServer)"
-                class="cellExpander" data-target="#tissues_{{geneName}}"  style="color:black">
-               <span class="glyphicon glyphicon-zoom-in" aria-hidden="true" data-target="#tissues_{{geneName}}"></span>
-               &nbsp;
+                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'T2D gene burden for {{geneName}}',mpgSoftware.dynamicUi.retrieveDataFromServer)"
+                class="cellExpander" data-target="#geneBurdenTest_{{geneName}}"  style="color:black">
+                   <span class="glyphicon glyphicon-zoom-in" aria-hidden="true" data-target="#geneBurdenTest_{{geneName}}"></span>&nbsp;
+                   {{displayValue}}
                </a>
+               <div  class="collapse opengeneBurdenCallOut" id="geneBurdenTest_{{geneName}}">
+
+               </div>
  {{/exomeSequenceCallOut}}
  {{^exomeSequenceCallOut}}
-    {{textToDisplay}}
+     {{#gwasCodingCallOut}}
+                    <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'DIAMANTE credible sets with coding variant {{geneName}}',mpgSoftware.dynamicUi.retrieveGwasCodingCredibleSetFromServer)"
+                    class="cellExpander" data-target="#gwasCoding_{{geneName}}"  style="color:black">
+                       <span class="glyphicon glyphicon-zoom-in" aria-hidden="true" data-target="#gwasCoding_{{geneName}}"></span>&nbsp;
+                       {{displayValue}}
+                   </a>
+                   <div  class="collapse opengeneGwasCodingCallOut" id="gwasCoding_{{geneName}}">
+
+                   </div>
+     {{/gwasCodingCallOut}}
+     {{^gwasCodingCallOut}}
+        {{textToDisplay}}
+     {{/gwasCodingCallOut}}
  {{/exomeSequenceCallOut}}
 </div>
 {{/Genetic_combined}}
@@ -142,4 +156,62 @@
                     {{/data}}
                </div>
             </div>
+</script>
+
+<script id="fillUpTheGeneBurdenSpecifics"  type="x-tmpl-mustache">
+<div  class=" opengeneSkatAssociationInGeneTable" id="geneSkatAssociation_{{gene}}">
+    {{#tissuesExist}}
+    <table class="expandableDrillDownTable openSkatInGeneTable" style="border: 0">
+        <thead>
+        <tr role="row">
+            <th class="text-center leftMostCol">technique</th>
+            <th class="text-center otherCols">p-value</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{/tissuesExist}}
+        {{#tissues}}
+        <tr role="row">
+            <td class="leftMostCol">{{tissueName}}</td>
+            <td class="otherCols">{{value}}</td>
+        </tr>
+        {{/tissues}}
+        {{#tissuesExist}}
+        </tbody>
+    </table>
+    {{/tissuesExist}}
+</div>
+</script>
+
+
+
+<script id="fillUpTheCodingGwasCredibleSet"  type="x-tmpl-mustache">
+<div  class=" opengeneSkatAssociationInGeneTable" id="geneSkatAssociation_{{gene}}">
+    {{#variantsExist}}
+    <table class="expandableDrillDownTable openSkatInGeneTable" style="border: 0">
+        <thead>
+        <tr role="row">
+            <th class="text-center leftMostCol">VAR ID</th>
+            <th class="text-center otherCols">Post. Prob.</th>
+            <th class="text-center otherCols">pValue</th>
+            <th class="text-center otherCols">coding</th>
+            <th class="text-center otherCols">cred set ID</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{/variantsExist}}
+        {{#variants}}
+        <tr role="row">
+            <td class="leftMostCol">{{varId}}</td>
+            <td class="otherCols">{{posteriorProbability}}</td>
+            <td class="otherCols">{{pValue}}</td>
+            <td class="otherCols">{{coding}}</td>
+            <td class="otherCols">{{credibleSetId}}</td>
+        </tr>
+        {{/variants}}
+        {{#variantsExist}}
+        </tbody>
+    </table>
+    {{/variantsExist}}
+</div>
 </script>

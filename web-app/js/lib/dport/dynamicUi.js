@@ -3551,9 +3551,33 @@ mpgSoftware.dynamicUi = (function () {
                     var x = parseInt($(a).attr("sortnumber"));
                     var y = parseInt($(b).attr("sortnumber"));
                     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+                    break;
                 case 'Genetic_combined':
                 case 'Genomic_combined':
                 case 'Perturbation_combined':
+                     var textA = $(a).text().trim().toUpperCase();
+                     var textAEmpty = (textA.length===0);
+                     var textB = $(b).text().trim().toUpperCase();
+                     var textBEmpty = (textB.length===0);
+                     if ( textAEmpty && textBEmpty ) {
+                         return 0;
+                     }
+                     else if ( textAEmpty ) {
+                         if (direction==='asc') {
+                             return 1;
+                         } else {
+                             return -1;
+                         }
+                     }else if ( textBEmpty )
+                     {
+                         if (direction==='asc') {
+                             return -1;
+                         } else {
+                             return 1;
+                         }
+                     }
+                     return (textA < textB) ? 1 : (textA > textB) ? -1 : 0;
+                     break;
                 case 'external_evidence':
                 case 'homologous_gene':
                 case 'straightAlphabeticWithSpacesOnTop':
@@ -4033,15 +4057,25 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                              var sortOrderDesignation = "sorting_";
                              var bigGroupDesignation = "BigGroupNum";
                              var combinedCategory = "Combined_category";
-                             if ( oneClass.substr(0,sortOrderDesignation.length) === sortOrderDesignation ){
+                             var  sortingClass = 'sortClass_';
+                             if (
+                                 ( oneClass.substr(0,sortOrderDesignation.length) === sortOrderDesignation )||
+                                 ( oneClass.substr(0,bigGroupDesignation.length) === bigGroupDesignation )||
+                                 ( oneClass.substr(0,combinedCategory.length) === combinedCategory )
+                             ){
                                  classesToPromote.push (oneClass);
                              }
-                             if ( oneClass.substr(0,bigGroupDesignation.length) === bigGroupDesignation ){
-                                 classesToPromote.push (oneClass);
+                             if (
+                                 ( oneClass.substr(0,sortingClass.length) === sortingClass )
+                             ){
+                                 classesToPromote.push ( oneClass.substr(sortingClass.length));
                              }
-                             if ( oneClass.substr(0,combinedCategory.length) === combinedCategory ){
-                                 classesToPromote.push (oneClass);
-                             }
+                             // if ( oneClass.substr(0,bigGroupDesignation.length) === bigGroupDesignation ){
+                             //     classesToPromote.push (oneClass);
+                             // }
+                             // if ( oneClass.substr(0,combinedCategory.length) === combinedCategory ){
+                             //     classesToPromote.push (oneClass);
+                             // }
                          });
                      }
                      var contentOfHeader = headerContent;
@@ -4779,15 +4813,128 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         $('button.hider.'+annotationId).hide();
     };
 
-    var retrieveDataFromServer = function(event){
+
+
+
+
+    var retrieveGwasCodingCredibleSetFromServer = function(event){
         var dataTarget = $(event.target).attr('data-target').substring(1).trim();
-        if (dataTarget.indexOf("tissues_")>=0){
-            var geneName = dataTarget.substring("tissues_".length);
+        if (dataTarget.indexOf("gwasCoding_")>=0){
+            var geneName = dataTarget.substring("gwasCoding_".length);
             var uniqueId  = dataTarget+'_uniquifier';
+            var additionalParameters = getDyanamicUiVariables();
+            var dataSaver = [];
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: additionalParameters.getVariantsForNearbyCredibleSetsUrl,
+                data: {
+                    gene: geneName,
+                    phenotype: 'T2D'
+                },
+                async: true
+            }).done(function (data, textStatus, jqXHR) {
+                mpgSoftware.dynamicUi.fullEffectorGeneTable.processRecordsFromGetData(data,dataSaver);
+                var tissueTranslations = [];
+                if (dataSaver.length>0){
+                    tissueTranslations = dataSaver[0].TISSUE_TRANSLATIONS;
+                }
+                var sortedDisplayableRecords;
+                var uniqueCodingSetIds;
+                var credibleSetsWithCodingVariants=[];
+                    // figure out which credible sets have a coding variant
+                _.forEach(dataSaver,function(allRecords) {
+                    if (allRecords.posteriorsAvailable){
+                        var codingSets = _.map(_.filter(allRecords.contents, function (o) {
+                            return o.mds < 3;
+                        }), function (recToKeep) {
+                            return recToKeep.credibleSetId;
+                        });
+                        uniqueCodingSetIds = _.uniq(codingSets);
+                        credibleSetsWithCodingVariants = _.filter(allRecords.contents, function (o) {
+                            return ($.inArray(o.credibleSetId, uniqueCodingSetIds)!== -1);
+                        });
+                    }
+                });
+                _.forEach(dataSaver,function(allRecords){
+                    sortedDisplayableRecords = _.map(_.orderBy(credibleSetsWithCodingVariants,['posteriorProbability','pValue'],['desc','asc']),function(record){
+                        return { varId:record.varId,
+                            credibleSetId: record.credibleSetId,
+                            pValue: UTILS.realNumberFormatter(""+record.pValue),
+                            coding:(record.mds<=2)?'yes':'',
+                            posteriorProbability: UTILS.realNumberFormatter(""+record.posteriorProbability) };
+                    })
+                });
+                $('#'+uniqueId).empty().append(Mustache.render($('#fillUpTheCodingGwasCredibleSet')[0].innerHTML,
+                    {variantsExist:(sortedDisplayableRecords.length>0)?[1]:[],
+                        variants:sortedDisplayableRecords}
+                ));
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                loading.hide();
+                alert("Ajax call failed, url="+rememberUrl+", data="+rememberData+".");
+                core.errorReporter(jqXHR, errorThrown)
+            })
 
         }
-        return "<h1>howdy!</h1>";
-    }
+        return;
+    };
+
+
+
+
+
+
+
+
+
+    var retrieveDataFromServer = function(event){
+        var dataTarget = $(event.target).attr('data-target').substring(1).trim();
+        if (dataTarget.indexOf("geneBurdenTest_")>=0){
+            var geneName = dataTarget.substring("geneBurdenTest_".length);
+            var uniqueId  = dataTarget+'_uniquifier';
+            var additionalParameters = getDyanamicUiVariables();
+            var dataSaver = [];
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: additionalParameters.retrieveGeneLevelAssociationsUrl,
+                data: {
+                    gene: geneName,
+                    phenotype: 'T2D',
+                    propertyNames: "[\"P_VALUE\"]",
+                    preferredSampleGroup: "ExSeq_52k_mdv37"
+                },
+                async: true
+            }).done(function (data, textStatus, jqXHR) {
+                mpgSoftware.dynamicUi.geneBurdenSkat.processGeneSkatAssociationRecords(data,dataSaver);
+                var tissueTranslations = [];
+                if (dataSaver.length>0){
+                    tissueTranslations = dataSaver[0].TISSUE_TRANSLATIONS;
+                }
+                var sortedDisplayableRecords;
+                _.forEach(dataSaver,function(allRecords){
+                    sortedDisplayableRecords = _.map(_.sortBy(_.filter(allRecords.tissues,function(t){return t.tissue.includes("FIRTH")}),['value']),function(tissueRecord){
+                        return {  tissueName:  translateATissueName(tissueTranslations,tissueRecord.tissue),
+                            tissue: tissueRecord.tissue,
+                            value: UTILS.realNumberFormatter(""+tissueRecord.value),
+                            numericalValue: tissueRecord.value };
+                    })
+                });
+                $('#'+uniqueId).empty().append(Mustache.render($('#fillUpTheGeneBurdenSpecifics')[0].innerHTML,
+                    {tissuesExist:(sortedDisplayableRecords.length>0)?[1]:[],
+                        tissues:sortedDisplayableRecords}
+                ));
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                loading.hide();
+                alert("Ajax call failed, url="+rememberUrl+", data="+rememberData+".");
+                core.errorReporter(jqXHR, errorThrown)
+            })
+
+        }
+        return;
+    };
 
 
 
@@ -5317,7 +5464,9 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         contractColumns:contractColumns,
         expandColumns:expandColumns,
         openFilter:openFilter,
-        closeFilterModal:closeFilterModal
+        closeFilterModal:closeFilterModal,
+        retrieveDataFromServer:retrieveDataFromServer,
+        retrieveGwasCodingCredibleSetFromServer: retrieveGwasCodingCredibleSetFromServer
     }
 }());
 
