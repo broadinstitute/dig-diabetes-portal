@@ -122,7 +122,7 @@ ul.nav-tabs > li.active > a { background-color: #fff !important; }
 
         <div class="gene-info-container row">
 
-            <g:render template="/templates/burdenTestSharedTemplate" model="['variantIdentifier': ' ', 'accordionHeaderClass': 'accordion-heading']" />
+            <g:render template="/templates/burdenTestSharedTemplate" model="['variantIdentifier': 'rs13266634', 'accordionHeaderClass': 'accordion-heading']" />
 
 
             <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': '8_118184783_C_T',

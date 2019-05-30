@@ -204,6 +204,9 @@ mpgSoftware.burdenTestShared = (function () {
         //burdenTestVariantSelectionOptionsAjaxUrl){
         displayParameters["variantsSetRefinement"] = (( typeof displayParameters.grsVariantSet === 'undefined') ||
             (displayParameters.grsVariantSet.length === 0)) ? [1] : [];
+        displayParameters["standaloneTool"] = (( typeof displayParameters.grsVariantSet === 'undefined') ||
+            (displayParameters.grsVariantSet.length === 0)) ? [1] : [1];
+
         mpgSoftware.burdenTestShared.initializeGaitUi(selectionToFill,
             displayParameters);
         mpgSoftware.burdenTestShared.storeGeneForGait(geneName);
@@ -951,6 +954,9 @@ mpgSoftware.burdenTestShared = (function () {
             var tabDisplayString;
             var displayBurdenVariantSelectorString = (displayBurdenVariantSelector()) ? [1] : [];
             var variantsSetRefinement = (( typeof grsVariantSet === 'undefined') || (grsVariantSet.length === 0)) ? [1] : []; // if we aren't using a GRS variants set then allow the user to modify the set
+            //create a standalone variable parallel to variantSetRefinement
+            var standaloneTool = (( typeof grsVariantSet === 'undefined') || (grsVariantSet.length === 0)) ? [1] : [1];
+
             if (!multipleStrataExist) {
                 defaultDisplayString = ' active';
                 tabDisplayString = ' display: none';
@@ -959,6 +965,7 @@ mpgSoftware.burdenTestShared = (function () {
             var renderData = {
                 strataProperty: strataProperty,
                 variantsSetRefinement: variantsSetRefinement,
+                standaloneTool: standaloneTool,
                 phenotypeProperty: convertPhenotypeNames(phenotype),
                 defaultDisplay: defaultDisplayString,
                 tabDisplay: tabDisplayString,
