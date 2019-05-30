@@ -27,33 +27,20 @@ mpgSoftware.dynamicUi.gregorTissueTable = (function () {
     var processGregorDataForTissueTable = function (data,rawGeneAssociationRecords) {
 
         if ( ( typeof data !== 'undefined') &&
-            (  data.is_error !== true ) &&
-            (  data.numRecords > 0 ) &&
-            ( typeof data.variants !== 'undefined' ) ){
-            var geneRecord = {};
-            _.forEach(data.variants[0], function (oneRec) {
-                _.forEach(oneRec, function(sampleRecord,tissue){
-                    if ((tissue==='GENE')||(tissue==='Gene')) {
-                        geneRecord['gene'] = sampleRecord;
-                        geneRecord['tissues'] = [];
-                    } else if (tissue==='TISSUE_TRANSLATIONS') {
-                        geneRecord['TISSUE_TRANSLATIONS'] = sampleRecord;
-                    }  else {
-                        _.forEach(sampleRecord, function (phenotypeRecord, dataset) {
-                            _.forEach(phenotypeRecord, function (number, phenotypeString) {
-
-                                if (number !== null) {
-                                    geneRecord['tissues'].push({tissue: tissue, value: number});
-
-                                }
-                            })
-                        });
-                    }
-                });
+             ( typeof data.data !== 'undefined') ){
+            var geneRecord = {header:{}, contents:[]};
+            geneRecord.header['annotations'] = _.uniqBy(data.data,'annotation');
+            geneRecord.header['ancestries'] = _.uniqBy(data.data,'ancestry');
+            geneRecord.header['tissues'] = _.uniqBy(data.data,'tissue');
+            _.forEach(data.data, function (oneRec) {
+                geneRecord.contents.push({
+                    ancestry:oneRec.ancestry,
+                    annotation:oneRec.annotation,
+                    tissue:oneRec.tissue,
+                    p_value:oneRec.p_value
+                })
             });
-            if ((typeof geneRecord !== 'undefined')&&(typeof geneRecord.gene !== 'undefined')){
-                rawGeneAssociationRecords.push(geneRecord);
-            }
+            rawGeneAssociationRecords.push(geneRecord);
         }
         return rawGeneAssociationRecords;
     };
@@ -66,37 +53,131 @@ mpgSoftware.dynamicUi.gregorTissueTable = (function () {
      */
     var displayGregorDataForTissueTable = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
 
-        mpgSoftware.dynamicUi.displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
-            'FIR', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            'gregorTissueArray', // name of the persistent field where the data we received is stored
-            'P_MIN_P_FIRTH_NS_STRICT_NS_1PCT', // we may wish to pull out one record for summary purposes
-            function(records,tissueTranslations){
-                return _.map(_.sortBy(_.filter(records,function(t){return t.tissue.includes("FIRTH")}),['value']),function(tissueRecord){
-                    return {  tissueName:  mpgSoftware.dynamicUi.translateATissueName(tissueTranslations,tissueRecord.tissue),
-                        tissue: tissueRecord.tissue,
-                        value: UTILS.realNumberFormatter(""+tissueRecord.value),
-                        numericalValue: tissueRecord.value };
+            var dataAnnotationTypeCode = "FEGT";
+
+            mpgSoftware.dynamicUi.displayForFullEffectorGeneTable('table.fullEffectorGeneTableHolder', // which table are we adding to
+                dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+                'fullEffectorGeneTable', // name of the persistent field where the data we received is stored
+
+                // insert header records as necessary into the intermediate structure, and return header names that we can match on for the columns
+                function(incomingData,dataAnnotationType,intermediateDataStructure,returnObject){
+                    var headersObjects = [];
+                    var initialLinearIndex = 0;
+                    if (( typeof incomingData !== 'undefined') &&
+                        ( incomingData.length > 0)) {
+
+                        mpgSoftware.dynamicUi.addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode, intermediateDataStructure);
+
+                        var expectedColumns = dataAnnotationType.dataAnnotation.customColumnOrdering.constituentColumns;
+                        headersObjects = _.map(returnObject.headers, function (o) {
+                            var index = _.findIndex(expectedColumns, {'key': o});
+                            if (index > -1) {
+                                var grouping = dataAnnotationType.dataAnnotation.customColumnOrdering.topLevelColumns[expectedColumns[index].pos];
+                                return {
+                                    name: expectedColumns[index].key,
+                                    groupNum: expectedColumns[index].pos,
+                                    groupKey: grouping.key,
+                                    groupDisplayName: grouping.displayName,
+                                    columnDisplayName: expectedColumns[index].display,
+                                    groupHelpText: grouping.helptext,
+                                    columnHelpText: expectedColumns[index].helptext,
+                                    groupOrder: grouping.order,
+                                    withinGroupNum: expectedColumns[index].subPos
+                                }
+                            }
+                        });
+                        headersObjects = _.compact(headersObjects);
+                        var sortedHeaderObjects = _.sortBy(headersObjects, ['groupOrder', 'withinGroupNum', 'name']);
+                        _.forEach(sortedHeaderObjects, function (sortedHeaderObject) {
+                            sortedHeaderObject['initialLinearIndex'] = initialLinearIndex++;
+                        })
+                        returnObject.headers = _.map(sortedHeaderObjects, function (o) {
+                            return o.name
+                        });
+
+                        // set up the headers
+                        _.forEach(sortedHeaderObjects, function (oneRecord) {
+                            intermediateDataStructure.headers.push(new mpgSoftware.dynamicUi.IntermediateStructureDataCell(oneRecord,
+                                Mustache.render($('#' + dataAnnotationType.dataAnnotation.headerWriter)[0].innerHTML, oneRecord), "fegtHeader", 'LIT'));
+                        });
+                    }
+                    return sortedHeaderObjects;
+                },
+
+                // this function is for organizing and/or translating all of the names within a single cell
+                function(records,tissueTranslations){
+                    return _.map(records,function(oneRecord){
+                        return {    gene:oneRecord.gene,
+                            value:oneRecord};
+                        // return {    value:UTILS.realNumberFormatter(''+tissueRecord.value),
+                        //     numericalValue:tissueRecord.value,
+                        //     dataset: tissueRecord.dataset };
+                    });
+                },
+
+                // take all the records for each row and insert them into the intermediateDataStructure
+                function(returnObject,dataAnnotationType,intermediateDataStructure,initialLinearIndex){
+                    var constituentColumns = _.map(dataAnnotationType.dataAnnotation.customColumnOrdering.constituentColumns,function(val){
+                        return val.key;
+                    });
+                    var constituentColRecs = dataAnnotationType.dataAnnotation.customColumnOrdering.constituentColumns;
+                    //
+                    _.forEach(returnObject.contents,
+                        function (recordsPerGene,rowNumber) {
+                            if ($.isEmptyObject(recordsPerGene)) {
+                                alert('empty records not allowed in the FEGT')
+                            }
+                            var geneName = recordsPerGene["Gene_name"];
+                            _.forEach(recordsPerGene, function (valueInGeneRecord,header) {
+                                var indexOfColumn = _.indexOf(returnObject.headers, header );
+                                var indexOfPreassignedColumnName = _.indexOf(constituentColumns, header );
+                                if (indexOfColumn === -1) {
+
+                                } else if (indexOfPreassignedColumnName === -1) {
+                                    console.log("Did not find index of indexOfPreassignedColumnName "+header+" for FEGT.  Shouldn't we?")
+                                } else {
+                                    var groupNumber = constituentColRecs[indexOfPreassignedColumnName].pos;
+                                    var sortNumber = categorizor.categorizeRowsInEfgt(groupNumber, valueInGeneRecord );
+                                    var linkSafeText = valueInGeneRecord.replace(/\/.$/g, '').replace(/or /g, '');
+                                    var textWithoutQuotes = valueInGeneRecord.replace(/\"/g, '');
+                                    var exomeSequenceCallOut = [];
+                                    var gwasCodingCallOut = [];
+                                    if ((header === 'Exome_sequence_burden') &&
+                                        (valueInGeneRecord.length>0) )  {
+                                        exomeSequenceCallOut = [{geneName:geneName,displayValue:linkSafeText}]
+                                    }
+                                    if ((header === 'GWAS_coding_causal') &&
+                                        (valueInGeneRecord.length>0) )  {
+                                        gwasCodingCallOut = [{geneName:geneName,displayValue:linkSafeText}]
+                                    }
+                                    var categoryRecord = {
+                                        initialLinearIndex:initialLinearIndex++,
+                                        groupNumber:constituentColRecs[indexOfPreassignedColumnName].pos,
+                                        categoryName:textWithoutQuotes,
+                                        sortNumber:sortNumber,
+                                        linkSafeText:linkSafeText,
+                                        exomeSequenceCallOut:exomeSequenceCallOut,
+                                        gwasCodingCallOut:gwasCodingCallOut};
+                                    _.forEach(dataAnnotationType.dataAnnotation.customColumnOrdering.topLevelColumns, function (grouping, index){
+                                        if (grouping.order===constituentColRecs[indexOfPreassignedColumnName].pos){
+                                            categoryRecord[grouping.key]=[{textToDisplay:textWithoutQuotes}];
+                                        } else {
+                                            categoryRecord[grouping.key]=[];
+                                        }
+                                    });
+                                    var displayableRecord = Mustache.render($('#'+dataAnnotationType.dataAnnotation.cellBodyWriter)[0].innerHTML, categoryRecord);
+                                    intermediateDataStructure.rowsToAdd[rowNumber].columnCells[indexOfColumn] = new mpgSoftware.dynamicUi.IntermediateStructureDataCell(displayableRecord,
+                                        displayableRecord,"egftRecord","LIT" );
+                                }
+
+                            });
+                            mpgSoftware.dynamicUi.addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
+                        });
+
                 })
-            },
-            function(records, // all records
-                     recordsCellPresentationString,// record count cell text
-                     significanceCellPresentationString,// significance cell text
-                     dataAnnotationTypeCode,// driving code
-                     significanceValue,
-                     gene ){ // value of significance for sorting
-                return {  numberOfRecords:records.length,
-                    cellPresentationStringMap:{ Records:recordsCellPresentationString,
-                        Significance:significanceCellPresentationString },
-                    tissuesExist:(records.length)?[1]:[],
-                    gene:gene,
-                    tissueCategoryNumber:categorizor.categorizeTissueNumbers( records.length ),
-                    significanceCategoryNumber:categorizor.categorizeSignificanceNumbers( significanceValue ),
-                    significanceValue:significanceValue,
-                    tissues:records
-                }
-            }
-        );
-    };
+
+        };
+
 
 
 

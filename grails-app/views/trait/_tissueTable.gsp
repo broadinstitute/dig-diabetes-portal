@@ -6,9 +6,9 @@
     (function () {
         "use strict";
 
-        mpgSoftware.effectorTissueTableInitializer = (function () {
+        mpgSoftware.tissueTableInitializer = (function () {
 
-            var effectorTissueTableConfiguration = function(){
+            var tissueTableConfiguration = function(){
                 var drivingVariables = {
                     getGRSListOfVariantsAjaxUrl:"${createLink(controller:'grs',action: 'getGRSListOfVariantsAjax')}",
                     getLocusZoomFilledPlotUrl: '${createLink(controller:"gene", action:"getLocusZoomFilledPlot")}',
@@ -31,6 +31,7 @@
                     retrieveGeneLevelAssociationsUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveGeneLevelAssociations")}',
                     retrieveListOfGenesInARangeUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveListOfGenesInARange")}',
                     retrieveEffectorGeneInformationUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveEffectorGeneInformation")}',
+                    getAllPhenotypesAjaxUrl: '${g.createLink(controller: "trait", action: "getAllPhenotypesAjax")}',
                     dataAnnotationTypes: [
                         {
                             code: 'TITA',
@@ -59,7 +60,7 @@
 
 
             return {
-                effectorTissueTableConfiguration:effectorTissueTableConfiguration
+                tissueTableConfiguration:tissueTableConfiguration
             }
         }());
 
@@ -70,25 +71,25 @@
 
 
     $( document ).ready(function() {
-        mpgSoftware.effectorTissueTableInitializer.effectorTissueTableConfiguration();
+        mpgSoftware.tissueTableInitializer.tissueTableConfiguration();
     });
 </script>
 
 <g:render template="/templates/tissueTableTemplate" />
 
 <div id="mainTissueDiv">
-    <div class="container">
-        <div class="row">
-            <div class="text-center">
-                <h1 class="dk-page-title">Tissue table for <span class="phenotypeSpecifier">${phenotype}</span></h1>
-            </div>
-            <div class="col-md-12">
-                <div id="tissueTableHolder" class="mainEffectorDiv">
-                    <table class="tissueTableHolder effector-table">
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
+    %{--<div class="container">--}%
+        %{--<div class="row">--}%
+            %{--<div class="text-center">--}%
+                %{--<h1 class="dk-page-title">Tissue table for <span class="phenotypeSpecifier">${phenotype}</span></h1>--}%
+            %{--</div>--}%
+            %{--<div class="col-md-12">--}%
+                %{--<div id="tissueTableHolder" class="mainEffectorDiv">--}%
+                    %{--<table class="tissueTableHolder">--}%
+                    %{--</table>--}%
+                %{--</div>--}%
+            %{--</div>--}%
+        %{--</div>--}%
+    %{--</div>--}%
 </div>
 

@@ -12,8 +12,48 @@ mpgSoftware.tissueTable = (function () {
         return drivingVariablesToRemember;
     };
 
+    var fillPhenotypeDropDown = function(domSelector,preferredPhenotype){
+        $.ajax({
+            cache: false,
+            type: "post",
+            url: getVariablesToRemember().getAllPhenotypesAjaxUrl,
+            data: {
+            },
+            async: true
+        }).done(function (data, textStatus, jqXHR) {
+            if (( typeof  data !== 'undefined') ||
+                ( typeof  data.phenotypeMapping !== 'undefined')){
+                var phenotypeNames = [];
+                _.forEach(data.phenotypeMapping,function (phenotypeRecord,phenotypeName){
+                    phenotypeNames.push(phenotypeName);
+                });
+                _.forEach(phenotypeNames.sort(),function (phenotypeName){
+                    var optionToAdd;
+                    if (phenotypeName===preferredPhenotype){
+                        optionToAdd = '<option selected="selected">'+phenotypeName+'</option>';
+                    } else {
+                        optionToAdd = '<option>'+phenotypeName+'</option>';
+                    }
+                    $(domSelector).append(optionToAdd);
+                })
+            }
+
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            alert("Ajax call failed, url="+rememberUrl+", data="+rememberData+".");
+            core.errorReporter(jqXHR, errorThrown)
+        })
+
+    }
+
+
+
     var initialPageSetUp = function(){
-        mpgSoftware.dynamicUi.modifyScreenFields({},getVariablesToRemember());
+        var preferredPhenotype = 'T2D';
+        $('#mainTissueDiv').empty().append(Mustache.render($('#mainTissueTableOrganizer')[0].innerHTML,
+            {phenotype:preferredPhenotype}
+        ));
+        fillPhenotypeDropDown('select.phenotypePicker',preferredPhenotype);
+        mpgSoftware.dynamicUi.modifyScreenFields({phenotype:preferredPhenotype},getVariablesToRemember());
     }
 
     return {

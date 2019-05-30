@@ -42,6 +42,13 @@ class TraitController {
     }
 
 
+    def getAllPhenotypesAjax() {
+        JSONObject phenotypeDatasetMapping = metaDataService.getPhenotypeDatasetMapping()
+
+        render(status: 200, contentType: "application/json") {
+            [phenotypeMapping:phenotypeDatasetMapping]
+        }
+    }
 
 
 

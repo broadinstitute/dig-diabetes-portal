@@ -531,6 +531,7 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getInformationFromGregorForTissueTable":
                 functionToLaunchDataRetrieval = function () {
+                    var phenotype = getAccumulatorObject("preferredPhenotype");
                     retrieveRemotedContextInformation(buildRemoteContextArray({
                         name: "getInformationFromGregorForTissueTable",
                         retrieveDataUrl: additionalParameters.retrieveGregorDataUrl,
@@ -1850,6 +1851,69 @@ mpgSoftware.dynamicUi = (function () {
             'geneTableGeneHeaders', true);
     };
 
+
+
+
+
+
+    var displayTissueTable = function (idForTheTargetDiv, // which table are we adding to
+                                                    dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+                                                    nameOfAccumulatorField, // name of the persistent field where the data we received is stored
+                                                    insertAnyHeaderRecords, // we may wish to pull out one record for summary purposes
+                                                    mapSortAndFilterFunction,
+                                                    placeContentRowsIntoIntermediateObject ) { // sort and filter the records we will use.  Resulting array must have fields tissue, value, and numericalValue
+
+
+        var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode);
+        var intermediateDataStructure = new IntermediateDataStructure();
+
+        // for each gene collect up the data we want to display
+        var incomingData = getAccumulatorObject(nameOfAccumulatorField);
+        var returnObject={headers:[], content:{}};
+        if (( typeof incomingData !== 'undefined') &&
+            ( incomingData.length > 0)) {
+            returnObject = incomingData[0];
+        }
+        var sortedHeaderObjects = insertAnyHeaderRecords(incomingData,dataAnnotationType,intermediateDataStructure,returnObject);
+        var initialLinearIndex = sortedHeaderObjects.length;
+
+        if (returnObject.headers.length > 0){
+            placeContentRowsIntoIntermediateObject(returnObject,dataAnnotationType,intermediateDataStructure,initialLinearIndex);
+            intermediateDataStructure.tableToUpdate = idForTheTargetDiv;
+        }
+
+        // Set the default exclusions.  We need to do this because we have to find every column in the table, but we don't want
+        // to display every column.  Instead we exclude some of them unless a user specifically requests that a column be expanded.
+        var sharedTable = new SharedTableObject( 'fegtAnnotationHeaders',sortedHeaderObjects.length,0);
+        setAccumulatorObject("sharedTable_"+idForTheTargetDiv,sharedTable);
+        var deleter = {};
+        _.forEach(sortedHeaderObjects, function (o,index){
+            if (o.withinGroupNum === 0){
+                if (!$.isEmptyObject(deleter)){
+                    sharedTable.addColumnExclusionGroup(deleter.groupNumber,deleter.groupName,deleter.columnIndexes);
+                }
+                deleter['groupNumber'] = o.groupNum;
+                deleter['groupName'] = o.groupKey;
+                deleter['columnIndexes'] = [];
+            } else {
+                deleter.columnIndexes.push(index);
+            }
+        });
+        if (!$.isEmptyObject(deleter)){
+            sharedTable.addColumnExclusionGroup(deleter.groupNumber,deleter.groupName,deleter.columnIndexes);
+        }
+
+        prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
+            '#dynamicAbcGeneTable',
+            returnObject,
+            clearBeforeStarting,
+            intermediateDataStructure,
+            true,
+            'fegtAnnotationHeaders', false);
+
+
+
+    };
 
 
 
@@ -3242,7 +3306,11 @@ mpgSoftware.dynamicUi = (function () {
 
         $( window ).resize(function() {
             adjustTableWrapperWidth("table.fullEffectorGeneTableHolder");
-        })
+        });
+
+        if ( typeof data.phenotype !== 'undefined'){
+            setAccumulatorObject("preferredPhenotype", data.phenotype );
+        }
 
 
 
@@ -5462,6 +5530,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
     return {
         displayForGeneTable:displayForGeneTable,
         displayForFullEffectorGeneTable:displayForFullEffectorGeneTable,
+        displayTissueTable:displayTissueTable,
         displayHeaderForGeneTable:displayHeaderForGeneTable,
         addRowHolderToIntermediateDataStructure:addRowHolderToIntermediateDataStructure,
         IntermediateStructureDataCell:IntermediateStructureDataCell,
