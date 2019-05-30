@@ -3549,7 +3549,27 @@ mpgSoftware.dynamicUi = (function () {
 
                 case 'Combined_category':
                     var x = parseInt($(a).attr("sortnumber"));
+                    var keepAAtTheBottom = (x===0);
                     var y = parseInt($(b).attr("sortnumber"));
+                    var keepBAtTheBottom = (y===0);
+                    if ( keepAAtTheBottom && keepBAtTheBottom ) {
+                        return 0;
+                    }
+                    else if ( keepAAtTheBottom ) {
+                        if (direction==='asc') {
+                            return 1;
+                        } else {
+                            return -1;
+                        }
+                    }else if ( keepBAtTheBottom )
+                    {
+                        if (direction==='asc') {
+                            return -1;
+                        } else {
+                            return 1;
+                        }
+                    }
+
                     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
                     break;
                 case 'Genetic_combined':

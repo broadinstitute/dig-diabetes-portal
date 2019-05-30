@@ -188,32 +188,20 @@ mpgSoftware.dynamicUi.fullEffectorGeneTable = (function () {
         switch(groupNumber){
             case 0:
                 switch (valueToCategorize){
-                    case 'LIMITED_extra':
-                        returnValue = 1;
+                    case '(T2D_related)':
+                        returnValue = 0;
                         break;
-                    case 'LIMITED':
-                        returnValue = 2;
-                        break;
-                    case 'PLAUSIBLE_extra':
-                        returnValue = 3;
-                        break;
-                    case 'PLAUSIBLE':
-                        returnValue = 4;
-                        break;
-                    case 'POTENTIAL_extra':
+                    case 'WEAK':
                         returnValue = 5;
                         break;
-                    case 'POTENTIAL':
+                    case 'POSSIBLE':
                         returnValue = 6;
                         break;
-                    case 'STRONG_extra':
+                    case 'MODERATE':
                         returnValue = 7;
                         break;
                     case 'STRONG':
                         returnValue = 8;
-                        break;
-                    case 'CAUSAL_extra':
-                        returnValue = 9;
                         break;
                     case 'CAUSAL':
                         returnValue = 10;
