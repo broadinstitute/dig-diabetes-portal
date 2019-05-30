@@ -135,10 +135,10 @@
                                     display:"Other genetic evidence",
                                     pos:2,subPos:5,
                                     helptext: '<g:helpText title="effectorTable.other-genetic.help.header" placement="bottom" body="effectorTable.other-genetic.help.text"/>'},
-                                { key: "COMBINED",
-                                    display:"Combined genetic evidence classification",
-                                    pos:2,subPos:6,
-                                    helptext: '<g:helpText title="effectorTable.classified-genetic.help.header" placement="bottom" body="effectorTable.classified-genetic.help.text"/>'},
+                                %{--{ key: "COMBINED",--}%
+                                    %{--display:"Combined genetic evidence classification",--}%
+                                    %{--pos:2,subPos:6,--}%
+                                    %{--helptext: '<g:helpText title="effectorTable.classified-genetic.help.header" placement="bottom" body="effectorTable.classified-genetic.help.text"/>'},--}%
                                 { key: "Genomic_combined",
                                     display:"Combined regulatory evidence",
                                     pos:3,subPos:0,
@@ -264,13 +264,14 @@
                 <h1 class="dk-page-title">Predicted type 2 diabetes effector genes</h1>
             </div>
         </div>
-        <h3>Sub Title <a data-toggle="collapse" href="#graphicsDiv" aria-expanded="false" aria-controls="collapseExample" style="font-size: 0.8em;">View / hide graphics</a></h3>
+        <h3>Classifying predicted T2D effectors</h3>
+        <h4><a data-toggle="collapse" href="#graphicsDiv" aria-expanded="false" aria-controls="collapseExample" style="font-size: 0.8em;">View / hide graphic</a></h4>
         <div class="row collapse in" id="graphicsDiv">
 
             <div class="col-md-5">
-                Place holder for the text Maria will add.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                <p><a href="#">Link to a pdf with full description.</a> </p>
+                <p><g:message code="effectorTable.interface.help1"></g:message></p>
+                <p><g:message code="effectorTable.interface.help2"></g:message></p>
+                 %{--<p><a href="#">Link to a pdf with full description.</a> </p>--}%
             </div>
             <div id="EGL-graphics" class="col-md-7">
                 <ul  class="nav nav-pills">

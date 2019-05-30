@@ -194,7 +194,7 @@
                             <label><input type="radio" name="radio-gene-association" class="radio" onchange="mpgSoftware.homePage.switchVisibility(['variant-association-ui-wrapper'],['gene-association-ui-wrapper','effector-gene-list-ui-wrapper']);" checked> View variant associations</label>
                         </div>
                         <div class="radio-inline">
-                            <label><input type="radio" name="radio-gene-association" class="radio" onchange="mpgSoftware.homePage.switchVisibility(['gene-association-ui-wrapper'], ['variant-association-ui-wrapper','effector-gene-list-ui-wrapper']);" > <span style="float: left;">View gene-level T2D associations </span> <span class='new-dataset-flag' style="display: inline-flex; margin:-3px 0 0 5px; width: 30px; background-size: 30px;">&nbsp;</span></label>
+                            <label><input type="radio" name="radio-gene-association" class="radio" onchange="mpgSoftware.homePage.switchVisibility(['gene-association-ui-wrapper'], ['variant-association-ui-wrapper','effector-gene-list-ui-wrapper']);" > <span style="float: left;">View gene-level T2D associations </span> </label>
                         </div>
                         <g:if test="${portalVersionBean.getExposeEffectorGeneTableUi()}">
                             <div class="radio-inline">
