@@ -264,9 +264,10 @@
                 <h1 class="dk-page-title">Predicted type 2 diabetes effector genes</h1>
             </div>
         </div>
-        <div class="row">
+        <h3>Sub Title <a data-toggle="collapse" href="#graphicsDiv" aria-expanded="false" aria-controls="collapseExample" style="font-size: 0.8em;">View / hide graphics</a></h3>
+        <div class="row collapse in" id="graphicsDiv">
+
             <div class="col-md-5">
-                <h3>Sub header for the text block</h3>
                 Place holder for the text Maria will add.
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                 <p><a href="#">Link to a pdf with full description.</a> </p>
