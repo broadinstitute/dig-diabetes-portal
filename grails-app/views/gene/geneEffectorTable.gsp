@@ -257,12 +257,49 @@
 
 <body>
 
-<div id="mainEffectorDiv">
+<div id="mainEffectorDiv" style="padding-top:40px;">
     <div class="container">
         <div class="row">
-            <div class="text-center">
+            <div class="col-md-12">
                 <h1 class="dk-page-title">Predicted type 2 diabetes effector genes</h1>
             </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                <h3>Sub header for the text block</h3>
+                Place holder for the text Maria will add.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                <p><a href="#">Link to a pdf with full description.</a> </p>
+            </div>
+            <div id="EGL-graphics" class="col-md-7">
+                <ul  class="nav nav-pills">
+                    <li class="active"><a  href="#EGL_causal" data-toggle="tab">Causal</a></li>
+                    <li><a href="#EGL_strong" data-toggle="tab">Strong</a></li>
+                    <li><a href="#EGL_moderate" data-toggle="tab">Moderate</a></li>
+                    <li><a href="#EGL_possible" data-toggle="tab">Possible</a></li>
+                    <li><a href="#EGL_weak" data-toggle="tab">Weak</a></li>
+                </ul>
+
+                <div class="tab-content clearfix">
+                    <div class="tab-pane active" id="EGL_causal">
+                        <img src="${resource(dir: 'images', file: 'EGL_causal.jpg')}" />
+                    </div>
+                    <div class="tab-pane" id="EGL_strong">
+                        <img src="${resource(dir: 'images', file: 'EGL_strong.jpg')}" />
+                    </div>
+                    <div class="tab-pane" id="EGL_moderate">
+                        <img src="${resource(dir: 'images', file: 'EGL_moderate.jpg')}" />
+                    </div>
+                    <div class="tab-pane" id="EGL_possible">
+                        <img src="${resource(dir: 'images', file: 'EGL_possible.jpg')}" />
+                    </div>
+                    <div class="tab-pane" id="EGL_weak">
+                        <img src="${resource(dir: 'images', file: 'EGL_weak.jpg')}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-md-12" style="padding-top: 30px;">
                 <div id="effectiveGeneTableHolder" class="mainEffectorDiv">
                     <table class="fullEffectorGeneTableHolder effector-table">

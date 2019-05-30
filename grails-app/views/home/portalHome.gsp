@@ -273,7 +273,7 @@
                                     </div>
                                 </div>
                                 <a href="${createLink(controller:'gene', action:'effectorGeneTable')}">
-                                    <button id="geneTraitSearchLaunch" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; font-size: 14px;" ><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button></a>
+                                    <button class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; font-size: 14px;" ><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button></a>
                             </div>
                         </div>
                     </g:if>
