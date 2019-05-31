@@ -2,6 +2,10 @@
 records={{numberRecords}}
 </script>
 
+<script id="gregorTissueTableTissueHeader"  type="x-tmpl-mustache">
+{{tissueName}}
+</script>
+
 <script id="gregorTissueTableSignificanceCellPresentationString"  type="x-tmpl-mustache">
 {{Combined_category}}
 </script>

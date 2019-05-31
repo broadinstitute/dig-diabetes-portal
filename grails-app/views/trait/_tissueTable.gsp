@@ -39,6 +39,7 @@
                             displayCategory: 'Annotation',
                             subcategory: 'Gregor list',
                             displaySubcategory: 'Gregor list',
+                            headerWriter:'gregorTissueTableTissueHeader',
                             cellBodyWriter:'dynamicGeneTableEffectorGeneBody',
                             categoryWriter:'sharedCategoryWriter',
                             subCategoryWriter:'gregorTissueTableSubCategory',
@@ -78,18 +79,6 @@
 <g:render template="/templates/tissueTableTemplate" />
 
 <div id="mainTissueDiv">
-    %{--<div class="container">--}%
-        %{--<div class="row">--}%
-            %{--<div class="text-center">--}%
-                %{--<h1 class="dk-page-title">Tissue table for <span class="phenotypeSpecifier">${phenotype}</span></h1>--}%
-            %{--</div>--}%
-            %{--<div class="col-md-12">--}%
-                %{--<div id="tissueTableHolder" class="mainEffectorDiv">--}%
-                    %{--<table class="tissueTableHolder">--}%
-                    %{--</table>--}%
-                %{--</div>--}%
-            %{--</div>--}%
-        %{--</div>--}%
-    %{--</div>--}%
+
 </div>
 

@@ -225,11 +225,23 @@ mpgSoftware.matrixMath = (function(){
         return multiplyMatrices(matrixToManipulate,multiplierMatrix);
     };
 
+    var getColumnHeaders = function(matrixToWorkWith){
+        return getRowFromMatrix(matrixToWorkWith,0);
+    };
+
+    var getRowHeaders = function(matrixToWorkWith){
+        return getColumnFromMatrix(matrixToWorkWith,0);
+    };
+
+
+
     var doNothing = function(dataArray,numberOfRows,numberOfColumns){
         return new  Matrix(dataArray,numberOfRows,numberOfColumns);
     }
 
     return {
+        getColumnHeaders:getColumnHeaders,
+        getRowHeaders:getRowHeaders,
         swapColumnsInDataStructure:swapColumnsInDataStructure,
         moveColumnsInDataStructure:moveColumnsInDataStructure,
         deleteColumnsInDataStructure:deleteColumnsInDataStructure,

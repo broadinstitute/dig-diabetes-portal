@@ -1869,12 +1869,17 @@ mpgSoftware.dynamicUi = (function () {
 
         // for each gene collect up the data we want to display
         var incomingData = getAccumulatorObject(nameOfAccumulatorField);
+
+        // get the tissues that are already in place.  I'm planning to transpose this table before
+        //  I display it, so the tissues will be held as row headers
+        var tissuesAlreadyInTheTable = getArrayOfRowHeaders(idForTheTargetDiv);
+
         var returnObject={headers:[], content:{}};
         if (( typeof incomingData !== 'undefined') &&
             ( incomingData.length > 0)) {
             returnObject = incomingData[0];
         }
-        var sortedHeaderObjects = insertAnyHeaderRecords(incomingData,dataAnnotationType,intermediateDataStructure,returnObject);
+        var sortedHeaderObjects = insertAnyHeaderRecords(incomingData,tissuesAlreadyInTheTable,dataAnnotationType,intermediateDataStructure,returnObject);
         var initialLinearIndex = sortedHeaderObjects.length;
 
         if (returnObject.headers.length > 0){
@@ -4730,6 +4735,17 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
 
 
+    var getArrayOfRowHeaders = function (whereTheTableGoes) {
+        mpgSoftware.matrixMath.getRowHeaders(retrieveSortedDataForTable(whereTheTableGoes));
+    };
+
+
+    var getArrayOfColumnHeaders = function (whereTheTableGoes) {
+        mpgSoftware.matrixMath.getColumnHeaders(retrieveSortedDataForTable(whereTheTableGoes));
+    };
+
+
+
     var linearDataTransposor = function (linearArray,numberOfRows,numberOfColumns,mapper){
         var temporaryArray = [];
         _.forEach(linearArray, function (oneCell, linearIndex){
@@ -4741,10 +4757,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         });
         var nowTransposed = _.sortBy(temporaryArray,['newIndex']);
         return _.map(nowTransposed,'cell');
-    }
+    };
 
-
-    // var matrixMultiply
 
 
     /***

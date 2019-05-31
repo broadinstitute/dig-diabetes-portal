@@ -53,21 +53,29 @@ mpgSoftware.dynamicUi.gregorTissueTable = (function () {
      */
     var displayGregorDataForTissueTable = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
 
-            var dataAnnotationTypeCode = "FEGT";
+            var dataAnnotationTypeCode = "TITA";
 
-            mpgSoftware.dynamicUi.displayForFullEffectorGeneTable('table.fullEffectorGeneTableHolder', // which table are we adding to
+            mpgSoftware.dynamicUi.displayTissueTable(idForTheTargetDiv, // which table are we adding to
                 dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-                'fullEffectorGeneTable', // name of the persistent field where the data we received is stored
+                'gregorTissueArray', // name of the persistent field where the data we received is stored
 
                 // insert header records as necessary into the intermediate structure, and return header names that we can match on for the columns
-                function(incomingData,dataAnnotationType,intermediateDataStructure,returnObject){
+                function(incomingData,tissuesAlreadyInTheTable,dataAnnotationType,intermediateDataStructure,returnObject){
                     var headersObjects = [];
                     var initialLinearIndex = 0;
-                    if (( typeof incomingData !== 'undefined') &&
-                        ( incomingData.length > 0)) {
+                    if ( typeof incomingData !== 'undefined') {
 
                         mpgSoftware.dynamicUi.addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode, intermediateDataStructure);
 
+                        var tissuesAsHeaders = [];
+                        if (( typeof incomingData.header === 'undefined' ) &&
+                            ( typeof incomingData.header.tissues === 'undefined' )){
+                            tissuesAsHeaders = _.map(incomingData.header.tissues, function(tissue){
+                                return Mustache.render($('#'+dataAnnotationType.headerWriter)[0].innerHTML,
+                                    {tissueName: tissue}
+                                )
+                            });
+                        }
                         var expectedColumns = dataAnnotationType.dataAnnotation.customColumnOrdering.constituentColumns;
                         headersObjects = _.map(returnObject.headers, function (o) {
                             var index = _.findIndex(expectedColumns, {'key': o});
