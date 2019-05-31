@@ -260,8 +260,8 @@
                 <h1 class="dk-page-title">Predicted type 2 diabetes effector genes</h1>
             </div>
         </div>
-        <h3>Classifying predicted T2D effectors</h3>
-        <h4><a data-toggle="collapse" href="#graphicsDiv" aria-expanded="false" aria-controls="collapseExample" style="font-size: 0.8em;">View / hide graphic</a></h4>
+
+        <h5><a data-toggle="collapse" href="#graphicsDiv" aria-expanded="false" aria-controls="collapseExample" style="font-size: 0.8em;">View / hide graphic</a></h5>
         <div class="row collapse in" id="graphicsDiv">
 
             <div class="col-md-5">
@@ -299,7 +299,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12" style="padding-top: 30px;">
+            <div class="col-md-12">
                 <div id="effectiveGeneTableHolder" class="mainEffectorDiv">
                     <table class="fullEffectorGeneTableHolder effector-table">
                     </table>
