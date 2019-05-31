@@ -126,6 +126,7 @@ mpgSoftware.dynamicUi.fullEffectorGeneTable = (function () {
                             alert('empty records not allowed in the FEGT')
                         }
                         var geneName = recordsPerGene["Gene_name"];
+                        var categoryOfRow = -1;
                         _.forEach(recordsPerGene, function (valueInGeneRecord,header) {
                             var indexOfColumn = _.indexOf(returnObject.headers, header );
                             var indexOfPreassignedColumnName = _.indexOf(constituentColumns, header );
@@ -136,16 +137,21 @@ mpgSoftware.dynamicUi.fullEffectorGeneTable = (function () {
                             } else {
                                 var groupNumber = constituentColRecs[indexOfPreassignedColumnName].pos;
                                 var sortNumber = categorizor.categorizeRowsInEfgt(groupNumber, valueInGeneRecord );
+                                if (indexOfColumn === 0 ){
+                                    categoryOfRow = sortNumber;
+                                }
                                 var linkSafeText = valueInGeneRecord.replace(/\/.$/g, '').replace(/or /g, '');
                                 var textWithoutQuotes = valueInGeneRecord.replace(/\"/g, '');
                                 var exomeSequenceCallOut = [];
                                 var gwasCodingCallOut = [];
                                 if ((header === 'Exome_sequence_burden') &&
-                                    (valueInGeneRecord.length>0) )  {
+                                    (valueInGeneRecord.length>0) &&
+                                    (categoryOfRow>0))  {
                                     exomeSequenceCallOut = [{geneName:geneName,displayValue:linkSafeText}]
                                 }
                                 if ((header === 'GWAS_coding_causal') &&
-                                    (valueInGeneRecord.length>0) )  {
+                                    (valueInGeneRecord.length>0)&&
+                                    (categoryOfRow>0) )  {
                                     gwasCodingCallOut = [{geneName:geneName,displayValue:linkSafeText}]
                                 }
                                 var categoryRecord = {
