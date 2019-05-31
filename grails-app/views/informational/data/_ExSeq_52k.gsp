@@ -176,7 +176,7 @@
             </table>
         </div></td><td>European</td></tr>
 
-<tr><td>T2D-GENES</td><td>1,471</td><td>1,582</td><td><a onclick="showSection(event)">Singapore Diabetes Cohort Study and Singapore Prospective Study Program</a>
+<tr><td>T2D-GENES</td><td>483</td><td>482</td><td><a onclick="showSection(event)">Singapore Diabetes Cohort Study and Singapore Prospective Study Program</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -200,6 +200,27 @@
             </table>
         </div></td><td>East Asian</td></tr>
 
+                     <tr><td>T2D-GENES</td><td>985</td><td>991</td><td><a onclick="showSection(event)">Multi-Ethnic Cohort</a>
+
+        <div style="display: none;" class="cohortDetail">
+            <table border="1">
+                <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                <tr>
+                    <td valign="top">
+                        <ul>
+                            <li>Self-report of T2D diagnosis or medication</li>
+                            <li>Absence of T1D diagnosis</li>
+                        </ul>
+                    </td>
+                    <td valign="top">
+                        <ul>
+                            <li>No self-report of T2D diagnosis or medication</li>
+                            <li>No T1D or T2D diagnosis from the OSHPD, HMSA or KPH registries</li>
+                        </ul>
+                    </td></tr>
+
+            </table>
+        </div></td><td>East Asian</td></tr>
 
 
 <tr><td>T2D-GENES</td><td>529</td><td>567</td><td><a onclick="showSection(event)">Korea Association Research Project (KARE)</a>
@@ -642,33 +663,7 @@
             </table>
         </div></td><td>Hispanic</td></tr>
 
-
-<tr><td>T2D-GENES</td><td>1,589</td><td>1,459</td><td><a onclick="showSection(event)">Singapore Indian Eye Study</a>
-
-        <div style="display: none;" class="cohortDetail">
-            <table border="1">
-                <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-                <tr>
-                    <td valign="top">
-                        <ul>
-                            <li>HbA1c &ge; 6.5% or personal history of diabetes with age at diagnosis available</li>
-                            <li>Preferentially selected cases with at least one first degree relative with T2D</li>
-                        </ul>
-                    </td>
-                    <td valign="top">
-                        <ul>
-                            <li>HbA1c &lt; 6%</li>
-                            <li>No personal history of diabetes</li>
-                            <li>Not taking antidiabetes medication</li>
-                            <li>Older controls preferentially selected</li>
-                        </ul>
-                    </td></tr>
-
-            </table>
-        </div></td><td>South Asian</td></tr>
-
-
-                <tr><td>T2D-GENES</td><td>529</td><td>537</td><td><a onclick="showSection(event)">London Life Sciences Population (LOLIPOP)</a>
+               <tr><td>T2D-GENES</td><td>529</td><td>537</td><td><a onclick="showSection(event)">London Life Sciences Population (LOLIPOP)</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -693,7 +688,30 @@
             </table>
         </div></td><td>South Asian</td></tr>
 
-<tr><td>T2D-GENES</td><td>854</td><td>890</td><td><a onclick="showSection(event)">Pakistan Genomic Resource (PGR)</a>
+                      <tr><td>T2D-GENES</td><td>1,053</td><td>883</td><td><a onclick="showSection(event)">Multi-Ethnic Cohort</a>
+
+        <div style="display: none;" class="cohortDetail">
+            <table border="1">
+                <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                <tr>
+                    <td valign="top">
+                        <ul>
+                            <li>Self-report of T2D diagnosis or medication</li>
+                            <li>Absence of T1D diagnosis</li>
+                        </ul>
+                    </td>
+                    <td valign="top">
+                        <ul>
+                            <li>No self-report of T2D diagnosis or medication</li>
+                            <li>No T1D or T2D diagnosis from the OSHPD, HMSA or KPH registries</li>
+                        </ul>
+                    </td></tr>
+
+            </table>
+        </div></td><td>South Asian</td></tr>
+
+
+        <tr><td>T2D-GENES</td><td>854</td><td>890</td><td><a onclick="showSection(event)">Pakistan Genomic Resource (PGR)</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -712,6 +730,31 @@
 
             </table>
         </div></td><td>South Asian</td></tr>
+
+<tr><td>T2D-GENES</td><td>536</td><td>576</td><td><a onclick="showSection(event)">Singapore Indian Eye Study</a>
+
+        <div style="display: none;" class="cohortDetail">
+            <table border="1">
+                <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                <tr>
+                    <td valign="top">
+                        <ul>
+                            <li>HbA1c &ge; 6.5% or personal history of diabetes with age at diagnosis available</li>
+                            <li>Preferentially selected cases with at least one first degree relative with T2D</li>
+                        </ul>
+                    </td>
+                    <td valign="top">
+                        <ul>
+                            <li>HbA1c &lt; 6%</li>
+                            <li>No personal history of diabetes</li>
+                            <li>Not taking antidiabetes medication</li>
+                            <li>Older controls preferentially selected</li>
+                        </ul>
+                    </td></tr>
+
+            </table>
+        </div></td><td>South Asian</td></tr>
+
 
 </table>
 

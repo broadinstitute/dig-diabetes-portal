@@ -267,6 +267,7 @@
             <div class="col-md-5">
                 <p><g:message code="effectorTable.interface.help1"></g:message></p>
                 <p><g:message code="effectorTable.interface.help2"></g:message></p>
+                <p><g:message code="effectorTable.interface.help3"></g:message></p>
                  %{--<p><a href="#">Link to a pdf with full description.</a> </p>--}%
             </div>
             <div id="EGL-graphics" class="col-md-7">
