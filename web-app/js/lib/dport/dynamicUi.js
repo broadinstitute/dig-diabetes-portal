@@ -4923,7 +4923,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     gene: geneName,
                     phenotype: 'T2D',
                     propertyNames: "[\"P_VALUE\"]",
-                    preferredSampleGroup: "ExSeq_52k_mdv37"
+                    preferredSampleGroup: "ExSeq_52k"
                 },
                 async: true
             }).done(function (data, textStatus, jqXHR) {

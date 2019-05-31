@@ -2906,7 +2906,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                         MetaDataService.METADATA_GENE)
                 boolean sampleGroupChosen = false
                 if (preferredSampleGroup) { // if a specific sample group was requested then try to get it
-                    SampleGroup requestedSampleGroup =  sampleGroupList?.find{it.getSystemId()==preferredSampleGroup}
+                    SampleGroup requestedSampleGroup =  sampleGroupList?.find{it.getSystemId().contains(preferredSampleGroup)}
                     if (requestedSampleGroup){
                         listOfSampleGroupsToWorkWith << sampleGroupList?.first()
                         sampleGroupChosen = true
