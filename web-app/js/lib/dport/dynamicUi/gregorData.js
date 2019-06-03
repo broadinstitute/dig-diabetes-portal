@@ -29,9 +29,9 @@ mpgSoftware.dynamicUi.gregorTissueTable = (function () {
         if ( ( typeof data !== 'undefined') &&
              ( typeof data.data !== 'undefined') ){
             var geneRecord = {header:{}, contents:[]};
-            geneRecord.header['annotations'] = _.uniqBy(data.data,'annotation');
-            geneRecord.header['ancestries'] = _.uniqBy(data.data,'ancestry');
-            geneRecord.header['tissues'] = _.uniqBy(data.data,'tissue');
+            geneRecord.header['annotations'] = _.map(_.uniqBy(data.data,'annotation'),function(o){return o.annotation});
+            geneRecord.header['ancestries'] = _.map(_.uniqBy(data.data,'ancestry'),function(o){return o.ancestry});
+            geneRecord.header['tissues'] = _.map(_.uniqBy(data.data,'tissue'),function(o){return o.tissue});
             _.forEach(data.data, function (oneRec) {
                 geneRecord.contents.push({
                     ancestry:oneRec.ancestry,
@@ -68,45 +68,22 @@ mpgSoftware.dynamicUi.gregorTissueTable = (function () {
                         mpgSoftware.dynamicUi.addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode, intermediateDataStructure);
 
                         var tissuesAsHeaders = [];
-                        if (( typeof incomingData.header === 'undefined' ) &&
-                            ( typeof incomingData.header.tissues === 'undefined' )){
-                            tissuesAsHeaders = _.map(incomingData.header.tissues, function(tissue){
-                                return Mustache.render($('#'+dataAnnotationType.headerWriter)[0].innerHTML,
-                                    {tissueName: tissue}
+                        if (( typeof incomingData.header !== 'undefined' ) &&
+                            ( typeof incomingData.header.tissues !== 'undefined' )){
+                            var sortedHeaderObjects = returnObject.header.tissues.sort();
+                            returnObject.headers = _.map(sortedHeaderObjects, function(tissue,index){
+                                return Mustache.render($('#'+dataAnnotationType.dataAnnotation.headerWriter)[0].innerHTML,
+                                    {   tissueName: tissue,
+                                        initialLinearIndex:initialLinearIndex
+                                    }
                                 )
                             });
-                        }
-                        var expectedColumns = dataAnnotationType.dataAnnotation.customColumnOrdering.constituentColumns;
-                        headersObjects = _.map(returnObject.headers, function (o) {
-                            var index = _.findIndex(expectedColumns, {'key': o});
-                            if (index > -1) {
-                                var grouping = dataAnnotationType.dataAnnotation.customColumnOrdering.topLevelColumns[expectedColumns[index].pos];
-                                return {
-                                    name: expectedColumns[index].key,
-                                    groupNum: expectedColumns[index].pos,
-                                    groupKey: grouping.key,
-                                    groupDisplayName: grouping.displayName,
-                                    columnDisplayName: expectedColumns[index].display,
-                                    groupHelpText: grouping.helptext,
-                                    columnHelpText: expectedColumns[index].helptext,
-                                    groupOrder: grouping.order,
-                                    withinGroupNum: expectedColumns[index].subPos
-                                }
-                            }
-                        });
-                        headersObjects = _.compact(headersObjects);
-                        var sortedHeaderObjects = _.sortBy(headersObjects, ['groupOrder', 'withinGroupNum', 'name']);
-                        _.forEach(sortedHeaderObjects, function (sortedHeaderObject) {
-                            sortedHeaderObject['initialLinearIndex'] = initialLinearIndex++;
-                        })
-                        returnObject.headers = _.map(sortedHeaderObjects, function (o) {
-                            return o.name
-                        });
 
-                        // set up the headers
-                        _.forEach(sortedHeaderObjects, function (oneRecord) {
+                        }
+
+                        _.forEach(returnObject.headers, function (oneRecord) {
                             intermediateDataStructure.headers.push(new mpgSoftware.dynamicUi.IntermediateStructureDataCell(oneRecord,
-                                Mustache.render($('#' + dataAnnotationType.dataAnnotation.headerWriter)[0].innerHTML, oneRecord), "fegtHeader", 'LIT'));
+                                oneRecord, "tissueHeader", 'LIT'));
                         });
                     }
                     return sortedHeaderObjects;
@@ -114,73 +91,25 @@ mpgSoftware.dynamicUi.gregorTissueTable = (function () {
 
                 // this function is for organizing and/or translating all of the names within a single cell
                 function(records,tissueTranslations){
-                    return _.map(records,function(oneRecord){
-                        return {    gene:oneRecord.gene,
-                            value:oneRecord};
-                        // return {    value:UTILS.realNumberFormatter(''+tissueRecord.value),
-                        //     numericalValue:tissueRecord.value,
-                        //     dataset: tissueRecord.dataset };
-                    });
+                    return _.orderBy(records,['p_value'],['asc']);
                 },
 
                 // take all the records for each row and insert them into the intermediateDataStructure
-                function(returnObject,dataAnnotationType,intermediateDataStructure,initialLinearIndex){
-                    var constituentColumns = _.map(dataAnnotationType.dataAnnotation.customColumnOrdering.constituentColumns,function(val){
-                        return val.key;
-                    });
-                    var constituentColRecs = dataAnnotationType.dataAnnotation.customColumnOrdering.constituentColumns;
-                    //
-                    _.forEach(returnObject.contents,
-                        function (recordsPerGene,rowNumber) {
-                            if ($.isEmptyObject(recordsPerGene)) {
-                                alert('empty records not allowed in the FEGT')
-                            }
-                            var geneName = recordsPerGene["Gene_name"];
-                            _.forEach(recordsPerGene, function (valueInGeneRecord,header) {
-                                var indexOfColumn = _.indexOf(returnObject.headers, header );
-                                var indexOfPreassignedColumnName = _.indexOf(constituentColumns, header );
-                                if (indexOfColumn === -1) {
-
-                                } else if (indexOfPreassignedColumnName === -1) {
-                                    console.log("Did not find index of indexOfPreassignedColumnName "+header+" for FEGT.  Shouldn't we?")
-                                } else {
-                                    var groupNumber = constituentColRecs[indexOfPreassignedColumnName].pos;
-                                    var sortNumber = categorizor.categorizeRowsInEfgt(groupNumber, valueInGeneRecord );
-                                    var linkSafeText = valueInGeneRecord.replace(/\/.$/g, '').replace(/or /g, '');
-                                    var textWithoutQuotes = valueInGeneRecord.replace(/\"/g, '');
-                                    var exomeSequenceCallOut = [];
-                                    var gwasCodingCallOut = [];
-                                    if ((header === 'Exome_sequence_burden') &&
-                                        (valueInGeneRecord.length>0) )  {
-                                        exomeSequenceCallOut = [{geneName:geneName,displayValue:linkSafeText}]
-                                    }
-                                    if ((header === 'GWAS_coding_causal') &&
-                                        (valueInGeneRecord.length>0) )  {
-                                        gwasCodingCallOut = [{geneName:geneName,displayValue:linkSafeText}]
-                                    }
-                                    var categoryRecord = {
-                                        initialLinearIndex:initialLinearIndex++,
-                                        groupNumber:constituentColRecs[indexOfPreassignedColumnName].pos,
-                                        categoryName:textWithoutQuotes,
-                                        sortNumber:sortNumber,
-                                        linkSafeText:linkSafeText,
-                                        exomeSequenceCallOut:exomeSequenceCallOut,
-                                        gwasCodingCallOut:gwasCodingCallOut};
-                                    _.forEach(dataAnnotationType.dataAnnotation.customColumnOrdering.topLevelColumns, function (grouping, index){
-                                        if (grouping.order===constituentColRecs[indexOfPreassignedColumnName].pos){
-                                            categoryRecord[grouping.key]=[{textToDisplay:textWithoutQuotes}];
-                                        } else {
-                                            categoryRecord[grouping.key]=[];
-                                        }
-                                    });
-                                    var displayableRecord = Mustache.render($('#'+dataAnnotationType.dataAnnotation.cellBodyWriter)[0].innerHTML, categoryRecord);
-                                    intermediateDataStructure.rowsToAdd[rowNumber].columnCells[indexOfColumn] = new mpgSoftware.dynamicUi.IntermediateStructureDataCell(displayableRecord,
-                                        displayableRecord,"egftRecord","LIT" );
-                                }
-
-                            });
-                            mpgSoftware.dynamicUi.addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
-                        });
+                function(tissueRecords,
+                         recordsCellPresentationString,
+                         significanceCellPresentationString,
+                         dataAnnotationTypeCode,
+                         significanceValue,
+                         tissueName ){
+                        return {
+                            tissueRecords:tissueRecords,
+                            cellPresentationStringMap:{
+                                'Significance':significanceCellPresentationString,
+                                'Records':recordsCellPresentationString
+                            },
+                            dataAnnotationTypeCode:dataAnnotationTypeCode,
+                            significanceValue:significanceValue,
+                            tissueName:tissueName};
 
                 })
 

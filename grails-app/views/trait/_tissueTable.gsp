@@ -40,7 +40,7 @@
                             subcategory: 'Gregor list',
                             displaySubcategory: 'Gregor list',
                             headerWriter:'gregorTissueTableTissueHeader',
-                            cellBodyWriter:'dynamicGeneTableEffectorGeneBody',
+                            cellBodyWriter:'gregorTissueTableBody',
                             categoryWriter:'sharedCategoryWriter',
                             subCategoryWriter:'gregorTissueTableSubCategory',
                             numberRecordsCellPresentationStringWriter:'gregorTissueTableNumberRecordsCellPresentationString',
@@ -50,7 +50,8 @@
                     ],
                     dynamicTableConfiguration: {
                         domSpecificationForAccumulatorStorage:'#mainTissueDiv',
-                        formOfStorage: 'loadFromTable'
+                        formOfStorage: 'loadFromTable',
+                        initializeSharedTableMemory:  '#mainTissueDiv table.tissueTableHolder'
                     }
                 };
                 mpgSoftware.tissueTable.setVariablesToRemember(drivingVariables);
@@ -77,6 +78,7 @@
 </script>
 
 <g:render template="/templates/tissueTableTemplate" />
+<g:render template="/templates/dynamicUi/TITA" />
 
 <div id="mainTissueDiv">
 

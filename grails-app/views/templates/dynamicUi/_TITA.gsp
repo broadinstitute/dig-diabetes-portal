@@ -3,11 +3,11 @@ records={{numberRecords}}
 </script>
 
 <script id="gregorTissueTableTissueHeader"  type="x-tmpl-mustache">
-{{tissueName}}
+<div class="tissueTableTissueHeader initialLinearIndex_{{initialLinearIndex}}">{{tissueName}}</div>
 </script>
 
 <script id="gregorTissueTableSignificanceCellPresentationString"  type="x-tmpl-mustache">
-{{Combined_category}}
+pvalue={{significanceValueAsString}}
 </script>
 
 <script id="gregorTissueTableSubCategory"  type="x-tmpl-mustache">
@@ -24,37 +24,31 @@ records={{numberRecords}}
 <script id="gregorTissueTableBody"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
              class="tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
-               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'effector gene records {{gene}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
-               data-target="#effector_gene_{{gene}}" style="color:black">
-               {{#data}}
-               {{value.Combined_category}}
-               {{/data}}
+               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'Gregor predictions for {{tissueName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
+               data-target="#effector_gene_{{tissueName}}" style="color:black"> {{cellPresentationString}}
                </a>
-               <div  class="collapse openEffectorGeneInformationInGeneTable" id="effector_gene_{{gene}}">
-                    {{#data}}
+
+               <div  class="collapse openEffectorGeneInformationInGeneTable" id="effector_gene_{{tissueName}}">
+
                     <table class="expandableDrillDownTable openEffectorGeneInformationInGeneTable">
                      <thead>
                       <tr role="row">
-                        <th class="text-center leftMostCol">category</th>
-                        <th class="text-center otherCols">value</th>
+                        <th class="text-center leftMostCol">annotation</th>
+                        <th class="text-center otherCols">ancestry</th>
+                        <th class="text-center otherCols">p-value</th>
                       </tr>
                      </thead>
                      <tbody>
+                     {{#tissueRecords}}
                       <tr role="row">
-                           <td class="leftMostCol">Genetic combined</td>
-                           <td class="otherCols">{{value.Genetic_combined}}</td>
+                           <td class="leftMostCol">{{annotation}}</td>
+                           <td class="otherCols">{{ancestry}}</td>
+                           <td class="otherCols">{{p_value}}</td>
                        </tr>
-                       <tr role="row">
-                           <td class="leftMostCol">Genomic combined</td>
-                           <td class="otherCols">{{value.Genomic_combined}}</td>
-                       </tr>
-                       <tr role="row">
-                           <td class="leftMostCol">Perturbation combined</td>
-                           <td class="otherCols">{{value.Perturbation_combined}}</td>
-                       </tr>
+                      {{/tissueRecords}}
                      </tbody>
                     </table>
-                    {{/data}}
+
                </div>
             </div>
 </script>

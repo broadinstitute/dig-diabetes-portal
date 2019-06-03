@@ -479,7 +479,7 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getInformationFromGregorForTissueTable":
                 defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.gregorTissueTable.displayGregorDataForTissueTable;
-                defaultFollowUp.placeToDisplayData = '#mainTissueDiv div.tissueTableHolder';
+                defaultFollowUp.placeToDisplayData = '#mainTissueDiv table.tissueTableHolder';
                 break;
 
 
@@ -1861,7 +1861,7 @@ mpgSoftware.dynamicUi = (function () {
                                                     nameOfAccumulatorField, // name of the persistent field where the data we received is stored
                                                     insertAnyHeaderRecords, // we may wish to pull out one record for summary purposes
                                                     mapSortAndFilterFunction,
-                                                    placeContentRowsIntoIntermediateObject ) { // sort and filter the records we will use.  Resulting array must have fields tissue, value, and numericalValue
+                                                    placeDataIntoRenderForm ) { // sort and filter the records we will use.  Resulting array must have fields tissue, value, and numericalValue
 
 
         var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode);
@@ -1874,47 +1874,75 @@ mpgSoftware.dynamicUi = (function () {
         //  I display it, so the tissues will be held as row headers
         var tissuesAlreadyInTheTable = getArrayOfRowHeaders(idForTheTargetDiv);
 
-        var returnObject={headers:[], content:{}};
+        var returnObject={headers:[], content:[]};
         if (( typeof incomingData !== 'undefined') &&
             ( incomingData.length > 0)) {
             returnObject = incomingData[0];
         }
-        var sortedHeaderObjects = insertAnyHeaderRecords(incomingData,tissuesAlreadyInTheTable,dataAnnotationType,intermediateDataStructure,returnObject);
+        var sortedHeaderObjects = insertAnyHeaderRecords(returnObject,tissuesAlreadyInTheTable,dataAnnotationType,intermediateDataStructure,returnObject);
         var initialLinearIndex = sortedHeaderObjects.length;
 
         if (returnObject.headers.length > 0){
-            placeContentRowsIntoIntermediateObject(returnObject,dataAnnotationType,intermediateDataStructure,initialLinearIndex);
+            // placeContentRowsIntoIntermediateObject(returnObject,dataAnnotationType,intermediateDataStructure,initialLinearIndex);
+            var objectsGroupedByTissue = _.groupBy(returnObject.contents,'tissue');
+            _.forEach(objectsGroupedByTissue, function (recordsPerTissue, tissueName) {
+                var indexOfColumn = _.indexOf(sortedHeaderObjects, tissueName);
+                if (indexOfColumn === -1) {
+                    console.log("Did not find index of recordsPerTissue.tissue.  Shouldn't we?")
+                } else {
+                    if ((recordsPerTissue.length === 0)) {
+                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(tissueName,
+                            {}, "tissue specific",'EMC');
+                    } else {
+                        var tissueTranslations = recordsPerTissue["TISSUE_TRANSLATIONS"]; // if no translations are provided, it is fine to leave this value as undefined
+                        var tissueRecords = mapSortAndFilterFunction (recordsPerTissue,tissueTranslations);
+
+                        var recordsCellPresentationString = Mustache.render($('#'+dataAnnotationType.dataAnnotation.numberRecordsCellPresentationStringWriter)[0].innerHTML, {
+                            numberRecords:tissueRecords.length
+                        });
+                        var significanceCellPresentationString = "0";
+                        var significanceValue = 0;
+                        if (( typeof recordsPerTissue !== 'undefined')&&
+                            (recordsPerTissue.length>0)){
+                            var mostSignificantRecord;
+                            if (( typeof preferredSummaryKey !== 'undefined') && (preferredSummaryKey.length>0)){ // we have a key telling us which record to pick
+                                mostSignificantRecord=_.find(tissueRecords,function(t){return t.tissue.includes(preferredSummaryKey)});
+                            }else{// no specific key, but we have sorted the keys in ascending order by value, so we can just pick the first one
+                                mostSignificantRecord=tissueRecords[0];
+                            }
+                            significanceValue = mostSignificantRecord.p_value;
+                            significanceCellPresentationString = Mustache.render($('#'+dataAnnotationType.dataAnnotation.significanceCellPresentationStringWriter)[0].innerHTML,
+                                {significanceValue:significanceValue,
+                                    significanceValueAsString:UTILS.realNumberFormatter(""+significanceValue),
+                                    recordDescription:translateATissueName(tissueTranslations,mostSignificantRecord.tissue),
+                                    numberRecords:tissueRecords.length});
+
+                        }
+                        //  this is the information we carry around each cell and that we will later use to display it
+                        var renderData = placeDataIntoRenderForm(   tissueRecords,
+                            recordsCellPresentationString,
+                            significanceCellPresentationString,
+                            dataAnnotationTypeCode,
+                            significanceValue,
+                            tissueName );
+
+                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(significanceValue,
+                            renderData,"tissue specific",dataAnnotationTypeCode );
+                    }
+
+                }
+            });
+
             intermediateDataStructure.tableToUpdate = idForTheTargetDiv;
         }
 
-        // Set the default exclusions.  We need to do this because we have to find every column in the table, but we don't want
-        // to display every column.  Instead we exclude some of them unless a user specifically requests that a column be expanded.
-        var sharedTable = new SharedTableObject( 'fegtAnnotationHeaders',sortedHeaderObjects.length,0);
-        setAccumulatorObject("sharedTable_"+idForTheTargetDiv,sharedTable);
-        var deleter = {};
-        _.forEach(sortedHeaderObjects, function (o,index){
-            if (o.withinGroupNum === 0){
-                if (!$.isEmptyObject(deleter)){
-                    sharedTable.addColumnExclusionGroup(deleter.groupNumber,deleter.groupName,deleter.columnIndexes);
-                }
-                deleter['groupNumber'] = o.groupNum;
-                deleter['groupName'] = o.groupKey;
-                deleter['columnIndexes'] = [];
-            } else {
-                deleter.columnIndexes.push(index);
-            }
-        });
-        if (!$.isEmptyObject(deleter)){
-            sharedTable.addColumnExclusionGroup(deleter.groupNumber,deleter.groupName,deleter.columnIndexes);
-        }
-
-        prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
-            '#dynamicAbcGeneTable',
+        prepareToPresentToTheScreen("#mainTissueDiv table.tissueTableHolder",
+            '#not used',
             returnObject,
             clearBeforeStarting,
             intermediateDataStructure,
             true,
-            'fegtAnnotationHeaders', false);
+            'tissueTableTissueHeaders', false);
 
 
 
@@ -3317,40 +3345,38 @@ mpgSoftware.dynamicUi = (function () {
             setAccumulatorObject("preferredPhenotype", data.phenotype );
         }
 
-
-
-        // Everything that happens on the gene table
-        //$('#retrieveMultipleRecordsTest').on('click', function () {
-            var arrayOfRoutinesToUndertake = [];
-
-            //  If we ever want to update this page without reloading it then were going to need to get rid of the information in the accumulators
-            resetAccumulatorObject("geneInfoArray");
-            resetAccumulatorObject("tissuesForEveryGene");
-            resetAccumulatorObject("genesForEveryTissue");
-            resetAccumulatorObject("rawDepictInfo");
-            resetAccumulatorObject("abcAggregatedPerVariant");
-            resetAccumulatorObject("sharedTable_table.combinedGeneTableHolder");
-            resetAccumulatorObject("modNameArray");
-
-
-            destroySharedTable('table.combinedGeneTableHolder');
-
-            _.forEach(additionalParameters.dataAnnotationTypes, function (oneAnnotationType){
-                arrayOfRoutinesToUndertake.push( actionContainer(oneAnnotationType.internalIdentifierString,
-                    actionDefaultFollowUp(oneAnnotationType.internalIdentifierString)));
-            });
-
-            _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
-
-            // some old ones...
-            // arrayOfRoutinesToUndertake.push( actionContainer("getTissuesFromAbcForGenesTable",
-            //    actionDefaultFollowUp("getTissuesFromAbcForGenesTable")));
-            // arrayOfRoutinesToUndertake.push( actionContainer('getTissuesFromEqtlsForGenesTable',
-            //    actionDefaultFollowUp("getTissuesFromEqtlsForGenesTable")));
+        // Every table depends on some in memory storage.  Create that here if requested.
+        if (    ( typeof  additionalParameters.dynamicTableConfiguration !== 'undefined') &&
+                ( typeof  additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory !== 'undefined') ){
+            var sharedTable = new SharedTableObject('tissueTableTissueHeaders',0,0);
+            setAccumulatorObject("sharedTable_" + additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory,sharedTable);
+        }
 
 
 
-        //});
+
+        var arrayOfRoutinesToUndertake = [];
+
+        //  If we ever want to update this page without reloading it then were going to need to get rid of the information in the accumulators
+        resetAccumulatorObject("geneInfoArray");
+        resetAccumulatorObject("tissuesForEveryGene");
+        resetAccumulatorObject("genesForEveryTissue");
+        resetAccumulatorObject("rawDepictInfo");
+        resetAccumulatorObject("abcAggregatedPerVariant");
+        resetAccumulatorObject("sharedTable_table.combinedGeneTableHolder");
+        resetAccumulatorObject("modNameArray");
+
+
+        destroySharedTable('table.combinedGeneTableHolder');
+
+        _.forEach(additionalParameters.dataAnnotationTypes, function (oneAnnotationType){
+            arrayOfRoutinesToUndertake.push( actionContainer(oneAnnotationType.internalIdentifierString,
+                actionDefaultFollowUp(oneAnnotationType.internalIdentifierString)));
+        });
+
+        _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
+
+
 
 
         // Everything that happens on the variant table
@@ -4026,6 +4052,13 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             case 'GHD':  // the first two columns are always empty, but contains some information in render data
                 returnValue = Mustache.render($('#dynamicGeneTableHeaderV2')[0].innerHTML,intermediateStructureDataCell.renderData);
                 break;
+            case "TITA":
+                var cellColoringScheme ="records";
+                intermediateStructureDataCell.renderData["cellPresentationString"] =
+                    intermediateStructureDataCell.renderData.cellPresentationStringMap[findCellColoringChoice('table.tissueTableHolder')];
+                var displayDetails = getDatatypeInformation(intermediateStructureDataCell.dataAnnotationTypeCode);
+                returnValue = Mustache.render($('#'+displayDetails.dataAnnotation.cellBodyWriter)[0].innerHTML,intermediateStructureDataCell.renderData);
+                break;
 
             default:  //  the standard case, where a cell renders its own data using its chosen mustache template
                 var cellColoringScheme ="records";
@@ -4649,6 +4682,12 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
          case 'fegtGeneNameHeaders':
              currentForm = 'fegtAnnotationHeaders';
              break;
+         case 'tissueTableTissueHeaders':
+             currentForm = 'tissueTableMethodHeaders';
+             break;
+         case 'tissueTableMethodHeaders':
+             currentForm = 'tissueTableTissueHeaders';
+             break;
 
 
          default:
@@ -4668,46 +4707,51 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
      * @returns {Array}
      */
     var extractSortedDataFromTable = function (whereTheTableGoes,numberOfRows,numberOfColumns,tableAndOrientation) {
-        var fullDataVector = [];
-        var dataTable = $(whereTheTableGoes).dataTable().DataTable();
-        var numberOfHeaders = dataTable.table().columns()[0].length;
-        _.each(_.range(0,numberOfHeaders),function(index){
-            var header=dataTable.table().column(index).header();
-            var divContents;
-            if ( typeof header.children[0] === 'undefined'){
-                // I'm completely unclear about why this special case is required.  It seems as if the first header in
-                // the gene table has no div.  But why?  All the other headers have DIVs.  Here's a workaround until I can figure it out.
-                divContents = '<div class="initialLinearIndex_0 geneFarLeftCorner">category X</div>'
-            } else {
-                divContents = header.children[0].outerHTML;
-            }
-            fullDataVector.push(divContents);
-        });
-        if (tableAndOrientation ==='variantTableAnnotationHeaders'){// in this case we collapse the first row into the header, so we now need to re-extract it into data
-            _.each(_.range(0,numberOfHeaders),function(index){
-                var header=dataTable.table().column(index).header();
-                fullDataVector.push(header.children[1].outerHTML);
-            });
-        }
-        if (tableAndOrientation ==='geneTableAnnotationHeaders'){// in this case we collapse the first row into the header, so we now need to re-extract it into data
-           _.each(_.range(0,numberOfHeaders),function(index){
-               var header=dataTable.table().column(index).header();
-               fullDataVector.push(header.children[1].outerHTML);
-           });
-        }
-         var dataFromTable = dataTable.rows().data();
-        _.forEach(dataFromTable, function (row, rowIndex) {
-            _.forEach(row, function (cell, columnIndex) {
-                fullDataVector.push(cell);
-            });
-        });
-        var sharedTable = getAccumulatorObject("sharedTable_"+whereTheTableGoes);
         var returnValue = [];
-        _.forEach(fullDataVector,function(oneCell){
-            var initialLinearIndex = extractClassBasedIndex(oneCell,"initialLinearIndex_");
-            var associatedData = _.find(sharedTable.dataCells,{ascensionNumber:initialLinearIndex})
-            returnValue.push(associatedData);
-        });
+        if  ($.fn.DataTable.isDataTable( whereTheTableGoes )){
+            var dataTable = $(whereTheTableGoes).dataTable().DataTable();
+            if (dataTable.table().columns().length>0){
+                var fullDataVector = [];
+                var numberOfHeaders = dataTable.table().columns()[0].length;
+                _.each(_.range(0,numberOfHeaders),function(index){
+                    var header=dataTable.table().column(index).header();
+                    var divContents;
+                    if ( typeof header.children[0] === 'undefined'){
+                        // I'm completely unclear about why this special case is required.  It seems as if the first header in
+                        // the gene table has no div.  But why?  All the other headers have DIVs.  Here's a workaround until I can figure it out.
+                        divContents = '<div class="initialLinearIndex_0 geneFarLeftCorner">category X</div>'
+                    } else {
+                        divContents = header.children[0].outerHTML;
+                    }
+                    fullDataVector.push(divContents);
+                });
+                if (tableAndOrientation ==='variantTableAnnotationHeaders'){// in this case we collapse the first row into the header, so we now need to re-extract it into data
+                    _.each(_.range(0,numberOfHeaders),function(index){
+                        var header=dataTable.table().column(index).header();
+                        fullDataVector.push(header.children[1].outerHTML);
+                    });
+                }
+                if (tableAndOrientation ==='geneTableAnnotationHeaders'){// in this case we collapse the first row into the header, so we now need to re-extract it into data
+                    _.each(_.range(0,numberOfHeaders),function(index){
+                        var header=dataTable.table().column(index).header();
+                        fullDataVector.push(header.children[1].outerHTML);
+                    });
+                }
+                var dataFromTable = dataTable.rows().data();
+                _.forEach(dataFromTable, function (row, rowIndex) {
+                    _.forEach(row, function (cell, columnIndex) {
+                        fullDataVector.push(cell);
+                    });
+                });
+                var sharedTable = getAccumulatorObject("sharedTable_"+whereTheTableGoes);
+                _.forEach(fullDataVector,function(oneCell){
+                    var initialLinearIndex = extractClassBasedIndex(oneCell,"initialLinearIndex_");
+                    var associatedData = _.find(sharedTable.dataCells,{ascensionNumber:initialLinearIndex})
+                    returnValue.push(associatedData);
+                });
+            }
+
+        }
         return returnValue;
     };
 
@@ -4736,12 +4780,12 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
 
     var getArrayOfRowHeaders = function (whereTheTableGoes) {
-        mpgSoftware.matrixMath.getRowHeaders(retrieveSortedDataForTable(whereTheTableGoes));
+        return mpgSoftware.matrixMath.getRowHeaders(retrieveSortedDataForTable(whereTheTableGoes));
     };
 
 
     var getArrayOfColumnHeaders = function (whereTheTableGoes) {
-        mpgSoftware.matrixMath.getColumnHeaders(retrieveSortedDataForTable(whereTheTableGoes));
+        return mpgSoftware.matrixMath.getColumnHeaders(retrieveSortedDataForTable(whereTheTableGoes));
     };
 
 
