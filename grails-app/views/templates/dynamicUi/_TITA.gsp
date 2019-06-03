@@ -7,7 +7,7 @@ records={{numberRecords}}
 </script>
 
 <script id="gregorTissueTableSignificanceCellPresentationString"  type="x-tmpl-mustache">
-pvalue={{significanceValueAsString}}
+{{significanceValueAsString}}
 </script>
 
 <script id="gregorTissueTableSubCategory"  type="x-tmpl-mustache">
@@ -25,30 +25,37 @@ pvalue={{significanceValueAsString}}
              <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
              class="tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'Gregor predictions for {{tissueName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
-               data-target="#effector_gene_{{tissueName}}" style="color:black"> {{cellPresentationString}}
+               data-target="#effector_gene_{{tissueNameKey}}" style="color:black"> {{cellPresentationString}}
                </a>
 
-               <div  class="collapse openEffectorGeneInformationInGeneTable" id="effector_gene_{{tissueName}}">
-
-                    <table class="expandableDrillDownTable openEffectorGeneInformationInGeneTable">
-                     <thead>
-                      <tr role="row">
-                        <th class="text-center leftMostCol">annotation</th>
-                        <th class="text-center otherCols">ancestry</th>
-                        <th class="text-center otherCols">p-value</th>
-                      </tr>
-                     </thead>
-                     <tbody>
-                     {{#tissueRecords}}
-                      <tr role="row">
-                           <td class="leftMostCol">{{annotation}}</td>
-                           <td class="otherCols">{{ancestry}}</td>
-                           <td class="otherCols">{{p_value}}</td>
-                       </tr>
-                      {{/tissueRecords}}
-                     </tbody>
-                    </table>
-
+               <div  class="collapse openEffectorGeneInformationInGeneTable" id="effector_gene_{{tissueNameKey}}">
+                    {{#recordsExist}}
+                        <table class="expandableDrillDownTable openEffectorGeneInformationInGeneTable">
+                         <thead>
+                          <tr role="row">
+                            <th class="text-center leftMostCol">annotation</th>
+                            <th class="text-center otherCols">ancestry</th>
+                            <th class="text-center otherCols">p-value</th>
+                          </tr>
+                         </thead>
+                         <tbody>
+                     {{/recordsExist}}
+                         {{#tissueRecords}}
+                          <tr role="row">
+                               <td class="leftMostCol">{{annotation}}</td>
+                               <td class="otherCols">{{ancestry}}</td>
+                               <td class="otherCols">{{pValueString}}</td>
+                           </tr>
+                          {{/tissueRecords}}
+                      {{#recordsExist}}
+                         </tbody>
+                        </table>
+                    {{/recordsExist}}
+                    {{#recordsExist}}
+                    {{/recordsExist}}
+                    {{^recordsExist}}
+                       No predictions achieve nominal significance (p-value<0.05)
+                    {{/recordsExist}}
                </div>
             </div>
 </script>

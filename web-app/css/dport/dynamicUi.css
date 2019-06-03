@@ -479,3 +479,6 @@ table.dataTable.fullEffectorGeneTableHolder  thead th.BigGroupNum7 {
 td.Combined_category div.fedtCell div.fedt {
     font-weight: bold;
 }
+div.tissueTableTissueHeader{
+    font-weight: bold;
+}

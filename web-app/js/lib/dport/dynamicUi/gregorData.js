@@ -37,7 +37,8 @@ mpgSoftware.dynamicUi.gregorTissueTable = (function () {
                     ancestry:oneRec.ancestry,
                     annotation:oneRec.annotation,
                     tissue:oneRec.tissue,
-                    p_value:oneRec.p_value
+                    p_value:oneRec.p_value,
+                    pValueString:UTILS.realNumberFormatter(""+oneRec.p_value)
                 })
             });
             rawGeneAssociationRecords.push(geneRecord);
@@ -91,7 +92,7 @@ mpgSoftware.dynamicUi.gregorTissueTable = (function () {
 
                 // this function is for organizing and/or translating all of the names within a single cell
                 function(records,tissueTranslations){
-                    return _.orderBy(records,['p_value'],['asc']);
+                    return _.orderBy(_.filter(records,function(o){return (o.p_value<0.05)}),['p_value'],['asc']);
                 },
 
                 // take all the records for each row and insert them into the intermediateDataStructure
@@ -103,12 +104,14 @@ mpgSoftware.dynamicUi.gregorTissueTable = (function () {
                          tissueName ){
                         return {
                             tissueRecords:tissueRecords,
+                            recordsExist:(tissueRecords.length>0)?[1]:[],
                             cellPresentationStringMap:{
                                 'Significance':significanceCellPresentationString,
                                 'Records':recordsCellPresentationString
                             },
                             dataAnnotationTypeCode:dataAnnotationTypeCode,
                             significanceValue:significanceValue,
+                            tissueNameKey:tissueName.replace(/ /g,"_"),
                             tissueName:tissueName};
 
                 })
