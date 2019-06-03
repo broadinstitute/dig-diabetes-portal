@@ -30,14 +30,9 @@
                                                    {{/variantsSetRefinement}}
                                                    {{^variantsSetRefinement}}
                                                    'K'
-                                                   {{/variantsSetRefinement}},
+                                                   {{/variantsSetRefinement}}
 
-                                                   {{#standaloneTool}}
-                                                   ''
-                                                   {{/standaloneTool}}
-                                                   {{^standaloneTool}}
-                                                   'K'
-                                                   {{/standaloneTool}}
+
                                                    )">Launch analysis</button>
         </div>
 

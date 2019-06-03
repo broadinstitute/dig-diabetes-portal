@@ -12,6 +12,7 @@
     <r:require modules="core"/>
     <r:require modules="datatables"/>
     <r:require modules="gaitInfo"/>
+    <r:require modules="geneInfo"/>
     <r:require modules="burdenTest"/>
     <r:layoutResources/>
 
@@ -35,7 +36,7 @@
 
         var drivingVariables = {
             %{--portalTypeString:"${g.portalTypeString()}"--}%
-            %{--geneName: '${geneName}',--}%
+            geneName: 'SLC30A8'
             %{--sampleDataSet: "${sampleDataSet}",--}%
             %{--burdenDataSet: "${burdenDataSet}",--}%
             %{--geneChromosome: '${geneChromosome}',--}%
@@ -122,17 +123,22 @@ ul.nav-tabs > li.active > a { background-color: #fff !important; }
 
         <div class="gene-info-container row">
 
+            <em style="font-weight: 900;"><%=geneName%></em>
+
             <g:render template="/templates/burdenTestSharedTemplate" model="['variantIdentifier': 'rs13266634', 'accordionHeaderClass': 'accordion-heading']" />
 
 
-            <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': '8_118184783_C_T',
+
+            %{--If its gene Gait page then allowExperimentChoice = 0 and 'geneName':'geneName'--}%
+            <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': 'rs13266634',
                                                                    'accordionHeaderClass': 'accordion-heading',
                                                                    'modifiedTitle': 'Variant Interactive burden test',
                                                                    'modifiedGaitSummary': 'The Genetic Association Interactive Tool (GAIT) allows you to compute the disease or phenotype burden for this gene, using custom sets of variants, samples, and covariates. In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.',
                                                                    'allowExperimentChoice': 1,
                                                                    'allowPhenotypeChoice': 1,
                                                                    'allowStratificationChoice': 1,
-                                                                   'grsVariantSet':'']"/>
+                                                                   'grsVariantSet':'',
+                                                                   'geneName':'']"/>
 
 
 

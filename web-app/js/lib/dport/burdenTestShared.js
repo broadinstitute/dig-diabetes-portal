@@ -955,7 +955,7 @@ mpgSoftware.burdenTestShared = (function () {
             var displayBurdenVariantSelectorString = (displayBurdenVariantSelector()) ? [1] : [];
             var variantsSetRefinement = (( typeof grsVariantSet === 'undefined') || (grsVariantSet.length === 0)) ? [1] : []; // if we aren't using a GRS variants set then allow the user to modify the set
             //create a standalone variable parallel to variantSetRefinement
-            var standaloneTool = (( typeof grsVariantSet === 'undefined') || (grsVariantSet.length === 0)) ? [1] : [1];
+            var standaloneTool = (( typeof grsVariantSet === 'undefined') || (grsVariantSet.length === 0)) ? [0] : [0];
 
             if (!multipleStrataExist) {
                 defaultDisplayString = ' active';
