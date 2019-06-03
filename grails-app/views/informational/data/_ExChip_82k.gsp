@@ -421,14 +421,12 @@
 
     <p><g:message code="informational.project.descr.DIAGRAM"></g:message></p>
 
-    <h5>Genetics of Type 2 Diabetes (GoT2D) <small><a href="http://www.type2diabetesgenetics.org/projects/got2d"
-                                                      target="_blank">Learn more ></a>
+    <h5>Genetics of Type 2 Diabetes (GoT2D) <small><a href="${createLink(controller:"projects", action:"got2d")}" target="_blank">Learn more ></a>
     </small></h5>
 
     <p><g:message code="informational.project.descr.GoT2D"></g:message></p>
 
-    <h5>Type 2 Diabetes Genetic Exploration by Next-Generation Sequencing in Ethnic Samples (T2D-GENES) <small><a
-            href="http://www.type2diabetesgenetics.org/projects/t2dGenes" target="_blank">Learn more ></a></small></h5>
+    <h5>Type 2 Diabetes Genetic Exploration by Next-Generation Sequencing in Ethnic Samples (T2D-GENES) <small><a href="${createLink(controller:"projects", action:"t2dGenes")}" target="_blank">Learn more ></a></small></h5>
 
    <p><g:message code="informational.project.descr.T2D-GENES"></g:message></p>
 

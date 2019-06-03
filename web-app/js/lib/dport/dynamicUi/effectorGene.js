@@ -1,5 +1,5 @@
 /***
- * the eCAVIAR version of colocalization
+ * the effector gene table information for some limited number of genes
  *
  * The following externally visible functions are required:
  *         1) a function to process records
@@ -11,12 +11,12 @@
  *           categorizeSignificanceNumbers
  * @type {*|{}}
  */
-
 var mpgSoftware = mpgSoftware || {};  // encapsulating variable
 mpgSoftware.dynamicUi = mpgSoftware.dynamicUi || {};   // second level encapsulating variable
 
-mpgSoftware.dynamicUi.eCaviar = (function () {
+mpgSoftware.dynamicUi.effectorGene = (function () {
     "use strict";
+
 
     /***
      * 1) a function to process records
@@ -24,26 +24,24 @@ mpgSoftware.dynamicUi.eCaviar = (function () {
      * @param rawGeneAssociationRecords
      * @returns {*}
      */
-    var processRecordsFromECaviar = function (data, rawGeneAssociationRecords) {
-
-
+    var processRecordsFromEffectorGene = function (data, rawGeneAssociationRecords) {
         var dataArrayToProcess = [];
         if ( typeof data !== 'undefined'){
-            var geneName = '';
-            dataArrayToProcess = {
-                tissues:_.map(data,function(oneRec){
-                    geneName = oneRec.gene;
-                    return oneRec;
-                })
-            };
-            dataArrayToProcess ['gene'] = geneName;
+            _.forEach(data.data,function(oneRec){
+                dataArrayToProcess = {
+                    gene: oneRec.Gene_name,
+                    tissues: [{
+                        gene: oneRec.Gene_name,
+                        Combined_category: oneRec.Combined_category,
+                        Perturbation_combined: oneRec.Perturbation_combined,
+                        Genomic_combined: oneRec.Genomic_combined,
+                        Genetic_combined: oneRec.Genetic_combined
+                    }]
+                };
+            });
         }
         rawGeneAssociationRecords.push(dataArrayToProcess);
-
-
-        return rawGeneAssociationRecords;
     };
-
 
 
     /***
@@ -51,22 +49,21 @@ mpgSoftware.dynamicUi.eCaviar = (function () {
      * @param idForTheTargetDiv
      * @param objectContainingRetrievedRecords
      */
-    var displayGenesFromECaviar = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+    var displayGenesFromEffectorGene = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+
         mpgSoftware.dynamicUi.displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
-            'ECA', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            'rawColocalizationInfo', // name of the persistent field where the data we received is stored
+            'EFF', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+            'rawEffectorGeneRecords', // name of the persistent field where the data we received is stored
             '', // we may wish to pull out one record for summary purposes
             function(records,tissueTranslations){
-                return _.map(_.orderBy( records,["clpp"],["desc"]),function(tissueRecord){
-                    return {  tissue: tissueRecord.tissue_trans,
-                        clpp: UTILS.realNumberFormatter(""+tissueRecord.clpp),
-                        prob_in_causal_set: UTILS.realNumberFormatter(""+tissueRecord.prob_in_causal_set),
-                        gwas_z_score: UTILS.realNumberFormatter(""+tissueRecord.gwas_z_score),
-                        eqtl_z_score: UTILS.realNumberFormatter(""+tissueRecord.eqtl_z_score),
-                        var_id:tissueRecord.var_id,
-                        value:tissueRecord.clpp,
-                        numericalValue: tissueRecord.clpp
-                    }});
+                return _.map(records,function(oneRecord){
+                    return {    gene:oneRecord.gene,
+                                value:oneRecord};
+                    // return {    value:UTILS.realNumberFormatter(''+tissueRecord.value),
+                    //     numericalValue:tissueRecord.value,
+                    //     dataset: tissueRecord.dataset };
+                });
+
             },
             function(records, // all records
                      recordsCellPresentationString,// record count cell text
@@ -74,33 +71,34 @@ mpgSoftware.dynamicUi.eCaviar = (function () {
                      dataAnnotationTypeCode,// driving code
                      significanceValue,
                      gene ){ // value of significance for sorting
-                return {
+                return {  numberOfRecords:records.length,
                     cellPresentationStringMap:{ Records:recordsCellPresentationString,
                         Significance:significanceCellPresentationString },
-                    numberOfRecords:records.length,
-                    tissueCategoryNumber:categorizor.categorizeTissueNumbers( records.length ),
-                    significanceCategoryNumber:categorizor.categorizeSignificanceNumbers( records[0].clpp, "ECA" ),
                     recordsExist:(records.length)?[1]:[],
                     gene:gene,
+                    tissueCategoryNumber:categorizor.categorizeTissueNumbers( records.length ),
+                    significanceCategoryNumber:categorizor.categorizeSignificanceNumbers( significanceValue ),
                     significanceValue:significanceValue,
-                    records:records
+                    data:records
                 }
             } );
 
     };
+
+
 
     /***
      *  3) set of categorizor routines
      * @type {Categorizor}
      */
     var categorizor = new mpgSoftware.dynamicUi.Categorizor();
-    categorizor.categorizeSignificanceNumbers = Object.getPrototypeOf(categorizor).posteriorProbabilitySignificance;
+    categorizor.categorizeSignificanceNumbers = Object.getPrototypeOf(categorizor).genePValueSignificance;
 
 
 
 // public routines are declared below
     return {
-        processRecordsFromECaviar: processRecordsFromECaviar,
-        displayGenesFromECaviar:displayGenesFromECaviar
+        processRecordsFromEffectorGene: processRecordsFromEffectorGene,
+        displayGenesFromEffectorGene:displayGenesFromEffectorGene
     }
 }());

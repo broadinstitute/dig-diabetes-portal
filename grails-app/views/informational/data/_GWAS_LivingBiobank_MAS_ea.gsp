@@ -7,6 +7,11 @@
 <g:message code="informational.shared.publications.Tan_2018_IntJEpidemiol.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
 <div class="citation"><g:message code="informational.shared.publications.Tan_2018_IntJEpidemiol.citation"></g:message> </div>
 </div></p>
+<p><div class="paper">
+<g:message code="informational.shared.publications.Win_2015_BMCPubHealth"></g:message><br>
+<g:message code="informational.shared.publications.Win_2015_BMCPubHealth.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.Win_2015_BMCPubHealth.citation"></g:message> </div>
+</div></p>
 
         <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
 
