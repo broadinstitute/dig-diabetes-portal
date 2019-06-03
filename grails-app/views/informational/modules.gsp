@@ -162,13 +162,16 @@
 
                     <g:if test="${g.portalTypeString()?.equals('t2d')}">
                         <tr>
-                            <td class=""><span class='new-dataset-flag' style="margin-top:-10px; margin-left: 10px;">&nbsp;</span><h4><g:message code="informational.modules.GAIT.title"></g:message></h4></td>
+                            <td><span class='new-dataset-flag' style="margin-top:-10px; margin-left: 10px;">&nbsp;</span><h4><g:message code="informational.modules.GAIT.title"></g:message></h4></td>
                             <td><img  src="${resource(dir: 'images', file: 'gait.png')}" align="left" style="width: 200px; border: solid 1px #ddd; margin-right: 15px;"><g:message code="informational.modules.GAIT.description"></g:message></td>
                             %{--<td><div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact"><a href="${createLink(controller:'gait', action:'gaitInfo')}">Launch Gait</a></div></td>--}%
                             <td>
-                                <div id="generalized-go" class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact" type="button"  style="float: right; height: 41px; width:45px; border-radius:2px; margin: -1px 15px 0 0;"><a href="${createLink(controller:'gait', action:'gaitInfo')}">Launch Gait</a></div>
-                                <input id="generalized-input" value="" type="text" class="form-control input-default" style="float: right; height: 41px; width:200px; border-radius: 2px; margin: -1px 0 0 0;">
-                                <div style="padding:10px 15px 0 0; text-align: right; float: right; ">Look for another gene or variant</div>
+                            <label>Look for another gene or variant</label>
+
+                            <div class="form-inline">
+                                <input id="generalized-input" value="" type="text" class="form-control input-default">
+                            </div>
+                            <div id="generalized-go" class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact" type="button" style="margin-top: 10px;"><a href="${createLink(controller:'gait', action:'gaitInfo')}">Launch Gait</a></div>
                             </td>
                         </tr>
                     </g:if>
