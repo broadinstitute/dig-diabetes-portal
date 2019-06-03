@@ -262,7 +262,7 @@
         </div>
 
         <!--<h5><a data-toggle="collapse" href="#graphicsDiv" aria-expanded="false" aria-controls="collapseExample" style="font-size: 0.8em;">View / hide graphic</a></h5>-->
-        <div class="col-md-12" style="border-bottom:solid 1px #ddd;">
+        <div class="col-md-12" style="border-bottom:solid 1px #ddd; margin-top: -25px; margin-bottom: 20px; padding-left: 0;">
             <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact"><a data-toggle="collapse" href="#graphicsDiv" aria-expanded="false" aria-controls="collapseExample" style="font-size: 0.8em;">View / hide graphic</a></div>
         </div>
         <div class="row collapse in" id="graphicsDiv">
