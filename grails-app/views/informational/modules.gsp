@@ -165,7 +165,7 @@
                             <td><span class='new-dataset-flag' style="margin-top:-10px; margin-left: 10px;">&nbsp;</span><h4><g:message code="informational.modules.GAIT.title"></g:message></h4></td>
                             <td><img  src="${resource(dir: 'images', file: 'gait.png')}" align="left" style="width: 200px; border: solid 1px #ddd; margin-right: 15px;"><g:message code="informational.modules.GAIT.description"></g:message></td>
                             %{--<td><div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact"><a href="${createLink(controller:'gait', action:'gaitInfo')}">Launch Gait</a></div></td>--}%
-                            <td>
+                            <td style="position: relative;">
                             <label>Look for another gene or variant</label>
 
                             <div class="form-inline">
