@@ -128,7 +128,7 @@ ul.nav-tabs > li.active > a { background-color: #fff !important; }
             %{--If its gene Gait page then allowExperimentChoice = 0 and 'geneName':'geneName'--}%
             <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': '',
                                                                    'accordionHeaderClass': 'accordion-heading',
-                                                                   'modifiedTitle': 'Variant Interactive burden test',
+                                                                   'modifiedTitle': 'Genetic Association Interactive Tool',
                                                                    'modifiedGaitSummary': 'The Genetic Association Interactive Tool (GAIT) allows you to compute the disease or phenotype burden for this gene, using custom sets of variants, samples, and covariates. In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.',
                                                                    'allowExperimentChoice': allowExperimentChoice,
                                                                    'allowPhenotypeChoice': allowPhenotypeChoice,
