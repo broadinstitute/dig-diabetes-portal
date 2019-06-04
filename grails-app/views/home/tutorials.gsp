@@ -165,12 +165,11 @@
         <h1 class="dk-page-title">Resources</h1>
 
         <h3 align="center">Videos</h3>
-        <div class="tutorial" style="margin-bottom: 15px; text-align: center">
-            <div class="tutorial" style="margin-bottom: 15px; text-align: center">
-                <div class="btn dk-t2d-blue dk-video-button dk-right-column-buttons-compact "><a href="https://youtu.be/CR_V8vX2dyE" target="_blank">Introduction to the Knowledge Portals</a></div></div>
-            <div class="tutorial" style="margin-bottom: 15px; text-align: center">
-                <div class="btn dk-t2d-blue dk-video-button dk-right-column-buttons-compact "><a href=" https://youtu.be/xcIYElaA4D8" target="_blank">Webinar: AMP-T2DKP Workshop</a></div>
-            </div>
+
+        <div class="btn dk-t2d-blue dk-video-button dk-right-column-buttons-compact "><a href="https://youtu.be/CR_V8vX2dyE" target="_blank">Introduction to the Knowledge Portals</a></div>
+        <div class="btn dk-t2d-blue dk-video-button dk-right-column-buttons-compact "><a href="https://youtu.be/W23p91NdA5o" target="_blank">Overview of the Knowledge Portal Variant Page</a></div>
+        <div class="btn dk-t2d-blue dk-video-button dk-right-column-buttons-compact "><a href=" https://youtu.be/xcIYElaA4D8" target="_blank">Webinar: AMP-T2DKP Workshop</a></div>
+
 
             <hr>
             <h3 align="center">Help documentation</h3>
