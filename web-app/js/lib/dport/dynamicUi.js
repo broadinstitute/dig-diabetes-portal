@@ -3352,6 +3352,8 @@ mpgSoftware.dynamicUi = (function () {
         // Every table depends on some in memory storage.  Create that here if requested.
         if (    ( typeof  additionalParameters.dynamicTableConfiguration !== 'undefined') &&
                 ( typeof  additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory !== 'undefined') ){
+            resetAccumulatorObject('gregorTissueArray');
+            destroySharedTable(additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory);
             var sharedTable = new SharedTableObject('tissueTableTissueHeaders',0,0);
             setAccumulatorObject("sharedTable_" + additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory,sharedTable);
         }

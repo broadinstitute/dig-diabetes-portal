@@ -16,17 +16,17 @@
                             Transpose
                         </button>
                     </div>
-                    <div class="datatable-cell-color-control">
-                        <div class="tool-label">View:</div>
+                    %{--<div class="datatable-cell-color-control">--}%
+                        %{--<div class="tool-label">View:</div>--}%
 
 
-                        <button type="button" class="btn btn-secondary first-btn significance active" aria-label="click to organize by greatest significance" title="click to organize by greatest significance" onclick="mpgSoftware.dynamicUi.setColorButtonActive(event,['tissues'],'#mainTissueDiv table.tissueTableHolder');">Significance
-                        </button>
+                        %{--<button type="button" class="btn btn-secondary first-btn significance active" aria-label="click to organize by greatest significance" title="click to organize by greatest significance" onclick="mpgSoftware.dynamicUi.setColorButtonActive(event,['tissues'],'#mainTissueDiv table.tissueTableHolder');">Significance--}%
+                        %{--</button>--}%
 
-                        <button type="button" class="btn btn-secondary last-btn tissues" aria-label="click to organized by number of associated tissues" title="click to organized by number of associated tissues" onclick="mpgSoftware.dynamicUi.setColorButtonActive(event,['significance'],'#mainTissueDiv table.tissueTableHolder');">Records
+                        %{--<button type="button" class="btn btn-secondary last-btn tissues" aria-label="click to organized by number of associated tissues" title="click to organized by number of associated tissues" onclick="mpgSoftware.dynamicUi.setColorButtonActive(event,['significance'],'#mainTissueDiv table.tissueTableHolder');">Records--}%
 
-                        </button>
-                    </div>
+                        %{--</button>--}%
+                    %{--</div>--}%
 
 
                     <div class="datatable-zoom-control">
@@ -46,7 +46,7 @@
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-12">
-                        <select class="phenotypePicker">
+                        <select class="phenotypePicker" onchange="mpgSoftware.tissueTable.refreshTableForPhenotype(this)">
                         </select>
                     </div>
                 </div>

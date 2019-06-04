@@ -92,7 +92,8 @@ mpgSoftware.dynamicUi.gregorTissueTable = (function () {
 
                 // this function is for organizing and/or translating all of the names within a single cell
                 function(records,tissueTranslations){
-                    return _.orderBy(_.filter(records,function(o){return (o.p_value<0.05)}),['p_value'],['asc']);
+                    //return _.orderBy(_.filter(records,function(o){return (o.p_value<0.05)}),['p_value'],['asc']);
+                    return _.orderBy(_.filter(records,function(o){return (o.annotation.includes('nhancer'))}),['p_value'],['asc']);
                 },
 
                 // take all the records for each row and insert them into the intermediateDataStructure

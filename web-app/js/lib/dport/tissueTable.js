@@ -48,7 +48,8 @@ mpgSoftware.tissueTable = (function () {
 
 
     var refreshTableForPhenotype = function(preferredPhenotype){
-         mpgSoftware.dynamicUi.modifyScreenFields({phenotype:preferredPhenotype},getVariablesToRemember());
+        var phenotypeString = $(preferredPhenotype).val();
+         mpgSoftware.dynamicUi.modifyScreenFields({phenotype:phenotypeString},getVariablesToRemember());
     }
 
 
