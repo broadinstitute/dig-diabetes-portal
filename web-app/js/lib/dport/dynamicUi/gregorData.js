@@ -75,7 +75,7 @@ mpgSoftware.dynamicUi.gregorTissueTable = (function () {
                             returnObject.headers = _.map(sortedHeaderObjects, function(tissue,index){
                                 return Mustache.render($('#'+dataAnnotationType.dataAnnotation.headerWriter)[0].innerHTML,
                                     {   tissueName: tissue,
-                                        initialLinearIndex:initialLinearIndex
+                                        initialLinearIndex:initialLinearIndex++
                                     }
                                 )
                             });

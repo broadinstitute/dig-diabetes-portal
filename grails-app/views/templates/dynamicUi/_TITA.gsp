@@ -22,7 +22,7 @@ records={{numberRecords}}
 
 
 <script id="gregorTissueTableBody"  type="x-tmpl-mustache">
-             <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
+             <div significance_sortField="{{significanceValue}}" sortField=5
              class="tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'Gregor predictions for {{tissueName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
                data-target="#effector_gene_{{tissueNameKey}}" style="color:black"> {{cellPresentationString}}

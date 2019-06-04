@@ -1882,6 +1882,10 @@ mpgSoftware.dynamicUi = (function () {
         var sortedHeaderObjects = insertAnyHeaderRecords(returnObject,tissuesAlreadyInTheTable,dataAnnotationType,intermediateDataStructure,returnObject);
         var initialLinearIndex = sortedHeaderObjects.length;
 
+
+        var sharedTable = new SharedTableObject( 'tissueTableTissueHeaders',sortedHeaderObjects.length,0);
+        setAccumulatorObject("sharedTable_"+idForTheTargetDiv,sharedTable);
+
         if (returnObject.headers.length > 0){
             // placeContentRowsIntoIntermediateObject(returnObject,dataAnnotationType,intermediateDataStructure,initialLinearIndex);
             var objectsGroupedByTissue = _.groupBy(returnObject.contents,'tissue');
@@ -4055,7 +4059,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             case "TITA":
                 var cellColoringScheme ="records";
                 intermediateStructureDataCell.renderData["cellPresentationString"] =
-                    intermediateStructureDataCell.renderData.cellPresentationStringMap[findCellColoringChoice('table.tissueTableHolder')];
+                    intermediateStructureDataCell.renderData.cellPresentationStringMap[findCellColoringChoice('#mainTissueDiv table.tissueTableHolder')];
                 var displayDetails = getDatatypeInformation(intermediateStructureDataCell.dataAnnotationTypeCode);
                 returnValue = Mustache.render($('#'+displayDetails.dataAnnotation.cellBodyWriter)[0].innerHTML,intermediateStructureDataCell.renderData);
                 break;

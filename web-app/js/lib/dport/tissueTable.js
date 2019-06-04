@@ -47,6 +47,11 @@ mpgSoftware.tissueTable = (function () {
 
 
 
+    var refreshTableForPhenotype = function(preferredPhenotype){
+         mpgSoftware.dynamicUi.modifyScreenFields({phenotype:preferredPhenotype},getVariablesToRemember());
+    }
+
+
     var initialPageSetUp = function(){
         var preferredPhenotype = 'T2D';
         $('#mainTissueDiv').empty().append(Mustache.render($('#mainTissueTableOrganizer')[0].innerHTML,
@@ -58,7 +63,8 @@ mpgSoftware.tissueTable = (function () {
 
     return {
         setVariablesToRemember:setVariablesToRemember,
-        initialPageSetUp:initialPageSetUp
+        initialPageSetUp:initialPageSetUp,
+        refreshTableForPhenotype:refreshTableForPhenotype
     }
 }());
 
