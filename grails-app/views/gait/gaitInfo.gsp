@@ -35,53 +35,12 @@
         "use strict";
 
         var drivingVariables = {
-            %{--portalTypeString:"${g.portalTypeString()}"--}%
-            geneName: "${geneName}"
-            %{--geneName: '<%=geneName%>'--}%
-            %{--sampleDataSet: "${sampleDataSet}",--}%
-            %{--burdenDataSet: "${burdenDataSet}",--}%
-            %{--geneChromosome: '${geneChromosome}',--}%
-            %{--geneExtentBegin: ${geneExtentBegin},--}%
-            %{--geneExtentEnd: ${geneExtentEnd},--}%
-            %{--igvIntro:  '${igvIntro}',--}%
-            %{--defaultPhenotype: '${defaultPhenotype}',--}%
-            %{--identifiedGenes: '${identifiedGenes}',--}%
-            %{--firstPropertyName: '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().propertyName}',--}%
-            %{--firstStaticPropertyName:'${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().dataType}',--}%
-            %{--defaultTissues: ${(defaultTissues as String).encodeAsJSON()},--}%
-            %{--defaultTissuesDescriptions: ${(defaultTissuesDescriptions as String).encodeAsJSON()},--}%
-            %{--lzCommon: 'lzCommon',--}%
-            %{--lzCredSet: 'lzCredSet',--}%
-            %{--vrtUrl:  '${createLink(controller: "VariantSearch", action: "gene")}',--}%
-            %{--redLightImage: '<r:img uri="/images/redlight.png"/>',--}%
-            %{--yellowLightImage: '<r:img uri="/images/yellowlight.png"/>',--}%
-            %{--greenLightImage: '<r:img uri="/images/greenlight.png"/>',--}%
-            %{--suppressBurdenTest: !(${sampleLevelSequencingDataExists}),--}%
-            %{--variantInfoUrl: '${createLink(controller: "VariantInfo", action: "variantInfo")}',--}%
-            %{--currentPhenotype: $('.chosenPhenotype').attr('id'),--}%
-            %{--retrieveTopVariantsAcrossSgsUrl: '${createLink(controller: "VariantSearch", action: "retrieveTopVariantsAcrossSgs")}',--}%
-            %{--burdenTestAjaxUrl:'${createLink(controller: "gene", action: "burdenTestAjax")}',--}%
-            %{--preferIgv:($('input[name=genomeBrowser]:checked').val()==='2'),--}%
-            %{--sampleMetadataExperimentAjaxUrl: '${createLink(controller: 'VariantInfo', action: 'sampleMetadataExperimentAjax')}',--}%
-            %{--sampleMetadataAjaxWithAssumedExperimentUrl: "${createLink(controller: 'VariantInfo', action: 'sampleMetadataAjaxWithAssumedExperiment')}",--}%
-            %{--variantOnlyTypeAheadUrl: "${createLink(controller: 'gene', action: 'variantOnlyTypeAhead')}",--}%
-            %{--sampleMetadataAjaxUrl: "${createLink(controller: 'VariantInfo', action: 'sampleMetadataAjax')}",--}%
-            %{--generateListOfVariantsFromFiltersAjaxUrl: "${createLink(controller: 'gene', action: 'generateListOfVariantsFromFiltersAjax')}",--}%
-            %{--retrieveSampleSummaryUrl: "${createLink(controller: 'VariantInfo', action: 'retrieveSampleSummary')}",--}%
-            %{--variantAndDsAjaxUrl: "${createLink(controller: 'variantInfo', action: 'variantAndDsAjax')}",--}%
-            %{--burdenTestVariantSelectionOptionsAjaxUrl: "${createLink(controller:'gene',action: 'burdenTestVariantSelectionOptionsAjax')}",--}%
-            %{--recomb_rateMsg:"<g:message code='controls.shared.igv.tracks.recomb_rate' />",--}%
-            %{--genesMsg:"<g:message code='controls.shared.igv.tracks.genes' />",--}%
-            %{--retrievePotentialIgvTracksUrl:"${createLink(controller: 'trait', action: 'retrievePotentialIgvTracks')}",--}%
-            %{--getDataUrl: "${createLink(controller:'trait', action:'getData', absolute:'false')}",--}%
-            %{--traitInfoUrl: "${createLink(controller:'trait', action:'traitInfo', absolute:'true')}",--}%
-            %{--getLocusZoomUrl: '${createLink(controller:"gene", action:"getLocusZoom")}',--}%
-            %{--retrieveFunctionalDataAjaxUrl: '${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',--}%
-            %{--getLocusZoomFilledPlotUrl: '${createLink(controller:"gene", action:"getLocusZoomFilledPlot")}',--}%
-            %{--fillCredibleSetTableUrl: '${g.createLink(controller: "RegionInfo", action: "fillCredibleSetTable")}',--}%
-            %{--assayIdList: "${assayIdList}",--}%
-            %{--geneChromosomeMinusChr:function(){if ('${geneChromosome}'.indexOf('chr')==0) { return '${geneChromosome}'.substr(3)} else {return '${geneChromosome}' }},--}%
-            %{--genePageWarning:"${genePageWarning}"--}%
+            geneName: "${geneName}",
+            variantIdentifier: "${variantIdentifier}",
+            allowExperimentChoice:"${allowExperimentChoice}",
+            allowPhenotypeChoice:"${allowPhenotypeChoice}",
+            allowStratificationChoice:"${allowStratificationChoice}"
+
         };
 
         mpgSoftware.gaitInfo.setGaitInfoData(drivingVariables);
@@ -127,8 +86,42 @@ ul.nav-tabs > li.active > a { background-color: #fff !important; }
             <em style="font-weight: 900;"><%=geneName%></em>
 
 
+            <em style="font-weight: 900;"><%=variantIdentifier%></em>
 
-            <g:render template="/templates/burdenTestSharedTemplate" model="['variantIdentifier': '', 'accordionHeaderClass': 'accordion-heading']" />
+
+            %{--If its gene Gait page then allowExperimentChoice = 0 and 'geneName':'geneName'--}%
+            %{--<g:if test="${geneName?.equals('')}">--}%
+
+                %{--<g:render template="/templates/burdenTestSharedTemplate" model="['variantIdentifier': variantIdentifier, 'accordionHeaderClass': 'accordion-heading']" />--}%
+
+                %{--<g:render template="/widgets/burdenTestShared" model="['variantIdentifier': variantIdentifier,--}%
+                                                                       %{--'accordionHeaderClass': 'accordion-heading',--}%
+                                                                       %{--'modifiedTitle': 'Variant Interactive burden test',--}%
+                                                                       %{--'modifiedGaitSummary': 'The Genetic Association Interactive Tool (GAIT) allows you to compute the disease or phenotype burden for this gene, using custom sets of variants, samples, and covariates. In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.',--}%
+                                                                       %{--'allowExperimentChoice': 1,--}%
+                                                                       %{--'allowPhenotypeChoice': 1,--}%
+                                                                       %{--'allowStratificationChoice': 0,--}%
+                                                                       %{--'grsVariantSet':'',--}%
+                                                                       %{--'geneName':'']"/>--}%
+            %{--</g:if>--}%
+
+            %{--<g:else>--}%
+                %{--<g:render template="/templates/burdenTestSharedTemplate" model="['variantIdentifier': '', 'accordionHeaderClass': 'accordion-heading']" />--}%
+
+                %{--<g:render template="/widgets/burdenTestShared" model="['variantIdentifier': '',--}%
+                                                                       %{--'accordionHeaderClass': 'accordion-heading',--}%
+                                                                       %{--'modifiedTitle': 'Gene Interactive burden test',--}%
+                                                                       %{--'modifiedGaitSummary': 'The Genetic Association Interactive Tool (GAIT) allows you to compute the disease or phenotype burden for this gene, using custom sets of variants, samples, and covariates. In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.',--}%
+                                                                       %{--'allowExperimentChoice': 1,--}%
+                                                                       %{--'allowPhenotypeChoice': 1,--}%
+                                                                       %{--'allowStratificationChoice': 1,--}%
+                                                                       %{--'grsVariantSet':'',--}%
+                                                                       %{--'geneName':geneName]"/>--}%
+
+            %{--</g:else>--}%
+
+
+            <g:render template="/templates/burdenTestSharedTemplate" model="['variantIdentifier': variantIdentifier, 'accordionHeaderClass': 'accordion-heading']" />
 
 
 
@@ -137,11 +130,15 @@ ul.nav-tabs > li.active > a { background-color: #fff !important; }
                                                                    'accordionHeaderClass': 'accordion-heading',
                                                                    'modifiedTitle': 'Variant Interactive burden test',
                                                                    'modifiedGaitSummary': 'The Genetic Association Interactive Tool (GAIT) allows you to compute the disease or phenotype burden for this gene, using custom sets of variants, samples, and covariates. In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.',
-                                                                   'allowExperimentChoice': 0,
-                                                                   'allowPhenotypeChoice': 1,
-                                                                   'allowStratificationChoice': 1,
+                                                                   'allowExperimentChoice': allowExperimentChoice,
+                                                                   'allowPhenotypeChoice': allowPhenotypeChoice,
+                                                                   'allowStratificationChoice': allowStratificationChoice,
                                                                    'grsVariantSet':'',
                                                                    'geneName':geneName]"/>
+
+
+
+
 
 
 

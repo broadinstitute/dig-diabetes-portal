@@ -3,18 +3,28 @@ package org.broadinstitute.mpg
 
 import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
+import org.broadinstitute.mpg.meta.UserQueryContext
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 class GaitController {
     RestServerService  restServerService
+    WidgetService widgetService
 
     def index() {
         forward gaitInfo()
     }
 
     def gaitInfo(){
-        String geneName = params.id
-        render (view: 'gaitInfo', model:[geneName: geneName])
+        String uncharacterizedString = params.id
+        UserQueryContext userQueryContext = widgetService.generateUserQueryContext(uncharacterizedString)
+        if (userQueryContext.gene){
+            render (view: 'gaitInfo', model:[geneName: userQueryContext.originalRequest,allowExperimentChoice: false, allowPhenotypeChoice: true, allowStratificationChoice: true ])
+        }
+        if (userQueryContext.variant){
+            render (view: 'gaitInfo', model:[variantIdentifier: userQueryContext.originalRequest, variantSetId: userQueryContext.originalRequest,allowExperimentChoice: true, allowPhenotypeChoice: true, allowStratificationChoice: false])
+        }
+
+
     }
 
     def getGRSListOfVariantsAjax() {
