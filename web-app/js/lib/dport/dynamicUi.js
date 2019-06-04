@@ -1883,7 +1883,7 @@ mpgSoftware.dynamicUi = (function () {
         var initialLinearIndex = sortedHeaderObjects.length;
 
 
-        var sharedTable = new SharedTableObject( 'tissueTableTissueHeaders',sortedHeaderObjects.length,0);
+        var sharedTable = new SharedTableObject( 'tissueTableTissueHeaders',sortedHeaderObjects.length+1,0);
         setAccumulatorObject("sharedTable_"+idForTheTargetDiv,sharedTable);
 
         if (returnObject.headers.length > 0){
@@ -1946,7 +1946,7 @@ mpgSoftware.dynamicUi = (function () {
             clearBeforeStarting,
             intermediateDataStructure,
             true,
-            'tissueTableTissueHeaders', false);
+            'tissueTableTissueHeaders', true);
 
 
 
@@ -3585,6 +3585,7 @@ mpgSoftware.dynamicUi = (function () {
                     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
                     break;
                 case 'P-value':
+                case 'gregorValuesInTissueTable':
                     var x = parseFloat($(a).attr(defaultSearchField));
                     var y = parseFloat($(b).attr(defaultSearchField));
                     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
@@ -3965,6 +3966,12 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     'table':'table.combinedGeneTableHolder'
                 };
                 break;
+            case 'gregorValuesInTissueTable':
+                currentSortRequestObject = {
+                    'currentSort':oneClass,
+                    'table':'table.tissueTableHolder'
+                };
+                break;
             case 'COLOC':
                 currentSortRequestObject = {
                     'currentSort':oneClass,
@@ -4167,6 +4174,16 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                                 'methods','EMP'));
                             sortability.push(true);
                             break;
+                        case 'tissueTableTissueHeaders':
+                            var isdc = new IntermediateStructureDataCell('farLeftCorner',
+                                displayCategoryHtml('TITA',0),
+                                'categoryNam','LIT');
+                            var header = {title:isdc.title, annotation:isdc.annotation};
+                            addedColumns.push(new NewColumn(    getDisplayableCellContent(isdc),
+                                header,
+                                ['initialLinearIndex_0'],
+                                isdc));
+                            break;
                         case 'variantTableAnnotationHeaders':
                         case 'geneTableAnnotationHeaders':
                         default:
@@ -4204,12 +4221,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                              ){
                                  classesToPromote.push ( oneClass.substr(sortingClass.length));
                              }
-                             // if ( oneClass.substr(0,bigGroupDesignation.length) === bigGroupDesignation ){
-                             //     classesToPromote.push (oneClass);
-                             // }
-                             // if ( oneClass.substr(0,combinedCategory.length) === combinedCategory ){
-                             //     classesToPromote.push (oneClass);
-                             // }
+
                          });
                      }
                      var contentOfHeader = headerContent;
@@ -4486,6 +4498,12 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     adjustTableWrapperWidth("table.fullEffectorGeneTableHolder");
                     break;
 
+
+                case 'tissueTableTissueHeaders':
+                     adjustTableWrapperWidth("table.tissueTableHolder");
+                    break;
+
+
                 default:
                     break;
             }
@@ -4569,9 +4587,17 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                                                 "insertedColumn2"));
                         numberOfColumnsAdded += rowDescriber.length;
                         break;
-                    case 'geneTableAnnotationHeaders':
-                        break;
-                    default:
+                     case 'tissueTableTissueHeaders':
+                         indexInOneDimensionalArray = (numberOfExistingRows*numberOfColumns);
+                         rowDescriber.push( new IntermediateStructureDataCell(row.category,
+                             displaySubcategoryHtml(row.code,indexInOneDimensionalArray),
+                             row.subcategory+" gregorValuesInTissueTable","LIT")) ;
+                         indexInOneDimensionalArray++;
+                         numberOfColumnsAdded += rowDescriber.length;
+                         break;
+                     case 'geneTableAnnotationHeaders':
+                         break;
+                     default:
                         break;
                 }
 

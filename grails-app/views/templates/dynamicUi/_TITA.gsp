@@ -2,6 +2,14 @@
 records={{numberRecords}}
 </script>
 
+<script id="gregorTissueTableTissueHeaderLabel"  type="x-tmpl-mustache">
+<div class="initialLinearIndex_{{indexInOneDimensionalArray}}">Tissues</div>
+</script>
+
+<script id="gregorTissueTableTissueRowLabel"  type="x-tmpl-mustache">
+<div class="initialLinearIndex_{{indexInOneDimensionalArray}}">Values</div>
+</script>
+
 <script id="gregorTissueTableTissueHeader"  type="x-tmpl-mustache">
 <div class="tissueTableTissueHeader initialLinearIndex_{{initialLinearIndex}}">{{tissueName}}</div>
 </script>

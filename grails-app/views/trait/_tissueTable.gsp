@@ -41,8 +41,8 @@
                             displaySubcategory: 'Gregor list',
                             headerWriter:'gregorTissueTableTissueHeader',
                             cellBodyWriter:'gregorTissueTableBody',
-                            categoryWriter:'sharedCategoryWriter',
-                            subCategoryWriter:'gregorTissueTableSubCategory',
+                            categoryWriter:'gregorTissueTableTissueHeaderLabel',
+                            subCategoryWriter:'gregorTissueTableTissueRowLabel',
                             numberRecordsCellPresentationStringWriter:'gregorTissueTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'gregorTissueTableSignificanceCellPresentationString',
                             internalIdentifierString:'getInformationFromGregorForTissueTable'

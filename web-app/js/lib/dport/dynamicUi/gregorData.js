@@ -63,7 +63,7 @@ mpgSoftware.dynamicUi.gregorTissueTable = (function () {
                 // insert header records as necessary into the intermediate structure, and return header names that we can match on for the columns
                 function(incomingData,tissuesAlreadyInTheTable,dataAnnotationType,intermediateDataStructure,returnObject){
                     var headersObjects = [];
-                    var initialLinearIndex = 0;
+                    var initialLinearIndex = 1;
                     if ( typeof incomingData !== 'undefined') {
 
                         mpgSoftware.dynamicUi.addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode, intermediateDataStructure);
