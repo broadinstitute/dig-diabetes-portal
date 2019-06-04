@@ -55,7 +55,7 @@
             "use strict";
 
             function goToSelectedItem(item) {
-                window.location.href = "${createLink(controller:'gene',action:'findTheRightDataPage')}/" + item;
+                window.location.href = "${createLink(controller:'gait', action:'gaitInfo')}" +"/" + item;
             }
 
             /***
@@ -171,7 +171,7 @@
                             <div class="form-inline">
                                 <input id="generalized-input" value="" type="text" class="form-control input-default">
                             </div>
-                            <div id="generalized-go" class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact" type="button" style="margin-top: 10px;"><a href="${createLink(controller:'gait', action:'gaitInfo')}">Launch Gait</a></div>
+                            <div id="generalized-go" class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact" type="button" style="margin-top: 10px;">Launch Gait</div>
                             </td>
                         </tr>
                     </g:if>

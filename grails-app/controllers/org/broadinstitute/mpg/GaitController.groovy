@@ -13,7 +13,8 @@ class GaitController {
     }
 
     def gaitInfo(){
-        render (view: 'gaitInfo', model:[])
+        String geneName = params.id
+        render (view: 'gaitInfo', model:[geneName: geneName])
     }
 
     def getGRSListOfVariantsAjax() {
@@ -41,23 +42,6 @@ class GaitController {
         JsonSlurper slurper = new JsonSlurper()
         String codedVariantList = """{"results":[${recordPerVariants.join(",")}]}""".toString()
         JSONObject sampleCallSpecifics = slurper.parseText(codedVariantList)
-
-//        if (sampleCallSpecifics.results) {
-//            for (Map result in sampleCallSpecifics.results){
-//                for (Map pval in result.pVals){
-//                    if ((pval.level == "Consequence")||
-//                            (pval.level == "SIFT_PRED")||
-//                            (pval.level == "PolyPhen_PRED")){
-//                        List<String> consequenceList = pval.count.tokenize(",")
-//                        List<String> translatedConsequenceList = []
-//                        for (String consequence in consequenceList){
-//                            translatedConsequenceList << g.message(code: "metadata." + consequence, default: consequence)
-//                        }
-//                        pval.count = translatedConsequenceList.join(", ")
-//                    }
-//                }
-//            }
-//        }
 
         // send json response back
         render(status: 200, contentType: "application/json") {sampleCallSpecifics}
