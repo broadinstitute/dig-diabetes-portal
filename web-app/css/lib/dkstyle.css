@@ -1250,3 +1250,42 @@ span.new-dataset-flag {
 	top: -3px;
 	right: -2px;
 }
+
+div.traits-filter-wrapper > .radio-inline {
+    display: block;
+    margin-left: 10px;
+}
+
+/* Effector Gene List page */
+#EGL-graphics > .nav-pills {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#EGL-graphics > .nav-pills > li {
+    float: none;
+    display: inline-block;
+}
+
+#EGL-graphics > .nav-pills > li > a {
+    color: #333;
+    background-color: #fff;
+    font-size: 16px;
+    border-radius: 25px;
+    padding: 5px 15px;
+}
+
+#EGL-graphics > .nav-pills > li.active > a, #EGL-graphics > .nav-pills > li.active > a:hover {
+    color: #333;
+    background-color: #ddd;
+}
+
+#EGL-graphics > .tab-content > .tab-pane {
+    text-align: center;
+}
+
+#EGL-graphics > .tab-content img {
+	border: solid 1px #ddd;
+    width: 100%;
+    max-width: 550px;
+}

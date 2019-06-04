@@ -114,8 +114,7 @@
         <tr><td>Total: 3,848</td><td>Total: 4,366</td><td></td><td></td></tr>
     </table>
 <h4><g:message code="informational.shared.headers.project"></g:message></h4>
-    <h5>Slim Initiative in Genomic Medicine for the Americas (SIGMA) <small><a
-            href="http://www.type2diabetesgenetics.org/projects/sigma" target="_blank">Learn more ></a>
+    <h5>Slim Initiative in Genomic Medicine for the Americas (SIGMA) <small><a href="${createLink(controller:"projects", action:"sigma")}" target="_blank">Learn more ></a>
     </small></h5>
 
     <p><g:message code="informational.data.project.SIGMA"></g:message></p>

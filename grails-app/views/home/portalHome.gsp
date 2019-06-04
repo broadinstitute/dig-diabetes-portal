@@ -191,12 +191,16 @@
                     <g:if test="${portalVersionBean.geneLevelDataExists}">
 
                         <div class="radio-inline">
-                            <label><input type="radio" name="radio-gene-association" class="radio" onchange="mpgSoftware.homePage.switchVisibility(['variant-association-ui-wrapper'],['gene-association-ui-wrapper']);" checked> View variant associations</label>
+                            <label><input type="radio" name="radio-gene-association" class="radio" onchange="mpgSoftware.homePage.switchVisibility(['variant-association-ui-wrapper'],['gene-association-ui-wrapper','effector-gene-list-ui-wrapper']);" checked> View variant associations</label>
                         </div>
                         <div class="radio-inline">
-                            <label><input type="radio" name="radio-gene-association" class="radio" onchange="mpgSoftware.homePage.switchVisibility(['gene-association-ui-wrapper'], ['variant-association-ui-wrapper']);" > View gene associations</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class='new-dataset-flag' style="display: inline-flex; margin:-3px 0 0 -30px">&nbsp;</span>
+                            <label><input type="radio" name="radio-gene-association" class="radio" onchange="mpgSoftware.homePage.switchVisibility(['gene-association-ui-wrapper'], ['variant-association-ui-wrapper','effector-gene-list-ui-wrapper']);" > <span style="float: left;">View gene-level T2D associations </span> </label>
                         </div>
-
+                        <g:if test="${portalVersionBean.getExposeEffectorGeneTableUi()}">
+                            <div class="radio-inline">
+                                <label><input type="radio" name="radio-gene-association" class="radio" onchange="mpgSoftware.homePage.switchVisibility(['effector-gene-list-ui-wrapper'], ['variant-association-ui-wrapper', 'gene-association-ui-wrapper']);" > <span style="float: left;">View predicted T2D effector genes</span> <span class='new-dataset-flag' style="display: inline-flex; margin:-3px 0 0 5px; width: 30px; background-size: 30px;">&nbsp;</span></label>
+                            </div>
+                        </g:if>
                     </g:if>
 
                     <g:if test="${portalVersionBean.variantAssociationsExists}">
@@ -216,10 +220,60 @@
                     </g:if>
                     <g:if test="${portalVersionBean.geneLevelDataExists}">
                         <div class="form-inline gene-association-ui-wrapper" style="display:none;">
-                            <div class="gene-association-ui">
+                            <!--<div class="gene-association-ui">
                                 <select name="" id="gene-trait-input" class="form-control input-sm gene-trait-input selectpicker" data-live-search="true" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 0; border-top-left-radius: 3px; border-bottom-left-radius: 3px; margin:0; font-size: 16px;">
                                 </select>
                                 <button id="geneTraitSearchLaunch" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
+                            </div>-->
+                            <div class="gene-association-ui">
+                                <div class="btn-group bootstrap-select form-control input-sm gene-trait-input dropup">
+                                    <button type="button" class="btn dropdown-toggle btn-default" data-toggle="dropdown" role="button" data-id="gene-trait-input" title="&amp;nbsp;&amp;nbsp;&amp;nbsp;Type 2 diabetes">
+                                        <span class="filter-option pull-left">&nbsp;&nbsp;&nbsp;Type 2 diabetes</span>&nbsp;<span class="bs-caret"><span class="caret"></span></span></button>
+
+                                    <div class="dropdown-menu open" role="combobox" style="max-height: 463px; overflow: hidden; min-height: 42px;">
+                                        <div class="bs-searchbox">
+                                            <input type="text" class="form-control" autocomplete="off" role="textbox" aria-label="Search">
+                                        </div>
+                                        <ul class="dropdown-menu inner" role="listbox" aria-expanded="false" style="max-height: 409px; overflow-y: auto; min-height: 0px;">
+                                            <li class="divider" data-optgroup="0div"></li>
+                                            <li data-original-index="0" class="selected active">
+                                                <a tabindex="0" class="" data-tokens="null" role="option" aria-disabled="false" aria-selected="true">
+                                                    <span class="text">&nbsp;&nbsp;&nbsp;Type 2 diabetes</span>
+                                                    <span class="glyphicon glyphicon-ok check-mark"></span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <a href="${createLink(controller:'trait',action:'genePrioritization')}?trait=T2D&significance=0.0005">
+                                    <button class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; font-size: 14px;" ><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button></a>
+                            </div>
+                        </div>
+                    </g:if>
+                    <g:if test="${portalVersionBean.getExposeEffectorGeneTableUi()}">
+                        <div class="form-inline effector-gene-list-ui-wrapper" style="display:none;">
+                            <div class="gene-association-ui">
+                                <div class="btn-group bootstrap-select form-control input-sm gene-trait-input dropup">
+                                    <button type="button" class="btn dropdown-toggle btn-default" data-toggle="dropdown" role="button" data-id="gene-trait-input" title="&amp;nbsp;&amp;nbsp;&amp;nbsp;Type 2 diabetes">
+                                        <span class="filter-option pull-left">&nbsp;&nbsp;&nbsp;Type 2 diabetes</span>&nbsp;<span class="bs-caret"><span class="caret"></span></span></button>
+
+                                    <div class="dropdown-menu open" role="combobox" style="max-height: 463px; overflow: hidden; min-height: 42px;">
+                                        <div class="bs-searchbox">
+                                            <input type="text" class="form-control" autocomplete="off" role="textbox" aria-label="Search">
+                                        </div>
+                                        <ul class="dropdown-menu inner" role="listbox" aria-expanded="false" style="max-height: 409px; overflow-y: auto; min-height: 0px;">
+                                            <li class="divider" data-optgroup="0div"></li>
+                                            <li data-original-index="0" class="selected active">
+                                                <a tabindex="0" class="" data-tokens="null" role="option" aria-disabled="false" aria-selected="true">
+                                                    <span class="text">&nbsp;&nbsp;&nbsp;Type 2 diabetes</span>
+                                                    <span class="glyphicon glyphicon-ok check-mark"></span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <a href="${createLink(controller:'gene', action:'effectorGeneTable')}">
+                                    <button class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; font-size: 14px;" ><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button></a>
                             </div>
                         </div>
                     </g:if>
@@ -303,14 +357,14 @@
                         <img src="${resource(dir: 'images', file: 'data_icon3.png')}" style="width: 200px; margin-right: -50px;" align="right" >
                         <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData" default="About the data" /></h2>
                     <p><g:message code="about.the.portal.data.text" />
-                    <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">67 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">164 traits</span></h1>
+                    <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">75 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">180 traits</span></h1>
 
                         <span style="display:block; width: 100%;text-align:left;"><a style=" font-size: 20px; padding:10px 40px 10px 0; margin-right: -30px;background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; text-decoration:none; color:#333333; " href="${createLink(controller:'informational', action:'data')}"><g:message code="about.the.portal.data.text2"/></a></span>
                     </g:else>
 
                     <div>
                         <div style="min-width: 500px; margin-top:30px;">
-                            <h3><img src="${resource(dir: 'images', file: 'kpn_logo.svg')}" style="width: 120px;" align="left"><span style="display: inline-block; font-weight:400; font-size:35px; font-family:'Oswald'; margin: 2px 0 0 10px; padding: 0px 5px 2px 5px; border: solid 1px #00b1f0; border-right: none; border-left: none;">Knowledge Portal Network</span></h3>
+                            <h3><a href="http://www.kp4cd.org/" target="_blank"><img src="${resource(dir: 'images', file: 'kpn_logo.svg')}" style="width: 120px;" align="left"><span style="display: inline-block; font-weight:400; font-size:35px; font-family:'Oswald'; margin: 2px 0 0 10px; padding: 0px 5px 2px 5px; border: solid 1px #00b1f0; border-right: none; border-left: none;">Knowledge Portal Network</span></a></h3>
                             <p style="font-size: 16px;"><g:message code="portal.home.about.KPN"></g:message></p>
                         </div>
 

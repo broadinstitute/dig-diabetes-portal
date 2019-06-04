@@ -8,8 +8,8 @@
         );
     });
     <%@ page import="org.broadinstitute.mpg.RestServerService" %>
-
     <g:set var="restServer" bean="restServerService"/>
+
 </script>
 
 <div class="container-fluid floop" id="header-bottom" style="background-image:url(${resource( file:restServer.retrieveBeanForCurrentPortal().getBackgroundGraphic())}); background-position: left bottom; font-size: 14px; font-weight:300; padding:0; margin:0; ">
@@ -34,7 +34,11 @@
                         </g:if>
                     </g:if>
 
-                </ul></li>
+                </ul>
+            </li>
+            <g:if test="${restServer.retrieveBeanForCurrentPortal().getExposeEffectorGeneTableUi()}">
+                <li class="data-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="${createLink(controller:'gene', action:'effectorGeneTable')}"><g:message code="portal.header.effector.gene.table"/><span class="new-dataset-flag" style="position:relative; width: 30px; background-size: 30px; margin-right: -10px;">&nbsp;</span></a></li>
+            </g:if>
             <li class="about-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="${createLink(controller:'informational', action:'about')}"><g:message code="portal.header.nav.about"/></a></li>
             <li class="policies-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="${createLink(controller:'informational', action:'policies')}"><g:message code="portal.header.nav.policies"/></a></li>
             <li class="tutorials-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="${createLink(controller: 'home', action: 'tutorials')}"><g:message code="portal.header.nav.tutorials"/></a><span class="new-dataset-flag" style="position:relative; width: 30px; background-size: 30px; margin-right: -10px;">&nbsp;</span></li>

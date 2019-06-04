@@ -181,6 +181,11 @@ span.displayGeneName{
     color: black;
     font-weight: bold;
 }
+span.displayMethodName{
+    color: black;
+    font-weight: bold;
+}
+
 .dynamicUiHolder { width: 100%; overflow: auto; border-right:solid 1px #70cAdB; border-left:solid 1px #70cAdB; }
 
 .dynamicUiHolder table { margin: 0 !important; }
@@ -235,5 +240,242 @@ th.onlyCol{
     border-bottom: 1px solid black;
     border-left: 0;
     border-right: 0;
+    font-weight: bold;
+}
+
+
+
+.effector-table th {
+    position:relative;
+    text-align:center;
+    /*padding-left: 40px !important;*/
+    /*padding-right: 30px !important;*/
+    white-space:nowrap;
+}
+
+.effector-table th > div> span.effector-ui-wrapper {
+    display: block;
+    position:absolute;
+    font-size: 12px;
+    left: 2px;
+    color: rgba(16,45,201,.35);
+    z-index: 10;
+    -webkit-transition: all 0.5s;
+    transition: all 0.5s;
+    top: 50%;
+    transform: translate(0, -50%);
+}
+
+.effector-table th > div> span.options-icon {
+    display: block;
+    position:absolute;
+    font-size: 12px;
+    width: 12px;
+    top: 50%;
+    transform: translate(0, -50%);
+    right: 0px;
+    color: rgba(16,45,201,.35);
+    -webkit-transition: all 0.15s;
+    transition: all 0.15s;
+}
+
+.effector-table th > div> span.options-icon:hover {
+    font-size: 16px;
+    color: rgba(16,45,201,.75);
+}
+
+.effector-table th > span.effector-ui-wrapper >span.glyphicon {
+    margin: 0;
+}
+
+.effector-table th > span.effector-ui-wrapper >span.glyphicon:hover {
+    cursor:pointer;
+    font-size: 14px;
+    color: rgba(16,45,201,.75);
+}
+
+.effector-table th span.inactive {
+    display: none;
+}
+
+.effector-table th span.glyphicon.expand-trigger, .effector-table th span.glyphicon.collapse-trigger {
+    position: absolute;
+    top: 50%;
+    transform: translate(50%, -50%);
+    font-size: 12px;
+    color: rgba(16,45,201,.35);
+    -webkit-transition: all 0.15s;
+    transition: all 0.15s;
+}
+.effector-table th span.glyphicon.expand-trigger:hover, .effector-table th span.glyphicon.collapse-trigger:hover {
+    font-size: 14px;
+    color: rgba(16,45,201,.75);
+}
+
+.effector-table th.effector-sub-th, .effector-table td {
+
+}
+
+.effector-table th.effector-sub-th.active-th, .effector-table td.active-td {
+    display: table-cell;
+}
+
+#filter_modal {
+    position: absolute;
+    top: 100px;
+    left: 100px;
+    background-color: #ddd;
+    padding: 5px;
+    border: solid 1px #bbb;
+    border-radius: 5px;
+    -moz-box-shadow: 3px 3px 3px 0 #ddd;
+    -webkit-box-shadow: 3px 3px 3px 0 #ddd;
+    box-shadow: 3px 3px 3px 0 #ddd;
+    z-index: 1000;
+}
+
+#filter_modal > .content-wrapper {
+    background-color: #fff;
+    padding: 5px;
+    width: 200px;
+    height: 300px;
+    overflow: auto;
+    font-size: 12px;
+}
+div.fegtHeaderStyling{
+    color: #999999;
+}
+div.fedt{
+
+}
+
+div.groupNum0, div.groupNum1, div.groupNum2, div.groupNum3, div.groupNum4, div.groupNum5, div.groupNum6, div.groupNum7, div.groupNum8, div.groupNum9 {
+    border: none;
+}
+/*table.dataTable thead th.BigGroupNum1 {*/
+    /*background: blue;*/
+/*}*/
+/*th.BigGroupNum0 {*/
+    /*background-color  : #bbb;*/
+/*}*/
+
+/*th.BigGroupNum1 {*/
+    /*background-color:  #F4F73F;*/
+/*}*/
+
+/*th.BigGroupNum2 {*/
+    /*border-top: solid 3px #F6B11C;*/
+/*}*/
+
+/*th.BigGroupNum3 {*/
+    /*border-top: solid 3px #66E54D;*/
+/*}*/
+
+/*th.BigGroupNum4 {*/
+    /*border-top: solid 3px #4DA9E5;*/
+/*}*/
+
+/*th.BigGroupNum5 {*/
+    /*border-top: solid 3px #A9E54D;*/
+/*}*/
+
+/*th.BigGroupNum6 {*/
+    /*border-top: solid 3px #E5A54D;*/
+/*}*/
+
+/*th.BigGroupNum7 {*/
+    /*border-top: solid 3px #ddd;*/
+/*}*/
+
+
+div.fedtCell.groupNum0 {
+    /*border-top: solid 3px #bbb;*/
+}
+
+div.fedtCell.groupNum1 {
+    border-top: solid 3px #F4F73F;
+}
+
+div.fedtCell.groupNum2 {
+    border-top: solid 3px #F6B11C;
+}
+
+div.fedtCell.groupNum3 {
+    border-top: solid 3px #66E54D;
+}
+
+div.fedtCell.groupNum4 {
+    border-top: solid 3px #4DA9E5;
+}
+
+div.fedtCell.groupNum5 {
+    border-top: solid 3px #A9E54D;
+}
+
+div.fedtCell.groupNum6 {
+    border-top: solid 3px #E5A54D;
+}
+
+div.fedtCell.groupNum7 {
+    border-top: solid 3px #ddd;
+}
+
+div.fedtCell.groupNum8 {
+    border-top: solid 3px #0f0;
+}
+
+div.fedtCell.groupNum9 {
+    border-top: solid 3px #ff0;
+}
+
+.dataTables_wrapper tbody td.fegtHeader {
+    border: none;
+    border-left: solid 1px #ddd;
+    border-top: solid 1px #ddd;
+    padding: 0;
+    vertical-align: top;
+}
+
+.dataTables_wrapper tbody > tr > td.fegtHeader:last-child {
+    border-right: solid 1px #ddd;
+}
+
+.dataTables_wrapper tbody td.fegtHeader > div, .dataTables_wrapper tbody td.fegtHeader > div > div {
+    height: 100%;
+}
+.dataTables_wrapper tbody div.fedt {
+    padding: 5px;
+}
+table.dataTable.fullEffectorGeneTableHolder  thead .sorting_asc {
+    background: url("http://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
+}
+table.dataTable.fullEffectorGeneTableHolder  thead .sorting_desc {
+    background: url("http://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
+}
+table.dataTable.fullEffectorGeneTableHolder  thead .sorting {
+    background: url("http://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+}
+table.dataTable.fullEffectorGeneTableHolder  thead th.BigGroupNum1 {
+    border-top: solid 3px #F4F73F;
+}
+table.dataTable.fullEffectorGeneTableHolder  thead th.BigGroupNum2 {
+    border-top: solid 3px #F6B11C;
+}
+table.dataTable.fullEffectorGeneTableHolder  thead th.BigGroupNum3 {
+    border-top: solid 3px #66E54D;
+}
+table.dataTable.fullEffectorGeneTableHolder  thead th.BigGroupNum4 {
+    border-top: solid 3px #4DA9E5;
+}
+table.dataTable.fullEffectorGeneTableHolder  thead th.BigGroupNum5 {
+    border-top: solid 3px #A9E54D;
+}
+table.dataTable.fullEffectorGeneTableHolder  thead th.BigGroupNum6 {
+    border-top: solid 3px #E5A54D;
+}
+table.dataTable.fullEffectorGeneTableHolder  thead th.BigGroupNum7 {
+    border-top: solid 3px #F6B11C;
+}
+td.Combined_category div.fedtCell div.fedt {
     font-weight: bold;
 }
