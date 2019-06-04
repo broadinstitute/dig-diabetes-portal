@@ -32,7 +32,7 @@
                         <g:if test="${restServer.retrieveBeanForCurrentPortal().exposeGrsModule}">
                             <li class="grs-btn" style=""><a href="${createLink(controller:'grs', action:'grsInfo')}"><g:message code="portal.header.nav.grs"/></a></li>
                         </g:if>
-                        <li class="grs-btn" style=""><a href="${createLink(controller:'gait', action:'gaitInfo')}"><g:message code="portal.header.nav.gait"/></a></li>
+                        <li class="grs-btn" style=""><a href="${createLink(controller:'gait', action:'gaitInfo')}/SLC30A8"><g:message code="portal.header.nav.gait"/></a></li>
                     </g:if>
 
 
