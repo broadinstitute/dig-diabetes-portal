@@ -55,6 +55,7 @@
             "use strict";
 
             function goToSelectedItem(item) {
+                var loading = $('#spinner').show();
                 window.location.href = "${createLink(controller:'gait', action:'gaitInfo')}" +"/" + item;
             }
 
@@ -175,10 +176,6 @@
                             <div class="form-inline">
                                 <input id="generalized-input" value="" type="text" class="form-control input-default" style="width: 100%;">
                             </div>
-
-
-                            <!--<div id="generalized-go" class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact" type="button" style="margin-top: 10px;">Launch Custom Association Analysis</div>-->
-
                             </td>
                         </tr>
                     </g:if>
@@ -193,7 +190,6 @@
 
                         </td>
                         <td>
-
                             <label>Select phenotype</label>
                             <div id="phenotypeDropdownWrapper">
 

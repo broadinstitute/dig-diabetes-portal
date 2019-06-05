@@ -20,6 +20,7 @@
         </div>
 
         <div class="col-md-offset-4 col-md-4 vcenter center burden-test-btn-wrapper">
+
             <button name="singlebutton" style="height: 50px; z-index: 10;" id="singleRunButton"
                                                    class="btn btn-primary btn-lg burden-test-btn vcenter"
                                                    onclick="mpgSoftware.burdenTestShared.immediateFilterAndRun('${createLink(controller: "variantInfo", action: "metadataAjax")}',

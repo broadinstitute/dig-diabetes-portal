@@ -89,38 +89,6 @@ ul.nav-tabs > li.active > a { background-color: #fff !important; }
             <h3><em style="font-weight: 900;"><%=variantIdentifier%></em></h3>
 
 
-            %{--If its gene Gait page then allowExperimentChoice = 0 and 'geneName':'geneName'--}%
-            %{--<g:if test="${geneName?.equals('')}">--}%
-
-                %{--<g:render template="/templates/burdenTestSharedTemplate" model="['variantIdentifier': variantIdentifier, 'accordionHeaderClass': 'accordion-heading']" />--}%
-
-                %{--<g:render template="/widgets/burdenTestShared" model="['variantIdentifier': variantIdentifier,--}%
-                                                                       %{--'accordionHeaderClass': 'accordion-heading',--}%
-                                                                       %{--'modifiedTitle': 'Variant Interactive burden test',--}%
-                                                                       %{--'modifiedGaitSummary': 'The Genetic Association Interactive Tool (GAIT) allows you to compute the disease or phenotype burden for this gene, using custom sets of variants, samples, and covariates. In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.',--}%
-                                                                       %{--'allowExperimentChoice': 1,--}%
-                                                                       %{--'allowPhenotypeChoice': 1,--}%
-                                                                       %{--'allowStratificationChoice': 0,--}%
-                                                                       %{--'grsVariantSet':'',--}%
-                                                                       %{--'geneName':'']"/>--}%
-            %{--</g:if>--}%
-
-            %{--<g:else>--}%
-                %{--<g:render template="/templates/burdenTestSharedTemplate" model="['variantIdentifier': '', 'accordionHeaderClass': 'accordion-heading']" />--}%
-
-                %{--<g:render template="/widgets/burdenTestShared" model="['variantIdentifier': '',--}%
-                                                                       %{--'accordionHeaderClass': 'accordion-heading',--}%
-                                                                       %{--'modifiedTitle': 'Gene Interactive burden test',--}%
-                                                                       %{--'modifiedGaitSummary': 'The Genetic Association Interactive Tool (GAIT) allows you to compute the disease or phenotype burden for this gene, using custom sets of variants, samples, and covariates. In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.',--}%
-                                                                       %{--'allowExperimentChoice': 1,--}%
-                                                                       %{--'allowPhenotypeChoice': 1,--}%
-                                                                       %{--'allowStratificationChoice': 1,--}%
-                                                                       %{--'grsVariantSet':'',--}%
-                                                                       %{--'geneName':geneName]"/>--}%
-
-            %{--</g:else>--}%
-
-
             <g:render template="/templates/burdenTestSharedTemplate" model="['variantIdentifier': variantIdentifier, 'accordionHeaderClass': 'accordion-heading']" />
 
 

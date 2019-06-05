@@ -230,6 +230,9 @@ mpgSoftware.burdenTestShared = (function () {
 
 
     var initializeGaitUi = function (selectorInWhichToInsert, valuesToInsert) {
+        $(window).on('load', function(){
+            $('#singleRunButton').fadeOut(5000);
+        })
         $(selectorInWhichToInsert).empty().append(Mustache.render($('#mainGaitHolder')[0].innerHTML, valuesToInsert));
     };
 
@@ -328,6 +331,8 @@ mpgSoftware.burdenTestShared = (function () {
 
 
     var refreshTopOfGaitDisplay = function (data, params) {
+        $('.caatSpinner').show();
+
         var phenotypeDropdown = $(params.dropDownPhenoSelector);
         var stratifyDesignationDropdown = $(params.stratifyDesignation);
         var linkToTypeaheadUrl = params.linkToTypeaheadUrl;
