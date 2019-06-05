@@ -128,8 +128,8 @@ ul.nav-tabs > li.active > a { background-color: #fff !important; }
             %{--If its gene Gait page then allowExperimentChoice = 0 and 'geneName':'geneName'--}%
             <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': '',
                                                                    'accordionHeaderClass': 'accordion-heading',
-                                                                   'modifiedTitle': 'Genetic Association Interactive Tool',
-                                                                   'modifiedGaitSummary': 'The Genetic Association Interactive Tool (GAIT) allows you to compute the disease or phenotype burden for this gene, using custom sets of variants, samples, and covariates. In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.',
+                                                                   'modifiedTitle': 'Custom Association Analysis',
+                                                                   'modifiedGaitSummary': 'This interface allows you to perform single-variant association analysis or a gene-level burden test using custom parameters. Results for the T2D phenotype are powered by the AMP T2D-GENES exome sequence analysis dataset; results for other traits are powered by the 19k exome sequence analysis subset. In order to protect patient privacy, visualization or analysis of data from fewer than 100 individuals is not supported.',
                                                                    'allowExperimentChoice': allowExperimentChoice,
                                                                    'allowPhenotypeChoice': allowPhenotypeChoice,
                                                                    'allowStratificationChoice': allowStratificationChoice,

@@ -166,12 +166,15 @@
                             <td><img  src="${resource(dir: 'images', file: 'gait.png')}" align="left" style="width: 200px; border: solid 1px #ddd; margin-right: 15px;"><g:message code="informational.modules.GAIT.description"></g:message></td>
                             %{--<td><div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact"><a href="${createLink(controller:'gait', action:'gaitInfo')}">Launch Gait</a></div></td>--}%
                             <td style="position: relative;">
-                            <label>Look for another gene or variant</label>
+                            <label>Enter a gene name or variant rsID</label>
 
                             <div class="form-inline">
                                 <input id="generalized-input" value="" type="text" class="form-control input-default">
                             </div>
-                            <div id="generalized-go" class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact" type="button" style="margin-top: 10px;">Launch Gait</div>
+
+
+                            <div id="generalized-go" class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact" type="button" style="margin-top: 10px;">Launch Custom Association Analysis</div>
+                            <div style="float: left; margin-top: 5px;" class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact "><a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/KP_GAIT_guide.pdf" target="_blank">Custom association analysis guide</a></div>
                             <div class="errorReporter">${errorText}</div>
                             </td>
                         </tr>
@@ -208,7 +211,7 @@
                     </tr>
                     <g:if test="${g.portalTypeString()?.equals('t2d')}">
                         <tr>
-                            <td class=""><span class='new-dataset-flag' style="margin-top:-10px; margin-left: 10px;">&nbsp;</span><h4><g:message code="informational.modules.GRS.title"></g:message></h4></td>
+                            <td class=""><h4><g:message code="informational.modules.GRS.title"></g:message></h4></td>
                             <td><img  src="${resource(dir: 'images', file: 'GRS.png')}" align="left" style="width: 200px; border: solid 1px #ddd; margin-right: 15px;"><g:message code="informational.modules.GRS.description"></g:message></td>
                             <td><div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact"><a href="${createLink(controller:'grs', action:'grsInfo')}">Launch GRS</a></div></td>
                         </tr>
