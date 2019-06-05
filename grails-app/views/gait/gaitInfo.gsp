@@ -134,7 +134,8 @@ ul.nav-tabs > li.active > a { background-color: #fff !important; }
                                                                    'allowPhenotypeChoice': allowPhenotypeChoice,
                                                                    'allowStratificationChoice': allowStratificationChoice,
                                                                    'grsVariantSet':'',
-                                                                   'geneName':geneName]"/>
+                                                                   'geneName':geneName,
+                                                                    'standAloneTool':true]"/>
 
 
 

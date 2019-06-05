@@ -204,8 +204,11 @@ mpgSoftware.burdenTestShared = (function () {
         //burdenTestVariantSelectionOptionsAjaxUrl){
         displayParameters["variantsSetRefinement"] = (( typeof displayParameters.grsVariantSet === 'undefined') ||
             (displayParameters.grsVariantSet.length === 0)) ? [1] : [];
-        displayParameters["standaloneTool"] = (( typeof displayParameters.grsVariantSet === 'undefined') ||
-            (displayParameters.grsVariantSet.length === 0)) ? [1] : [1];
+
+        if(displayParameters["standAloneTool"]){
+            displayParameters["variantsSetRefinement"] = []
+        }
+
 
         mpgSoftware.burdenTestShared.initializeGaitUi(selectionToFill,
             displayParameters);

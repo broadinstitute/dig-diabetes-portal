@@ -742,7 +742,7 @@ the individual filters themselves. That work is handled later as part of a loop-
 
     <div id="collapseBurden"
     {{#variantsSetRefinement}}
-    class="accordion-body collapse in"
+    class="accordion-body collapse"
     {{/variantsSetRefinement}}
     {{^variantsSetRefinement}}
     class="accordion-body collapse in"
