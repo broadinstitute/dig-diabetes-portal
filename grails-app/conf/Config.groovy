@@ -169,7 +169,6 @@ getRestServerList = [
         digdevlocalFederatedServer,
         digAWSKBV2prodServer,
         federatedAwsProdKBV2Server,
-        digawsdevnewKB,
         digawsqanewKB,
         digawsdevWorkflowKB,
         digawsdevWorkflowKBrevised,

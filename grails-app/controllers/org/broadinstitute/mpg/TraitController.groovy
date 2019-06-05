@@ -1,6 +1,7 @@
 package org.broadinstitute.mpg
 
 import grails.converters.JSON
+import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
@@ -47,6 +48,26 @@ class TraitController {
 
         render(status: 200, contentType: "application/json") {
             [phenotypeMapping:phenotypeDatasetMapping]
+        }
+    }
+
+
+
+
+    def getAllPhenotypesAndTranslationAjax() {
+        List<String> everyPhenotype = metaDataService.getEveryPhenotype()
+        JsonSlurper slurper = new JsonSlurper()
+
+        List<HashMap> phenotypesPlusTranslations = []
+        everyPhenotype.each { String phenoName ->
+            HashMap phenotypeMapping = [:]
+            phenotypeMapping[phenoName] = g.message(code: "metadata." + phenoName, default: phenoName)
+            phenotypesPlusTranslations.push(phenotypeMapping)
+        }
+        String proposedJsonString = new JsonBuilder( phenotypesPlusTranslations ).toPrettyString()
+        JSONArray jsonArray= slurper.parseText(proposedJsonString)
+        render(status: 200, contentType: "application/json") {
+            [phenotypeMapping:jsonArray]
         }
     }
 

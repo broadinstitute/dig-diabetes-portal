@@ -24,15 +24,20 @@ mpgSoftware.tissueTable = (function () {
             if (( typeof  data !== 'undefined') ||
                 ( typeof  data.phenotypeMapping !== 'undefined')){
                 var phenotypeNames = [];
-                _.forEach(data.phenotypeMapping,function (phenotypeRecord,phenotypeName){
-                    phenotypeNames.push(phenotypeName);
+                var translation ={};
+                _.forEach(data.phenotypeMapping,function (phenotypeRecord){
+                    _.forEach(phenotypeRecord,function (humanReadablePhenotype,phenotypeName){
+                        phenotypeNames.push(phenotypeName);
+                        translation[phenotypeName]=humanReadablePhenotype
+                    });
+
                 });
                 _.forEach(phenotypeNames.sort(),function (phenotypeName){
                     var optionToAdd;
                     if (phenotypeName===preferredPhenotype){
-                        optionToAdd = '<option selected="selected">'+phenotypeName+'</option>';
+                        optionToAdd = '<option selected="selected" value="'+phenotypeName+'">'+translation[phenotypeName]+'</option>';
                     } else {
-                        optionToAdd = '<option>'+phenotypeName+'</option>';
+                        optionToAdd = '<option value="'+phenotypeName+'">'+translation[phenotypeName]+'</option>';
                     }
                     $(domSelector).append(optionToAdd);
                 })

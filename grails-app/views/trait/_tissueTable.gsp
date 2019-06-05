@@ -31,7 +31,7 @@
                     retrieveGeneLevelAssociationsUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveGeneLevelAssociations")}',
                     retrieveListOfGenesInARangeUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveListOfGenesInARange")}',
                     retrieveEffectorGeneInformationUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveEffectorGeneInformation")}',
-                    getAllPhenotypesAjaxUrl: '${g.createLink(controller: "trait", action: "getAllPhenotypesAjax")}',
+                    getAllPhenotypesAjaxUrl: '${g.createLink(controller: "trait", action: "getAllPhenotypesAndTranslationAjax")}',
                     dataAnnotationTypes: [
                         {
                             code: 'TITA',
@@ -76,7 +76,7 @@
         mpgSoftware.tissueTableInitializer.tissueTableConfiguration();
     });
 </script>
-
+<g:render template="/templates/dynamicUiTemplate" />
 <g:render template="/templates/tissueTableTemplate" />
 <g:render template="/templates/dynamicUi/TITA" />
 

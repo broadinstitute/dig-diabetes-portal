@@ -1894,13 +1894,13 @@ mpgSoftware.dynamicUi = (function () {
                 if (indexOfColumn === -1) {
                     console.log("Did not find index of recordsPerTissue.tissue.  Shouldn't we?")
                 } else {
-                    if ((recordsPerTissue.length === 0)) {
+                    var tissueTranslations = recordsPerTissue["TISSUE_TRANSLATIONS"];
+                    var tissueRecords = mapSortAndFilterFunction (recordsPerTissue,tissueTranslations);
+                    if ((tissueRecords.length === 0)) {
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(tissueName,
                             {}, "tissue specific",'EMC');
                     } else {
-                        var tissueTranslations = recordsPerTissue["TISSUE_TRANSLATIONS"]; // if no translations are provided, it is fine to leave this value as undefined
-                        var tissueRecords = mapSortAndFilterFunction (recordsPerTissue,tissueTranslations);
-
+                         // if no translations are provided, it is fine to leave this value as undefined
                         var recordsCellPresentationString = Mustache.render($('#'+dataAnnotationType.dataAnnotation.numberRecordsCellPresentationStringWriter)[0].innerHTML, {
                             numberRecords:tissueRecords.length
                         });
