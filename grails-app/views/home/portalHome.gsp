@@ -364,7 +364,7 @@
 
                     <div>
                         <div style="min-width: 500px; margin-top:30px;">
-                            <h3><img src="${resource(dir: 'images', file: 'kpn_logo.svg')}" style="width: 120px;" align="left"><span style="display: inline-block; font-weight:400; font-size:35px; font-family:'Oswald'; margin: 2px 0 0 10px; padding: 0px 5px 2px 5px; border: solid 1px #00b1f0; border-right: none; border-left: none;">Knowledge Portal Network</span></h3>
+                            <h3><a href="http://www.kp4cd.org/" target="_blank"><img src="${resource(dir: 'images', file: 'kpn_logo.svg')}" style="width: 120px;" align="left"><span style="display: inline-block; font-weight:400; font-size:35px; font-family:'Oswald'; margin: 2px 0 0 10px; padding: 0px 5px 2px 5px; border: solid 1px #00b1f0; border-right: none; border-left: none;">Knowledge Portal Network</span></a></h3>
                             <p style="font-size: 16px;"><g:message code="portal.home.about.KPN"></g:message></p>
                         </div>
 

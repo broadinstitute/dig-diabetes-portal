@@ -28,7 +28,7 @@ $( document ).ready( function (){
                 getGRSListOfVariantsAjaxUrl:"${createLink(controller:'grs',action: 'getGRSListOfVariantsAjax')}"
             }
         );
-
+console.log('${geneName}');
 } );
 
 </g:javascript>

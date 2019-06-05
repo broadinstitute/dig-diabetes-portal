@@ -31,6 +31,8 @@
                                                    {{^variantsSetRefinement}}
                                                    'K'
                                                    {{/variantsSetRefinement}}
+
+
                                                    )">Launch analysis</button>
         </div>
 
@@ -108,7 +110,7 @@
                                          retrieveSampleSummaryUrl:'${createLink(controller: "variantInfo", action: "retrieveSampleSummary")}',
                                          variantAndDsAjaxUrl:'${createLink(controller: "variantInfo", action: "variantAndDsAjax")}',
                                          burdenTestVariantSelectionOptionsAjaxUrl:'${createLink(controller: "gene", action: "burdenTestVariantSelectionOptionsAjax")}',
-                                         getGRSListOfVariantsAjaxUrl:'${createLink(controller:"grs",action: "getGRSListOfVariantsAjax")}'})">
+                                         getGRSListOfVariantsAjaxUrl:'${createLink(controller:"gait",action: "getGRSListOfVariantsAjax")}'})">
                         </select>
                     </div>
                 </div>
@@ -130,7 +132,7 @@
                                          retrieveSampleSummaryUrl:'${createLink(controller: "variantInfo", action: "retrieveSampleSummary")}',
                                          variantAndDsAjaxUrl:'${createLink(controller: "variantInfo", action: "variantAndDsAjax")}',
                                          burdenTestVariantSelectionOptionsAjaxUrl:'${createLink(controller: "gene", action: "burdenTestVariantSelectionOptionsAjax")}',
-                                         getGRSListOfVariantsAjaxUrl:'${createLink(controller:"grs",action: "getGRSListOfVariantsAjax")}'})">
+                                         getGRSListOfVariantsAjaxUrl:'${createLink(controller:"gait",action: "getGRSListOfVariantsAjax")}'})">
                      </select>
                 </div>
             </div>
@@ -153,7 +155,7 @@
                                          retrieveSampleSummaryUrl:'${createLink(controller: "variantInfo", action: "retrieveSampleSummary")}',
                                          variantAndDsAjaxUrl:'${createLink(controller: "variantInfo", action: "variantAndDsAjax")}',
                                          burdenTestVariantSelectionOptionsAjaxUrl:'${createLink(controller: "gene", action: "burdenTestVariantSelectionOptionsAjax")}',
-                                         getGRSListOfVariantsAjaxUrl:'${createLink(controller:"grs",action: "getGRSListOfVariantsAjax")}'})">
+                                         getGRSListOfVariantsAjaxUrl:'${createLink(controller:"gait",action: "getGRSListOfVariantsAjax")}'})">
                                 <option value="none">none</option>
                                 <option value="origin">ancestry</option>
                     </select>
@@ -176,7 +178,7 @@
                                          retrieveSampleSummaryUrl:'${createLink(controller: "variantInfo", action: "retrieveSampleSummary")}',
                                          variantAndDsAjaxUrl:'${createLink(controller: "variantInfo", action: "variantAndDsAjax")}',
                                          burdenTestVariantSelectionOptionsAjaxUrl:'${createLink(controller: "gene", action: "burdenTestVariantSelectionOptionsAjax")}',
-                                         getGRSListOfVariantsAjaxUrl:'${createLink(controller:"grs",action: "getGRSListOfVariantsAjax")}'})">
+                                         getGRSListOfVariantsAjaxUrl:'${createLink(controller:"gait",action: "getGRSListOfVariantsAjax")}'})">
                                         <label style="padding-left:0">Filter cases and controls separately</label>
                                 </input>
                         </div>
@@ -614,6 +616,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                                             </select>
                                             {{/variantsSetRefinement}}
                                         </label>
+
                                     </div>
                                 </div>
                                 <div  class="row">
@@ -696,6 +699,9 @@ the individual filters themselves. That work is handled later as part of a loop-
                                     <div class="col-md-2"></div>
                                 </div>
                                 {{/variantsSetRefinement}}
+
+
+
                             </div>
                             <div  class="col-md-1 col-sm-1 col-xs-12 burden-test-btn-wrapper vcenter">
                             </div>
@@ -736,20 +742,31 @@ the individual filters themselves. That work is handled later as part of a loop-
 
     <div id="collapseBurden"
     {{#variantsSetRefinement}}
-    class="accordion-body collapse"
+    class="accordion-body collapse in"
     {{/variantsSetRefinement}}
     {{^variantsSetRefinement}}
     class="accordion-body collapse in"
     {{/variantsSetRefinement}}
     >
 
+    <div id="collapseBurden"
+    {{#standaloneTool}}
+    class="accordion-body collapse in"
+    {{/standaloneTool}}
+    {{^standaloneTool}}
+    class="accordion-body collapse in"
+    {{/standaloneTool}}
+    >
+
         <div class="accordion-inner">
 
             {{#variantsSetRefinement}}
                 <div style="float: right; margin-top: 15px;" class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact ">
-                    <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/KP_GAIT_guide.pdf" target="_blank">GAIT guide</a>
+                    <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/KP_GAIT_guide.pdf" target="_blank">Custom association analysis guide</a>
                 </div>
             {{/variantsSetRefinement}}
+
+
 
             <div class="container">
                 <h5>

@@ -204,6 +204,9 @@ mpgSoftware.burdenTestShared = (function () {
         //burdenTestVariantSelectionOptionsAjaxUrl){
         displayParameters["variantsSetRefinement"] = (( typeof displayParameters.grsVariantSet === 'undefined') ||
             (displayParameters.grsVariantSet.length === 0)) ? [1] : [];
+        displayParameters["standaloneTool"] = (( typeof displayParameters.grsVariantSet === 'undefined') ||
+            (displayParameters.grsVariantSet.length === 0)) ? [1] : [1];
+
         mpgSoftware.burdenTestShared.initializeGaitUi(selectionToFill,
             displayParameters);
         mpgSoftware.burdenTestShared.storeGeneForGait(geneName);
@@ -951,6 +954,9 @@ mpgSoftware.burdenTestShared = (function () {
             var tabDisplayString;
             var displayBurdenVariantSelectorString = (displayBurdenVariantSelector()) ? [1] : [];
             var variantsSetRefinement = (( typeof grsVariantSet === 'undefined') || (grsVariantSet.length === 0)) ? [1] : []; // if we aren't using a GRS variants set then allow the user to modify the set
+            //create a standalone variable parallel to variantSetRefinement
+            var standaloneTool = (( typeof grsVariantSet === 'undefined') || (grsVariantSet.length === 0)) ? [0] : [0];
+
             if (!multipleStrataExist) {
                 defaultDisplayString = ' active';
                 tabDisplayString = ' display: none';
@@ -959,6 +965,7 @@ mpgSoftware.burdenTestShared = (function () {
             var renderData = {
                 strataProperty: strataProperty,
                 variantsSetRefinement: variantsSetRefinement,
+                standaloneTool: standaloneTool,
                 phenotypeProperty: convertPhenotypeNames(phenotype),
                 defaultDisplay: defaultDisplayString,
                 tabDisplay: tabDisplayString,
@@ -1044,10 +1051,19 @@ mpgSoftware.burdenTestShared = (function () {
             }
 
 
+
+
             //
             // set up the section where the filters will go
             //
             renderData.sectionNumber++;
+            var temp = Mustache.render($('#chooseFiltersTemplate')[0].innerHTML, renderData,
+                {
+                    allFiltersTemplate: $('#allFiltersTemplate')[0].innerHTML,
+                    filterFloatTemplate: $('#filterFloatTemplate')[0].innerHTML,
+                    filterCategoricalTemplate: $('#filterCategoricalTemplate')[0].innerHTML
+                });
+           console.log(temp)
             $("#chooseFiltersLocation").empty().append(Mustache.render($('#chooseFiltersTemplate')[0].innerHTML, renderData,
                 {
                     allFiltersTemplate: $('#allFiltersTemplate')[0].innerHTML,
