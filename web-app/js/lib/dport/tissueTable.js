@@ -57,6 +57,10 @@ mpgSoftware.tissueTable = (function () {
          mpgSoftware.dynamicUi.modifyScreenFields({phenotype:phenotypeString},getVariablesToRemember());
     }
 
+    var refreshTableForAnnotations = function(x){
+        mpgSoftware.dynamicUi.redrawTissueTable();
+    }
+
 
     var initialPageSetUp = function(){
         var preferredPhenotype = 'T2D';
@@ -70,7 +74,8 @@ mpgSoftware.tissueTable = (function () {
     return {
         setVariablesToRemember:setVariablesToRemember,
         initialPageSetUp:initialPageSetUp,
-        refreshTableForPhenotype:refreshTableForPhenotype
+        refreshTableForPhenotype:refreshTableForPhenotype,
+        refreshTableForAnnotations:refreshTableForAnnotations
     }
 }());
 

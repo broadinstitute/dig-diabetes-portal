@@ -47,6 +47,36 @@ mpgSoftware.dynamicUi.gregorTissueTable = (function () {
     };
 
 
+
+
+    var createSingleGregorCell = function (recordsPerTissue,dataAnnotationType,chosenAnnotations) {
+        var significanceValue = 0;
+        var returnValue = {};
+        var tissuesFilteredByAnnotation = _.filter(recordsPerTissue,  function(oneRecord){
+            return _.includes(chosenAnnotations,oneRecord.annotation)
+        })
+        if (( typeof tissuesFilteredByAnnotation !== 'undefined')&&
+            (tissuesFilteredByAnnotation.length>0)){
+            var mostSignificantRecord=tissuesFilteredByAnnotation[0];
+
+            significanceValue = mostSignificantRecord.p_value;
+            returnValue['significanceValue'] = significanceValue;
+            returnValue['significanceCellPresentationString'] = Mustache.render($('#'+dataAnnotationType.dataAnnotation.significanceCellPresentationStringWriter)[0].innerHTML,
+                {significanceValue:significanceValue,
+                    tissuesFilteredByAnnotation:tissuesFilteredByAnnotation,
+                    significanceValueAsString:UTILS.realNumberFormatter(""+significanceValue),
+                    recordDescription:mostSignificantRecord.tissue,
+                    numberRecords:tissuesFilteredByAnnotation.length});
+            returnValue['tissuesFilteredByAnnotation'] = tissuesFilteredByAnnotation;
+
+        }
+        return returnValue;
+    };
+
+
+
+
+
     /***
      *  2) a function to display the processed records
      * @param idForTheTargetDiv
@@ -93,17 +123,19 @@ mpgSoftware.dynamicUi.gregorTissueTable = (function () {
                 // this function is for organizing and/or translating all of the names within a single cell
                 function(records,tissueTranslations){
                     //return _.orderBy(_.filter(records,function(o){return (o.p_value<0.05)}),['p_value'],['asc']);
-                    return _.orderBy(_.filter(records,function(o){return (o.annotation.includes('nhancer'))}),['p_value'],['asc']);
+                    return _.orderBy(records,['p_value'],['asc']);
                 },
 
                 // take all the records for each row and insert them into the intermediateDataStructure
                 function(tissueRecords,
+                         allTissueRecords,
                          recordsCellPresentationString,
                          significanceCellPresentationString,
                          dataAnnotationTypeCode,
                          significanceValue,
                          tissueName ){
                         return {
+                            allTissueRecords:allTissueRecords,
                             tissueRecords:tissueRecords,
                             recordsExist:(tissueRecords.length>0)?[1]:[],
                             cellPresentationStringMap:{
@@ -115,7 +147,9 @@ mpgSoftware.dynamicUi.gregorTissueTable = (function () {
                             tissueNameKey:tissueName.replace(/ /g,"_"),
                             tissueName:tissueName};
 
-                })
+                },
+                createSingleGregorCell
+            )
 
         };
 
@@ -134,6 +168,7 @@ mpgSoftware.dynamicUi.gregorTissueTable = (function () {
 // public routines are declared below
     return {
         processGregorDataForTissueTable: processGregorDataForTissueTable,
-        displayGregorDataForTissueTable:displayGregorDataForTissueTable
+        displayGregorDataForTissueTable:displayGregorDataForTissueTable,
+        createSingleGregorCell:createSingleGregorCell
     }
 }());

@@ -16,18 +16,6 @@
                             Transpose
                         </button>
                     </div>
-                    %{--<div class="datatable-cell-color-control">--}%
-                        %{--<div class="tool-label">View:</div>--}%
-
-
-                        %{--<button type="button" class="btn btn-secondary first-btn significance active" aria-label="click to organize by greatest significance" title="click to organize by greatest significance" onclick="mpgSoftware.dynamicUi.setColorButtonActive(event,['tissues'],'#mainTissueDiv table.tissueTableHolder');">Significance--}%
-                        %{--</button>--}%
-
-                        %{--<button type="button" class="btn btn-secondary last-btn tissues" aria-label="click to organized by number of associated tissues" title="click to organized by number of associated tissues" onclick="mpgSoftware.dynamicUi.setColorButtonActive(event,['significance'],'#mainTissueDiv table.tissueTableHolder');">Records--}%
-
-                        %{--</button>--}%
-                    %{--</div>--}%
-
 
                     <div class="datatable-zoom-control">
                         <div class="tool-label">Zoom</div>
@@ -45,9 +33,14 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <select class="phenotypePicker" onchange="mpgSoftware.tissueTable.refreshTableForPhenotype(this)">
                         </select>
+                    </div>
+                    <div class="annotationPickerHolder col-md-4" style="display: none">
+                        <select id="annotationPicker" class="annotationPicker"  multiple="multiple" onchange="mpgSoftware.tissueTable.refreshTableForAnnotations(this)">
+                        </select>
+                        <label for="annotationPicker">annotations</label>
                     </div>
                 </div>
             </div>

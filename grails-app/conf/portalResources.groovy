@@ -238,6 +238,9 @@ modules = {
 
         resource url: 'js/lib/dport/dynamicUi/gregorData.js'
         resource url: 'js/lib/dport/matrixMath.js'
+
+        resource url: 'js/lib/bootstrap-multiselect.js'
+        resource url: 'css/lib/bootstrap-multiselect.css'
     }
     mustache {
         resource url: 'js/lib/mustache.js'

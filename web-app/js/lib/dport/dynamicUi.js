@@ -1861,7 +1861,63 @@ mpgSoftware.dynamicUi = (function () {
                                                     nameOfAccumulatorField, // name of the persistent field where the data we received is stored
                                                     insertAnyHeaderRecords, // we may wish to pull out one record for summary purposes
                                                     mapSortAndFilterFunction,
-                                                    placeDataIntoRenderForm ) { // sort and filter the records we will use.  Resulting array must have fields tissue, value, and numericalValue
+                                                    placeDataIntoRenderForm,
+                                                    createSingleGregorCell) { // sort and filter the records we will use.  Resulting array must have fields tissue, value, and numericalValue
+
+        var displayAnnotationPicker = function(holderString,annotationPickerString,annotationArray){
+            if (( typeof annotationArray !== 'undefined') &&
+                (annotationArray.length > 0)){
+                $(holderString).show();
+
+                var annotationsToActivate = _.map(annotationArray, function (annotationName){
+                    return {name:annotationName,
+                            value:annotationName,
+                            selected:false}
+                });
+
+                // First let's See if there is already a table, and if so what has been checked, since we'd like to try to retain those choices
+                var selectedElements = $(annotationPickerString+' option:selected');
+                var selectedValues = [];
+                _.forEach(selectedElements,function(oe){
+                    selectedValues.push($(oe).val());
+                });
+                if (selectedValues.length>0) {
+                    // there were previous selections. Let's try to retain them
+                    _.forEach(annotationsToActivate, function (oneRecord) {
+                        oneRecord['selected'] = _.includes(selectedValues, oneRecord.value);
+                    });
+                }
+                if ((selectedElements.length>0)||
+                    (_.filter(annotationsToActivate,['selected',true]).length===0)){
+                    // No selected elements exist in any existing list, OR the previous matching trick gave us no selections.  In either case
+                    // let's provide a default and pick all the elements that contain the word 'enhancer'
+                    _.forEach(annotationsToActivate,function(oneRecord){
+                        oneRecord['selected'] = oneRecord.value.includes('nhancer');
+                    });
+                }
+                var annotationArray = _.map(_.filter(annotationsToActivate,['selected',true]),function(o){return o.value});
+                setAccumulatorObject('tissueTableChosenAnnotations', annotationArray);  //save this for easy recall later
+
+                // now for the UI work.  Wipe out anything in the multi-select, and fill it back up again
+                $(annotationPickerString).empty();
+                $(annotationPickerString).multiselect({includeSelectAllOption: false,
+                    buttonWidth: '60%',onChange: function() {
+                        console.log($('#annotationPicker').val());
+                    }});
+                _.forEach(_.orderBy(annotationsToActivate,['name'],['asc']), function(annotationToActivate) {
+                    $(annotationPickerString).append($('<option>', {
+                        value: annotationToActivate.value,
+                        text : annotationToActivate.name ,
+                     selected: annotationToActivate.selected}))
+                });
+
+
+                $('#annotationPicker').multiselect('rebuild');
+            } else {
+                $(holderString).hide();
+            }
+        };
+
 
 
         var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode);
@@ -1871,7 +1927,7 @@ mpgSoftware.dynamicUi = (function () {
         var incomingData = getAccumulatorObject(nameOfAccumulatorField);
 
         // get the tissues that are already in place.  I'm planning to transpose this table before
-        //  I display it, so the tissues will be held as row headers
+        //  I display it, so tSaturday night July 22 you was right before you are you know you we are bowing to the available to people could be also in and all the tissues will be held as row headers
         var tissuesAlreadyInTheTable = getArrayOfRowHeaders(idForTheTargetDiv);
 
         var returnObject={headers:[], content:[]};
@@ -1880,14 +1936,14 @@ mpgSoftware.dynamicUi = (function () {
             returnObject = incomingData[0];
         }
         var sortedHeaderObjects = insertAnyHeaderRecords(returnObject,tissuesAlreadyInTheTable,dataAnnotationType,intermediateDataStructure,returnObject);
-        var initialLinearIndex = sortedHeaderObjects.length;
+
+        displayAnnotationPicker('div.annotationPickerHolder','#annotationPicker',returnObject.header.annotations)
 
 
         var sharedTable = new SharedTableObject( 'tissueTableTissueHeaders',sortedHeaderObjects.length+1,0);
         setAccumulatorObject("sharedTable_"+idForTheTargetDiv,sharedTable);
 
         if (returnObject.headers.length > 0){
-            // placeContentRowsIntoIntermediateObject(returnObject,dataAnnotationType,intermediateDataStructure,initialLinearIndex);
             var objectsGroupedByTissue = _.groupBy(returnObject.contents,'tissue');
             _.forEach(objectsGroupedByTissue, function (recordsPerTissue, tissueName) {
                 var indexOfColumn = _.indexOf(sortedHeaderObjects, tissueName);
@@ -1906,28 +1962,30 @@ mpgSoftware.dynamicUi = (function () {
                         });
                         var significanceCellPresentationString = "0";
                         var significanceValue = 0;
-                        if (( typeof recordsPerTissue !== 'undefined')&&
-                            (recordsPerTissue.length>0)){
-                            var mostSignificantRecord;
-                            if (( typeof preferredSummaryKey !== 'undefined') && (preferredSummaryKey.length>0)){ // we have a key telling us which record to pick
-                                mostSignificantRecord=_.find(tissueRecords,function(t){return t.tissue.includes(preferredSummaryKey)});
-                            }else{// no specific key, but we have sorted the keys in ascending order by value, so we can just pick the first one
-                                mostSignificantRecord=tissueRecords[0];
-                            }
-                            significanceValue = mostSignificantRecord.p_value;
-                            significanceCellPresentationString = Mustache.render($('#'+dataAnnotationType.dataAnnotation.significanceCellPresentationStringWriter)[0].innerHTML,
-                                {significanceValue:significanceValue,
-                                    significanceValueAsString:UTILS.realNumberFormatter(""+significanceValue),
-                                    recordDescription:translateATissueName(tissueTranslations,mostSignificantRecord.tissue),
-                                    numberRecords:tissueRecords.length});
-
-                        }
+                        var valuesForDisplay = createSingleGregorCell(recordsPerTissue,dataAnnotationType,getAccumulatorObject('tissueTableChosenAnnotations'));
+                        //if (( typeof recordsPerTissue !== 'undefined')&&
+                        //    (recordsPerTissue.length>0)){
+                        //    var mostSignificantRecord;
+                        //    if (( typeof preferredSummaryKey !== 'undefined') && (preferredSummaryKey.length>0)){ // we have a key telling us which record to pick
+                        //        mostSignificantRecord=_.find(tissueRecords,function(t){return t.tissue.includes(preferredSummaryKey)});
+                        //    }else{// no specific key, but we have sorted the keys in ascending order by value, so we can just pick the first one
+                        //        mostSignificantRecord=tissueRecords[0];
+                        //    }
+                        //    significanceValue = mostSignificantRecord.p_value;
+                        //    significanceCellPresentationString = Mustache.render($('#'+dataAnnotationType.dataAnnotation.significanceCellPresentationStringWriter)[0].innerHTML,
+                        //        {significanceValue:significanceValue,
+                        //            significanceValueAsString:UTILS.realNumberFormatter(""+significanceValue),
+                        //            recordDescription:translateATissueName(tissueTranslations,mostSignificantRecord.tissue),
+                        //            numberRecords:tissueRecords.length});
+                        //
+                        //}
                         //  this is the information we carry around each cell and that we will later use to display it
-                        var renderData = placeDataIntoRenderForm(   tissueRecords,
+                        var renderData = placeDataIntoRenderForm(  valuesForDisplay.tissuesFilteredByAnnotation,
+                            tissueRecords,
                             recordsCellPresentationString,
-                            significanceCellPresentationString,
+                            valuesForDisplay.significanceCellPresentationString,
                             dataAnnotationTypeCode,
-                            significanceValue,
+                            valuesForDisplay.significanceValue,
                             tissueName );
 
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(significanceValue,
@@ -3353,9 +3411,12 @@ mpgSoftware.dynamicUi = (function () {
         if (    ( typeof  additionalParameters.dynamicTableConfiguration !== 'undefined') &&
                 ( typeof  additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory !== 'undefined') ){
             resetAccumulatorObject('gregorTissueArray');
+            resetAccumulatorObject('tissueTableChosenAnnotations');
             destroySharedTable(additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory);
             var sharedTable = new SharedTableObject('tissueTableTissueHeaders',0,0);
             setAccumulatorObject("sharedTable_" + additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory,sharedTable);
+
+
         }
 
 
@@ -4077,11 +4138,14 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 returnValue = Mustache.render($('#dynamicGeneTableHeaderV2')[0].innerHTML,intermediateStructureDataCell.renderData);
                 break;
             case "TITA":
-                var cellColoringScheme ="records";
-                intermediateStructureDataCell.renderData["cellPresentationString"] =
+                var dataAnnotationType= getDatatypeInformation(intermediateStructureDataCell.dataAnnotationTypeCode);
+                var revisedValues = mpgSoftware.dynamicUi.gregorTissueTable.createSingleGregorCell(intermediateStructureDataCell.renderData.allTissueRecords,
+                    dataAnnotationType,
+                    getAccumulatorObject('tissueTableChosenAnnotations'));
+                intermediateStructureDataCell.renderData["cellPresentationString"] = revisedValues.significanceCellPresentationString;
                     intermediateStructureDataCell.renderData.cellPresentationStringMap[findCellColoringChoice('#mainTissueDiv table.tissueTableHolder')];
-                var displayDetails = getDatatypeInformation(intermediateStructureDataCell.dataAnnotationTypeCode);
-                returnValue = Mustache.render($('#'+displayDetails.dataAnnotation.cellBodyWriter)[0].innerHTML,intermediateStructureDataCell.renderData);
+                intermediateStructureDataCell.renderData["tissueRecords"]=revisedValues.tissuesFilteredByAnnotation;
+                returnValue = Mustache.render($('#'+dataAnnotationType.dataAnnotation.cellBodyWriter)[0].innerHTML,intermediateStructureDataCell.renderData);
                 break;
 
             default:  //  the standard case, where a cell renders its own data using its chosen mustache template
@@ -5627,8 +5691,26 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         $("#filter_modal").remove();
     };
 
+    var redrawTissueTable= function(){
+        var whereTheTableGoes = '#mainTissueDiv table.tissueTableHolder';
+        var selectedElements = $('#annotationPicker option:selected');
+        var selectedValues = [];
+        _.forEach(selectedElements,function(oe){
+            selectedValues.push($(oe).val());
+        });
+        setAccumulatorObject('tissueTableChosenAnnotations', selectedValues);
+        var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
+        redrawTableOnClick(whereTheTableGoes,function(sortedData, numberOfRows, numberOfColumns){
+            return mpgSoftware.matrixMath.doNothing (sortedData, numberOfRows, numberOfColumns);
+        },{});
+        refineTableRecords(whereTheTableGoes,$(whereTheTableGoes).dataTable(),sharedTable.currentForm,[],false);
+
+    }
+
+
 // public routines are declared below
     return {
+        redrawTissueTable:redrawTissueTable,
         displayForGeneTable:displayForGeneTable,
         displayForFullEffectorGeneTable:displayForFullEffectorGeneTable,
         displayTissueTable:displayTissueTable,
