@@ -83,10 +83,10 @@ ul.nav-tabs > li.active > a { background-color: #fff !important; }
 
         <div class="gene-info-container row">
 
-            <em style="font-weight: 900;"><%=geneName%></em>
+            <h3><em style="font-weight: 900;"><%=geneName%></em></h3>
 
 
-            <em style="font-weight: 900;"><%=variantIdentifier%></em>
+            <h3><em style="font-weight: 900;"><%=variantIdentifier%></em></h3>
 
 
             %{--If its gene Gait page then allowExperimentChoice = 0 and 'geneName':'geneName'--}%
