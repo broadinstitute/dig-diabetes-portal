@@ -170,7 +170,7 @@
                             %{--<td><div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact"><a href="${createLink(controller:'gait', action:'gaitInfo')}">Launch Gait</a></div></td>--}%
                             <td style="position: relative;">
                             <label>Enter a gene name or variant rsID to start.<br>
-                                Select one from suggested list to launch Custom Association Analysis.</label>
+                                Select a name or ID from the list of suggestions to launch Custom Association Analysis.</label>
 
                             <div class="form-inline">
                                 <input id="generalized-input" value="" type="text" class="form-control input-default" style="width: 100%;">
