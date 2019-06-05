@@ -1940,7 +1940,7 @@ mpgSoftware.dynamicUi = (function () {
             intermediateDataStructure.tableToUpdate = idForTheTargetDiv;
         }
 
-        prepareToPresentToTheScreen("#mainTissueDiv table.tissueTableHolder",
+        prepareToPresentToTheScreen(idForTheTargetDiv,
             '#not used',
             returnObject,
             clearBeforeStarting,
@@ -1948,7 +1948,7 @@ mpgSoftware.dynamicUi = (function () {
             true,
             'tissueTableTissueHeaders', true);
 
-
+        transposeThisTable(idForTheTargetDiv);
 
     };
 
@@ -3585,9 +3585,13 @@ mpgSoftware.dynamicUi = (function () {
                     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
                     break;
                 case 'P-value':
-                case 'gregorValuesInTissueTable':
                     var x = parseFloat($(a).attr(defaultSearchField));
                     var y = parseFloat($(b).attr(defaultSearchField));
+                    return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+                    break;
+                case 'gregorValuesInTissueTable':
+                    var x = parseFloat($(b).attr(defaultSearchField));
+                    var y = parseFloat($(a).attr(defaultSearchField));
                     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
                     break;
                 case 'eQTL':
@@ -3644,7 +3648,6 @@ mpgSoftware.dynamicUi = (function () {
                     var textB = b.trim().toUpperCase();
                     return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
                     break;
-
                 case 'straightAlphabetic':
                     var textA = a.trim().toUpperCase();
                     var textB = b.trim().toUpperCase();
@@ -3680,6 +3683,7 @@ mpgSoftware.dynamicUi = (function () {
                     var y = parseInt($(b).attr("sortnumber"));
                     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
                     break;
+                case 'tissueNameInTissueTable':
                 case 'Genetic_combined':
                 case 'Genomic_combined':
                 case 'Perturbation_combined':
@@ -3972,6 +3976,13 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     'table':'table.tissueTableHolder'
                 };
                 break;
+            case 'tissueNameInTissueTable':
+                currentSortRequestObject = {
+                    'currentSort':oneClass,
+                    'table':'table.tissueTableHolder'
+                };
+                break;
+
             case 'COLOC':
                 currentSortRequestObject = {
                     'currentSort':oneClass,
@@ -4177,7 +4188,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         case 'tissueTableTissueHeaders':
                             var isdc = new IntermediateStructureDataCell('farLeftCorner',
                                 displayCategoryHtml('TITA',0),
-                                'categoryNam','LIT');
+                                'tissueNameInTissueTable','LIT');
                             var header = {title:isdc.title, annotation:isdc.annotation};
                             addedColumns.push(new NewColumn(    getDisplayableCellContent(isdc),
                                 header,

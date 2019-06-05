@@ -7,7 +7,7 @@ records={{numberRecords}}
 </script>
 
 <script id="gregorTissueTableTissueRowLabel"  type="x-tmpl-mustache">
-<div class="initialLinearIndex_{{indexInOneDimensionalArray}}">Values</div>
+<div class="staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">Values</div>
 </script>
 
 <script id="gregorTissueTableTissueHeader"  type="x-tmpl-mustache">
@@ -30,7 +30,7 @@ records={{numberRecords}}
 
 
 <script id="gregorTissueTableBody"  type="x-tmpl-mustache">
-             <div significance_sortField="{{significanceValue}}" sortField=5
+             <div significance_sortField="{{significanceValue}}" sortField="{{significanceValue}}"
              class="tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'Gregor predictions for {{tissueName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
                data-target="#effector_gene_{{tissueNameKey}}" style="color:black"> {{cellPresentationString}}
