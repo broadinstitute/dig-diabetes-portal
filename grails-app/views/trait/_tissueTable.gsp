@@ -32,6 +32,7 @@
                     retrieveListOfGenesInARangeUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveListOfGenesInARange")}',
                     retrieveEffectorGeneInformationUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveEffectorGeneInformation")}',
                     getAllPhenotypesAjaxUrl: '${g.createLink(controller: "trait", action: "getAllPhenotypesAndTranslationAjax")}',
+                    retrieveLdsrDataUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveLdsrData")}',
                     dataAnnotationTypes: [
                         {
                             code: 'TITA',
@@ -46,7 +47,22 @@
                             numberRecordsCellPresentationStringWriter:'gregorTissueTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'gregorTissueTableSignificanceCellPresentationString',
                             internalIdentifierString:'getInformationFromGregorForTissueTable'
+                        },
+                        {
+                            code: 'LDSR',
+                            category: 'LDSR Annotation',
+                            displayCategory: 'LDSR Annotation',
+                            subcategory: 'LDSR list',
+                            displaySubcategory: 'LDSR list',
+                            headerWriter:'ldsrTissueTableTissueHeader',
+                            cellBodyWriter:'ldsrTissueTableBody',
+                            categoryWriter:'ldsrTissueTableTissueHeaderLabel',
+                            subCategoryWriter:'ldsrTissueTableTissueRowLabel',
+                            numberRecordsCellPresentationStringWriter:'ldsrTissueTableNumberRecordsCellPresentationString',
+                            significanceCellPresentationStringWriter:'ldsrTissueTableSignificanceCellPresentationString',
+                            internalIdentifierString:'getInformationFromLdsrForTissueTable'
                         }
+
                     ],
                     dynamicTableConfiguration: {
                         domSpecificationForAccumulatorStorage:'#mainTissueDiv',
@@ -79,6 +95,7 @@
 <g:render template="/templates/dynamicUiTemplate" />
 <g:render template="/templates/tissueTableTemplate" />
 <g:render template="/templates/dynamicUi/TITA" />
+<g:render template="/templates/dynamicUi/LDSR" />
 
 <div id="mainTissueDiv">
 

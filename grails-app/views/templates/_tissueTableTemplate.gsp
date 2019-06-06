@@ -33,14 +33,15 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="row">
-                    <div class="col-md-6">
-                        <select class="phenotypePicker" onchange="mpgSoftware.tissueTable.refreshTableForPhenotype(this)">
+                    <div class="col-md-12">
+                        <label for="annotationPicker">choose phenotypes</label>
+                        <select id="tissueToPhenotypePicker" class="phenotypePicker" onchange="mpgSoftware.tissueTable.refreshTableForPhenotype(this)">
                         </select>
                     </div>
-                    <div class="annotationPickerHolder col-md-4" style="display: none">
+                    <div class="annotationPickerHolder col-md-7" style="display: none">
+                        <label for="annotationPicker">add/remove annotations</label>
                         <select id="annotationPicker" class="annotationPicker"  multiple="multiple" onchange="mpgSoftware.tissueTable.refreshTableForAnnotations(this)">
                         </select>
-                        <label for="annotationPicker">annotations</label>
                     </div>
                 </div>
             </div>

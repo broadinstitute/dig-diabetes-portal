@@ -813,6 +813,33 @@ class RegionInfoController {
 
 
 
+    def retrieveLdsrData() {
+        String phenotype = ""
+        boolean looksOkay = true
+        JSONObject jsonObject
+        def slurper = new JsonSlurper()
+
+        if (params.phenotype) {
+            phenotype = params.phenotype
+        } else {
+            looksOkay = falls
+        }
+
+        if (looksOkay){
+            jsonObject = restServerService.gatherLdsrData(  phenotype )
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+            jsonObject =  slurper.parseText(proposedJsonString) as JSONObject;
+        }
+
+        render(status: 200, contentType: "application/json") {jsonObject}
+        return
+    }
+
+
+
+
+
 
 
     def retrieveDepictGeneSetData() {

@@ -1,14 +1,6 @@
 /***
- * the FIRTH gene burden test
+ * GREGOR data for the tissue table
  *
- * The following externally visible functions are required:
- *         1) a function to process records
- *         2) a function to display the processed records
- * As well, always create a 'new mpgSoftware.dynamicUi.Categorizor()' as a means of building a
- *         3) set of categorizor routines
- * and try to use its prototype functions.  If you like, you can always override the definitions for:
- *          categorizeTissueNumbers
- *           categorizeSignificanceNumbers
  * @type {*|{}}
  */
 

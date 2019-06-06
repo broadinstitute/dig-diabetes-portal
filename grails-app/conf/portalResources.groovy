@@ -237,6 +237,7 @@ modules = {
         resource url: 'css/dport/dynamicUi.css'
 
         resource url: 'js/lib/dport/dynamicUi/gregorData.js'
+        resource url: 'js/lib/dport/dynamicUi/ldsrData.js'
         resource url: 'js/lib/dport/matrixMath.js'
 
         resource url: 'js/lib/bootstrap-multiselect.js'

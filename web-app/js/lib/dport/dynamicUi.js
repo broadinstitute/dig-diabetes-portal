@@ -482,6 +482,11 @@ mpgSoftware.dynamicUi = (function () {
                 defaultFollowUp.placeToDisplayData = '#mainTissueDiv table.tissueTableHolder';
                 break;
 
+            case "getInformationFromLdsrForTissueTable":
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.ldsrTissueTable.displayLdsrDataForTissueTable;
+                defaultFollowUp.placeToDisplayData = '#mainTissueDiv table.tissueTableHolder';
+                break;
+
 
             case "getRecordsFromAbcForTissueTable":
                 defaultFollowUp.displayRefinedContextFunction = displayTissuesFromAbc;
@@ -543,6 +548,24 @@ mpgSoftware.dynamicUi = (function () {
                         placeToDisplayData: displayLocation,
                         actionId: nextActionId,
                         nameOfAccumulatorField:'gregorTissueArray'
+                    }));
+                };
+                break;
+
+            case "getInformationFromLdsrForTissueTable":
+                functionToLaunchDataRetrieval = function () {
+                    var phenotype = getAccumulatorObject("preferredPhenotype");
+                    retrieveRemotedContextInformation(buildRemoteContextArray({
+                        name: "getInformationFromLdsrForTissueTable",
+                        retrieveDataUrl: additionalParameters.retrieveLdsrDataUrl,
+                        dataForCall: {
+                            phenotype: phenotype
+                        },
+                        processEachRecord: mpgSoftware.dynamicUi.ldsrTissueTable.processLdsrDataForTissueTable,
+                        displayRefinedContextFunction: displayFunction,
+                        placeToDisplayData: displayLocation,
+                        actionId: nextActionId,
+                        nameOfAccumulatorField:'ldsrTissueArray'
                     }));
                 };
                 break;
@@ -1937,11 +1960,22 @@ mpgSoftware.dynamicUi = (function () {
         }
         var sortedHeaderObjects = insertAnyHeaderRecords(returnObject,tissuesAlreadyInTheTable,dataAnnotationType,intermediateDataStructure,returnObject);
 
-        displayAnnotationPicker('div.annotationPickerHolder','#annotationPicker',returnObject.header.annotations)
+        if ( typeof returnObject.header.annotations !== 'undefined'){
+            displayAnnotationPicker('div.annotationPickerHolder','#annotationPicker',returnObject.header.annotations);
+        }
 
 
-        var sharedTable = new SharedTableObject( 'tissueTableTissueHeaders',sortedHeaderObjects.length+1,0);
-        setAccumulatorObject("sharedTable_"+idForTheTargetDiv,sharedTable);
+        var sharedTable = getAccumulatorObject("sharedTable_"+idForTheTargetDiv);
+        if ( ($.isArray(sharedTable)) &&
+            (sharedTable.length  === 0)) {
+            // this is the first data in the tissue table
+            sharedTable = new SharedTableObject( 'tissueTableTissueHeaders',sortedHeaderObjects.length+1,0);
+            setAccumulatorObject("sharedTable_"+idForTheTargetDiv,sharedTable);
+        } else {
+            // we need to merge new headers with old ones
+            console.log('foo');
+        }
+
 
         if (returnObject.headers.length > 0){
             var objectsGroupedByTissue = _.groupBy(returnObject.contents,'tissue');
@@ -1960,26 +1994,7 @@ mpgSoftware.dynamicUi = (function () {
                         var recordsCellPresentationString = Mustache.render($('#'+dataAnnotationType.dataAnnotation.numberRecordsCellPresentationStringWriter)[0].innerHTML, {
                             numberRecords:tissueRecords.length
                         });
-                        var significanceCellPresentationString = "0";
-                        var significanceValue = 0;
                         var valuesForDisplay = createSingleGregorCell(recordsPerTissue,dataAnnotationType,getAccumulatorObject('tissueTableChosenAnnotations'));
-                        //if (( typeof recordsPerTissue !== 'undefined')&&
-                        //    (recordsPerTissue.length>0)){
-                        //    var mostSignificantRecord;
-                        //    if (( typeof preferredSummaryKey !== 'undefined') && (preferredSummaryKey.length>0)){ // we have a key telling us which record to pick
-                        //        mostSignificantRecord=_.find(tissueRecords,function(t){return t.tissue.includes(preferredSummaryKey)});
-                        //    }else{// no specific key, but we have sorted the keys in ascending order by value, so we can just pick the first one
-                        //        mostSignificantRecord=tissueRecords[0];
-                        //    }
-                        //    significanceValue = mostSignificantRecord.p_value;
-                        //    significanceCellPresentationString = Mustache.render($('#'+dataAnnotationType.dataAnnotation.significanceCellPresentationStringWriter)[0].innerHTML,
-                        //        {significanceValue:significanceValue,
-                        //            significanceValueAsString:UTILS.realNumberFormatter(""+significanceValue),
-                        //            recordDescription:translateATissueName(tissueTranslations,mostSignificantRecord.tissue),
-                        //            numberRecords:tissueRecords.length});
-                        //
-                        //}
-                        //  this is the information we carry around each cell and that we will later use to display it
                         var renderData = placeDataIntoRenderForm(  valuesForDisplay.tissuesFilteredByAnnotation,
                             tissueRecords,
                             recordsCellPresentationString,
@@ -1988,7 +2003,7 @@ mpgSoftware.dynamicUi = (function () {
                             valuesForDisplay.significanceValue,
                             tissueName );
 
-                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(significanceValue,
+                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(valuesForDisplay.significanceValue,
                             renderData,"tissue specific",dataAnnotationTypeCode );
                     }
 
