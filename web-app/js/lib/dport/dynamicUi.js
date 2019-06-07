@@ -1945,7 +1945,6 @@ mpgSoftware.dynamicUi = (function () {
 
         var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode);
         var intermediateDataStructure = new IntermediateDataStructure();
-        //var currentTableFormat = getCurrentTableFormat(idForTheTargetDiv);
 
         // for each gene collect up the data we want to display
         var incomingData = getAccumulatorObject(nameOfAccumulatorField);
@@ -1959,7 +1958,7 @@ mpgSoftware.dynamicUi = (function () {
             ( incomingData.length > 0)) {
             returnObject = incomingData[0];
         }
-        var sortedHeaderObjects = insertAnyHeaderRecords(returnObject,tissuesAlreadyInTheTable,dataAnnotationType,intermediateDataStructure,returnObject);
+        var sortedHeaderObjects = [];
 
         if ( typeof returnObject.header.annotations !== 'undefined'){
             displayAnnotationPicker('div.annotationPickerHolder','#annotationPicker',returnObject.header.annotations);
@@ -1967,17 +1966,50 @@ mpgSoftware.dynamicUi = (function () {
 
 
         var sharedTable = getAccumulatorObject("sharedTable_"+idForTheTargetDiv);
+        var rowsToInsert = [];
+        var combinedSortedHeaders = [];
         if ( ($.isArray(sharedTable)) &&
             (sharedTable.length  === 0)) {
             // this is the first data in the tissue table
             sharedTable = new SharedTableObject( 'tissueTableTissueHeaders',sortedHeaderObjects.length+1,0);
             setAccumulatorObject("sharedTable_"+idForTheTargetDiv,sharedTable);
+            sharedTable["rememberHeadersInTissueTable"] = sortedHeaderObjects;
+        } else if (sharedTable.numberOfColumns === 0) {
+            // we have no existing data that we need to merge. Set the number of columns to whatever we just processed
+            sortedHeaderObjects = insertAnyHeaderRecords(returnObject,tissuesAlreadyInTheTable,dataAnnotationType,intermediateDataStructure,returnObject);
+            sharedTable["numberOfColumns"] = sortedHeaderObjects.length+1;
+            sharedTable["rememberHeadersInTissueTable"] = sortedHeaderObjects;
         } else {
-            // we need to merge new headers with old ones
-            console.log('foo');
+            // we need to merge new data into the old data. First, let's get the old data out of the table.
+            if (( typeof incomingData.header !== 'undefined' ) &&
+                ( typeof incomingData.header.tissues !== 'undefined' )) {
+                sortedHeaderObjects = returnObject.header.tissues.sort();
+            }
+            combinedSortedHeaders = _.union(sharedTable["rememberHeadersInTissueTable"],sortedHeaderObjects).sort();
+            // let's retrieve all of the old data from the table.
+            var existingData = retrieveTransposedDataForThisTable(idForTheTargetDiv);
+            var numberOfRows = existingData.dataArray.length / existingData.numberOfColumns;
+            var currentLocationInArray = existingData.numberOfColumns; // start at the end of the headers
+            _.each(_.range(0,numberOfRows),function(index) {
+                rowsToInsert.push(_.slice(existingData.dataArray, currentLocationInArray, existingData.numberOfColumns));
+                currentLocationInArray += existingData.numberOfColumns;
+            });
+            // now we create a new headers, and then place them in the intermediate structure
+            returnObject.headers = _.map(combinedSortedHeaders, function(tissue){
+                return Mustache.render($('#'+dataAnnotationType.dataAnnotation.headerWriter)[0].innerHTML,
+                    {   tissueName: tissue,
+                        initialLinearIndex:initialLinearIndex++
+                    }
+                )
+            });
+            _.forEach(returnObject.headers, function (oneRecord) {
+                intermediateDataStructure.headers.push(new mpgSoftware.dynamicUi.IntermediateStructureDataCell(oneRecord,
+                    oneRecord, "tissueHeader", 'LIT'));
+            });
         }
 
-
+        //  now proceed to process the data we received in this particular call.  We will add back in all of the old rows
+        //  after we're done with this step
         if (returnObject.headers.length > 0){
             var objectsGroupedByTissue = _.groupBy(returnObject.contents,'tissue');
             _.forEach(objectsGroupedByTissue, function (recordsPerTissue, tissueName) {
@@ -2013,6 +2045,12 @@ mpgSoftware.dynamicUi = (function () {
 
             intermediateDataStructure.tableToUpdate = idForTheTargetDiv;
         }
+        // now it is time two add any rows we had previously stored into the intermediate structure
+        _.forEach(rowsToInsert,function(oneRow){
+            
+        });
+
+
 
         prepareToPresentToTheScreen(idForTheTargetDiv,
             '#not used',
@@ -4927,6 +4965,16 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
     };
 
 
+    var retrieveTransposedDataForThisTable =  function (whereTheTableGoes) {
+        var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
+        var sortedData = retrieveSortedDataForTable(whereTheTableGoes);
+        return new mpgSoftware.matrixMath.Matrix(
+            linearDataTransposor(sortedData.dataArray, sharedTable.matrix.numberOfRows, sharedTable.matrix.numberOfColumns, function (x, y, rows, cols) {
+                return (x * cols) + y
+            }), sharedTable.matrix.numberOfColumns, sharedTable.matrix.numberOfRows);
+    }
+
+
 
     /***
      *   Give this function a table, and it will transpose it.  The basic parts of this routine are:
@@ -4942,13 +4990,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
     var transposeThisTable = function (whereTheTableGoes) {
         var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
 
-      //  var sortedData = extractSortedDataFromTable(whereTheTableGoes, sharedTable.matrix.numberOfRows, sharedTable.matrix.numberOfColumns, sharedTable.currentForm);
-        var sortedData = retrieveSortedDataForTable(whereTheTableGoes);
-        sharedTable['matrix'] = new mpgSoftware.matrixMath.Matrix(
-            linearDataTransposor(sortedData.dataArray, sharedTable.matrix.numberOfRows, sharedTable.matrix.numberOfColumns, function (x, y, rows, cols) {
-                return (x * cols) + y
-            }),sharedTable.matrix.numberOfColumns,sharedTable.matrix.numberOfRows);
-        sharedTable.currentForm = formConversionOfATranspose(sharedTable.currentForm);
+        sharedTable['matrix'] = retrieveTransposedDataForThisTable(whereTheTableGoes);
+        sharedTable['currentForm'] = formConversionOfATranspose(sharedTable.currentForm);
 
         destroySharedTable(whereTheTableGoes);
 
