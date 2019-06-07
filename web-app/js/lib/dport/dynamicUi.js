@@ -650,7 +650,7 @@ mpgSoftware.dynamicUi = (function () {
                                 gene: o.name,
                                 phenotype: phenotype,
                                 propertyNames: "[\"P_VALUE\"]",
-                                preferredSampleGroup: "ExSeq_52k_mdv37"
+                                preferredSampleGroup: "ExSeq_52k"
                             }
                         });
                         retrieveRemotedContextInformation(buildRemoteContextArray({
@@ -680,7 +680,7 @@ mpgSoftware.dynamicUi = (function () {
                                 gene: o.name,
                                 phenotype: phenotype,
                                 propertyNames: "[\"P_VALUE\"]",
-                                preferredSampleGroup: "ExSeq_52k_mdv37"
+                                preferredSampleGroup: "ExSeq_52k"
                             }
                         });
                         retrieveRemotedContextInformation(buildRemoteContextArray({
