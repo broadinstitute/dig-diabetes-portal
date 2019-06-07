@@ -1945,12 +1945,13 @@ mpgSoftware.dynamicUi = (function () {
 
         var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode);
         var intermediateDataStructure = new IntermediateDataStructure();
+        //var currentTableFormat = getCurrentTableFormat(idForTheTargetDiv);
 
         // for each gene collect up the data we want to display
         var incomingData = getAccumulatorObject(nameOfAccumulatorField);
 
         // get the tissues that are already in place.  I'm planning to transpose this table before
-        //  I display it, so tSaturday night July 22 you was right before you are you know you we are bowing to the available to people could be also in and all the tissues will be held as row headers
+        //  I display it
         var tissuesAlreadyInTheTable = getArrayOfRowHeaders(idForTheTargetDiv);
 
         var returnObject={headers:[], content:[]};
