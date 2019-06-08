@@ -11,7 +11,7 @@ records={{numberRecords}}
       sortField='{{index}}' subSortField='-1'>
      {{#dataAnnotation}}
           {{displaySubcategory}}
-          <g:helpText title="gene.COLOC.help.header" placement="bottom" body="gene.COLOC.help.text"/>
+          <g:helpText title="gene.effector.help.header" placement="bottom" body="gene.effector.help.text"/>
      {{/dataAnnotation}}
      </div>
 </script>
