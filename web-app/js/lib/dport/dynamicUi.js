@@ -1977,12 +1977,13 @@ mpgSoftware.dynamicUi = (function () {
         } else if (sharedTable.numberOfColumns === 0) {
             // we have no existing data that we need to merge. Set the number of columns to whatever we just processed
             sortedHeaderObjects = insertAnyHeaderRecords(returnObject,tissuesAlreadyInTheTable,dataAnnotationType,intermediateDataStructure,returnObject);
+            intermediateDataStructure["headerNames"] = sortedHeaderObjects;
             sharedTable["numberOfColumns"] = sortedHeaderObjects.length+1;
             sharedTable["rememberHeadersInTissueTable"] = sortedHeaderObjects;
         } else {
-            // we need to merge new data into the old data. First, let's get the old data out of the table.
-            if (( typeof incomingData.header !== 'undefined' ) &&
-                ( typeof incomingData.header.tissues !== 'undefined' )) {
+            // we need to merge new data into the old data.  get our new data inputted in an array.
+            if (( typeof returnObject.header !== 'undefined' ) &&
+                ( typeof returnObject.header.tissues !== 'undefined' )) {
                 sortedHeaderObjects = returnObject.header.tissues.sort();
             }
             combinedSortedHeaders = _.union(sharedTable["rememberHeadersInTissueTable"],sortedHeaderObjects).sort();
@@ -1990,18 +1991,24 @@ mpgSoftware.dynamicUi = (function () {
             var existingData = retrieveTransposedDataForThisTable(idForTheTargetDiv);
             var numberOfRows = existingData.dataArray.length / existingData.numberOfColumns;
             var currentLocationInArray = existingData.numberOfColumns; // start at the end of the headers
-            _.each(_.range(0,numberOfRows),function(index) {
-                rowsToInsert.push(_.slice(existingData.dataArray, currentLocationInArray, existingData.numberOfColumns));
+            _.each(_.range(1,numberOfRows),function(index) { // start at 1, since the first rowhouse only headers
+                rowsToInsert.push(_.slice(existingData.dataArray,
+                    currentLocationInArray,
+                    (currentLocationInArray+existingData.numberOfColumns)));
                 currentLocationInArray += existingData.numberOfColumns;
+                mpgSoftware.dynamicUi.addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode, intermediateDataStructure);
             });
             // now we create a new headers, and then place them in the intermediate structure
-            returnObject.headers = _.map(combinedSortedHeaders, function(tissue){
+            var initialLinearIndex = 0; // we are remaking the table, so start the count at zero
+            intermediateDataStructure["headerNames"] = combinedSortedHeaders;
+            returnObject.headers = _.map(intermediateDataStructure.headerNames, function(tissue){
                 return Mustache.render($('#'+dataAnnotationType.dataAnnotation.headerWriter)[0].innerHTML,
                     {   tissueName: tissue,
                         initialLinearIndex:initialLinearIndex++
                     }
                 )
             });
+
             _.forEach(returnObject.headers, function (oneRecord) {
                 intermediateDataStructure.headers.push(new mpgSoftware.dynamicUi.IntermediateStructureDataCell(oneRecord,
                     oneRecord, "tissueHeader", 'LIT'));
@@ -2010,7 +2017,12 @@ mpgSoftware.dynamicUi = (function () {
 
         //  now proceed to process the data we received in this particular call.  We will add back in all of the old rows
         //  after we're done with this step
-        if (returnObject.headers.length > 0){
+        if (intermediateDataStructure.headerNames.length > 0){
+            // we may have fewer records than headers, so let's assign a blank record to every cell, and then we can fill in the ones we have data for
+            _.each(_.range(0,intermediateDataStructure.headerNames.length),function(indexOfColumn) {
+                intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(intermediateDataStructure.headerNames[indexOfColumn],
+                    {initialLinearIndex:initialLinearIndex++}, "tissue specific",'EMC');
+            });
             var objectsGroupedByTissue = _.groupBy(returnObject.contents,'tissue');
             _.forEach(objectsGroupedByTissue, function (recordsPerTissue, tissueName) {
                 var indexOfColumn = _.indexOf(sortedHeaderObjects, tissueName);
@@ -2045,10 +2057,48 @@ mpgSoftware.dynamicUi = (function () {
 
             intermediateDataStructure.tableToUpdate = idForTheTargetDiv;
         }
-        // now it is time two add any rows we had previously stored into the intermediate structure
+        // now it is time two add any rows we had previously stored into the intermediate structure.  If we are going to
+        //  add additional rows in this context we must delete the old table.
+        if (rowsToInsert.length>0){
+            destroySharedTable(idForTheTargetDiv)
+            resetAccumulatorObject("sharedTable_"+idForTheTargetDiv);
+        }
         _.forEach(rowsToInsert,function(oneRow){
-            
+
+            var dataAnnotationTypeCode="";
+            if (oneRow.length>1){
+                dataAnnotationTypeCode = oneRow[1].renderData.dataAnnotationTypeCode;
+            }
+            addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode, intermediateDataStructure);
+
+            // first initialize the row with blank cells
+            var currentRow = intermediateDataStructure.rowsToAdd.length-1;
+            _.each(_.range(0,intermediateDataStructure.headerNames.length),function(indexOfColumn) {
+                intermediateDataStructure.rowsToAdd[currentRow].columnCells.push(new IntermediateStructureDataCell(intermediateDataStructure.headerNames[indexOfColumn],
+                    {initialLinearIndex:initialLinearIndex++}, "tissue specific",'EMC'));
+            });
+            _.forEach(oneRow, function(oneElement,indexOfColumn){
+                switch(oneElement.dataAnnotationTypeCode){
+                    case 'LIT':// these are row labels
+                        intermediateDataStructure.rowsToAdd[currentRow].columnCells[indexOfColumn] =
+                            new IntermediateStructureDataCell(  oneElement.title,
+                                                                oneElement.renderData,
+                                                                oneElement.annotation,
+                                                                oneElement.dataAnnotationTypeCode);
+                        break;
+                    default:
+                        intermediateDataStructure.rowsToAdd[currentRow].columnCells[indexOfColumn] =
+                            new IntermediateStructureDataCell(  oneElement.title,
+                                oneElement.renderData,
+                                oneElement.annotation,
+                                oneElement.dataAnnotationTypeCode);
+                        break;
+
+                }
+
+            });
         });
+
 
 
 
@@ -2060,7 +2110,7 @@ mpgSoftware.dynamicUi = (function () {
             true,
             'tissueTableTissueHeaders', true);
 
-        transposeThisTable(idForTheTargetDiv);
+       // transposeThisTable(idForTheTargetDiv);
 
     };
 
