@@ -61,6 +61,20 @@
                             numberRecordsCellPresentationStringWriter:'ldsrTissueTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'ldsrTissueTableSignificanceCellPresentationString',
                             internalIdentifierString:'getInformationFromLdsrForTissueTable'
+                        },
+                        {
+                            code: 'DEP_TI',
+                            category: 'DEPICT Tissue',
+                            displayCategory: 'DEPICT Tissue',
+                            subcategory: 'LDSR list',
+                            displaySubcategory: 'LDSR list',
+                            headerWriter:'ldsrTissueTableTissueHeader',
+                            cellBodyWriter:'ldsrTissueTableBody',
+                            categoryWriter:'ldsrTissueTableTissueHeaderLabel',
+                            subCategoryWriter:'ldsrTissueTableTissueRowLabel',
+                            numberRecordsCellPresentationStringWriter:'ldsrTissueTableNumberRecordsCellPresentationString',
+                            significanceCellPresentationStringWriter:'ldsrTissueTableSignificanceCellPresentationString',
+                            internalIdentifierString:'getInformationFromDepictForTissueTable'
                         }
 
                     ],
@@ -96,6 +110,7 @@
 <g:render template="/templates/tissueTableTemplate" />
 <g:render template="/templates/dynamicUi/TITA" />
 <g:render template="/templates/dynamicUi/LDSR" />
+<g:render template="/templates/dynamicUi/DEP_TI" />
 
 <div id="mainTissueDiv">
 

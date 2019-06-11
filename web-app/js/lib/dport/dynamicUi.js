@@ -472,6 +472,11 @@ mpgSoftware.dynamicUi = (function () {
                 defaultFollowUp.placeToDisplayData = '#dynamicGeneHolder div.dynamicUiHolder';
                 break;
 
+            case "getInformationFromDepictForTissueTable":
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.depictTissues.processRecordsFromDepictTissues;
+                defaultFollowUp.placeToDisplayData = '#mainTissueDiv table.tissueTableHolder';
+                break;
+
             case "getInformationFromEffectorGeneListTable":
                 defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.effectorGene.displayGenesFromEffectorGene;
                 defaultFollowUp.placeToDisplayData = '#dynamicGeneHolder div.dynamicUiHolder';
@@ -533,6 +538,26 @@ mpgSoftware.dynamicUi = (function () {
         var functionToLaunchDataRetrieval;
 
         switch (actionId) {
+
+            case "getInformationFromDepictForTissueTable":
+                functionToLaunchDataRetrieval = function () {
+                    var phenotype = getAccumulatorObject("preferredPhenotype");
+                    retrieveRemotedContextInformation(buildRemoteContextArray({
+                        name: "getInformationFromDepictForTissueTable",
+                        retrieveDataUrl: additionalParameters.retrieveGregorDataUrl,
+                        dataForCall: {
+                            phenotype: phenotype
+                        },
+                        processEachRecord: mpgSoftware.dynamicUi.gregorTissueTable.processRecordsFromDepictTissues,
+                        displayRefinedContextFunction: displayFunction,
+                        placeToDisplayData: displayLocation,
+                        actionId: nextActionId,
+                        nameOfAccumulatorField:'depictTissueArray'
+                    }));
+                };
+                break;
+
+
 
             case "getInformationFromGregorForTissueTable":
                 functionToLaunchDataRetrieval = function () {
