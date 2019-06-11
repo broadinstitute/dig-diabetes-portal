@@ -1988,7 +1988,12 @@ mpgSoftware.dynamicUi = (function () {
             }
             combinedSortedHeaders = _.union(sharedTable["rememberHeadersInTissueTable"],sortedHeaderObjects).sort();
             // let's retrieve all of the old data from the table.
-            var existingData = retrieveTransposedDataForThisTable(idForTheTargetDiv);
+            var existingData;
+            if (sharedTable.currentForm === 'tissueTableTissueHeaders'){
+                existingData = retrieveSortedDataForTable(idForTheTargetDiv);
+            } else { // must be tissueTableMethodHeaders
+                existingData = retrieveTransposedDataForThisTable(idForTheTargetDiv);
+            }
             var numberOfRows = existingData.dataArray.length / existingData.numberOfColumns;
             var currentLocationInArray = existingData.numberOfColumns; // start at the end of the headers
             _.each(_.range(1,numberOfRows),function(index) { // start at 1, since the first rowhouse only headers
@@ -1999,7 +2004,7 @@ mpgSoftware.dynamicUi = (function () {
                 mpgSoftware.dynamicUi.addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode, intermediateDataStructure);
             });
             // now we create a new headers, and then place them in the intermediate structure
-            var initialLinearIndex = 0; // we are remaking the table, so start the count at zero
+            var initialLinearIndex = 1; // we are remaking the table, so start the count just past the row label
             intermediateDataStructure["headerNames"] = combinedSortedHeaders;
             returnObject.headers = _.map(intermediateDataStructure.headerNames, function(tissue){
                 return Mustache.render($('#'+dataAnnotationType.dataAnnotation.headerWriter)[0].innerHTML,
@@ -2025,7 +2030,7 @@ mpgSoftware.dynamicUi = (function () {
             });
             var objectsGroupedByTissue = _.groupBy(returnObject.contents,'tissue');
             _.forEach(objectsGroupedByTissue, function (recordsPerTissue, tissueName) {
-                var indexOfColumn = _.indexOf(sortedHeaderObjects, tissueName);
+                var indexOfColumn = _.indexOf(intermediateDataStructure.headerNames, tissueName);
                 if (indexOfColumn === -1) {
                     console.log("Did not find index of recordsPerTissue.tissue.  Shouldn't we?")
                 } else {
@@ -2077,21 +2082,27 @@ mpgSoftware.dynamicUi = (function () {
                 intermediateDataStructure.rowsToAdd[currentRow].columnCells.push(new IntermediateStructureDataCell(intermediateDataStructure.headerNames[indexOfColumn],
                     {initialLinearIndex:initialLinearIndex++}, "tissue specific",'EMC'));
             });
-            _.forEach(oneRow, function(oneElement,indexOfColumn){
+            _.forEach(oneRow, function(oneElement){
                 switch(oneElement.dataAnnotationTypeCode){
                     case 'LIT':// these are row labels
-                        intermediateDataStructure.rowsToAdd[currentRow].columnCells[indexOfColumn] =
+                        intermediateDataStructure.rowsToAdd[currentRow].columnCells[0] =
                             new IntermediateStructureDataCell(  oneElement.title,
                                                                 oneElement.renderData,
                                                                 oneElement.annotation,
                                                                 oneElement.dataAnnotationTypeCode);
                         break;
                     default:
-                        intermediateDataStructure.rowsToAdd[currentRow].columnCells[indexOfColumn] =
-                            new IntermediateStructureDataCell(  oneElement.title,
-                                oneElement.renderData,
-                                oneElement.annotation,
-                                oneElement.dataAnnotationTypeCode);
+                        var indexOfColumn = _.findIndex(intermediateDataStructure.headerNames,function(o){ return o===oneElement.renderData.tissueName});
+                        if (indexOfColumn === -1){
+                            console.log('no index for '+oneElement.renderData.tissueName+'?')
+                        } else {
+                            oneElement.renderData.initialLinearIndex = "initialLinearIndex_-1";  // Force a reset of the index
+                            intermediateDataStructure.rowsToAdd[currentRow].columnCells[indexOfColumn] =
+                                new IntermediateStructureDataCell(  oneElement.title,
+                                    oneElement.renderData,
+                                    oneElement.annotation,
+                                    oneElement.dataAnnotationTypeCode);
+                        }
                         break;
 
                 }
