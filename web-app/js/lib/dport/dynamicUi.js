@@ -3765,9 +3765,31 @@ mpgSoftware.dynamicUi = (function () {
                     var y = parseFloat($(b).attr(defaultSearchField));
                     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
                     break;
+                case 'ldsrValuesInTissueTable':
                 case 'gregorValuesInTissueTable':
-                    var x = parseFloat($(b).attr(defaultSearchField));
-                    var y = parseFloat($(a).attr(defaultSearchField));
+                    var textA = $(a).attr(defaultSearchField);
+                    var textAEmpty = ((textA.length===0)||(textA==="0"));
+                    var textB = $(b).attr(defaultSearchField);
+                    var textBEmpty = ((textB.length===0)||(textB==="0"));
+                    if ( textAEmpty && textBEmpty ) {
+                        return 0;
+                    }
+                    else if ( textAEmpty ) {
+                        if (direction==='desc') {
+                            return -1;
+                        } else {
+                            return 1;
+                        }
+                    }else if ( textBEmpty )
+                    {
+                        if (direction==='desc') {
+                            return 1;
+                        } else {
+                            return -1;
+                        }
+                    }
+                    var x = parseFloat(textB);
+                    var y = parseFloat(textA);
                     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
                     break;
                 case 'eQTL':
@@ -4147,6 +4169,12 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 };
                 break;
             case 'gregorValuesInTissueTable':
+                currentSortRequestObject = {
+                    'currentSort':oneClass,
+                    'table':'table.tissueTableHolder'
+                };
+                break;
+            case 'ldsrValuesInTissueTable':
                 currentSortRequestObject = {
                     'currentSort':oneClass,
                     'table':'table.tissueTableHolder'
