@@ -24,11 +24,11 @@ mpgSoftware.dynamicUi.ldsrTissueTable = (function () {
             // for now we only want tissues that we can hope to match
             var filteredData = _.filter(data.data,function(o){return (o.tissue_name!==null)});
             combinedRecord.header['ancestries'] = _.map(_.uniqBy(filteredData,'ancestry'),function(o){return o.ancestry});
-            combinedRecord.header['tissues'] = _.map(_.uniqBy(filteredData,'tissue_name'),function(o){return o.tissue_name});
+            combinedRecord.header['tissues'] = _.map(_.uniqBy(filteredData,'tissue_name'),function(o){return o.tissue_name.replace('\'','')});
             _.forEach(filteredData, function (oneRec) {
                 combinedRecord.contents.push({
                     ancestry:oneRec.ancestry,
-                    tissue:oneRec.tissue_name,
+                    tissue:oneRec.tissue_name.replace('\'',''),
                     p_value:oneRec.pvalue,
                     stderr:oneRec.stderr,
                     pValueString:UTILS.realNumberFormatter(""+oneRec.pvalue)

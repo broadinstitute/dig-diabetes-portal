@@ -23,12 +23,12 @@ mpgSoftware.dynamicUi.gregorTissueTable = (function () {
             var geneRecord = {header:{}, contents:[]};
             geneRecord.header['annotations'] = _.map(_.uniqBy(data.data,'annotation'),function(o){return o.annotation});
             geneRecord.header['ancestries'] = _.map(_.uniqBy(data.data,'ancestry'),function(o){return o.ancestry});
-            geneRecord.header['tissues'] = _.map(_.uniqBy(data.data,'tissue'),function(o){return o.tissue});
+            geneRecord.header['tissues'] = _.map(_.uniqBy(data.data,'tissue'),function(o){return o.tissue.replace('\'','')});
             _.forEach(data.data, function (oneRec) {
                 geneRecord.contents.push({
                     ancestry:oneRec.ancestry,
                     annotation:oneRec.annotation,
-                    tissue:oneRec.tissue,
+                    tissue:oneRec.tissue.replace('\'',''),
                     p_value:oneRec.p_value,
                     pValueString:UTILS.realNumberFormatter(""+oneRec.p_value)
                 })
@@ -126,10 +126,11 @@ mpgSoftware.dynamicUi.gregorTissueTable = (function () {
                          dataAnnotationTypeCode,
                          significanceValue,
                          tissueName ){
+                var safeTissueRecords = ( typeof tissueRecords === 'undefined') ?  [] : tissueRecords;
                         return {
                             allTissueRecords:allTissueRecords,
-                            tissueRecords:tissueRecords,
-                            recordsExist:(tissueRecords.length>0)?[1]:[],
+                            tissueRecords:safeTissueRecords,
+                            recordsExist:(safeTissueRecords.length>0)?[1]:[],
                             cellPresentationStringMap:{
                                 'Significance':significanceCellPresentationString,
                                 'Records':recordsCellPresentationString
