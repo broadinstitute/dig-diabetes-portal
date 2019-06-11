@@ -7,7 +7,7 @@ records={{numberRecords}}
 </script>
 
 <script id="ldsrTissueTableTissueRowLabel"  type="x-tmpl-mustache">
-<div class="staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">Values</div>
+<div class="staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">LDSC</div>
 </script>
 
 <script id="ldsrTissueTableTissueHeader"  type="x-tmpl-mustache">
@@ -41,7 +41,6 @@ records={{numberRecords}}
                         <table class="expandableDrillDownTable openEffectorGeneInformationInGeneTable">
                          <thead>
                           <tr role="row">
-                            <th class="text-center leftMostCol">annotation</th>
                             <th class="text-center otherCols">ancestry</th>
                             <th class="text-center otherCols">p-value</th>
                           </tr>
@@ -50,7 +49,6 @@ records={{numberRecords}}
                      {{/recordsExist}}
                          {{#tissueRecords}}
                           <tr role="row">
-                               <td class="leftMostCol">{{annotation}}</td>
                                <td class="otherCols">{{ancestry}}</td>
                                <td class="otherCols">{{pValueString}}</td>
                            </tr>

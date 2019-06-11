@@ -2121,7 +2121,7 @@ mpgSoftware.dynamicUi = (function () {
             true,
             'tissueTableTissueHeaders', true);
 
-       // transposeThisTable(idForTheTargetDiv);
+        transposeThisTable(idForTheTargetDiv);
 
     };
 
@@ -4779,9 +4779,17 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         break;
                      case 'tissueTableTissueHeaders':
                          indexInOneDimensionalArray = (numberOfExistingRows*numberOfColumns);
+                         var datatypeClassIdentifier;
+                         if (row.code === 'TITA'){
+                             datatypeClassIdentifier =  "gregorValuesInTissueTable";
+                         } else if (row.code === 'LDSR'){
+                             datatypeClassIdentifier =  "ldsrValuesInTissueTable";
+                         } else {
+                             datatypeClassIdentifier =  "";
+                         }
                          rowDescriber.push( new IntermediateStructureDataCell(row.category,
                              displaySubcategoryHtml(row.code,indexInOneDimensionalArray),
-                             row.subcategory+" gregorValuesInTissueTable","LIT")) ;
+                             row.subcategory+" "+datatypeClassIdentifier,"LIT")) ;
                          indexInOneDimensionalArray++;
                          numberOfColumnsAdded += rowDescriber.length;
                          break;

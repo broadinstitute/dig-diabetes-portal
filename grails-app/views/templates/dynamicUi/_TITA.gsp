@@ -7,7 +7,7 @@ records={{numberRecords}}
 </script>
 
 <script id="gregorTissueTableTissueRowLabel"  type="x-tmpl-mustache">
-<div class="staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">Values</div>
+<div class="staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">GREGOR</div>
 </script>
 
 <script id="gregorTissueTableTissueHeader"  type="x-tmpl-mustache">
