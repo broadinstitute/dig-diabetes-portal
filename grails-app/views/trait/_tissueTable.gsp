@@ -71,7 +71,7 @@
                     }
                 };
                 mpgSoftware.tissueTable.setVariablesToRemember(drivingVariables);
-                mpgSoftware.tissueTable.initialPageSetUp();
+                mpgSoftware.tissueTable.initialPageSetUp("${phenotype}");
             };
 
 

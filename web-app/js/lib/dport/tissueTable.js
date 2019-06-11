@@ -62,8 +62,10 @@ mpgSoftware.tissueTable = (function () {
     }
 
 
-    var initialPageSetUp = function(){
-        var preferredPhenotype = 'T2D';
+    var initialPageSetUp = function(preferredPhenotype){
+        if (( typeof preferredPhenotype === 'undefined')||(preferredPhenotype.length===0)){
+            preferredPhenotype = 'T2D';
+        }
         $('#mainTissueDiv').empty().append(Mustache.render($('#mainTissueTableOrganizer')[0].innerHTML,
             {phenotype:preferredPhenotype}
         ));
