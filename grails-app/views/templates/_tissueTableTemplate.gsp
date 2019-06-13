@@ -4,9 +4,10 @@
     <div class="container">
         <div class="row">
             <div class="text-center">
-                <h1 class="dk-page-title">Tissue table for <span class="phenotypeSpecifier">{{phenotype}}</span></h1>
+                <h1 class="dk-page-title">Tissue enrichments for <span class="phenotypeSpecifier">{{phenotype}}</span></h1>
             </div>
         </div>
+        <p><g:message code="tissueTable.interface-help1"></g:message> <g:helpText title="tissueTable.overall.help.header" placement="bottom" body="tissueTable.help.text"/> <g:message code="tissueTable.interface-help2"></g:message></p>
         <div class="row">
             <div class="col-sm-12">
                 <div class="datatable-control-box">
