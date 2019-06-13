@@ -7,7 +7,7 @@ records={{numberRecords}}
 </script>
 
 <script id="gregorTissueTableTissueRowLabel"  type="x-tmpl-mustache">
-<div class="tissueTableHeader staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">GREGOR
+<div class="tissueTableHeader staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">GREGOR <g:helpText title="tissueTable.LDSR.help.header" placement="bottom" body="tissueTable.LDSR.help.text"/>
             <span class="glyphicon glyphicon-cog options-icon pull-right" aria-hidden="true" title="Open column filter"
 onclick="mpgSoftware.dynamicUi.displayAnnotationFilter(event,this);"></span>
 </div>
