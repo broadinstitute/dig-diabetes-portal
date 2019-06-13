@@ -33,6 +33,7 @@
                     retrieveEffectorGeneInformationUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveEffectorGeneInformation")}',
                     getAllPhenotypesAjaxUrl: '${g.createLink(controller: "trait", action: "getAllPhenotypesAndTranslationAjax")}',
                     retrieveLdsrDataUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveLdsrData")}',
+                    retrieveDepictTissueDataUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveDepictTissues")}',
                     dataAnnotationTypes: [
                         {
                             code: 'TITA',
@@ -61,21 +62,22 @@
                             numberRecordsCellPresentationStringWriter:'ldsrTissueTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'ldsrTissueTableSignificanceCellPresentationString',
                             internalIdentifierString:'getInformationFromLdsrForTissueTable'
-                        },
-                        {
-                            code: 'DEP_TI',
-                            category: 'DEPICT Tissue',
-                            displayCategory: 'DEPICT Tissue',
-                            subcategory: 'LDSR list',
-                            displaySubcategory: 'LDSR list',
-                            headerWriter:'ldsrTissueTableTissueHeader',
-                            cellBodyWriter:'ldsrTissueTableBody',
-                            categoryWriter:'ldsrTissueTableTissueHeaderLabel',
-                            subCategoryWriter:'ldsrTissueTableTissueRowLabel',
-                            numberRecordsCellPresentationStringWriter:'ldsrTissueTableNumberRecordsCellPresentationString',
-                            significanceCellPresentationStringWriter:'ldsrTissueTableSignificanceCellPresentationString',
-                            internalIdentifierString:'getInformationFromDepictForTissueTable'
                         }
+                        // ,
+                        // {
+                        //     code: 'DEP_TI',
+                        //     category: 'DEPICT Tissue',
+                        //     displayCategory: 'DEPICT Tissue',
+                        //     subcategory: 'DEPICT list',
+                        //     displaySubcategory: 'DEPICT list',
+                        //     headerWriter:'depictTissuesTissueTableTissueHeader',
+                        //     cellBodyWriter:'depictTissuesTissueTableBody',
+                        //     categoryWriter:'depictTissuesTissueTableTissueHeaderLabel',
+                        //     subCategoryWriter:'depictTissuesTissueTableTissueRowLabel',
+                        //     numberRecordsCellPresentationStringWriter:'depictTissuesTissueTableNumberRecordsCellPresentationString',
+                        //     significanceCellPresentationStringWriter:'depictTissuesTissueTableSignificanceCellPresentationString',
+                        //     internalIdentifierString:'getInformationFromDepictForTissueTable'
+                        // }
 
                     ],
                     dynamicTableConfiguration: {

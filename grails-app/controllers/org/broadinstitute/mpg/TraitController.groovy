@@ -1,5 +1,6 @@
 package org.broadinstitute.mpg
 
+import com.google.gson.JsonArray
 import grails.converters.JSON
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper

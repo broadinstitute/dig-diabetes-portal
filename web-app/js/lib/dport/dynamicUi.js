@@ -473,7 +473,7 @@ mpgSoftware.dynamicUi = (function () {
                 break;
 
             case "getInformationFromDepictForTissueTable":
-                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.depictTissues.processRecordsFromDepictTissues;
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.depictTissues.displayTissueInformationFromDepict;
                 defaultFollowUp.placeToDisplayData = '#mainTissueDiv table.tissueTableHolder';
                 break;
 
@@ -544,11 +544,11 @@ mpgSoftware.dynamicUi = (function () {
                     var phenotype = getAccumulatorObject("preferredPhenotype");
                     retrieveRemotedContextInformation(buildRemoteContextArray({
                         name: "getInformationFromDepictForTissueTable",
-                        retrieveDataUrl: additionalParameters.retrieveGregorDataUrl,
+                        retrieveDataUrl: additionalParameters.retrieveDepictTissueDataUrl,
                         dataForCall: {
                             phenotype: phenotype
                         },
-                        processEachRecord: mpgSoftware.dynamicUi.gregorTissueTable.processRecordsFromDepictTissues,
+                        processEachRecord: mpgSoftware.dynamicUi.depictTissues.processRecordsFromDepictTissues,
                         displayRefinedContextFunction: displayFunction,
                         placeToDisplayData: displayLocation,
                         actionId: nextActionId,
@@ -1998,27 +1998,31 @@ mpgSoftware.dynamicUi = (function () {
             // this is the first data in the tissue table
             sharedTable = new SharedTableObject( 'tissueTableTissueHeaders',sortedHeaderObjects.length+1,0);
             setAccumulatorObject("sharedTable_"+idForTheTargetDiv,sharedTable);
-            sharedTable["rememberHeadersInTissueTable"] = sortedHeaderObjects;
+            //sharedTable["rememberHeadersInTissueTable"] = sortedHeaderObjects;
+            setAccumulatorObject("rememberHeadersInTissueTable", sortedHeaderObjects);
         } else if (sharedTable.numberOfColumns === 0) {
             // we have no existing data that we need to merge. Set the number of columns to whatever we just processed
             sortedHeaderObjects = insertAnyHeaderRecords(returnObject,tissuesAlreadyInTheTable,dataAnnotationType,intermediateDataStructure,returnObject);
             intermediateDataStructure["headerNames"] = sortedHeaderObjects;
             sharedTable["numberOfColumns"] = sortedHeaderObjects.length+1;
-            sharedTable["rememberHeadersInTissueTable"] = sortedHeaderObjects;
+            //sharedTable["rememberHeadersInTissueTable"] = sortedHeaderObjects;
+            setAccumulatorObject("rememberHeadersInTissueTable", sortedHeaderObjects);
         } else {
             // we need to merge new data into the old data.  get our new data inputted in an array.
             if (( typeof returnObject.header !== 'undefined' ) &&
                 ( typeof returnObject.header.tissues !== 'undefined' )) {
                 sortedHeaderObjects = returnObject.header.tissues.sort();
             }
-            combinedSortedHeaders = _.union(sharedTable["rememberHeadersInTissueTable"],sortedHeaderObjects).sort();
+
+            combinedSortedHeaders = _.union(getAccumulatorObject("rememberHeadersInTissueTable"),sortedHeaderObjects).sort();
             // let's retrieve all of the old data from the table.
-            var existingData;
+            var cellData;
             if (sharedTable.currentForm === 'tissueTableTissueHeaders'){
-                existingData = retrieveSortedDataForTable(idForTheTargetDiv);
+                cellData = retrieveSortedDataForTable(idForTheTargetDiv);
             } else { // must be tissueTableMethodHeaders
-                existingData = retrieveTransposedDataForThisTable(idForTheTargetDiv);
+                cellData = retrieveTransposedDataForThisTable(idForTheTargetDiv);
             }
+            var existingData =cellData;
             var numberOfRows = existingData.dataArray.length / existingData.numberOfColumns;
             var currentLocationInArray = existingData.numberOfColumns; // start at the end of the headers
             _.each(_.range(1,numberOfRows),function(index) { // start at 1, since the first rowhouse only headers
@@ -2026,12 +2030,15 @@ mpgSoftware.dynamicUi = (function () {
                     currentLocationInArray,
                     (currentLocationInArray+existingData.numberOfColumns)));
                 currentLocationInArray += existingData.numberOfColumns;
-                mpgSoftware.dynamicUi.addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode, intermediateDataStructure);
+                if (index===1){
+                    mpgSoftware.dynamicUi.addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode, intermediateDataStructure);
+                }
             });
             // now we create a new headers, and then place them in the intermediate structure
             var initialLinearIndex = 1; // we are remaking the table, so start the count just past the row label
             intermediateDataStructure["headerNames"] = combinedSortedHeaders;
-            returnObject.headers = _.map(intermediateDataStructure.headerNames, function(tissue){
+            setAccumulatorObject("rememberHeadersInTissueTable", combinedSortedHeaders);
+                returnObject.headers = _.map(intermediateDataStructure.headerNames, function(tissue){
                 return Mustache.render($('#'+dataAnnotationType.dataAnnotation.headerWriter)[0].innerHTML,
                     {   tissueName: tissue,
                         initialLinearIndex:initialLinearIndex++
@@ -2090,14 +2097,15 @@ mpgSoftware.dynamicUi = (function () {
         // now it is time two add any rows we had previously stored into the intermediate structure.  If we are going to
         //  add additional rows in this context we must delete the old table.
         if (rowsToInsert.length>0){
-            destroySharedTable(idForTheTargetDiv)
+            destroySharedTable(idForTheTargetDiv);
             resetAccumulatorObject("sharedTable_"+idForTheTargetDiv);
         }
         _.forEach(rowsToInsert,function(oneRow){
 
             var dataAnnotationTypeCode="";
-            if (oneRow.length>1){
-                dataAnnotationTypeCode = oneRow[1].renderData.dataAnnotationTypeCode;
+            var rowsWithData = _.filter(oneRow,function(o){return (typeof o.renderData.dataAnnotationTypeCode !== 'undefined')});
+            if (rowsWithData.length>0){
+                dataAnnotationTypeCode = rowsWithData[0].renderData.dataAnnotationTypeCode;
             }
             addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode, intermediateDataStructure);
 
@@ -2105,22 +2113,30 @@ mpgSoftware.dynamicUi = (function () {
             var currentRow = intermediateDataStructure.rowsToAdd.length-1;
             _.each(_.range(0,intermediateDataStructure.headerNames.length),function(indexOfColumn) {
                 intermediateDataStructure.rowsToAdd[currentRow].columnCells.push(new IntermediateStructureDataCell(intermediateDataStructure.headerNames[indexOfColumn],
-                    {initialLinearIndex:initialLinearIndex++}, "tissue specific",'EMC'));
+                    {initialLinearIndex:initialLinearIndex++,tissueName:intermediateDataStructure.headerNames[indexOfColumn]}, "tissue specific",'EMC'));
             });
             _.forEach(oneRow, function(oneElement){
                 switch(oneElement.dataAnnotationTypeCode){
                     case 'LIT':// these are row labels
-                        intermediateDataStructure.rowsToAdd[currentRow].columnCells[0] =
-                            new IntermediateStructureDataCell(  oneElement.title,
-                                                                oneElement.renderData,
-                                                                oneElement.annotation,
-                                                                oneElement.dataAnnotationTypeCode);
+                        // intermediateDataStructure.rowsToAdd[currentRow].columnCells[0] =
+                        //     new IntermediateStructureDataCell(  oneElement.title,
+                        //                                         oneElement.renderData,
+                        //                                         oneElement.annotation,
+                        //                                         oneElement.dataAnnotationTypeCode);
+                        break;
+                    case 'EMC':// these are row labels
+                        // intermediateDataStructure.rowsToAdd[currentRow].columnCells[0] =
+                        //     new IntermediateStructureDataCell(  oneElement.title,
+                        //                                         oneElement.renderData,
+                        //                                         oneElement.annotation,
+                        //                                         oneElement.dataAnnotationTypeCode);
                         break;
                     default:
                         var indexOfColumn = _.findIndex(intermediateDataStructure.headerNames,function(o){ return o===oneElement.renderData.tissueName});
                         if (indexOfColumn === -1){
-                            console.log('no index for '+oneElement.renderData.tissueName+'?')
-                        } else {
+                            var errorMessage=( typeof oneElement.renderData.tissueName === 'undefined')?"unknown":oneElement.renderData.tissueName;
+                            console.log('no index for '+errorMessage+'?')
+                        } else if ( typeof oneElement.dataAnnotationTypeCode !== 'undefined'){
                             oneElement.renderData.initialLinearIndex = "initialLinearIndex_-1";  // Force a reset of the index
                             intermediateDataStructure.rowsToAdd[currentRow].columnCells[indexOfColumn] =
                                 new IntermediateStructureDataCell(  oneElement.title,
@@ -4837,8 +4853,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                              datatypeClassIdentifier =  "gregorValuesInTissueTable";
                          } else if (row.code === 'LDSR'){
                              datatypeClassIdentifier =  "ldsrValuesInTissueTable";
-                         } else {
-                             datatypeClassIdentifier =  "";
+                         } else if (row.code === 'DEP_TI'){
+                             datatypeClassIdentifier =  "depictTissueValuesInTissueTable";
                          }
                          rowDescriber.push( new IntermediateStructureDataCell(row.category,
                              displaySubcategoryHtml(row.code,indexInOneDimensionalArray),
