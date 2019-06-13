@@ -1,17 +1,17 @@
 <script class="panel-body" id="GWAS_UKBiobankModLeic_eu_script" type="x-tmpl-mustache">  
 
-<h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
+%{--<h4><g:message code="informational.shared.headers.dataset"></g:message></h4>--}%
 
  %{--<p><g:message code="informational.data.download.UKBBHRC"></g:message> | <g:message code="informational.data.download.UKBBHRC.README"></g:message></p>--}%  
 
 <h4><g:message code="informational.shared.headers.publications"></g:message></h4>  
 
-%{--<p><div class="paper">--}%
- %{--<g:message code="informational.shared.publications.Aragam_2018_Circulation"></g:message><br>--}%
- %{--<g:message code="informational.shared.publications.Aragam_2018_Circulation.author"></g:message>
-<g:message code="informational.shared.publications.etal"></g:message>--}% 
-%{--<div class="citation"><g:message code="informational.shared.publications.Aragam_2018_Circulation.citation"></g:message> </div>--}%
- %{--</div></p>--}%  
+<p><div class="paper">
+ <g:message code="informational.shared.publications.Sakornsakolpat_2019_NatGenet"></g:message><br>
+ <g:message code="informational.shared.publications.Sakornsakolpat_2019_NatGenet.author"></g:message>
+<g:message code="informational.shared.publications.etal"></g:message> 
+<div class="citation"><g:message code="informational.shared.publications.Sakornsakolpat_2019_NatGenet.citation"></g:message> </div>
+ </div></p>  
 
 <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
 
