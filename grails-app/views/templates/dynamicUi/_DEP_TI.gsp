@@ -7,7 +7,7 @@ records={{numberRecords}}
 </script>
 
 <script id="depictTissuesTissueTableTissueRowLabel"  type="x-tmpl-mustache">
-<div class="staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">DEPICT</div>
+<div class="tissueTableHeader staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">DEPICT</div>
 </script>
 
 <script id="depictTissuesTissueTableTissueHeader"  type="x-tmpl-mustache">

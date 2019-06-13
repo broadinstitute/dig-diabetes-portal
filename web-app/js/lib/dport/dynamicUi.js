@@ -3828,6 +3828,7 @@ mpgSoftware.dynamicUi = (function () {
                     break;
                 case 'ldsrValuesInTissueTable':
                 case 'gregorValuesInTissueTable':
+                case 'depictTissueValuesInTissueTable':
                     var textA = $(a).attr(defaultSearchField);
                     var textAEmpty = ((textA.length===0)||(textA==="0"));
                     var textB = $(b).attr(defaultSearchField);
@@ -3851,7 +3852,7 @@ mpgSoftware.dynamicUi = (function () {
                     }
                     var x = parseFloat(textB);
                     var y = parseFloat(textA);
-                    return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+                    return ((x > y) ? -1 : ((x < y) ? 1 : 0));
                     break;
                 case 'eQTL':
                 case 'DEPICT':
@@ -4241,6 +4242,12 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     'table':'table.tissueTableHolder'
                 };
                 break;
+            case 'depictTissueValuesInTissueTable':
+                currentSortRequestObject = {
+                    'currentSort':oneClass,
+                    'table':'table.tissueTableHolder'
+                };
+                break;
             case 'tissueNameInTissueTable':
                 currentSortRequestObject = {
                     'currentSort':oneClass,
@@ -4606,7 +4613,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             switch(headerType){
                 case 'geneTableGeneHeaders':
                     if (headerSpecific){
-                        setUpDraggable();
+                        setUpDraggable(whereTheTableGoes);
                         $('div.geneName span.glyphicon-remove').show();
                     } else{
                         $('div.geneAnnotationShifters').hide ();
@@ -4643,7 +4650,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     break;
                 case 'geneTableAnnotationHeaders':
                     if (headerSpecific){
-                        setUpDraggable();
+                        setUpDraggable(whereTheTableGoes);
                     }
                     else{
                         $('div.geneAnnotationShifters').show ();
@@ -4779,7 +4786,12 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
 
                 case 'tissueTableTissueHeaders':
-                     adjustTableWrapperWidth("table.tissueTableHolder");
+                    adjustTableWrapperWidth("table.tissueTableHolder");
+                    break;
+                case 'tissueTableMethodHeaders':
+                    if (headerSpecific){
+                    //    setUpDraggable(whereTheTableGoes);
+                    }
                     break;
 
 
@@ -4878,7 +4890,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                          }
                          rowDescriber.push( new IntermediateStructureDataCell(row.category,
                              displaySubcategoryHtml(row.code,indexInOneDimensionalArray),
-                             row.subcategory+" "+datatypeClassIdentifier,"LIT")) ;
+                             row.subcategory+" tissueTableHeader "+datatypeClassIdentifier,"LIT")) ;
                          indexInOneDimensionalArray++;
                          numberOfColumnsAdded += rowDescriber.length;
                          break;
@@ -5822,13 +5834,13 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
 
 
-    var handleRequestToDropADraggableColumn = function (offeredThis,originatingObject){
+    var handleRequestToDropADraggableColumn = function (offeredThis,originatingObject,whereTheTableGoes){
         var targetColumn =$(offeredThis) ;
         var draggedColumn = $(originatingObject.draggable);
         var initialLinearIndexTargetColumn = extractClassBasedIndex(targetColumn[0].innerHTML,"initialLinearIndex_");
         var initialLinearIndexColumnBeingDragged = extractClassBasedIndex(draggedColumn[0].innerHTML,"initialLinearIndex_");
-        var currentIndexTargetColumn = retrieveCurrentIndexOfColumn ('table.combinedGeneTableHolder',initialLinearIndexTargetColumn);
-        var currentIndexColumnBeingDragged = retrieveCurrentIndexOfColumn ('table.combinedGeneTableHolder',initialLinearIndexColumnBeingDragged);
+        var currentIndexTargetColumn = retrieveCurrentIndexOfColumn (whereTheTableGoes,initialLinearIndexTargetColumn);
+        var currentIndexColumnBeingDragged = retrieveCurrentIndexOfColumn (whereTheTableGoes,initialLinearIndexColumnBeingDragged);
         redrawTableOnClick('table.combinedGeneTableHolder',
             function(sortedData,numberOfRows,numberOfColumns,arguments){
                 return mpgSoftware.matrixMath.moveColumnsInDataStructure(sortedData,numberOfRows,numberOfColumns,
@@ -5840,14 +5852,15 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
 
 
-    var setUpDraggable = function() {
-        var whereTheTableGoes = "table.combinedGeneTableHolder";
+    var setUpDraggable = function(whereTheTableGoes) {
         var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
         var classNameToIdentifyHeader;
         if ((sharedTable.currentForm === 'geneTableGeneHeaders') || (sharedTable.currentForm === 'variantTableVariantHeaders')){
             classNameToIdentifyHeader =  "th.geneHeader";
         } else if ((sharedTable.currentForm === 'geneTableAnnotationHeaders') || (sharedTable.currentForm === 'variantTableAnnotationHeaders')){
             classNameToIdentifyHeader =  "th.categoryNameToUse";
+        } else if ((sharedTable.currentForm === 'tissueTableMethodHeaders') ){
+            classNameToIdentifyHeader =  "th.tissueTableHeader";
         }
 
         $( classNameToIdentifyHeader ).draggable({
@@ -5862,7 +5875,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             },
             accept:classNameToIdentifyHeader,
             drop: function( event, ui ) {
-                handleRequestToDropADraggableColumn(this,ui);
+                handleRequestToDropADraggableColumn(this,ui,whereTheTableGoes);
             }
         });
 

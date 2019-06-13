@@ -7,7 +7,7 @@ records={{numberRecords}}
 </script>
 
 <script id="ldsrTissueTableTissueRowLabel"  type="x-tmpl-mustache">
-<div class="staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">LDSC</div>
+<div class="tissueTableHeader staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">LDSC</div>
 </script>
 
 <script id="ldsrTissueTableTissueHeader"  type="x-tmpl-mustache">
