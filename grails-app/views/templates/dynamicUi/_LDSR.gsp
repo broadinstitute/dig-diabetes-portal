@@ -7,7 +7,7 @@ records={{numberRecords}}
 </script>
 
 <script id="ldsrTissueTableTissueRowLabel"  type="x-tmpl-mustache">
-<div class="tissueTableHeader staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">LDSC</div>
+<div class="tissueTableHeader staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">LDSR <g:helpText title="gene.COLOC.help.header" placement="bottom" body="gene.COLOC.help.text"/></div>
 </script>
 
 <script id="ldsrTissueTableTissueHeader"  type="x-tmpl-mustache">
