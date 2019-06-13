@@ -63,21 +63,21 @@
                             significanceCellPresentationStringWriter:'ldsrTissueTableSignificanceCellPresentationString',
                             internalIdentifierString:'getInformationFromLdsrForTissueTable'
                         }
-                        // ,
-                        // {
-                        //     code: 'DEP_TI',
-                        //     category: 'DEPICT Tissue',
-                        //     displayCategory: 'DEPICT Tissue',
-                        //     subcategory: 'DEPICT list',
-                        //     displaySubcategory: 'DEPICT list',
-                        //     headerWriter:'depictTissuesTissueTableTissueHeader',
-                        //     cellBodyWriter:'depictTissuesTissueTableBody',
-                        //     categoryWriter:'depictTissuesTissueTableTissueHeaderLabel',
-                        //     subCategoryWriter:'depictTissuesTissueTableTissueRowLabel',
-                        //     numberRecordsCellPresentationStringWriter:'depictTissuesTissueTableNumberRecordsCellPresentationString',
-                        //     significanceCellPresentationStringWriter:'depictTissuesTissueTableSignificanceCellPresentationString',
-                        //     internalIdentifierString:'getInformationFromDepictForTissueTable'
-                        // }
+                        ,
+                        {
+                            code: 'DEP_TI',
+                            category: 'DEPICT Tissue',
+                            displayCategory: 'DEPICT Tissue',
+                            subcategory: 'DEPICT list',
+                            displaySubcategory: 'DEPICT list',
+                            headerWriter:'depictTissuesTissueTableTissueHeader',
+                            cellBodyWriter:'depictTissuesTissueTableBody',
+                            categoryWriter:'depictTissuesTissueTableTissueHeaderLabel',
+                            subCategoryWriter:'depictTissuesTissueTableTissueRowLabel',
+                            numberRecordsCellPresentationStringWriter:'depictTissuesTissueTableNumberRecordsCellPresentationString',
+                            significanceCellPresentationStringWriter:'depictTissuesTissueTableSignificanceCellPresentationString',
+                            internalIdentifierString:'getInformationFromDepictForTissueTable'
+                        }
 
                     ],
                     dynamicTableConfiguration: {

@@ -1986,6 +1986,19 @@ mpgSoftware.dynamicUi = (function () {
         var sortedHeaderObjects = [];
 
         if ( typeof returnObject.header.annotations !== 'undefined'){
+            var filterModalContent = '<div id="filter_modal" style="display: none"><div class="closer-wrapper" style="text-align: center;">Filter GREGOR annotations\
+                <span style="float:right; font-size: 12px; color: #888;" onclick="mpgSoftware.dynamicUi.displayAnnotationFilter(event,this);" class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>\
+                <div class="content-wrapper" style="width: auto; height:auto; width: 400px; min-height: 300px;">\
+                <div class="annotationPickerHolder col-md-7" style="display: none">\
+                <label for="annotationPicker">Add/remove annotations</label>\
+                <select id="annotationPicker" class="annotationPicker"  multiple="multiple" \
+                onchange="mpgSoftware.tissueTable.refreshTableForAnnotations(this)">\
+                </select>\
+                </div></div></div>';
+            $("body").append(filterModalContent);
+            var filterModalLeft = ($(window).width() - $("#filter_modal").width())/2;
+            var filterModalTop = ($(window).height() - $("#filter_modal").height())/2;
+            $("#filter_modal").css({"top":filterModalTop,"left":filterModalLeft});
             displayAnnotationPicker('div.annotationPickerHolder','#annotationPicker',returnObject.header.annotations);
         }
 
@@ -2001,13 +2014,20 @@ mpgSoftware.dynamicUi = (function () {
             //sharedTable["rememberHeadersInTissueTable"] = sortedHeaderObjects;
             setAccumulatorObject("rememberHeadersInTissueTable", sortedHeaderObjects);
         } else if (sharedTable.numberOfColumns === 0) {
+            if (returnObject.contents.length===0){
+                return;
+            }
             // we have no existing data that we need to merge. Set the number of columns to whatever we just processed
             sortedHeaderObjects = insertAnyHeaderRecords(returnObject,tissuesAlreadyInTheTable,dataAnnotationType,intermediateDataStructure,returnObject);
             intermediateDataStructure["headerNames"] = sortedHeaderObjects;
             sharedTable["numberOfColumns"] = sortedHeaderObjects.length+1;
             //sharedTable["rememberHeadersInTissueTable"] = sortedHeaderObjects;
             setAccumulatorObject("rememberHeadersInTissueTable", sortedHeaderObjects);
+
         } else {
+            if (returnObject.contents.length===0){
+                return;
+            }
             // we need to merge new data into the old data.  get our new data inputted in an array.
             if (( typeof returnObject.header !== 'undefined' ) &&
                 ( typeof returnObject.header.tissues !== 'undefined' )) {
@@ -5863,7 +5883,14 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
 
 
-
+    var displayAnnotationFilter = function(event,reportingElement){
+        event.stopPropagation();
+        if ($("#filter_modal").is(':visible')){
+            $("#filter_modal").hide();
+        } else {
+            $("#filter_modal").show();
+        }
+    }
 
 
     var openFilter = function(TARGETCLMID) {
@@ -5907,6 +5934,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
 // public routines are declared below
     return {
+        displayAnnotationFilter:displayAnnotationFilter,
         redrawTissueTable:redrawTissueTable,
         displayForGeneTable:displayForGeneTable,
         displayForFullEffectorGeneTable:displayForFullEffectorGeneTable,

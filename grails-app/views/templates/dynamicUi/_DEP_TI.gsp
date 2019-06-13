@@ -38,19 +38,17 @@ records={{numberRecords}}
 
                <div  class="collapse openEffectorGeneInformationInGeneTable" id="depict_tissue_{{tissueNameKey}}">
                     {{#recordsExist}}
-                        <table class="expandableDrillDownTable openEffectorGeneInformationInGeneTable">
+                        <table class="expandableDrillDownTable openEffectorGeneInformationInGeneTable" style="margin: 0 auto">
                          <thead>
                           <tr role="row">
-                            <th class="text-center otherCols">ancestry</th>
-                            <th class="text-center otherCols">p-value</th>
+                            <th class="text-center leftMostCol">p-values</th>
                           </tr>
                          </thead>
                          <tbody>
                      {{/recordsExist}}
                          {{#tissueRecords}}
                           <tr role="row">
-                               <td class="otherCols">{{ancestry}}</td>
-                               <td class="otherCols">{{pValueString}}</td>
+                               <td class="leftMostCol" style="border-right: 0">{{pValueString}}</td>
                            </tr>
                           {{/tissueRecords}}
                       {{#recordsExist}}
