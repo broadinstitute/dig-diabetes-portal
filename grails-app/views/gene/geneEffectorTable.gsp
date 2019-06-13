@@ -224,7 +224,7 @@
 
                         ],
                         dynamicTableConfiguration: {
-                            domSpecificationForAccumulatorStorage:'#mainEffectorDiv',
+                            domSpecificationForAccumulatorStorage:'#mainTissueDiv',
                             formOfStorage: 'loadOnce'
                         }
                     };
@@ -253,7 +253,9 @@
 
 <body>
 
-<div id="mainEffectorDiv" style="padding-top:40px;">
+
+<div id="mainTissueDiv">
+
     <div class="container">
         <div class="row">
             <div class="col-md-12">

@@ -311,13 +311,13 @@ environments {
 
 //       grails.serverURL = "http://www.type2diabetesgenetics.org"
 //        grails.serverURL = "http://www.type2diabetesgenetics.org"
-//        grails.serverURL = "http://variant2function.org"
+        grails.serverURL = "http://variant2function.org"
 
 //        grails.serverURL = "http://demo52k.us-east-1.elasticbeanstalk.com"
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 
-     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+//     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
 
 
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
@@ -461,6 +461,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/informational/**':    ['permitAll'],
         '/region/**':           ['ROLE_USER'],
         '/trait/**':            ['ROLE_USER'],
+        '/trait/tissueTable':            ['ROLE_SYSTEM'],
         '/variant/**':          ['ROLE_USER'],
         '/variantInfo/**':      ['ROLE_USER'],
         '/grs/**':              ['ROLE_USER'],
@@ -972,6 +973,3 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                   )
 ]
 
-
-
-// Here the secret authentication strings

@@ -784,6 +784,87 @@ class RegionInfoController {
 
 
 
+    def retrieveDepictTissues() {
+        String phenotype = ""
+        boolean looksOkay = true
+        JSONArray jsonArray
+        def slurper = new JsonSlurper()
+
+        if (params.phenotype) {
+            phenotype = params.phenotype  ?: restServerService.retrieveBeanForCurrentPortal().phenotype
+        }
+
+        if (looksOkay){
+            jsonArray = restServerService.gatherDepictTissues(  phenotype )
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+            jsonArray =  slurper.parseText(proposedJsonString) as JSONArray;
+        }
+
+        render(status: 200, contentType: "application/json") {jsonArray}
+        return
+    }
+
+
+
+
+
+
+    def retrieveGregorData() {
+        String phenotype = ""
+        boolean looksOkay = true
+        JSONObject jsonObject
+        def slurper = new JsonSlurper()
+
+        if (params.phenotype) {
+            phenotype = params.phenotype
+        } else {
+            looksOkay = falls
+        }
+
+        if (looksOkay){
+            jsonObject = restServerService.gatherGregorData(  phenotype )
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+            jsonObject =  slurper.parseText(proposedJsonString) as JSONObject;
+        }
+
+        render(status: 200, contentType: "application/json") {jsonObject}
+        return
+    }
+
+
+
+
+
+    def retrieveLdsrData() {
+        String phenotype = ""
+        boolean looksOkay = true
+        JSONObject jsonObject
+        def slurper = new JsonSlurper()
+
+        if (params.phenotype) {
+            phenotype = params.phenotype
+        } else {
+            looksOkay = falls
+        }
+
+        if (looksOkay){
+            jsonObject = restServerService.gatherLdsrData(  phenotype )
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+            jsonObject =  slurper.parseText(proposedJsonString) as JSONObject;
+        }
+
+        render(status: 200, contentType: "application/json") {jsonObject}
+        return
+    }
+
+
+
+
+
+
 
     def retrieveDepictGeneSetData() {
         String gene = ""

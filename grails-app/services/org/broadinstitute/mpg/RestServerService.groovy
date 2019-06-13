@@ -66,11 +66,14 @@ class RestServerService {
     private String GET_VARIANT_COLOC_COLOCALIZATION_FROM_URL= "testcalls/ecaviar/colocalization_expanded_max/object"
     private String GET_REGION_FROM_ABC_URL= "testcalls/abc/region/object"
     private String GET_GENE_BASED_RECORDS_FROM_DEPICT_URL= "testcalls/depict/region/object"
+    private String GET_TISSUE_BASED_RECORDS_FROM_DEPICT_URL= "testcalls/depict/tissue/object"
     private String GET_GENE_BASED_RECORDS_FROM_MODS_URL= "testcalls/knockout/object"
     private String GET_GENESET_RECORDS_FROM_DEPICT_URL= "testcalls/depict/genepathway/object"
     private String GET_DNASE_RECORDS_URL= "testcalls/region/dnase/object"
     private String GET_H3K27AC_RECORDS_URL= "testcalls/region/h3k27ac/object"
     private String GET_BOTTOM_LINE_RESULTS_URL= "graph/meta/variant/object"
+    private String GET_TISSUES_FROM_GREGOR_URL= "graph/gregor/phenotype/object"
+    private String GET_TISSUES_FROM_LDSR_URL = "testcalls/ldscore/tissue/object"
     private String GET_HAIL_DATA_URL = "getHailData"
     private String GET_SAMPLE_DATA_URL = "getSampleData"
     private String GET_SAMPLE_METADATA_URL = "getSampleMetadata"
@@ -2457,10 +2460,70 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         try{
             jsonArray = slurper.parseText(rawReturnFromApi) as List
         } catch(Exception e){
-            // are you telling me this stupid library interprets a list of one as not a list at all, but an object?  eat me, Java
             jsonArray = [slurper.parseText(rawReturnFromApi)] as List
         }
         return jsonArray
+    }
+
+
+
+
+
+
+    public JSONArray gatherDepictTissues(  String phenotype ) {
+        List<String> specifyRequestList = []
+        if ((phenotype) && (phenotype.length() > 0)) {
+            specifyRequestList << "phenotype=${phenotype}"
+        }
+
+        String rawReturnFromApi =  getRestCall("${GET_TISSUE_BASED_RECORDS_FROM_DEPICT_URL}?${specifyRequestList.join("&")}".toString())
+        JsonSlurper slurper = new JsonSlurper()
+        JSONArray jsonArray
+        try{
+            jsonArray = slurper.parseText(rawReturnFromApi) as List
+        } catch(Exception e){
+            jsonArray = [slurper.parseText(rawReturnFromApi)] as List
+        }
+        return jsonArray
+    }
+
+
+
+
+
+    public JSONObject gatherGregorData(  String phenotype ) {
+        List<String> specifyRequestList = []
+        if ((phenotype) && (phenotype.length() > 0)) {
+            specifyRequestList << "phenotype=${phenotype}"
+        }
+
+        String rawReturnFromApi =  getRestCall("${GET_TISSUES_FROM_GREGOR_URL}?${specifyRequestList.join("&")}".toString())
+        JsonSlurper slurper = new JsonSlurper()
+        JSONObject jsonObject
+        try{
+            jsonObject = slurper.parseText(rawReturnFromApi)
+        } catch(Exception e){
+            log.error("ERROR: gatherGregorData. problem parsing the data we received from the KB")
+        }
+        return jsonObject
+    }
+
+
+    public JSONObject gatherLdsrData(  String phenotype ) {
+        List<String> specifyRequestList = []
+        if ((phenotype) && (phenotype.length() > 0)) {
+            specifyRequestList << "phenotype=${phenotype}"
+        }
+
+        String rawReturnFromApi =  getRestCall("${GET_TISSUES_FROM_LDSR_URL}?${specifyRequestList.join("&")}".toString())
+        JsonSlurper slurper = new JsonSlurper()
+        JSONObject jsonObject
+        try{
+            jsonObject = slurper.parseText(rawReturnFromApi)
+        } catch(Exception e){
+            log.error("ERROR: gatherGregorData. problem parsing the data we received from the KB")
+        }
+        return jsonObject
     }
 
 
