@@ -38,7 +38,7 @@ records={{numberRecords}}
 
                <div  class="collapse openEffectorGeneInformationInGeneTable" id="effector_gene_{{tissueNameKey}}">
                     {{#recordsExist}}
-                        <table class="expandableDrillDownTable openEffectorGeneInformationInGeneTable">
+                        <table class="expandableDrillDownTable openEffectorGeneInformationInGeneTable" style="margin: 0 auto">
                          <thead>
                           <tr role="row">
                             <th class="text-center otherCols">ancestry</th>

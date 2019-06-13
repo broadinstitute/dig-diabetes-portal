@@ -4789,6 +4789,11 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     adjustTableWrapperWidth("table.tissueTableHolder");
                     break;
                 case 'tissueTableMethodHeaders':
+                    $('[data-toggle="popover"]').popover({
+                        animation: true,
+                        html: true,
+                        template: '<div class="popover" role="tooltip"><div class="arrow"></div><h5 class="popover-title"></h5><div class="popover-content"></div></div>'
+                    });
                     if (headerSpecific){
                     //    setUpDraggable(whereTheTableGoes);
                     }
