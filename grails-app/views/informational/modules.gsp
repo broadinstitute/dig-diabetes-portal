@@ -104,6 +104,7 @@
 
             if (userLogIn) {
                     mpgSoftware.moduleLaunch.fillPhenotypesDropdown(drivingVariables.phenotypeName,'phenotypeDropdownWrapper','phenotypeDropdown');
+                mpgSoftware.moduleLaunch.fillPhenotypesDropdown(drivingVariables.phenotypeName,'phenotypeDropdownWrapper2','phenotypeDropdown');
 
             } else {
 
@@ -191,11 +192,31 @@
                         </td>
                         <td>
                             <label>Select phenotype</label>
-                            <div id="phenotypeDropdownWrapper">
+                            <div id="phenotypeDropdownWrapper2">
 
                             </div>
 
                             <div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact" style="margin-top: 10px;" ><a id="launchLDClumping" href="javascript:;" onclick="mpgSoftware.moduleLaunch.launchLDClumping()">Launch Interactive Manhattan plot</a></div>
+
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td><h4><g:message code="informational.modules.TissueEnrichmentModule.title"></g:message></h4></td>
+                        <td>
+                            <img  src="${resource(dir: 'images', file: 'LD_clumping.jpg')}" align="left" style="width: 200px; border: solid 1px #ddd; margin-right: 15px;">
+                            <p><g:message code="informational.modules.LDClumping.description1"></g:message></p>
+                            <p><g:message code="informational.modules.LDClumping.description2"></g:message></td></p>
+
+                    </td>
+                        <td>
+                            <label>Select phenotype</label>
+                            <div id="phenotypeDropdownWrapper">
+
+                            </div>
+
+                            <div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact" style="margin-top: 10px;" > <a href="${createLink(controller:'trait', action:'tissueTable')}"> Tissue Enrichment Table</a> </div>
 
                         </td>
                     </tr>
