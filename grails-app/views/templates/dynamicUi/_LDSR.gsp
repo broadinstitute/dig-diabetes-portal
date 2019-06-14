@@ -33,10 +33,10 @@ records={{numberRecords}}
              <div significance_sortField="{{significanceValue}}" sortField="{{significanceValue}}"
              class="tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'LDSR predictions for {{tissueName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
-               data-target="#effector_gene_{{tissueNameKey}}" style="color:black"> {{cellPresentationString}}
+               data-target="#ldsr_tissue_table_{{tissueNameKey}}" style="color:black"> {{cellPresentationString}}
                </a>
 
-               <div  class="collapse openEffectorGeneInformationInGeneTable" id="effector_gene_{{tissueNameKey}}">
+               <div  class="collapse openEffectorGeneInformationInGeneTable" id="ldsr_tissue_table_{{tissueNameKey}}">
                     {{#recordsExist}}
                         <table class="expandableDrillDownTable openEffectorGeneInformationInGeneTable" style="margin: 0 auto">
                          <thead>

@@ -17,22 +17,51 @@ div.contextHolder{
     border: solid 1px #fff;
 }
 
-.dataTables_wrapper.dk-zoom-0, .dataTables_wrapper.dk-zoom-0 .btn { font-size: 14px; }
-.dataTables_wrapper.dk-zoom-1, .dataTables_wrapper.dk-zoom-1 .btn { font-size: 12px; }
-.dataTables_wrapper.dk-zoom-2, .dataTables_wrapper.dk-zoom-2 .btn { font-size: 10px; }
-.dataTables_wrapper.dk-zoom-3, .dataTables_wrapper.dk-zoom-3 .btn { font-size: 8px; }
+/*.dataTables_wrapper.dk-zoom-0, .dataTables_wrapper.dk-zoom-0 .btn { font-size: 14px; }*/
+/*.dataTables_wrapper.dk-zoom-1, .dataTables_wrapper.dk-zoom-1 .btn { font-size: 12px; }*/
+/*.dataTables_wrapper.dk-zoom-2, .dataTables_wrapper.dk-zoom-2 .btn { font-size: 10px; }*/
+/*.dataTables_wrapper.dk-zoom-3, .dataTables_wrapper.dk-zoom-3 .btn { font-size: 8px; }*/
+
+/*.dataTables_wrapper tbody th, .dataTables_wrapper tbody td { padding: 8px 10px; outline: none; border:none; border-top: solid 1px #ccc; border-right: solid 1px #ccc; }*/
+/*.dataTables_wrapper.dk-zoom-0 tbody th, .dataTables_wrapper.dk-zoom-0 tbody td { padding: 8px 10px; outline: none; border-top: solid 1px #ccc; border-right: solid 1px #ccc; }*/
+/*.dataTables_wrapper.dk-zoom-1 tbody th, .dataTables_wrapper.dk-zoom-1 tbody td { padding: 6px 7px; outline: none; border-top: solid 1px #ccc; border-right: solid 1px #ccc;  }*/
+/*.dataTables_wrapper.dk-zoom-2 tbody th, .dataTables_wrapper.dk-zoom-2 tbody td { padding: 4px 5px; outline: none; border-top: solid 1px #ccc; border-right: solid 1px #ccc;  }*/
+/*.dataTables_wrapper.dk-zoom-3 tbody th, .dataTables_wrapper.dk-zoom-3 tbody td { padding: 3px 4px; outline: none; border-top: solid 1px #ccc; border-right: solid 1px #ccc;  }*/
+
+/*.dataTables_wrapper thead th, .dataTables_wrapper thead td { padding: 10px 18px; outline: none; border:none; border-top: solid 1px #ccc; border-right: solid 1px #ccc; }*/
+/*.dataTables_wrapper.dk-zoom-0 thead th, .dataTables_wrapper.dk-zoom-0 thead td { padding: 10px 18px; }*/
+/*.dataTables_wrapper.dk-zoom-1 thead th, .dataTables_wrapper.dk-zoom-1 thead td { padding: 10px 18px; }*/
+/*.dataTables_wrapper.dk-zoom-2 thead th, .dataTables_wrapper.dk-zoom-2 thead td { padding: 10px 18px; }*/
+/*.dataTables_wrapper.dk-zoom-3 thead th, .dataTables_wrapper.dk-zoom-3 thead td { padding: 10px 18px; }*/
+
+
+.dataTables_wrapper.dk-zoom-0, .dataTables_wrapper.dk-zoom-0 .btn { font-size: 18px; }
+.dataTables_wrapper.dk-zoom-1, .dataTables_wrapper.dk-zoom-1 .btn { font-size: 16px; }
+.dataTables_wrapper.dk-zoom-2, .dataTables_wrapper.dk-zoom-2 .btn { font-size: 14px; }
+.dataTables_wrapper.dk-zoom-3, .dataTables_wrapper.dk-zoom-3 .btn { font-size: 12px; }
+.dataTables_wrapper.dk-zoom-4, .dataTables_wrapper.dk-zoom-4 .btn { font-size: 10px; }
+.dataTables_wrapper.dk-zoom-5, .dataTables_wrapper.dk-zoom-5 .btn { font-size: 8px; }
+.dataTables_wrapper.dk-zoom-6, .dataTables_wrapper.dk-zoom-6 .btn { font-size: 7px; }
 
 .dataTables_wrapper tbody th, .dataTables_wrapper tbody td { padding: 8px 10px; outline: none; border:none; border-top: solid 1px #ccc; border-right: solid 1px #ccc; }
-.dataTables_wrapper.dk-zoom-0 tbody th, .dataTables_wrapper.dk-zoom-0 tbody td { padding: 8px 10px; outline: none; border-top: solid 1px #ccc; border-right: solid 1px #ccc; }
-.dataTables_wrapper.dk-zoom-1 tbody th, .dataTables_wrapper.dk-zoom-1 tbody td { padding: 6px 7px; outline: none; border-top: solid 1px #ccc; border-right: solid 1px #ccc;  }
-.dataTables_wrapper.dk-zoom-2 tbody th, .dataTables_wrapper.dk-zoom-2 tbody td { padding: 4px 5px; outline: none; border-top: solid 1px #ccc; border-right: solid 1px #ccc;  }
-.dataTables_wrapper.dk-zoom-3 tbody th, .dataTables_wrapper.dk-zoom-3 tbody td { padding: 3px 4px; outline: none; border-top: solid 1px #ccc; border-right: solid 1px #ccc;  }
+.dataTables_wrapper.dk-zoom-0 tbody th, .dataTables_wrapper.dk-zoom-0 tbody td { padding: 12px 12px; outline: none; border-top: solid 1px #ccc; border-right: solid 1px #ccc; }
+.dataTables_wrapper.dk-zoom-1 tbody th, .dataTables_wrapper.dk-zoom-1 tbody td { padding: 10px 12px; outline: none; border-top: solid 1px #ccc; border-right: solid 1px #ccc; }
+.dataTables_wrapper.dk-zoom-2 tbody th, .dataTables_wrapper.dk-zoom-2 tbody td { padding: 8px 10px; outline: none; border-top: solid 1px #ccc; border-right: solid 1px #ccc; }
+.dataTables_wrapper.dk-zoom-3 tbody th, .dataTables_wrapper.dk-zoom-3 tbody td { padding: 6px 7px; outline: none; border-top: solid 1px #ccc; border-right: solid 1px #ccc;  }
+.dataTables_wrapper.dk-zoom-4 tbody th, .dataTables_wrapper.dk-zoom-4 tbody td { padding: 4px 5px; outline: none; border-top: solid 1px #ccc; border-right: solid 1px #ccc;  }
+.dataTables_wrapper.dk-zoom-5 tbody th, .dataTables_wrapper.dk-zoom-5 tbody td { padding: 3px 4px; outline: none; border-top: solid 1px #ccc; border-right: solid 1px #ccc;  }
+.dataTables_wrapper.dk-zoom-6 tbody th, .dataTables_wrapper.dk-zoom-6 tbody td { padding: 2px 3px; outline: none; border-top: solid 1px #ccc; border-right: solid 1px #ccc;  }
 
 .dataTables_wrapper thead th, .dataTables_wrapper thead td { padding: 10px 18px; outline: none; border:none; border-top: solid 1px #ccc; border-right: solid 1px #ccc; }
 .dataTables_wrapper.dk-zoom-0 thead th, .dataTables_wrapper.dk-zoom-0 thead td { padding: 10px 18px; }
 .dataTables_wrapper.dk-zoom-1 thead th, .dataTables_wrapper.dk-zoom-1 thead td { padding: 10px 18px; }
 .dataTables_wrapper.dk-zoom-2 thead th, .dataTables_wrapper.dk-zoom-2 thead td { padding: 10px 18px; }
 .dataTables_wrapper.dk-zoom-3 thead th, .dataTables_wrapper.dk-zoom-3 thead td { padding: 10px 18px; }
+.dataTables_wrapper.dk-zoom-4 thead th, .dataTables_wrapper.dk-zoom-4 thead td { padding: 10px 18px; }
+.dataTables_wrapper.dk-zoom-5 thead th, .dataTables_wrapper.dk-zoom-5 thead td { padding: 10px 18px; }
+.dataTables_wrapper.dk-zoom-6 thead th, .dataTables_wrapper.dk-zoom-6 thead td { padding: 10px 18px; }
+
+
 
 div.openMetaXcanInGeneTable {
     font-size: 10px;
@@ -491,4 +520,8 @@ div.staticValuesLabelInTissueTable {
 select.phenotypePicker {
     padding: 8px;
     margin-bottom: 10px;
+}
+span.phenotypeSpecifier{
+    font-family: 'Oswald';
+    font-size: 55px;
 }
