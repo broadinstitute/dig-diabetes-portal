@@ -7,7 +7,7 @@ records={{numberRecords}}
 </script>
 
 <script id="gregorTissueTableTissueRowLabel"  type="x-tmpl-mustache">
-<div class="tissueTableHeader staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">GREGOR <g:helpText title="tissueTable.GREGOR.help.header" placement="bottom" body="tissueTable.GREGOR.help.text"/>
+<div class="tissueTableHeader staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">GREGOR min p-value&nbsp;<g:helpText title="tissueTable.GREGOR.help.header" placement="bottom" body="tissueTable.GREGOR.help.text"/>
             <span class="glyphicon glyphicon-cog options-icon pull-right" aria-hidden="true" title="Open column filter"
 onclick="mpgSoftware.dynamicUi.displayAnnotationFilter(event,this);"></span>
 </div>
