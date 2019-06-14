@@ -5239,9 +5239,12 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
 
     var  dataTableZoomSet =    function (TGWRAPPER,TGZOOM) {
-        $(TGWRAPPER).find(".dataTables_wrapper").removeClass("dk-zoom-0 dk-zoom-1 dk-zoom-2 dk-zoom-3").addClass("dk-zoom-"+TGZOOM);
+        $(TGWRAPPER).find(".dataTables_wrapper").removeClass("dk-zoom-0 dk-zoom-1 dk-zoom-2 dk-zoom-3 dk-zoom-4 dk-zoom-5 dk-zoom-6").addClass("dk-zoom-"+TGZOOM);
     }
-    var  dataTableZoomDynaSet =    function (zoomWrapper,getBigger) {
+    var  dataTableZoomDynaSet =    function (zoomWrapper,getBigger,event) {
+        if ( typeof event !== 'undefined'){
+            event.stopPropagation();
+        }
         if (typeof $(zoomWrapper).data("zoomParmHolder") === 'undefined') {
             $(zoomWrapper).data("zoomParmHolder",1);
         }
@@ -5251,13 +5254,14 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 currentSize--;
             }
         } else {
-            if (currentSize < 3){
+            if (currentSize < 6){
                 currentSize++;
             }
         }
         $(zoomWrapper).data("zoomParmHolder",currentSize);
+        console.log("currentsize="+currentSize+".")
 
-        $(zoomWrapper).find(".dataTables_wrapper").removeClass("dk-zoom-0 dk-zoom-1 dk-zoom-2 dk-zoom-3").addClass("dk-zoom-"+currentSize);
+        $(zoomWrapper).find(".dataTables_wrapper").removeClass("dk-zoom-0 dk-zoom-1 dk-zoom-2 dk-zoom-3 dk-zoom-4 dk-zoom-5 dk-zoom-6").addClass("dk-zoom-"+currentSize);
 
     }
 
