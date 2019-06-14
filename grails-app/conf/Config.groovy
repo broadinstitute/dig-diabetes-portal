@@ -461,7 +461,6 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/informational/**':    ['permitAll'],
         '/region/**':           ['ROLE_USER'],
         '/trait/**':            ['ROLE_USER'],
-        '/trait/tissueTable':            ['ROLE_SYSTEM'],
         '/variant/**':          ['ROLE_USER'],
         '/variantInfo/**':      ['ROLE_USER'],
         '/grs/**':              ['ROLE_USER'],
