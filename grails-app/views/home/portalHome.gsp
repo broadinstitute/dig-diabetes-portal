@@ -459,6 +459,9 @@
                         <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
                             <g:message code="portal.sleep.use.citation.itself" />
                         </g:elseif>
+                        <g:elseif test="${g.portalTypeString()?.equals('lung')}">
+                            <g:message code="portal.lung.use.citation.itself" />
+                        </g:elseif>
                         <g:else></g:else>
                         </p>
                     </div>
