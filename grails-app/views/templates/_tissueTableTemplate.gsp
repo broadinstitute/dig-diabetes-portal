@@ -7,7 +7,10 @@
                 <h1 class="dk-page-title">Tissue enrichments for <span class="phenotypeSpecifier">{{phenotype}}</span></h1>
             </div>
         </div>
-        <p><g:message code="tissueTable.interface-help1"></g:message> <g:helpText title="tissueTable.overall.help.header" placement="bottom" body="tissueTable.help.text"/> <g:message code="tissueTable.interface-help2"></g:message></p>
+        <p><g:message code="tissueTable.interface-help1"></g:message>
+<g:helpText title="tissueTable.overall.help.header" placement="bottom" body="tissueTable.help.text"/>
+<g:message code="tissueTable.interface-help2"></g:message></p>
+<p><g:message code="tissueTable.interface-help3"></g:message></p>
         <div class="row">
             <div class="col-sm-12">
                 <div class="datatable-control-box">
