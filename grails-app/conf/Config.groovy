@@ -960,7 +960,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "portal.lung.header.title.short",
                                           [],
                                           ["HHIP"],
-                                          ["rs62158211"],
+                                          ["rs13113591"],
                                           ["chr2:113,873,524-114,136,577"],
                                           "images/lung/front_LDKP_banner_bg.png",
                                           "",
