@@ -950,7 +950,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "GWAS_UKBiobank_ModLeic_eu_mdv130",// used to pick a default data set for a gene query
                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
-                                          ["AnteriorCaudate"],
+                                          ["NHLF", "AnteriorCaudate"],
                                           ["OTHER", "GLYCEMIC", "ANTHROPOMETRIC"], // most important phenotype group name
                                           [],
                                           "[3]",
