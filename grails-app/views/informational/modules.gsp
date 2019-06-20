@@ -26,6 +26,7 @@
             "geneTraitInput":"#gene-trait-input",
             "geneIndexUrl":"${createLink(controller:'gene', action:'index')}",
             "traitSearchUrl":"${createLink(controller:'trait',action:'traitSearch')}",
+            "traitTissueTable":"${createLink(controller:'trait',action:'tissueTable')}",
             "genePrioritizationUrl":"${createLink(controller:'trait',action:'genePrioritization')}",
             "findTheRightDataPageUrl": "${createLink(controller:'gene',action:'findTheRightDataPage')}",
             "findTheRightGenePageUrl": "${createLink(controller:'variantSearch',action:'findTheRightGenePage')}",
@@ -38,6 +39,7 @@
         var drivingVariables = {
             phenotypeName: '${g.defaultPhenotype()}',
             traitSearchUrl: "${createLink(controller: 'trait', action: 'traitSearch')}",
+            traitTissueTableUrl: "${createLink(controller: 'trait', action: 'tissueTable')}",
             ajaxClumpDataUrl: '${createLink(controller: "trait", action: "ajaxClumpData")}',
             retrievePhenotypesAjaxUrl: '<g:createLink controller="variantSearch" action="retrievePhenotypesAjax" />',
             ajaxSampleGroupsPerTraitUrl: '${createLink(controller: "trait", action: "ajaxSampleGroupsPerTrait")}',
@@ -104,7 +106,7 @@
 
             if (userLogIn) {
                     mpgSoftware.moduleLaunch.fillPhenotypesDropdown(drivingVariables.phenotypeName,'phenotypeDropdownWrapper','phenotypeDropdown');
-                mpgSoftware.moduleLaunch.fillPhenotypesDropdown(drivingVariables.phenotypeName,'phenotypeDropdownWrapper2','phenotypeDropdown');
+                mpgSoftware.moduleLaunch.fillPhenotypesDropdown(drivingVariables.phenotypeName,'phenotypeDropdownWrapper2','phenotypeDropdown2');
 
             } else {
 
@@ -192,7 +194,7 @@
                         </td>
                         <td>
                             <label>Select phenotype</label>
-                            <div id="phenotypeDropdownWrapper2">
+                            <div id="phenotypeDropdownWrapper">
 
                             </div>
 
@@ -212,11 +214,13 @@
                     </td>
                         <td>
                             <label>Select phenotype</label>
-                            <div id="phenotypeDropdownWrapper">
+                            <div id="phenotypeDropdownWrapper2">
 
                             </div>
 
-                            <div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact" style="margin-top: 10px;" > <a href="${createLink(controller:'trait', action:'tissueTable')}"> Tissue Enrichment Table</a> </div>
+                            %{--<div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact" style="margin-top: 10px;" > <a href="${createLink(controller:'trait', action:'tissueTable')} + ?trait="> Tissue Enrichment Table</a> </div>--}%
+
+                            <div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact" style="margin-top: 10px;" > <a id="launchTissueEnrichment" href="javascript:;" onclick="mpgSoftware.moduleLaunch.launchTissueEnrichment()">Tissue Enrichment table</a> </div>
 
                         </td>
                     </tr>

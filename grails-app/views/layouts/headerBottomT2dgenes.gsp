@@ -29,6 +29,7 @@
                 <ul>
                     <li class="" style=""><a href="${createLink(controller:'trait', action:'traitSearch')}?trait=T2D&significance=0.0005"><g:message code="LD.clumping.header"/></a></li>
                     <li class="" style=""><a href="${createLink(controller:'variantSearch', action:'variantSearchWF')}"><g:message code="variant.search.header"/></a></li>
+                    <li class="data-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="${createLink(controller:'trait', action:'tissueTable')}"><g:message code="portal.header.tissue.table"/><span class="new-dataset-flag" style="position:relative; width: 30px; background-size: 30px; margin-right: -10px;">&nbsp;</span></a></li>
                     <g:if test="${g.portalTypeString()?.equals('t2d')}">
                         <g:if test="${restServer.retrieveBeanForCurrentPortal().exposeGrsModule}">
                             <li class="grs-btn" style=""><a href="${createLink(controller:'grs', action:'grsInfo')}"><g:message code="portal.header.nav.grs"/></a></li>
@@ -40,7 +41,7 @@
 
                 </ul>
             </li>
-            <li class="data-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="${createLink(controller:'trait', action:'tissueTable')}"><g:message code="portal.header.tissue.table"/><span class="new-dataset-flag" style="position:relative; width: 30px; background-size: 30px; margin-right: -10px;">&nbsp;</span></a></li>
+
             <g:if test="${restServer.retrieveBeanForCurrentPortal().getExposeEffectorGeneTableUi()}">
                 <li class="data-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="${createLink(controller:'gene', action:'effectorGeneTable')}"><g:message code="portal.header.effector.gene.table"/><span class="new-dataset-flag" style="position:relative; width: 30px; background-size: 30px; margin-right: -10px;">&nbsp;</span></a></li>
             </g:if>

@@ -22,6 +22,14 @@ var mpgSoftware = mpgSoftware || {};
             window.location.href = launchLDClumpURL;
         }
 
+
+        var launchTissueEnrichment = function() {
+            var rememVars = mpgSoftware.moduleLaunch.getMySavedVariables();
+            var selectedVal = $('#phenotypeDropdown2').val();
+            var launchTissueEnrichmentURL = rememVars.traitTissueTableUrl + "?trait=" + selectedVal;
+            window.location.href = launchTissueEnrichmentURL;
+        }
+
         var handleAjaxError = function() {
             var currentPage = window.location.href;
             var loginModal = '<div class="modal fade" id="mode3Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">\n' +
@@ -105,7 +113,8 @@ var mpgSoftware = mpgSoftware || {};
             setMySavedVariables:setMySavedVariables,
             getMySavedVariables:getMySavedVariables,
             launchLDClumping: launchLDClumping,
-            handleAjaxError: handleAjaxError
+            handleAjaxError: handleAjaxError,
+            launchTissueEnrichment:launchTissueEnrichment
         }
     }());
 

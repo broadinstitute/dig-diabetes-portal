@@ -311,11 +311,11 @@ environments {
 
 //       grails.serverURL = "http://www.type2diabetesgenetics.org"
 //        grails.serverURL = "http://www.type2diabetesgenetics.org"
-        grails.serverURL = "http://variant2function.org"
+//        grails.serverURL = "http://variant2function.org"
 
 //        grails.serverURL = "http://demo52k.us-east-1.elasticbeanstalk.com"
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
-//      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
+      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 
 //     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
 
@@ -971,4 +971,5 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0  // expose the effector gene table
                                   )
 ]
+
 
