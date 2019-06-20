@@ -2006,14 +2006,7 @@ mpgSoftware.dynamicUi = (function () {
         var sharedTable = getAccumulatorObject("sharedTable_"+idForTheTargetDiv);
         var rowsToInsert = [];
         var combinedSortedHeaders = [];
-        if ( ($.isArray(sharedTable)) &&
-            (sharedTable.length  === 0)) {
-            // this is the first data in the tissue table
-            sharedTable = new SharedTableObject( 'tissueTableTissueHeaders',sortedHeaderObjects.length+1,0);
-            setAccumulatorObject("sharedTable_"+idForTheTargetDiv,sharedTable);
-            //sharedTable["rememberHeadersInTissueTable"] = sortedHeaderObjects;
-            setAccumulatorObject("rememberHeadersInTissueTable", sortedHeaderObjects);
-        } else if (sharedTable.numberOfColumns === 0) {
+        if (sharedTable.numberOfColumns === 0) {
             if (returnObject.contents.length===0){
                 return;
             }
@@ -2021,12 +2014,11 @@ mpgSoftware.dynamicUi = (function () {
             sortedHeaderObjects = insertAnyHeaderRecords(returnObject,tissuesAlreadyInTheTable,dataAnnotationType,intermediateDataStructure,returnObject);
             intermediateDataStructure["headerNames"] = sortedHeaderObjects;
             sharedTable["numberOfColumns"] = sortedHeaderObjects.length+1;
-            //sharedTable["rememberHeadersInTissueTable"] = sortedHeaderObjects;
             setAccumulatorObject("rememberHeadersInTissueTable", sortedHeaderObjects);
 
         } else {
             if (returnObject.contents.length===0){
-                return;
+                return;  // we have no data to present. Abandon ship on adding this row
             }
             // we need to merge new data into the old data.  get our new data inputted in an array.
             if (( typeof returnObject.header !== 'undefined' ) &&
@@ -2138,18 +2130,10 @@ mpgSoftware.dynamicUi = (function () {
             _.forEach(oneRow, function(oneElement){
                 switch(oneElement.dataAnnotationTypeCode){
                     case 'LIT':// these are row labels
-                        // intermediateDataStructure.rowsToAdd[currentRow].columnCells[0] =
-                        //     new IntermediateStructureDataCell(  oneElement.title,
-                        //                                         oneElement.renderData,
-                        //                                         oneElement.annotation,
-                        //                                         oneElement.dataAnnotationTypeCode);
+                        // These are added by the buildHeader and addContent routines
                         break;
                     case 'EMC':// these are row labels
-                        // intermediateDataStructure.rowsToAdd[currentRow].columnCells[0] =
-                        //     new IntermediateStructureDataCell(  oneElement.title,
-                        //                                         oneElement.renderData,
-                        //                                         oneElement.annotation,
-                        //                                         oneElement.dataAnnotationTypeCode);
+                        // These are empty cells, and what we have by default anyway
                         break;
                     default:
                         var indexOfColumn = _.findIndex(intermediateDataStructure.headerNames,function(o){ return o===oneElement.renderData.tissueName});
@@ -5239,9 +5223,12 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
 
     var  dataTableZoomSet =    function (TGWRAPPER,TGZOOM) {
-        $(TGWRAPPER).find(".dataTables_wrapper").removeClass("dk-zoom-0 dk-zoom-1 dk-zoom-2 dk-zoom-3").addClass("dk-zoom-"+TGZOOM);
+        $(TGWRAPPER).find(".dataTables_wrapper").removeClass("dk-zoom-0 dk-zoom-1 dk-zoom-2 dk-zoom-3 dk-zoom-4 dk-zoom-5 dk-zoom-6").addClass("dk-zoom-"+TGZOOM);
     }
-    var  dataTableZoomDynaSet =    function (zoomWrapper,getBigger) {
+    var  dataTableZoomDynaSet =    function (zoomWrapper,getBigger,event) {
+        if ( typeof event !== 'undefined'){
+            event.stopPropagation();
+        }
         if (typeof $(zoomWrapper).data("zoomParmHolder") === 'undefined') {
             $(zoomWrapper).data("zoomParmHolder",1);
         }
@@ -5251,13 +5238,14 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 currentSize--;
             }
         } else {
-            if (currentSize < 3){
+            if (currentSize < 6){
                 currentSize++;
             }
         }
         $(zoomWrapper).data("zoomParmHolder",currentSize);
+        console.log("currentsize="+currentSize+".")
 
-        $(zoomWrapper).find(".dataTables_wrapper").removeClass("dk-zoom-0 dk-zoom-1 dk-zoom-2 dk-zoom-3").addClass("dk-zoom-"+currentSize);
+        $(zoomWrapper).find(".dataTables_wrapper").removeClass("dk-zoom-0 dk-zoom-1 dk-zoom-2 dk-zoom-3 dk-zoom-4 dk-zoom-5 dk-zoom-6").addClass("dk-zoom-"+currentSize);
 
     }
 

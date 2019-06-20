@@ -24,20 +24,21 @@ mpgSoftware.tissueTable = (function () {
             if (( typeof  data !== 'undefined') ||
                 ( typeof  data.phenotypeMapping !== 'undefined')){
                 var phenotypeNames = [];
-                var translation ={};
+                //var translation ={};
                 _.forEach(data.phenotypeMapping,function (phenotypeRecord){
                     _.forEach(phenotypeRecord,function (humanReadablePhenotype,phenotypeName){
-                        phenotypeNames.push(phenotypeName);
-                        translation[phenotypeName]=humanReadablePhenotype
+                        phenotypeNames.push({phenotypeCode:phenotypeName,readablePhenotype:humanReadablePhenotype});
+                       // translation[phenotypeName]=humanReadablePhenotype
                     });
 
                 });
-                _.forEach(phenotypeNames.sort(),function (phenotypeName){
+                _.forEach(_.sortBy(phenotypeNames,['readablePhenotype']),function (phenotype){
                     var optionToAdd;
-                    if (phenotypeName===preferredPhenotype){
-                        optionToAdd = '<option selected="selected" value="'+phenotypeName+'">'+translation[phenotypeName]+'</option>';
+                    if (phenotype.phenotypeCode===preferredPhenotype){
+                        optionToAdd = '<option selected="selected" value="'+phenotype.phenotypeCode+'">'+phenotype.readablePhenotype+'</option>';
+                        $('span.phenotypeSpecifier').text(phenotype.readablePhenotype);
                     } else {
-                        optionToAdd = '<option value="'+phenotypeName+'">'+translation[phenotypeName]+'</option>';
+                        optionToAdd = '<option value="'+phenotype.phenotypeCode+'">'+phenotype.readablePhenotype+'</option>';
                     }
                     $(domSelector).append(optionToAdd);
                 })
@@ -53,7 +54,10 @@ mpgSoftware.tissueTable = (function () {
 
 
     var refreshTableForPhenotype = function(preferredPhenotype){
-        var phenotypeString = $(preferredPhenotype).val();
+        var domElement = $(preferredPhenotype);
+        var phenotypeString = domElement.val();
+        var phenotypeName = domElement.find(':selected').text();
+        $('span.phenotypeSpecifier').text(phenotypeName);
          mpgSoftware.dynamicUi.modifyScreenFields({phenotype:phenotypeString},getVariablesToRemember());
     }
 

@@ -7,7 +7,10 @@
                 <h1 class="dk-page-title">Tissue enrichments for <span class="phenotypeSpecifier">{{phenotype}}</span></h1>
             </div>
         </div>
-        <p><g:message code="tissueTable.interface-help1"></g:message> <g:helpText title="tissueTable.overall.help.header" placement="bottom" body="tissueTable.help.text"/> <g:message code="tissueTable.interface-help2"></g:message></p>
+        <p><g:message code="tissueTable.interface-help1"></g:message>
+<g:helpText title="tissueTable.overall.help.header" placement="bottom" body="tissueTable.help.text"/>
+<g:message code="tissueTable.interface-help2"></g:message></p>
+<p><g:message code="tissueTable.interface-help3"></g:message></p>
         <div class="row">
             <div class="col-sm-12">
                 <div class="datatable-control-box">
@@ -20,11 +23,11 @@
 
                     <div class="datatable-zoom-control">
                         <div class="tool-label">Zoom</div>
-                        <button type="button" class="btn btn-default btn-secondary" aria-label="Zoom out" title="click to zoom out" onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#mainTissueDiv',false)">
-                            <span class="glyphicon glyphicon-minus" aria-hidden="true" onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicGeneHolder',false)"></span>
+                        <button type="button" class="btn btn-default btn-secondary" aria-label="Zoom out" title="click to zoom out" onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#mainTissueDiv',false,event)">
+                            <span class="glyphicon glyphicon-minus" aria-hidden="true" onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#mainTissueDiv',false,event)"></span>
                         </button>
-                        <button type="button" class="btn btn-default btn-secondary" aria-label="Zoom in" title="click to zoom in" onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#mainTissueDiv',true)">
-                            <span class="glyphicon glyphicon-plus" aria-hidden="true" onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicGeneHolder',true)"></span>
+                        <button type="button" class="btn btn-default btn-secondary" aria-label="Zoom in" title="click to zoom in" onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#mainTissueDiv',true,event)">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true" onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#mainTissueDiv',true,event)"></span>
                         </button>
 
                     </div>

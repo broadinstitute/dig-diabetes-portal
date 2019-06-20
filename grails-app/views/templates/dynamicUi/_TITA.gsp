@@ -7,7 +7,7 @@ records={{numberRecords}}
 </script>
 
 <script id="gregorTissueTableTissueRowLabel"  type="x-tmpl-mustache">
-<div class="tissueTableHeader staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">GREGOR <g:helpText title="tissueTable.GREGOR.help.header" placement="bottom" body="tissueTable.GREGOR.help.text"/>
+<div class="tissueTableHeader staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">GREGOR min p-value&nbsp;<g:helpText title="tissueTable.GREGOR.help.header" placement="bottom" body="tissueTable.GREGOR.help.text"/>
             <span class="glyphicon glyphicon-cog options-icon pull-right" aria-hidden="true" title="Open column filter"
 onclick="mpgSoftware.dynamicUi.displayAnnotationFilter(event,this);"></span>
 </div>
@@ -36,10 +36,10 @@ onclick="mpgSoftware.dynamicUi.displayAnnotationFilter(event,this);"></span>
              <div significance_sortField="{{significanceValue}}" sortField="{{significanceValue}}"
              class="tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'GREGOR predictions for {{tissueName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
-               data-target="#effector_gene_{{tissueNameKey}}" style="color:black"> {{cellPresentationString}}
+               data-target="#gregor_tissue_table_{{tissueNameKey}}" style="color:black"> {{cellPresentationString}}
                </a>
 
-               <div  class="collapse openEffectorGeneInformationInGeneTable" id="effector_gene_{{tissueNameKey}}">
+               <div  class="collapse openEffectorGeneInformationInGeneTable" id="gregor_tissue_table_{{tissueNameKey}}">
                     {{#recordsExist}}
                         <table class="expandableDrillDownTable openEffectorGeneInformationInGeneTable">
                          <thead>

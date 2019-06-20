@@ -704,14 +704,14 @@
                                         <div class="datatable-zoom-control">
                                             <div class="tool-label">Zoom</div>
                                             <button type="button" class="btn btn-default btn-secondary" aria-label="Zoom out"  title="click to zoom out"
-                                                onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicGeneHolder',false)">
+                                                onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicGeneHolder',false,event)">
                                                 <span class="glyphicon glyphicon-minus" aria-hidden="true"
-                                                onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicGeneHolder',false)"></span>
+                                                onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicGeneHolder',false,event)"></span>
                                             </button>
                                             <button type="button" class="btn btn-default btn-secondary" aria-label="Zoom in"  title="click to zoom in"
-                                                onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicGeneHolder',true)">
+                                                onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicGeneHolder',true,event)">
                                                 <span class="glyphicon glyphicon-plus" aria-hidden="true"
-                                                onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicGeneHolder',true)"></span>
+                                                onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicGeneHolder',true,event)"></span>
                                             </button>
 
                                         </div>
