@@ -123,6 +123,8 @@
 <g:render template="./data/GWAS_LivingBiobank_MAS_ea" />
 <g:render template="./data/GWAS_LivingBiobank_CHS_ea" />
 <g:render template="./data/GWAS_UKBiobankModLeic" />
+<g:render template="./data/GWAS_SpiroMeta_eu" />
+
 
 
 <script id="metaData2" type="x-tmpl-mustache">
