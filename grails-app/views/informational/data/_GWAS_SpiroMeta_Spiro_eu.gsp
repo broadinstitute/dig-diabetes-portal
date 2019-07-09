@@ -1,4 +1,4 @@
-<script class="panel-body" id="GWAS_SpiroMeta_eu_script" type="x-tmpl-mustache">
+<script class="panel-body" id="GWAS_SpiroMeta_Spiro_eu_script" type="x-tmpl-mustache">
 
  <h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
 <p><g:message code="informational.data.download.SpiroMeta"></g:message></p>
@@ -24,7 +24,6 @@
 <table class="table table-condensed table-responsive table-striped">
 
  <tr><th>Subjects</th><th>Cohort</th><th>Ancestry</th></tr>
-<tr><td>321,047</td><td>UK Biobank</td><td>European</td></tr>
 <tr><td>5,934</td><td>British 1958 Birth Cohort (B58C)</td><td>European</td></tr>
 <tr><td>4,355</td><td>Busselton Health Study 1 and 2 (BHS1&2)</td><td>European</td></tr>
 <tr><td>826</td><td>CROATIA-Korcula study</td><td>European</td></tr>
