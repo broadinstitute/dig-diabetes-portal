@@ -46,7 +46,8 @@
                         retrieveGeneLevelAssociationsUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveGeneLevelAssociations")}',
                         retrieveListOfGenesInARangeUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveListOfGenesInARange")}',
                         retrieveEffectorGeneInformationUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveEffectorGeneInformation")}',
-                         dataAnnotationTypes: [
+                        dynamicTableType:'effectorGeneTable',
+                        dataAnnotationTypes: [
                             {   code: 'FEGT',
                                 category: 'Annotation',
                                 displayCategory: 'Annotation',

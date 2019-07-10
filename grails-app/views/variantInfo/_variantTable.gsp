@@ -34,30 +34,31 @@
                     getAllPhenotypesAjaxUrl: '${g.createLink(controller: "trait", action: "getAllPhenotypesAndTranslationAjax")}',
                     retrieveLdsrDataUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveLdsrData")}',
                     retrieveDepictTissueDataUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveDepictTissues")}',
+                    dynamicTableType:'variantTable',
                     dataAnnotationTypes: [
                         {
-                            code: 'TITA',
+                            code: 'VHDR',
                             category: 'Annotation',
                             displayCategory: 'Annotation',
-                            subcategory: 'Gregor list',
-                            displaySubcategory: 'Gregor list',
+                            subcategory: 'Variant list',
+                            displaySubcategory: 'Variant list',
                             headerWriter:'gregorTissueTableTissueHeader',
                             cellBodyWriter:'gregorTissueTableBody',
                             categoryWriter:'gregorTissueTableTissueHeaderLabel',
                             subCategoryWriter:'gregorTissueTableTissueRowLabel',
                             numberRecordsCellPresentationStringWriter:'gregorTissueTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'gregorTissueTableSignificanceCellPresentationString',
-                            internalIdentifierString:'getInformationFromGregorForTissueTable'
+                            internalIdentifierString:'getVariantsFromQtlForContextDescription'
                         }
                     ],
                     dynamicTableConfiguration: {
-                        domSpecificationForAccumulatorStorage:'#mainTissueDiv',
+                        domSpecificationForAccumulatorStorage:'#mainVariantDiv',
                         formOfStorage: 'loadFromTable',
-                        initializeSharedTableMemory:  '#mainTissueDiv table.tissueTableHolder'
+                        initializeSharedTableMemory:  '#mainVariantDiv table.tissueTableHolder'
                     }
                 };
-                mpgSoftware.tissueTable.setVariablesToRemember(drivingVariables);
-                mpgSoftware.tissueTable.initialPageSetUp("${phenotype}");
+                mpgSoftware.variantTable.setVariablesToRemember(drivingVariables);
+                mpgSoftware.variantTable.initialPageSetUp("${phenotype}");
             };
 
 
@@ -80,8 +81,8 @@
 </script>
 <g:render template="/templates/dynamicUiTemplate" />
 <g:render template="/templates/tissueTableTemplate" />
-<g:render template="/templates/dynamicUi/TITA" />
-
-<div id="mainTissueDiv">
+<g:render template="/templates/dynamicUi/VHDR" />
+<h1>Hello tissue table</h1>
+<div id="mainVariantDiv">
 
 </div>

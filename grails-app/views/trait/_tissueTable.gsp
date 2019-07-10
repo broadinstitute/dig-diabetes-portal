@@ -34,6 +34,7 @@
                     getAllPhenotypesAjaxUrl: '${g.createLink(controller: "trait", action: "getAllPhenotypesAndTranslationAjax")}',
                     retrieveLdsrDataUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveLdsrData")}',
                     retrieveDepictTissueDataUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveDepictTissues")}',
+                    dynamicTableType:'tissueTable',
                     dataAnnotationTypes: [
                         {
                             code: 'TITA',

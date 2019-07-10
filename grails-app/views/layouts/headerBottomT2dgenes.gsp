@@ -33,14 +33,11 @@
                         <g:if test="${restServer.retrieveBeanForCurrentPortal().exposeGrsModule}">
                             <li class="grs-btn" style=""><a href="${createLink(controller:'grs', action:'grsInfo')}"><g:message code="portal.header.nav.grs"/></a></li>
                         </g:if>
-                        %{--<li class="grs-btn" style=""><a href="${createLink(controller:'gait', action:'gaitInfo')}/SLC30A8"><g:message code="portal.header.nav.geneGait"/></a></li>--}%
-                        %{--<li class="grs-btn" style=""><a href="${createLink(controller:'gait', action:'gaitInfo')}/rs13266634"><g:message code="portal.header.nav.variantGait"/></a></li>--}%
                     </g:if>
-
-
                 </ul>
             </li>
             <li class="data-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="${createLink(controller:'trait', action:'tissueTable')}"><g:message code="portal.header.tissue.table"/><span class="new-dataset-flag" style="position:relative; width: 30px; background-size: 30px; margin-right: -10px;">&nbsp;</span></a></li>
+            <li class="data-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="${createLink(controller:'variantInfo', action:'variantTable')}"><g:message code="portal.header.variant.table"/><span class="new-dataset-flag" style="position:relative; width: 30px; background-size: 30px; margin-right: -10px;">&nbsp;</span></a></li>
             <g:if test="${restServer.retrieveBeanForCurrentPortal().getExposeEffectorGeneTableUi()}">
                 <li class="data-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="${createLink(controller:'gene', action:'effectorGeneTable')}"><g:message code="portal.header.effector.gene.table"/><span class="new-dataset-flag" style="position:relative; width: 30px; background-size: 30px; margin-right: -10px;">&nbsp;</span></a></li>
             </g:if>

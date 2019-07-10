@@ -26,6 +26,20 @@ class VariantInfoController {
 
     def index() { }
 
+
+
+
+    def variantTable(){
+        String phenotypeString = params.trait ?: restServerService.retrieveBeanForCurrentPortal().phenotype
+
+        render (view: 'variantTableHolder', model:[
+                portalVersionBean:restServerService.retrieveBeanForCurrentPortal(),
+                phenotype:phenotypeString
+        ])
+    }
+
+
+
     /***
      *  Launch the page frame that will hold a friendly collection of information about a single variant. The associated Ajax call is  variantAjax
      * @return
@@ -34,30 +48,9 @@ class VariantInfoController {
         String locale = RequestContextUtils.getLocale(request)
         JSONObject phenotypeDatasetMapping = metaDataService.getPhenotypeDatasetMapping()
         String variantToStartWith = params.id
-        String locusZoomDataset
-        //List <String> defaultTissues = []   -- no need for tissues when looking at a particular variant
         String phenotype = metaDataService.getDefaultPhenotype()
-        String portalType = g.portalTypeString() as String
-        String igvIntro = ""
-        switch (portalType){
-            case 't2d':
-                igvIntro = g.message(code: "gene.igv.intro1", default: "Use the IGV browser")
-                break
-            case 'mi':
-                igvIntro = g.message(code: "gene.mi.igv.intro1", default: "Use the IGV browser")
-                break
-            case 'stroke':
-                igvIntro = g.message(code: "gene.stroke.igv.intro1", default: "Use the IGV browser")
-                break
-            case 'sleep':
-                igvIntro = g.message(code: "gene.stroke.igv.intro1", default: "Use the IGV browser")
-                break
-            case 'ibd':
-                igvIntro = g.message(code: "gene.ibd.igv.intro1", default: "Use the IGV browser")
-                break
-            default:
-                break
-        }
+
+        String igvIntro = "Use the IGV browser"
 
        // this supports variant searches coming from links inside of LZ plots
         if(params.lzId) {
