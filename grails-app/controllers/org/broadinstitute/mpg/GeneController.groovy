@@ -101,7 +101,7 @@ class GeneController {
         } catch(e){
           //  e.printStackTrace()
         }
-        defaultTissues = restServerService.retrieveBeanForPortalType(portalType)?.getTissues()
+        List<String> defaultTissues = restServerService.retrieveBeanForPortalType(portalType)?.getTissues()
 
         if (params.phenotypeChooser){
             phenotype = params.phenotypeChooser
