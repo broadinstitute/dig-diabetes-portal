@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by mduby on 8/21/15.
@@ -83,6 +85,10 @@ public class BurdenJsonBuilder {
         // local variables
         String finalString;
         StringBuilder stringBuilder = new StringBuilder();
+        Boolean biallelicBurdenTest = false;
+        if ((alleleType != null)  && (alleleType.length()>0) && ("multi".equals(alleleType))) {
+            biallelicBurdenTest = true;
+        }
 
         // open the json object
         stringBuilder.append("{");
@@ -140,9 +146,34 @@ public class BurdenJsonBuilder {
         } else if (variantList.size() == 0) {
                 throw new PortalException("Got empty variant list for the burden test");
         } else {
-            for (int i = 0; i < variantList.size(); i++) {
-                stringBuilder.append("\"" + variantList.get(i) + "\"");
-                if (i < variantList.size() - 1) {
+            List<String> adjustedVariantList = new ArrayList<String>();
+            if (biallelicBurdenTest){
+                for (int i = 0; i < variantList.size(); i++) {
+                    if (variantList.get(i).contains(",")) { // need to break every multi allelic into alleles
+                        String rawAlternatives[] = variantList.get(i).split(",");
+                        String firstAlternateAllele = rawAlternatives[0];
+                        Pattern p = Pattern.compile(".*_");
+                        Matcher m = p.matcher(firstAlternateAllele);
+                        String chromPosRef = "";
+                        if (m.find()) {
+                            chromPosRef = m.group(0);
+                        }
+                        adjustedVariantList.add("\"" + firstAlternateAllele + "\"");
+                        for (int j = 1; j < rawAlternatives.length; j++) {
+                            adjustedVariantList.add("\"" + chromPosRef + rawAlternatives[j] + "\"");
+                        }
+                    } else {
+                        adjustedVariantList.add("\"" + variantList.get(i) + "\"");
+                    }
+                }
+            } else {
+                for (int i = 0; i < variantList.size(); i++) {
+                    adjustedVariantList.add("\"" + variantList.get(i) + "\"");
+                }
+            }
+            for (int i = 0; i < adjustedVariantList.size(); i++) {
+                stringBuilder.append(adjustedVariantList.get(i));
+                if (i < adjustedVariantList.size() - 1) {
                     stringBuilder.append(",");
                 }
             }
