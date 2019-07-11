@@ -37,9 +37,9 @@
                         </g:if>
 
                     </ul></li>
-                <li class="about-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="http://3.208.176.209/about/${g.portalTypeString()}" target="_blank"><g:message code="portal.header.nav.about"/></a></li>
-                <li class="policies-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="http://3.208.176.209/policies/${g.portalTypeString()}" target="_blank"><g:message code="portal.header.nav.policies"/></a></li>
-                <li class="tutorials-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="http://3.208.176.209/resources/${g.portalTypeString()}" target="_blank"><g:message code="portal.header.nav.tutorials"/></a></li>
+                <li class="about-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="http://www.kp4cd.org/about/${g.portalTypeString()}" target="_blank"><g:message code="portal.header.nav.about"/></a></li>
+                <li class="policies-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="http://www.kp4cd.org/policies/${g.portalTypeString()}" target="_blank"><g:message code="portal.header.nav.policies"/></a></li>
+                <li class="tutorials-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="http://www.kp4cd.org/resources/${g.portalTypeString()}" target="_blank"><g:message code="portal.header.nav.tutorials"/></a></li>
                 <g:if test="${g.portalTypeString()?.equals('stroke')}">
                     <li class="contact-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="portal.header.nav.contact_plural"/></a></li>
                     <li style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="https://CV-disease-portal.blogspot.com/" target="_blank"><g:message code="portal.header.nav.blog" default="blog" /></a></li>
