@@ -6,9 +6,9 @@
     (function () {
         "use strict";
 
-        mpgSoftware.tissueTableInitializer = (function () {
+        mpgSoftware.variantTableInitializer = (function () {
 
-            var tissueTableConfiguration = function(){
+            var variantTableConfiguration = function(){
                 var drivingVariables = {
                     getGRSListOfVariantsAjaxUrl:"${createLink(controller:'grs',action: 'getGRSListOfVariantsAjax')}",
                     getLocusZoomFilledPlotUrl: '${createLink(controller:"gene", action:"getLocusZoomFilledPlot")}',
@@ -65,7 +65,7 @@
 
 
             return {
-                tissueTableConfiguration:tissueTableConfiguration
+                variantTableConfiguration:variantTableConfiguration
             }
         }());
 
@@ -76,11 +76,11 @@
 
 
     $( document ).ready(function() {
-        mpgSoftware.tissueTableInitializer.tissueTableConfiguration();
+        mpgSoftware.variantTableInitializer.variantTableConfiguration();
     });
 </script>
 <g:render template="/templates/dynamicUiTemplate" />
-<g:render template="/templates/tissueTableTemplate" />
+<g:render template="/templates/variantTableTemplate" />
 <g:render template="/templates/dynamicUi/VHDR" />
 <h1>Hello tissue table</h1>
 <div id="mainVariantDiv">

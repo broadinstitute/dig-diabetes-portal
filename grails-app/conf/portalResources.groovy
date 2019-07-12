@@ -251,6 +251,20 @@ modules = {
         resource url: 'js/lib/bootstrap-multiselect.js'
         resource url: 'css/lib/bootstrap-multiselect.css'
     }
+    variantTable {
+        dependsOn "core", "portalHome"
+
+        resource url: 'js/lib/dport/variantTable.js'
+
+        resource url: 'js/lib/dport/dynamicUi.js'
+        resource url: 'css/dport/dynamicUi.css'
+
+        resource url: 'js/lib/dport/matrixMath.js'
+
+        resource url: 'js/lib/bootstrap-multiselect.js'
+        resource url: 'css/lib/bootstrap-multiselect.css'
+    }
+
     mustache {
         resource url: 'js/lib/mustache.js'
     }

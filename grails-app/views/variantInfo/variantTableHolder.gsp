@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta name="layout" content="t2dGenesCore"/>
-  <r:require module="tissueTable"/>
+  <r:require module="variantTable"/>
 
 
   <r:layoutResources/>

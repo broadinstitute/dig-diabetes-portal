@@ -3579,7 +3579,22 @@ mpgSoftware.dynamicUi = (function () {
 
         }
 
+        switch (additionalParameters.dynamicTableType) {
+            case 'geneTable':
+                break;
+            case 'effectorGeneTable':
+                break;
+            case 'tissueTable':
+                break;
+            case 'variantTable':
+                break;
+            default:
+                alert (' unexpected dynamicTableType === '+ additionalParameters.dynamicTableType +'.')
+                break;
+        }
 
+
+}
 
 
         var arrayOfRoutinesToUndertake = [];
@@ -3607,33 +3622,33 @@ mpgSoftware.dynamicUi = (function () {
 
 
         // Everything that happens on the variant table
-        $('#getVariantsFromQtlAndThenRetrieveEpigeneticData').on('click', function () {
-
-            resetAccumulatorObject("sharedTable_table.combinedVariantTableHolder");
-            destroySharedTable('table.combinedVariantTableHolder');
-            var arrayOfRoutinesToUndertake = [];
-
-            arrayOfRoutinesToUndertake.push( actionContainer('getVariantsWeWillUseToBuildTheVariantTable',
-                actionDefaultFollowUp("getVariantsWeWillUseToBuildTheVariantTable")));
-
-            arrayOfRoutinesToUndertake.push( actionContainer('getEqtlsGivenVariantList',
-                actionDefaultFollowUp("getEqtlsGivenVariantList")));
-
-
-            arrayOfRoutinesToUndertake.push( actionContainer('getABCGivenVariantList',
-                actionDefaultFollowUp("getABCGivenVariantList")));
-
-            arrayOfRoutinesToUndertake.push( actionContainer('getDnaseGivenVariantList',
-                actionDefaultFollowUp("getDnaseGivenVariantList")));
-
-            arrayOfRoutinesToUndertake.push( actionContainer('getH3k27acGivenVariantList',
-                actionDefaultFollowUp("getH3k27acGivenVariantList")));
-
-
-            _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
-
-
-        });
+        // $('#getVariantsFromQtlAndThenRetrieveEpigeneticData').on('click', function () {
+        //
+        //     resetAccumulatorObject("sharedTable_table.combinedVariantTableHolder");
+        //     destroySharedTable('table.combinedVariantTableHolder');
+        //     var arrayOfRoutinesToUndertake = [];
+        //
+        //     arrayOfRoutinesToUndertake.push( actionContainer('getVariantsWeWillUseToBuildTheVariantTable',
+        //         actionDefaultFollowUp("getVariantsWeWillUseToBuildTheVariantTable")));
+        //
+        //     arrayOfRoutinesToUndertake.push( actionContainer('getEqtlsGivenVariantList',
+        //         actionDefaultFollowUp("getEqtlsGivenVariantList")));
+        //
+        //
+        //     arrayOfRoutinesToUndertake.push( actionContainer('getABCGivenVariantList',
+        //         actionDefaultFollowUp("getABCGivenVariantList")));
+        //
+        //     arrayOfRoutinesToUndertake.push( actionContainer('getDnaseGivenVariantList',
+        //         actionDefaultFollowUp("getDnaseGivenVariantList")));
+        //
+        //     arrayOfRoutinesToUndertake.push( actionContainer('getH3k27acGivenVariantList',
+        //         actionDefaultFollowUp("getH3k27acGivenVariantList")));
+        //
+        //
+        //     _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
+        //
+        //
+        // });
 
 
 
