@@ -403,8 +403,9 @@ mpgSoftware.dynamicUi = (function () {
                 break;
 
             case "getVariantsFromQtlForContextDescription":
-                defaultFollowUp.displayRefinedContextFunction = displayVariantRecordsFromVariantQtlSearch;
-                defaultFollowUp.placeToDisplayData = '#dynamicVariantHolder div.dynamicUiHolder';
+                // the URL referenced here is nonfunctional, so this case is surely used nowhere
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.variantTableHeaders.displayRefinedVariantsInARange;
+                defaultFollowUp.placeToDisplayData = '#mainVariantDiv div.dynamicUiHolder';
                 break;
 
             case "getPhenotypesFromQtlForPhenotypeTable":
@@ -818,7 +819,8 @@ mpgSoftware.dynamicUi = (function () {
                         processEachRecord: processRecordsFromVariantQtlSearch,
                         displayRefinedContextFunction: displayFunction,
                         placeToDisplayData: displayLocation,
-                        actionId: nextActionId
+                        actionId: nextActionId,
+                        nameOfAccumulatorField:'rawVariantRecords'
                     }));
                 };
                 break;
@@ -3587,14 +3589,17 @@ mpgSoftware.dynamicUi = (function () {
             case 'tissueTable':
                 break;
             case 'variantTable':
+                setAccumulatorObject("chromosome","8");
+                setAccumulatorObject("extentBegin","117862462");
+                setAccumulatorObject("extentEnd","118289003");
                 break;
             default:
-                alert (' unexpected dynamicTableType === '+ additionalParameters.dynamicTableType +'.')
+                alert (' unexpected dynamicTableType === '+ additionalParameters.dynamicTableType +'.');
                 break;
         }
 
 
-}
+
 
 
         var arrayOfRoutinesToUndertake = [];

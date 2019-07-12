@@ -16,7 +16,7 @@
 var mpgSoftware = mpgSoftware || {};  // encapsulating variable
 mpgSoftware.dynamicUi = mpgSoftware.dynamicUi || {};   // second level encapsulating variable
 
-mpgSoftware.dynamicUi.geneHeaders = (function () {
+mpgSoftware.dynamicUi.variantTableHeaders = (function () {
     "use strict";
 
 
@@ -38,7 +38,7 @@ mpgSoftware.dynamicUi.geneHeaders = (function () {
                 alert(' No genes in the specified region')
             } else {
                 _.forEach(data.listOfGenes, function (geneRec) {
-                   if ( typeof _.find(rawGeneAssociationRecords,{name:geneRec.name2}) === 'undefined'){
+                    if ( typeof _.find(rawGeneAssociationRecords,{name:geneRec.name2}) === 'undefined'){
                         var chromosomeString = _.includes(geneRec.chromosome, "chr") ? geneRec.chromosome.substr(3) : geneRec.chromosome;
                         rawGeneAssociationRecords.push({
                                 chromosome: chromosomeString,
@@ -57,7 +57,7 @@ mpgSoftware.dynamicUi.geneHeaders = (function () {
     };
 
 
-    var displayRefinedGenesInARange = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+    var displayRefinedVariantsInARange = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
         mpgSoftware.dynamicUi.displayHeaderForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
             'GHDR', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
             'geneInfoArray');
@@ -78,6 +78,6 @@ mpgSoftware.dynamicUi.geneHeaders = (function () {
 // public routines are declared below
     return {
         processRecordsFromProximitySearch: processRecordsFromProximitySearch,
-        displayRefinedGenesInARange:displayRefinedGenesInARange
+        displayRefinedVariantsInARange:displayRefinedVariantsInARange
     }
 }());

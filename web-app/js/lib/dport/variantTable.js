@@ -1,5 +1,6 @@
 var mpgSoftware = mpgSoftware || {};
 
+
 mpgSoftware.variantTable = (function () {
     "use strict";
 

@@ -34,6 +34,7 @@
                     getAllPhenotypesAjaxUrl: '${g.createLink(controller: "trait", action: "getAllPhenotypesAndTranslationAjax")}',
                     retrieveLdsrDataUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveLdsrData")}',
                     retrieveDepictTissueDataUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveDepictTissues")}',
+                    retrieveVariantsWithQtlRelationshipsUrl:'${g.createLink(controller: "RegionInfo", action: "retrieveVariantsWithQtlRelationships")}',
                     dynamicTableType:'variantTable',
                     dataAnnotationTypes: [
                         {
@@ -48,7 +49,7 @@
                             subCategoryWriter:'gregorTissueTableTissueRowLabel',
                             numberRecordsCellPresentationStringWriter:'gregorTissueTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'gregorTissueTableSignificanceCellPresentationString',
-                            internalIdentifierString:'getVariantsFromQtlForContextDescription'
+                            internalIdentifierString:'getVariantsWeWillUseToBuildTheVariantTable'
                         }
                     ],
                     dynamicTableConfiguration: {
@@ -82,7 +83,7 @@
 <g:render template="/templates/dynamicUiTemplate" />
 <g:render template="/templates/variantTableTemplate" />
 <g:render template="/templates/dynamicUi/VHDR" />
-<h1>Hello tissue table</h1>
+
 <div id="mainVariantDiv">
 
 </div>
