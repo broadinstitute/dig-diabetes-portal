@@ -560,7 +560,7 @@
                 </div>
                 </div>
                     <g:if test="${g.portalTypeString()?.equals('t2d')}">
-                        <a href="http://t2d-genetics-portal.blogspot.com/2019/07/t2dkp-webinar-thursday-july-18.html" style="display:block; float:right; margin: 20px 15px -20px 0;"><img src="${resource(dir: 'images', file: 'webinar_jul_18.png')}" style="" ></a>
+                        <a href="http://t2d-genetics-portal.blogspot.com/2019/07/t2dkp-webinar-thursday-july-18.html" target="_blank" style="display:block; float:right; margin: 20px 15px -20px 0;"><img src="${resource(dir: 'images', file: 'webinar_jul_18.png')}" style="" ></a>
                     </g:if>
                     <div class="col-md-5 col-md-offset-1" style="margin-top:30px;">
                         <h3 style="font-weight:700; font-size:30px; font-family:'Oswald'; color:#000000; text-align: left; margin-top: 10px;"><g:message code="portal.home.news_headline" default="What's new" />&nbsp;<span style="color:#4eadcd; vertical-align: 5px;" class="glyphicon glyphicon-comment" aria-hidden="true"></span></h3>
