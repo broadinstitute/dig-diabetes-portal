@@ -622,7 +622,7 @@ grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'org.broadinsti
 grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.people.Role'
 
 
-portal.type.override = "lung"     // options are "t2d", "stroke", "mi", "ibd", "epilepsy", or "sleep".   What is the portal type for all nonsystem users?
+portal.type.override = "bone"     // options are "t2d", "stroke", "mi", "ibd", "epilepsy", or "sleep".   What is the portal type for all nonsystem users?
 
 
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
@@ -946,6 +946,57 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "Lung",
                                           "mdv130",
                                           "LDKP", // name of KB data we want
+                                          "COPD", // make sure your default phenotype exists in your default data set
+                                          "GWAS_UKBiobank_ModLeic_eu_mdv130",// used to pick a default data set for a gene query
+                                          ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
+                                          ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
+                                          ["NHLF", "AnteriorCaudate"],
+                                          ["OTHER", "GLYCEMIC", "ANTHROPOMETRIC"], // most important phenotype group name
+                                          [],
+                                          "[3]",
+                                          "GWAS_UKBiobank_ModLeic_eu_mdv130",
+                                          "images/lung/front_LDKP_logo_2019.svg",
+                                          "portal.lung.header.tagline",
+                                          "portal.lung.header.title.short",
+                                          [],
+                                          ["HHIP"],
+                                          ["rs13113591"],
+                                          ["chr2:113,873,524-114,136,577"],
+                                          "images/lung/front_LDKP_banner_bg.png",
+                                          "",
+                                          "images/lung/header_LDKP_logo2.svg",
+                                          "images/menu_bg_2017_5.png",
+                                          "false",
+                                          "",
+                                          "",
+                                          '8578131941543427205',
+                                          1, // expose the common variant tab have on the gene page
+                                          1, // expose the high-impact variant tab on the gene page
+                                          1,
+                                          0,
+                                          0,
+                                          1,
+                                          0,
+                                          1,1,1,
+                                          0,
+                                          0,
+                                          0,
+                                          0,
+                                          0,0,0, // Hi-C tab on the gene page
+                                          0,  // expose dynamic UI
+                                          0, // expose the data set hierarchy in the sunburst visualization on the data page
+                                          0, // expose the old school variant and association table.  Potentially useful for debugging
+                                          0, // expose the IGV interface in its own accordion section
+                                          0,  // expose an accordion section with the burden test on the gene page
+                                          0,  // expose the 'genes in region' tab on the gene page
+                                          0, // expose the region adjuster for the gene page
+                                          0, // expose the gene table on the dynamic UI
+                                          0  // expose the variant table on the dynamic UI
+                                  ),
+                                  new PortalVersionBean("bone",
+                                          "Bone",
+                                          "mdv140",
+                                          "MSGKP", // name of KB data we want
                                           "COPD", // make sure your default phenotype exists in your default data set
                                           "GWAS_UKBiobank_ModLeic_eu_mdv130",// used to pick a default data set for a gene query
                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
