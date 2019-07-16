@@ -1032,10 +1032,16 @@ mpgSoftware.dynamicUi = (function () {
             case "getVariantsWeWillUseToBuildTheVariantTable":
                 functionToLaunchDataRetrieval = function () {
 
-                    var phenotype = $('li.chosenPhenotype').attr('id');
-                    var chromosome = $('span.dynamicUiChromosome').text();
-                    var startExtent = $('span.dynamicUiGeneExtentBegin').text();
-                    var endExtent = $('span.dynamicUiGeneExtentEnd').text();
+                    // var phenotype = $('li.chosenPhenotype').attr('id');
+                    // var chromosome = $('span.dynamicUiChromosome').text();
+                    // var startExtent = $('span.dynamicUiGeneExtentBegin').text();
+                    // var endExtent = $('span.dynamicUiGeneExtentEnd').text();
+
+                    var phenotype = getAccumulatorObject("phenotype");
+                    var chromosome = getAccumulatorObject("chromosome");
+                    var startExtent = getAccumulatorObject("extentBegin");
+                    var endExtent = getAccumulatorObject("extentEnd");
+
                     var dataNecessaryToRetrieveVariantsPerPhenotype;
                     if (( typeof phenotype === 'undefined') ||
                         (typeof chromosome === 'undefined') ||
@@ -1058,7 +1064,8 @@ mpgSoftware.dynamicUi = (function () {
                         processEachRecord: processRecordsFromQtl,
                         displayRefinedContextFunction: displayFunction,
                         placeToDisplayData: displayLocation,
-                        actionId: nextActionId
+                        actionId: nextActionId,
+                        nameOfAccumulatorField:'variantNameArray'
                     }));
 
                 };
@@ -3589,6 +3596,7 @@ mpgSoftware.dynamicUi = (function () {
             case 'tissueTable':
                 break;
             case 'variantTable':
+                setAccumulatorObject("phenotype","T2D");
                 setAccumulatorObject("chromosome","8");
                 setAccumulatorObject("extentBegin","117862462");
                 setAccumulatorObject("extentEnd","118289003");
