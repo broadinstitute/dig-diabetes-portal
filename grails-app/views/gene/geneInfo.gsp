@@ -105,7 +105,6 @@
                 data: {geneName: '${geneName}'},
                 async: true
             }).done(function (data) {
-                console.log(geneName);
                 mpgSoftware.geneInfo.fillTheGeneFields(data); // fills the uniprot summary
                 $('[data-toggle="popover"]').popover({
                     animation: true,
