@@ -1208,7 +1208,7 @@ span.new-dataset-flag {
 }
 
 .analysis-modules-btn ul > li {
-	background-color: rgba(1, 84, 149, .75);
+	background-color: rgba(120, 120, 120, .75);
 	font-size: 0.8em;
 	padding: 5px 15px 5px 15px;
 	border-bottom: solid 1px #666;
@@ -1217,7 +1217,7 @@ span.new-dataset-flag {
 }
 
 .analysis-modules-btn ul > li:hover {
-	background-color: rgba(1, 84, 149, 1);
+	background-color: rgba(90, 90, 90, 1);
 }
 
 .analysis-modules-btn ul > li:last-child {
@@ -1288,6 +1288,19 @@ span.new-dataset-flag {
     background-color: #7ACCC8;
 }
 
+/* banner setting for Bone and Muscle portal */
+.front-top-banner-bone {
+	background-image:url(../../images/bone/front_boneKP_banner_bg.png), linear-gradient(#BCAFD6, #918BC3);
+}
+
+.front-top-banner-bone .front-banner-btn {
+	color: #918BC3;
+}
+
+#header-bottom-bone {
+	background-color: #BCAFD6;
+}
+
 /* banner setting for T2D portal */
 
 .front-top-banner-t2d {
@@ -1348,6 +1361,10 @@ span.new-dataset-flag {
 
 .front-logo-tagline-t2d {
     transform: translate(0%,5%);
+}
+
+.front-logo-tagline-bone {
+	transform: translate(0%,15%);
 }
 
 .front-banner-ui-tabs {

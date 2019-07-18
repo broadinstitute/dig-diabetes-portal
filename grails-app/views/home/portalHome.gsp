@@ -178,7 +178,7 @@
                         <a href="${createLink(controller:'informational', action:'modules')}" class="btn btn-lg btn-default front-banner-btn">Analysis modules</a>
                     </div>
                     <div class="col-md-6" style="text-align: center">
-                        <a href="http://3.208.176.209/resources/${g.portalTypeString()}" target="_blank" class="btn btn-lg btn-default front-banner-btn">Learn about the portal</a>
+                        <a href="http://www.kp4cd.org/resources/${g.portalTypeString()}" target="_blank" class="btn btn-lg btn-default front-banner-btn">Learn about the portal</a>
                     </div>
                 </div>
             %{--</g:if >--}%
