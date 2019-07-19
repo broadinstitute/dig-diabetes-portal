@@ -1,6 +1,6 @@
-<script class="panel-body" id="GWAS_UKBiobankGEFOS_eu_script" type="x-tmpl-mustache">
+<script class="panel-body" id="GWAS_DeCODE_eu_script" type="x-tmpl-mustache">
 
-                <h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
+                    <h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
 
 <p><g:message code="informational.data.download.GEFOS"></g:message></p>
 
@@ -42,7 +42,6 @@
 
    <h4>Accessing GEFOS eBMD and fracture GWAS results</h4>
 <p><g:message code="informational.data.accessing.GEFOS1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.GEFOS2"></g:message></p>
-
 
 
 

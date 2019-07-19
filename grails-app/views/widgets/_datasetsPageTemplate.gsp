@@ -124,7 +124,9 @@
 <g:render template="./data/GWAS_LivingBiobank_CHS_ea" />
 <g:render template="./data/GWAS_UKBiobankModLeic" />
 <g:render template="./data/GWAS_SpiroMeta_eu" />
-
+<g:render template="./data/GWAS_DeCODE_eu" />
+<g:render template="./data/GWAS_GEFOS" />
+<g:render template="./data/GWAS_GEFOS2" />
 
 
 
