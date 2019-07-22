@@ -22,7 +22,7 @@
 <table class="table table-condensed table-responsive table-striped">
 
  <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>
-<tr><td>21,081</td><td>179,,711</td><td>UK Biobank</td><td>European</td></tr>
+<tr><td>21,081</td><td>179,711</td><td>UK Biobank</td><td>European</td></tr>
 <tr><td>1,060</td><td>6,164</td><td>Atherosclerosis Risk in Communities (ARIC)</td><td>Caucasian</td></tr>
 <tr><td>736</td><td>1,586</td><td>Cardiovascular Health Study European (CHS EA)</td><td>European</td></tr>
 <tr><td>3,068</td><td>2,110</td><td>COPDGene NHW</td><td>Non-Hispanic White</td></tr>
