@@ -435,7 +435,7 @@ var variantProcessing = (function () {
             // default number of rows
             pageLength: 25,
             // menu to select number of rows to display
-            lengthMenu: [ 10, 25, 50, 1000 ],
+            lengthMenu: [ 10, 25, 50, 1000, 10000 ],
             // defaults to sorting the first p-value column found when generating the columns
             order: [[ sortCol, 'asc' ]],
             language: languageSetting,
@@ -467,6 +467,16 @@ var variantProcessing = (function () {
                 $('#spinner').hide();
             }
         });
+        $(divId).parent().parent().append(
+            '<div><span class="pull-right float-right">' +
+            '<a href="#" download="data.tsv" role="button" style="margin: 5px;background-color:#d5f2f2;color:black"  ' +
+            'type="button" class="btn btn-secondary btn-sm tableDownloadButtons"' +
+            'onclick="UTILS.downloadTableData(\''+divId+'\',\'TSV\',this)">download TSV</a>'+
+            '<a href="#" download="data.csv" role="button" style="margin: 5px;background-color:#d5f2f2;color:black" type="button" ' +
+            'class="btn btn-secondary btn-sm tableDownloadButtons"' +
+            'onclick="UTILS.downloadTableData(\''+divId+'\',\'CSV\',this)">download CSV</a>'+
+
+            '</span></div>') ;
 
     };
 

@@ -984,8 +984,62 @@ var UTILS = {
 
         }
         return renderData;
-    }
+    },
 
+     extractDataFromTable : function (whereTheTableGoes, extractionDetails ) {
+        var returnValue = {headers: [], rows:[], empty: true};
+        if  ($.fn.DataTable.isDataTable( whereTheTableGoes )){
+            var dataTable = $(whereTheTableGoes).dataTable().DataTable();
+            if (dataTable.table().columns().length>0){
+                var numberOfColumns = dataTable.table().columns()[0].length;
+                _.each(_.range(0,numberOfColumns),function(index){
+                    returnValue.empty = false;
+                    var header=dataTable.table().column(index).header();
+                    var bottomMostHeader = $(header).text();
+                    var divContents;
+                    if ( typeof bottomMostHeader === ''){
+                        divContents = 'empty'
+                    } else {
+                        divContents = bottomMostHeader;
+                    }
+                    returnValue.headers.push(divContents);
+                });
+                 var numberOfRows = dataTable.rows().count();
+                _.each(_.range(0,numberOfRows),function(rowIndex){
+                    var row = [];
+                    var rowNode = $(dataTable.row(rowIndex).node());
+                    _.each(_.range(0,numberOfColumns),function(columnIndex){
+                        row.push($(rowNode.children()[columnIndex]).text());
+                    });
+                    returnValue.rows.push(row);
+                });
+            }
+
+        }
+        return returnValue;
+    },
+    downloadTableData : function (whereTheTableGoes, tableType, passedThis ){
+        var extractDataFromTable = UTILS.extractDataFromTable(whereTheTableGoes,{});
+        var dataForFile = '';
+        var delimiter = '';
+        switch (tableType){
+            case 'CSV': delimiter = ','; break;
+            case 'TSV': delimiter = '\t'; break;
+            case 'SPACE': delimiter = ' '; break;
+            default: alert('illegal delimiter request = '+tableType+'.')
+        }
+
+        if (( typeof extractDataFromTable !== 'undefined')&&(!extractDataFromTable.empty)){
+            dataForFile+=extractDataFromTable.headers.join(delimiter)+'\n';
+            _.forEach(extractDataFromTable.rows,function( row ){
+                dataForFile+=row.join(delimiter)+'\n';
+            })
+        }
+
+
+
+        passedThis.href = "data:text/plain;charset=UTF-8,"  + encodeURIComponent(dataForFile);
+    }
 
 
 };
