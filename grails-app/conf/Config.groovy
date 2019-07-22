@@ -319,7 +319,9 @@ environments {
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 
-     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+//     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+
+        grails.serverURL = "http://mdgkp.us-east-1.elasticbeanstalk.com"
 
 
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
@@ -998,14 +1000,14 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "mdv140",
                                           "MSGKP", // name of KB data we want
                                           "COPD", // make sure your default phenotype exists in your default data set
-                                          "GWAS_UKBiobank_ModLeic_eu_mdv130",// used to pick a default data set for a gene query
+                                          "GWAS_GIANT-A_mdv140",// used to pick a default data set for a gene query
                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
                                           ["NHLF", "AnteriorCaudate"],
                                           ["OTHER", "GLYCEMIC", "ANTHROPOMETRIC"], // most important phenotype group name
                                           [],
                                           "[3]",
-                                          "GWAS_UKBiobank_ModLeic_eu_mdv130",
+                                          "GWAS_GIANT-A_mdv140",
                                           "images/bone/front_boneKP_logo_2019.svg",
                                           "portal.bone.header.tagline",
                                           "portal.bone.header.title.short",
