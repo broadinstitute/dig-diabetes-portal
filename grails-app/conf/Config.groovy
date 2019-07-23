@@ -955,7 +955,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           [],
                                           "[3]",
                                           "GWAS_UKBiobank_ModLeic_eu_mdv130",
-                                          "images/lung/front_LDKP_logo_2019.svg",
+                                          "images/lung/front_LDKP_logo_2019_2.svg",
                                           "portal.lung.header.tagline",
                                           "portal.lung.header.title.short",
                                           [],
