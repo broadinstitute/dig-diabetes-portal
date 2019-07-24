@@ -160,7 +160,7 @@ digawsqanewKB_fed_dedicated_EBIv2 = new ServerBean("Dedicated EBI QA fed KB - Us
 
 
 // this will be your default
-defaultRestServer = digawsdevnewKB
+defaultRestServer = digawsdevWorkflowKBrevised
 
 
 
@@ -1012,9 +1012,9 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "portal.bone.header.tagline",
                                           "portal.bone.header.title.short",
                                           [],
-                                          ["HHIP"],
-                                          ["rs13113591"],
-                                          ["chr2:113,873,524-114,136,577"],
+                                          ["WNT16"],
+                                          ["rs17284876"],
+                                          ["chr7:120,500,000-121,500,000"],
                                           "images/bone/front_boneKP_banner_bg.png",
                                           "",
                                           "images/bone/header_boneKP_logo.svg",
