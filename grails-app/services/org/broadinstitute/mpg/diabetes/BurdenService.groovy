@@ -141,13 +141,19 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
         //filterList << """{"parameter": "p_value", "operator": "lt", "value": "0.01"}""".toString()
 
         if (geneString){
-            filterList << """{"parameter": "gene", "operator": "eq", "value": "${geneString}"}""".toString()
+            LinkedHashMap geneExtent = sharedToolsService.getGeneExpandedExtent(geneString,restServerService.EXPAND_ON_EITHER_SIDE_OF_GENE)
+            log.error("No record for gene = $geneString")
+            filterList << """{"parameter": "pos", "operator": "le", "value": ${geneExtent.endExtent}}""".toString()
+            filterList << """{"parameter": "pos", "operator": "ge", "value": ${geneExtent.startExtent}}""".toString()
+            String chromosome = (((String)geneExtent.chrom).startsWith("chr"))?
+                    ((String)geneExtent.chrom).substring(3):(String)geneExtent.chrom
+            filterList << """{"parameter": "chrom", "operator": "eq", "value": "${chromosome}"}""".toString()
         }
 
         // get the json string to send to the getData call
         try {
-            jsonString = """{   "version": "mdv32",
-                "dataset": "${dataSet}",
+            jsonString = """{   "version": "${metaDataService.getDataVersion()}",
+                "dataset": "ExSeq_52k_mdv55",
                 "phenotype": "T2D",
                 "filters": [
                 ${filterList.join(",")}
