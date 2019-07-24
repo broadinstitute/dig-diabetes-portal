@@ -68,7 +68,7 @@ class PortalVersionBean {
     private Integer exposeRegionAdjustmentOnGenePage=0
     private Integer exposeGeneTableOnDynamicUi=0
     private Integer exposeVariantTableOfDynamicUi=0
-    private Integer exposeEffectorGeneTable=0
+    private Integer exposeEffectorGeneTableUi=0
 
 
 
@@ -127,7 +127,7 @@ class PortalVersionBean {
                              Integer exposeRegionAdjustmentOnGenePage,
                              Integer exposeGeneTableOnDynamicUi,
                              Integer exposeVariantTableOfDynamicUi,
-                             Integer exposeEffectorGeneTable
+                             Integer exposeEffectorGeneTableUi
     ){
         this.portalType = portalType;
         this.portalDescription = portalDescription;
@@ -183,7 +183,7 @@ class PortalVersionBean {
         this.exposeRegionAdjustmentOnGenePage = exposeRegionAdjustmentOnGenePage
         this.exposeGeneTableOnDynamicUi = exposeGeneTableOnDynamicUi
         this.exposeVariantTableOfDynamicUi = exposeVariantTableOfDynamicUi
-        this.exposeEffectorGeneTable = exposeEffectorGeneTable
+        this.exposeEffectorGeneTableUi = exposeEffectorGeneTableUi
     }
 
 
@@ -408,7 +408,7 @@ class PortalVersionBean {
         return exposeVariantTableOfDynamicUi
     }
     public Integer getExposeEffectorGeneTableUi(){
-        return exposeEffectorGeneTable
+        return exposeEffectorGeneTableUi
     }
 
 
