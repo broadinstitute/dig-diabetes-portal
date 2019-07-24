@@ -39,7 +39,7 @@ Table of cohort information coming soon!
     <h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
 <p><g:message code="informational.data.exptsumm.GEFOSfracture2018"></g:message></p>
 
-   <h4>Accessing GEFOS eBMD and fracture GWAS results</h4>
+   <h4>Accessing GEFOS Fracture GWAS results</h4>
 <p><g:message code="informational.data.accessing.GEFOSfracture20181"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.GEFOSfracture20182"></g:message></p>
 
 
