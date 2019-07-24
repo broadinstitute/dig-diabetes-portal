@@ -129,19 +129,12 @@
                             <td><div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact"><a href="${createLink(controller:'grs', action:'grsInfo')}">Launch GRS</a></div></td>
                         </tr>
                     </g:if>
-                    <g:elseif test="${g.portalTypeString()?.equals('bone')}">
-                        <tr>
-                            <td class=""><span class='new-dataset-flag' style="margin-top:-10px; margin-left: 10px;">&nbsp;</span><h4><g:message code="informational.modules.GRS.title"></g:message></h4></td>
-                            <td><img  src="${resource(dir: 'images', file: 'GRS.png')}" align="left" style="width: 200px; border: solid 1px #ddd; margin-right: 15px;"><g:message code="informational.modules.GRS.description"></g:message></td>
-                            <td><div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact"><a href="${createLink(controller:'grs', action:'grsInfo')}">Launch GRS</a></div></td>
-                        </tr>
-                    </g:elseif>
 
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-
+</div>
 </body>
 </html>
