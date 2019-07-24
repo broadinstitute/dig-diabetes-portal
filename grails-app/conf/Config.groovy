@@ -999,15 +999,15 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "Bone",
                                           "mdv140",
                                           "MSGKP", // name of KB data we want
-                                          "COPD", // make sure your default phenotype exists in your default data set
-                                          "GWAS_GIANT-A_mdv140",// used to pick a default data set for a gene query
+                                          "Fracture", // make sure your default phenotype exists in your default data set
+                                          "GWAS_UKBiobankGEFOS_eu_mdv140",// used to pick a default data set for a gene query
                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
-                                          ["NHLF", "AnteriorCaudate"],
-                                          ["OTHER", "GLYCEMIC", "ANTHROPOMETRIC"], // most important phenotype group name
+                                          ["SkeletalMuscle", "HSMM"],
+                                          ["MUSCULOSKELETAL", "ANTHROPOMETRIC"], // most important phenotype group name
                                           [],
                                           "[3]",
-                                          "GWAS_UKBiobank_ModLeic_eu_mdv130",
+                                          "GWAS_UKBiobankGEFOS_eu_mdv140",
                                           "images/bone/front_boneKP_logo_2019_2.svg",
                                           "portal.bone.header.tagline",
                                           "portal.bone.header.title.short",
@@ -1036,7 +1036,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           0,
                                           0,0,0, // Hi-C tab on the gene page
-                                          0,  // expose dynamic UI
+                                          1,  // expose dynamic UI
                                           0, // expose the data set hierarchy in the sunburst visualization on the data page
                                           0, // expose the old school variant and association table.  Potentially useful for debugging
                                           0, // expose the IGV interface in its own accordion section
