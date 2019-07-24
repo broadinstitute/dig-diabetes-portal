@@ -22,7 +22,7 @@
     <table class="table table-condensed table-responsive table-striped">
 
 <tr><th>Samples</th><th>Cohort</th><th>Ancestry</th></tr>
-<tr><td>426,824</td><td>UK Biobank</td><td><European</td></tr>
+<tr><td>426,824</td><td>UK Biobank</td><td>European</td></tr>
 
 
 
