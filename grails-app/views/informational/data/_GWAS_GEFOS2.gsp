@@ -2,28 +2,28 @@
 
                     <h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
 
-<p><g:message code="informational.data.download.GEFOS"></g:message></p>
+<p><g:message code="informational.data.download.GEFOS2"></g:message></p>
 
             <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
         <p><div class="paper">
-<g:message code="informational.shared.publications.Morris_2019_NatGenet"></g:message><br>
-<g:message code="informational.shared.publications.Morris_2019_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
-<div class="citation"><g:message code="informational.shared.publications.Morris_2019_NatGenet.citation"></g:message> </div>
+<g:message code="informational.shared.publications.Estrada_2012_NatGenet"></g:message><br>
+<g:message code="informational.shared.publications.Estrada_2012_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.Estrada_2012_NatGenet.citation"></g:message> </div>
 </div></p>
 
 <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
 <ul>
-<li><g:message code="metadata.eBMD"></g:message></li>
-<li><g:message code="metadata.Fracture"></g:message></li>
+<li><g:message code="metadata.LSBMD"></g:message></li>
+<li><g:message code="metadata.FNBMD"></g:message></li>
 </ul>
 
 <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
     <table class="table table-condensed table-responsive table-striped">
 
-<tr><th>Samples</th><th>Cohort</th><th>Ancestry</th></tr>
-<tr><td>426,824</td><td>UK Biobank</td><td><European</td></tr>
-
+%{--<tr><th>Samples</th><th>Cohort</th><th>Ancestry</th></tr>--}%
+%{--<tr><td>426,824</td><td>UK Biobank</td><td><European</td></tr>--}%
+Table of cohort information coming soon!
 
 
     </table>
@@ -38,10 +38,10 @@
 
 
     <h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
-<p><g:message code="informational.data.exptsumm.GEFOS"></g:message></p>
+<p><g:message code="informational.data.exptsumm.GEFOS2"></g:message></p>
 
-   <h4>Accessing GEFOS eBMD and fracture GWAS results</h4>
-<p><g:message code="informational.data.accessing.GEFOS1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.GEFOS2"></g:message></p>
+   <h4>Accessing GEFOS BMD GWAS results</h4>
+<p><g:message code="informational.data.accessing.GEFOS21"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.GEFOS22"></g:message></p>
 
 
 </script>
