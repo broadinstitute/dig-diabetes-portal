@@ -320,7 +320,7 @@ td.tissueTable.informationIsPresent{
                             category: 'Annotation',
                             displayCategory: 'Annotation',
                             subcategory: 'Effector gene list',
-                            displaySubcategory: 'Effector gene list',
+                            displaySubcategory: 'T2D effector gene list',
                             cellBodyWriter:'dynamicGeneTableEffectorGeneBody',
                             categoryWriter:'sharedCategoryWriter',
                             subCategoryWriter:'dynamicGeneTableEffectorGeneSubCategory',

@@ -8,9 +8,9 @@
 
 
     <p><div class="paper">
-    <g:message code="informational.shared.publications.Jones_2019_NatCommun"></g:message><br>
-    <g:message code="informational.shared.publications.Jones_2019_NatCommun.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
-    <div class="citation"><g:message code="informational.shared.publications.Jones_2019_NatCommun.citation"></g:message> </div>
+    <g:message code="informational.shared.publications.Jones_2019b_NatCommun"></g:message><br>
+    <g:message code="informational.shared.publications.Jones_2019a_NatCommun.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+    <div class="citation"><g:message code="informational.shared.publications.Jones_2019b_NatCommun.citation"></g:message> </div>
     </div></p>
 
 <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
@@ -46,7 +46,7 @@
 <h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
 <p><g:message code="informational.data.exptsumm.Accel"></g:message></p>
 
-<h4>Accessing Accelerometer-derived sleep timing GWAS results</h4>
+<h4>Accessing UK Biobank Sleep GWAS: Accelerometer-derived results</h4>
 <p><g:message code="informational.data.accessing.Accel1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.Accel2"></g:message></p>
 
 

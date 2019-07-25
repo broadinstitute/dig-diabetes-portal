@@ -179,7 +179,7 @@
             </g:if>
             <g:if test="${!portalVersionBean.regionSpecificVersion}">
                 <div style="padding-bottom:10px;" class="variant-finder-wrapper">
-                    <h2 style="font-size:20px; font-weight:300;"><g:message code="analysis.module.header"/>  <span class="new-dataset-flag">&nbsp;</span></h2>
+                    <h2 style="font-size:20px; font-weight:300;"><g:message code="analysis.module.header"/>  </h2>
                     <p class="dk-footnote" style="width:83%;"><g:message code="analysis.module.specifics"/></p>
                     <a href="${createLink(controller: 'informational', action: 'modules')}">
                         <button class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px;  margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; margin-right:1%; margin-top: -45px; float:right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
@@ -560,7 +560,7 @@
                 </div>
                 </div>
                     %{--<g:if test="${g.portalTypeString()?.equals('t2d')}">--}%
-                        %{--<a href="http://t2d-genetics-portal.blogspot.com/2019/03/upcoming-t2dkp-webinar-march-21.html" style="display:block; float:right; margin: 20px 15px -20px 0;"><img src="${resource(dir: 'images', file: 'webinar.png')}" style="" ></a>--}%
+                        %{--<a href="http://t2d-genetics-portal.blogspot.com/2019/07/t2dkp-webinar-thursday-july-18.html" target="_blank" style="display:block; float:right; margin: 20px 15px -20px 0;"><img src="${resource(dir: 'images', file: 'webinar_jul_18.png')}" style="" ></a>--}%
                     %{--</g:if>--}%
                     <div class="col-md-5 col-md-offset-1" style="margin-top:30px;">
                         <h3 style="font-weight:700; font-size:30px; font-family:'Oswald'; color:#000000; text-align: left; margin-top: 10px;"><g:message code="portal.home.news_headline" default="What's new" />&nbsp;<span style="color:#4eadcd; vertical-align: 5px;" class="glyphicon glyphicon-comment" aria-hidden="true"></span></h3>
