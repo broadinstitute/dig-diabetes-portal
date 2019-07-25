@@ -164,7 +164,15 @@ mpgSoftware.dynamicUi.fullEffectorGeneTable = (function () {
                                     gwasCodingCallOut:gwasCodingCallOut};
                                 _.forEach(dataAnnotationType.dataAnnotation.customColumnOrdering.topLevelColumns, function (grouping, index){
                                     if (grouping.order===constituentColRecs[indexOfPreassignedColumnName].pos){
-                                        categoryRecord[grouping.key]=[{textToDisplay:textWithoutQuotes}];
+                                        var convertedString = substitutePubMedLink(textWithoutQuotes);
+                                        if (convertedString.converted){
+                                            categoryRecord[grouping.key]=[{ textToDisplay:'',
+                                                                            htmlToDisplay:convertedString.text}];
+                                        } else {
+                                            categoryRecord[grouping.key]=[{ textToDisplay:convertedString.text,
+                                                htmlToDisplay:''}];
+                                        }
+
                                     } else {
                                         categoryRecord[grouping.key]=[];
                                     }
@@ -218,6 +226,29 @@ mpgSoftware.dynamicUi.fullEffectorGeneTable = (function () {
         }
         return returnValue;
     };
+
+
+    var substitutePubMedLink  = function ( rawString ) {
+        var pubMedLink = "https://www.ncbi.nlm.nih.gov/pubmed/";
+        var returnValue = {converted:false,text:rawString};
+        if ( ( typeof rawString !== 'undefined') &&
+            ( _.includes(rawString,"PMID:") ) ) {
+            var individualElements = rawString.split('|');
+            var revisedStringHolder = [];
+            _.forEach(individualElements, function (individualElement){
+                var pmidString = individualElement.match(/PMID:\d+/);
+                if (pmidString !== null){
+                    var pmidNumber = pmidString[0].match(/\d+/)[0];
+                    var stringWithoutPmidReference = individualElement.replace (/PMID:\d+/,'')
+                    revisedStringHolder.push (stringWithoutPmidReference +
+                                         '<a target="_blank" class="fegtLinks" href="'+pubMedLink+pmidNumber+'">'+pmidString+'</a>');
+                }
+            });
+            returnValue = {converted:true,text:revisedStringHolder.join('|')};
+        }
+        return returnValue;
+
+    }
 
 
 

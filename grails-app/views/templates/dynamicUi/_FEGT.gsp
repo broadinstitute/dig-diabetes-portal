@@ -73,6 +73,7 @@
      {{/gwasCodingCallOut}}
      {{^gwasCodingCallOut}}
         {{textToDisplay}}
+        {{{htmlToDisplay}}}
      {{/gwasCodingCallOut}}
  {{/exomeSequenceCallOut}}
 </div>
@@ -80,26 +81,31 @@
 {{#Genomic_combined}}
 <div class="fedt text-center">
     {{textToDisplay}}&nbsp;
+    {{{htmlToDisplay}}}
 </div>
 {{/Genomic_combined}}
 {{#Perturbation_combined}}
  <div class="fedt text-center">
     {{textToDisplay}}&nbsp;
+    {{{htmlToDisplay}}}
 </div>
 {{/Perturbation_combined}}
 {{#Semantic_score}}
  <div class="fedt text-center">
     {{textToDisplay}}&nbsp;
+    {{{htmlToDisplay}}}
 </div>
 {{/Semantic_score}}
 {{#FishHomo}}
  <div class="fedt">
     {{textToDisplay}}&nbsp;
+    {{{htmlToDisplay}}}
 </div>
 {{/FishHomo}}
 {{#additional_reference}}
  <div class="fedt ">
     {{textToDisplay}}&nbsp;
+    {{{htmlToDisplay}}}
 </div>
 {{/additional_reference}}
 </div>
