@@ -21,9 +21,24 @@
 <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
     <table class="table table-condensed table-responsive table-striped">
 
-%{--<tr><th>Samples</th><th>Cohort</th><th>Ancestry</th></tr>--}%
-%{--<tr><td>426,824</td><td>UK Biobank</td><td><European</td></tr>--}%
-Table of cohort information coming soon!
+<tr><th>Samples</th><th>Cohort</th><th>Ancestry</th></tr>
+<tr><td>918</td><td>Amish Family Osteoporosis Study (AFOS)</td><td>European</td></tr>
+<tr><td>1,955</td><td>Anglo-Australasian Osteoporosis Genetics Consortium (AOGC)</td><td>European</td></tr>
+<tr><td>3,291</td><td>Cardiovascular Health Study (CHS)</td><td>European</td></tr>
+<tr><td>7,605</td><td>DeCODE Genetics Study (DeCODE)</td><td>European</td></tr>
+<tr><td>1,602</td><td>Erasmus Rucphen Family (ERF)</td><td>European</td></tr>
+<tr><td>249</td><td>European Prospective Investigation into Cancer, Norfolk study (EPICNOR)</td><td>European</td></tr>
+<tr><td>3,886</td><td>Framingham Heart Study (FHS)</td><td>European</td></tr>
+<tr><td>938</td><td>Gothenburg Osteoporosis and Obesity Determinants Study (GOOD)</td><td>European</td></tr>
+<tr><td>1,649</td><td>Health Aging and Body Composition (HABC)</td><td>European</td></tr>
+<tr><td>800</td><td>Hong Kong Osteoporosis Study (HKOS)</td><td>East Asian</td></tr>
+<tr><td>1,487</td><td>Indiana Genetics of Bone Fragility Study (Indiana)</td><td>European</td></tr>
+<tr><td>427</td><td>The Orkney Complex Disease Study (ORCADES)</td><td>European</td></tr>
+<tr><td>5,746</td><td>Rotterdam Study I (RS I)</td><td>European</td></tr>
+<tr><td>2,157</td><td>Rotterdam Study II (RS II)</td><td>European</td></tr>
+<tr><td>1,212</td><td>Rotterdam Study III (RS III)</td><td>European</td></tr>
+<tr><td>1,511</td><td>TwinsUK (TUK-1)</td><td>European</td></tr>
+<tr><td>2,801</td><td>TwinsUK (TUK-23)</td><td>European</td></tr>
 
 
     </table>
