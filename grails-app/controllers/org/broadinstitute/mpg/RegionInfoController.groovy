@@ -909,6 +909,80 @@ class RegionInfoController {
 
 
 
+    def retrieveVariantsInRange() {
+        String phenotype = ""
+        int startPosition = -1
+        int endPosition = -1
+        int limit = -1
+        String chromosome = ""
+        boolean looksOkay = true
+        JSONObject jsonReturn
+        Map geneNameMap = [:]
+
+        if (params.phenotype) {
+            phenotype = params.phenotype
+        } else {
+            looksOkay = false
+        }
+
+        if (params.startPos) {
+            try {
+                startPosition = Double.parseDouble(params.startPos).intValue()
+            } catch (Exception e) {
+                looksOkay = false
+                e.printStackTrace()
+                log.error("retrieveVariantsInRange:failed to convert startPos value=${params.startPos}")
+            }
+        } else {
+            looksOkay = false
+        }
+        if (params.endPos) {
+            try {
+                endPosition = Double.parseDouble(params.endPos).intValue()
+            } catch (Exception e) {
+                looksOkay = false
+                e.printStackTrace()
+                log.error("retrieveVariantsInRange:failed to convert endPos value=${params.endPos}")
+            }
+        } else {
+            looksOkay = false
+        }
+
+        if (params.limit) {
+            try {
+                limit = Double.parseDouble(params.limit).intValue()
+            } catch (Exception e) {
+                looksOkay = false
+                e.printStackTrace()
+                log.error("retrieveVariantsInRange:failed to convert limit value=${params.limit}")
+            }
+        }
+
+        if (params.chromosome) {
+            chromosome = params.chromosome
+        } else {
+            looksOkay = false
+        }
+
+        if (looksOkay){
+            jsonReturn = restServerService.gatherVariantsInRange( phenotype, chromosome, startPosition, endPosition, limit)
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+            def slurper = new JsonSlurper()
+            jsonReturn =  slurper.parseText(proposedJsonString) as JSONObject;
+        }
+
+//        JSONArray jsonArray = new JSONArray()
+//        for (JSONObject jsonObject in jsonReturn) {
+//            jsonObject.put("common_name", geneNameMap[jsonObject.gene] ?: jsonObject.gene)
+//            jsonObject.put("tissue_trans",g.message(code: "metadata.${jsonObject.tissue}", default: jsonObject.tissue))
+//            jsonArray.put(jsonObject)
+//        }
+
+        render(status: 200, contentType: "application/json") {jsonReturn}
+        return
+    }
+
 
 
 

@@ -500,8 +500,8 @@ mpgSoftware.dynamicUi = (function () {
                 break;
 
             case "getVariantsWeWillUseToBuildTheVariantTable":
-                defaultFollowUp.displayRefinedContextFunction = displayVariantsForAPhenotype;
-                defaultFollowUp.placeToDisplayData = '#dynamicVariantHolder div.dynamicUiHolder';
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.variantTableHeaders.displayRefinedVariantsInARange;
+                defaultFollowUp.placeToDisplayData = '#mainVariantDiv table.variantTableHolder';
                 break;
 
             case "getEqtlsGivenVariantList":
@@ -1051,7 +1051,10 @@ mpgSoftware.dynamicUi = (function () {
                     } else {
                         dataNecessaryToRetrieveVariantsPerPhenotype = {
                             phenotype: phenotype,
-                            geneToSummarize: "chr" + chromosome + ":" + startExtent + "-" + endExtent
+                            chromosome: chromosome,
+                            startPos: startExtent,
+                            endPos: endExtent,
+                            limit: "10"
                         }
 
                     }
@@ -1059,9 +1062,9 @@ mpgSoftware.dynamicUi = (function () {
 
                     retrieveRemotedContextInformation(buildRemoteContextArray({
                         name: "getVariantsWeWillUseToBuildTheVariantTable",
-                        retrieveDataUrl: additionalParameters.retrieveTopVariantsAcrossSgsUrl,
+                        retrieveDataUrl: additionalParameters.getVariantsForRangeAjaxUrl,
                         dataForCall: dataNecessaryToRetrieveVariantsPerPhenotype,
-                        processEachRecord: processRecordsFromQtl,
+                        processEachRecord: mpgSoftware.dynamicUi.variantTableHeaders.processRecordsFromProximitySearch,
                         displayRefinedContextFunction: displayFunction,
                         placeToDisplayData: displayLocation,
                         actionId: nextActionId,
@@ -4839,6 +4842,39 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
     };
 
 
+    var displayHeaderForVariantTable = function (idForTheTargetDiv, // which table are we adding to
+                                                 dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+                                                 nameOfAccumulatorField // name of the persistent field where the data we received is stored
+    )
+    { // sort and filter the records we will use.  Resulting array must have fields tissue, value, and numericalValue
+        var selectorForIidForTheTargetDiv = idForTheTargetDiv;
+        $(selectorForIidForTheTargetDiv).empty();
+        var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode);
+        var objectContainingRetrievedRecords = getAccumulatorObject(nameOfAccumulatorField);
+
+        var intermediateDataStructure = new IntermediateDataStructure();
+
+        if (typeof objectContainingRetrievedRecords !== 'undefined') {
+            // set up the headers, and give us an empty row of column cells
+            _.forEach(objectContainingRetrievedRecords, function (oneRecord,index) {
+                intermediateDataStructure.headerNames.push(oneRecord.var_id);
+                intermediateDataStructure.headerContents.push(Mustache.render($('#'+dataAnnotationType.dataAnnotation.cellBodyWriter)[0].innerHTML, oneRecord));
+                intermediateDataStructure.headers.push(new IntermediateStructureDataCell(oneRecord.name,
+                    Mustache.render($('#'+dataAnnotationType.dataAnnotation.cellBodyWriter)[0].innerHTML, oneRecord),"geneHeader asc ",'LIT'));
+            });
+
+            intermediateDataStructure.tableToUpdate = idForTheTargetDiv;
+        }
+
+
+        prepareToPresentToTheScreen(idForTheTargetDiv,
+            '#notUsed',
+            objectContainingRetrievedRecords,
+            clearBeforeStarting,
+            intermediateDataStructure,
+            true,
+            'variantTableVariantHeaders', true);
+    };
 
 
     var extractClassBasedIndex = function (domString,classNameToExtract) {
@@ -6019,7 +6055,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         openFilter:openFilter,
         closeFilterModal:closeFilterModal,
         retrieveDataFromServer:retrieveDataFromServer,
-        retrieveGwasCodingCredibleSetFromServer: retrieveGwasCodingCredibleSetFromServer
+        retrieveGwasCodingCredibleSetFromServer: retrieveGwasCodingCredibleSetFromServer,
+        displayHeaderForVariantTable:displayHeaderForVariantTable
     }
 }());
 

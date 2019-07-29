@@ -28,42 +28,33 @@ mpgSoftware.dynamicUi.variantTableHeaders = (function () {
      * @param rawGeneAssociationRecords
      * @returns {*}
      */
-    var processRecordsFromProximitySearch = function (data, rawGeneAssociationRecords) {
+    var processRecordsFromProximitySearch = function (data, rawVariantAssociationRecords) {
         var geneInfoArray = [];
         if (( typeof data !== 'undefined') &&
             ( data !== null ) &&
-            (data.is_error === false ) &&
-            ( typeof data.listOfGenes !== 'undefined')) {
-            if (data.listOfGenes.length === 0) {
-                alert(' No genes in the specified region')
+            ( typeof data.data !== 'undefined') ) {
+            if (data.data.length === 0) {
+                alert(' No variants in the specified region')
             } else {
-                _.forEach(data.listOfGenes, function (geneRec) {
-                    if ( typeof _.find(rawGeneAssociationRecords,{name:geneRec.name2}) === 'undefined'){
-                        var chromosomeString = _.includes(geneRec.chromosome, "chr") ? geneRec.chromosome.substr(3) : geneRec.chromosome;
-                        rawGeneAssociationRecords.push({
-                                chromosome: chromosomeString,
-                                startPos: geneRec.addrStart,
-                                endPos: geneRec.addrEnd,
-                                name: geneRec.name2,
-                                id: geneRec.id
-                            }
-                        );
-                    }
-                    ;
+                _.forEach(data.data, function (variantRec) {
+                    rawVariantAssociationRecords.push(variantRec);
                 });
             }
         }
-        return rawGeneAssociationRecords;
+        return rawVariantAssociationRecords;
     };
 
 
     var displayRefinedVariantsInARange = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-        mpgSoftware.dynamicUi.displayHeaderForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
-            'GHDR', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            'geneInfoArray');
+        mpgSoftware.dynamicUi.displayHeaderForVariantTable(idForTheTargetDiv, // which table are we adding to
+            'VHDR', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+            'variantNameArray');
 
 
     };
+
+
+
 
 
     /***

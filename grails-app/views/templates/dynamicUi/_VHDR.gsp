@@ -1,4 +1,4 @@
-<script id="dynamicGeneTableHeaderV3"  type="x-tmpl-mustache">
+<script id="dynamicVariantTableHeader"  type="x-tmpl-mustache">
 
         <div sortStrategy="alphabetical" sortField="-1"  sortTerm="{{name1}}" class="geneName text-center {{initialLinearIndex}}">
            <div class="geneHeaderShifters text-center">
@@ -11,7 +11,7 @@
            <span class="displayGeneName">{{name}}</span>
         </div>
         <div class="genePosition text-center">
-        {{chromosome}}: {{startPos}}-{{endPos}}
+        {{var_id}}
         </div>
 
 

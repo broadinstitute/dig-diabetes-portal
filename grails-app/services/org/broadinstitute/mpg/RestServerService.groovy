@@ -73,6 +73,7 @@ class RestServerService {
     private String GET_H3K27AC_RECORDS_URL= "testcalls/region/h3k27ac/object"
     private String GET_BOTTOM_LINE_RESULTS_URL= "graph/meta/variant/object"
     private String GET_TISSUES_FROM_GREGOR_URL= "graph/gregor/phenotype/object"
+    private String GET_VARIANTS_FROM_RANGE_URL= "graph/prioritization/variant/object"
     private String GET_TISSUES_FROM_LDSR_URL = "testcalls/ldscore/tissue/object"
     private String GET_HAIL_DATA_URL = "getHailData"
     private String GET_SAMPLE_DATA_URL = "getSampleData"
@@ -2488,6 +2489,43 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     }
 
 
+
+
+
+    public JSONObject gatherVariantsInRange(  String phenotype,
+                                              String chromosome,
+                                              int startPosition,
+                                              int endPosition,
+                                              int limit ) {
+        List<String> specifyRequestList = []
+
+        if ((phenotype) && (phenotype.length() > 0)) {
+            specifyRequestList << "phenotype=${phenotype}"
+        }
+
+        if ((chromosome) && (chromosome.length() > 0)) {
+            specifyRequestList << "chrom=${chromosome}"
+        }
+        if (startPosition > -1) {
+            specifyRequestList << "start_pos=${startPosition}"
+        }
+        if (endPosition > -1) {
+            specifyRequestList << "end_pos=${endPosition}"
+        }
+        if (limit > -1) {
+            specifyRequestList << "limit=${limit}"
+        }
+
+        String rawReturnFromApi =  getRestCall("${GET_VARIANTS_FROM_RANGE_URL}?${specifyRequestList.join("&")}".toString())
+        JsonSlurper slurper = new JsonSlurper()
+        JSONObject jsonObject
+        try{
+            jsonObject = slurper.parseText(rawReturnFromApi)
+        } catch(Exception e){
+            log.error("ERROR: gatherVariantsInRange. problem parsing the data we received from the KB")
+        }
+        return jsonObject
+    }
 
 
 

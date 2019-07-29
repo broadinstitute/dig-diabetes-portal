@@ -36,6 +36,7 @@
                     retrieveDepictTissueDataUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveDepictTissues")}',
                     retrieveVariantsWithQtlRelationshipsUrl:'${g.createLink(controller: "RegionInfo", action: "retrieveVariantsWithQtlRelationships")}',
                     retrieveTopVariantsAcrossSgsUrl:'${g.createLink(controller: "VariantSearch", action: "retrieveTopVariantsAcrossSgs")}',
+                    getVariantsForRangeAjaxUrl:"${createLink(controller:'RegionInfo',action: 'retrieveVariantsInRange')}",
                     dynamicTableType:'variantTable',
                     dataAnnotationTypes: [
                         {
@@ -45,7 +46,7 @@
                             subcategory: 'Variant list',
                             displaySubcategory: 'Variant list',
                             headerWriter:'gregorTissueTableTissueHeader',
-                            cellBodyWriter:'gregorTissueTableBody',
+                            cellBodyWriter:'dynamicVariantTableHeader',
                             categoryWriter:'gregorTissueTableTissueHeaderLabel',
                             subCategoryWriter:'gregorTissueTableTissueRowLabel',
                             numberRecordsCellPresentationStringWriter:'gregorTissueTableNumberRecordsCellPresentationString',
@@ -86,5 +87,8 @@
 <g:render template="/templates/dynamicUi/VHDR" />
 
 <div id="mainVariantDiv">
+
+
+
 
 </div>
