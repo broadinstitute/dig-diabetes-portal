@@ -260,6 +260,7 @@ modules = {
         resource url: 'css/dport/dynamicUi.css'
 
         resource url: 'js/lib/dport/dynamicUi/variantTableHeaders.js'
+        resource url: 'js/lib/dport/dynamicUi/abcVariantTable.js'
         resource url: 'js/lib/dport/matrixMath.js'
 
         resource url: 'js/lib/bootstrap-multiselect.js'

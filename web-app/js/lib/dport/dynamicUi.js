@@ -510,8 +510,8 @@ mpgSoftware.dynamicUi = (function () {
                 break;
 
             case "getABCGivenVariantList":
-                defaultFollowUp.displayRefinedContextFunction = displayAbcGivenVariantList;
-                defaultFollowUp.placeToDisplayData = '#dynamicVariantHolder div.dynamicUiHolder';
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.abcVariantTable.displayTissueInformationFromAbc;
+                defaultFollowUp.placeToDisplayData = '#mainVariantDiv table.variantTableHolder';
                 break;
 
             case "getDnaseGivenVariantList":
@@ -1068,7 +1068,7 @@ mpgSoftware.dynamicUi = (function () {
                         displayRefinedContextFunction: displayFunction,
                         placeToDisplayData: displayLocation,
                         actionId: nextActionId,
-                        nameOfAccumulatorField:'variantNameArray'
+                        nameOfAccumulatorField:'variantInfoArray'
                     }));
 
                 };
@@ -1099,23 +1099,25 @@ mpgSoftware.dynamicUi = (function () {
                 break;
             case "getABCGivenVariantList":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("variantNameArray")) {
+                    if (accumulatorObjectFieldEmpty("variantInfoArray")) {
                         var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: "getABCGivenVariantList"});
                         actionToUndertake();
                     } else {
                         var variantsAsJson = "[]";
-                        if (getAccumulatorObject("variantNameArray").length > 0) {
-                            variantsAsJson = "[\"" + getAccumulatorObject("variantNameArray").join("\",\"") + "\"]";
+                        if (getAccumulatorObject("variantInfoArray").length > 0) {
+                            var variantNameArray = _.map(getAccumulatorObject("variantInfoArray"), function(variantRec){return variantRec.var_id;});
+                            variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";
                         }
                         var dataForCall = {variants: variantsAsJson};
                         retrieveRemotedContextInformation(buildRemoteContextArray({
                             name: "getABCGivenVariantList",
                             retrieveDataUrl: additionalParameters.retrieveAbcDataUrl,
                             dataForCall: dataForCall,
-                            processEachRecord: processAbcRecordsFromVariantBasedRequest,
+                            processEachRecord: mpgSoftware.dynamicUi.abcVariantTable.processRecordsFromAbc,
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
-                            actionId: nextActionId
+                            actionId: nextActionId,
+                            nameOfAccumulatorField:'abcVariantInfo'
                         }));
                     }
                 };

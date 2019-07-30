@@ -53,6 +53,22 @@
                             significanceCellPresentationStringWriter:'gregorTissueTableSignificanceCellPresentationString',
                             internalIdentifierString:'getVariantsWeWillUseToBuildTheVariantTable'
                         }
+                        ,
+                        {
+                            code: 'ABC_VAR',
+                            category: 'ABC Tissue',
+                            displayCategory: 'ABC Tissue',
+                            subcategory: 'ABC list',
+                            displaySubcategory: 'ABC list',
+                            headerWriter:'abcVariantTableTissueHeader',
+                            cellBodyWriter:'abcVariantTableBody',
+                            categoryWriter:'abcVariantTableTissueHeaderLabel',
+                            subCategoryWriter:'abcVariantTableTissueRowLabel',
+                            numberRecordsCellPresentationStringWriter:'abcVariantTableNumberRecordsCellPresentationString',
+                            significanceCellPresentationStringWriter:'abcVariantTableSignificanceCellPresentationString',
+                            internalIdentifierString:'getABCGivenVariantList'
+                        }
+
                     ],
                     dynamicTableConfiguration: {
                         emptyBodyRecord:'#emptyBodyRecord',
