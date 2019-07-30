@@ -347,6 +347,8 @@ td.tissueTable.informationIsPresent{
 
                     ],
                     dynamicTableConfiguration: {
+                        emptyBodyRecord:'#emptyBodyRecord',
+                        emptyHeaderRecord:'#emptyHeaderRecord',
                         domSpecificationForAccumulatorStorage:'#configurableUiTabStorage',
                         formOfStorage: 'loadFromTable'
                     }

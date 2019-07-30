@@ -225,6 +225,8 @@
 
                         ],
                         dynamicTableConfiguration: {
+                            emptyBodyRecord:'#emptyBodyRecord',
+                            emptyHeaderRecord:'#emptyHeaderRecord',
                             domSpecificationForAccumulatorStorage:'#mainTissueDiv',
                             formOfStorage: 'loadOnce'
                         }
@@ -316,7 +318,7 @@
     </div>
 </div>
 
-<g:render template="../templates/dynamicUi/FEGT" />
+<g:render template="../templates/dynamicUi/T2D_EFFECTOR_GENE_TABLE" />
 
 </body>
 </html>

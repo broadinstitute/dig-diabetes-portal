@@ -55,9 +55,11 @@
                         }
                     ],
                     dynamicTableConfiguration: {
-                        domSpecificationForAccumulatorStorage:'#mainVariantDiv',
+                        emptyBodyRecord:'#emptyBodyRecord',
+                        emptyHeaderRecord:'#emptyHeaderRecord',
+                        domSpecificationForAccumulatorStorage:'#mainVariantDivHolder',
                         formOfStorage: 'loadFromTable',
-                        initializeSharedTableMemory:  '#mainVariantDiv table.tissueTableHolder'
+                        initializeSharedTableMemory:  '#mainVariantDiv table.variantTableHolder'
                     }
                 };
                 mpgSoftware.variantTable.setVariablesToRemember(drivingVariables);
@@ -82,13 +84,9 @@
         mpgSoftware.variantTableInitializer.variantTableConfiguration();
     });
 </script>
-<g:render template="/templates/dynamicUiTemplate" />
-<g:render template="/templates/variantTableTemplate" />
-<g:render template="/templates/dynamicUi/VHDR" />
-
-<div id="mainVariantDiv">
+<g:render template="/templates/dynamicUi/VARIANT_TABLE" />
 
 
-
+<div id="mainVariantDivHolder">
 
 </div>

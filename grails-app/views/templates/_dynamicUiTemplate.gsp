@@ -268,16 +268,6 @@
 </script>
 
 
-<script id="dynamicGeneTableEmptyRecord"  type="x-tmpl-mustache">
-
-                <div class="{{initialLinearIndex}}" sortField=0 significance_sortfield='0.0'>
-                {{constText}}
-                </div>
-
-
-</script>
-
-
 
 
 <script id="dynamicGeneTableEqtlSummaryBody"  type="x-tmpl-mustache">

@@ -71,7 +71,7 @@ mpgSoftware.variantTable = (function () {
         if (( typeof preferredPhenotype === 'undefined')||(preferredPhenotype.length===0)){
             preferredPhenotype = 'T2D';
         }
-        $('#mainVariantDiv').empty().append(Mustache.render($('#mainVariantTableOrganizer')[0].innerHTML,
+        $('#mainVariantDivHolder').empty().append(Mustache.render($('#mainVariantTableOrganizer')[0].innerHTML,
             {phenotype:preferredPhenotype}
         ));
         fillPhenotypeDropDown('select.phenotypePicker',preferredPhenotype);

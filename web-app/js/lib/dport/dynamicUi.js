@@ -4370,15 +4370,16 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
     var getDisplayableCellContent  = function (intermediateStructureDataCell,indexInOneDimensionalArray){
         var returnValue = "";
         //var displayDetails = getDatatypeInformation( intermediateStructureDataCell.dataAnnotationTypeCode );
+        var additionalParameters = getDyanamicUiVariables();
         switch (intermediateStructureDataCell.dataAnnotationTypeCode){
             case 'LIT': // a literal. Used when we recall the headers straight from the table
                 returnValue = intermediateStructureDataCell.renderData;
                 break;
             case 'EMC':  // an empty cell
-                returnValue = Mustache.render($('#dynamicGeneTableEmptyRecord')[0].innerHTML,intermediateStructureDataCell.renderData);
+                returnValue = Mustache.render($(additionalParameters.dynamicTableConfiguration.emptyHeaderRecord)[0].innerHTML,intermediateStructureDataCell.renderData);
                 break;
             case 'EMP':  // the first two columns are always empty, but contains some information in render data
-                returnValue = Mustache.render($('#emptyRecord')[0].innerHTML,intermediateStructureDataCell.renderData);
+                returnValue = Mustache.render($(additionalParameters.dynamicTableConfiguration.emptyBodyRecord)[0].innerHTML,intermediateStructureDataCell.renderData);
                 break;
             case 'GHD':  // the first two columns are always empty, but contains some information in render data
                 returnValue = Mustache.render($('#dynamicGeneTableHeaderV2')[0].innerHTML,intermediateStructureDataCell.renderData);
@@ -4485,14 +4486,22 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                             sortability.push(true);
                             break;
                         case 'variantTableVariantHeaders':
-                            alert('needs to be fixed');
-                            addedColumns.push(new IntermediateStructureDataCell('farLeftCorner',
+                            var isdc = new IntermediateStructureDataCell('farLeftCorner',
                                 {initialLinearIndex:"initialLinearIndex_0"},
-                                'variantAnnotationCategory','EMP'));
-                            sortability.push(true);
-                            addedColumns.push(new IntermediateStructureDataCell('b',
+                                'categoryNam','EMP');
+                            var header = {title:isdc.title, annotation:isdc.annotation};
+                            addedColumns.push(new NewColumn(    getDisplayableCellContent(isdc),
+                                header,
+                                ['initialLinearIndex_0'],
+                                isdc));
+                            var isdc2 = new IntermediateStructureDataCell('b',
                                 {initialLinearIndex:"initialLinearIndex_1"},
-                                'methods','EMP'));
+                                'geneMethods','EMP');
+                            var header2 = {title:isdc.title, annotation:isdc.annotation};
+                            addedColumns.push(new NewColumn(    getDisplayableCellContent(isdc2),
+                                header2,
+                                ['initialLinearIndex_1'],
+                                isdc2));
                             sortability.push(true);
                             break;
                         case 'tissueTableTissueHeaders':

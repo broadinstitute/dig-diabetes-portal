@@ -44,8 +44,8 @@
                 </div>
             </div>
             <div class="col-md-12">
-                <div id="tissueTableHolder" class="mainEffectorDiv">
-                    <table class="tissueTableHolder">
+                <div id="mainVariantDiv">
+                    <table class="variantTableHolder">
                     </table>
                 </div>
             </div>

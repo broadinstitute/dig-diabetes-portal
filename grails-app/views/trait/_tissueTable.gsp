@@ -82,6 +82,8 @@
 
                     ],
                     dynamicTableConfiguration: {
+                        emptyBodyRecord:'#emptyBodyRecord',
+                        emptyHeaderRecord:'#emptyHeaderRecord',
                         domSpecificationForAccumulatorStorage:'#mainTissueDiv',
                         formOfStorage: 'loadFromTable',
                         initializeSharedTableMemory:  '#mainTissueDiv table.tissueTableHolder'
@@ -109,11 +111,8 @@
         mpgSoftware.tissueTableInitializer.tissueTableConfiguration();
     });
 </script>
-<g:render template="/templates/dynamicUiTemplate" />
-<g:render template="/templates/tissueTableTemplate" />
-<g:render template="/templates/dynamicUi/TITA" />
-<g:render template="/templates/dynamicUi/LDSR" />
-<g:render template="/templates/dynamicUi/DEP_TI" />
+<g:render template="/templates/dynamicUi/TISSUE_TABLE" />
+
 
 <div id="mainTissueDiv">
 
