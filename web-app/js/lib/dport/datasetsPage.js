@@ -19,13 +19,14 @@ var mpgSoftware = mpgSoftware || {};
          */
         var getAccessName = function (dataTypeName){
             var access;
-            //if (dataTypeName.includes('FUSION')){
-            //    access = "Early access phase 2";}
+            
+            if (dataTypeName.includes('CUHK')){
+                access = "Pre-publication";}
             //else if (dataTypeName.includes('DCSP2')){
             //    access = "Early access phase 2";}
-            //else{
+            else{
                 access = "Open access";
-        //}
+        }
             return access;
         }
 
