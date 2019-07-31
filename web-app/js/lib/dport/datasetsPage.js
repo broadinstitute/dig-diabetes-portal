@@ -19,7 +19,7 @@ var mpgSoftware = mpgSoftware || {};
          */
         var getAccessName = function (dataTypeName){
             var access;
-            
+
             if (dataTypeName.includes('CUHK')){
                 access = "Pre-publication";}
             //else if (dataTypeName.includes('DCSP2')){
