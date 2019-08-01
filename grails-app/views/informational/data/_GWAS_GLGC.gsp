@@ -1,9 +1,9 @@
 <script class="panel-body" id="GWAS_GLGC_script" type="x-tmpl-mustache">
-    <h4>Dataset</h4>
+    <h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
 
     <p>Download URL: <a href="http://csg.sph.umich.edu//abecasis/public/lipids2013/" target="_blank">http://csg.sph.umich.edu//abecasis/public/lipids2013/</a><br/>
 
-    <h4>Publications</h4>
+    <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
                    <p><div class="paper">
 <g:message code="informational.shared.publications.Teslovich_2010_Nature"></g:message><br>
@@ -34,10 +34,10 @@
     </small></h5>
 
     <p><g:message code="informational.data.project.GLGC"></g:message></p>
-<h4>Experiment summary</h4>
+<h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
 <p><g:message code="informational.data.exptsumm.GLGC"></g:message></p>
 
-<h4>Accessing GLGC GWAS data</h4>
+<h4>Accessing GLGC GWAS results</h4>
 <p><g:message code="informational.data.accessing.GLGC"></g:message></p>
 
 </script>
