@@ -124,6 +124,12 @@
 <g:render template="./data/GWAS_LivingBiobank_CHS_ea" />
 <g:render template="./data/GWAS_UKBiobankModLeic_eu" />
 <g:render template="./data/GWAS_Accel_eu" />
+<g:render template="./data/GWAS_CUHK_ea" />
+<g:render template="./data/ExChip_GIANT" />
+<g:render template="./data/ExChip_GLGC" />
+<g:render template="./data/GWAS_COGENTK" />
+<g:render template="./data/GWAS_CRP_eu" />
+<g:render template="./data/GWAS_IVGTT" />
 
 
 <script id="metaData2" type="x-tmpl-mustache">

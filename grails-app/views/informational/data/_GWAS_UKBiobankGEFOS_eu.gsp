@@ -22,7 +22,7 @@
     <table class="table table-condensed table-responsive table-striped">
 
 <tr><th>Samples</th><th>Cohort</th><th>Ancestry</th></tr>
-<tr><td>426,824</td><td>UK Biobank</td><td><European</td></tr>
+<tr><td>426,824</td><td>UK Biobank</td><td>European</td></tr>
 
 
 
@@ -40,7 +40,7 @@
     <h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
 <p><g:message code="informational.data.exptsumm.GEFOS"></g:message></p>
 
-   <h4>Accessing Genetic Factors for Osteoporosis Consortium GWAS results</h4>
+   <h4>Accessing GEFOS eBMD and fracture GWAS results</h4>
 <p><g:message code="informational.data.accessing.GEFOS1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.GEFOS2"></g:message></p>
 
 

@@ -59,6 +59,10 @@
         color: red;
     }
 
+    .data-status-pre-publication {
+        color: red;
+    }
+
     .dataset-info {
         color: #777;
     }

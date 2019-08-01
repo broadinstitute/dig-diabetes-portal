@@ -435,7 +435,7 @@ var variantProcessing = (function () {
             // default number of rows
             pageLength: 25,
             // menu to select number of rows to display
-            lengthMenu: [ 10, 25, 50, 1000, 10000 ],
+            lengthMenu: [ 10, 25, 50, 1000 ],
             // defaults to sorting the first p-value column found when generating the columns
             order: [[ sortCol, 'asc' ]],
             language: languageSetting,

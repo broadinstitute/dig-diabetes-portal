@@ -19,13 +19,14 @@ var mpgSoftware = mpgSoftware || {};
          */
         var getAccessName = function (dataTypeName){
             var access;
-            //if (dataTypeName.includes('FUSION')){
-            //    access = "Early access phase 2";}
+
+            if (dataTypeName.includes('CUHK')){
+                access = "Pre-publication";}
             //else if (dataTypeName.includes('DCSP2')){
             //    access = "Early access phase 2";}
-            //else{
+            else{
                 access = "Open access";
-        //}
+        }
             return access;
         }
 
@@ -296,7 +297,7 @@ var mpgSoftware = mpgSoftware || {};
                 $("#phenotypeFilterLevel1Display").empty().append(filterDynamicHtml);
                 renderFilteredData();
 
-                var newDatasets = ["WMHV", "COPD", "Accelerometer-derived", "Living", "Eye", "Japan GWAS", "Albuminuria", "TOPMed", "Heart failure", "oxyhemoglobin", "apnea"];
+                var newDatasets = ["GIANT 2018 exome", "WMHV", "COPD", "Accelerometer-derived", "Hong Kong", "Albuminuria", "TOPMed", "Heart failure", "oxyhemoglobin", "apnea", "IVGTT"];
 
                 addNewDatasetFlag (newDatasets,".accordion-toggle","<span class='new-dataset-flag'>&nbsp;</span>"); //[DK] This function exists on t2dGenesCore.gsp. It's called to add "New dataset Flag
 
