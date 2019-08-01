@@ -51,7 +51,9 @@
                             subCategoryWriter:'gregorTissueTableTissueRowLabel',
                             numberRecordsCellPresentationStringWriter:'gregorTissueTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'gregorTissueTableSignificanceCellPresentationString',
-                            internalIdentifierString:'getVariantsWeWillUseToBuildTheVariantTable'
+                            internalIdentifierString:'getVariantsWeWillUseToBuildTheVariantTable',
+                            nameOfAccumulatorField:'variantInfoArray',
+                            nameOfAccumulatorFieldWithIndex:'notUsed'
                         }
                         ,
                         {
@@ -66,7 +68,9 @@
                             subCategoryWriter:'abcVariantTableTissueRowLabel',
                             numberRecordsCellPresentationStringWriter:'abcVariantTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'abcVariantTableSignificanceCellPresentationString',
-                            internalIdentifierString:'getABCGivenVariantList'
+                            internalIdentifierString:'getABCGivenVariantList',
+                            nameOfAccumulatorField:'abcVariantInfo',
+                            nameOfAccumulatorFieldWithIndex:'variantInfoArray'
                         }
 
                     ],

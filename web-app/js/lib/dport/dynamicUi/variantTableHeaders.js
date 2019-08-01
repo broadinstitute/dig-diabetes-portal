@@ -36,8 +36,11 @@ mpgSoftware.dynamicUi.variantTableHeaders = (function () {
             if (data.data.length === 0) {
                 alert(' No variants in the specified region')
             } else {
+                rawVariantAssociationRecords.splice(0,rawVariantAssociationRecords.length);
                 _.forEach(data.data, function (variantRec) {
-                    rawVariantAssociationRecords.push(variantRec);
+                    var variantRecToExtend  = variantRec;
+                    variantRecToExtend["name"] = variantRec.var_id; // standard field in which to store the index value?
+                    rawVariantAssociationRecords.push(variantRecToExtend);
                 });
             }
         }
@@ -45,10 +48,10 @@ mpgSoftware.dynamicUi.variantTableHeaders = (function () {
     };
 
 
-    var displayRefinedVariantsInARange = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+    var displayRefinedVariantsInARange = function (idForTheTargetDiv, objectContainingRetrievedRecords, callingParameters) {
         mpgSoftware.dynamicUi.displayHeaderForVariantTable(idForTheTargetDiv, // which table are we adding to
-            'VHDR', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            'variantNameArray');
+            callingParameters.code, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+            callingParameters.nameOfAccumulatorField);
 
 
     };

@@ -532,6 +532,7 @@ mpgSoftware.dynamicUi = (function () {
 
     var actionContainer = function (actionId, followUp) {
         var additionalParameters = getDyanamicUiVariables();
+        var dataAnnotationType =_.find(additionalParameters.dataAnnotationTypes,{internalIdentifierString:actionId});
         var displayFunction = ( typeof followUp.displayRefinedContextFunction !== 'undefined') ? followUp.displayRefinedContextFunction : undefined;
         var displayLocation = ( typeof followUp.placeToDisplayData !== 'undefined') ? followUp.placeToDisplayData : undefined;
         var nextActionId = ( typeof followUp.actionId !== 'undefined') ? followUp.actionId : undefined;
@@ -553,7 +554,9 @@ mpgSoftware.dynamicUi = (function () {
                         displayRefinedContextFunction: displayFunction,
                         placeToDisplayData: displayLocation,
                         actionId: nextActionId,
-                        nameOfAccumulatorField:'depictTissueArray'
+                        nameOfAccumulatorField:'depictTissueArray',
+                        code:dataAnnotationType.code,
+                        nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                     }));
                 };
                 break;
@@ -573,7 +576,9 @@ mpgSoftware.dynamicUi = (function () {
                         displayRefinedContextFunction: displayFunction,
                         placeToDisplayData: displayLocation,
                         actionId: nextActionId,
-                        nameOfAccumulatorField:'gregorTissueArray'
+                        nameOfAccumulatorField:'gregorTissueArray',
+                        code:dataAnnotationType.code,
+                        nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                     }));
                 };
                 break;
@@ -591,7 +596,9 @@ mpgSoftware.dynamicUi = (function () {
                         displayRefinedContextFunction: displayFunction,
                         placeToDisplayData: displayLocation,
                         actionId: nextActionId,
-                        nameOfAccumulatorField:'ldsrTissueArray'
+                        nameOfAccumulatorField:'ldsrTissueArray',
+                        code:dataAnnotationType.code,
+                        nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                     }));
                 };
                 break;
@@ -613,7 +620,9 @@ mpgSoftware.dynamicUi = (function () {
                         displayRefinedContextFunction: displayFunction,
                         placeToDisplayData: displayLocation,
                         actionId: nextActionId,
-                        nameOfAccumulatorField:'geneInfoArray'
+                        nameOfAccumulatorField:'geneInfoArray',
+                        code:dataAnnotationType.code,
+                        nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                     }));
                 };
                 break;
@@ -628,7 +637,9 @@ mpgSoftware.dynamicUi = (function () {
                         displayRefinedContextFunction: displayFunction,
                         placeToDisplayData: displayLocation,
                         actionId: nextActionId,
-                        nameOfAccumulatorField:'fullEffectorGeneTable'
+                        nameOfAccumulatorField:'fullEffectorGeneTable',
+                        code:dataAnnotationType.code,
+                        nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                     }));
                 };
                 break;
@@ -704,7 +715,9 @@ mpgSoftware.dynamicUi = (function () {
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
                             actionId: nextActionId,
-                            nameOfAccumulatorField:'rawGeneAssociationRecords'
+                            nameOfAccumulatorField:'rawGeneAssociationRecords',
+                            code:dataAnnotationType.code,
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                         }));
                     }
                 };
@@ -733,7 +746,9 @@ mpgSoftware.dynamicUi = (function () {
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
                             actionId: nextActionId,
-                            nameOfAccumulatorField:'rawGeneSkatRecords'
+                            nameOfAccumulatorField:'rawGeneSkatRecords',
+                            code:dataAnnotationType.code,
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                         }));
                     }
                 };
@@ -763,7 +778,9 @@ mpgSoftware.dynamicUi = (function () {
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
                             actionId: nextActionId,
-                            nameOfAccumulatorField:'rawGeneFirthRecords'
+                            nameOfAccumulatorField:'rawGeneFirthRecords',
+                            code:dataAnnotationType.code,
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                         }));
                     }
                 };
@@ -792,7 +809,9 @@ mpgSoftware.dynamicUi = (function () {
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
                             actionId: nextActionId,
-                            nameOfAccumulatorField:'rawEffectorGeneRecords'
+                            nameOfAccumulatorField:'rawEffectorGeneRecords',
+                            code:dataAnnotationType.code,
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                         }));
                     }
                 };
@@ -820,7 +839,9 @@ mpgSoftware.dynamicUi = (function () {
                         displayRefinedContextFunction: displayFunction,
                         placeToDisplayData: displayLocation,
                         actionId: nextActionId,
-                        nameOfAccumulatorField:'rawVariantRecords'
+                        nameOfAccumulatorField:'rawVariantRecords',
+                        code:dataAnnotationType.code,
+                        nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                     }));
                 };
                 break;
@@ -911,7 +932,9 @@ mpgSoftware.dynamicUi = (function () {
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
                             actionId: nextActionId,
-                            nameOfAccumulatorField:'rawColocalizationInfo'
+                            nameOfAccumulatorField:'rawColocalizationInfo',
+                            code:dataAnnotationType.code,
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                         }));
                     }
                 };
@@ -936,7 +959,9 @@ mpgSoftware.dynamicUi = (function () {
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
                             actionId: nextActionId,
-                            nameOfAccumulatorField:'rawColoInfo'
+                            nameOfAccumulatorField:'rawColoInfo',
+                            code:dataAnnotationType.code,
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                         }));
                     }
                 };
@@ -961,7 +986,9 @@ mpgSoftware.dynamicUi = (function () {
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
                             actionId: nextActionId,
-                            nameOfAccumulatorField:'modNameArray'
+                            nameOfAccumulatorField:'modNameArray',
+                            code:dataAnnotationType.code,
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                         }));
                     }
                 };
@@ -1068,7 +1095,9 @@ mpgSoftware.dynamicUi = (function () {
                         displayRefinedContextFunction: displayFunction,
                         placeToDisplayData: displayLocation,
                         actionId: nextActionId,
-                        nameOfAccumulatorField:'variantInfoArray'
+                        nameOfAccumulatorField:dataAnnotationType.nameOfAccumulatorField,
+                        code:dataAnnotationType.code,
+                        nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                     }));
 
                 };
@@ -1117,7 +1146,9 @@ mpgSoftware.dynamicUi = (function () {
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
                             actionId: nextActionId,
-                            nameOfAccumulatorField:'abcVariantInfo'
+                            nameOfAccumulatorField:dataAnnotationType.nameOfAccumulatorField,
+                            code:dataAnnotationType.code,
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                         }));
                     }
                 };
@@ -1144,7 +1175,9 @@ mpgSoftware.dynamicUi = (function () {
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
                             actionId: nextActionId,
-                            nameOfAccumulatorField:'rawDepictInfo'
+                            nameOfAccumulatorField:'rawDepictInfo',
+                            code:dataAnnotationType.code,
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                         }));
                     }
                 };
@@ -1172,7 +1205,9 @@ mpgSoftware.dynamicUi = (function () {
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
                             actionId: nextActionId,
-                            nameOfAccumulatorField:'depictGeneSetInfo'
+                            nameOfAccumulatorField:'depictGeneSetInfo',
+                            code:dataAnnotationType.code,
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                         }));
                     }
                 };
@@ -1914,10 +1949,21 @@ mpgSoftware.dynamicUi = (function () {
     };
 
 
-
-
-
-
+    /***
+     * This display function is trickier than the others for two reasons:
+     *   1) we don't know the list of tissues we are seeking to display upfront.  Instead, we are
+     *   adding new tissues each time we run a computational technique, and expanding the display to include them.
+     *   2) we have this funky trick in which we update the list in response to changes made by
+     *   the user interactively selecting which annotations we are going to use for Gregor data.
+     *
+     * @param idForTheTargetDiv
+     * @param dataAnnotationTypeCode
+     * @param nameOfAccumulatorField
+     * @param insertAnyHeaderRecords
+     * @param mapSortAndFilterFunction
+     * @param placeDataIntoRenderForm
+     * @param createSingleGregorCell
+     */
     var displayTissueTable = function (idForTheTargetDiv, // which table are we adding to
                                                     dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
                                                     nameOfAccumulatorField, // name of the persistent field where the data we received is stored
@@ -2352,6 +2398,109 @@ mpgSoftware.dynamicUi = (function () {
     };
 
 
+
+
+
+
+
+    var displayForVariantTable = function (idForTheTargetDiv, // which table are we adding to
+                                        dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+                                        nameOfAccumulatorField, // name of the persistent field where the data we received is stored
+                                        nameOfAccumulatorFieldWithIndex, // we may wish to pull out one record for summary purposes
+                                        mapSortAndFilterFunction,
+                                        placeDataIntoRenderForm ) { // sort and filter the records we will use.  Resulting array must have fields tissue, value, and numericalValue
+
+        var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode);
+        //var returnObject = createNewDisplayReturnObject();
+        var intermediateDataStructure = new IntermediateDataStructure();
+
+        // for each gene collect up the data we want to display
+        var arrayOfDataToDisplay = getAccumulatorObject(nameOfAccumulatorField);
+
+        // do we have any data at all?  If we do, then make a row
+        if (( typeof arrayOfDataToDisplay !== 'undefined') && ( arrayOfDataToDisplay.length > 0)) {
+            addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
+
+            // set up the headers, even though we know we won't use them. Is this step necessary?
+            var headerNames = [];
+            if (accumulatorObjectFieldEmpty("nameOfAccumulatorFieldWithIndex")) {
+                console.log("We should have a list of variants, otherwise we shouldn't be here. We have a problem.");
+            } else {
+                headerNames  = _.map(getAccumulatorObject("nameOfAccumulatorFieldWithIndex"),'name');
+                _.forEach(getAccumulatorObject("nameOfAccumulatorFieldWithIndex"), function (oneRecord) {
+                    intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
+                        {},"header",'EMC'));
+                });
+            }
+
+
+            // set up the headers, and give us an empty row of column cells
+
+
+            // fill in all of the column cells
+            _.forEach(arrayOfDataToDisplay, function (oneRecord) {
+                var indexOfColumn = _.indexOf(headerNames, oneRecord.name);
+                if (indexOfColumn === -1) {
+                    console.log("Did not find index of ABC var_id.  Shouldn't we?")
+                } else {
+                    if ((recordsPerGene.arrayOfRecords.length === 0)) {
+                        alert('should not happen, right?');
+                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.gene,
+                            {}, "tissue specific",'EMC');
+                    } else {
+                        var tissueTranslations = recordsPerGene["TISSUE_TRANSLATIONS"]; // if no translations are provided, it is fine to leave this value as undefined
+                        var tissueRecords = mapSortAndFilterFunction (recordsPerGene.arrayOfRecords,tissueTranslations);
+
+                        var recordsCellPresentationString = Mustache.render($('#'+dataAnnotationType.dataAnnotation.numberRecordsCellPresentationStringWriter)[0].innerHTML, {
+                            numberRecords:tissueRecords.length
+                        });
+                        var significanceCellPresentationString = "0";
+                        var significanceValue = 0;
+                        if (( typeof tissueRecords !== 'undefined')&&
+                            (tissueRecords.length>0)){
+                            var mostSignificantRecord;
+                            if (( typeof preferredSummaryKey !== 'undefined') && (preferredSummaryKey.length>0)){ // we have a key telling us which record to pick
+                                mostSignificantRecord=_.find(tissueRecords,function(t){return t.tissue.includes(preferredSummaryKey)});
+                            }else{// no specific key, but we have sorted the keys in ascending order by value, so we can just pick the first one
+                                mostSignificantRecord=tissueRecords[0];
+                            }
+                            significanceValue = mostSignificantRecord.value;
+                            significanceCellPresentationString = Mustache.render($('#'+dataAnnotationType.dataAnnotation.significanceCellPresentationStringWriter)[0].innerHTML,
+                                {significanceValue:significanceValue,
+                                    significanceValueAsString:UTILS.realNumberFormatter(""+significanceValue),
+                                    recordDescription:translateATissueName(tissueTranslations,mostSignificantRecord.tissue),
+                                    numberRecords:tissueRecords.length});
+
+                        }
+                        //  this is the information we carry around each cell and that we will later use to display it
+                        var renderData = placeDataIntoRenderForm(   tissueRecords,
+                            recordsCellPresentationString,
+                            significanceCellPresentationString,
+                            dataAnnotationTypeCode,
+                            significanceValue,
+                            recordsPerGene.gene );
+                        recordsPerGene["numberOfRecords"] = recordsPerGene.tissues.length;//not sure if this is used
+                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.gene,
+                            renderData,"tissue specific",dataAnnotationTypeCode );
+                    }
+
+                }
+            });
+            intermediateDataStructure.tableToUpdate = idForTheTargetDiv;
+        }
+
+
+        prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
+            '#dynamicAbcGeneTable',
+            undefined, // unused
+            clearBeforeStarting,
+            intermediateDataStructure,
+            true,
+            'geneTableGeneHeaders', true);
+
+
+
+    };
 
 
 
@@ -3385,8 +3534,9 @@ mpgSoftware.dynamicUi = (function () {
             if (( typeof collectionOfRemoteCallingParameters.displayRefinedContextFunction !== 'undefined') &&
                 ( collectionOfRemoteCallingParameters.displayRefinedContextFunction !== null ) ) {
 
-                collectionOfRemoteCallingParameters.displayRefinedContextFunction(   collectionOfRemoteCallingParameters.placeToDisplayData,
-                    objectContainingRetrievedRecords );
+                collectionOfRemoteCallingParameters.displayRefinedContextFunction(  collectionOfRemoteCallingParameters.placeToDisplayData,
+                                                                                    objectContainingRetrievedRecords,
+                                                                                    collectionOfRemoteCallingParameters );
 
             } else if  ( typeof collectionOfRemoteCallingParameters.actionId !== 'undefined')  {
 
@@ -3434,6 +3584,8 @@ mpgSoftware.dynamicUi = (function () {
                 returnValue["placeToDisplayData"] = startingMaterials.placeToDisplayData;
                 returnValue["actionId"] = startingMaterials.actionId;
                 returnValue["nameOfAccumulatorField"] = startingMaterials.nameOfAccumulatorField;
+                returnValue["code"] = startingMaterials.code;
+                returnValue["nameOfAccumulatorFieldWithIndex"] = startingMaterials.nameOfAccumulatorFieldWithIndex;
         } else {
                 console.log("Serious error: incorrect fields in startingMaterials = "+startingMaterials.name+".")
             };
@@ -6067,7 +6219,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         closeFilterModal:closeFilterModal,
         retrieveDataFromServer:retrieveDataFromServer,
         retrieveGwasCodingCredibleSetFromServer: retrieveGwasCodingCredibleSetFromServer,
-        displayHeaderForVariantTable:displayHeaderForVariantTable
+        displayHeaderForVariantTable:displayHeaderForVariantTable,
+        displayForVariantTable:displayForVariantTable
     }
 }());
 
