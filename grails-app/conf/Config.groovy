@@ -1008,7 +1008,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           [],
                                           "[3]",
                                           "GWAS_UKBiobankGEFOS_eu_mdv140",
-                                          "images/bone/front_boneKP_logo_2019_3.svg",
+                                          "images/bone/front_boneKP_logo_2019_4.svg",
                                           "portal.bone.header.tagline",
                                           "portal.bone.header.title.short",
                                           [],
