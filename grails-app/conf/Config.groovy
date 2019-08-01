@@ -998,7 +998,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                   new PortalVersionBean("bone",
                                           "Bone",
                                           "mdv140",
-                                          "MSGKP", // name of KB data we want
+                                          "MGKP", // name of KB data we want
                                           "Fracture", // make sure your default phenotype exists in your default data set
                                           "GWAS_UKBiobankGEFOS_eu_mdv140",// used to pick a default data set for a gene query
                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
