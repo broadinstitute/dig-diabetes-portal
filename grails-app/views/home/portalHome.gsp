@@ -562,6 +562,8 @@
 
                     <g:elseif test="${g.portalTypeString()?.equals('bone')}"> 
                         <p><g:message code="about.the.bone.portal.text"/></p>
+                        <p><g:message code="about.the.bone.portal.text2"/></p>
+                        <a href="http://www.ifmrs.org" target="_blank"><img src="${resource(dir:'images/organizations', file:'IFMRS_Logo.jpg')}" style="width:200px"></a>
                          </g:elseif>
 
                     <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
