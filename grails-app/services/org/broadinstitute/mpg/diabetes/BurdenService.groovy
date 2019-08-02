@@ -19,6 +19,8 @@ import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.codehaus.groovy.grails.web.json.JSONTokener
 
+import java.awt.geom.Rectangle2D
+
 @Transactional
 class BurdenService {
 
@@ -137,8 +139,13 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
 
         filterList << """{"parameter": "most_del_score", "operator": "${operand}", "value": ${mostDelScore}}""".toString()
 
-        // super hack
-        //filterList << """{"parameter": "p_value", "operator": "lt", "value": "0.01"}""".toString()
+        // We have to MAF filter by hand
+        Float mafThreshold = 0f
+        QueryFilter queryFilter = additionalQueryFilterList.find{QueryFilter qfb->qfb.property.name=="MAF"}
+        if (queryFilter != null){
+            mafThreshold = Float.parseFloat(queryFilter.value)
+        }
+
 
         if (geneString){
             LinkedHashMap geneExtent = sharedToolsService.getGeneExpandedExtent(geneString,restServerService.EXPAND_ON_EITHER_SIDE_OF_GENE)
@@ -169,6 +176,12 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
         resultJson = this.restServerService.postMultiAllelicHackRestCall(jsonString);
 
         // return the result
+        if ((resultJson)&&
+                (resultJson.variants)&&
+                (mafThreshold>0f)){
+            resultJson.variants = resultJson.variants.findAll{o->o.AF<mafThreshold} as JSONArray
+            resultJson.numRecords = resultJson.variants.size()
+        }
         return resultJson;
     }
 
@@ -354,8 +367,8 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
         String retval
 
         // log
-        log.info("called burden test for gene: " + geneString + " and variant select option: " + variantSelectionOptionId + " and data version id: " + dataVersionId);
-        log.info("also had MAF option: " + mafSampleGroupOption + " and MAF value: " + mafValue);
+        println("0000000000000000000000 called burden test for gene: " + geneString + " and variant select option: " + variantSelectionOptionId + " and data version id: " + dataVersionId);
+        println("also had MAF option: " + mafSampleGroupOption + " and MAF value: " + mafValue);
         // when the phenotypes no longer have multiple names each then we can remove this kludgefest
         String convertedPhenotype = phenotype
         switch (phenotype){
@@ -458,7 +471,25 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
             default: break
         }
 
-
+        if (variantSelectionOptionId==1){
+            println('EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE: option='+variantSelectionOptionId)
+        } else if (variantSelectionOptionId==2){
+            println('EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE: option='+variantSelectionOptionId)
+        }else if (variantSelectionOptionId==3){
+            println('EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE: option='+variantSelectionOptionId)
+        }else if (variantSelectionOptionId==4){
+            println('EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE: option='+variantSelectionOptionId)
+        }else if (variantSelectionOptionId==5){
+            println('EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE: option='+variantSelectionOptionId)
+        }else if (variantSelectionOptionId==6){
+            println('EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE: option='+variantSelectionOptionId)
+        }else if (variantSelectionOptionId==7){
+            println('EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE: option='+variantSelectionOptionId)
+        }else if (variantSelectionOptionId==8){
+            println('EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE: option='+variantSelectionOptionId)
+        }else if (variantSelectionOptionId==9){
+            println('EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE: option='+variantSelectionOptionId)
+        }
 
 
 

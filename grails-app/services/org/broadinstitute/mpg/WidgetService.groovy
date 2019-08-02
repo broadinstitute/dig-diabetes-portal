@@ -722,7 +722,11 @@ class WidgetService {
                     String phenotypeGroup = "unknown phenotype group"
                     String dataSetDescription = g.message(code: "metadata." + variant.dataset, default: variant.dataset)
                     SampleGroup sampleGroup = metaDataService.getSampleGroupByName (variant.dataset as String,metaDataService.METADATA_VARIANT)
-                    int subjectNumber = sampleGroup?.getSubjectsNumber()
+                    int subjectNumber = 0
+                    if (sampleGroup?.getSubjectsNumber()!=null){
+                        subjectNumber = sampleGroup?.getSubjectsNumber()
+                    }
+
                     String pValueAsString = "0"
                     Double pValue =0d
                     Double logPValue =0d
@@ -810,7 +814,7 @@ class WidgetService {
                     String phenotypeGroup = "unknown phenotype group"
                     String dataSetDescription = g.message(code: "metadata." + variant.dataset, default: variant.dataset)
                     SampleGroup sampleGroup = metaDataService.getSampleGroupByName (variant.dataset as String,metaDataService.METADATA_VARIANT)
-                    int subjectNumber = sampleGroup?.getSubjectsNumber()
+                    //int subjectNumber = sampleGroup?.getSubjectsNumber()
                     String pValueAsString = "0"
                     String betaAsString = "0"
                     String standardErrorAsString = "0"
