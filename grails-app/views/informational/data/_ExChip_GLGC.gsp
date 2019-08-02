@@ -99,7 +99,7 @@
    <h4><g:message code="informational.shared.headers.project"></g:message></h4>
     <h5>Global Lipids Genetics Consortium (GLGC) <small><a href="http://lipidgenetics.org/" target="_blank">Learn more ></a>
     </small></h5>
-
+<br><br>
 
 <h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
 
