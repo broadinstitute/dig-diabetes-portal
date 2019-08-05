@@ -108,13 +108,13 @@ public class BurdenJsonBuilder {
             stringBuilder.append("\", ");
         }
 
-        if (variantSetId!= null) {
+//        if (variantSetId!= null) {
             stringBuilder.append("\"");
             stringBuilder.append(PortalConstants.JSON_BURDEN_OPERATION_KEY);
             stringBuilder.append("\": \"");
             stringBuilder.append(PortalConstants.JSON_BURDEN_OPERATION_SUM_KEY);
             stringBuilder.append("\", ");
-        }
+//        }
 
         // add in the phenotype
         stringBuilder.append("\"");

@@ -380,10 +380,11 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
         }
 
         try {
-//            if ((variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_NS_BROAD)||
-//                    (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_NS)){
-//                mafValue = 0.01
-//            }
+            if ( (mafValue == null)&&
+                    ((variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_NS_BROAD)||
+                    (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_NS))){
+                mafValue = 0.01
+            }
             queryFilterList = this.getBurdenJsonBuilder().getMinorAlleleFrequencyFiltersByString(dataVersion, mafSampleGroupOption, mafValue, dataSet, metaDataService);
 
             // get the getData results payload
