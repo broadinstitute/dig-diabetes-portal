@@ -622,7 +622,7 @@ grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'org.broadinsti
 grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.people.Role'
 
 
-portal.type.override = "lung"     // options are "t2d", "stroke", "mi", "ibd", "epilepsy", or "sleep".   What is the portal type for all nonsystem users?
+portal.type.override = "ibd"     // options are "t2d", "stroke", "mi", "ibd", "epilepsy", or "sleep".   What is the portal type for all nonsystem users?
 
 
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
@@ -799,17 +799,17 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
 //                                          "[1,2,3,4,5,6,7,8,9,10,11,12,13,14]",
                                           "[1,2,4,5,6,9,10,11,12,13,14,15,16,17,18]",
                                                           "GWAS_IBDGenomics_eu_mdv80",
-                                          "images/ibd/ibd_front_logo_WOnT2.png",
+                                          "images/v2f/front_V2FKP_logo_2019.svg",
                                           "portal.ibd.header.tagline",
                                           "portal.ibd.header.title",
                                           [],
                                           ["IL23R"],
                                           ["6_31628397_T_A"],
                                           ["chr1:67,500,000-67,800,000"],
-                                          "images/ibd/front_ibd_bg_2018.png",
+                                          "images/v2f/front_V2FKP_banner_bg.png",
                                         "",
                                          // "images/ibd/ibd_header_logo.svg",
-                                          "images/ibd/v2f-little-logo.png",
+                                          "images/v2f/header_V2FKP_logo.svg",
                                           "images/ibd/ibd_menu_wrapper_bg.png",
                                           "false",
                                           "",
