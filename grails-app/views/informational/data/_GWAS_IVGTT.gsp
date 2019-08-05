@@ -19,7 +19,7 @@
 <li><g:message code="metadata.ISR"></g:message></li>
 <li><g:message code="metadata.ISRadjBMI"></g:message></li>
 <li><g:message code="metadata.PEAK"></g:message></li>
-<li><g:message code="metadata.PEAKadjISI"></g:message></li>
+<li><g:message code="metadata.PEAKadjSI"></g:message></li>
 <li><g:message code="metadata.PEAKadjBMInSI"></g:message></li>
  </ul>
 
