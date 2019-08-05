@@ -23,36 +23,6 @@
     </ul>
 
     <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
-%{--This table pertains to mdv31--}%
-%{--<table class="table table-condensed table-responsive table-striped">--}%
-
-%{--<tr><th>Cases</th><th>Controls</th><th>Cohort<small>(Click to view selection criteria for cases and controls)</small></th><th>Ancestry</th></tr>--}%
-
-%{--<tr><td>2,007</td><td>0</td><td><a onclick="showSection(event)">Diabetic Cohort (DC)</a>--}%
-
-%{--<div style="display: none;" class="cohortDetail">--}%
-%{--<table border="1">--}%
-%{--<tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>--}%
-%{--<tr>--}%
-%{--<td valign="top">Physician diagnosis of T2D</td>--}%
-%{--<td valign="top">n/a</td></tr>--}%
-%{--</table>--}%
-%{--</div></td><td>East Asian</td></tr>--}%
-
-%{--<tr><td>0</td><td>1,944</td><td><a onclick="showSection(event)">Singapore Prospective Study Program (SP2)</a>--}%
-
-%{--<div style="display: none;" class="cohortDetail">--}%
-%{--<table border="1">--}%
-%{--<tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>--}%
-%{--<tr>--}%
-%{--<td valign="top">n/a</td>--}%
-%{--<td valign="top">No prior history of diabetes, fasting glucose level &le; 6.0 mmol/L</td></tr>--}%
-%{--</table>--}%
-%{--</div></td><td>East Asian</td></tr>--}%
-
-
-%{--</table>--}%
-
 
 
 <table class="table table-condensed table-responsive table-striped">
@@ -105,7 +75,7 @@
 
 <h4><g:message code="informational.shared.headers.reports"></g:message></h4>
 
-<p>Genotype Data Quality Control Report (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP-DCC_Quality_Control_Report_NUS.pdf" target="_blank">download PDF</a>)</p>
+<p>Genotype Data Quality Control Report (<a href="https://broad-portal-resources.s3.amazonaws.com/reports/AMP_DCC_QCR_NUS.v1.0.20190522.1750.pdf" target="_blank">download PDF</a>)</p>
 <p>AMP-DCC Data Analysis Report (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP-DCC_Data_Analysis_Report_NUS.pdf" target="_blank">download PDF</a>)</p>
 
 
