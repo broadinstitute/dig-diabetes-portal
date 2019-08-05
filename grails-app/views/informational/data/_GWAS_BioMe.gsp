@@ -31,7 +31,7 @@
 </div></p>
 
     <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
-    <p><g:message code="pheno.help.text"></g:message></p>
+
     <h5><g:message code="informational.shared.headers.phase1"></g:message></h5>
     <ul>
         <li><g:message code="informational.shared.traits.t2d"></g:message></li>

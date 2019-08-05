@@ -10,7 +10,7 @@
 
 
     <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
-    <p><g:message code="pheno.help.text"></g:message></p>
+    <h5><g:message code="informational.shared.headers.phase1"></g:message></h5>
 
     <ul>
         <li><g:message code="informational.shared.traits.t2d"></g:message></li>
@@ -19,8 +19,23 @@
         <li><g:message code="informational.shared.traits.fasting_glucose_BMI"></g:message></li>
         <li><g:message code="informational.shared.traits.fasting_insulin"></g:message></li>
         <li><g:message code="informational.shared.traits.fasting_insulin_BMI"></g:message></li>
+        <li><g:message code="informational.shared.traits.HbA1c"></g:message></li>
+        <li><g:message code="informational.shared.traits.HbA1c_BMI"></g:message></li>
+</ul>
+<h5><g:message code="informational.shared.headers.phase2"></g:message></h5>
 
-    </ul>
+<ul>
+        <li><g:message code="informational.shared.traits.serum_creatinine"></g:message></li>
+        <li><g:message code="informational.shared.traits.diastolicBP"></g:message></li>
+        <li><g:message code="informational.shared.traits.BMI"></g:message></li>
+        <li><g:message code="informational.shared.traits.systolicBP"></g:message></li>
+        <li><g:message code="informational.shared.traits.eGFR-creat"></g:message></li>
+        <li><g:message code="informational.shared.traits.HDL_cholesterol"></g:message></li>
+        <li><g:message code="informational.shared.traits.LDL_cholesterol"></g:message></li>
+</ul>
+
+
+
 
     <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
 
@@ -72,11 +87,16 @@
 <p><g:message code="informational.data.overview.DC_SP2-2"></g:message></p>
 <p><g:message code="informational.data.overview.DC_SP2-3"></g:message></p>
 <p><g:message code="informational.data.overview.DC_SP2-4"></g:message></p>
+<p><g:message code="informational.data.overview.DC_SP2-5"></g:message></p>
+<p><g:message code="informational.data.overview.DC_SP2-6"></g:message></p>
+<p><g:message code="informational.data.overview.DC_SP2-7"></g:message></p>
+<p><g:message code="informational.data.overview.DC_SP2-8"></g:message></p>
 
 <h4><g:message code="informational.shared.headers.reports"></g:message></h4>
 
 <p>Genotype Data Quality Control Report (<a href="https://broad-portal-resources.s3.amazonaws.com/reports/AMP_DCC_QCR_NUS.v1.0.20190522.1750.pdf" target="_blank">download PDF</a>)</p>
-<p>AMP-DCC Data Analysis Report (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP-DCC_Data_Analysis_Report_NUS.pdf" target="_blank">download PDF</a>)</p>
+<p>AMP-DCC Phase 1 Data Analysis Report (<a href="https://broad-portal-resources.s3.amazonaws.com/reports/AMP_DCC_DAR_NUS.phase1.v1.1.20190710.1310.pdf" target="_blank">download PDF</a>)</p>
+<p>AMP-DCC Phase 2 Data Analysis Report (<a href="https://broad-portal-resources.s3.amazonaws.com/reports/AMP_DCC_DAR_NUS.phase2.v1.1.20190710.1310.pdf" target="_blank">download PDF</a>)</p>
 
 
     <h4>Accessing Diabetic Cohort-Singapore Prospective Study Program GWAS data</h4>
