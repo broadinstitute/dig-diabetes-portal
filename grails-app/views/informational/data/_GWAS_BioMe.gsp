@@ -33,21 +33,25 @@
     <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
 
     <h5><g:message code="informational.shared.headers.phase1"></g:message></h5>
+
     <ul>
         <li><g:message code="informational.shared.traits.t2d"></g:message></li>
-        <li><g:message code="informational.shared.traits.fasting_glucose_age-sex"></g:message></li>
-        <li><g:message code="informational.shared.traits.HbA1c_age-sex"></g:message></li>
-        <li><g:message code="informational.shared.traits.HbA1c_age-sex-BMI"></g:message></li>
-    </ul>
-    <h5><g:message code="informational.shared.headers.phase2"></g:message></h5>
-    <ul>
-<li><g:message code="informational.shared.traits.creatinine"></g:message></li>
-<li><g:message code="informational.shared.traits.systolicBP"></g:message></li>
-<li><g:message code="informational.shared.traits.diastolicBP"></g:message></li>
-<li><g:message code="informational.shared.traits.LDL_cholesterol"></g:message></li>
-<li><g:message code="informational.shared.traits.HDL_cholesterol"></g:message></li>
-<li><g:message code="informational.shared.traits.BMI"></g:message></li>
-<li><g:message code="informational.shared.traits.eGFR-creat"></g:message></li>
+        <li><g:message code="informational.shared.traits.t2dadjbmi"></g:message></li>
+        <li><g:message code="informational.shared.traits.fasting_glucose"></g:message></li>
+        <li><g:message code="informational.shared.traits.fasting_glucose_BMI"></g:message></li>
+        <li><g:message code="informational.shared.traits.HbA1c"></g:message></li>
+        <li><g:message code="informational.shared.traits.HbA1c_BMI"></g:message></li>
+</ul>
+<h5><g:message code="informational.shared.headers.phase2"></g:message></h5>
+
+<ul>
+        <li><g:message code="informational.shared.traits.serum_creatinine"></g:message></li>
+        <li><g:message code="informational.shared.traits.systolicBP"></g:message></li>
+        <li><g:message code="informational.shared.traits.HDL_cholesterol"></g:message></li>
+        <li><g:message code="informational.shared.traits.eGFR-creat"></g:message></li>
+        <li><g:message code="informational.shared.traits.diastolicBP"></g:message></li>
+         <li><g:message code="informational.shared.traits.LDL_cholesterol"></g:message></li>
+        <li><g:message code="informational.shared.traits.BMI"></g:message></li>
 </ul>
 <h5><g:message code="informational.shared.headers.phase3"></g:message></h5>
 <ul>
@@ -91,33 +95,26 @@
 
 <h4><g:message code="informational.shared.headers.overview"></g:message></h4>
 <p><g:message code="informational.data.overview.BioMe1a"></g:message></p>
-<p><g:message code="informational.data.overview.BioMe1b"></g:message>
-    (<g:message code="informational.shared.publications.Morris_2012_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
-<g:message code="informational.shared.publications.Morris_2012_NatGenet"></g:message>)
-</p>
-<p><g:message code="informational.data.overview.BioMe2"></g:message>
-(<g:message code="informational.shared.publications.Dupuis_2010_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
-<g:message code="informational.shared.publications.Dupuis_2010_NatGenet"></g:message>;
-
-<g:message code="informational.shared.publications.Scott_2012_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
-<g:message code="informational.shared.publications.Scott_2012_NatGenet"></g:message>).
-
-<p><g:message code="informational.data.overview.BioMe3"></g:message><g:message code="informational.shared.publications.Soranzo_2010_Diabetes.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
-<g:message code="informational.shared.publications.Soranzo_2010_Diabetes"></g:message><g:message code="informational.data.overview.BioMe4"></g:message></p>
-
+<p><g:message code="informational.data.overview.BioMe1b"></g:message></p>
+<p><g:message code="informational.data.overview.BioMe2"></g:message></p>
+<p><g:message code="informational.data.overview.BioMe3"></g:message></p>
+<p><g:message code="informational.data.overview.BioMe4"></g:message></p>
 <p><g:message code="informational.data.overview.BioMe5"></g:message></p>
-<p><g:message code="informational.data.overview.BioMe6a"></g:message><g:message code="informational.shared.publications.ICBP_2011_Nature.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>,
-&nbsp;<g:message code="informational.shared.publications.ICBP_2011_Nature"></g:message><g:message code="informational.data.overview.BioMe6b"></g:message></p>
-
-
-<p><g:message code="informational.data.overview.BioMe7a"></g:message><g:message code="informational.shared.publications.Willer_2013_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>,
-<g:message code="informational.shared.publications.Willer_2013_NatGenet"></g:message><g:message code="informational.data.overview.BioMe7b"></g:message></p>
+<p><g:message code="informational.data.overview.BioMe6"></g:message></p>
+<p><g:message code="informational.data.overview.BioMe7"></g:message></p>
 
 <p><g:message code="informational.data.overview.BioMe8"></g:message></p>
 <p><g:message code="informational.data.overview.BioMe9"></g:message></p>
 <p><g:message code="informational.data.overview.BioMe10"></g:message></p>
 
 <h4><g:message code="informational.shared.headers.reports"></g:message></h4>
+
+<h4><g:message code="informational.shared.headers.reports"></g:message></h4>
+
+<p><g:message code="informational.data.reports.QCR_BioMe"></g:message></p>
+<p><g:message code="informational.data.reports.DAR1_BioMe"></g:message></p>
+<p><g:message code="informational.data.reports.DAR2_BioMe"></g:message></p>
+<p><g:message code="informational.data.reports.DAR_complications_BioMe"></g:message></p>
 
 <p>Genotype Data Quality Control Report for Phase 1 and 2 analysis (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP-DCC+Quality+Control+Report+BioMe_2016_1102.pdf" target="_blank">download PDF</a>)</p>
 
