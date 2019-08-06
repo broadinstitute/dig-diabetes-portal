@@ -94,9 +94,9 @@
 
 <h4><g:message code="informational.shared.headers.reports"></g:message></h4>
 
-<p>Genotype Data Quality Control Report (<a href="https://broad-portal-resources.s3.amazonaws.com/reports/AMP_DCC_QCR_NUS.v1.0.20190522.1750.pdf" target="_blank">download PDF</a>)</p>
-<p>AMP-DCC Phase 1 Data Analysis Report (<a href="https://broad-portal-resources.s3.amazonaws.com/reports/AMP_DCC_DAR_NUS.phase1.v1.1.20190710.1310.pdf" target="_blank">download PDF</a>)</p>
-<p>AMP-DCC Phase 2 Data Analysis Report (<a href="https://broad-portal-resources.s3.amazonaws.com/reports/AMP_DCC_DAR_NUS.phase2.v1.1.20190710.1310.pdf" target="_blank">download PDF</a>)</p>
+<p><g:message code="informational.data.reports.QCR_DC_SP2"></g:message></p>
+<p><g:message code="informational.data.reports.DAR1_DC_SP2"></g:message></p>
+<p><g:message code="informational.data.reports.DAR2_DC_SP2"></g:message></p>
 
 
     <h4>Accessing Diabetic Cohort-Singapore Prospective Study Program GWAS results</h4>
