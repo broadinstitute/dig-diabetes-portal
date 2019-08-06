@@ -99,7 +99,7 @@
 <p>AMP-DCC Phase 2 Data Analysis Report (<a href="https://broad-portal-resources.s3.amazonaws.com/reports/AMP_DCC_DAR_NUS.phase2.v1.1.20190710.1310.pdf" target="_blank">download PDF</a>)</p>
 
 
-    <h4>Accessing Diabetic Cohort-Singapore Prospective Study Program GWAS data</h4>
+    <h4>Accessing Diabetic Cohort-Singapore Prospective Study Program GWAS results</h4>
     <p><g:message code="informational.data.accessing.DC_SP2-1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.DC_SP2-2"></g:message></p>
 
 
