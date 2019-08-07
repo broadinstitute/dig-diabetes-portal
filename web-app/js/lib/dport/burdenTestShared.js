@@ -1772,6 +1772,13 @@ mpgSoftware.burdenTestShared = (function () {
                 //     $('#gaitTableDataHolder').append('<span class="variantsToCheck">'+variantRec.VAR_ID+'</span>')
                 var arrayOfRows = [];
                 var variantID = variantRec.VAR_ID;
+                // can we build up a variant ID presentation that will be effect allele specific
+                var variantIDelements = variantID.split("_");
+                if (variantIDelements.length>2){
+                    variantID = variantIDelements[0]+"_"+
+                                variantIDelements[1]+"_"+
+                        variantRec.Reference_allele+"_"+variantRec.Effect_allele;
+                }
                 if ((variantRec.CHROM) && (variantRec.POS)) {
                     variantID = variantRec.CHROM + ":" + variantRec.POS;
                 }

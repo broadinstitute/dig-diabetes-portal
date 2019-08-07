@@ -606,9 +606,10 @@ the individual filters themselves. That work is handled later as part of a loop-
                                         <label><g:message code="gene.burdenTesting.label.available_variant_filter"/>:
                                             {{#variantsSetRefinement}}
                                             <select id= "burdenProteinEffectFilter" class="burdenProteinEffectFilter form-control"
-                                            onchange="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters({generateListOfVariantsFromFiltersAjaxUrl:'${createLink(controller: 'gene', action: 'generateListOfVariantsFromFiltersAjax')}'},
-                                                                                         mpgSoftware.burdenTestShared.buildVariantTable,
-                                            '${createLink(controller: 'variantInfo', action: 'variantInfo')}')">
+                                            onchange="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters(
+                                            {generateListOfVariantsFromFiltersAjaxUrl:'${createLink(controller: 'gene', action: 'generateListOfVariantsFromFiltersAjax')}'},
+                                            mpgSoftware.burdenTestShared.buildVariantTable,
+                                            {variantInfoUrl:'${createLink(controller: 'variantInfo', action: 'variantInfo')}'})">
                                             </select>
                                             {{/variantsSetRefinement}}
                                             {{^variantsSetRefinement}}
@@ -630,9 +631,10 @@ the individual filters themselves. That work is handled later as part of a loop-
                                             <div class="labelAndInput">
                                                 MAF &lt;&nbsp;
                                                 <input style="display: inline-block" type="text" class="form-control" id="mafInput" placeholder="value"
-                                                onkeyup="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters({generateListOfVariantsFromFiltersAjaxUrl:'${createLink(controller: 'gene', action: 'generateListOfVariantsFromFiltersAjax')}'},
-                                                                                             mpgSoftware.burdenTestShared.buildVariantTable,
-                                                '${createLink(controller: 'variantInfo', action: 'variantInfo')}')">
+                                                onkeyup="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters(
+                                                {generateListOfVariantsFromFiltersAjaxUrl:'${createLink(controller: 'gene', action: 'generateListOfVariantsFromFiltersAjax')}'},
+                                                mpgSoftware.burdenTestShared.buildVariantTable,
+                                                {variantInfoUrl:'${createLink(controller: 'variantInfo', action: 'variantInfo')}'})">
                                             </div>
 
                                         </div>
@@ -640,14 +642,18 @@ the individual filters themselves. That work is handled later as part of a loop-
                                             <label><g:message code="gene.burdenTesting.label.apply_maf"/>:&nbsp;&nbsp;</label>
                                             <div class="form-inline mafOptionChooser">
                                                 <div class="radio">
-                                                    <label><input type="radio" name="mafOption" value="1" onclick="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters({generateListOfVariantsFromFiltersAjaxUrl:'${createLink(controller: 'gene', action: 'generateListOfVariantsFromFiltersAjax')}'},
-                                                                                                 mpgSoftware.burdenTestShared.buildVariantTable,
-                                                '${createLink(controller: 'variantInfo', action: 'variantInfo')}')"/>&nbsp;<g:message code="gene.burdenTesting.label.all_samples"/></label>
+                                                    <label><input type="radio" name="mafOption" value="1" onclick="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters(
+                                                    {generateListOfVariantsFromFiltersAjaxUrl:'${createLink(controller: 'gene', action: 'generateListOfVariantsFromFiltersAjax')}'},
+                                                    mpgSoftware.burdenTestShared.buildVariantTable,
+                                                {variantInfoUrl:'${createLink(controller: 'variantInfo', action: 'variantInfo')}'})"/>
+                                                &nbsp;<g:message code="gene.burdenTesting.label.all_samples"/></label>
                                                 </div>
                                                 <div class="radio">
-                                                    <label><input type="radio" name="mafOption"  value="2" checked onclick="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters({generateListOfVariantsFromFiltersAjaxUrl:'${createLink(controller: 'gene', action: 'generateListOfVariantsFromFiltersAjax')}'},
+                                                    <label><input type="radio" name="mafOption"  value="2" checked onclick="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters(
+                                                    {generateListOfVariantsFromFiltersAjaxUrl:'${createLink(controller: 'gene', action: 'generateListOfVariantsFromFiltersAjax')}'},
                                                     mpgSoftware.burdenTestShared.buildVariantTable,
-                                                '${createLink(controller: 'variantInfo', action: 'variantInfo')}')"/>&nbsp;<g:message code="gene.burdenTesting.label.each_ancestry"/></label>
+                                                {variantInfoUrl:'${createLink(controller: 'variantInfo', action: 'variantInfo')}'})"/>
+                                                &nbsp;<g:message code="gene.burdenTesting.label.each_ancestry"/></label>
                                                 </div>
                                             </div>
                                         </div>
