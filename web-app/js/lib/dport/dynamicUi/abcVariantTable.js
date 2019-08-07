@@ -64,59 +64,56 @@ mpgSoftware.dynamicUi.abcVariantTable = (function () {
                 //return _.orderBy(_.filter(records,function(o){return (o.p_value<0.05)}),['p_value'],['asc']);
                 return _.orderBy(records,['SOURCE'],['asc']);
             },
-            function(incomingData,tissuesAlreadyInTheTable,dataAnnotationType,intermediateDataStructure,returnObject){
-                var headersObjects = [];
-                var initialLinearIndex = 1;
-                if ( typeof incomingData !== 'undefined') {
-
-                    mpgSoftware.dynamicUi.addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode, intermediateDataStructure);
-
-                    var tissuesAsHeaders = [];
-                    if (( typeof incomingData.header !== 'undefined' ) &&
-                        ( typeof incomingData.header.tissues !== 'undefined' )){
-                        var sortedHeaderObjects = returnObject.header.tissues.sort();
-                        returnObject.headers = _.map(sortedHeaderObjects, function(tissue,index){
-                            return Mustache.render($('#'+dataAnnotationType.dataAnnotation.headerWriter)[0].innerHTML,
-                                {   tissueName: tissue,
-                                    initialLinearIndex:initialLinearIndex++
-                                }
-                            )
-                        });
-
-                    }
-
-                    _.forEach(returnObject.headers, function (oneRecord) {
-                        intermediateDataStructure.headers.push(new mpgSoftware.dynamicUi.IntermediateStructureDataCell(oneRecord,
-                            oneRecord, "tissueHeader", 'LIT'));
-                    });
-                }
-                return sortedHeaderObjects;
-            },
-
+            // function(incomingData,tissuesAlreadyInTheTable,dataAnnotationType,intermediateDataStructure,returnObject){
+            //     var headersObjects = [];
+            //     var initialLinearIndex = 1;
+            //     if ( typeof incomingData !== 'undefined') {
+            //
+            //         mpgSoftware.dynamicUi.addRowHolderToIntermediateDataStructure(callingParameters.code, intermediateDataStructure);
+            //
+            //         var tissuesAsHeaders = [];
+            //         if (( typeof incomingData.header !== 'undefined' ) &&
+            //             ( typeof incomingData.header.tissues !== 'undefined' )){
+            //             var sortedHeaderObjects = returnObject.header.tissues.sort();
+            //             returnObject.headers = _.map(sortedHeaderObjects, function(tissue,index){
+            //                 return Mustache.render($('#'+dataAnnotationType.dataAnnotation.headerWriter)[0].innerHTML,
+            //                     {   tissueName: tissue,
+            //                         initialLinearIndex:initialLinearIndex++
+            //                     }
+            //                 )
+            //             });
+            //
+            //         }
+            //
+            //         _.forEach(returnObject.headers, function (oneRecord) {
+            //             intermediateDataStructure.headers.push(new mpgSoftware.dynamicUi.IntermediateStructureDataCell(oneRecord,
+            //                 oneRecord, "tissueHeader", 'LIT'));
+            //         });
+            //     }
+            //     return sortedHeaderObjects;
+            // },
             // this function is for organizing and/or translating all of the names within a single cell
 
 
             // take all the records for each row and insert them into the intermediateDataStructure
             function(tissueRecords,
-                     allTissueRecords,
                      recordsCellPresentationString,
                      significanceCellPresentationString,
                      dataAnnotationTypeCode,
                      significanceValue,
                      tissueName ){
                 return {
-                    allTissueRecords:allTissueRecords,
-                    tissueRecords:allTissueRecords,
-                    recordsExist:(allTissueRecords.length>0)?[1]:[],
+                    tissueRecords:tissueRecords,
+                    recordsExist:(tissueRecords.length>0)?[1]:[],
                     cellPresentationStringMap:{
                         'Significance':significanceCellPresentationString,
                         'Records':recordsCellPresentationString
                     },
                     dataAnnotationTypeCode:dataAnnotationTypeCode,
                     significanceValue:significanceValue,
-                    tissueNameKey:tissueName.replace(/ /g,"_"),
+                    tissueNameKey:( typeof tissueName !== 'undefined')?tissueName.replace(/ /g,"_"):'var_name_missing',
                     tissueName:tissueName,
-                    tissuesFilteredByAnnotation:allTissueRecords};
+                    tissuesFilteredByAnnotation:tissueRecords};
 
             },
             createSingleAbcCell

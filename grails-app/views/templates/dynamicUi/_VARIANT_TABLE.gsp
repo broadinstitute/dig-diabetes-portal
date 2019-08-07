@@ -29,3 +29,4 @@
 
 <g:render template="/templates/variantTableTemplate" />
 <g:render template="/templates/dynamicUi/VHDR" />
+<g:render template="/templates/dynamicUi/ABC_VAR" />

@@ -32,8 +32,8 @@ records={{numberRecords}}
 <script id="abcVariantTableBody"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortField="{{significanceValue}}"
              class="tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
-               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'DEPICT enrichments for {{tissueName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
-               data-target="#depict_tissue_{{tissueNameKey}}" style="color:black"> {{cellPresentationString}}
+               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'ABC predictions for {{tissueName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
+               data-target="#depict_tissue_{{tissueNameKey}}" style="color:black"> see genes
                </a>
 
                <div  class="collapse openEffectorGeneInformationInGeneTable" id="depict_tissue_{{tissueNameKey}}">
@@ -41,14 +41,18 @@ records={{numberRecords}}
                         <table class="expandableDrillDownTable openEffectorGeneInformationInGeneTable" style="margin: 0 auto">
                          <thead>
                           <tr role="row">
-                            <th class="text-center leftMostCol">p-values</th>
+                            <th class="text-center leftMostCol">Gene</th>
+                            <th class="text-center otherCols">Tissue</th>
+                            <th class="text-center otherCols">Value</th>
                           </tr>
                          </thead>
                          <tbody>
                      {{/recordsExist}}
                          {{#tissueRecords}}
                           <tr role="row">
-                               <td class="leftMostCol" style="border-right: 0">{{pValueString}}</td>
+                               <td class="leftMostCol"">{{GENE}}</td>
+                               <td class="text-center otherCols">{{SOURCE}}</td>
+                               <td class="text-center otherCols">{{VALUE}}</td>
                            </tr>
                           {{/tissueRecords}}
                       {{#recordsExist}}
@@ -58,7 +62,7 @@ records={{numberRecords}}
                     {{#recordsExist}}
                     {{/recordsExist}}
                     {{^recordsExist}}
-                       No predictions achieve nominal significance (p-value<0.05)
+                       No predicted connections
                     {{/recordsExist}}
                </div>
             </div>

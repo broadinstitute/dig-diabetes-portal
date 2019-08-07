@@ -2423,11 +2423,11 @@ mpgSoftware.dynamicUi = (function () {
 
             // set up the headers, even though we know we won't use them. Is this step necessary?
             var headerNames = [];
-            if (accumulatorObjectFieldEmpty("nameOfAccumulatorFieldWithIndex")) {
+            if (accumulatorObjectFieldEmpty(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex)) {
                 console.log("We should have a list of variants, otherwise we shouldn't be here. We have a problem.");
             } else {
-                headerNames  = _.map(getAccumulatorObject("nameOfAccumulatorFieldWithIndex"),'name');
-                _.forEach(getAccumulatorObject("nameOfAccumulatorFieldWithIndex"), function (oneRecord) {
+                headerNames  = _.map(getAccumulatorObject(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex),'name');
+                _.forEach(getAccumulatorObject(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex), function (oneRecord) {
                     intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
                         {},"header",'EMC'));
                 });
@@ -2443,13 +2443,14 @@ mpgSoftware.dynamicUi = (function () {
                 if (indexOfColumn === -1) {
                     console.log("Did not find index of ABC var_id.  Shouldn't we?")
                 } else {
-                    if ((recordsPerGene.arrayOfRecords.length === 0)) {
+                    if ((oneRecord.arrayOfRecords.length === 0)) {
                         alert('should not happen, right?');
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.gene,
                             {}, "tissue specific",'EMC');
                     } else {
-                        var tissueTranslations = recordsPerGene["TISSUE_TRANSLATIONS"]; // if no translations are provided, it is fine to leave this value as undefined
-                        var tissueRecords = mapSortAndFilterFunction (recordsPerGene.arrayOfRecords,tissueTranslations);
+                        //var tissueTranslations = recordsPerGene["TISSUE_TRANSLATIONS"]; // if no translations are provided, it is fine to leave this value as undefined
+                        var tissueTranslations = undefined;
+                        var tissueRecords = mapSortAndFilterFunction (oneRecord.arrayOfRecords,tissueTranslations);
 
                         var recordsCellPresentationString = Mustache.render($('#'+dataAnnotationType.dataAnnotation.numberRecordsCellPresentationStringWriter)[0].innerHTML, {
                             numberRecords:tissueRecords.length
@@ -2478,9 +2479,9 @@ mpgSoftware.dynamicUi = (function () {
                             significanceCellPresentationString,
                             dataAnnotationTypeCode,
                             significanceValue,
-                            recordsPerGene.gene );
-                        recordsPerGene["numberOfRecords"] = recordsPerGene.tissues.length;//not sure if this is used
-                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.gene,
+                            oneRecord.name );
+                        oneRecord["numberOfRecords"] = oneRecord.arrayOfRecords.length;//not sure if this is used
+                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(oneRecord.name,
                             renderData,"tissue specific",dataAnnotationTypeCode );
                     }
 
@@ -2496,7 +2497,7 @@ mpgSoftware.dynamicUi = (function () {
             clearBeforeStarting,
             intermediateDataStructure,
             true,
-            'geneTableGeneHeaders', true);
+            'variantTableVariantHeaders', true);
 
 
 
@@ -4548,6 +4549,16 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 intermediateStructureDataCell.renderData["tissueRecords"]=revisedValues.tissuesFilteredByAnnotation;
                 returnValue = Mustache.render($('#'+dataAnnotationType.dataAnnotation.cellBodyWriter)[0].innerHTML,intermediateStructureDataCell.renderData);
                 break;
+            case "ABC_VAR":
+                var displayDetails = getDatatypeInformation(intermediateStructureDataCell.dataAnnotationTypeCode);
+                returnValue = Mustache.render($('#'+displayDetails.dataAnnotation.cellBodyWriter)[0].innerHTML,intermediateStructureDataCell.renderData);
+                break;
+            case "ABC list":
+                returnValue = "ABC list";
+                break;
+            case undefined:
+                returnValue = "wtf";
+                break;
 
             default:  //  the standard case, where a cell renders its own data using its chosen mustache template
                 var cellColoringScheme ="records";
@@ -4558,7 +4569,12 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 break;
 
         }
-        return returnValue.trim();
+        if (typeof returnValue === "string"){
+            return returnValue.trim();
+        } else {
+            return "object";
+        }
+
     };
 
     /***
@@ -5105,12 +5121,12 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         indexInOneDimensionalArray = (numberOfExistingRows*numberOfColumns);
                         var primarySortField =  ( typeof row.sortField === 'undefined') ? row.category : row.sortField;
                         rowDescriber.push( new IntermediateStructureDataCell(row.category,
-                            getDisplayableCellContent(new IntermediateStructureDataCell (row.category,{},row.category,'CAT')),
+                            getDisplayableCellContent(new IntermediateStructureDataCell (row.category,{},row.category,'LIT')),
                                                  row.displayCategory+"</div>" ,
                                                 row.subcategory)) ;
                         indexInOneDimensionalArray++;
                         rowDescriber.push( new IntermediateStructureDataCell(row.subcategory,
-                             getDisplayableCellContent(new IntermediateStructureDataCell (row.subcategory,{},row.subcategory,'SUB')),
+                             getDisplayableCellContent(new IntermediateStructureDataCell (row.subcategory,{},row.subcategory,'LIT')),
                                                 "insertedColumn2"));
                         numberOfColumnsAdded += rowDescriber.length;
                         break;
