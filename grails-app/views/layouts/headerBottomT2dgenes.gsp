@@ -26,6 +26,7 @@
                 <li class="home-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="${createLink(controller:'home',action:'portalHome')}"><g:message code="localized.home"/></a></li>
                 <!--<li class="variant-search-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="${createLink(controller:'variantSearch', action:'variantSearchWF')}"><g:message code="variant.search.header"/></a></li>-->
                 <li class="data-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="${createLink(controller:'informational', action:'data')}"><g:message code="portal.header.nav.about_data"/></a></li>
+                <g:if test="${g.portalTypeString() != 'ibd'}">
                 <li class="analysis-modules-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="${createLink(controller:'informational', action:'modules')}"><g:message code="analysis.module.header"/> </a>
                     <ul>
                         <li class="" style=""><a href="${createLink(controller:'trait', action:'traitSearch')}?trait=COPD&significance=0.0005"><g:message code="LD.clumping.header"/></a></li>
@@ -37,6 +38,7 @@
                         </g:if>
 
                     </ul></li>
+                </g:if>
                 <li class="about-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="http://www.kp4cd.org/about/${g.portalTypeString()}" target="_blank"><g:message code="portal.header.nav.about"/></a></li>
                 <li class="policies-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="http://www.kp4cd.org/policies/${g.portalTypeString()}" target="_blank"><g:message code="portal.header.nav.policies"/></a></li>
                 <li class="tutorials-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="http://www.kp4cd.org/resources/${g.portalTypeString()}" target="_blank"><g:message code="portal.header.nav.tutorials"/></a></li>
@@ -46,19 +48,19 @@
 
                 </g:if>
                 <g:elseif test="${g.portalTypeString()?.equals('mi')}">
-                    <li class="contact-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="portal.header.nav.contact_plural"/></a></li>
+                    <li class="contact-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="portal.header.nav.contact_plural"/></a></li>
                     <li style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="https://cvdgenetics.blogspot.com/" target="_blank"><g:message code="portal.header.nav.blog" default="blog" /></a></li>
                 </g:elseif>
                 <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
-                    <li class="contact-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="portal.header.nav.contact_plural"/></a></li>
+                    <li class="contact-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="portal.header.nav.contact_plural"/></a></li>
                 </g:elseif>
                 <g:elseif test="${g.portalTypeString()?.equals('t2d')}">
-                    <li class="contact-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="portal.header.nav.contact"/></a></li>
-                    <li class="data-submission-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="${createLink(controller:'informational', action:'dataSubmission')}"><g:message code="portal.header.nav.submit"/></a></li>
-                    <li style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="https://t2d-genetics-portal.blogspot.com/" target="_blank"><g:message code="portal.header.nav.blog" default="blog" /></a></li>
+                    <li class="contact-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="portal.header.nav.contact"/></a></li>
+                    <li class="data-submission-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="${createLink(controller:'informational', action:'dataSubmission')}"><g:message code="portal.header.nav.submit"/></a></li>
+                    <li style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="https://t2d-genetics-portal.blogspot.com/" target="_blank"><g:message code="portal.header.nav.blog" default="blog" /></a></li>
                 </g:elseif>
                 <g:elseif test="${g.portalTypeString()?.equals('epilepsy')}">
-                    <li class="contact-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="portal.header.nav.contact_plural"/></a></li>
+                    <li class="contact-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="portal.header.nav.contact_plural"/></a></li>
                 </g:elseif>
                 <g:else>
                     <li class="contact-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="http://www.kp4cd.org/contact/contact_${g.portalTypeString()}" target="_blank"><g:message code="portal.header.nav.contact_plural"/></a></li>
