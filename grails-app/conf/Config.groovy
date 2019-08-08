@@ -867,7 +867,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                   ),
                                   new PortalVersionBean("sleep",
                                           "Sleep",
-                                          "mdv110",
+                                          "mdv111",
                                           "SDKP", // name of KB data we want
                                           "SleepChronotype", // make sure your default phenotype exists in your default data set
                                           "GWAS_UKBB_mdv110",// used to pick a default data set for a gene query
