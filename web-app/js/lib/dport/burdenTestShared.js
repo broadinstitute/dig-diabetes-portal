@@ -2727,6 +2727,124 @@ mpgSoftware.burdenTestShared = (function () {
     };
 
 
+    var runSkatTest = function (mode) {
+        var sample_mask_payload = {
+            "chrom": "22",
+            "start": 50276998,
+            "stop": 50357719,
+            "genotypeDataset": 1,
+            "phenotypeDataset": 1,
+            "phenotype": "ldl",
+            "samples": "ALL",
+            "genomeBuild": "GRCh37",
+            "maskDefinitions": [
+                {
+                    "id": 10,
+                    "name": "On-the-fly mask",
+                    "description": "Mask created on the fly, potentially by using a browser UI",
+                    "genome_build": "GRCh37",
+                    "group_type": "GENE",
+                    "identifier_type": "ENSEMBL",
+                    "groups": {
+                        "CRELD2": [
+                            "22:50312454_C/T",
+                            "22:50313452_C/T",
+                            "22:50313465_C/A",
+                            "22:50315537_A/G",
+                            "22:50315971_C/G",
+                            "22:50316015_C/T",
+                            "22:50316301_A/G",
+                            "22:50316902_G/A",
+                            "22:50316906_C/T",
+                            "22:50317418_C/T",
+                            "22:50318061_G/C",
+                            "22:50318402_C/T",
+                            "22:50318757_C/T",
+                            "22:50319373_C/T",
+                            "22:50319968_G/A",
+                            "22:50320921_G/A"
+                        ]
+                    }
+                }
+            ]
+        };
+
+
+        var _example = function (url, covariance_request_spec) {
+            var promise = $.ajax({
+                cache: false,
+                type: "post",
+                url: url,
+                data: JSON.stringify(covariance_request_spec),
+                async: true
+            });
+            promise.done(
+                function (data) {
+                    if (data.ok) {
+                        var groupsAndVariants = raremetal.helpers.parsePortalJSON(data.json);
+                        //const [groups, variants] = raremetal.helpers.parsePortalJSON(data.json);
+                        var runner = new raremetal.helpers.PortalTestRunner(groupsAndVariants.groups,
+                            groupsAndVariants.variants, [ // One or more test names can be specified!
+                                // 'burden',
+                                'skat',
+                                // 'vt'
+                            ]);
+                        return runner.run();
+                    }
+                });
+            promise.fail(
+                function (a) {
+                    alert('foo');
+                }
+            );
+
+
+        };
+
+
+        /**
+         * Demonstrate the actual process of running one or more burden tests, by fetching covariance data for a single
+         *  pre-defined list of variants
+         * @return {Promise<Response | never>}
+         */
+        // var _example = function (url, covariance_request_spec) {
+        //     return fetch(url, { // Tell the server to calculate covariance for specified groups
+        //         method: 'POST',
+        //         body: JSON.stringify(covariance_request_spec),
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //         }
+        //     }).then(resp => {
+        //         if (resp.ok) {
+        //         return resp.json();
+        //     } else {
+        //         throw new Error('Request failed');
+        //     }
+        // }).then(json => { // Use the returned covariance data to run aggregation tests and return results (note that runner.run() returns a Promise)
+        //         const [groups, variants] = raremetal.helpers.parsePortalJSON(json);
+        //     const runner = new raremetal.helpers.PortalTestRunner(groups, variants, [ // One or more test names can be specified!
+        //         // 'burden',
+        //         'skat',
+        //         // 'vt'
+        //     ]);
+        //     return runner.run();
+        // });
+        // };
+
+
+
+        // When the page loads, get the data and display the results
+        var results = document.getElementById('results-display');
+        _example('https://portaldev.sph.umich.edu/raremetal/v1/aggregation/covariance', sample_mask_payload).then(res => {
+            console.log(`Ran ${res.length} test(s)`);
+        console.log(res);
+        results.value = JSON.stringify(res, null, 4);
+
+    };
+    };
+
+
+
     var swapSingleMultipleVariantAdditionMode = function (mode) {
         var singleVariantInput = $('#proposedVariant');
         var multiVariantInput = $('#proposedMultiVariant');
@@ -2748,7 +2866,6 @@ mpgSoftware.burdenTestShared = (function () {
         preloadInteractiveAnalysisData: preloadInteractiveAnalysisData, // assuming there is only one data set we can get most everything at page load
         retrieveExperimentMetadata: retrieveExperimentMetadata, //Retrieve sample metadata only to get the experiment list
         immediateFilterAndRun: immediateFilterAndRun, // apply filters locally and then launch IAT
-//    retrieveMatchingDataSets:retrieveMatchingDataSets, // retrieve data set matching phenotype.  not currently used
         refreshGaitDisplay: refreshGaitDisplay, // refresh the filters, covariates, and results sections
         carryCovChanges: carryCovChanges, // Terry across strata.  Similar to carryTheAllFiltersAcrossStrata but much simpler
         displayTestResultsSection: displayTestResultsSection,  // simply display results section (show() or hide()
@@ -2763,7 +2880,8 @@ mpgSoftware.burdenTestShared = (function () {
         storeGrsVariantSet: storeGrsVariantSet,
         getGRSListOfVariants: getGRSListOfVariants,
         buildVariantTable: buildVariantTable,
-        respondedToAddVariantButtonClick:respondedToAddVariantButtonClick
+        respondedToAddVariantButtonClick:respondedToAddVariantButtonClick,
+        runSkatTest:runSkatTest
     }
 
 }());
