@@ -148,7 +148,9 @@ var mpgSoftware = mpgSoftware || {};
             $("#traitsPerVariantTable").find("thead").find("tr").each(function() {
                 $(this).find("th").eq("1").insertBefore($(this).find("th").eq("0"));
 
-                if (typeof phenotypeDatasetMapping != 'undefined' && phenotypeDatasetMapping) $("<th>sample</th>").appendTo($(this));
+                var sampleHeaderText = traitsPerVariantTableColumns.sample+'<a style="padding:0; text-decoration:none; color:inherit;" class="glyphicon glyphicon-question-sign sample-column" data-toggle="popover" role="button" data-trigger="focus" tabindex="0" animation="true" data-container="body" data-placement="bottom" title="" data-html="true" data-content="" data-original-title=""><div class="popover fade in" role="tooltip"><div class="arrow"></div><h5 class="popover-title">'+traitsPerVariantTableColumns.sampleHelpHeader+'</h5><div class="popover-content">'+traitsPerVariantTableColumns.sampleHelpText+'</div></div></a>';
+
+                if (typeof phenotypeDatasetMapping != 'undefined' && phenotypeDatasetMapping) $('<th class="sorting_disabled" rowspan="1" colspan="1" aria-label="samples" style="width: 80px;">'+sampleHeaderText+"</th>").appendTo($(this));
             });
 
             $("#traits_table_filter").on('input',mpgSoftware.traitSample.filterTraitsTable);

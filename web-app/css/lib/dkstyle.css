@@ -1289,3 +1289,20 @@ div.traits-filter-wrapper > .radio-inline {
     width: 100%;
     max-width: 550px;
 }
+
+/* Patch work for 'samples' column on #traitsPerVariantTable. Need to be removed after it's implemented into correct place.*/
+
+#traitsPerVariantTable a.sample-column {
+	position: relative;
+}
+
+#traitsPerVariantTable .sample-column > div.popover {
+	position: absolute;
+	display: none;
+	top: 20px;
+	left: -200px;
+}
+
+#traitsPerVariantTable .sample-column:hover > div.popover {
+	display: block;
+}
