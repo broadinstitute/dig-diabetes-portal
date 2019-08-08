@@ -57,7 +57,6 @@
 
 <h4><g:message code="informational.shared.headers.reports"></g:message></h4>
 
-<p>AMP-DCC Data Analysis Report (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP-DCC_Data_Analysis_Report_CAMP_Phase1_2017_0207.pdf" target="_blank">download PDF</a>)</p>
 <p><g:message code="informational.data.reports.QCR_CAMP"></g:message></p>
 <p><g:message code="informational.data.reports.DAR1_CAMP"></g:message></p>
 <p><g:message code="informational.data.reports.DAR2_CAMP"></g:message></p>
