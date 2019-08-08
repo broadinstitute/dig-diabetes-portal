@@ -73,7 +73,7 @@
                     </div>
                 </div>
 
-                <g:if test="${g.portalTypeString() == 'ibd'}">
+                <g:if test="${g.portalTypeString() == 'v2f'}">
                     <div class="col-md-6 col-md-offset-3" style="text-align: center; padding-top: 30px;">
                         <a href="http://www.kp4cd.org/resources/${g.portalTypeString()}" target="_blank" class="btn btn-lg btn-default front-banner-btn">Learn about the portal</a>
                     </div>
@@ -281,7 +281,7 @@
                         <span style="display:block; width: 100%; text-align: right; margin-top: 0px; padding:10px 40px 10px 0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="portal.stroke.AHA_discovery.link"></g:message></span>
 
                     </g:elseif>
-                    <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
+                    <g:elseif test="${g.portalTypeString()?.equals('v2f')}">
                         <div class="col-md-12" style="padding-top:40px;">
                             <img src="${resource(dir: 'images', file: 'data_icon4.png')}" style="width: 200px; margin-right: -50px;" align="right" >
                         <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData" default="About the data" /></h2>
@@ -619,7 +619,7 @@
                             <p><g:message code="about.the.mi.portal.text"/></p>
                         </g:elseif>
 
-                        <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
+                        <g:elseif test="${g.portalTypeString()?.equals('v2f')}">
                             <p><g:message code="about.the.ibd.portal.text"/></p>
                         </g:elseif>
 

@@ -26,7 +26,7 @@
                 <li class="home-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="${createLink(controller:'home',action:'portalHome')}"><g:message code="localized.home"/></a></li>
                 <!--<li class="variant-search-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="${createLink(controller:'variantSearch', action:'variantSearchWF')}"><g:message code="variant.search.header"/></a></li>-->
                 <li class="data-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="${createLink(controller:'informational', action:'data')}"><g:message code="portal.header.nav.about_data"/></a></li>
-                <g:if test="${g.portalTypeString() != 'ibd'}">
+                <g:if test="${g.portalTypeString() != 'v2f'}">
                 <li class="analysis-modules-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="${createLink(controller:'informational', action:'modules')}"><g:message code="analysis.module.header"/> </a>
                     <ul>
                         <li class="" style=""><a href="${createLink(controller:'trait', action:'traitSearch')}?trait=COPD&significance=0.0005"><g:message code="LD.clumping.header"/></a></li>
@@ -51,7 +51,7 @@
                     <li class="contact-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="portal.header.nav.contact_plural"/></a></li>
                     <li style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="https://cvdgenetics.blogspot.com/" target="_blank"><g:message code="portal.header.nav.blog" default="blog" /></a></li>
                 </g:elseif>
-                <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
+                <g:elseif test="${g.portalTypeString()?.equals('v2f')}">
                     <li class="contact-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="portal.header.nav.contact_plural"/></a></li>
                 </g:elseif>
                 <g:elseif test="${g.portalTypeString()?.equals('t2d')}">
