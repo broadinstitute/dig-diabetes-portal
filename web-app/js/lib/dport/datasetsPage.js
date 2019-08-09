@@ -22,8 +22,16 @@ var mpgSoftware = mpgSoftware || {};
 
             if (dataTypeName.includes('CUHK')){
                 access = "Pre-publication";}
-            //else if (dataTypeName.includes('DCSP2')){
-            //    access = "Early access phase 2";}
+            else if (dataTypeName.includes('DCSP2')){
+                access = "Pre-publication";}
+            else if (dataTypeName.includes('BioMe')){
+                access = "Pre-publication";}
+            else if (dataTypeName.includes('METSIM')){
+                access = "Pre-publication";}
+            else if (dataTypeName.includes('FUSION')){
+                access = "Pre-publication";}
+            else if (dataTypeName.includes('CAMP')){
+                access = "Pre-publication";}
             else{
                 access = "Open access";
         }
