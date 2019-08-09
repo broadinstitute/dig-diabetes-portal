@@ -50,7 +50,8 @@
 <p><g:message code="informational.data.overview.GWAS_FUSION1"></g:message></p>
 <p><g:message code="informational.data.overview.GWAS_FUSION2"></g:message></p>
 <p><g:message code="informational.data.overview.GWAS_FUSION3"></g:message></p>
-
+<p><g:message code="informational.data.overview.GWAS_FUSION4"></g:message></p>
+<p><g:message code="informational.data.overview.GWAS_FUSION5"></g:message></p>
 
 <h4><g:message code="informational.shared.headers.reports"></g:message></h4>
 <p><g:message code="informational.data.reports.QCR_FUSION"></g:message></p>
