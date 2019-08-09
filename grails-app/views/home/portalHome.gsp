@@ -307,7 +307,13 @@
                         <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData" default="About the data" /></h2>
                         <p><g:message code="portal.lung.about.the.data.text" />
                         %{--<h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">22 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">59 traits</span></h1>--}%
-
+                    </g:elseif>
+                    <g:elseif test="${g.portalTypeString()?.equals('bone')}">
+                        <div class="col-md-12" style="padding-top:40px;">
+                            <img src="${resource(dir: 'images', file: 'data_icon4.png')}" style="width: 230px; margin-right: -80px;" align="right" >
+                            <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData" default="About the data" /></h2>
+                        <p><g:message code="portal.bone.about.the.data.text" />
+                    <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">27 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">54 traits</span></h1>
                     </g:elseif>
                 <g:else>
                     <div class="col-md-12" style="padding-top:40px;">
@@ -477,26 +483,27 @@
                                 <img src="${resource(dir: 'images', file: 't2d_symbol.svg')}" style="width: 76px; float: left; margin-top:-13px; margin-left:-3px; margin-right: 13px;">
                                 <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_T2DKP"></g:message></h3>
                                 <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Type 2 Diabetes <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://type2diabetesgenetics.org/" target="_blank">Visit portal</a></h3>
                             </div>
                             <div style="margin-top: 25px;">
                                 <a href="http://www.broadcvdi.org/"><img src="${resource(dir: 'images', file: 'mi_symbol.svg')}" style="width: 90px; float: left; margin-top:-10px; margin-left:-10px; margin-right: 5px;"></a>
                                 <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CVDI"></g:message></h3>
                                 <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cardiovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://www.broadcvdi.org/">Visit portal</a></h3>
+                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://www.broadcvdi.org/" target="_blank">Visit portal</a></h3>
                             </div>
 
                             <div style="margin-top: 15px;">
                                 <a href="http://www.cerebrovascularportal.org/"><img src="${resource(dir: 'images', file: 'stroke_symbol.svg')}" style="width: 70px; float: left; margin-right: 15px;"></a>
                                 <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CDKP"></g:message></h3>
                                 <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cerebrovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://www.cerebrovascularportal.org/">Visit portal</a></h3>
+                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://www.cerebrovascularportal.org/" target="_blank">Visit portal</a></h3>
                             </div>
 
                             <div style="margin-top: 15px;">
                                 <a href="http://sleepdisordergenetics.org/"><img src="${resource(dir: 'images', file: 'sleep_symbol.svg')}" style="width: 90px; float: left; margin-top:-10px; margin-left:-10px; margin-right: 5px;"></a>
                                 <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_sleep"></g:message></h3>
                                 <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Sleep Disorder <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://sleepdisordergenetics.org/">Visit portal</a></h3>
+                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://sleepdisordergenetics.org/" target="_blank">Visit portal</a></h3>
                             </div>
 
                         </g:else>
@@ -542,6 +549,9 @@
                         </g:elseif>
                         <g:elseif test="${g.portalTypeString()?.equals('lung')}">
                             <g:message code="portal.lung.use.citation.itself" />
+                        </g:elseif>
+                        <g:elseif test="${g.portalTypeString()?.equals('bone')}">
+                            <g:message code="portal.bone.use.citation.itself" />
                         </g:elseif>
                         <g:else></g:else>
                         </p>
@@ -594,8 +604,8 @@
                                         <img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'email_update.svg')}" />
                                     </a>
                                 </p>
-                                <p style="margin-bottom:3px;"><a href="https://twitter.com/T2DKP" target="_blank"><img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'twitter_icn.svg')}" /></a></p>
-                                <p><a href="https://www.linkedin.com/groups/8505761" target="_blank"><img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'linkedin_icn.svg')}" /></a></p>
+                                <p style="margin-bottom:3px;"><a href="https://twitter.com/KPortalNetwork" target="_blank"><img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'twitter_icn.svg')}" /></a></p>
+                                %{--<p><a href="https://www.linkedin.com/groups/8505761" target="_blank"><img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'linkedin_icn.svg')}" /></a></p>--}%
                             </div>
                         </g:else>
                         <h3 style="margin-top: 0px;font-weight:700; font-size:30px; font-family:'Oswald'"><g:message code="about.the.portal.header"/></h3>
@@ -629,8 +639,13 @@
 
                     <g:elseif test="${g.portalTypeString()?.equals('lung')}"> 
                         <p><g:message code="about.the.lung.portal.text1"/></p>
-                         </g:elseif>
+ </g:elseif>
 
+                    <g:elseif test="${g.portalTypeString()?.equals('bone')}"> 
+                        <p><g:message code="about.the.bone.portal.text"/></p>
+                        <p><g:message code="about.the.bone.portal.text2"/></p>
+                        <a href="http://www.ifmrs.org" target="_blank"><img src="${resource(dir:'images/organizations', file:'IFMRS_Logo.jpg')}" style="width:200px"></a>
+ </g:elseif>
 
                     <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
                             <p><g:message code="about.the.sleep.portal.text"/></p>

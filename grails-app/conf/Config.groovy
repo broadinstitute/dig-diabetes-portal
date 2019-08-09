@@ -160,7 +160,7 @@ digawsqanewKB_fed_dedicated_EBIv2 = new ServerBean("Dedicated EBI QA fed KB - Us
 
 
 // this will be your default
-defaultRestServer = digawsdevnewKB
+defaultRestServer = digawsdevWorkflowKBrevised
 
 
 
@@ -319,7 +319,9 @@ environments {
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 
-     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+//     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+
+        grails.serverURL = "http://mdgkp.us-east-1.elasticbeanstalk.com"
 
 
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
@@ -993,65 +995,55 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0, // expose the gene table on the dynamic UI
                                           0  // expose the variant table on the dynamic UI
                                   ),
-                                  new PortalVersionBean("v2f",      // label for this portal type
-                                          "V2F",
-                                          "mdv39",//"mdv80",
-                                          "T2DKP", // name of KB data we want
-                                          "CD",// another option would be "IBD"
-                                          "GWAS_IBDGenomics_eu_mdv80",
-                                          ["UCSC annotation","ATACSeq_QTL","Enhancer-gene link"],
-                                          ["UCSC annotation","ATACSeq_QTL","Enhancer-gene link"],
-                                          ["E071","E106","E088","E085"],
-                                          ["INFLAMMATORY BOWEL"], // most important phenotype group name
+                                  new PortalVersionBean("bone",
+                                          "Bone",
+                                          "mdv140",
+                                          "MGKP", // name of KB data we want
+                                          "Fracture", // make sure your default phenotype exists in your default data set
+                                          "GWAS_UKBiobankGEFOS_eu_mdv140",// used to pick a default data set for a gene query
+                                          ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
+                                          ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
+                                          ["SkeletalMuscle", "HSMM"],
+                                          ["MUSCULOSKELETAL", "ANTHROPOMETRIC"], // most important phenotype group name
                                           [],
-//                                          "[1,2,3,4,5,6,7,8,9,10,11,12,13,14]",
-                                          "[1,2,4,5,6,9,10,11,12,13,14,15,16,17,18]",
-                                          "GWAS_IBDGenomics_eu_mdv80",
-                                          "images/v2f/front_V2FKP_logo_2019.svg",
-                                          "portal.ibd.header.tagline",
-                                          "portal.ibd.header.title",
+                                          "[3]",
+                                          "GWAS_UKBiobankGEFOS_eu_mdv140",
+                                          "images/bone/front_boneKP_logo_2019_4.svg",
+                                          "portal.bone.header.tagline",
+                                          "portal.bone.header.title.short",
                                           [],
-                                          ["IL23R"],
-                                          ["6_31628397_T_A"],
-                                          ["chr1:67,500,000-67,800,000"],
-                                          "images/v2f/front_V2FKP_banner_bg.png",
+                                          ["WNT16"],
+                                          ["rs17284876"],
+                                          ["chr7:120,500,000-121,500,000"],
+                                          "images/bone/front_boneKP_banner_bg.png",
                                           "",
-                                          // "images/ibd/ibd_header_logo.svg",
-                                          "images/v2f/header_V2FKP_logo.svg",
-                                          "images/ibd/ibd_menu_wrapper_bg.png",
+                                          "images/bone/header_boneKP_logo2.svg",
+                                          "images/menu_bg_2017_5.png",
                                           "false",
                                           "",
                                           "",
-                                          '7857348124942584918',
+                                          '8578131941543427205',
                                           1, // expose the common variant tab have on the gene page
                                           1, // expose the high-impact variant tab on the gene page
-                                          1, // do we have parent level associations to show
-                                          1, // Do we have gene level associations to show?
-                                          1, // add a link to the GRS module into the headers. Note that the GRS module is available whether or not the link is in place
-                                          1, // no longer used?
-                                          0, // if true then entering a gene takes you to a region page around that chain
-                                          1, // show the pheWAS plot
-                                          1, // show the forest pheWAS plot
-                                          1, // should we show the variant Association section on the variant info page
-                                          0, // expose the green boxes on the variant info page
-                                          0, // expose a secondary table and the credible set page built around genes, not just variants
-                                          0, // clicking on a variant can take you to the variant info page, or else to a range page (as in V2F)
-                                          0, // utilize bi-allelic gate, as opposed to the version that depends on multi-allelic definitions
-                                          0,  // access UC San Diego data remotely? I'm not sure if this works anymore
-                                          0, // LEDGE tab on the gene page
-                                          0, // Hi-C tab on the gene page
-                                          1, // expose dynamic UI
+                                          1,
+                                          0,
+                                          0,
+                                          1,
+                                          0,
+                                          1,1,1,
+                                          0,
+                                          0,
+                                          0,
+                                          0,
+                                          0,0,0, // Hi-C tab on the gene page
+                                          1,  // expose dynamic UI
                                           0, // expose the data set hierarchy in the sunburst visualization on the data page
                                           0, // expose the old school variant and association table.  Potentially useful for debugging
                                           0, // expose the IGV interface in its own accordion section
-                                          0, // expose an accordion section with the burden test on the gene page
-                                          0, // expose the 'genes in region' tab on the gene page
+                                          0,  // expose an accordion section with the burden test on the gene page
+                                          0,  // expose the 'genes in region' tab on the gene page
                                           0, // expose the region adjuster for the gene page
                                           0, // expose the gene table on the dynamic UI
                                           0  // expose the variant table on the dynamic UI
                                   )
 ]
-
-
-
-

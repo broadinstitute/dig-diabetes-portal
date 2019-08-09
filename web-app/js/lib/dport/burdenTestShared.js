@@ -1818,8 +1818,9 @@ mpgSoftware.burdenTestShared = (function () {
                     rememberCallBack(data, rememberParameters);
                 }
             );
+            promise.fail();
         }
-        promise.fail();
+
     }
 
 
@@ -1839,6 +1840,7 @@ mpgSoftware.burdenTestShared = (function () {
         if (typeof selectedFilterValue !== 'undefined') {
             selectedFilterValueId = parseInt(selectedFilterValue);
         }
+        console.log("datasetFilter" + datasetFilter);
         if ((typeof datasetFilter !== 'undefined') && ( datasetFilter !== null )) {
             var metadata = mpgSoftware.burdenTestShared.getStoredSampleMetadata();
             dataSet = metadata.conversion[datasetFilter];
@@ -1861,11 +1863,12 @@ mpgSoftware.burdenTestShared = (function () {
             });
             promise.done(
                 function (data, d) {
+                    console.log("filter data" + data);
                     rememberCallBack(data, rememberParameters);
                 }
             );
+            promise.fail();
         }
-        promise.fail();
     }
 
 
