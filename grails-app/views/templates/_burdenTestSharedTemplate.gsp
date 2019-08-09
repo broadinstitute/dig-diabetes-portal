@@ -90,7 +90,7 @@
                 Choose a phenotype and partitioning strategy
             </h3>
         </div>
-
+                            <button onclick="mpgSoftware.burdenTestShared.runSkatTest()">SKAT</button>
         <div id="chooseSamples" class="">
             <div class="secBody">
             <div class="row">
@@ -98,7 +98,7 @@
                     <div class="secHeader chooseExperiment">
                         <!-- <div class="col-sm-4 col-xs-4 text-left"> -->
                             <label>Dataset</label>
-                            <button onclick="mpgSoftware.burdenTestShared.runSkatTest()">SKAT</button>
+
                         <!-- </div> -->
                     </div>
 

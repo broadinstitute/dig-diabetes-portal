@@ -2770,66 +2770,62 @@ mpgSoftware.burdenTestShared = (function () {
         };
 
 
-        var _example = function (url, covariance_request_spec) {
-            var promise = $.ajax({
-                cache: false,
-                type: "post",
-                url: url,
-                data: JSON.stringify(covariance_request_spec),
-                async: true
-            });
-            promise.done(
-                function (data) {
-                    if (data.ok) {
-                        var groupsAndVariants = raremetal.helpers.parsePortalJSON(data.json);
-                        //const [groups, variants] = raremetal.helpers.parsePortalJSON(data.json);
-                        var runner = new raremetal.helpers.PortalTestRunner(groupsAndVariants.groups,
-                            groupsAndVariants.variants, [ // One or more test names can be specified!
-                                // 'burden',
-                                'skat',
-                                // 'vt'
-                            ]);
-                        return runner.run();
-                    }
-                });
-            promise.fail(
-                function (a) {
-                    alert('foo');
-                }
-            );
-
-
-        };
-
-
-        /**
-         * Demonstrate the actual process of running one or more burden tests, by fetching covariance data for a single
-         *  pre-defined list of variants
-         * @return {Promise<Response | never>}
-         */
         // var _example = function (url, covariance_request_spec) {
-        //     return fetch(url, { // Tell the server to calculate covariance for specified groups
-        //         method: 'POST',
-        //         body: JSON.stringify(covariance_request_spec),
-        //         headers: {
-        //             'Content-Type': 'application/json',
+        //     var promise = $.ajax({
+        //         cache: false,
+        //         type: "post",
+        //         contentType: "application/json",
+        //         url: url,
+        //         data: JSON.stringify(covariance_request_spec),
+        //         async: true
+        //     });
+        //     promise.done(
+        //         function (data) {
+        //             if (data) {
+        //                 // var groupsAndVariants = raremetal.helpers.parsePortalJSON(data);
+        //                 const [groups, variants] = raremetal.helpers.parsePortalJSON(data);
+        //                 var runner = new raremetal.helpers.PortalTestRunner(groups,
+        //                     variants, [ // One or more test names can be specified!
+        //                         // 'burden',
+        //                         'skat',
+        //                         // 'vt'
+        //                     ]);
+        //                 return runner.run();
+        //             }
+        //             console.log('ran test');
+        //         });
+        //     promise.fail(
+        //         function (a) {
+        //             alert('foo');
         //         }
-        //     }).then(resp => {
-        //         if (resp.ok) {
-        //         return resp.json();
-        //     } else {
-        //         throw new Error('Request failed');
-        //     }
-        // }).then(json => { // Use the returned covariance data to run aggregation tests and return results (note that runner.run() returns a Promise)
-        //         const [groups, variants] = raremetal.helpers.parsePortalJSON(json);
-        //     const runner = new raremetal.helpers.PortalTestRunner(groups, variants, [ // One or more test names can be specified!
-        //         // 'burden',
-        //         'skat',
-        //         // 'vt'
-        //     ]);
-        //     return runner.run();
-        // });
+        //     );
+        //
+        //
         // };
+
+        var _example = function (url, covariance_request_spec) {
+            return fetch(url, { // Tell the server to calculate covariance for specified groups
+                method: 'POST',
+                body: JSON.stringify(covariance_request_spec),
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }).then(resp => {
+                if (resp.ok) {
+                return resp.json();
+            } else {
+                throw new Error('Request failed');
+            }
+        }).then(json => { // Use the returned covariance data to run aggregation tests and return results (note that runner.run() returns a Promise)
+                const [groups, variants] = raremetal.helpers.parsePortalJSON(json);
+            const runner = new raremetal.helpers.PortalTestRunner(groups, variants, [ // One or more test names can be specified!
+                // 'burden',
+                'skat',
+                // 'vt'
+            ]);
+            return runner.run();
+        });
+        };
 
 
 
@@ -2837,10 +2833,13 @@ mpgSoftware.burdenTestShared = (function () {
         var results = document.getElementById('results-display');
         _example('https://portaldev.sph.umich.edu/raremetal/v1/aggregation/covariance', sample_mask_payload).then(res => {
             console.log(`Ran ${res.length} test(s)`);
-        console.log(res);
-        results.value = JSON.stringify(res, null, 4);
+            console.log(res);
+        }).catch(e => {
+            results.value = 'Calculations failed; see JS console for details.'
+        });
+       // _example('https://portaldev.sph.umich.edu/raremetal/v1/aggregation/covariance', sample_mask_payload);
+        //results.value = JSON.stringify(res, null, 4);
 
-    };
     };
 
 
