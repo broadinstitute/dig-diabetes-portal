@@ -55,8 +55,8 @@
                     <li class="contact-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="portal.header.nav.contact_plural"/></a></li>
                 </g:elseif>
                 <g:elseif test="${g.portalTypeString()?.equals('t2d')}">
-                    <li class="contact-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="portal.header.nav.contact"/></a></li>
-                    <li class="data-submission-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="${createLink(controller:'informational', action:'dataSubmission')}"><g:message code="portal.header.nav.submit"/></a></li>
+                    <li class="contact-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="http://www.kp4cd.org/contacts/${g.portalTypeString()}" target="_blank"><g:message code="portal.header.nav.contact"/></a></li>
+                    <li class="data-submission-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="http://www.kp4cd.org/collaborate/${g.portalTypeString()}" target="_blank"><g:message code="portal.header.nav.submit"/></a></li>
                     <li style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="https://t2d-genetics-portal.blogspot.com/" target="_blank"><g:message code="portal.header.nav.blog" default="blog" /></a></li>
                 </g:elseif>
                 <g:elseif test="${g.portalTypeString()?.equals('epilepsy')}">

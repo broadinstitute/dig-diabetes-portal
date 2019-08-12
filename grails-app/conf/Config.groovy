@@ -622,7 +622,7 @@ grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'org.broadinsti
 grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.people.Role'
 
 
-portal.type.override = "v2f"     // options are "t2d", "stroke", "mi", "ibd", "epilepsy", or "sleep".   What is the portal type for all nonsystem users?
+portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", "ibd", "epilepsy", or "sleep".   What is the portal type for all nonsystem users?
 
 
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
@@ -639,16 +639,16 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                         [], // any data sets that should be omitted from LZ display
                                                         "[3]",  // the assays we should search
                                                         "ExSeq_13k_mdv23",
-                                                "images/t2d/T2DKP_logo_2019.svg",
+                                                "images/t2d/front_T2DKP_logo_2019.svg",
                                                 "portal.header.tagline",
                                                 "portal.header.title.short",
                                                 ["English", "Spanish"],
                                                 ["SLC30A8"],
                                                 ["rs13266634"],
                                                 ["chr9:21,940,000-22,190,000"],
-                                                "images/t2d/T2DKP_bg_2019.png",
+                                                "images/t2d/front_T2DKP_bg.png",
                                                 "pheno.help.text",
-                                                "images/t2d/T2DKP_header_logo_2019.svg",
+                                                "images/t2d/header_T2DKP_logo.svg",
                                                 "images/menu_bg_2017_5.png",
                                                 "true",
                                                 "gene.genePage.warning",

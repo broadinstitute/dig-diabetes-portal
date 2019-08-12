@@ -63,8 +63,8 @@
 
     <div class="fluid front-top-banner front-top-banner-${g.portalTypeString()}" style="">
 
-    <div class="container" style="color:#fff;">
-        <div class="row" style="padding-top:40px;">
+        <div class="container" style="color:#fff;">
+            <div class="row" style="padding-top:40px;">
             %{--<g:if test="${g.portalTypeString()?.equals('lung')}">--}%
                 <div class="col-md-12">
                     <div class="front-logo-wrapper">
@@ -73,12 +73,14 @@
                     </div>
                 </div>
 
-                <g:if test="${g.portalTypeString() == 'v2f'}">
-                    <div class="col-md-6 col-md-offset-3" style="text-align: center; padding-top: 30px;">
-                        <a href="http://www.kp4cd.org/resources/${g.portalTypeString()}" target="_blank" class="btn btn-lg btn-default front-banner-btn">Learn about the portal</a>
-                    </div>
-                    <div class="col-md-6 col-md-offset-3">
-                        <h1 style="    padding-top: 50px; text-align: center; border-bottom: solid 1px #ddd; padding-bottom: 15px;"><g:message code="regionSpecificVersion.text.input.header"/></h1>
+
+                <div class="col-md-6 col-md-offset-3" style="text-align: center; padding-top: 30px;">
+                    <a href="http://www.kp4cd.org/new_features/${g.portalTypeString()}" target="_blank" class="btn btn-lg btn-default front-banner-btn">Learn about the portal</a>
+                </div>
+
+            <g:if test="${g.portalTypeString() == 'v2f'}">
+                <div class="col-md-6 col-md-offset-3">
+                    <h1 style="    padding-top: 50px; text-align: center; border-bottom: solid 1px #ddd; padding-bottom: 15px;"><g:message code="regionSpecificVersion.text.input.header"/></h1>
                     <div class="dk-front-search-wrapper">
                         <div class="gene-search-wrapper" style="padding-top: 15px; padding-bottom:20px; font-weight: 300; text-align: center; ">
                             <div style="font-size: 14px;">
@@ -147,7 +149,7 @@
                             <div role="tabpanel" class="tab-pane active" id="search-box">
                                 <div class="dk-front-search-wrapper">
                                     <div class="gene-search-wrapper" style="padding-bottom:20px; font-weight: 300;">
-                                        <div style="font-size: 14px;">
+                                        <div style="font-size: 16px;">
                                             <span><g:message code="site.shared.phrases.examples" />: </span>
                                             <g:each in="${portalVersionBean.geneExamples}">
                                                 <a class="front-search-example" href='<g:createLink controller="gene" action="geneInfo"
@@ -175,8 +177,8 @@
                                             </g:each>
                                         </div>
                                         <div class="form-inline" style="padding-top: 10px;">
-                                            <input id="generalized-input" type="text" class="form-control input-sm" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 5px; margin:0; font-size: 16px;">
-                                            <button id="generalized-go" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
+                                            <input id="generalized-input" type="text" class="form-control input-lg" style="width: 83%; height: 50px; background-color:#fff; border:none; border-radius: 5px; margin:0; font-size: 20px;">
+                                            <button id="generalized-go" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 50px; background-color:#fff; color: #7640b1; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; font-size: 15px;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
                                             <div class="errorReporter">${errorText}</div>
                                         </div>
 
@@ -201,10 +203,10 @@
                                     <g:if test="${portalVersionBean.variantAssociationsExists}">
                                         <div class="form-inline variant-association-ui-wrapper">
                                             <div class="traits-select-ui variant-association-ui" style="">
-                                                <select name="" id="trait-input" class="form-control input-sm trait-input selectpicker" data-live-search="true" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 0; border-top-left-radius: 3px; border-bottom-left-radius: 3px; margin:0; font-size: 16px;">
+                                                <select name="" id="trait-input" class="form-control input-sm trait-input selectpicker" data-live-search="true" style="width: 83%; height: 50px; background-color:#fff; border:none; border-radius: 5px; margin:0; font-size: 20px;">
                                                 </select>
 
-                                                <button id="traitSearchLaunch" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
+                                                <button id="traitSearchLaunch" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 50px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:15px 0 0 ; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; font-size: 15px;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
                                             </div>
                                         </div>
                                     </g:if>
@@ -213,7 +215,7 @@
                                             <div class="gene-association-ui">
                                                 <select name="" id="gene-trait-input" class="form-control input-sm gene-trait-input selectpicker" data-live-search="true" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 0; border-top-left-radius: 3px; border-bottom-left-radius: 3px; margin:0; font-size: 16px;">
                                                 </select>
-                                                <button id="geneTraitSearchLaunch" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
+                                                <button id="geneTraitSearchLaunch" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 50px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:15px 0 0 ; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; font-size: 15px;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
                                             </div>
                                         </div>
                                     </g:if>
@@ -223,21 +225,35 @@
 
                     </div>
 
-                    <div class="col-md-12" style="padding-top: 70px;">
+                    <!--<div class="col-md-12" style="padding-top: 70px;">
                         <div class="col-md-6" style="text-align: center">
                             <a href="${createLink(controller:'informational', action:'modules')}" class="btn btn-lg btn-default front-banner-btn">Analysis modules</a>
                         </div>
                         <div class="col-md-6" style="text-align: center">
                             <a href="http://www.kp4cd.org/resources/${g.portalTypeString()}" target="_blank" class="btn btn-lg btn-default front-banner-btn">Learn about the portal</a>
                         </div>
-                    </div>
+                    </div>-->
                 </g:else>
 
             %{--</g:if >--}%
             %{--<g:else >--}%
             %{--</g:else>--}%
         </div>
-        </div>
+
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <ul id="new_features">
+
+                    </ul>
+                </div>
+            </div>
+
+            <script type="text/javascript">
+                /* Example to add 'new' or 'updated' feature buttons;
+                mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]);
+             */
+                mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]);
+            </script>
         </div>
     </div>
 
