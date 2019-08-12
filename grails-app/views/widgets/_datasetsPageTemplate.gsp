@@ -131,6 +131,7 @@
 <g:render template="./data/GWAS_FUSIONonlyMetaboChip_eu" />
 <g:render template="./data/ExChip_GIANTwWHR" />
 <g:render template="./data/ExSeq_FinnMetSeqFemales_eu" />
+<g:render template="./data/ExSeq_52kQT" />
 
 <script id="metaData2" type="x-tmpl-mustache">
     <div>
