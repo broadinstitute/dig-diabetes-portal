@@ -86,14 +86,14 @@
 
                     </ul>
                 </div>
-
+<g:if test="${g.portalTypeString()?.equals('t2d')}">
                 <script type="text/javascript">
                     /* Example to add 'new' or 'updated' feature buttons;
                     mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]);
                  */
                     mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]);
                 </script>
-
+</g:if>
             </div>
             <g:if test="${!portalVersionBean.regionSpecificVersion}">
                 <div class="col-md-5 col-md-offset-1 dk-front-search-wrapper">
