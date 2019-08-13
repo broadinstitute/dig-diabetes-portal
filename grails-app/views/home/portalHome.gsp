@@ -80,6 +80,20 @@
                 </p>
                 <p style="padding-top:10px; font-size:25px; font-weight: 300 !important;">
                     <g:message code="${portalVersionBean.tagline}" /></p>
+
+                <div>
+                    <ul id="new_features">
+
+                    </ul>
+                </div>
+
+                <script type="text/javascript">
+                    /* Example to add 'new' or 'updated' feature buttons;
+                    mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]);
+                 */
+                    mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]);
+                </script>
+
             </div>
             <g:if test="${!portalVersionBean.regionSpecificVersion}">
                 <div class="col-md-5 col-md-offset-1 dk-front-search-wrapper">
