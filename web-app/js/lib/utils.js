@@ -1,6 +1,40 @@
 var mpgSoftware = mpgSoftware || {};
 
 var UTILS = {
+    
+
+     extractParts:  function (varId){
+        // broad form example: 8_118183491_C_T
+        // UM form example: 8:118183491_C/T
+        var returnValue = {};
+        if (( typeof varId !== 'undefined')&&(varId.length>0)){
+            var broadIdSplit = varId.split("_");
+            if (broadIdSplit.length==4){
+                returnValue = {"chromosome":broadIdSplit[0],
+                    "position":broadIdSplit[1],
+                    "reference":broadIdSplit[2],
+                    "alternate":broadIdSplit[3]};
+            } else if (broadIdSplit.length==3){
+                returnValue = {"chromosome":broadIdSplit[0],
+                    "position":broadIdSplit[1],
+                    "reference":broadIdSplit[2],
+                    "alternate":""};
+            } else{
+                var umIdSplit1 = varId.split("_");
+                if (umIdSplit1.length!=2){console.log("Unexpected var ID format: "+varId+".")}
+                var umIdSplit2 = umIdSplit1[0].split(":");
+                if (umIdSplit2.length!=2){console.log("Unexpected var ID format: "+varId+".")}
+                var umIdSplit3 = umIdSplit1[1].split("/");
+                if (umIdSplit3.length!=2){console.log("Unexpected var ID format: "+varId+".")}
+                returnValue = {"chromosome":umIdSplit2[0],
+                    "position":umIdSplit2[1],
+                    "reference":umIdSplit3[0],
+                    "alternate":umIdSplit3[1]};
+            }
+        }
+        return returnValue;
+    },
+    
     /***
      * Everyone seems to use three digits of precision. I wonder why
      * @param incoming
@@ -1039,7 +1073,24 @@ var UTILS = {
 
 
         passedThis.href = "data:text/plain;charset=UTF-8,"  + encodeURIComponent(dataForFile);
+    },
+    convertVarIdToUmichFavoredForm: function (varId){
+        // broad form example: 8_118183491_C_T
+        // UM form example: 8:118183491_C/T
+        var extractedParts = extractParts(varId);
+        var returnValue = UTILS.extractedParts.chromosome+":"+extractedParts.position+"_"+extractedParts.reference+"/"+extractedParts.alternate;
+        return returnValue;
+    },
+    convertVarIdToBroadFavoredForm: function (varId){
+        // broad form example: 8_118183491_C_T
+        // UM form example: 8:118183491_C/T
+        var extractedParts = extractParts(varId);
+        var returnValue = UTILS.extractedParts.chromosome+"_"+extractedParts.position+"_"+extractedParts.reference+"_"+extractedParts.alternate;
+
+        return returnValue;
     }
+
+
 
 
 };

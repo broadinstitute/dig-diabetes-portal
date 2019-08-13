@@ -168,22 +168,28 @@
 
                 <div class="row">
                     <div class="col-sm-12 col-xs-12 text-left">
-                        <div  id="caseControlFilteringWithLabel" class="checkbox" style="margin:20px 0 10px 0">
-                                <span style="margin: 0 25px 0 0; font-weight: bold">Samples:</span>
-                                <input id="caseControlFiltering" type="checkbox" name="caseControlFiltering"
-                                       value="caseControlFiltering"
-                                        onchange="mpgSoftware.burdenTestShared.refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering',false,
-                                         {linkToTypeaheadUrl:'${createLink(controller:"gene", action:"variantOnlyTypeAhead")}',
-                                         sampleMetadataAjaxUrl:'${createLink(controller: "VariantInfo", action: "sampleMetadataAjax")}',
-                                         generateListOfVariantsFromFiltersAjaxUrl:'${createLink(controller: "gene", action: "generateListOfVariantsFromFiltersAjax")}',
-                                         variantInfoUrl:'${createLink(controller: "variantInfo", action: "variantInfo")}',
-                                         retrieveSampleSummaryUrl:'${createLink(controller: "variantInfo", action: "retrieveSampleSummary")}',
-                                         variantAndDsAjaxUrl:'${createLink(controller: "variantInfo", action: "variantAndDsAjax")}',
-                                         burdenTestVariantSelectionOptionsAjaxUrl:'${createLink(controller: "gene", action: "burdenTestVariantSelectionOptionsAjax")}',
-                                         getGRSListOfVariantsAjaxUrl:'${createLink(controller:"gait",action: "getGRSListOfVariantsAjax")}'})">
-                                        <label style="padding-left:0">Filter cases and controls separately</label>
-                                </input>
-                        </div>
+                        <select>
+                            <option value="1">&lt;</option>
+                            <option value="2">&gt;</option>
+                            <option value="3">internal</option>
+                            <option value="4">external</option>
+                        </select>
+%{--                        <div  id="caseControlFilteringWithLabel" class="checkbox" style="margin:20px 0 10px 0">--}%
+%{--                                <span style="margin: 0 25px 0 0; font-weight: bold">Samples:</span>--}%
+%{--                                <input id="caseControlFiltering" type="checkbox" name="caseControlFiltering"--}%
+%{--                                       value="caseControlFiltering"--}%
+%{--                                        onchange="mpgSoftware.burdenTestShared.refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering',false,--}%
+%{--                                         {linkToTypeaheadUrl:'${createLink(controller:"gene", action:"variantOnlyTypeAhead")}',--}%
+%{--                                         sampleMetadataAjaxUrl:'${createLink(controller: "VariantInfo", action: "sampleMetadataAjax")}',--}%
+%{--                                         generateListOfVariantsFromFiltersAjaxUrl:'${createLink(controller: "gene", action: "generateListOfVariantsFromFiltersAjax")}',--}%
+%{--                                         variantInfoUrl:'${createLink(controller: "variantInfo", action: "variantInfo")}',--}%
+%{--                                         retrieveSampleSummaryUrl:'${createLink(controller: "variantInfo", action: "retrieveSampleSummary")}',--}%
+%{--                                         variantAndDsAjaxUrl:'${createLink(controller: "variantInfo", action: "variantAndDsAjax")}',--}%
+%{--                                         burdenTestVariantSelectionOptionsAjaxUrl:'${createLink(controller: "gene", action: "burdenTestVariantSelectionOptionsAjax")}',--}%
+%{--                                         getGRSListOfVariantsAjaxUrl:'${createLink(controller:"gait",action: "getGRSListOfVariantsAjax")}'})">--}%
+%{--                                        <label style="padding-left:0">Filter cases and controls separately</label>--}%
+%{--                                </input>--}%
+%{--                        </div>--}%
                     </div>
                 </div>
 
@@ -211,6 +217,22 @@ the individual filters themselves. That work is handled later as part of a loop-
 
                     <div class="row">
                         <div class="col-sm-12 col-xs-12">
+                             <div  id="caseControlFilteringWithLabel" class="checkbox" style="margin:20px 0 10px 0">
+                                    <span style="margin: 0 25px 0 0; font-weight: bold">Samples:</span>
+                                    <input id="caseControlFiltering" type="checkbox" name="caseControlFiltering"
+                                           value="caseControlFiltering"
+                                            onchange="mpgSoftware.burdenTestShared.refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering',false,
+                                             {linkToTypeaheadUrl:'${createLink(controller:"gene", action:"variantOnlyTypeAhead")}',
+                                             sampleMetadataAjaxUrl:'${createLink(controller: "VariantInfo", action: "sampleMetadataAjax")}',
+                                             generateListOfVariantsFromFiltersAjaxUrl:'${createLink(controller: "gene", action: "generateListOfVariantsFromFiltersAjax")}',
+                                             variantInfoUrl:'${createLink(controller: "variantInfo", action: "variantInfo")}',
+                                             retrieveSampleSummaryUrl:'${createLink(controller: "variantInfo", action: "retrieveSampleSummary")}',
+                                             variantAndDsAjaxUrl:'${createLink(controller: "variantInfo", action: "variantAndDsAjax")}',
+                                             burdenTestVariantSelectionOptionsAjaxUrl:'${createLink(controller: "gene", action: "burdenTestVariantSelectionOptionsAjax")}',
+                                             getGRSListOfVariantsAjaxUrl:'${createLink(controller:"gait",action: "getGRSListOfVariantsAjax")}'})">
+                                            <label style="padding-left:0">Filter cases and controls separately</label>
+                                    </input>
+                            </div>
                             <p>
                                 Each of the boxes below enables you to define a criterion for inclusion of samples in your analysis; each criterion is specified as a filter based on a single phenotype.
                                 The final subset of samples used will be those that match all of the specified criteria; to omit a criterion leave the text box blank.
