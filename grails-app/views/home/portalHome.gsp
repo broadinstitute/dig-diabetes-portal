@@ -352,6 +352,8 @@
                         %{--<h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">22 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">59 traits</span></h1>--}%
 
                     </g:elseif>
+
+ %{--comment out this section for 52k demo site                   --}%
                 <g:else>
                     <div class="col-md-12" style="padding-top:40px;">
                         <img src="${resource(dir: 'images', file: 'data_icon3.png')}" style="width: 200px; margin-right: -50px;" align="right" >
@@ -361,6 +363,18 @@
 
                         <span style="display:block; width: 100%;text-align:left;"><a style=" font-size: 20px; padding:10px 40px 10px 0; margin-right: -30px;background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; text-decoration:none; color:#333333; " href="${createLink(controller:'informational', action:'data')}"><g:message code="about.the.portal.data.text2"/></a></span>
                     </g:else>
+%{--end of text to be commented out for 52k demo site--}%
+ %{--alternative text for 52k demo site                  --}%
+                    %{--<g:else>--}%
+                        %{--<div class="col-md-12" style="padding-top:40px;">--}%
+                            %{--<img src="${resource(dir: 'images', file: 'organizations/AMP_T2D-GENES.png')}" style="width: 200px; margin-right: -50px;" align="right" >--}%
+                        %{--<h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData_52kQTs" default="About the data" /></h2>--}%
+                        %{--<p><g:message code="about.the.portal.52kQTdata.text" />--}%
+                        %{--<h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">81 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">187 traits</span></h1>--}%
+
+                        %{--<span style="display:block; width: 100%;text-align:left;"><a style=" font-size: 20px; padding:10px 40px 10px 0; margin-right: -30px;background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; text-decoration:none; color:#333333; " href="${createLink(controller:'informational', action:'data')}"><g:message code="about.the.portal.data.text2"/></a></span>--}%
+                    %{--</g:else>--}%
+ %{--end alternative text for 52k demo site                   --}%
 
                     <div>
                         <div style="min-width: 500px; margin-top:30px;">
