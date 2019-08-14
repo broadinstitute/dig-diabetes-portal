@@ -1489,18 +1489,28 @@ mpgSoftware.burdenTestShared = (function () {
 
     };
 
-    var retrieveCheckedVariantsFromBurdenInterface = function (){
-        if ($('#gaitTable').children().length > 0) { // check that we have a table
-            
-            var gaitTableCheckboxes = $($('#gaitTable').DataTable().rows().nodes()).find('td input.geneGaitVariantSelector:checked');
+    var retrieveCheckedVariantsFromBurdenInterface = function (tableIdentifier){
+        var listOfVariantsToCheck = [];
+        if ($(tableIdentifier).children().length > 0) { // check that we have a table
+            var gaitTableCheckboxes = $($(tableIdentifier).DataTable().rows().nodes()).find('td input.geneGaitVariantSelector:checked');
             _.forEach(gaitTableCheckboxes, function (eachVariantId) {
                 var gaitTableCheckboxId = $(eachVariantId).attr('id');
                 listOfVariantsToCheck.push('"' + gaitTableCheckboxId.substr(12) + '"');
             });
         }
+        return listOfVariantsToCheck;
     }
 
-    var executeAssociationTest = function (filterValues, covariateValues, propertyName, stratum, compoundedFilterValues, burdenTestAjaxUrl, variantIdentifier, variantSetId) {
+    var executeAssociationTest = function (filterValues,
+                                           covariateValues,
+                                           propertyName,
+                                           stratum,
+                                           compoundedFilterValues,
+                                           burdenTestAjaxUrl,
+                                           variantIdentifier,
+                                           variantSetId,
+                                           listOfVariantsToCheck,
+                                           burdenMethod ) {
 
         var isCategoricalF = function (stats) {
             var isDichotomousTrait = false;
@@ -1517,21 +1527,13 @@ mpgSoftware.burdenTestShared = (function () {
 
         var phenotypeToPredict = $('#phenotypeFilter').val();
         var datasetUse = $('#datasetFilter').val();
-        var listOfVariantsToCheck = [];
-        if ($('#gaitTable').children().length > 0) { // check that we have a table
 
-
-            var gaitTableCheckboxes = $($('#gaitTable').DataTable().rows().nodes()).find('td input.geneGaitVariantSelector:checked');
-            _.forEach(gaitTableCheckboxes, function (eachVariantId) {
-                var gaitTableCheckboxId = $(eachVariantId).attr('id');
-                listOfVariantsToCheck.push('"' + gaitTableCheckboxId.substr(12) + '"');
-            });
-        }
         return $.ajax({
             cache: false,
             type: "post",
             url: burdenTestAjaxUrl,
             data: {
+                burdenMethod: burdenMethod,
                 variantName: variantIdentifier,
                 variantList: "[" + listOfVariantsToCheck.join(',') + "]",
                 covariates: covariateValues,
@@ -2090,16 +2092,64 @@ mpgSoftware.burdenTestShared = (function () {
         }
 
 
-        var deferreds = [];
-        _.forEach(nonPhenotypeTabs, function (stratum) {
-            var compoundedFilterValues = compoundingStrataFilterValues(stratum);
-            var strataPropertyName = stratum[0].strataPropertyName;
-            var stratumName = stratum[0].stratumName;
-            deferreds.push(executeAssociationTest('{}', collectingCovariateValues(strataPropertyName, stratumName), strataPropertyName, stratumName, compoundedFilterValues.strataFilters,
-                burdenTestAjaxUrl, variantIdentifier, variantSetId));
+        var variantsToUse =  retrieveCheckedVariantsFromBurdenInterface('#gaitTable');
+        var phenotypeToPredict = $('#phenotypeFilter').val();
+        var methodChoice = $('#burdenMethodChoice').val();
+        var burdenMethod = "sum"; // default to using a variant summing method
+        switch (methodChoice){
+            case 'collapse':
+                burdenMethod = "max";
+            case 'burden':
+                var deferreds = [];
+                _.forEach(nonPhenotypeTabs, function (stratum) {
+                    var compoundedFilterValues = compoundingStrataFilterValues(stratum);
+                    var strataPropertyName = stratum[0].strataPropertyName;
+                    var stratumName = stratum[0].stratumName;
+                    deferreds.push(executeAssociationTest('{}',
+                        collectingCovariateValues(strataPropertyName, stratumName),
+                        strataPropertyName,
+                        stratumName,
+                        compoundedFilterValues.strataFilters,
+                        burdenTestAjaxUrl,
+                        variantIdentifier,
+                        variantSetId,
+                        variantsToUse,
+                        burdenMethod ));
 
-        });
-        asynchronousPromiseRunner(deferreds,runMetaAnalysis);
+                });
+                asynchronousPromiseRunner(deferreds,runMetaAnalysis);
+                break;
+
+                break;
+            case 'skat':
+            case 'vt':
+                var coreVariables = mpgSoftware.geneSignalSummaryMethods.getSignalSummarySectionVariables();
+                mpgSoftware.externalBurdenTestMethods.buildAndRunUMichTest(asynchronousPromiseRunner,
+                    coreVariables.aggregationCovarianceUrl,
+                    variantsToUse.map(function(o){return o.replace(/\"/g,"")}),
+                    phenotypeToPredict,methodChoice);
+                break;
+            default:
+                alert('unrecognized aggregation test type ='+methodChoice+'.');
+                break;
+        }
+        // var deferreds = [];
+        // _.forEach(nonPhenotypeTabs, function (stratum) {
+        //     var compoundedFilterValues = compoundingStrataFilterValues(stratum);
+        //     var strataPropertyName = stratum[0].strataPropertyName;
+        //     var stratumName = stratum[0].stratumName;
+        //     deferreds.push(executeAssociationTest('{}',
+        //         collectingCovariateValues(strataPropertyName, stratumName),
+        //         strataPropertyName,
+        //         stratumName,
+        //         compoundedFilterValues.strataFilters,
+        //         burdenTestAjaxUrl,
+        //         variantIdentifier,
+        //         variantSetId,
+        //         variantsToUse));
+        //
+        // });
+        // asynchronousPromiseRunner(deferreds,runMetaAnalysis);
         // $.when.apply($, deferreds).then(function () {
         //     runMetaAnalysis();
         //     $('#rSpinner').hide();

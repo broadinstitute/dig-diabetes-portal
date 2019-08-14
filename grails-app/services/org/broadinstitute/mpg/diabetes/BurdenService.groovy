@@ -453,7 +453,7 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
      * @return
      */
     public JSONObject callBurdenTest(String phenotype, String geneString, int variantSelectionOptionId, int mafSampleGroupOption, Float mafValue, String dataSet, String sampleDataSet,
-                                     Boolean explicitlySelectSamples, String portalTypeString, String variantSetId) {
+                                     Boolean explicitlySelectSamples, String portalTypeString, String variantSetId, String burdenMethod) {
         // local variables
         JSONObject jsonObject, returnJson;
         List<Variant> variantList;
@@ -470,26 +470,6 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
         switch (phenotype){
             case "t2d": convertedPhenotype = "T2D"; break
             default: break
-        }
-
-        if (variantSelectionOptionId==1){
-            println('EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE: option='+variantSelectionOptionId)
-        } else if (variantSelectionOptionId==2){
-            println('EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE: option='+variantSelectionOptionId)
-        }else if (variantSelectionOptionId==3){
-            println('EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE: option='+variantSelectionOptionId)
-        }else if (variantSelectionOptionId==4){
-            println('EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE: option='+variantSelectionOptionId)
-        }else if (variantSelectionOptionId==5){
-            println('EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE: option='+variantSelectionOptionId)
-        }else if (variantSelectionOptionId==6){
-            println('EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE: option='+variantSelectionOptionId)
-        }else if (variantSelectionOptionId==7){
-            println('EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE: option='+variantSelectionOptionId)
-        }else if (variantSelectionOptionId==8){
-            println('EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE: option='+variantSelectionOptionId)
-        }else if (variantSelectionOptionId==9){
-            println('EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE: option='+variantSelectionOptionId)
         }
 
 
@@ -532,7 +512,7 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
 
 
             returnJson = this.getBurdenResultForVariantIdList( "mdv${dataVersionId}".toString(), phenotype, burdenVariantList, covariatesObject, samplesObject, filtersObject, [] as JSONArray,
-                                                               sampleDataSet, explicitlySelectSamples, variantSetId );
+                                                               sampleDataSet, explicitlySelectSamples, variantSetId, burdenMethod );
 
         } catch (PortalException exception) {
             log.error("Got error creating burden test for gene: " + geneString + " and phenotype: " + phenotype + ": " + exception.getMessage());
@@ -598,7 +578,8 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
                                                           JSONObject filtersJsonObject,
                                                           JSONArray phenotypeFilterValues,
                                                           String dataset,
-                                                          String variantSetId ) throws PortalException {
+                                                          String variantSetId,
+                                                          String burdenMethod) throws PortalException {
         // local variables
         org.broadinstitute.mpg.Variant burdenVariant;
         JSONObject returnJson = null;
@@ -616,7 +597,7 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
         }
 
         // call shared method
-        returnJson = this.callBurdenTestForTraitAndVariantId(traitOption, variantIds, covariateJsonObject, sampleJsonObject, filtersJsonObject, phenotypeFilterValues, dataset, variantSetId );
+        returnJson = this.callBurdenTestForTraitAndVariantId(traitOption, variantIds, covariateJsonObject, sampleJsonObject, filtersJsonObject, phenotypeFilterValues, dataset, variantSetId, burdenMethod );
 
         // return
         return returnJson;
@@ -636,14 +617,14 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
                                                             JSONObject filtersJsonObject,
                                                             JSONArray phenotypeFilterValues,
                                                             String dataset,
-                                                            String variantSetId) throws PortalException {
+                                                            String variantSetId, burdenMethod) throws PortalException {
         // local variables
         JSONObject returnJson = null;
         //int dataVersion = this.sharedToolsService.getDataVersion();
         String stringDataVersion = metaDataService.getDataVersion()
 
         returnJson = this.getBurdenResultForVariantIdList(stringDataVersion , traitOption, burdenVariantList, covariateJsonObject, sampleJsonObject,  filtersJsonObject,
-                phenotypeFilterValues, dataset, false, variantSetId );
+                phenotypeFilterValues, dataset, false, variantSetId, burdenMethod );
 
         // return
         return returnJson;
@@ -660,7 +641,7 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
     protected JSONObject getBurdenResultForVariantIdList(String stringDataVersion, String phenotype, List<String> burdenVariantList,
                                                          JSONObject covariateJsonObject, JSONObject sampleJsonObject, JSONObject filtersJsonObject,
                                                          JSONArray phenotypeFilterValues, String dataset, Boolean explicitlySelectSamples,
-                                                         String variantSetId) throws PortalException {
+                                                         String variantSetId, String burdenMethod) throws PortalException {
         // local variables
         JSONObject jsonObject = null;
         JSONObject returnJson = null;
@@ -705,10 +686,10 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
         }
 
         if (!explicitlySelectSamples){
-            jsonObject = this.getBurdenJsonBuilder().getBurdenPostJson(stringDataVersion, phenotype, burdenVariantList, covariateList, sampleList, filters,dataset, variantSetId,alleleType);
+            jsonObject = this.getBurdenJsonBuilder().getBurdenPostJson(stringDataVersion, phenotype, burdenVariantList, covariateList, sampleList, filters,dataset, variantSetId,alleleType,burdenMethod);
         } else {
             if (sampleList?.size()>MINIMUM_ALLOWABLE_NUMBER_OF_SAMPLES){
-                jsonObject = this.getBurdenJsonBuilder().getBurdenPostJson(stringDataVersion, phenotype, burdenVariantList, covariateList, sampleList, filters,dataset, variantSetId,alleleType);
+                jsonObject = this.getBurdenJsonBuilder().getBurdenPostJson(stringDataVersion, phenotype, burdenVariantList, covariateList, sampleList, filters,dataset, variantSetId,alleleType,burdenMethod);
             } else {
                 log.info("needed more samples than ${MINIMUM_ALLOWABLE_NUMBER_OF_SAMPLES}");
             }

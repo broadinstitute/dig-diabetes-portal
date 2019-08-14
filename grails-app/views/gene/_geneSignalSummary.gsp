@@ -186,6 +186,8 @@ td.tissueTable.informationIsPresent{
                     retrieveGeneLevelAssociationsUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveGeneLevelAssociations")}',
                     retrieveListOfGenesInARangeUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveListOfGenesInARange")}',
                     retrieveEffectorGeneInformationUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveEffectorGeneInformation")}',
+                    aggregationCovarianceUrl: "${portalVersionBean.getAggregationCovarianceUrl()}",
+                    aggregationMetadataUrl: '${portalVersionBean.getAggregationMetadataUrl()}',
                     geneInfoAjaxUrl: '${g.createLink(controller: "Gene", action: "geneInfoAjax")}',
                     retrieveVariantsWithQtlRelationshipsUrl:'${g.createLink(controller: "RegionInfo", action: "retrieveVariantsWithQtlRelationships")}',
                     assayIdList: "${assayIdList}",

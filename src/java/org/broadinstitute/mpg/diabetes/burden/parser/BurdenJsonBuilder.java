@@ -56,13 +56,13 @@ public class BurdenJsonBuilder {
      * @throws PortalException
      */
     public JSONObject getBurdenPostJson(String stringDataVersion, String phenotype, List<String> variantList, List<String> covariatesList,
-                                        List<String> sampleList, String filters, String dataSet, String variantSetId, String alleleType) throws PortalException {
+                                        List<String> sampleList, String filters, String dataSet, String variantSetId, String alleleType, String burdenMethod) throws PortalException {
         // local variables
         JSONObject finalObject;
 
         // create the json object
         try {
-            finalObject = new JSONObject(this.getBurdenPostJsonString( stringDataVersion, phenotype, variantList, covariatesList,  sampleList, filters, dataSet,  variantSetId, alleleType));
+            finalObject = new JSONObject(this.getBurdenPostJsonString( stringDataVersion, phenotype, variantList, covariatesList,  sampleList, filters, dataSet,  variantSetId, alleleType, burdenMethod));
 
         } catch (JSONException exception) {
             throw new PortalException(("got json creation exception for burden test payload generation: " + exception.getMessage()));
@@ -81,7 +81,7 @@ public class BurdenJsonBuilder {
      * @throws PortalException
      */
     public String getBurdenPostJsonString(String stringDataVersion , String phenotype, List<String> variantList, List<String> covariatesList,
-                                          List<String> sampleList, String filters, String dataSet, String variantSetId, String alleleType) throws PortalException {
+                                          List<String> sampleList, String filters, String dataSet, String variantSetId, String alleleType, String burdenMethod) throws PortalException {
         // local variables
         String finalString;
         StringBuilder stringBuilder = new StringBuilder();
@@ -108,13 +108,14 @@ public class BurdenJsonBuilder {
             stringBuilder.append("\", ");
         }
 
-//        if (variantSetId!= null) {
+        if ((burdenMethod==null)||
+                ("sum".equals(burdenMethod))){ // if we are not asked to take an additive approach then we use a collapsing burden test
             stringBuilder.append("\"");
             stringBuilder.append(PortalConstants.JSON_BURDEN_OPERATION_KEY);
             stringBuilder.append("\": \"");
             stringBuilder.append(PortalConstants.JSON_BURDEN_OPERATION_SUM_KEY);
             stringBuilder.append("\", ");
-//        }
+        }
 
         // add in the phenotype
         stringBuilder.append("\"");

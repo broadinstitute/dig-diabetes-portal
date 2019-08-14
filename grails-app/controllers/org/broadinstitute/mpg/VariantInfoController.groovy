@@ -643,7 +643,7 @@ def retrieveSampleSummary (){
         JSONArray phenotypeFilterValues = slurper.parseText(params.compoundedFilterValues) as JSONArray
         JSONArray variantNameJsonList = slurper.parseText(params.variantList) as JSONArray
         String variantSetId = params.variantSetId
-
+        String burdenMethod = params.burdenMethod
         String dataset = params.dataset
 
         // cast the parameters
@@ -658,7 +658,7 @@ def retrieveSampleSummary (){
         // TODO - eventually create new bean to hold all the options and have smarts for double checking validity
         JSONObject result
         try {
-            result = this.burdenService.callBurdenTestForTraitAndDbSnpId(traitFilterOptionId, variantNameList, covariateJsonObject, sampleJsonObject, filtersJsonObject, phenotypeFilterValues, dataset, variantSetId  );
+            result = this.burdenService.callBurdenTestForTraitAndDbSnpId(traitFilterOptionId, variantNameList, covariateJsonObject, sampleJsonObject, filtersJsonObject, phenotypeFilterValues, dataset, variantSetId, burdenMethod  );
         } catch (Exception e){
             e.printStackTrace()
         }

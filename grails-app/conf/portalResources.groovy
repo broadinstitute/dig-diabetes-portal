@@ -59,6 +59,7 @@ modules = {
         resource url: 'css/dport/burdenTest.css'
         resource url: 'js/lib/dport/burdenTest.js'
         resource url: 'js/lib/dport/burdenTestShared.js'
+        resource url: 'js/lib/dport/externalBurdenTestMethods.js'
 
         resource url: 'https://cdn.jsdelivr.net/npm/raremetal.js@1.1.0/dist/raremetal.js'
         //resource url: 'js/lib/raremetal.js'
@@ -145,6 +146,7 @@ modules = {
         resource url: 'css/dport/burdenTest.css'
         resource url: 'js/lib/dport/burdenTest.js'
         resource url: 'js/lib/dport/burdenTestShared.js'
+        resource url: 'js/lib/dport/externalBurdenTestMethods.js'
 
         resource url: 'https://cdn.jsdelivr.net/npm/raremetal.js@1.1.0/dist/raremetal.js'
 

@@ -90,7 +90,6 @@
                 Choose a phenotype and partitioning strategy
             </h3>
         </div>
-                            <button onclick="mpgSoftware.burdenTestShared.runSkatTest()">SKAT</button>
         <div id="chooseSamples" class="">
             <div class="secBody">
             <div class="row">
@@ -168,6 +167,15 @@
 
                 <div class="row">
                     <div class="col-sm-12 col-xs-12 text-left">
+                        <div class="burdenMethodChoiceHolder">
+        <label for="burdenMethodChoice">Method:</label>
+        <select id="burdenMethodChoice">
+            <option value="burden">Burden test</option>
+            <option value="collapse">Collapse test</option>
+            <option value="skat">SKAT</option>
+            <option value="vt">Variable threshold</option>
+        </select>
+    </div>
 
 %{--                        <div  id="caseControlFilteringWithLabel" class="checkbox" style="margin:20px 0 10px 0">--}%
 %{--                                <span style="margin: 0 25px 0 0; font-weight: bold">Samples:</span>--}%
@@ -198,14 +206,7 @@
 %{--Handles the filters section, both with and without strata.  Note however that we do not fill in
 the individual filters themselves. That work is handled later as part of a loop--}%
 <script id="chooseFiltersTemplate"  type="x-tmpl-mustache">
-    <div class="burdenMethodChoiceHolder">
-        <label for="burdenMethodChoice">Method:</label>
-        <select id="burdenMethodChoice">
-            <option value="1">collapsing burden</option>
-            <option value="2">SKAT burden</option>
-            <option value="3">variable threshold</option>
-        </select>
-    </div>
+
 <div class="panel panel-default">%{--should hold the Choose filters panel--}%
 
             <div class="panel-heading">

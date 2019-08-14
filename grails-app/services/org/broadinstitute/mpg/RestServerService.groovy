@@ -362,6 +362,8 @@ class RestServerService {
                     existingPortalVersionBean.getGenePageWarning(),
                     existingPortalVersionBean.getCredibleSetInfoCode(),
                     existingPortalVersionBean.getBlogId(),
+                    existingPortalVersionBean.getAggregationCovarianceUrl(),
+                    existingPortalVersionBean.getAggregationMetadataUrl(),
                     existingPortalVersionBean.getExposeCommonVariantTab(),
                     existingPortalVersionBean.getExposeRareVariantTab(),
                     existingPortalVersionBean.getVariantAssociationsExists(),
