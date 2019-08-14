@@ -168,12 +168,7 @@
 
                 <div class="row">
                     <div class="col-sm-12 col-xs-12 text-left">
-                        <select>
-                            <option value="1">&lt;</option>
-                            <option value="2">&gt;</option>
-                            <option value="3">internal</option>
-                            <option value="4">external</option>
-                        </select>
+
 %{--                        <div  id="caseControlFilteringWithLabel" class="checkbox" style="margin:20px 0 10px 0">--}%
 %{--                                <span style="margin: 0 25px 0 0; font-weight: bold">Samples:</span>--}%
 %{--                                <input id="caseControlFiltering" type="checkbox" name="caseControlFiltering"--}%
@@ -203,6 +198,14 @@
 %{--Handles the filters section, both with and without strata.  Note however that we do not fill in
 the individual filters themselves. That work is handled later as part of a loop--}%
 <script id="chooseFiltersTemplate"  type="x-tmpl-mustache">
+    <div class="burdenMethodChoiceHolder">
+        <label for="burdenMethodChoice">Method:</label>
+        <select id="burdenMethodChoice">
+            <option value="1">collapsing burden</option>
+            <option value="2">SKAT burden</option>
+            <option value="3">variable threshold</option>
+        </select>
+    </div>
 <div class="panel panel-default">%{--should hold the Choose filters panel--}%
 
             <div class="panel-heading">

@@ -1487,8 +1487,18 @@ mpgSoftware.burdenTestShared = (function () {
             (isDichotomousTrait ? 'odds ratio = ' + oddsRatio : 'beta = ' + beta),
             ciDisplay, isDichotomousTrait, additionalText);
 
-    }
+    };
 
+    var retrieveCheckedVariantsFromBurdenInterface = function (){
+        if ($('#gaitTable').children().length > 0) { // check that we have a table
+            
+            var gaitTableCheckboxes = $($('#gaitTable').DataTable().rows().nodes()).find('td input.geneGaitVariantSelector:checked');
+            _.forEach(gaitTableCheckboxes, function (eachVariantId) {
+                var gaitTableCheckboxId = $(eachVariantId).attr('id');
+                listOfVariantsToCheck.push('"' + gaitTableCheckboxId.substr(12) + '"');
+            });
+        }
+    }
 
     var executeAssociationTest = function (filterValues, covariateValues, propertyName, stratum, compoundedFilterValues, burdenTestAjaxUrl, variantIdentifier, variantSetId) {
 
@@ -2078,7 +2088,7 @@ mpgSoftware.burdenTestShared = (function () {
 
             }
         }
-        // var compoundedFilterValues = compoundingFilterValues(phenotypeTabs);
+
 
         var deferreds = [];
         _.forEach(nonPhenotypeTabs, function (stratum) {
@@ -2849,7 +2859,7 @@ mpgSoftware.burdenTestShared = (function () {
                         const runner = new raremetal.helpers.PortalTestRunner(groups, variants, [ // One or more test names can be specified!
                             // 'burden',
                             'skat',
-                            // 'vt'
+                            //'vt'
                         ]);
                         return runner.run();
                     }
@@ -2872,7 +2882,8 @@ mpgSoftware.burdenTestShared = (function () {
 
         // When the page loads, get the data and display the results
         var results = document.getElementById('results-display');
-        buildAndRunScatTest('https://portaldev.sph.umich.edu/raremetal/v1/aggregation/covariance', generateObjectForLdServer([
+//        buildAndRunScatTest('https://portaldev.sph.umich.edu/raremetal/v1/aggregation/covariance', generateObjectForLdServer([
+        buildAndRunScatTest('http://raremetal.type2diabeteskb.org/aggregation/covariance', generateObjectForLdServer([
             "22:50312454_C/T",
             "22:50313452_C/T",
             "22:50313465_C/A",
@@ -2889,17 +2900,7 @@ mpgSoftware.burdenTestShared = (function () {
             "22:50319373_C/T",
             "22:50319968_G/A",
             "22:50320921_G/A"
-        ], "ldl"))
-        //     .then(res => {
-        //    // _example('https://portaldev.sph.umich.edu/raremetal/v1/aggregation/covariance', sample_mask_payload).then(res => {
-        //     console.log(`Ran ${res.length} test(s)`);
-        //     console.log(res);
-        // }).catch(e => {
-        //     results.value = 'Calculations failed; see JS console for details.'
-        // });
-       //_example('https://portaldev.sph.umich.edu/raremetal/v1/aggregation/covariance', sample_mask_payload);
-        //results.value = JSON.stringify(res, null, 4);
-
+        ], "LDL"));
     };
 
 
