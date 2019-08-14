@@ -41,7 +41,29 @@
 
     <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
 <ul>
-    <li><g:message code="informational.shared.traits.t2d"></g:message></li>
+    <li><g:message code="metadata.Adipon"></g:message></li>
+    <li><g:message code="metadata.BMI"></g:message></li>
+    <li><g:message code="metadata.DBP"></g:message></li>
+    <li><g:message code="metadata.CPEP_FAST"></g:message></li>
+    <li><g:message code="metadata.FG"></g:message></li>
+    <li><g:message code="metadata.FI"></g:message></li>
+    <li><g:message code="metadata.HBA1C"></g:message></li>
+    <li><g:message code="metadata.HDL"></g:message></li>
+    <li><g:message code="metadata.HEIGHT"></g:message></li>
+    <li><g:message code="metadata.HIP"></g:message></li>
+    <li><g:message code="metadata.HOMAB"></g:message></li>
+    <li><g:message code="metadata.HOMAIR"></g:message></li>
+    <li><g:message code="metadata.LDL"></g:message></li>
+    <li><g:message code="metadata.LEPTIN"></g:message></li>
+    <li><g:message code="metadata.SBP"></g:message></li>
+    <li><g:message code="metadata.2hrCPEP"></g:message></li>
+    <li><g:message code="metadata.2hrG"></g:message></li>
+    <li><g:message code="metadata.2hrI"></g:message></li>
+    <li><g:message code="metadata.TC"></g:message></li>
+    <li><g:message code="metadata.TG"></g:message></li>
+    <li><g:message code="metadata.TGtoHDL"></g:message></li>
+    <li><g:message code="metadata.WAIST"></g:message></li>
+    <li><g:message code="metadata.WHR"></g:message></li>
 </ul>
     <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
 <table class="table table-condensed table-responsive table-striped">
@@ -786,9 +808,9 @@
 
 
 <h4><g:message code="informational.shared.headers.overview"></g:message></h4>
-<p><g:message code="informational.data.overview.52K-1"></g:message></p>
-<p><g:message code="informational.data.overview.52K-2"></g:message></p>
-<p><g:message code="informational.data.overview.52K-3"></g:message></p>
+<p><g:message code="informational.data.overview.52K-QT-1"></g:message></p>
+<p><g:message code="informational.data.overview.52K-QT-2"></g:message></p>
+<p><g:message code="informational.data.overview.52K-QT-3"></g:message></p>
 <p>&nbsp;</p>
 
 <h4>Accessing AMP T2D-GENES exome sequence analysis results</h4>
