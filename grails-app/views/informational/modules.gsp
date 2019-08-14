@@ -163,7 +163,7 @@
 
                     <g:if test="${g.portalTypeString()?.equals('t2d')}">
                         <tr>
-                            <td><span class='new-dataset-flag' style="margin-top:-10px; margin-left: 10px;">&nbsp;</span><h4><g:message code="informational.modules.GAIT.title"></g:message></h4></td>
+                            <td><h4><g:message code="informational.modules.GAIT.title"></g:message></h4></td>
                             <td><img  src="${resource(dir: 'images', file: 'gait.png')}" align="left" style="width: 200px; border: solid 1px #ddd; margin-right: 15px;"><g:message code="informational.modules.GAIT.description"></g:message>
                                 <div style="float: left; margin-top: 5px; margin-left: 215px;" class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact "><a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/KP_GAIT_guide.pdf" target="_blank">Custom association analysis guide</a></div>
                                 <div class="errorReporter">${errorText}</div>
