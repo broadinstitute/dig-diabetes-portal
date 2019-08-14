@@ -32,6 +32,8 @@ var mpgSoftware = mpgSoftware || {};
                 access = "Pre-publication";}
             else if (dataTypeName.includes('CAMP')){
                 access = "Pre-publication";}
+            else if (dataTypeName.includes('52k')){
+                access = "Pre-publication";}
             else{
                 access = "Open access";
         }
