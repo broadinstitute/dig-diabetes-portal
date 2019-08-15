@@ -95,11 +95,23 @@
             <div class="row">
                 <div class="col-md-4 text-left">
                     <div class="secHeader chooseExperiment">
-                        <!-- <div class="col-sm-4 col-xs-4 text-left"> -->
-                            <label>Dataset</label>
-
-                        <!-- </div> -->
+                        <label>Dataset</label>
                     </div>
+                    <div class="secHeader chooseAggregationMethod">
+                        <label for="burdenMethodChoice">Aggregation method</label>
+                    </div>
+                    <div class="chooseAggregationMethod">
+                        <select id="burdenMethodChoice" class="traitFilter form-control text-left"
+                        onchange="mpgSoftware.externalBurdenTestMethods.showOnlyRelevantInterfaceSections(this)">
+                            <option value="sum">Burden test</option>
+                            <option value="max">Collapse test</option>
+                            <option value="skat">SKAT</option>
+                            <option value="vt">Variable threshold</option>
+                            <option value="burden">UMich burden</option>
+                        </select>
+                    </div>
+
+
 
                     <div class="chooseExperiment">
                         <select id="datasetFilter" class="traitFilter form-control text-left"
@@ -167,16 +179,16 @@
 
                 <div class="row">
                     <div class="col-sm-12 col-xs-12 text-left">
-                        <div class="burdenMethodChoiceHolder">
-        <label for="burdenMethodChoice">Method:</label>
-        <select id="burdenMethodChoice">
-            <option value="sum">Burden test</option>
-            <option value="max">Collapse test</option>
-            <option value="skat">SKAT</option>
-            <option value="vt">Variable threshold</option>
-            <option value="burden">UMich burden</option>
-        </select>
-    </div>
+                        %{--<div class="burdenMethodChoiceHolder">--}%
+        %{--<label for="burdenMethodChoice">Method:</label>--}%
+        %{--<select id="burdenMethodChoice">--}%
+            %{--<option value="sum">Burden test</option>--}%
+            %{--<option value="max">Collapse test</option>--}%
+            %{--<option value="skat">SKAT</option>--}%
+            %{--<option value="vt">Variable threshold</option>--}%
+            %{--<option value="burden">UMich burden</option>--}%
+        %{--</select>--}%
+    %{--</div>--}%
 
 %{--                        <div  id="caseControlFilteringWithLabel" class="checkbox" style="margin:20px 0 10px 0">--}%
 %{--                                <span style="margin: 0 25px 0 0; font-weight: bold">Samples:</span>--}%
@@ -856,8 +868,7 @@ the individual filters themselves. That work is handled later as part of a loop-
         <div class="stratum_strat1 stratumName"></div>
         <div class="pValue_strat1">pValue = {{pValuePrintable}}</div>
         <div class="orValue_strat1">stat = {{statPrintable}}</div>
-        %{--<div class="">variants used = {{variantCount}}</div>--}%
-        %{--<div class="ciValue_strat1">95% CI: (-0.00314 to 0.0187)</div>--}%
+        <div class="">variants used = {{variantCount}}</div>
         <div id="chart"></div>
     {{/.}}
     </div>
