@@ -38,6 +38,11 @@
 
 <script>
 
+    var traitsPerVariantTableColumns = {sample:'<g:message code="variantTable.columnHeaders.shared.samples" />',
+        sampleHelpHeader:'<g:message code="variantTable.columnHeaders.shared.samples.help.header" />',
+        sampleHelpText:'<g:message code="variantTable.columnHeaders.shared.samples.help.text" />'
+    }
+
     // generate the texts here so that the appropriate one can be selected in initializePage
     // the keys (1,2,3,4) map to the assignments for MOST_DEL_SCORE
 

@@ -402,6 +402,13 @@ var mpgSoftware = mpgSoftware || {};
             })
         }
 
+        var newFeatures = function(FEATURES) {
+            $.each(FEATURES, function(index,feature) {
+                var newFeature = '<li class="'+feature.class+'"><span class="flag">'+feature.type.toUpperCase()+'</span><a href="'+feature.link+'"><span class="pointer">&nbsp;</span>'+feature.name+'</a></li>';
+                $("#new_features").append(newFeature);
+            })
+        }
+
 
         return {
             initializeInputFields:initializeInputFields,
@@ -412,6 +419,7 @@ var mpgSoftware = mpgSoftware || {};
             retrieveGenePhenotypes:retrieveGenePhenotypes,
             retrievePhenotypes:retrievePhenotypes,
             switchVisibility:switchVisibility,
+            newFeatures:newFeatures,
         }
     })();
 })();

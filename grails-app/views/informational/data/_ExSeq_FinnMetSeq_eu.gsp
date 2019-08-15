@@ -3,9 +3,9 @@
                <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
         <p><div class="paper">
-<g:message code="informational.shared.publications.Locke_2019_submitted"></g:message><br>
-<g:message code="informational.shared.publications.Locke_2019_submitted.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
-<div class="citation"><g:message code="informational.shared.publications.Locke_2019_submitted.citation"></g:message> </div>
+<g:message code="informational.shared.publications.Locke_2019_Nature"></g:message><br>
+<g:message code="informational.shared.publications.Locke_2019_Nature.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.Locke_2019_Nature.citation"></g:message> </div>
 </div></p>
 
 <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
@@ -72,7 +72,6 @@
 <li><g:message code="metadata.Val"></g:message></li>
 <li><g:message code="metadata.VitD"></g:message></li>
 <li><g:message code="metadata.WAISTadjBMI"></g:message></li>
-<li><g:message code="metadata.WHRadjBMI"></g:message></li>
 <li><g:message code="metadata.WEIGHT"></g:message></li>
 	</ul>
 <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>

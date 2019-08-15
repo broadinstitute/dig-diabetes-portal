@@ -22,8 +22,18 @@ var mpgSoftware = mpgSoftware || {};
 
             if (dataTypeName.includes('CUHK')){
                 access = "Pre-publication";}
-            //else if (dataTypeName.includes('DCSP2')){
-            //    access = "Early access phase 2";}
+            else if (dataTypeName.includes('DCSP2')){
+                access = "Pre-publication";}
+            else if (dataTypeName.includes('BioMe')){
+                access = "Pre-publication";}
+            else if (dataTypeName.includes('METSIM')){
+                access = "Pre-publication";}
+            else if (dataTypeName.includes('FUSION')){
+                access = "Pre-publication";}
+            else if (dataTypeName.includes('CAMP')){
+                access = "Pre-publication";}
+            else if (dataTypeName.includes('52k')){
+                access = "Pre-publication";}
             else{
                 access = "Open access";
         }
@@ -297,7 +307,7 @@ var mpgSoftware = mpgSoftware || {};
                 $("#phenotypeFilterLevel1Display").empty().append(filterDynamicHtml);
                 renderFilteredData();
 
-                var newDatasets = ["GIANT 2018 exome", "WMHV", "COPD", "Accelerometer-derived", "Hong Kong", "Albuminuria", "TOPMed", "Heart failure", "oxyhemoglobin", "apnea", "IVGTT", "COGENT", "GLGC exome", "Inflammation", "Singapore Prospective", "METSIM", "BioMe"];
+                var newDatasets = ["quantitative trait", "GIANT 2018 exome", "WMHV", "COPD", "Accelerometer-derived", "Hong Kong", "Albuminuria", "TOPMed", "Heart failure", "oxyhemoglobin", "apnea", "IVGTT", "COGENT", "GLGC exome", "Inflammation", "Singapore Prospective", "METSIM", "BioMe", "CAMP", "FUSION", "GIANT 2018"];
 
                 addNewDatasetFlag (newDatasets,".accordion-toggle","<span class='new-dataset-flag'>&nbsp;</span>"); //[DK] This function exists on t2dGenesCore.gsp. It's called to add "New dataset Flag
 

@@ -696,7 +696,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                             0,
                                             0,0,0, // Hi-C tab on the gene page
-                                          0,  // expose dynamic UI
+                                          1,  // expose dynamic UI
                                           0, // expose the data set hierarchy in the sunburst visualization on the data page
                                           0, // expose the old school variant and association table.  Potentially useful for debugging
                                           0, // expose the IGV interface in its own accordion section
@@ -751,7 +751,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           0,
                                           0,0, // Hi-C tab on the gene page
-                                          0,  // expose dynamic UI
+                                         1,  // expose dynamic UI
                                           0, // expose the data set hierarchy in the sunburst visualization on the data page
                                           0, // expose the old school variant and association table.  Potentially useful for debugging
                                           0, // expose the IGV interface in its own accordion section
@@ -877,7 +877,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                   ),
                                   new PortalVersionBean("sleep",
                                           "Sleep",
-                                          "mdv110",
+                                          "mdv111",
                                           "SDKP", // name of KB data we want
                                           "SleepChronotype", // make sure your default phenotype exists in your default data set
                                           "GWAS_UKBB_mdv110",// used to pick a default data set for a gene query

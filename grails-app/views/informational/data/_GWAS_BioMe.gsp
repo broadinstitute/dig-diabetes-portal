@@ -109,22 +109,10 @@
 
 <h4><g:message code="informational.shared.headers.reports"></g:message></h4>
 
-<h4><g:message code="informational.shared.headers.reports"></g:message></h4>
-
 <p><g:message code="informational.data.reports.QCR_BioMe"></g:message></p>
 <p><g:message code="informational.data.reports.DAR1_BioMe"></g:message></p>
 <p><g:message code="informational.data.reports.DAR2_BioMe"></g:message></p>
 <p><g:message code="informational.data.reports.DAR_complications_BioMe"></g:message></p>
-
-<p>Genotype Data Quality Control Report for Phase 1 and 2 analysis (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP-DCC+Quality+Control+Report+BioMe_2016_1102.pdf" target="_blank">download PDF</a>)</p>
-
-<p>BioMe Phase 1 AMP-DCC Data Analysis Report (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP-DCC_Data_Analysis_Report_BIOME_Phase1_2017_0101.pdf" target="_blank">download PDF</a>)</p>
-
-<p>BioMe Phase 2 AMP-DCC Data Analysis Report (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP-DCC_Data_Analysis_Report_BIOME_Phase2.pdf" target="_blank">download PDF</a>)</p>
-
-<p>Genotype Data Quality Control Report for Diabetic Complications Phase 1 analysis (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP_DCC_QCR_BioMe.v2.2.20190121.2303.pdf" target="_blank">download PDF</a>)</p>
-
-<p>BioMe Diabetic Complications Phase 1 AMP-DCC Data Analysis Report (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP_DCC_DAR_BioMe_Complications_Phase1.v2.2.20190305.1246.pdf" target="_blank">download PDF</a>)</p>
 
 
 <h4>Accessing BioMe AMP T2D GWAS results</h4>
