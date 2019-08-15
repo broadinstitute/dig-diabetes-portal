@@ -19,9 +19,9 @@
     </div></p>
 
           <p><div class="paper">
-    <g:message code="informational.shared.publications.Wang_2019_submitted"></g:message><br>
-    <g:message code="informational.shared.publications.Wang_2019_submitted.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
-    <div class="citation"><g:message code="informational.shared.publications.Wang_2019_submitted.citation"></g:message> </div>
+    <g:message code="informational.shared.publications.Wang_2019_NatCommun"></g:message><br>
+    <g:message code="informational.shared.publications.Wang_2019_NatCommun.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+    <div class="citation"><g:message code="informational.shared.publications.Wang_2019_NatCommun.citation"></g:message> </div>
     </div></p>
 
               <p><div class="paper">
