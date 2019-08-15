@@ -2171,7 +2171,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             (displayHighImpactTab.length>0)){
             mpgSoftware.burdenTestShared.buildGaitInterface('#burdenGoesHere', {
                     accordionHeaderClass: 'toned-down-accordion-heading',
-                    modifiedTitle: 'Run a custom burden test',
+                    modifiedTitle: 'Custom aggregation tests',
                     modifiedTitleStyling: 'font-size: 18px;text-decoration: underline;padding-left: 20px; float: right; margin-right: 20px;',
                     allowExperimentChoice: false,
                     allowPhenotypeChoice: true,

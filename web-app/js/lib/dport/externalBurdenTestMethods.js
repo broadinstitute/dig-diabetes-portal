@@ -100,7 +100,7 @@ var mpgSoftware = mpgSoftware || {};
         }
 
 
-        var buildUMichBurdenTestPromiseArray = function (url, covariance_request_spec, subtype ) {
+        var buildUMichBurdenTestPromiseArray = function (url, covariance_request_spec, subtype, resultDisplayFunction ) {
             var promiseArray = [];
             var promise = $.ajax({
                 cache: false,
@@ -131,44 +131,23 @@ var mpgSoftware = mpgSoftware || {};
                         ]);
                         return runner.run();
                     }
-                ).then(res =>
-                    {
-                        console.log(`Ran ${res.length} test(s)`);
-                        console.log(res);
-                    }
+                ).then(res=>{resultDisplayFunction(res)}
+                    // {
+                    //     console.log(`Ran ${res.length} test(s)`);
+                    //     console.log(res);
+                    // }
                 ).catch(e => {
                     results.value = 'Calculations failed; see JS console for details.'
                 })
             );
             return promiseArray;
         };
-        var buildAndRunUMichTest = function (asynchronousPromiseRunner, url, variableList, phenotype, subtype) {
+        var buildAndRunUMichTest = function (asynchronousPromiseRunner, url, variableList, phenotype, subtype, displayResults) {
             var covariance_request_spec = generateObjectForLdServer(variableList,phenotype);
-            asynchronousPromiseRunner(buildUMichBurdenTestPromiseArray(url, covariance_request_spec, subtype),undefined);
+            asynchronousPromiseRunner(buildUMichBurdenTestPromiseArray(url, covariance_request_spec, subtype,displayResults),undefined);
         }
 
 
-
-        // When the page loads, get the data and display the results
-        // var results = document.getElementById('results-display');
-        // buildAndRunScatTest('http://raremetal.type2diabeteskb.org/aggregation/covariance', generateObjectForLdServer([
-        //     "22:50312454_C/T",
-        //     "22:50313452_C/T",
-        //     "22:50313465_C/A",
-        //     "22:50315537_A/G",
-        //     "22:50315971_C/G",
-        //     "22:50316015_C/T",
-        //     "22:50316301_A/G",
-        //     "22:50316902_G/A",
-        //     "22:50316906_C/T",
-        //     "22:50317418_C/T",
-        //     "22:50318061_G/C",
-        //     "22:50318402_C/T",
-        //     "22:50318757_C/T",
-        //     "22:50319373_C/T",
-        //     "22:50319968_G/A",
-        //     "22:50320921_G/A"
-        // ], "LDL"));
         return {
             // public routines
             buildAndRunUMichTest: buildAndRunUMichTest,

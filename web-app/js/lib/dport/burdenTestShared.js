@@ -2095,11 +2095,9 @@ mpgSoftware.burdenTestShared = (function () {
         var variantsToUse =  retrieveCheckedVariantsFromBurdenInterface('#gaitTable');
         var phenotypeToPredict = $('#phenotypeFilter').val();
         var methodChoice = $('#burdenMethodChoice').val();
-        var burdenMethod = "sum"; // default to using a variant summing method
         switch (methodChoice){
-            case 'collapse':
-                burdenMethod = "max";
-            case 'burden':
+            case 'sum':
+            case 'max':
                 var deferreds = [];
                 _.forEach(nonPhenotypeTabs, function (stratum) {
                     var compoundedFilterValues = compoundingStrataFilterValues(stratum);
@@ -2114,7 +2112,7 @@ mpgSoftware.burdenTestShared = (function () {
                         variantIdentifier,
                         variantSetId,
                         variantsToUse,
-                        burdenMethod ));
+                        methodChoice ));
 
                 });
                 asynchronousPromiseRunner(deferreds,runMetaAnalysis);
@@ -2123,37 +2121,34 @@ mpgSoftware.burdenTestShared = (function () {
                 break;
             case 'skat':
             case 'vt':
+            case 'burden':
                 var coreVariables = mpgSoftware.geneSignalSummaryMethods.getSignalSummarySectionVariables();
                 mpgSoftware.externalBurdenTestMethods.buildAndRunUMichTest(asynchronousPromiseRunner,
                     coreVariables.aggregationCovarianceUrl,
                     variantsToUse.map(function(o){return o.replace(/\"/g,"")}),
-                    phenotypeToPredict,methodChoice);
+                    phenotypeToPredict,methodChoice,
+                    function(results){
+                        if (( typeof results !== 'undefined') &&
+                            (results.length>0)){
+                            console.log("hurray!");
+                            console.log(results)  ;
+                            const renderData = _.map(results,function(oneResult){
+                                oneResult["variantCount"] = function(){return oneResult.variants.length};
+                                oneResult["pValuePrintable"] = function(){return UTILS.realNumberFormatter(oneResult.pvalue)};
+                                oneResult["statPrintable"] = function(){return UTILS.realNumberFormatter(oneResult.stat)};
+                                return oneResult
+                            });
+                            displayTestResultsSection(true);
+                            $("div.strataResults").empty().append(Mustache.render($('#uMichAggregationTestResults')[0].innerHTML,
+                                renderData));
+                        }
+
+                    });
                 break;
             default:
                 alert('unrecognized aggregation test type ='+methodChoice+'.');
                 break;
         }
-        // var deferreds = [];
-        // _.forEach(nonPhenotypeTabs, function (stratum) {
-        //     var compoundedFilterValues = compoundingStrataFilterValues(stratum);
-        //     var strataPropertyName = stratum[0].strataPropertyName;
-        //     var stratumName = stratum[0].stratumName;
-        //     deferreds.push(executeAssociationTest('{}',
-        //         collectingCovariateValues(strataPropertyName, stratumName),
-        //         strataPropertyName,
-        //         stratumName,
-        //         compoundedFilterValues.strataFilters,
-        //         burdenTestAjaxUrl,
-        //         variantIdentifier,
-        //         variantSetId,
-        //         variantsToUse));
-        //
-        // });
-        // asynchronousPromiseRunner(deferreds,runMetaAnalysis);
-        // $.when.apply($, deferreds).then(function () {
-        //     runMetaAnalysis();
-        //     $('#rSpinner').hide();
-        // });
     }; // runBurdenTest
 
 

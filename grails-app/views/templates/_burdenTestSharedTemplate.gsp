@@ -170,10 +170,11 @@
                         <div class="burdenMethodChoiceHolder">
         <label for="burdenMethodChoice">Method:</label>
         <select id="burdenMethodChoice">
-            <option value="burden">Burden test</option>
-            <option value="collapse">Collapse test</option>
+            <option value="sum">Burden test</option>
+            <option value="max">Collapse test</option>
             <option value="skat">SKAT</option>
             <option value="vt">Variable threshold</option>
+            <option value="burden">UMich burden</option>
         </select>
     </div>
 
@@ -847,3 +848,18 @@ the individual filters themselves. That work is handled later as part of a loop-
 </div> %{--end accordion group--}%
 
 </script>
+
+
+<script id="uMichAggregationTestResults"  type="x-tmpl-mustache">
+    <div class="strat1 strataHolder">
+    {{#.}}
+        <div class="stratum_strat1 stratumName"></div>
+        <div class="pValue_strat1">pValue = {{pValuePrintable}}</div>
+        <div class="orValue_strat1">stat = {{statPrintable}}</div>
+        %{--<div class="">variants used = {{variantCount}}</div>--}%
+        %{--<div class="ciValue_strat1">95% CI: (-0.00314 to 0.0187)</div>--}%
+        <div id="chart"></div>
+    {{/.}}
+    </div>
+</script>
+
