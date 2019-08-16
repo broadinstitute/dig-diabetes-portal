@@ -11,7 +11,7 @@
            <span class="displayGeneName">{{name}}</span>
         </div>
         <div class="genePosition text-center">
-        {{var_id}}
+        
         </div>
 
 
