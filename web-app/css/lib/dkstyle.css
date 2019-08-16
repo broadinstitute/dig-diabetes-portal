@@ -1288,18 +1288,44 @@ span.new-dataset-flag {
     background-color: #7ACCC8;
 }
 
+/* banner setting for MI portal */
+.front-top-banner-mi {
+    background-image:url(../../images/mi/front_miKP_banner_bg.png), linear-gradient(#FFCC00, #DCA228);
+}
+
+.front-top-banner-mi .front-banner-btn {
+    color: #DCA228;
+}
+
+#header-bottom-mi {
+    background-color: #FFCC00;
+}
+
+/* banner setting for Sleep portal */
+.front-top-banner-sleep {
+    background-image:url(../../images/sleep/front_sleepKP_banner_bg.png), linear-gradient(#74B9E2, #477CBF);
+}
+
+.front-top-banner-sleep .front-banner-btn {
+    color: #477CBF;
+}
+
+#header-bottom-sleep {
+    background-color: #74B9E2;
+}
+
 /* banner setting for V2F portal */
 
-.front-top-banner-v2f {
+.front-top-banner-v2f, .front-top-banner-ibd {
 	background-image:url(../../images/v2f/front_V2FKP_banner_bg.png), linear-gradient(#b998ef, #7640b1);
 	margin-top: 0;
 }
 
-.front-top-banner-v2f .front-banner-btn {
-	color: #b998ef;
+.front-top-banner-v2f .front-banner-btn, .front-top-banner-ibd .front-banner-btn {
+	color: #7640b1;
 }
 
-#header-bottom-v2f {
+#header-bottom-v2f, #header-bottom-ibd {
 	position: relative;
 	background-color: #b998ef
 }
@@ -1323,17 +1349,17 @@ span.new-dataset-flag {
 /* banner setting for Stroke portal */
 
 .front-top-banner-stroke {
-    background-image:url(../../images/t2d/T2DKP_bg_2019_3.png), linear-gradient(#53d268, #2d944d);
+    background-image:url(../../images/stroke/front_strokeKP_banner_bg.png), linear-gradient(#73d253, #38942d);
     margin-top: 0;
 }
 
 .front-top-banner-stroke .front-banner-btn {
-    color: #53d268;
+    color: #38942d;
 }
 
 #header-bottom-stroke {
     position: relative;
-    background-color: #53d268;
+    background-color: #73d253;
 }
 
 
@@ -1362,8 +1388,20 @@ span.new-dataset-flag {
     transform: translate(0%,43%);
 }
 
-.front-logo-tagline-v2f {
+.front-logo-tagline-v2f, .front-logo-tagline-ibd {
 	transform: translate(0%,17%);
+}
+
+.front-logo-tagline-stroke {
+     transform: translate(0%,10%);
+ }
+
+.front-logo-tagline-mi {
+    transform: translate(0%,10%);
+}
+
+.front-logo-tagline-sleep {
+    transform: translate(0%,10%);
 }
 
 .front-logo-tagline-t2d {

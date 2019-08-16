@@ -622,7 +622,7 @@ grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'org.broadinsti
 grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.people.Role'
 
 
-portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", "ibd", "epilepsy", or "sleep".   What is the portal type for all nonsystem users?
+portal.type.override = "mi"     // options are "t2d", "stroke", "mi", "ibd", "epilepsy", or "sleep".   What is the portal type for all nonsystem users?
 
 
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
@@ -694,7 +694,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                           ["SIGN", "MetaStroke"], // any data sets that should be omitted from LZ display
                                                           "[3]",
                                                           "ExSeq_13k_mdv23",
-                                          "images/stroke/front_stroke_logo_2018.svg",
+                                          "images/stroke/front_strokeKP_logo_2019.svg",
                                           "portal.stroke.header.tagline",
                                           "portal.stroke.header.title.short",
                                           [],
@@ -703,7 +703,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["chr7:18,100,000-18,300,000"],
                                           "images/stroke/front_stroke_bg_2018.png",
                                           "stroke.pheno.help.text",
-                                          "images/stroke/STROKEKP_header_logo_2019.svg",
+                                          "images/stroke/header_strokeKP_logo.svg",
                                           "images/stroke/menu_bg_2017_stroke.png",
                                           "false",
                                           "",
@@ -745,7 +745,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                           [],
                                                           "[3]",
                                                           "GWAS_CARDIoGRAM_mdv91",
-                                          "images/mi/front_mi_logo_2018.svg",
+                                          "images/mi/front_miKP_logo_2019.svg",
                                           "portal.mi.header.tagline",
                                           "portal.mi.header.title.short",
                                           [],
@@ -754,7 +754,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["chr9:20,940,000-21,800,000"],
                                           "images/mi/front_mi_banner_2018.png",
                                         "",
-                                          "images/mi/mi_header_logo_2017.svg",
+                                          "images/mi/header_miKP_logo.svg",
                                           "images/mi/menu_band_2017_mi.png",
                                           "false",
                                           "",
@@ -904,7 +904,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           [],
                                           "[3]",
                                           "GWAS_UKBB_mdv110",
-                                          "images/sleep/front_sleep_logo_2018.svg",
+                                          "images/sleep/front_sleepKP_logo_2019.svg",
                                           "portal.sleep.header.tagline",
                                           "portal.sleep.header.title.short",
                                           [],
@@ -913,7 +913,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["chr2:113,873,524-114,136,577"],
                                           "images/sleep/sleep_banner_2018.png",
                                           "",
-                                          "images/sleep/sleep_menu_logo_2018.svg",
+                                          "images/sleep/header_sleepKP_logo.svg",
                                           "images/menu_bg_2017_5.png",
                                           "false",
                                           "",
