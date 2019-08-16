@@ -172,6 +172,7 @@ getRestServerList = [
         digawsqanewKB,
         digawsdevWorkflowKB,
         digawsdevWorkflowKBrevised,
+        digawsdevnewKB_fed,
         digawsqanewKB_fed,
         digawsqanewKB_fed_dedicated,
         ebiKB1,
