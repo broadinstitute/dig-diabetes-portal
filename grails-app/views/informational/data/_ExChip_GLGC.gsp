@@ -1,30 +1,24 @@
 <script class="panel-body" id="ExChip_GLGC_script" type="x-tmpl-mustache">
-
-        <h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
- <p><g:message code="informational.data.download.ExChipGLGC"></g:message></p>  
-
-<h4><g:message code="informational.shared.headers.publications"></g:message></h4>  
+<h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
+<p><g:message code="informational.data.download.ExChipGLGC"></g:message></p>
+<h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 <p><div class="paper">
- <g:message code="informational.shared.publications.Liu_2017_NatGenet"></g:message><br>
- <g:message code="informational.shared.publications.Liu_2017_NatGenet.author"></g:message>
-<g:message code="informational.shared.publications.etal"></g:message> 
-<div class="citation"><g:message code="informational.shared.publications.Liu_2017_NatGenet.citation"></g:message> </div>
- </div></p>  
-
-
+<g:message code="informational.shared.publications.Liu_2017_NatGenet"></g:message><br>
+<g:message code="informational.shared.publications.Liu_2017_NatGenet.author"></g:message>
+<g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.Liu_2017_NatGenet.citation"></g:message></div>
+</div></p> 
 <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
- <ul>     <li><g:message code="metadata.HDL"></g:message></li>
+<ul>
+<li><g:message code="metadata.HDL"></g:message></li>
 <li><g:message code="metadata.LDL"></g:message></li>
 <li><g:message code="metadata.TC"></g:message></li>
 <li><g:message code="metadata.TG"></g:message></li>
- </ul>
-
-  <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>  
-
+</ul>
+<h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
 <table class="table table-condensed table-responsive table-striped">
-
-  <tr><th>Cohort</th></tr>
- <tr><td>British 1958 Birth Cohort (1958BC)</td></tr>
+<tr><th>Cohort</th></tr>
+<tr><td>British 1958 Birth Cohort (1958BC)</td></tr>
 <tr><td>Anglo–Danish–Dutch Study of Intensive Treatment in People with Screen-Detected Diabetes in Primary Care - Denmark screening cohort (ADDITION)</td></tr>
 <tr><td>Age gene/environment susceptibility Reykjavik study (AGES)</td></tr>
 <tr><td>Atherosclerosis Risk in Communities Study (ARIC-AA, ARIC-EA)</td></tr>
@@ -93,20 +87,14 @@
 <tr><td>Women's Genome Health Study (WGHS)</td></tr>
 <tr><td>Women's Health Initiative (WHI-EA, WHI-AA)</td></tr>
 <tr><td>West of Scotland Coronary Prevention Study (WOSCOPS)</td></tr>
-
-  </table>
-
-   <h4><g:message code="informational.shared.headers.project"></g:message></h4>
-    <h5>Global Lipids Genetics Consortium (GLGC) <small><a href="http://lipidgenetics.org/" target="_blank">Learn more ></a>
-    </small></h5>
-<br><br>
-
+</table><h4><g:message code="informational.shared.headers.project"></g:message></h4>
+<h5>Global Lipids Genetics Consortium (GLGC) <small><a href="http://lipidgenetics.org/" target="_blank">Learn more ></a></small>
+</h5><br><br>
 <h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
-
- <p><g:message code="informational.data.exptsumm.ExChipGLGC"></g:message></p>
-
-   <h4>Accessing GLGC exome chip analysis results</h4>  
-<p><g:message code="informational.data.accessing.ExChipGLGC1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.ExChipGLGC2"></g:message></p>    
-
-
+<p><g:message code="informational.data.exptsumm.ExChipGLGC"></g:message></p>
+<h4>Accessing GLGC exome chip analysis results</h4>
+<p><g:message code="informational.data.accessing.ExChipGLGC1"></g:message>
+<a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a>
+<g:message code="informational.data.accessing.ExChipGLGC2"></g:message></p>
 </script>
+
