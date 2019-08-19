@@ -79,7 +79,8 @@
                         emptyHeaderRecord:'#emptyHeaderRecord',
                         domSpecificationForAccumulatorStorage:'#mainVariantDivHolder',
                         formOfStorage: 'loadFromTable',
-                        initializeSharedTableMemory:  '#mainVariantDiv table.variantTableHolder'
+                        initializeSharedTableMemory:  '#mainVariantDiv table.variantTableHolder',
+                        organizingDiv:  '#mainVariantDiv'
                     }
                 };
                 mpgSoftware.variantTable.setVariablesToRemember(drivingVariables);

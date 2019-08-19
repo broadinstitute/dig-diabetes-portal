@@ -1541,6 +1541,14 @@ mpgSoftware.dynamicUi = (function () {
     };
 
 
+    // convenience function for a very common retrieval
+    const getSharedTable = function (idForTheTargetDiv) {
+        return getAccumulatorObject("sharedTable_"+idForTheTargetDiv);
+    };
+
+
+
+
 
     /***
      * Need to build an intermediate data structure. It'll be an object but looks like this:
@@ -5043,6 +5051,9 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             });
 
             intermediateDataStructure.tableToUpdate = idForTheTargetDiv;
+            var sharedTable = getSharedTable(idForTheTargetDiv);
+            sharedTable["numberOfColumns"] = objectContainingRetrievedRecords.length+2;
+
         }
 
 

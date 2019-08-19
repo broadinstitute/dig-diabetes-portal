@@ -68,11 +68,14 @@ mpgSoftware.variantTable = (function () {
 
 
     var initialPageSetUp = function(preferredPhenotype){
+        var drivingVariables = getVariablesToRemember();
         if (( typeof preferredPhenotype === 'undefined')||(preferredPhenotype.length===0)){
             preferredPhenotype = 'T2D';
         }
         $('#mainVariantDivHolder').empty().append(Mustache.render($('#mainVariantTableOrganizer')[0].innerHTML,
-            {phenotype:preferredPhenotype}
+            {   phenotype:preferredPhenotype,
+                domTableSpecifier: drivingVariables.dynamicTableConfiguration.initializeSharedTableMemory,
+                organizingDiv: drivingVariables.dynamicTableConfiguration.organizingDiv  }
         ));
         fillPhenotypeDropDown('select.phenotypePicker',preferredPhenotype);
         mpgSoftware.dynamicUi.modifyScreenFields({phenotype:preferredPhenotype},getVariablesToRemember());
