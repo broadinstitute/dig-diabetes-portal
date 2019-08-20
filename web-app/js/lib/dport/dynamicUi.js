@@ -5132,13 +5132,17 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         indexInOneDimensionalArray = (numberOfExistingRows*numberOfColumns);
                         var primarySortField =  ( typeof row.sortField === 'undefined') ? row.category : row.sortField;
                         rowDescriber.push( new IntermediateStructureDataCell(row.category,
-                            getDisplayableCellContent(new IntermediateStructureDataCell (row.category,{},row.category,'LIT')),
-                                                 row.displayCategory+"</div>" ,
-                                                row.subcategory)) ;
+                            displaySubcategoryHtml(row.code,indexInOneDimensionalArray),
+                            "insertedColumn2","LIT"));
+                                // {},row.category,'LIT')),
+                                //                  row.displayCategory+"</div>" ,
+                                //                 row.subcategory)) ;
                         indexInOneDimensionalArray++;
                         rowDescriber.push( new IntermediateStructureDataCell(row.subcategory,
-                             getDisplayableCellContent(new IntermediateStructureDataCell (row.subcategory,{},row.subcategory,'LIT')),
-                                                "insertedColumn2"));
+                            displaySubcategoryHtml(row.code,indexInOneDimensionalArray),
+                            "insertedColumn2","LIT"));
+                             // getDisplayableCellContent(new IntermediateStructureDataCell (row.subcategory,{},row.subcategory,'LIT')),
+                             //                    "insertedColumn2"));
                         numberOfColumnsAdded += rowDescriber.length;
                         break;
                      case 'tissueTableTissueHeaders':
