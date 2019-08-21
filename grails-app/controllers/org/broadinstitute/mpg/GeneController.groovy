@@ -722,6 +722,23 @@ class GeneController {
     }
 
 
+
+    def aggregationCovariance(){
+        JsonSlurper slurper = new JsonSlurper()
+        String incomingRequest = slurper.toString(request.JSON)
+        JSONObject returnObject =  restServerService.postRestCallBase( incomingRequest, "http://raremetal.type2diabeteskb.org/aggregation/covariance", "")
+        render(status: 200, contentType: "application/json") {returnObject}
+    }
+    def aggregationMetadata(){
+        JSONObject returnObject =  restServerService.getRestCallBase( "http://raremetal.type2diabeteskb.org/aggregation/metadata", "")
+        render(status: 200, contentType: "application/json") {returnObject}
+    }
+
+
+
+
+
+
     def list(Integer max) {
         params.max = Math.min(max ?: 50, 1000)
         List geneResults = []
