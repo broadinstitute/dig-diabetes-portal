@@ -422,7 +422,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 return buildAHeaderForTheDatatable(o,counter++,'commonDataSet');
             }
         );
-        pValueIndex = _.findIndex(requestedProperties,function (o){o=="PVALUE"});
+        pValueIndex = _.findIndex(requestedProperties,function (o){return o=="PVALUE"});
         if (pValueIndex === -1) {pValueIndex = 0;};
         commonTable  = $(selectionToFill).dataTable({
                 "bDestroy": true,
@@ -512,7 +512,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 return buildAHeaderForTheDatatable(o,counter++,'highImpactDataSet');
             }
         );
-        pValueIndex = _.findIndex(requestedProperties,function (o){o=="PVALUE"});
+        pValueIndex = _.findIndex(requestedProperties,function (o){return o==="PVALUE"});
         if (pValueIndex === -1) {pValueIndex = 0;};
         var highImpactTable  = $(selectionToFill).dataTable({
                 "bDestroy": true,
@@ -598,7 +598,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 return buildAHeaderForTheDatatable(o,counter++,'allVariantDataSet');
             }
         );
-        pValueIndex = _.findIndex(requestedProperties,function (o){o=="PVALUE"});
+        pValueIndex = _.findIndex(requestedProperties,function (o){return o==="PVALUE"});
         if (pValueIndex === -1) {pValueIndex = 0;};
         allVariantTable  = $(selectionToFill).dataTable({
                 "bDestroy": true,
@@ -999,7 +999,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
             }
         });
-        return _.sortBy(listOfInterestingPhenotypes,[function(o){return o.pValue}]);
+        return _.orderBy(listOfInterestingPhenotypes,['signalStrength','pValue'],['desc','asc']);
     };
 
     function toggleOtherPhenoBtns(){

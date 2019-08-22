@@ -333,9 +333,9 @@ public class BurdenJsonBuilder {
                     //TODO can I make this simple branch here, or do I have to do something more elaborate?
                     variant.setVariantId((String)map.get(PortalConstants.JSON_VARIANT_ID_KEY));
                     variant.setChromosome((String) map.get(PortalConstants.JSON_VARIANT_CHROMOSOME_KEY));
-                    if ((map.get("AF") != null)  && (map.get("AF") != JSONObject.NULL)){
-                        Double mafValue = (Double) map.get("AF");
-                        variant.setMaf(mafValue.floatValue() );
+                    if ((map.get("AF") != null) && (map.get("AF") != JSONObject.NULL)) {
+                            Double mafValue = (Double) map.get("AF");
+                            variant.setMaf(mafValue.floatValue());
                     } else if ((map.get("MAF") != null)  && (map.get("MAF") != JSONObject.NULL)){
                         JSONObject jsonObject1 = (JSONObject) map.get("MAF");
 

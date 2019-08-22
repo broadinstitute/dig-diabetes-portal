@@ -810,11 +810,10 @@
 <h4><g:message code="informational.shared.headers.overview"></g:message></h4>
 <p><g:message code="informational.data.overview.52K-QT-1"></g:message></p>
 <p><g:message code="informational.data.overview.52K-QT-2"></g:message></p>
-<p><g:message code="informational.data.overview.52K-QT-3"></g:message></p>
 <p>&nbsp;</p>
 
-<h4>Accessing AMP T2D-GENES exome sequence analysis results</h4>
-    <p><g:message code="informational.data.accessing.52K1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.52K2"></g:message></p>
+<h4>Accessing AMP T2D-GENES quantitative trait exome sequence analysis results</h4>
+    <p><g:message code="informational.data.accessing.52KQT1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.52KQT2"></g:message></p>
 
 
 
