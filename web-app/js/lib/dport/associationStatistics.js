@@ -67,11 +67,9 @@ var mpgSoftware = mpgSoftware || {};
             if (jqueryElement.find("span").hasClass('glyphicon-resize-full')) {
                 jqueryElement.find("span").removeClass('glyphicon-resize-full');
                 jqueryElement.find("span").addClass('glyphicon-resize-small');
-                jqueryElement.attr('title', "Click to remove additional associations for GIANT GWAS across other data sets");
             } else if (jqueryElement.find("span").hasClass('glyphicon-resize-small')) {
                 jqueryElement.find("span").addClass('glyphicon-resize-full');
                 jqueryElement.find("span").removeClass('glyphicon-resize-small');
-                jqueryElement.attr('title', "Click to open additional associations for GIANT GWAS across other data sets");
             }
         };
 
