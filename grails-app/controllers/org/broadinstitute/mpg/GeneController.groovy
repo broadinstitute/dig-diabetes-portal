@@ -4,6 +4,7 @@ import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.BurdenService
 import org.broadinstitute.mpg.diabetes.MetaDataService
+import org.broadinstitute.mpg.diabetes.bean.PortalVersionBean
 import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
@@ -724,13 +725,14 @@ class GeneController {
 
 
     def aggregationCovariance(){
-        JsonSlurper slurper = new JsonSlurper()
-        String incomingRequest = slurper.toString(request.JSON)
-        JSONObject returnObject =  restServerService.postRestCallBase( incomingRequest, "http://raremetal.type2diabeteskb.org/aggregation/covariance", "")
+        PortalVersionBean portalVersionBean = restServerService.retrieveBeanForCurrentPortal()
+        String incomingRequest = request.JSON.toString()
+        JSONObject returnObject =  restServerService.postRestCallBase( incomingRequest, portalVersionBean.getAggregationCovarianceUrl(), "")
         render(status: 200, contentType: "application/json") {returnObject}
     }
     def aggregationMetadata(){
-        JSONObject returnObject =  restServerService.getRestCallBase( "http://raremetal.type2diabeteskb.org/aggregation/metadata", "")
+        PortalVersionBean portalVersionBean = restServerService.retrieveBeanForCurrentPortal()
+        JSONObject returnObject =  restServerService.getRestCallBase( portalVersionBean.getAggregationMetadataUrl(), "")
         render(status: 200, contentType: "application/json") {returnObject}
     }
 
