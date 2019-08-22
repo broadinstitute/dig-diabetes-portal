@@ -25,9 +25,9 @@ var mpgSoftware = mpgSoftware || {};
 
         var initializePage = function(config){
             console.log("in mpgSoftware.associationStatistics.initializePage.");
-            $(".collapse").on('show.bs.collapse', function (a, b) {
-                console.log('The collapsible content is about to show.');
-            });
+            // $(".collapse").on('show.bs.collapse', function (a, b) {
+            //     console.log('The collapsible content is about to show.');
+            // });
             $("#collapseVariantTraitAssociation").on("show.bs.collapse", function () {
                 console.log("a mpgSoftware.associationStatistics.initializePage.");
                 if (getAssociationStatisticsVariables().tableNotLoaded) {
@@ -46,6 +46,13 @@ var mpgSoftware = mpgSoftware || {};
                     }
                 }
 
+            });
+            $("#collapseVariantAssociationStatistics").on("show.bs.collapse", function () {
+                console.log("a mpgSoftware.associationStatistics.initializePage.");
+                // if (getAssociationStatisticsVariables().tableNotLoaded) {
+                //     loadAssociationTable();
+                //     getAssociationStatisticsVariables().tableNotLoaded = false;
+                // }
             });
             $('#traitsPerVariantTable').on('order.dt', UTILS.labelIndenter('traitsPerVariantTable'));
             console.log("out mpgSoftware.associationStatistics.initializePage.");
