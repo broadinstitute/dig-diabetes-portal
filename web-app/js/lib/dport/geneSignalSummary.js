@@ -999,7 +999,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
             }
         });
-        return _.sortBy(listOfInterestingPhenotypes,[function(o){return o.pValue}]);
+        return _.orderBy(listOfInterestingPhenotypes,['signalStrength','pValue'],['desc','asc']);
     };
 
     function toggleOtherPhenoBtns(){
