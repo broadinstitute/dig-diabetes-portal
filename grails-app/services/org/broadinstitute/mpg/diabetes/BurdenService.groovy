@@ -182,7 +182,15 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
             resultJson.variants = resultJson.variants.findAll{o->o.AF<mafThreshold} as JSONArray
             resultJson.numRecords = resultJson.variants.size()
         }
-        return resultJson;
+        // there is no gene parameter in this call,
+        if ((resultJson)&&
+                (resultJson.variants)&&
+                (resultJson.variants.size()>0)&&
+                (geneString)){
+            resultJson.variants = resultJson.variants.findAll{o->o.GENE==geneString} as JSONArray
+            resultJson.numRecords = resultJson.variants.size()
+        }
+        return resultJson
     }
 
 
