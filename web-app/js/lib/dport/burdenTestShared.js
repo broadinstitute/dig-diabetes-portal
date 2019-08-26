@@ -1631,6 +1631,7 @@ mpgSoftware.burdenTestShared = (function () {
 
 
     var buildVariantTable = function (data, parms) {
+        const drivingVariables = mpgSoftware.geneSignalSummaryMethods.getSignalSummarySectionVariables();
         $('#rSpinner').hide();
         if ((typeof data !== 'undefined') &&
             (data)) {
@@ -1759,7 +1760,11 @@ mpgSoftware.burdenTestShared = (function () {
                 if ((variantRec.CHROM) && (variantRec.POS)) {
                     variantID = variantRec.CHROM + ":" + variantRec.POS;
                 }
-                arrayOfRows.push(variantRec.VAR_ID);
+                if (drivingVariables.utilizeBiallelicGait){
+                    arrayOfRows.push(variantID);
+                } else {
+                    arrayOfRows.push(variantRec.VAR_ID);
+                }
                 arrayOfRows.push('<a href="' + parms.variantInfoUrl + '/' + variantRec.VAR_ID + '" class="boldItlink">' + variantID + '</a>');
                 var DBSNP_ID = (variantRec.DBSNP_ID) ? variantRec.DBSNP_ID : '';
                 arrayOfRows.push(DBSNP_ID);
