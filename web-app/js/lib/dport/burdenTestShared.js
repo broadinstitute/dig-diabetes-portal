@@ -1776,13 +1776,13 @@ mpgSoftware.burdenTestShared = (function () {
                 // can we build up a variant ID presentation that will be effect allele specific
                 var variantIDelements = variantID.split("_");
                 const referenceAllele = (variantRec.Reference_allele)?variantRec.Reference_allele:variantRec.Reference_Allele;
-                const effectAllele = (variantRec.Effect_allele)?variantRec.Effect_allele:variantRec.Effect_Allele;
+                const effectAllele = (variantRec.Effect_allele)?variantRec.Effect_allele:variantRec.Effect_Allele; //
                 if (variantIDelements.length>2){
                     variantID = variantIDelements[0]+"_"+
                                 variantIDelements[1]+"_"+
-                        referenceAllele+"_"+effectAllele;
-                }
-                if ((variantRec.CHROM) && (variantRec.POS)) {
+                                variantIDelements[2]+"_"+
+                                variantIDelements[3];
+                } else if ((variantRec.CHROM) && (variantRec.POS)) {
                     if (( typeof referenceAllele !== 'undefined')&&( typeof effectAllele !== 'undefined')){
                         variantID = variantRec.CHROM + "_" + variantRec.POS+"_"+ referenceAllele+"_"+effectAllele;
                     } else {
