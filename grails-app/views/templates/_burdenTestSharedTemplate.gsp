@@ -87,7 +87,7 @@
 
         <div class="">
             <h3>
-                Choose a phenotype and partitioning strategy
+                Choose a method, phenotype, and partitioning strategy
             </h3>
         </div>
         <div id="chooseSamples" class="">
