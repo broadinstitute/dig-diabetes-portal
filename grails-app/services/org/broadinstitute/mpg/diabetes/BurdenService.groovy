@@ -157,11 +157,15 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
             filterList << """{"parameter": "chrom", "operator": "eq", "value": "${chromosome}"}""".toString()
         }
 
-        // get the json string to send to the getData call
+        // get the json string to send to the multiallelic hack call.
+        //
+        // Note: it might look disturbing that I am hard coding the phenotype in the call below.  This parameter,
+        //  while required, is not used. The nature of this call is that the variance returned are not phenotype dependent.
         try {
             jsonString = """{   "version": "${metaDataService.getDataVersion()}",
                 "dataset": "ExSeq_52k_mdv55",
-                "phenotype": "T2D",
+                "phenotype": "T2D", 
+                "pagination": {"size": 5000},
                 "filters": [
                 ${filterList.join(",")}
             ]
