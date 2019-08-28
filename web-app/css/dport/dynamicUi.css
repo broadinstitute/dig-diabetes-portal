@@ -61,7 +61,12 @@ div.contextHolder{
 .dataTables_wrapper.dk-zoom-5 thead th, .dataTables_wrapper.dk-zoom-5 thead td { padding: 10px 18px; }
 .dataTables_wrapper.dk-zoom-6 thead th, .dataTables_wrapper.dk-zoom-6 thead td { padding: 10px 18px; }
 
-
+div.variantAnnotation {
+    height: 10px;
+}
+div.variantAnnotation {
+    height: 10px;
+}
 
 div.openMetaXcanInGeneTable {
     font-size: 10px;

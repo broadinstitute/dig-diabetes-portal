@@ -541,6 +541,10 @@ mpgSoftware.dynamicUi = (function () {
 
         switch (actionId) {
 
+            case "doesNotHaveAnIndependentFunction":
+                functionToLaunchDataRetrieval = function () {}
+                break;
+
             case "getInformationFromDepictForTissueTable":
                 functionToLaunchDataRetrieval = function () {
                     var phenotype = getAccumulatorObject("preferredPhenotype");
@@ -2440,8 +2444,6 @@ mpgSoftware.dynamicUi = (function () {
                         {},"header",'EMC'));
                 });
             }
-
-
             // set up the headers, and give us an empty row of column cells
 
 
@@ -4564,6 +4566,10 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             case "ABC list":
                 returnValue = "ABC list";
                 break;
+            case "VHDR":
+                var displayDetails = getDatatypeInformation(intermediateStructureDataCell.annotation);
+                returnValue = Mustache.render($('#'+displayDetails.dataAnnotation.cellBodyWriter)[0].innerHTML,intermediateStructureDataCell.renderData);
+                break;
             case undefined:
                 returnValue = "wtf";
                 break;
@@ -5031,8 +5037,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
     var displayHeaderForVariantTable = function (idForTheTargetDiv, // which table are we adding to
                                                  dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-                                                 nameOfAccumulatorField // name of the persistent field where the data we received is stored
-    )
+                                                 nameOfAccumulatorField, // name of the persistent field where the data we received is stored
+                                                 placeDataIntoRenderForm )
     { // sort and filter the records we will use.  Resulting array must have fields tissue, value, and numericalValue
         var selectorForIidForTheTargetDiv = idForTheTargetDiv;
         $(selectorForIidForTheTargetDiv).empty();
@@ -5053,6 +5059,43 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             intermediateDataStructure.tableToUpdate = idForTheTargetDiv;
             var sharedTable = getSharedTable(idForTheTargetDiv);
             sharedTable["numberOfColumns"] = objectContainingRetrievedRecords.length+2;
+
+
+            //const rowTypesToAdd = ["coding","splice","utr","promoter","pValue","posteriorPValue"];
+            const rowTypesToAdd = ["VAR_CODING"];
+            let rowNumber = 1;
+            _.forEach(rowTypesToAdd, function (rowTypeToAdd) {
+                addRowHolderToIntermediateDataStructure(rowTypeToAdd,intermediateDataStructure)
+                // fill in all of the column cells
+                _.forEach(objectContainingRetrievedRecords, function (oneRecord) {
+                    var indexOfColumn = _.indexOf(intermediateDataStructure.headerNames, oneRecord.name);
+                    if (indexOfColumn === -1) {
+                        console.log("Did not find index of ABC var_id.  Shouldn't we?")
+                    } else {
+                            let emphasisSwitch = "false";
+                            switch(rowTypeToAdd){
+                                case "VAR_CODING":
+                                if (oneRecord.consequence.join(",").indexOf('splice')>-1){
+                                    emphasisSwitch = "true"
+                                }
+                                break;
+
+                            }
+                            var renderData = placeDataIntoRenderForm(   "",
+                                oneRecord.name,
+                                (sharedTable["numberOfColumns"]*rowNumber)+indexOfColumn+2,
+                                emphasisSwitch);
+
+                            _.last(intermediateDataStructure.rowsToAdd).columnCells[indexOfColumn] = new IntermediateStructureDataCell(oneRecord.name,
+                                renderData,rowTypeToAdd,dataAnnotationTypeCode );
+
+
+                    }
+                });
+            });
+
+
+
 
         }
 
@@ -5132,7 +5175,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         indexInOneDimensionalArray = (numberOfExistingRows*numberOfColumns);
                         var primarySortField =  ( typeof row.sortField === 'undefined') ? row.category : row.sortField;
                         rowDescriber.push( new IntermediateStructureDataCell(row.category,
-                            displaySubcategoryHtml(row.code,indexInOneDimensionalArray),
+                            displayCategoryHtml(row.code,indexInOneDimensionalArray),
                             "insertedColumn2","LIT"));
                                 // {},row.category,'LIT')),
                                 //                  row.displayCategory+"</div>" ,

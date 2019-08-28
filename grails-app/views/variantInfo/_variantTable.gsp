@@ -57,6 +57,20 @@
                         }
                         ,
                         {
+                            code: 'VAR_CODING',
+                            category: 'Annotation',
+                            displayCategory: 'Annotation',
+                            subcategory: 'Coding indicator',
+                            displaySubcategory: 'Coding indicator',
+                            cellBodyWriter:'variantIsCodingBody',
+                            categoryWriter:'variantIsCodingCategoryLabel',
+                            subCategoryWriter:'variantIsCodingSubcategoryLabel',
+                            internalIdentifierString:'doesNotHaveAnIndependentFunction',
+                            nameOfAccumulatorField:'notUsed',
+                            nameOfAccumulatorFieldWithIndex:'notUsed'
+                        }
+                        ,
+                        {
                             code: 'ABC_VAR',
                             category: 'ABC Tissue',
                             displayCategory: 'ABC Tissue',
