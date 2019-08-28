@@ -1311,8 +1311,8 @@ div.traits-filter-wrapper > .radio-inline {
     list-style: none;
     margin: 0;
     padding: 0;
-    margin-top: 30px;
-    text-align:left;
+    margin-top: 0px;
+    text-align:center;
 }
 
 #new_features > li {
@@ -1326,15 +1326,15 @@ div.traits-filter-wrapper > .radio-inline {
     border-bottom-right-radius: 3px;
     padding: 0px 10px 2px 10px;
     margin-right: 10px;
-    font-size: 16px;
+    font-size: 14px;
     position: relative;
 }
 
 #new_features > li > span.flag {
     border-top-left-radius: 3px;
     border-bottom-left-radius: 3px;
-    padding: 3px 10px 2px 10px;
-    font-size: 13px;
+    padding: 3px 10px 3px 10px;
+    font-size: 11px;
     vertical-align: baseline;
 }
 
@@ -1514,7 +1514,8 @@ div.traits-filter-wrapper > .radio-inline {
 }
 
 .front-logo-tagline-t2d {
-    transform: translate(0%,15%);
+    transform: translate(0%,5%);
+    line-height:1.3em;
 }
 
 .front-banner-ui-tabs {
@@ -1590,4 +1591,14 @@ div.traits-filter-wrapper > .radio-inline {
 
 .traits-select-ui.variant-association-ui > div.trait-input > button.dropdown-toggle, .gene-association-ui > div.gene-trait-input > button.dropdown-toggle {
     height: 50px; font-size: 20px;
+}
+
+ul.traits-filter-options {
+    width: 150%;
+    margin-left: -25%;
+    padding: 0;
+}
+
+ul.traits-filter-options > li {
+    display: inline-flex;
 }

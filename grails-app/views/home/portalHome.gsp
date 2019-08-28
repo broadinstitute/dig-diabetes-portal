@@ -69,9 +69,10 @@
                 <div class="col-md-12">
                     <div class="front-logo-wrapper">
                         <img class="front-logo-img" src="${resource(file:g.message(code: portalVersionBean.frontLogo, default:portalVersionBean.frontLogo)) }" />
-                        <span class="front-logo-tagline front-logo-tagline-${g.portalTypeString()}"><g:message code="${portalVersionBean.tagline}" /></span>
+                        <span class="front-logo-tagline front-logo-tagline-${g.portalTypeString()}"><g:message code="${portalVersionBean.tagline}" />
                         <!-- Language options only for T2DKP -->
-                        <p style="padding-top:10px;">
+                        <br />
+                            <small style="font-size: 16px;">
                             <g:each in="${portalVersionBean.alternateLanguages}">
                                 <g:if test="${it.equals('English')}">
                                     <a href='<g:createLink controller="home" action="index" params="[lang:'en']"/>' style="color:#ffffff; text-decoration: none;">
@@ -82,7 +83,8 @@
                                         <g:message code="portal.language.setting.setSpanish" default="En Español" /></a>
                                 </g:elseif>
                             </g:each>
-                        </p>
+                            </small>
+                        </span>
                     </div>
                 </div>
 
@@ -93,6 +95,29 @@
                     <a href="http://www.kp4cd.org/new_features/${g.portalTypeString()}" target="_blank" class="btn btn-lg btn-default front-banner-btn">Learn about the portal</a>
                 </div>
                 <!-- Learn portal button end -->
+
+                <!-- New features buttons -->
+
+
+                <div class="col-md-12">
+                    <ul id="new_features">
+
+                    </ul>
+                </div>
+                <g:if test="${g.portalTypeString()?.equals('t2d')}">
+                    <script type="text/javascript">
+                        /* Example to add 'new' or 'updated' feature buttons;
+                        mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]);
+                     */
+                        mpgSoftware.homePage.newFeatures([{"name":"Predicted T2D effector genes","link":"${createLink(controller:'gene',action:'effectorGeneTable')}","class":"feature","type":"new"},
+                            {"name":"Tissue enrichments","link":"${createLink(controller:'trait',action:'tissueTable')}","class":"feature","type":"new"},
+                            {"name":"Video: predicted T2D effector genes","link":"https://youtu.be/cG6gxFunHt8","class":"resource","type":"new"},
+                            {"name":"Webinar video: gene-specific resources in the T2DKP","link":"https://www.youtube.com/watch?v=ylPn6D1hpY4","class":"resource","type":"new"}]);
+                    </script>
+                </g:if>
+
+
+            <!-- New features buttons end -->
 
                 <!-- Search UI & drop-down UI in the top banner -->
                 <div class="col-md-12">
@@ -206,21 +231,22 @@
                 <g:if test="${!portalVersionBean.regionSpecificVersion}">
                     <div class="traits-filter-wrapper">
 
-
+                        <ul class="traits-filter-options">
                         <g:if test="${portalVersionBean.geneLevelDataExists}">
 
-                            <div class="radio-inline">
+                            <li class="radio-inline">
                                 <label><input type="radio" name="radio-gene-association" class="radio" onchange="mpgSoftware.homePage.switchVisibility(['variant-association-ui-wrapper'],['gene-association-ui-wrapper','effector-gene-list-ui-wrapper']);" checked> View variant associations</label>
-                            </div>
-                            <div class="radio-inline">
+                            </li>
+                            <li class="radio-inline">
                                 <label><input type="radio" name="radio-gene-association" class="radio" onchange="mpgSoftware.homePage.switchVisibility(['gene-association-ui-wrapper'], ['variant-association-ui-wrapper','effector-gene-list-ui-wrapper']);" > <span style="float: left;">View gene-level T2D associations </span> </label>
-                            </div>
+                            </li>
                             <g:if test="${portalVersionBean.getExposeEffectorGeneTableUi()}">
-                                <div class="radio-inline">
+                                <li class="radio-inline">
                                     <label><input type="radio" name="radio-gene-association" class="radio" onchange="mpgSoftware.homePage.switchVisibility(['effector-gene-list-ui-wrapper'], ['variant-association-ui-wrapper', 'gene-association-ui-wrapper']);" > <span style="float: left;">View predicted T2D effector genes</span> <span class='new-dataset-flag' style="display: inline-flex; margin:-3px 0 0 5px; width: 30px; background-size: 30px;">&nbsp;</span></label>
-                                </div>
+                                </li>
                             </g:if>
                         </g:if>
+                        </ul>
 
                         <g:if test="${portalVersionBean.variantAssociationsExists}">
                             <div class="form-inline variant-association-ui-wrapper">
@@ -230,19 +256,19 @@
                                 <div style="float: right; font-size: 20px; padding: 5px 0 1px 0; color: #666; background-color: #fff; width: 10%; height: 35px; border-bottom-right-radius: 5px; border-top-right-radius: 5px; text-align: center; margin-right: 1%" onclick="mpgSoftware.traitsFilter.clearTraitsSearch()" onmouseover="mpgSoftware.traitsFilter.setBtnOver(this)" onmouseout="mpgSoftware.traitsFilter.setBtnOut(this)" ><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></div>
                             </div>-->
                                 <div class="traits-select-ui variant-association-ui" style="">
-                                    <select name="" id="trait-input" class="form-control input-sm trait-input selectpicker" data-live-search="true" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 0; border-top-left-radius: 3px; border-bottom-left-radius: 3px; margin:0; font-size: 16px;">
+                                    <select name="" id="trait-input" class="form-control input-sm trait-input selectpicker" data-live-search="true" style="width: 83%; height: 50px; background-color:#fff; border:none; border-radius: 5px; margin:0; font-size: 20px;">
                                     </select>
 
-                                    <button id="traitSearchLaunch" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
+                                    <button id="traitSearchLaunch" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 50px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:15px 0 0 0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; font-size: 15px;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
                                 </div>
                             </div>
                         </g:if>
                         <g:if test="${portalVersionBean.geneLevelDataExists}">
                             <div class="form-inline gene-association-ui-wrapper" style="display:none;">
                                 <!--<div class="gene-association-ui">
-                                <select name="" id="gene-trait-input" class="form-control input-sm gene-trait-input selectpicker" data-live-search="true" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 0; border-top-left-radius: 3px; border-bottom-left-radius: 3px; margin:0; font-size: 16px;">
+                                <select name="" id="gene-trait-input" class="form-control input-sm gene-trait-input selectpicker" data-live-search="true" style="width: 83%; height: 50px; background-color:#fff; border:none; border-radius: 5px; margin:0; font-size: 20px;">
                                 </select>
-                                <button id="geneTraitSearchLaunch" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
+                                <button id="geneTraitSearchLaunch" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 50px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
                             </div>-->
                                 <div class="gene-association-ui">
                                     <div class="btn-group bootstrap-select form-control input-sm gene-trait-input dropup">
@@ -265,7 +291,7 @@
                                         </div>
                                     </div>
                                     <a href="${createLink(controller:'trait',action:'genePrioritization')}?trait=T2D&significance=0.0005">
-                                        <button class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; font-size: 14px;" ><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button></a>
+                                        <button class="btn btn-primary btn-sm" type="button" style="width:15%; height: 50px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; font-size: 14px;" ><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button></a>
                                 </div>
                             </div>
                         </g:if>
@@ -292,7 +318,7 @@
                                         </div>
                                     </div>
                                     <a href="${createLink(controller:'gene', action:'effectorGeneTable')}">
-                                        <button class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; font-size: 14px;" ><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button></a>
+                                        <button class="btn btn-primary btn-sm" type="button" style="width:15%; height: 50px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; font-size: 14px;" ><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button></a>
                                 </div>
                             </div>
                         </g:if>
@@ -303,28 +329,8 @@
                 </div>
 
                 <!-- tab content for 'drop-down' UI end -->
-                <!-- New features buttons -->
-
-
-                <div>
-                    <ul id="new_features">
-
-                    </ul>
-                </div>
-                <g:if test="${g.portalTypeString()?.equals('t2d')}">
-                <script type="text/javascript">
-                    /* Example to add 'new' or 'updated' feature buttons;
-                    mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]);
-                 */
-                    mpgSoftware.homePage.newFeatures([{"name":"Predicted T2D effector genes","link":"${createLink(controller:'gene',action:'effectorGeneTable')}","class":"feature","type":"new"},
-                        {"name":"Tissue enrichments","link":"${createLink(controller:'trait',action:'tissueTable')}","class":"feature","type":"new"},
-                        {"name":"Video: predicted T2D effector genes","link":"https://youtu.be/cG6gxFunHt8","class":"resource","type":"new"},
-                        {"name":"Webinar video: gene-specific resources in the T2DKP","link":"https://www.youtube.com/watch?v=ylPn6D1hpY4","class":"resource","type":"new"}]);
-                </script>
-                </g:if>
             </div>
 
-                <!-- New features buttons end -->
 
         </div>
         </div>
