@@ -1655,6 +1655,7 @@ mpgSoftware.burdenTestShared = (function () {
 
     var buildVariantTable = function (data, parms) {
         $('#rSpinner').hide();
+        const drivingVariables = mpgSoftware.geneSignalSummaryMethods.getSignalSummarySectionVariables();
         if ((typeof data !== 'undefined') &&
             (data)) {
             var variantListHolder = [];
@@ -1772,10 +1773,28 @@ mpgSoftware.burdenTestShared = (function () {
                 //     $('#gaitTableDataHolder').append('<span class="variantsToCheck">'+variantRec.VAR_ID+'</span>')
                 var arrayOfRows = [];
                 var variantID = variantRec.VAR_ID;
-                if ((variantRec.CHROM) && (variantRec.POS)) {
-                    variantID = variantRec.CHROM + ":" + variantRec.POS;
+                // can we build up a variant ID presentation that will be effect allele specific
+                var variantIDelements = variantID.split("_");
+                const referenceAllele = (variantRec.Reference_allele)?variantRec.Reference_allele:variantRec.Reference_Allele;
+                const effectAllele = (variantRec.Effect_allele)?variantRec.Effect_allele:variantRec.Effect_Allele; //
+                if (variantIDelements.length>2){
+                    variantID = variantIDelements[0]+"_"+
+                                variantIDelements[1]+"_"+
+                                variantIDelements[2]+"_"+
+                                variantIDelements[3];
+                } else if ((variantRec.CHROM) && (variantRec.POS)) {
+                    if (( typeof referenceAllele !== 'undefined')&&( typeof effectAllele !== 'undefined')){
+                        variantID = variantRec.CHROM + "_" + variantRec.POS+"_"+ referenceAllele+"_"+effectAllele;
+                    } else {
+                        variantID = variantRec.CHROM + ":" + variantRec.POS;
+                    }
+
                 }
-                arrayOfRows.push(variantRec.VAR_ID);
+                if (( typeof drivingVariables !== 'undefined')&&(drivingVariables.utilizeBiallelicGait)){
+                    arrayOfRows.push(variantID);
+                } else {
+                    arrayOfRows.push(variantRec.VAR_ID);
+                }
                 arrayOfRows.push('<a href="' + parms.variantInfoUrl + '/' + variantRec.VAR_ID + '" class="boldItlink">' + variantID + '</a>');
                 var DBSNP_ID = (variantRec.DBSNP_ID) ? variantRec.DBSNP_ID : '';
                 arrayOfRows.push(DBSNP_ID);

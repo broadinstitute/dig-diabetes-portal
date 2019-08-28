@@ -206,6 +206,7 @@ td.tissueTable.informationIsPresent{
                     exposeGeneTableOnDynamicUi:"${portalVersionBean.getExposeGeneTableOnDynamicUi()}",
                     exposeVariantTableOfDynamicUi:"${portalVersionBean.getExposeVariantTableOfDynamicUi()}",
                     dynamicTableType:'geneTable',
+                    utilizeBiallelicGait:"${portalVersionBean.getUtilizeBiallelicGait()}",
                     dataAnnotationTypes: [
                         {   code: 'GHDR', // manages the header.  Most of the records in this particular category have no match in the code, unlike all of the other categories
                             category: 'blank',

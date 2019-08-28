@@ -54,14 +54,10 @@
 <g:render template="./data/GWAS_DCSP2a610" />
 <g:render template="./data/GWAS_DCSP2a1M" />
 <g:render template="./data/ExSeq_RSNG" />
-<g:render template="./data/GWAS_DCSP2" />
 <g:render template="./data/GWAS_DIAGRAMimputed" />
 <g:render template="./data/GWAS_DIAGRAMimputed_eu" />
 <g:render template="./data/GWAS_AFHRC" />
 <g:render template="./data/ExChip_ExTexT2D" />
-<g:render template="./data/ExChip_FUSION" />
-<g:render template="./data/GWAS_FUSION" />
-<g:render template="./data/GWAS_FUSIONonlyMetaboChip" />
 <g:render template="./data/ExChip_EPRI" />
 <g:render template="./data/GWAS_MetaStroke" />
 <g:render template="./data/GWAS_HPTxNCGM" />
@@ -124,7 +120,18 @@
 <g:render template="./data/GWAS_LivingBiobank_CHS_ea" />
 <g:render template="./data/GWAS_UKBiobankModLeic_eu" />
 <g:render template="./data/GWAS_Accel_eu" />
-
+<g:render template="./data/GWAS_CUHK_ea" />
+<g:render template="./data/ExChip_GIANT" />
+<g:render template="./data/ExChip_GLGC" />
+<g:render template="./data/GWAS_COGENTK" />
+<g:render template="./data/GWAS_CRP_eu" />
+<g:render template="./data/GWAS_IVGTT" />
+<g:render template="./data/ExChip_FUSION_eu" />
+<g:render template="./data/GWAS_FUSION_eu" />
+<g:render template="./data/GWAS_FUSIONonlyMetaboChip_eu" />
+<g:render template="./data/ExChip_GIANTwWHR" />
+<g:render template="./data/ExSeq_FinnMetSeqFemales_eu" />
+<g:render template="./data/ExSeq_52kQT" />
 
 <script id="metaData2" type="x-tmpl-mustache">
     <div>

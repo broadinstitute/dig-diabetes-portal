@@ -3369,25 +3369,22 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             int numberOfVariants = apiResults.numRecords
             for (int j = 0; j < numberOfVariants; j++) {
                 List<String> keys = []
-                if (!retrieveBeanForCurrentPortal().utilizeBiallelicGait){
+                def valueToLoopOver
+                if (apiResults.variants[j] instanceof JSONObject) {
+                    valueToLoopOver = (apiResults.variants[j] as Map).keySet()
+                } else {
                     for (int i = 0; i < apiResults.variants[j]?.size(); i++) {
                         keys << (new JSONObject(apiResults.variants[j][i]).keys()).next()
                     }
-                }
-                def valueToLoopOver
-                if (retrieveBeanForCurrentPortal().utilizeBiallelicGait){
-                    valueToLoopOver = (apiResults.variants[j] as Map).keySet()
-                }else {
                     valueToLoopOver = keys
                 }
                 List<String> variantSpecificList = []
                 for (def key in valueToLoopOver) {
                     def value
-                    if (retrieveBeanForCurrentPortal().utilizeBiallelicGait){
-                        value = apiResults.variants[j][key]
+                    if (apiResults.variants[j][key] instanceof ArrayList){
+                        value = apiResults.variants[j][key].findAll { it }[0]
                     } else {
-                        ArrayList valueArray = apiResults.variants[j][key]
-                        value = valueArray.findAll { it }[0]
+                        value = apiResults.variants[j][key]
                     }
                     if (value instanceof String) {
                         String stringValue = value as String

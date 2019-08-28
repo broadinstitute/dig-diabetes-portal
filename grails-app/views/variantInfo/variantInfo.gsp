@@ -38,6 +38,11 @@
 
 <script>
 
+    var traitsPerVariantTableColumns = {sample:'<g:message code="variantTable.columnHeaders.shared.samples" />',
+        sampleHelpHeader:'<g:message code="variantTable.columnHeaders.shared.samples.help.header" />',
+        sampleHelpText:'<g:message code="variantTable.columnHeaders.shared.samples.help.text" />'
+    }
+
     // generate the texts here so that the appropriate one can be selected in initializePage
     // the keys (1,2,3,4) map to the assignments for MOST_DEL_SCORE
 
@@ -231,46 +236,6 @@
 
                     <div class="separator"></div>
 
-                    %{--<div class="accordion-group">--}%
-                        %{--<div class="accordion-heading">--}%
-                            %{--<a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordionVariant"--}%
-                               %{--href="#collapseIgv">--}%
-                                %{--<h2><strong><g:message code="variant.igvBrowser.title"--}%
-                                                       %{--default="Explore with IGV"/></strong></h2>--}%
-                            %{--</a>--}%
-                        %{--</div>--}%
-
-                        %{--<div id="collapseIgv" class="accordion-body collapse">--}%
-                            %{--<div class="accordion-inner">--}%
-                                %{--<div class="igvGoesHere"></div>--}%
-                                %{--<g:render template="../templates/igvBrowserTemplate"/>--}%
-                            %{--</div>--}%
-                        %{--</div>--}%
-                    %{--</div>--}%
-
-                    %{--<div class="separator"></div>--}%
-
-<!--
-
-
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle  collapsed" data-toggle="collapse"
-                               data-parent="#accordionVariant"
-                               href="#collapseFindOutMore">
-                                <h2><strong><g:message code="variant.findOutMore.title"
-                                                       default="find out more"/></strong></h2>
-                            </a>
-                        </div>
-
-                        <div id="collapseFindOutMore" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                <g:render template="findOutMore"/>
-                            </div>
-                        </div>
-                    </div>
-
-                    -->
 
                     <div class="accordion-group" style="padding: 7px; border: solid 1px #ddd; margin-top: 15px; background-color: #eee; border-radius: 3px;">
 
@@ -291,33 +256,6 @@
     </div>
 
 </div>
-%{--<script>--}%
-    %{--$('#accordionVariant').on('shown.bs.collapse', function (e) {--}%
-        %{--if (e.target.id === "collapseIgv") {--}%
-            %{--var igvParms = mpgSoftware.variantInfo.retrieveVariantPosition();--}%
-
-           %{--igvLauncher.setUpIgv(igvParms.locus,--}%
-                    %{--'.igvGoesHere',--}%
-                    %{--"<g:message code='controls.shared.igv.tracks.recomb_rate' />",--}%
-                    %{--"<g:message code='controls.shared.igv.tracks.genes' />",--}%
-                    %{--"${createLink(controller: 'trait', action: 'retrievePotentialIgvTracks')}",--}%
-                    %{--"${createLink(controller:'trait', action:'getData', absolute:'false')}",--}%
-                    %{--"${createLink(controller:'variantInfo', action:'variantInfo', absolute:'true')}",--}%
-                    %{--"${createLink(controller:'trait', action:'traitInfo', absolute:'true')}",--}%
-                    %{--'${igvIntro}');--}%
-        %{--} else if (e.target.id === "collapseFunctionalData") {--}%
-            %{--$("#functionalDataTableGoesHere").DataTable().draw();--}%
-        %{--}--}%
-
-    %{--});--}%
-    %{--$('#accordionVariant').on('show.bs.collapse', function (e) {--}%
-        %{--if (e.target.id === "collapseIgv") {--}%
-
-        %{--}--}%
-    %{--});--}%
-
-    %{--$('#collapseVariantAssociationStatistics').collapse({hide: false})--}%
-%{--</script>--}%
 
 </body>
 </html>

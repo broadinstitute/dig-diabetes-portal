@@ -168,7 +168,8 @@
 
         <div class="btn dk-t2d-blue dk-video-button dk-right-column-buttons-compact "><a href="https://youtu.be/CR_V8vX2dyE" target="_blank">Introduction to the Knowledge Portals</a></div>
         <div class="btn dk-t2d-blue dk-video-button dk-right-column-buttons-compact "><a href="https://youtu.be/W23p91NdA5o" target="_blank">Overview of the Knowledge Portal Variant Page</a></div>
-        <div class="btn dk-t2d-blue dk-video-button dk-right-column-buttons-compact "><a href=" https://youtu.be/xcIYElaA4D8" target="_blank">Webinar: AMP-T2DKP Workshop</a></div>
+        <div class="btn dk-t2d-blue dk-video-button dk-right-column-buttons-compact "><a href="https://youtu.be/xcIYElaA4D8" target="_blank">Webinar: AMP-T2DKP Overview</a></div>
+<div class="btn dk-t2d-blue dk-video-button dk-right-column-buttons-compact "><a href="https://www.youtube.com/watch?v=ylPn6D1hpY4" target="_blank">Webinar: T2DKP Gene-specific resources</a></div>
 
 
             <hr>
@@ -188,9 +189,9 @@
                 code="portal.introTutorial.title"/></a></div>
             <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact "><a id="CDKPGenePageGuidePdf"><g:message
                     code="portal.GenePageGuide.title"/></a></div>
-                <div class="btn dk-t2d-green dk-tutorial-button dk-right-column-buttons-compact "><a id="GAITPdf"><g:message
+                <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact "><a id="GAITPdf"><g:message
                         code="portal.GAITguide.title"/></a></div>
-            <div class="btn dk-t2d-green dk-tutorial-button dk-right-column-buttons-compact "><a id="variantPdf"><g:message
+            <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact "><a id="variantPdf"><g:message
                     code="portal.variantFinderTutorial.title"/></a></div>
             <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact "><a id="VariantResultsPdf"><g:message
                     code="portal.variantResultsTableGuide.title"/></a></div>
@@ -219,9 +220,9 @@
                     code="portal.introTutorial.title"/></a></div>
                 <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact"><a id="GenePageGuidePdf"><g:message
                         code="portal.GenePageGuide.title"/></a></div>
-                <div class="btn dk-t2d-green dk-tutorial-button dk-right-column-buttons-compact"><a id="GAITPdf"><g:message
+                <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact"><a id="GAITPdf"><g:message
                         code="portal.GAITguide.title"/></a></div>
-                <div class="btn dk-t2d-green dk-tutorial-button dk-right-column-buttons-compact"><a id="variantPdf"><g:message
+                <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact"><a id="variantPdf"><g:message
                         code="portal.variantFinderTutorial.title"/></a></div>
                 <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact"><a id="VariantResultsPdf"><g:message
                         code="portal.variantResultsTableGuide.title"/></a></div>
@@ -229,6 +230,8 @@
                 code="portal.PhenotypeGuide.title"/></a></div>
                 <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact"><a id="GeneticsGuidePdf"><g:message
                         code="portal.GeneticsGuide.title"/></a></div>
+            <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact"><a href="https://broad-portal-resources.s3.amazonaws.com/Risk_Assessment_KP_platform.pdf"><g:message
+                    code="portal.PrivacyGuide.title"/></a></div>
 
             </div>
 

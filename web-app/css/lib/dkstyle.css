@@ -1289,3 +1289,73 @@ div.traits-filter-wrapper > .radio-inline {
     width: 100%;
     max-width: 550px;
 }
+
+/* Patch work for 'samples' column on #traitsPerVariantTable. Need to be removed after it's implemented into correct place.*/
+
+#traitsPerVariantTable a.sample-column {
+	position: relative;
+}
+
+#traitsPerVariantTable .sample-column > div.popover {
+	position: absolute;
+	display: none;
+	top: 20px;
+	left: -200px;
+}
+
+#traitsPerVariantTable .sample-column:hover > div.popover {
+	display: block;
+}
+
+#new_features {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    margin-top: 30px;
+    text-align:left;
+}
+
+#new_features > li {
+    display: inline-block;
+    margin-top: 10px;
+}
+
+#new_features > li > a {
+    background-color: #fff;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    padding: 0px 10px 2px 10px;
+    margin-right: 10px;
+    font-size: 16px;
+    position: relative;
+}
+
+#new_features > li > span.flag {
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    padding: 3px 10px 2px 10px;
+    font-size: 13px;
+    vertical-align: baseline;
+}
+
+#new_features > li.resource > span.flag {
+    background-color: #7fc343;
+}
+
+#new_features > li.module > span.flag {
+    background-color: #FF9900;
+}
+
+#new_features > li.feature > span.flag {
+    background-color: #FFCC00;
+}
+
+#new_features > li > a > span.pointer {
+    background-color: #fff;
+    width: 8px !important;
+    height: 8px;
+    transform: rotate(45deg);
+    position: absolute;
+    top: 6px;
+    left: -4px;
+}
