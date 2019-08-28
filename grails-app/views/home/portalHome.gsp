@@ -93,6 +93,7 @@
                  */
                     mpgSoftware.homePage.newFeatures([{"name":"Predicted T2D effector genes","link":"${createLink(controller:'gene',action:'effectorGeneTable')}","class":"feature","type":"new"},
                         {"name":"Tissue enrichments","link":"${createLink(controller:'trait',action:'tissueTable')}","class":"feature","type":"new"},
+                        {"name":"Video: predicted T2D effector genes","link":"https://youtu.be/cG6gxFunHt8","class":"resource","type":"new"},
                         {"name":"Webinar video: gene-specific resources in the T2DKP","link":"https://www.youtube.com/watch?v=ylPn6D1hpY4","class":"resource","type":"new"}]);
                 </script>
 </g:if>
