@@ -1633,6 +1633,7 @@ mpgSoftware.burdenTestShared = (function () {
     var buildVariantTable = function (data, parms) {
         const drivingVariables = mpgSoftware.geneSignalSummaryMethods.getSignalSummarySectionVariables();
         $('#rSpinner').hide();
+        const drivingVariables = mpgSoftware.geneSignalSummaryMethods.getSignalSummarySectionVariables();
         if ((typeof data !== 'undefined') &&
             (data)) {
             var variantListHolder = [];
@@ -1752,15 +1753,22 @@ mpgSoftware.burdenTestShared = (function () {
                 var variantID = variantRec.VAR_ID;
                 // can we build up a variant ID presentation that will be effect allele specific
                 var variantIDelements = variantID.split("_");
+                const referenceAllele = (variantRec.Reference_allele)?variantRec.Reference_allele:variantRec.Reference_Allele;
+                const effectAllele = (variantRec.Effect_allele)?variantRec.Effect_allele:variantRec.Effect_Allele; //
                 if (variantIDelements.length>2){
                     variantID = variantIDelements[0]+"_"+
                                 variantIDelements[1]+"_"+
-                        variantRec.Reference_allele+"_"+variantRec.Effect_allele;
+                                variantIDelements[2]+"_"+
+                                variantIDelements[3];
+                } else if ((variantRec.CHROM) && (variantRec.POS)) {
+                    if (( typeof referenceAllele !== 'undefined')&&( typeof effectAllele !== 'undefined')){
+                        variantID = variantRec.CHROM + "_" + variantRec.POS+"_"+ referenceAllele+"_"+effectAllele;
+                    } else {
+                        variantID = variantRec.CHROM + ":" + variantRec.POS;
+                    }
+
                 }
-                if ((variantRec.CHROM) && (variantRec.POS)) {
-                    variantID = variantRec.CHROM + ":" + variantRec.POS;
-                }
-                if (drivingVariables.utilizeBiallelicGait){
+                if (( typeof drivingVariables !== 'undefined')&&(drivingVariables.utilizeBiallelicGait)){
                     arrayOfRows.push(variantID);
                 } else {
                     arrayOfRows.push(variantRec.VAR_ID);

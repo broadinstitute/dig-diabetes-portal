@@ -91,7 +91,7 @@ class VariantSearchController {
     def retrieveGwasSpecificPhenotypesAjax() {
 
         LinkedHashMap<String, List<String>> propertyTree = metaDataService.getHierarchicalPhenotypeTree()
-        LinkedHashMap<String, List <List <String>>>  groupedPhenotypesNames = widgetService.retrieveGroupedPhenotypesNames('GWAS')
+        LinkedHashMap<String, List <List <String>>>  groupedPhenotypesNames = widgetService.retrieveGroupedPhenotypesNames()
 
         JSONObject result2 = [
                 dataset: new JSONObject()

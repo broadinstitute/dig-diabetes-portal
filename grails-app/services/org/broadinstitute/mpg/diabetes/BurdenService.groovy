@@ -164,7 +164,7 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
         try {
             jsonString = """{   "version": "${metaDataService.getDataVersion()}",
                 "dataset": "ExSeq_52k_mdv55",
-                "phenotype": "T2D", 
+                "phenotype": "T2D",
                 "pagination": {"size": 5000},
                 "filters": [
                 ${filterList.join(",")}
