@@ -102,7 +102,7 @@
                         /* Example to add 'new' or 'updated' feature buttons;
                          mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]);
                          */
-                        mpgSoftware.homePage.newFeatures([{"name":"Tissue enrichments","link":"${createLink(controller:'trait',action:'tissueTable')}","class":"feature","type":"new"}]);
+                        mpgSoftware.homePage.newFeatures([{"name":"Tissue enrichments","link":"${createLink(controller:'trait',action:'tissueTable')}","class":"resource","type":"new"}]);
                     </script>
                 </g:if>
                 <g:if test="${g.portalTypeString()?.equals('stroke')}">
