@@ -973,7 +973,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,  // expose the 'genes in region' tab on the gene page
                                           0, // expose the region adjuster for the gene page
                                           0, // expose the gene table on the dynamic UI
-                                          0  // expose the variant table on the dynamic UI
+                                          0, // expose the variant table on the dynamic UI
+                                          0  // expose the effector gene table
                                   ),
                                   new PortalVersionBean("bone",
                                           "Bone",
