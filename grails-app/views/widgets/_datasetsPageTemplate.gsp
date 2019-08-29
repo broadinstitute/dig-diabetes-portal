@@ -54,7 +54,7 @@
 <g:render template="./data/GWAS_DCSP2a610" />
 <g:render template="./data/GWAS_DCSP2a1M" />
 <g:render template="./data/ExSeq_RSNG" />
-<g:render template="./data/GWAS_DCSP2" />
+<g:render template="./data/GWAS_DCSP2_ea" />
 <g:render template="./data/GWAS_DIAGRAMimputed" />
 <g:render template="./data/GWAS_DIAGRAMimputed_eu" />
 <g:render template="./data/GWAS_AFHRC" />
