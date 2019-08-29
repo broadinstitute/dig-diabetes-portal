@@ -14,12 +14,12 @@ mpgSoftware.matrixMath = (function(){
      */
     var Matrix = function(dataArray,numberOfRows,numberOfColumns){
         if (( typeof dataArray === 'undefined') ||
-            (!$.isArray(dataArray))||
-            (dataArray.length<1)){
+            (!$.isArray(dataArray))){
             alert(" No data array to work with")
-        } else if ((dataArray.length % numberOfColumns) !== 0) {  // sanity check 1
+        } else if ((dataArray.length>0)&&(numberOfColumns>0)&&
+                   ((dataArray.length % numberOfColumns) !== 0) ){  // sanity check 1
             alert(" CRITICAL ERROR in matrix constructor.  Consistency check (dataArray.length % numberOfColumns) === 0) has failed.")
-        } else if ((dataArray.length % numberOfRows) !== 0) {  // sanity check 2
+        } else if ((dataArray.length>0)&&(numberOfRows>0)&&((dataArray.length % numberOfRows) !== 0)) {  // sanity check 2
             console.log(" CRITICAL ERROR in matrix constructor.  Consistency check (dataArray.length % numberOfRows) === 0) has failed.")
         }
         return {
@@ -85,6 +85,77 @@ mpgSoftware.matrixMath = (function(){
     };
 
 
+    /***
+     * building identity matrix, except move the colSource column to the location of the old location
+     * of the colTarget column, and shift the other columns around as necessary.
+     * Here's the approach: march along each column, and add the identity element until we encounter
+     * the source _xor_ the target. Once we do, then we need to shift all the other columns that
+     * we run into.  Once we have hit both the source _and_ the target, then we go back to writing identity
+     * elements.
+     * @param matrix
+     * @param colSource
+     * @param colTarget
+     * @returns {*}
+     */
+    var buildMatrixToMoveOneColumn  = function(matrix,colSource,colTarget){
+        if ((colSource>=matrix.numberOfColumns) || (colTarget>=matrix.numberOfColumns)){
+            alert("buildMatrixToMoveOneColumn problem with number of columns requested.")
+        }
+        var shifter = 0;
+        var hitTheSource = false;
+        var hitTheTarget = false;
+        var directionToShift = 0;
+        if (colSource < colTarget) {// we are moving a column to the right
+            directionToShift=1;
+        } else if (colSource > colTarget) {// we are moving a column to the left
+            directionToShift=-1;
+        }
+        _.times(matrix.numberOfColumns,function(column){
+            if (column===colSource) {
+                hitTheSource = true;
+                shifter = directionToShift;
+                setElement(matrix, column + shifter, column, 1);
+                if (hitTheTarget) {
+                    shifter = 0;
+                }
+            } else if (column===colTarget) {
+                hitTheTarget = true;
+                shifter = directionToShift;
+                setElement (matrix,colSource,column,1);
+                if (hitTheSource) {
+                    shifter = 0;
+                }
+            } else {
+                setElement (matrix,column+shifter,column,1);
+            }
+        });
+        return matrix;
+    };
+
+
+
+    var buildMatrixToDeleteColumns  = function(matrix,columnsToDelete){
+        _.forEach(columnsToDelete, function(columnIndex){
+            if (
+                //(columnIndex>matrix.numberOfColumns) ||
+                (columnIndex < 0)){
+                alert("buildMatrixToDeleteColumns problem with number of columns requested.")
+            }
+        });
+        var columnsFilledIn = 0;
+        _.times(matrix.numberOfColumns+columnsToDelete.length,function(counter){
+
+            if (!_.includes(columnsToDelete, counter )){
+                setElement (matrix,counter,columnsFilledIn,1);
+                columnsFilledIn++;
+            }
+
+        });
+        return matrix;
+    };
+
+
+
     var getRowFromMatrix = function(matrix,rowNumber){
         return _.slice(matrix.dataArray,rowNumber*matrix.numberOfColumns,(1+rowNumber)*matrix.numberOfColumns);
     };
@@ -137,10 +208,44 @@ mpgSoftware.matrixMath = (function(){
     var swapColumnsInDataStructure = function(dataArray,numberOfRows,numberOfColumns,colA,colB){
         var matrixToManipulate = new Matrix(dataArray,numberOfRows,numberOfColumns);
         var multiplierMatrix = buildMatrixToSwapColumns (buildArrayOfZeros(numberOfColumns,numberOfColumns),colA,colB);
-        return multiplyMatrices(matrixToManipulate,multiplierMatrix).dataArray;
+        return multiplyMatrices(matrixToManipulate,multiplierMatrix);
     };
 
+    var moveColumnsInDataStructure = function(dataArray,numberOfRows,numberOfColumns,colSource,colTarget){
+        var matrixToManipulate = new Matrix(dataArray,numberOfRows,numberOfColumns);
+        var multiplierMatrix = buildMatrixToMoveOneColumn (buildArrayOfZeros(numberOfColumns,numberOfColumns),colSource,colTarget);
+        return multiplyMatrices(matrixToManipulate,multiplierMatrix);
+    };
+
+
+    var deleteColumnsInDataStructure = function(dataArray,numberOfRows,numberOfColumns,columnListToDelelete){
+        var revisedNumberOfColumns = numberOfColumns-columnListToDelelete.length;
+        var matrixToManipulate = new Matrix(dataArray,numberOfRows,numberOfColumns);
+        var multiplierMatrix = buildMatrixToDeleteColumns (buildArrayOfZeros(numberOfColumns,revisedNumberOfColumns),columnListToDelelete);
+        return multiplyMatrices(matrixToManipulate,multiplierMatrix);
+    };
+
+    var getColumnHeaders = function(matrixToWorkWith){
+        return getRowFromMatrix(matrixToWorkWith,0);
+    };
+
+    var getRowHeaders = function(matrixToWorkWith){
+        return getColumnFromMatrix(matrixToWorkWith,0);
+    };
+
+
+
+    var doNothing = function(dataArray,numberOfRows,numberOfColumns){
+        return new  Matrix(dataArray,numberOfRows,numberOfColumns);
+    }
+
     return {
-        swapColumnsInDataStructure:swapColumnsInDataStructure
+        getColumnHeaders:getColumnHeaders,
+        getRowHeaders:getRowHeaders,
+        swapColumnsInDataStructure:swapColumnsInDataStructure,
+        moveColumnsInDataStructure:moveColumnsInDataStructure,
+        deleteColumnsInDataStructure:deleteColumnsInDataStructure,
+        doNothing:doNothing,
+        Matrix:Matrix
     }
 }());

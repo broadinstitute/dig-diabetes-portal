@@ -121,7 +121,7 @@
 
 
 <h4><g:message code="informational.shared.headers.project"></g:message></h4>
-    <h5>Genetics of Type 2 Diabetes (GoT2D) <small><a href="http://www.type2diabetesgenetics.org/projects/got2d" target="_blank">Learn more ></a>
+    <h5>Genetics of Type 2 Diabetes (GoT2D) <small><a href="${createLink(controller:"projects", action:"got2d")}" target="_blank">Learn more ></a>
     </small></h5>
 
  <p><g:message code="informational.project.descr.GoT2D"></g:message></p>

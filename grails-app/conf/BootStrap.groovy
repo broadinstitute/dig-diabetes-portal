@@ -103,6 +103,7 @@ class BootStrap {
                                 (username == 'ryank@broadinstitute.org') ||
                                 (username == 'mariacos@broadinstitute.org') ||
                                 (username == 'dkjang@broadinstitute.org') ||
+                                (username == 'qhoang@broadinstitute.org') ||
                                 (username == 'psingh@broadinstitute.org')) {
                             UserRole.create user, adminRole
                             UserRole.create user, systemRole
@@ -214,12 +215,14 @@ class BootStrap {
         // reload the localizations database, so that any updates to the properties files
         // get picked up (the default behavior of the plugin is to assume the database is
         // more current, and thus ignore any changes in the properties files
+        log.info( "4" )
         Localization.reload();
-
+        log.info( "3" )
         // any services that need to be initialized should be referenced here
         restServerService.initialize()
+        log.info( "2" )
         sharedToolsService.initialize()
-
+        log.info( "1" )
     }
     def destroy = {
     }

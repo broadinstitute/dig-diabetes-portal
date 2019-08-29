@@ -19,15 +19,15 @@
     </div></p>
 
           <p><div class="paper">
-    <g:message code="informational.shared.publications.Wang_2019_submitted"></g:message><br>
-    <g:message code="informational.shared.publications.Wang_2019_submitted.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
-    <div class="citation"><g:message code="informational.shared.publications.Wang_2019_submitted.citation"></g:message> </div>
+    <g:message code="informational.shared.publications.Wang_2019_NatCommun"></g:message><br>
+    <g:message code="informational.shared.publications.Wang_2019_NatCommun.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+    <div class="citation"><g:message code="informational.shared.publications.Wang_2019_NatCommun.citation"></g:message> </div>
     </div></p>
 
               <p><div class="paper">
-    <g:message code="informational.shared.publications.Jones_2019_NatCommun"></g:message><br>
-    <g:message code="informational.shared.publications.Jones_2019_NatCommun.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
-    <div class="citation"><g:message code="informational.shared.publications.Jones_2019_NatCommun.citation"></g:message> </div>
+    <g:message code="informational.shared.publications.Jones_2019a_NatCommun"></g:message><br>
+    <g:message code="informational.shared.publications.Jones_2019a_NatCommun.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+    <div class="citation"><g:message code="informational.shared.publications.Jones_2019a_NatCommun.citation"></g:message> </div>
     </div></p>
 
     <p><div class="paper">
@@ -70,7 +70,7 @@
 <h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
 <p><g:message code="informational.data.exptsumm.sleep"></g:message></p>
 
-<h4>Accessing UK Biobank Sleep Traits GWAS data</h4>
+<h4>Accessing UK Biobank Sleep Traits GWAS: Self-report results</h4>
 <p><g:message code="informational.data.accessing.sleep1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.sleep2"></g:message></p>
 
 

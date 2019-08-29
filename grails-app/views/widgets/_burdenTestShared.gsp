@@ -11,7 +11,8 @@ $( document ).ready( function (){
             allowPhenotypeChoice : ${allowPhenotypeChoice},
             allowStratificationChoice: ${allowStratificationChoice},
             grsVariantSet:'${grsVariantSet}',
-            modifiedGaitSummary:'${modifiedGaitSummary}'
+            modifiedGaitSummary:'${modifiedGaitSummary}',
+            standAloneTool:'${standAloneTool}'
         },
         '${geneName}',
         true,
@@ -28,7 +29,7 @@ $( document ).ready( function (){
                 getGRSListOfVariantsAjaxUrl:"${createLink(controller:'grs',action: 'getGRSListOfVariantsAjax')}"
             }
         );
-
+console.log('${geneName}');
 } );
 
 </g:javascript>

@@ -26,7 +26,7 @@ var mpgSoftware = mpgSoftware || {};
                 type: "post",
                 url: coreVariables.ajaxSampleGroupsPerTraitUrl,
                 data: {phenotype: phenotype},
-                async: false,
+                async: true,
                 success: function (data) {
                     loader.hide();
                     var rowDataStructure = [];

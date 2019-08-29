@@ -15,7 +15,7 @@
 
 
     <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
-    <p><g:message code="pheno.help.text"></g:message></p>
+    <h5><g:message code="informational.shared.headers.phase1"></g:message></h5>
 
     <ul>
         <li><g:message code="informational.shared.traits.t2d"></g:message></li>
@@ -24,7 +24,21 @@
         <li><g:message code="informational.shared.traits.fasting_glucose_BMI"></g:message></li>
         <li><g:message code="informational.shared.traits.fasting_insulin"></g:message></li>
         <li><g:message code="informational.shared.traits.fasting_insulin_BMI"></g:message></li>
-        </ul>
+        <li><g:message code="informational.shared.traits.HbA1c"></g:message></li>
+        <li><g:message code="informational.shared.traits.HbA1c_BMI"></g:message></li>
+</ul>
+<h5><g:message code="informational.shared.headers.phase2"></g:message></h5>
+
+<ul>
+        <li><g:message code="informational.shared.traits.serum_creatinine"></g:message></li>
+        <li><g:message code="informational.shared.traits.systolicBP"></g:message></li>
+        <li><g:message code="informational.shared.traits.HDL_cholesterol"></g:message></li>
+        <li><g:message code="informational.shared.traits.eGFR-creat"></g:message></li>
+        <li><g:message code="informational.shared.traits.diastolicBP"></g:message></li>
+        <li><g:message code="informational.shared.traits.LDL_cholesterol"></g:message></li>
+        <li><g:message code="informational.shared.traits.BMI"></g:message></li>
+</ul>
+
 
 
     <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
@@ -64,25 +78,33 @@
 <p><g:message code="informational.data.funding.METSIM"></g:message>
 
 <h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
+
 <p><g:message code="informational.data.exptsumm.METSIM1"></g:message></p>
 <p><g:message code="informational.data.exptsumm.METSIM2"></g:message></p>
 
 
 <h4><g:message code="informational.shared.headers.overview"></g:message></h4>
+<p><g:message code="informational.data.overview.METSIM0"></g:message></p>
 <p><g:message code="informational.data.overview.METSIM1"></g:message></p>
 <p><g:message code="informational.data.overview.METSIM2"></g:message>
+<p><g:message code="informational.data.overview.METSIM2a"></g:message>
 <p><g:message code="informational.data.overview.METSIM3"></g:message>
+<p><g:message code="informational.data.overview.METSIM4"></g:message>
+<p><g:message code="informational.data.overview.METSIM5"></g:message>
+<p><g:message code="informational.data.overview.METSIM6"></g:message>
+<p><g:message code="informational.data.overview.METSIM7"></g:message>
+<p><g:message code="informational.data.overview.METSIM8"></g:message>
+<p><g:message code="informational.data.overview.METSIM9"></g:message>
+<p><g:message code="informational.data.overview.METSIM10"></g:message>
 
 
 <h4><g:message code="informational.shared.headers.reports"></g:message></h4>
 
-<p>AMP-DCC Genotype Data Quality Control Report: METSIM (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP-DCC_Quality_Control_Report_METSIM.pdf" target="_blank">download PDF</a>)</p>
+<p><g:message code="informational.data.reports.QCR_METSIM"></g:message></p>
+<p><g:message code="informational.data.reports.DAR1_METSIM"></g:message></p>
+<p><g:message code="informational.data.reports.DAR2_METSIM"></g:message></p>
 
-
-<p>AMP-DCC Data Analysis Report: METSIM Phase 1 (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP-DCC_Data_Analysis_Report_METSIM_Phase1.pdf" target="_blank">download PDF</a>)</p>
-
-
-<h4>Accessing METSIM GWAS data</h4>
+<h4>Accessing METSIM GWAS results</h4>
 <p><g:message code="informational.data.accessing.METSIM_GWAS1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.METSIM_GWAS2"></g:message></p>
 
 

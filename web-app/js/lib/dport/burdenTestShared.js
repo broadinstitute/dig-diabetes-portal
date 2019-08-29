@@ -204,6 +204,12 @@ mpgSoftware.burdenTestShared = (function () {
         //burdenTestVariantSelectionOptionsAjaxUrl){
         displayParameters["variantsSetRefinement"] = (( typeof displayParameters.grsVariantSet === 'undefined') ||
             (displayParameters.grsVariantSet.length === 0)) ? [1] : [];
+
+        if(displayParameters["standAloneTool"]){
+            displayParameters["variantsSetRefinement"] = []
+        }
+
+
         mpgSoftware.burdenTestShared.initializeGaitUi(selectionToFill,
             displayParameters);
         mpgSoftware.burdenTestShared.storeGeneForGait(geneName);
@@ -224,6 +230,9 @@ mpgSoftware.burdenTestShared = (function () {
 
 
     var initializeGaitUi = function (selectorInWhichToInsert, valuesToInsert) {
+        $(window).on('load', function(){
+            $('#singleRunButton').fadeOut(5000);
+        })
         $(selectorInWhichToInsert).empty().append(Mustache.render($('#mainGaitHolder')[0].innerHTML, valuesToInsert));
     };
 
@@ -322,6 +331,8 @@ mpgSoftware.burdenTestShared = (function () {
 
 
     var refreshTopOfGaitDisplay = function (data, params) {
+        $('.caatSpinner').show();
+
         var phenotypeDropdown = $(params.dropDownPhenoSelector);
         var stratifyDesignationDropdown = $(params.stratifyDesignation);
         var linkToTypeaheadUrl = params.linkToTypeaheadUrl;
@@ -951,6 +962,9 @@ mpgSoftware.burdenTestShared = (function () {
             var tabDisplayString;
             var displayBurdenVariantSelectorString = (displayBurdenVariantSelector()) ? [1] : [];
             var variantsSetRefinement = (( typeof grsVariantSet === 'undefined') || (grsVariantSet.length === 0)) ? [1] : []; // if we aren't using a GRS variants set then allow the user to modify the set
+            //create a standalone variable parallel to variantSetRefinement
+            var standaloneTool = (( typeof grsVariantSet === 'undefined') || (grsVariantSet.length === 0)) ? [0] : [0];
+
             if (!multipleStrataExist) {
                 defaultDisplayString = ' active';
                 tabDisplayString = ' display: none';
@@ -959,6 +973,7 @@ mpgSoftware.burdenTestShared = (function () {
             var renderData = {
                 strataProperty: strataProperty,
                 variantsSetRefinement: variantsSetRefinement,
+                standaloneTool: standaloneTool,
                 phenotypeProperty: convertPhenotypeNames(phenotype),
                 defaultDisplay: defaultDisplayString,
                 tabDisplay: tabDisplayString,
@@ -1044,10 +1059,19 @@ mpgSoftware.burdenTestShared = (function () {
             }
 
 
+
+
             //
             // set up the section where the filters will go
             //
             renderData.sectionNumber++;
+            var temp = Mustache.render($('#chooseFiltersTemplate')[0].innerHTML, renderData,
+                {
+                    allFiltersTemplate: $('#allFiltersTemplate')[0].innerHTML,
+                    filterFloatTemplate: $('#filterFloatTemplate')[0].innerHTML,
+                    filterCategoricalTemplate: $('#filterCategoricalTemplate')[0].innerHTML
+                });
+           console.log(temp)
             $("#chooseFiltersLocation").empty().append(Mustache.render($('#chooseFiltersTemplate')[0].innerHTML, renderData,
                 {
                     allFiltersTemplate: $('#allFiltersTemplate')[0].innerHTML,
@@ -1631,6 +1655,7 @@ mpgSoftware.burdenTestShared = (function () {
 
     var buildVariantTable = function (data, parms) {
         $('#rSpinner').hide();
+        const drivingVariables = mpgSoftware.geneSignalSummaryMethods.getSignalSummarySectionVariables();
         if ((typeof data !== 'undefined') &&
             (data)) {
             var variantListHolder = [];
@@ -1748,10 +1773,28 @@ mpgSoftware.burdenTestShared = (function () {
                 //     $('#gaitTableDataHolder').append('<span class="variantsToCheck">'+variantRec.VAR_ID+'</span>')
                 var arrayOfRows = [];
                 var variantID = variantRec.VAR_ID;
-                if ((variantRec.CHROM) && (variantRec.POS)) {
-                    variantID = variantRec.CHROM + ":" + variantRec.POS;
+                // can we build up a variant ID presentation that will be effect allele specific
+                var variantIDelements = variantID.split("_");
+                const referenceAllele = (variantRec.Reference_allele)?variantRec.Reference_allele:variantRec.Reference_Allele;
+                const effectAllele = (variantRec.Effect_allele)?variantRec.Effect_allele:variantRec.Effect_Allele; //
+                if (variantIDelements.length>2){
+                    variantID = variantIDelements[0]+"_"+
+                                variantIDelements[1]+"_"+
+                                variantIDelements[2]+"_"+
+                                variantIDelements[3];
+                } else if ((variantRec.CHROM) && (variantRec.POS)) {
+                    if (( typeof referenceAllele !== 'undefined')&&( typeof effectAllele !== 'undefined')){
+                        variantID = variantRec.CHROM + "_" + variantRec.POS+"_"+ referenceAllele+"_"+effectAllele;
+                    } else {
+                        variantID = variantRec.CHROM + ":" + variantRec.POS;
+                    }
+
                 }
-                arrayOfRows.push(variantRec.VAR_ID);
+                if (( typeof drivingVariables !== 'undefined')&&(drivingVariables.utilizeBiallelicGait)){
+                    arrayOfRows.push(variantID);
+                } else {
+                    arrayOfRows.push(variantRec.VAR_ID);
+                }
                 arrayOfRows.push('<a href="' + parms.variantInfoUrl + '/' + variantRec.VAR_ID + '" class="boldItlink">' + variantID + '</a>');
                 var DBSNP_ID = (variantRec.DBSNP_ID) ? variantRec.DBSNP_ID : '';
                 arrayOfRows.push(DBSNP_ID);

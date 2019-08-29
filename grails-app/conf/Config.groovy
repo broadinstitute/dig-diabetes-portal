@@ -134,7 +134,6 @@ digAWS02KBV2prodServer = new ServerBean("KB-stage-2016-aws", "http://ec2-52-207-
 federatedAwsStageKBV2Server = new ServerBean("KB-stage-fed-2016-aws", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/dccservices/distributed/")
 toddTestServer = new ServerBean("KB-ToddTest-Broad","http://dig-prod.broadinstitute.org:8087/todd/gs/")
 digdevmarcin = new ServerBean("KB-dev-Broad", "http://dig-api-dev.broadinstitute.org/dev/gs/")
-digawsdevnewKB = new ServerBean("KB-dev-2017-aws", "http://ec2-34-229-106-174.compute-1.amazonaws.com:8090/dccservices/")
 digawsdevWorkflowKB = new ServerBean("KB-dev-2017-aws-8089", "http://ec2-34-229-106-174.compute-1.amazonaws.com:8089/dccservices/")
 digawsdevWorkflowKBrevised = new ServerBean("KB-dev-2017-aws-8090", "http://ec2-34-229-106-174.compute-1.amazonaws.com:8090/dccservices/")
 digawsdevnewKB_fed = new ServerBean("KB-dev-fed-2017-aws", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8085/dccservices/distributed/")
@@ -174,6 +173,7 @@ getRestServerList = [
         digawsqanewKB,
         digawsdevWorkflowKB,
         digawsdevWorkflowKBrevised,
+        digawsdevnewKB_fed,
         digawsqanewKB_fed,
         digawsqanewKB_fed_dedicated,
         ebiKB1,
@@ -313,7 +313,7 @@ environments {
 
 //       grails.serverURL = "http://www.type2diabetesgenetics.org"
 //        grails.serverURL = "http://www.type2diabetesgenetics.org"
-//        grails.serverURL = "http://variant2function.org"
+        grails.serverURL = "http://variant2function.org"
 
 //        grails.serverURL = "http://demo52k.us-east-1.elasticbeanstalk.com"
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
@@ -321,7 +321,9 @@ environments {
 
 //     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
 
-        grails.serverURL = "http://mdgkp.us-east-1.elasticbeanstalk.com"
+//
+//        grails.serverURL = "http://mdgkp.us-east-1.elasticbeanstalk.com"
+
 
 
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
@@ -468,6 +470,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/variant/**':          ['ROLE_USER'],
         '/variantInfo/**':      ['ROLE_USER'],
         '/grs/**':              ['ROLE_USER'],
+        '/gait/**':              ['ROLE_USER'],
         '/variantSearch/retrieveGwasSpecificPhenotypesAjax':    ['permitAll'],
         '/variantSearch/**':    ['ROLE_USER'],
         '/beacon/*':          ['permitAll'],
@@ -487,36 +490,6 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/metadatainfo/**':       ['ROLE_USER'],
         '/regionInfo/**':      ['ROLE_USER']
 
-
-//        '/admin/**':            ['ROLE_ADMIN'],
-//        '/user/**':            ['ROLE_ADMIN'],
-//        '/geneData/**':            ['permitAll'],
-//        '/gene/index':          ['permitAll'],
-//        '/gene/**':             ['permitAll'],
-//        '/informational/**':    ['permitAll'],
-//        '/region/**':           ['permitAll'],
-//        '/trait/**':            ['permitAll'],
-//        '/variant/**':          ['permitAll'],
-//        '/variantInfo/**':      ['permitAll'],
-//        '/grs/**':              ['permitAll'],
-//        '/variantSearch/retrieveGwasSpecificPhenotypesAjax':    ['permitAll'],
-//        '/variantSearch/**':    ['permitAll'],
-//        '/beacon/*':          ['permitAll'],
-//        '/assets/**':         ['permitAll'],
-//        '/**/js/**':          ['permitAll'],
-//        '/**/fonts/**':       ['permitAll'],
-//        '/**/css/**':         ['permitAll'],
-//        '/**/images/**':      ['permitAll'],
-//        '/**/*.ico':          ['permitAll'],
-//        '/login/**':          ['permitAll'],
-//        '/logout/**':         ['permitAll'],
-//        '/hypothesisGen/**':  ['permitAll'],
-//        '/oauth/**':          ['permitAll'],
-//        '/springSecurityOAuth/**':          ['permitAll'],
-//        '/dbconsole/**':      ['permitAll'],
-//        '/localization/**':   ['permitAll'],
-//        '/metadatainfo/**':       ['permitAll'],
-//        '/regionInfo/**':      ['permitAll']
 ]
 grails.plugin.auth.loginFormUrl='/Security/auth2'
 grails.plugin.springsecurity.logout.postOnly = false
@@ -629,7 +602,7 @@ portal.type.override = "bone"     // options are "t2d", "stroke", "mi", "ibd", "
 
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
                                                         "T2D",  // displayable label for this portal type
-                                                        "mdv38",    // the MDV number for this portal
+                                                        "mdv39",    // the MDV number for this portal
                                                         "T2DKP", // name of KB data we want
                                                         "T2D",      // the default phenotype for this portal
                                                         "ExSeq_19k_mdv28",  // default data set.  Used rarely.
@@ -641,7 +614,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                         [], // any data sets that should be omitted from LZ display
                                                         "[3]",  // the assays we should search
                                                         "ExSeq_13k_mdv23",
-                                                "images/t2d/T2DKP_logo_2019.svg",
+                                                "images/t2d/front_T2DKP_logo_2019.svg",
                                                 "portal.header.tagline",
                                                 "portal.header.title.short",
                                                 ["English", "Spanish"],
@@ -650,7 +623,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                 ["chr9:21,940,000-22,190,000"],
                                                 "images/t2d/T2DKP_bg_2019.png",
                                                 "pheno.help.text",
-                                                "images/t2d/T2DKP_header_logo_2019.svg",
+                                                "images/t2d/header_T2DKP_logo.svg",
                                                 "images/menu_bg_2017_5.png",
                                                 "true",
                                                 "gene.genePage.warning",
@@ -669,7 +642,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                 0, // expose the green boxes on the variant info page
                                                 0, // expose a secondary table and the credible set page built around genes, not just variants
                                                 0, // clicking on a variant can take you to the variant info page, or else to a range page (as in V2F)
-                                                0, // utilize bi-allelic gate, as opposed to the version that depends on multi-allelic definitions
+                                                1, // utilize bi-allelic gate, as opposed to the version that depends on multi-allelic definitions
                                                 0,  // access UC San Diego data remotely? I'm not sure if this works anymore
                                                 0, // LEDGE tab on the gene page
                                                 0, // Hi-C tab on the gene page
@@ -681,7 +654,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                 0, // expose the 'genes in region' tab on the gene page
                                                 0, // expose the region adjuster for the gene page
                                                 0, // expose the gene table on the dynamic UI
-                                                0  // expose the variant table on the dynamic UI
+                                                0,  // expose the variant table on the dynamic UI
+                                                1  // expose the effector gene table
                                             ),
                                   new PortalVersionBean("stroke",
                                                           "Stroke",
@@ -696,7 +670,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                           ["SIGN", "MetaStroke"], // any data sets that should be omitted from LZ display
                                                           "[3]",
                                                           "ExSeq_13k_mdv23",
-                                          "images/stroke/front_stroke_logo_2018.svg",
+                                          "images/stroke/front_strokeKP_logo_2019.svg",
                                           "portal.stroke.header.tagline",
                                           "portal.stroke.header.title.short",
                                           [],
@@ -705,7 +679,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["chr7:18,100,000-18,300,000"],
                                           "images/stroke/front_stroke_bg_2018.png",
                                           "stroke.pheno.help.text",
-                                          "images/stroke/STROKEKP_header_logo_2019.svg",
+                                          "images/stroke/header_strokeKP_logo.svg",
                                           "images/stroke/menu_bg_2017_stroke.png",
                                           "false",
                                           "",
@@ -724,7 +698,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                             0,
                                             0,0,0, // Hi-C tab on the gene page
-                                          0,  // expose dynamic UI
+                                          1,  // expose dynamic UI
                                           0, // expose the data set hierarchy in the sunburst visualization on the data page
                                           0, // expose the old school variant and association table.  Potentially useful for debugging
                                           0, // expose the IGV interface in its own accordion section
@@ -732,7 +706,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,  // expose the 'genes in region' tab on the gene page
                                           0, // expose the region adjuster for the gene page
                                           0, // expose the gene table on the dynamic UI
-                                          0  // expose the variant table on the dynamic UI
+                                          0, // expose the variant table on the dynamic UI
+                                          0  // expose the effector gene table
                                   ),
                                   new PortalVersionBean("mi",
                                                           "Myocardial Infarction",
@@ -747,7 +722,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                           [],
                                                           "[3]",
                                                           "GWAS_CARDIoGRAM_mdv91",
-                                          "images/mi/front_mi_logo_2018.svg",
+                                          "images/mi/front_miKP_logo_2019.svg",
                                           "portal.mi.header.tagline",
                                           "portal.mi.header.title.short",
                                           [],
@@ -756,7 +731,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["chr9:20,940,000-21,800,000"],
                                           "images/mi/front_mi_banner_2018.png",
                                         "",
-                                          "images/mi/mi_header_logo_2017.svg",
+                                          "images/mi/header_miKP_logo.svg",
                                           "images/mi/menu_band_2017_mi.png",
                                           "false",
                                           "",
@@ -776,7 +751,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           0,
                                           0,0, // Hi-C tab on the gene page
-                                          0,  // expose dynamic UI
+                                         1,  // expose dynamic UI
                                           0, // expose the data set hierarchy in the sunburst visualization on the data page
                                           0, // expose the old school variant and association table.  Potentially useful for debugging
                                           0, // expose the IGV interface in its own accordion section
@@ -784,7 +759,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,  // expose the 'genes in region' tab on the gene page
                                           0, // expose the region adjuster for the gene page
                                           0, // expose the gene table on the dynamic UI
-                                          0  // expose the variant table on the dynamic UI
+                                          0, // expose the variant table on the dynamic UI
+                                          0  // expose the effector gene table
                                   ),
                                   new PortalVersionBean("ibd",
                                           //"Inflammatory Bowel Disease",
@@ -801,7 +777,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
 //                                          "[1,2,3,4,5,6,7,8,9,10,11,12,13,14]",
                                           "[1,2,4,5,6,9,10,11,12,13,14,15,16,17,18]",
                                                           "GWAS_IBDGenomics_eu_mdv80",
-                                          "images/ibd/ibd_front_logo_WOnT2.png",
+                                          "images/v2f/front_V2FKP_logo_2019.svg",
                                           "portal.ibd.header.tagline",
                                           "portal.ibd.header.title",
                                           [],
@@ -811,7 +787,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "images/ibd/front_ibd_bg_2018.png",
                                         "",
                                          // "images/ibd/ibd_header_logo.svg",
-                                          "images/ibd/v2f-little-logo.png",
+                                          "images/v2f/front_V2FKP_banner_bg.png",
                                           "images/ibd/ibd_menu_wrapper_bg.png",
                                           "false",
                                           "",
@@ -839,8 +815,9 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           1,  // expose the 'genes in region' tab on the gene page
                                           0, // expose the region adjuster for the gene page
                                           0, // expose the gene table on the dynamic UI
-                                          0  // expose the variant table on the dynamic UI
-                                  ),
+                                          0, // expose the variant table on the dynamic UI
+                                          0  // expose the effector gene table
+                                 ),
                                   new PortalVersionBean("epilepsy",
                                           "Epilepsy",
                                           "mdv100",
@@ -891,11 +868,12 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,  // expose the 'genes in region' tab on the gene page
                                           0, // expose the region adjuster for the gene page
                                           0, // expose the gene table on the dynamic UI
-                                          0  // expose the variant table on the dynamic UI
+                                          0, // expose the variant table on the dynamic UI
+                                          0  // expose the effector gene table
                                   ),
                                   new PortalVersionBean("sleep",
                                           "Sleep",
-                                          "mdv110",
+                                          "mdv111",
                                           "SDKP", // name of KB data we want
                                           "SleepChronotype", // make sure your default phenotype exists in your default data set
                                           "GWAS_UKBB_mdv110",// used to pick a default data set for a gene query
@@ -906,7 +884,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           [],
                                           "[3]",
                                           "GWAS_UKBB_mdv110",
-                                          "images/sleep/front_sleep_logo_2018.svg",
+                                          "images/sleep/front_sleepKP_logo_2019.svg",
                                           "portal.sleep.header.tagline",
                                           "portal.sleep.header.title.short",
                                           [],
@@ -915,7 +893,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["chr2:113,873,524-114,136,577"],
                                           "images/sleep/sleep_banner_2018.png",
                                           "",
-                                          "images/sleep/sleep_menu_logo_2018.svg",
+                                          "images/sleep/header_sleepKP_logo.svg",
                                           "images/menu_bg_2017_5.png",
                                           "false",
                                           "",
@@ -934,7 +912,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           0,
                                           0,0,0, // Hi-C tab on the gene page
-                                          0,  // expose dynamic UI
+                                          1,  // expose dynamic UI
                                           0, // expose the data set hierarchy in the sunburst visualization on the data page
                                           0, // expose the old school variant and association table.  Potentially useful for debugging
                                           0, // expose the IGV interface in its own accordion section
@@ -942,7 +920,9 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,  // expose the 'genes in region' tab on the gene page
                                           0, // expose the region adjuster for the gene page
                                           0, // expose the gene table on the dynamic UI
-                                          0  // expose the variant table on the dynamic UI
+                                          0, // expose the variant table on the dynamic UI
+                                          0  // expose the effector gene table
+
                                   ),
                                   new PortalVersionBean("lung",
                                           "Lung",
@@ -1044,6 +1024,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,  // expose the 'genes in region' tab on the gene page
                                           0, // expose the region adjuster for the gene page
                                           0, // expose the gene table on the dynamic UI
-                                          0  // expose the variant table on the dynamic UI
+                                          0,  // expose the variant table on the dynamic UI
+                                          0  // expose the effector gene table
                                   )
 ]

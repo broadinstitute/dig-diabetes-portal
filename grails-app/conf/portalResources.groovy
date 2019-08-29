@@ -32,6 +32,13 @@ modules = {
         resource url: 'css/dport/grsInfo.css'
     }
 
+    gaitInfo {
+        dependsOn "core", "mbar", "bootstrapMultiselect", "burdenTest","boxwhisker"
+
+        resource url: 'js/lib/dport/gaitInfo.js'
+        resource url: 'css/dport/grsInfo.css'
+    }
+
     regionInfo {
         resource url: 'js/lib/dport/regionInfo.js'
         resource url: 'css/dport/regionInfo.css'
@@ -213,6 +220,36 @@ modules = {
         resource url: 'js/lib/dport/dynamicUi/eCaviar.js'
         resource url: 'js/lib/dport/dynamicUi/coloc.js'
         resource url: 'js/lib/dport/dynamicUi/mouseKnockout.js'
+        resource url: 'js/lib/dport/dynamicUi/effectorGene.js'
+        resource url: 'js/lib/dport/dynamicUi/geneHeaders.js'
+    }
+    geneEffectorTable {
+        dependsOn "core", "portalHome"
+
+        resource url: 'js/lib/dport/effectorGeneTable.js'
+
+        resource url: 'js/lib/dport/dynamicUi.js'
+        resource url: 'css/dport/dynamicUi.css'
+
+        resource url: 'js/lib/dport/dynamicUi/fullEffectorGeneTable.js'
+        resource url: 'js/lib/dport/dynamicUi/geneBurdenSkat.js'
+        resource url: 'js/lib/dport/matrixMath.js'
+    }
+    tissueTable {
+        dependsOn "core", "portalHome"
+
+        resource url: 'js/lib/dport/tissueTable.js'
+
+        resource url: 'js/lib/dport/dynamicUi.js'
+        resource url: 'css/dport/dynamicUi.css'
+
+        resource url: 'js/lib/dport/dynamicUi/gregorData.js'
+        resource url: 'js/lib/dport/dynamicUi/depictTissue.js'
+        resource url: 'js/lib/dport/dynamicUi/ldsrData.js'
+        resource url: 'js/lib/dport/matrixMath.js'
+
+        resource url: 'js/lib/bootstrap-multiselect.js'
+        resource url: 'css/lib/bootstrap-multiselect.css'
     }
     mustache {
         resource url: 'js/lib/mustache.js'
