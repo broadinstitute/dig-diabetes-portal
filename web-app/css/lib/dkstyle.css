@@ -1397,6 +1397,20 @@ div.traits-filter-wrapper > .radio-inline {
     background-color: #7ACCC8;
 }
 
+/* banner setting for Bone and Muscle portal */
+.front-top-banner-bone {
+    background-image:url(../../images/bone/front_boneKP_banner_bg.png), linear-gradient(#BCAFD6, #918BC3);
+}
+
+.front-top-banner-bone .front-banner-btn {
+    color: #918BC3;
+}
+
+#header-bottom-bone {
+    background-color: #BCAFD6;
+}
+
+
 /* banner setting for MI portal */
 .front-top-banner-mi {
     background-image:url(../../images/mi/front_miKP_banner_bg.png), linear-gradient(#FFCC00, #DCA228);
@@ -1495,6 +1509,10 @@ div.traits-filter-wrapper > .radio-inline {
 
 .front-logo-tagline-lung {
     transform: translate(0%,43%);
+}
+
+.front-logo-tagline-bone {
+    transform: translate(0%,15%);
 }
 
 .front-logo-tagline-v2f, .front-logo-tagline-ibd {
