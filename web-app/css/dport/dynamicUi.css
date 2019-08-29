@@ -64,10 +64,12 @@ div.contextHolder{
 div.variantAnnotation {
     height: 10px;
 }
-div.variantAnnotation {
-    height: 10px;
+div.variantAnnotation.emphasisSwitch_true {
+    background-color: #0000FF;
 }
-
+div.variantAnnotation.emphasisSwitch_false {
+    background-color: #FFFFFF;
+}
 div.openMetaXcanInGeneTable {
     font-size: 10px;
 }

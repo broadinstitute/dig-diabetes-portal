@@ -71,6 +71,34 @@
                         }
                         ,
                         {
+                            code: 'VAR_SPLICE',
+                            category: 'Annotation',
+                            displayCategory: 'Annotation',
+                            subcategory: 'Coding indicator',
+                            displaySubcategory: 'Coding indicator',
+                            cellBodyWriter:'variantIsSplicingBody',
+                            categoryWriter:'variantIsSplicingCategoryLabel',
+                            subCategoryWriter:'variantIsSplicingSubcategoryLabel',
+                            internalIdentifierString:'doesNotHaveAnIndependentFunction',
+                            nameOfAccumulatorField:'notUsed',
+                            nameOfAccumulatorFieldWithIndex:'notUsed'
+                        }
+                        ,
+                        {
+                            code: 'VAR_UTR',
+                            category: 'Annotation',
+                            displayCategory: 'Annotation',
+                            subcategory: 'Coding indicator',
+                            displaySubcategory: 'Coding indicator',
+                            cellBodyWriter:'variantIsUtrBody',
+                            categoryWriter:'variantIsUtrCategoryLabel',
+                            subCategoryWriter:'variantIsUtrSubcategoryLabel',
+                            internalIdentifierString:'doesNotHaveAnIndependentFunction',
+                            nameOfAccumulatorField:'notUsed',
+                            nameOfAccumulatorFieldWithIndex:'notUsed'
+                        }
+                        ,
+                        {
                             code: 'ABC_VAR',
                             category: 'ABC Tissue',
                             displayCategory: 'ABC Tissue',

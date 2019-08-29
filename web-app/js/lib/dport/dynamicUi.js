@@ -5062,7 +5062,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
 
             //const rowTypesToAdd = ["coding","splice","utr","promoter","pValue","posteriorPValue"];
-            const rowTypesToAdd = ["VAR_CODING"];
+            const rowTypesToAdd = ["VAR_CODING","VAR_SPLICE","VAR_UTR"];
             let rowNumber = 1;
             _.forEach(rowTypesToAdd, function (rowTypeToAdd) {
                 addRowHolderToIntermediateDataStructure(rowTypeToAdd,intermediateDataStructure)
@@ -5075,11 +5075,24 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                             let emphasisSwitch = "false";
                             switch(rowTypeToAdd){
                                 case "VAR_CODING":
-                                if (oneRecord.consequence.join(",").indexOf('splice')>-1){
-                                    emphasisSwitch = "true"
-                                }
-                                break;
-
+                                    if ((oneRecord.most_del_score>0)&&
+                                        (oneRecord.most_del_score<4)){
+                                        emphasisSwitch = "true"
+                                    }
+                                    break;
+                                case "VAR_SPLICE":
+                                    if (oneRecord.consequence.join(",").indexOf('splice')>-1){
+                                        emphasisSwitch = "true"
+                                    }
+                                    break;
+                                case "VAR_UTR":
+                                    if (oneRecord.consequence.join(",").indexOf('UTR')>-1){
+                                        emphasisSwitch = "true"
+                                    }
+                                    break;
+                                default:
+                                    alert(" unexpected rowTypeToAdd="+rowTypeToAdd+".");
+                                    break;
                             }
                             var renderData = placeDataIntoRenderForm(   "",
                                 oneRecord.name,

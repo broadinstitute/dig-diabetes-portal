@@ -12,8 +12,8 @@ Coding
 </script>
 
 <script id="variantIsCodingBody"  type="x-tmpl-mustache">
-    <div  class="variantAnnotation variantIsCoding IsCoding_{{emphasisSwitch}}  initialLinearIndex_{{indexInOneDimensionalArray}}">
-        very
+    <div  class="variantAnnotation variantIsCoding emphasisSwitch_{{emphasisSwitch}}  initialLinearIndex_{{indexInOneDimensionalArray}}">
+&nbsp;-
     </div>
 </script>
 
