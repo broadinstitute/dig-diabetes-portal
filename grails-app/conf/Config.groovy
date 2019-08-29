@@ -957,7 +957,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           [],
                                           "[3]",
                                           "GWAS_UKBiobank_ModLeic_eu_mdv130",
-                                          "images/lung/front_LDKP_logo_2019.svg",
+                                          "images/lung/front_LDKP_logo_2019_2.svg",
                                           "portal.lung.header.tagline",
                                           "portal.lung.header.title.short",
                                           [],
@@ -985,7 +985,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           0,
                                           0,0,0, // Hi-C tab on the gene page
-                                          0,  // expose dynamic UI
+                                          1,  // expose dynamic UI
                                           0, // expose the data set hierarchy in the sunburst visualization on the data page
                                           0, // expose the old school variant and association table.  Potentially useful for debugging
                                           0, // expose the IGV interface in its own accordion section
