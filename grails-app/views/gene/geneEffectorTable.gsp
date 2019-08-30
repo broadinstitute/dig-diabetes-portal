@@ -228,7 +228,8 @@
                             emptyBodyRecord:'#emptyBodyRecord',
                             emptyHeaderRecord:'#emptyHeaderRecord',
                             domSpecificationForAccumulatorStorage:'#mainTissueDiv',
-                            formOfStorage: 'loadOnce'
+                            formOfStorage: 'loadOnce',
+                            initialOrientation:'fegtAnnotationHeaders'
                         }
                     };
                     mpgSoftware.effectorGeneTable.setVariablesToRemember(drivingVariables);

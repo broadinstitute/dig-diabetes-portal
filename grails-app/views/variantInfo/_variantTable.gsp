@@ -122,7 +122,8 @@
                         domSpecificationForAccumulatorStorage:'#mainVariantDivHolder',
                         formOfStorage: 'loadFromTable',
                         initializeSharedTableMemory:  '#mainVariantDiv table.variantTableHolder',
-                        organizingDiv:  '#mainVariantDiv'
+                        organizingDiv:  '#mainVariantDiv',
+                        initialOrientation:'variantTableVariantHeaders'
                     }
                 };
                 mpgSoftware.variantTable.setVariablesToRemember(drivingVariables);

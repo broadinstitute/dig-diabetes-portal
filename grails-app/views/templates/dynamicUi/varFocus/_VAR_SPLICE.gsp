@@ -13,6 +13,5 @@ Splice
 
 <script id="variantIsSplicingBody"  type="x-tmpl-mustache">
     <div  class="variantAnnotation emphasisSwitch_{{emphasisSwitch}}  initialLinearIndex_{{indexInOneDimensionalArray}}">
-&nbsp;-
     </div>
 </script>

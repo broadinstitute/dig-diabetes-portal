@@ -13,6 +13,5 @@ UTR
 
 <script id="variantIsUtrBody"  type="x-tmpl-mustache">
     <div  class="variantAnnotation emphasisSwitch_{{emphasisSwitch}}  initialLinearIndex_{{indexInOneDimensionalArray}}">
--
     </div>
 </script>

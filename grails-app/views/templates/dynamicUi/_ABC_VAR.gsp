@@ -33,7 +33,7 @@ records={{numberRecords}}
              <div significance_sortField="{{significanceValue}}" sortField="{{significanceValue}}"
              class="tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'ABC predictions for {{tissueName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
-               data-target="#depict_tissue_{{tissueNameKey}}" style="color:black"> see genes
+               data-target="#depict_tissue_{{tissueNameKey}}" style="color:black">genes
                </a>
 
                <div  class="collapse openEffectorGeneInformationInGeneTable" id="depict_tissue_{{tissueNameKey}}">

@@ -8,7 +8,7 @@
            <div class="pull-right">
                <span class="glyphicon glyphicon-remove" aria-hidden="true" onclick="mpgSoftware.dynamicUi.removeColumn(event,this,'forward','table.combinedGeneTableHolder')" style="padding: 0 8px 0 0"></span>
            </div>
-           <span class="displayGeneName">{{name}}</span>
+           <span class="displayVariantName">{{name}}</span>
         </div>
         <div class="genePosition text-center">
         

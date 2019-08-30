@@ -351,7 +351,8 @@ td.tissueTable.informationIsPresent{
                         emptyBodyRecord:'#emptyBodyRecord',
                         emptyHeaderRecord:'#emptyHeaderRecord',
                         domSpecificationForAccumulatorStorage:'#configurableUiTabStorage',
-                        formOfStorage: 'loadFromTable'
+                        formOfStorage: 'loadFromTable',
+                        initialOrientation:'geneTableGeneHeaders'
                     }
                 };
                 mpgSoftware.geneSignalSummaryMethods.setSignalSummarySectionVariables(drivingVariables);

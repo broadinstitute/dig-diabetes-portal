@@ -86,7 +86,8 @@
                         emptyHeaderRecord:'#emptyHeaderRecord',
                         domSpecificationForAccumulatorStorage:'#mainTissueDiv',
                         formOfStorage: 'loadFromTable',
-                        initializeSharedTableMemory:  '#mainTissueDiv table.tissueTableHolder'
+                        initializeSharedTableMemory:  '#mainTissueDiv table.tissueTableHolder',
+                        initialOrientation:'tissueTableTissueHeaders'
                     }
                 };
                 mpgSoftware.tissueTable.setVariablesToRemember(drivingVariables);

@@ -64,10 +64,10 @@ div.contextHolder{
 div.variantAnnotation {
     height: 10px;
 }
-div.variantAnnotation.emphasisSwitch_true {
+td.emphasisSwitch_true {
     background-color: #0000FF;
 }
-div.variantAnnotation.emphasisSwitch_false {
+td.emphasisSwitch_false {
     background-color: #FFFFFF;
 }
 div.openMetaXcanInGeneTable {
@@ -531,4 +531,27 @@ select.phenotypePicker {
 span.phenotypeSpecifier{
     font-family: 'Oswald';
     font-size: 55px;
+}
+.variantTableHolder th.niceHeadersThatAreLinks{
+    background: white;
+    transform-origin: left;
+    -webkit-transform: rotate(-60deg);
+    transform: rotate(-60deg);
+    max-width: 2px;
+    font-weight: normal;
+    text-align: left;
+    text-decoration: underline;
+    color: blue;
+    text-align: left;
+    cursor: pointer;
+}
+.variantTableHolder th.niceHeadersThatAreGeneLinks{
+    background: white;
+    transform-origin: left;
+    -webkit-transform: rotate(-60deg);
+    transform: rotate(-60deg);
+    max-width: 2px;
+    font-weight: normal;
+    font-size: 20px;
+    text-align: left;
 }

@@ -13,7 +13,6 @@ Coding
 
 <script id="variantIsCodingBody"  type="x-tmpl-mustache">
     <div  class="variantAnnotation variantIsCoding emphasisSwitch_{{emphasisSwitch}}  initialLinearIndex_{{indexInOneDimensionalArray}}">
-&nbsp;-
     </div>
 </script>
 
