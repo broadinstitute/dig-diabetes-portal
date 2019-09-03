@@ -1208,7 +1208,7 @@ span.new-dataset-flag {
 }
 
 .analysis-modules-btn ul > li {
-	background-color: rgba(1, 84, 149, .75);
+	background-color: rgba(120, 120, 120, .75);
 	font-size: 0.8em;
 	padding: 5px 15px 5px 15px;
 	border-bottom: solid 1px #666;
@@ -1217,7 +1217,7 @@ span.new-dataset-flag {
 }
 
 .analysis-modules-btn ul > li:hover {
-	background-color: rgba(1, 84, 149, 1);
+    background-color: rgba(90, 90, 90, 1);
 }
 
 .analysis-modules-btn ul > li:last-child {
@@ -1311,8 +1311,8 @@ div.traits-filter-wrapper > .radio-inline {
     list-style: none;
     margin: 0;
     padding: 0;
-    margin-top: 30px;
-    text-align:left;
+    margin-top: 0px;
+    text-align:center;
 }
 
 #new_features > li {
@@ -1326,15 +1326,15 @@ div.traits-filter-wrapper > .radio-inline {
     border-bottom-right-radius: 3px;
     padding: 0px 10px 2px 10px;
     margin-right: 10px;
-    font-size: 16px;
+    font-size: 14px;
     position: relative;
 }
 
 #new_features > li > span.flag {
     border-top-left-radius: 3px;
     border-bottom-left-radius: 3px;
-    padding: 3px 10px 2px 10px;
-    font-size: 13px;
+    padding: 3px 10px 3px 10px;
+    font-size: 11px;
     vertical-align: baseline;
 }
 
@@ -1358,4 +1358,265 @@ div.traits-filter-wrapper > .radio-inline {
     position: absolute;
     top: 6px;
     left: -4px;
+}
+
+/* styles for new portal theme 2019 */
+
+.header-bottom {
+    text-transform: capitalize;
+    font-size: 14px;
+    font-weight: 300;
+    padding: 0;
+    margin: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 50px;
+    z-index: 100;
+}
+
+.front-top-banner {
+    font-size:16px;
+    background-repeat: no-repeat;
+    background-position: -130px 130px, top left;
+    padding-bottom: 70px;
+    padding-top:0px;
+    margin-top: 50px;
+}
+
+/* banner setting for Lung portal */
+.front-top-banner-lung {
+    background-image:url(../../images/lung/front_LDKP_banner_bg.png), linear-gradient(#7ACCC8, #08B89D);
+}
+
+.front-top-banner-lung .front-banner-btn {
+    color: #08B89D;
+}
+
+#header-bottom-lung {
+    background-color: #7ACCC8;
+}
+
+/* banner setting for Bone and Muscle portal */
+.front-top-banner-bone {
+    background-image:url(../../images/bone/front_boneKP_banner_bg.png), linear-gradient(#BCAFD6, #918BC3);
+}
+
+.front-top-banner-bone .front-banner-btn {
+    color: #918BC3;
+}
+
+#header-bottom-bone {
+    background-color: #BCAFD6;
+}
+
+
+/* banner setting for MI portal */
+.front-top-banner-mi {
+    background-image:url(../../images/mi/front_miKP_banner_bg.png), linear-gradient(#FFCC00, #DCA228);
+}
+
+.front-top-banner-mi .front-banner-btn {
+    color: #DCA228;
+}
+
+#header-bottom-mi {
+    background-color: #FFCC00;
+}
+
+/* banner setting for Sleep portal */
+.front-top-banner-sleep {
+    background-image:url(../../images/sleep/front_sleepKP_banner_bg.png), linear-gradient(#74B9E2, #477CBF);
+}
+
+.front-top-banner-sleep .front-banner-btn {
+    color: #477CBF;
+}
+
+#header-bottom-sleep {
+    background-color: #74B9E2;
+}
+
+/* banner setting for V2F portal */
+
+.front-top-banner-v2f, .front-top-banner-ibd {
+    background-image:url(../../images/v2f/front_V2FKP_banner_bg.png), linear-gradient(#b998ef, #7640b1);
+    margin-top: 0;
+}
+
+.front-top-banner-v2f .front-banner-btn, .front-top-banner-ibd .front-banner-btn {
+    color: #7640b1;
+}
+
+#header-bottom-v2f, #header-bottom-ibd {
+    position: relative;
+    background-color: #b998ef
+}
+
+/* banner setting for T2D portal */
+
+.front-top-banner-t2d {
+    background-image:url(../../images/t2d/front_T2DKP_bg.png), linear-gradient(#55AAEE, #3C80BD);
+    margin-top: 0;
+}
+
+.front-top-banner-t2d .front-banner-btn {
+    color: #3399cc;
+}
+
+#header-bottom-t2d {
+    position: relative;
+    background-color: #55AAEE;
+}
+
+/* banner setting for Stroke portal */
+
+.front-top-banner-stroke {
+    background-image:url(../../images/stroke/front_strokeKP_banner_bg.png), linear-gradient(#73d253, #38942d);
+    margin-top: 0;
+}
+
+.front-top-banner-stroke .front-banner-btn {
+    color: #38942d;
+}
+
+#header-bottom-stroke {
+    position: relative;
+    background-color: #73d253;
+}
+
+
+.front-logo-wrapper {
+    margin-left: auto;
+    margin-right: auto;
+    width: 830px;
+}
+
+.front-logo-img {
+    width: 400px;
+    padding-right: 30px;
+    border-right: solid 1px #fff;
+    margin-right: 30px;
+    float: left;
+}
+
+.front-logo-tagline {
+    width: 400px;
+    font-size: 25px;
+    display: block;
+    float: left;
+}
+
+.front-logo-tagline-lung {
+    transform: translate(0%,43%);
+}
+
+.front-logo-tagline-bone {
+    transform: translate(0%,15%);
+}
+
+.front-logo-tagline-v2f, .front-logo-tagline-ibd {
+    transform: translate(0%,17%);
+}
+
+.front-logo-tagline-stroke {
+    transform: translate(0%,10%);
+}
+
+.front-logo-tagline-mi {
+    transform: translate(0%,10%);
+}
+
+.front-logo-tagline-sleep {
+    transform: translate(0%,10%);
+}
+
+.front-logo-tagline-t2d {
+    transform: translate(0%,5%);
+    line-height:1.3em;
+}
+
+.front-banner-ui-tabs {
+    width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    margin-top: 70px;
+    border-bottom: solid 1px rgba(255,255,255, 0.55);
+    font-size: 25px;
+}
+
+.front-banner-ui-tabs > li {
+    float: none;
+    display: inline-block;
+}
+
+.front-banner-ui-tabs > li > a {
+    color: #fff;
+}
+
+.front-banner-ui-tabs > li > a:hover {
+    color: #fff;
+    background-color: rgba(255,255,255, 0.25);
+    border: solid 1px rgba(255,255,255, 0.55);
+}
+
+.front-banner-ui-tabs > li.active > a, .front-banner-ui-tabs > li.active > a:focus, .front-banner-ui-tabs > li.active > a:hover {
+    color: #fff;
+    background-color: rgba(255,255,255, 0.25);
+    border: solid 1px rgba(255,255,255, 0.55);
+}
+
+.front-banner-ui-tabs-content {
+    width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.dk-front-search-wrapper {
+
+}
+
+.front-banner-btn {
+    border-radius: 30px;
+    width: 250px;
+}
+
+.portal-settings-menu {
+    position: absolute;
+    right: 10px;
+    background-color: rgba(0,0,0,0.25);
+    padding: 0px 10px;
+    border-radius: 5px;
+    color: #fff;
+}
+
+.portal-settings-menu > ul {
+    display: none;
+}
+
+.portal-settings-menu:hover > ul {
+    display: block;
+}
+
+.portal-settings-menu > ul > li{
+    display: block;
+    list-style: none;
+    padding-bottom: 5px;
+}
+
+.traits-select-ui.variant-association-ui > div.trait-input > button.dropdown-toggle, .gene-association-ui > div.gene-trait-input > button.dropdown-toggle {
+    height: 50px; font-size: 20px;
+}
+
+ul.traits-filter-options {
+    width: 150%;
+    margin-left: -25%;
+    padding: 0;
+}
+
+ul.traits-filter-options > li {
+    display: inline-flex;
 }
