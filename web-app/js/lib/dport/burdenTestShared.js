@@ -2096,6 +2096,7 @@ mpgSoftware.burdenTestShared = (function () {
                 asynchronousPromiseRunner(deferreds,runMetaAnalysis);
                 break;
             case 'skat':
+            case 'skat-o':
             case 'vt':
             case 'burden':
                 var coreVariables = mpgSoftware.geneSignalSummaryMethods.getSignalSummarySectionVariables();

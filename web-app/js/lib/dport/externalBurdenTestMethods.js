@@ -85,6 +85,7 @@ var mpgSoftware = mpgSoftware || {};
                         const runner = new raremetal.helpers.PortalTestRunner(groups, variants, [ // One or more test names can be specified!
                             // 'burden',
                             //'skat',
+                            //'skat-o',
                             //'vt'
                             subtype
                         ]);
@@ -113,6 +114,7 @@ var mpgSoftware = mpgSoftware || {};
                     $('#stratifyDesignation').attr("disabled", false);
                     break;
                 case 'skat':
+                case 'skat-o':
                 case 'vt':
                 case 'burden':
                     $('#chooseFiltersLocation').hide();
