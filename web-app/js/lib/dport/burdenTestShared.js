@@ -1631,7 +1631,6 @@ mpgSoftware.burdenTestShared = (function () {
 
 
     var buildVariantTable = function (data, parms) {
-        const drivingVariables = mpgSoftware.geneSignalSummaryMethods.getSignalSummarySectionVariables();
         $('#rSpinner').hide();
         const drivingVariables = mpgSoftware.geneSignalSummaryMethods.getSignalSummarySectionVariables();
         if ((typeof data !== 'undefined') &&

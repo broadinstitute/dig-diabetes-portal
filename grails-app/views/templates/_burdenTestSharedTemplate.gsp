@@ -106,6 +106,7 @@
                             <option value="sum">Burden test</option>
                             <option value="max">Collapse test</option>
                             <option value="skat">SKAT</option>
+                            <option value="skat-o">SKAT-O</option>
                             <option value="vt">Variable threshold</option>
                             <option value="burden">UMich burden</option>
                         </select>
