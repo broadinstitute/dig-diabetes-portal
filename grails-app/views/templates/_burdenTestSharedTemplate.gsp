@@ -628,9 +628,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                     <div class="row">
                         <div class="col-sm-12 col-xs-12">
                             <p>
-                                Choose a collection of variants which will be analyzed together to assess disease burden.
-                                You may choose a set of variants with a specific consequence or minor allele frequency, and
-                                potentially remove variants from this set by using the check boxes at the left of the table.
+                                Choose a collection of variants for analysis. Choose a variant filter; set a MAF threshold if desired (this overrides the MAF thresholds in the variant filters) and apply the threshold across all samples or each ancestry; add variants to the list; or remove variants by using the check boxes at the left of the table.
                             </p>
                         </div>
                     </div>
