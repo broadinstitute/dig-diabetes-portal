@@ -3082,7 +3082,7 @@ mpgSoftware.dynamicUi = (function () {
                 intermediateDataStructure.headerNames.push(oneRecord.var_id);
                 intermediateDataStructure.headerContents.push(Mustache.render($('#'+dataAnnotationType.dataAnnotation.cellBodyWriter)[0].innerHTML, oneRecord));
                 intermediateDataStructure.headers.push(new IntermediateStructureDataCell(oneRecord.name,
-                    Mustache.render($('#'+dataAnnotationType.dataAnnotation.cellBodyWriter)[0].innerHTML, oneRecord),"geneHeader asc ",'LIT'));
+                    Mustache.render($('#'+dataAnnotationType.dataAnnotation.cellBodyWriter)[0].innerHTML, oneRecord),"asc ",'LIT'));
             });
 
             intermediateDataStructure.tableToUpdate = idForTheTargetDiv;

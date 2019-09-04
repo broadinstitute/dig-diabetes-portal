@@ -532,11 +532,31 @@ span.phenotypeSpecifier{
     font-family: 'Oswald';
     font-size: 55px;
 }
-.variantTableHolder th.niceHeadersThatAreLinks{
+/*.variantTableHolder th.niceHeadersThatAreLinks{*/
+    /*background: white;*/
+    /*transform-origin: left;*/
+    /*-webkit-transform: rotate(-60deg);*/
+    /*transform: rotate(-60deg);*/
+    /*max-width: 2px;*/
+    /*font-weight: normal;*/
+    /*text-align: left;*/
+    /*text-decoration: underline;*/
+    /*color: blue;*/
+    /*text-align: left;*/
+    /*cursor: pointer;*/
+/*}*/
+/*.variantTableHolder th.niceHeadersThatAreGeneLinks{*/
+    /*background: white;*/
+    /*transform-origin: left;*/
+    /*-webkit-transform: rotate(-60deg);*/
+    /*transform: rotate(-60deg);*/
+    /*max-width: 2px;*/
+    /*font-weight: normal;*/
+    /*font-size: 20px;*/
+    /*text-align: left;*/
+/*}*/
+.variantTableHolder th.headersWithVarIds {
     background: white;
-    transform-origin: left;
-    -webkit-transform: rotate(-60deg);
-    transform: rotate(-60deg);
     max-width: 2px;
     font-weight: normal;
     text-align: left;
@@ -545,13 +565,65 @@ span.phenotypeSpecifier{
     text-align: left;
     cursor: pointer;
 }
-.variantTableHolder th.niceHeadersThatAreGeneLinks{
-    background: white;
-    transform-origin: left;
-    -webkit-transform: rotate(-60deg);
+div.variantHeaderShifters span.glyphicon-step-forward, div.geneHeaderShifters span.glyphicon-step-forward {
+    color: #ccc;
+}
+
+div.variantHeaderShifters span.glyphicon-step-backward, div.geneHeaderShifters span.glyphicon-step-backward {
+    margin-right: -4px;
+    color: #ccc;
+}
+div.variantHeaderShifters{
+    padding: 0;
+    margin: 0;
+    height: 15px;
+    position: absolute;
+    right: 0;
+    top: 90px;
+    padding-top: 10px;
+    color: #ccc;
+    background-image: url("../images/D_a_D.png");
+    background-repeat: no-repeat;
+    background-position: right top;
+
+}
+div.displayVariantNameHolder{
+    position: relative;
+    left:0;
+    bottom:0;
+    height:120px;
+}
+span.displayVariantName{
+    /*transform-origin: left;*/
+    /*-webkit-transform: rotate(-60deg);*/
+    /*transform: rotate(-60deg);*/
+    position: absolute;
+    bottom: 0;
+    left: 0;
+
+    /* Border is the new background */
+    background: none;
+
+    /* Rotate from top left corner (not default) */
+    transform-origin: 0 0;
     transform: rotate(-60deg);
-    max-width: 2px;
-    font-weight: normal;
-    font-size: 20px;
-    text-align: left;
+}
+table.variantTableHolder, th  {
+    border-top: 0;
+    table-layout: fixed;
+    width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+div.variantHeaderHolder{
+    position: relative;
+    top:0;
+    bottom:0;
+}
+table.variantTableHolder th.headersWithVarIds {
+    border-top: 0;
+    width: 80px;
+    padding:0;
+    overflow: auto;
 }
