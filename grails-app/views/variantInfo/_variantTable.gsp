@@ -114,6 +114,23 @@
                             nameOfAccumulatorField:'abcVariantInfo',
                             nameOfAccumulatorFieldWithIndex:'variantInfoArray'
                         }
+                        ,
+                        {
+                            code: 'DNASE_VAR',
+                            category: 'DNASE Tissue',
+                            displayCategory: 'DNASE Tissue',
+                            subcategory: 'DNASE list',
+                            displaySubcategory: 'DNASE list',
+                            headerWriter:'dnaseVariantTableTissueHeader',
+                            cellBodyWriter:'dnaseVariantTableBody',
+                            categoryWriter:'dnaseVariantTableTissueHeaderLabel',
+                            subCategoryWriter:'dnaseVariantTableTissueRowLabel',
+                            numberRecordsCellPresentationStringWriter:'dnaseVariantTableNumberRecordsCellPresentationString',
+                            significanceCellPresentationStringWriter:'dnaseVariantTableSignificanceCellPresentationString',
+                            internalIdentifierString:'getDnaseGivenVariantList',
+                            nameOfAccumulatorField:'dnaseVariantInfo',
+                            nameOfAccumulatorFieldWithIndex:'variantInfoArray'
+                        }
 
                     ],
                     dynamicTableConfiguration: {

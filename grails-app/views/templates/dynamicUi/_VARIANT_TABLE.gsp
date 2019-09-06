@@ -28,8 +28,8 @@
 </script>
 
 <g:render template="/templates/variantTableTemplate" />
-<g:render template="/templates/dynamicUi/VHDR" />
-<g:render template="/templates/dynamicUi/ABC_VAR" />
+<g:render template="/templates/dynamicUi/varFocus/VHDR" />
+<g:render template="/templates/dynamicUi/varFocus/ABC_VAR" />
 <g:render template="/templates/dynamicUi/varFocus/VAR_CODING" />
 <g:render template="/templates/dynamicUi/varFocus/VAR_SPLICE" />
 <g:render template="/templates/dynamicUi/varFocus/VAR_UTR" />

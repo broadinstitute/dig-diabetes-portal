@@ -523,6 +523,8 @@ mpgSoftware.dynamicUi = (function () {
                 defaultFollowUp.placeToDisplayData = '#dynamicVariantHolder div.dynamicUiHolder';
                 break;
 
+
+
             default:
                 break;
         }
@@ -1218,27 +1220,55 @@ mpgSoftware.dynamicUi = (function () {
                 break;
 
             case "getDnaseGivenVariantList":
+                // functionToLaunchDataRetrieval = function () {
+                //     if (accumulatorObjectFieldEmpty("variantNameArray")) {
+                //         var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: "getDnaseGivenVariantList"});
+                //         actionToUndertake();
+                //     } else {
+                //         var variantsAsJson = "[]";
+                //         if (getAccumulatorObject("variantNameArray").length > 0) {
+                //             variantsAsJson = "[\"" + getAccumulatorObject("variantNameArray").join("\",\"") + "\"]";
+                //         }
+                //         var dataForCall = {variants: variantsAsJson};
+                //         retrieveRemotedContextInformation(buildRemoteContextArray({
+                //             name: "getDnaseGivenVariantList",
+                //             retrieveDataUrl: additionalParameters.retrieveDnaseDataUrl,
+                //             dataForCall: dataForCall,
+                //             processEachRecord: processDnaseRecordsFromVariantBasedRequest,
+                //             displayRefinedContextFunction: displayFunction,
+                //             placeToDisplayData: displayLocation,
+                //             actionId: nextActionId
+                //         }));
+                //     }
+                // };
+
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("variantNameArray")) {
+                    if (accumulatorObjectFieldEmpty(additionalParameters.nameOfAccumulatorFieldWithIndex)) {
                         var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: "getDnaseGivenVariantList"});
                         actionToUndertake();
                     } else {
                         var variantsAsJson = "[]";
-                        if (getAccumulatorObject("variantNameArray").length > 0) {
-                            variantsAsJson = "[\"" + getAccumulatorObject("variantNameArray").join("\",\"") + "\"]";
+                        if (getAccumulatorObject(additionalParameters.nameOfAccumulatorFieldWithIndex).length > 0) {
+                            var variantNameArray = _.map(getAccumulatorObject(additionalParameters.nameOfAccumulatorFieldWithIndex), function(variantRec){return variantRec.var_id;});
+                            variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";
                         }
                         var dataForCall = {variants: variantsAsJson};
                         retrieveRemotedContextInformation(buildRemoteContextArray({
                             name: "getDnaseGivenVariantList",
                             retrieveDataUrl: additionalParameters.retrieveDnaseDataUrl,
                             dataForCall: dataForCall,
-                            processEachRecord: processDnaseRecordsFromVariantBasedRequest,
+                            processEachRecord: mpgSoftware.dynamicUi.dnaseVariantTable.processRecordsFromDnase,
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
-                            actionId: nextActionId
+                            actionId: nextActionId,
+                            nameOfAccumulatorField:dataAnnotationType.nameOfAccumulatorField,
+                            code:dataAnnotationType.code,
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                         }));
                     }
                 };
+
+
                 break;
             case "getH3k27acGivenVariantList":
                 functionToLaunchDataRetrieval = function () {
