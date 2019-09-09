@@ -515,12 +515,12 @@ mpgSoftware.dynamicUi = (function () {
                 break;
 
             case "getDnaseGivenVariantList":
-                defaultFollowUp.displayRefinedContextFunction = displayDnaseGivenVariantList;
-                defaultFollowUp.placeToDisplayData = '#dynamicVariantHolder div.dynamicUiHolder';
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.dnaseVariantTable.displayTissueInformationFromDnase;
+                defaultFollowUp.placeToDisplayData = '#mainVariantDiv table.variantTableHolder';
                 break;
             case "getH3k27acGivenVariantList":
                 defaultFollowUp.displayRefinedContextFunction = displayH3k27acGivenVariantList;
-                defaultFollowUp.placeToDisplayData = '#dynamicVariantHolder div.dynamicUiHolder';
+                defaultFollowUp.placeToDisplayData = '#mainVariantDiv table.variantTableHolder';
                 break;
 
 
@@ -1243,13 +1243,13 @@ mpgSoftware.dynamicUi = (function () {
                 // };
 
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty(additionalParameters.nameOfAccumulatorFieldWithIndex)) {
+                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
                         var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: "getDnaseGivenVariantList"});
                         actionToUndertake();
                     } else {
                         var variantsAsJson = "[]";
-                        if (getAccumulatorObject(additionalParameters.nameOfAccumulatorFieldWithIndex).length > 0) {
-                            var variantNameArray = _.map(getAccumulatorObject(additionalParameters.nameOfAccumulatorFieldWithIndex), function(variantRec){return variantRec.var_id;});
+                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
+                            var variantNameArray = _.map(getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex), function(variantRec){return variantRec.var_id;});
                             variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";
                         }
                         var dataForCall = {variants: variantsAsJson};

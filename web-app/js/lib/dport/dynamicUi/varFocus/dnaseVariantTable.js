@@ -86,7 +86,7 @@ mpgSoftware.dynamicUi.dnaseVariantTable = (function () {
                     tissuesFilteredByAnnotation:tissueRecords};
 
             },
-            createSingleAbcCell
+            createSingleDnaseCell
         )
 
     };

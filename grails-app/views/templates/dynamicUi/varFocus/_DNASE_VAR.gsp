@@ -7,33 +7,33 @@ records={{numberRecords}}
 </script>
 
 <script id="dnaseVariantTableTissueRowLabel"  type="x-tmpl-mustache">
-<div class="tissueTableHeader staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">ABC&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/></div>
+<div class="tissueTableHeader staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">DNase&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/></div>
 </script>
 
 <script id="dnaseVariantTableTissueHeader"  type="x-tmpl-mustache">
 <div class="tissueTableTissueHeader initialLinearIndex_{{initialLinearIndex}}">{{tissueName}}</div>
 </script>
 
-<script id=dnaseVariantTableSignificanceCellPresentationString"  type="x-tmpl-mustache">
+<script id="dnaseVariantTableSignificanceCellPresentationString"  type="x-tmpl-mustache">
 {{significanceValueAsString}}
 </script>
 
-<script id="abcVariantTableSubCategory"  type="x-tmpl-mustache">
-     <div significance_sortfield='{{index}}' class='subcategory initialLinearIndex_{{indexInOneDimensionalArray}}'
-      sortField='{{index}}' subSortField='-1'>
-     {{#dataAnnotation}}
-          {{displaySubcategory}}
-          <g:helpText title="gene.COLOC.help.header" placement="bottom" body="gene.COLOC.help.text"/>
-     {{/dataAnnotation}}
-     </div>
-</script>
+%{--<script id="abcVariantTableSubCategory"  type="x-tmpl-mustache">--}%
+     %{--<div significance_sortfield='{{index}}' class='subcategory initialLinearIndex_{{indexInOneDimensionalArray}}'--}%
+      %{--sortField='{{index}}' subSortField='-1'>--}%
+     %{--{{#dataAnnotation}}--}%
+          %{--{{displaySubcategory}}--}%
+          %{--<g:helpText title="gene.COLOC.help.header" placement="bottom" body="gene.COLOC.help.text"/>--}%
+     %{--{{/dataAnnotation}}--}%
+     %{--</div>--}%
+%{--</script>--}%
 
 
 <script id="dnaseVariantTableBody"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortField="{{significanceValue}}"
              class="tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'ABC predictions for {{tissueName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
-               data-target="#depict_tissue_{{tissueNameKey}}" style="color:black">genes
+               data-target="#depict_tissue_{{tissueNameKey}}" style="color:black">tissues with open chromatin
                </a>
 
                <div  class="collapse openEffectorGeneInformationInGeneTable" id="depict_tissue_{{tissueNameKey}}">
