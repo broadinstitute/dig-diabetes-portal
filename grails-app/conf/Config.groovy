@@ -169,6 +169,7 @@ getRestServerList = [
         digdevlocalFederatedServer,
         digAWSKBV2prodServer,
         federatedAwsProdKBV2Server,
+        digawsdevnewKB,
         digawsqanewKB,
         digawsdevWorkflowKB,
         digawsdevWorkflowKBrevised,
@@ -319,6 +320,10 @@ environments {
       grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 
 //     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+
+//
+//        grails.serverURL = "http://mdgkp.us-east-1.elasticbeanstalk.com"
+
 
 
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
@@ -609,16 +614,16 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                         [], // any data sets that should be omitted from LZ display
                                                         "[3]",  // the assays we should search
                                                         "ExSeq_13k_mdv23",
-                                                "images/t2d_front_logo.svg",
+                                                "images/t2d/front_T2DKP_logo_2019.svg",
                                                 "portal.header.tagline",
                                                 "portal.header.title.short",
                                                 ["English", "Spanish"],
                                                 ["SLC30A8"],
                                                 ["rs13266634"],
                                                 ["chr9:21,940,000-22,190,000"],
-                                                "images/front_t2d_bg_2018.png",
+                                                "images/t2d/T2DKP_bg_2019.png",
                                                 "pheno.help.text",
-                                                "images/t2d_logo.svg",
+                                                "images/t2d/header_T2DKP_logo.svg",
                                                 "images/menu_bg_2017_5.png",
                                                 "true",
                                                 "gene.genePage.warning",
@@ -667,7 +672,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                           ["SIGN", "MetaStroke"], // any data sets that should be omitted from LZ display
                                                           "[3]",
                                                           "ExSeq_13k_mdv23",
-                                          "images/stroke/front_stroke_logo_2018.svg",
+                                          "images/stroke/front_strokeKP_logo_2019.svg",
                                           "portal.stroke.header.tagline",
                                           "portal.stroke.header.title.short",
                                           [],
@@ -676,7 +681,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["chr7:18,100,000-18,300,000"],
                                           "images/stroke/front_stroke_bg_2018.png",
                                           "stroke.pheno.help.text",
-                                          "images/stroke/stroke_header_logo.svg",
+                                          "images/stroke/header_strokeKP_logo.svg",
                                           "images/stroke/menu_bg_2017_stroke.png",
                                           "false",
                                           "",
@@ -721,7 +726,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                           [],
                                                           "[3]",
                                                           "GWAS_CARDIoGRAM_mdv91",
-                                          "images/mi/front_mi_logo_2018.svg",
+                                          "images/mi/front_miKP_logo_2019.svg",
                                           "portal.mi.header.tagline",
                                           "portal.mi.header.title.short",
                                           [],
@@ -730,7 +735,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["chr9:20,940,000-21,800,000"],
                                           "images/mi/front_mi_banner_2018.png",
                                         "",
-                                          "images/mi/mi_header_logo_2017.svg",
+                                          "images/mi/header_miKP_logo.svg",
                                           "images/mi/menu_band_2017_mi.png",
                                           "false",
                                           "",
@@ -778,7 +783,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
 //                                          "[1,2,3,4,5,6,7,8,9,10,11,12,13,14]",
                                           "[1,2,4,5,6,9,10,11,12,13,14,15,16,17,18]",
                                                           "GWAS_IBDGenomics_eu_mdv80",
-                                          "images/ibd/ibd_front_logo_WOnT2.png",
+                                          "images/v2f/front_V2FKP_logo_2019.svg",
                                           "portal.ibd.header.tagline",
                                           "portal.ibd.header.title",
                                           [],
@@ -788,7 +793,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "images/ibd/front_ibd_bg_2018.png",
                                         "",
                                          // "images/ibd/ibd_header_logo.svg",
-                                          "images/ibd/v2f-little-logo.png",
+                                          "images/v2f/front_V2FKP_banner_bg.png",
                                           "images/ibd/ibd_menu_wrapper_bg.png",
                                           "false",
                                           "",
@@ -889,7 +894,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           [],
                                           "[3]",
                                           "GWAS_UKBB_mdv110",
-                                          "images/sleep/front_sleep_logo_2018.svg",
+                                          "images/sleep/front_sleepKP_logo_2019.svg",
                                           "portal.sleep.header.tagline",
                                           "portal.sleep.header.title.short",
                                           [],
@@ -898,7 +903,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["chr2:113,873,524-114,136,577"],
                                           "images/sleep/sleep_banner_2018.png",
                                           "",
-                                          "images/sleep/sleep_menu_logo_2018.svg",
+                                          "images/sleep/header_sleepKP_logo.svg",
                                           "images/menu_bg_2017_5.png",
                                           "false",
                                           "",
@@ -939,21 +944,21 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "GWAS_UKBiobank_ModLeic_eu_mdv130",// used to pick a default data set for a gene query
                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
-                                          ["NHLF"],
+                                          ["NHLF", "AnteriorCaudate"],
                                           ["OTHER", "GLYCEMIC", "ANTHROPOMETRIC"], // most important phenotype group name
                                           [],
                                           "[3]",
                                           "GWAS_UKBiobank_ModLeic_eu_mdv130",
-                                          "images/sleep/front_sleep_logo_2018.svg",
+                                          "images/lung/front_LDKP_logo_2019_2.svg",
                                           "portal.lung.header.tagline",
                                           "portal.lung.header.title.short",
                                           [],
                                           ["HHIP"],
-                                          ["rs62158211"],
+                                          ["rs13113591"],
                                           ["chr2:113,873,524-114,136,577"],
-                                          "images/sleep/sleep_banner_2018.png",
+                                          "images/lung/front_LDKP_banner_bg.png",
                                           "",
-                                          "images/sleep/sleep_menu_logo_2018.svg",
+                                          "images/lung/header_LDKP_logo2.svg",
                                           "images/menu_bg_2017_5.png",
                                           "false",
                                           "",
@@ -974,7 +979,59 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           0,
                                           0,0,0, // Hi-C tab on the gene page
-                                          0,  // expose dynamic UI
+                                          1,  // expose dynamic UI
+                                          0, // expose the data set hierarchy in the sunburst visualization on the data page
+                                          0, // expose the old school variant and association table.  Potentially useful for debugging
+                                          0, // expose the IGV interface in its own accordion section
+                                          0,  // expose an accordion section with the burden test on the gene page
+                                          0,  // expose the 'genes in region' tab on the gene page
+                                          0, // expose the region adjuster for the gene page
+                                          0, // expose the gene table on the dynamic UI
+                                          0, // expose the variant table on the dynamic UI
+                                          0  // expose the effector gene table
+                                  ),
+                                  new PortalVersionBean("bone",
+                                          "Bone",
+                                          "mdv140",
+                                          "MGKP", // name of KB data we want
+                                          "Fracture", // make sure your default phenotype exists in your default data set
+                                          "GWAS_UKBiobankGEFOS_eu_mdv140",// used to pick a default data set for a gene query
+                                          ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
+                                          ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
+                                          ["SkeletalMuscle", "HSMM"],
+                                          ["MUSCULOSKELETAL", "ANTHROPOMETRIC"], // most important phenotype group name
+                                          [],
+                                          "[3]",
+                                          "GWAS_UKBiobankGEFOS_eu_mdv140",
+                                          "images/bone/front_boneKP_logo_2019_4.svg",
+                                          "portal.bone.header.tagline",
+                                          "portal.bone.header.title.short",
+                                          [],
+                                          ["WNT16"],
+                                          ["rs17284876"],
+                                          ["chr7:120,500,000-121,500,000"],
+                                          "images/bone/front_boneKP_banner_bg.png",
+                                          "",
+                                          "images/bone/header_boneKP_logo2.svg",
+                                          "images/menu_bg_2017_5.png",
+                                          "false",
+                                          "",
+                                          "",
+                                          '8578131941543427205',
+                                          1, // expose the common variant tab have on the gene page
+                                          1, // expose the high-impact variant tab on the gene page
+                                          1,
+                                          0,
+                                          0,
+                                          1,
+                                          0,
+                                          1,1,1,
+                                          0,
+                                          0,
+                                          0,
+                                          0,
+                                          0,0,0, // Hi-C tab on the gene page
+                                          1,  // expose dynamic UI
                                           0, // expose the data set hierarchy in the sunburst visualization on the data page
                                           0, // expose the old school variant and association table.  Potentially useful for debugging
                                           0, // expose the IGV interface in its own accordion section
@@ -986,4 +1043,3 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0  // expose the effector gene table
                                   )
 ]
-

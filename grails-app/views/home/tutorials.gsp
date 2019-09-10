@@ -168,6 +168,7 @@
 
         <div class="btn dk-t2d-blue dk-video-button dk-right-column-buttons-compact "><a href="https://youtu.be/CR_V8vX2dyE" target="_blank">Introduction to the Knowledge Portals</a></div>
         <div class="btn dk-t2d-blue dk-video-button dk-right-column-buttons-compact "><a href="https://youtu.be/W23p91NdA5o" target="_blank">Overview of the Knowledge Portal Variant Page</a></div>
+<div class="btn dk-t2d-blue dk-video-button dk-right-column-buttons-compact "><a href="https://youtu.be/cG6gxFunHt8" target="_blank">Predicted T2D effector genes</a></div>
         <div class="btn dk-t2d-blue dk-video-button dk-right-column-buttons-compact "><a href="https://youtu.be/xcIYElaA4D8" target="_blank">Webinar: AMP-T2DKP Overview</a></div>
 <div class="btn dk-t2d-blue dk-video-button dk-right-column-buttons-compact "><a href="https://www.youtube.com/watch?v=ylPn6D1hpY4" target="_blank">Webinar: T2DKP Gene-specific resources</a></div>
 

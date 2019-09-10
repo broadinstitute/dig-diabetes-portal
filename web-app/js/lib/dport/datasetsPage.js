@@ -19,24 +19,13 @@ var mpgSoftware = mpgSoftware || {};
          */
         var getAccessName = function (dataTypeName){
             var access;
-
-            if (dataTypeName.includes('CUHK')){
-                access = "Pre-publication";}
-            else if (dataTypeName.includes('DCSP2')){
-                access = "Pre-publication";}
-            else if (dataTypeName.includes('BioMe')){
-                access = "Pre-publication";}
-            else if (dataTypeName.includes('METSIM')){
-                access = "Pre-publication";}
-            else if (dataTypeName.includes('FUSION')){
-                access = "Pre-publication";}
-            else if (dataTypeName.includes('CAMP')){
-                access = "Pre-publication";}
-            else if (dataTypeName.includes('52kQT')){
-                access = "Pre-publication";}
-            else{
+            //if (dataTypeName.includes('FUSION')){
+            //    access = "Early access phase 2";}
+            //else if (dataTypeName.includes('DCSP2')){
+            //    access = "Early access phase 2";}
+            //else{
                 access = "Open access";
-        }
+        //}
             return access;
         }
 
@@ -307,7 +296,7 @@ var mpgSoftware = mpgSoftware || {};
                 $("#phenotypeFilterLevel1Display").empty().append(filterDynamicHtml);
                 renderFilteredData();
 
-                var newDatasets = ["quantitative trait", "GIANT 2018 exome", "WMHV", "COPD", "Accelerometer-derived", "Hong Kong", "Albuminuria", "TOPMed", "Heart failure", "oxyhemoglobin", "apnea", "IVGTT", "COGENT", "GLGC exome", "Inflammation", "Singapore Prospective", "METSIM", "BioMe", "CAMP", "FUSION", "GIANT 2018"];
+                var newDatasets = ["Bone", "BMD", "fracture", "WMHV", "Living", "Eye", "Japan GWAS", "Albuminuria", "TOPMed", "Heart failure", "T2D-GENES", "MEDIA", "VATGen", "FinnMetSeq", "Liver", "BioMe", "Osteoporosis", "2019", "oxyhemoglobin", "apnea"];
 
                 addNewDatasetFlag (newDatasets,".accordion-toggle","<span class='new-dataset-flag'>&nbsp;</span>"); //[DK] This function exists on t2dGenesCore.gsp. It's called to add "New dataset Flag
 

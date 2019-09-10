@@ -103,6 +103,15 @@
                 </div>
             </g:elseif>
 
+            <g:elseif test="${g.portalTypeString()?.equals('bone')}">
+                <div class="col-md-12">
+                    <h1 class="dk-page-title">Data</h1>
+                </div>
+                <div class="col-md-12">
+                    <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.bone.title" default="about the data"/></p>
+                </div>
+            </g:elseif>
+
     <g:elseif test="${g.portalTypeString()?.equals('mi')}">
             <div class="col-md-12">
                 <h1 class="dk-page-title">Polygenic Scores</h1>
