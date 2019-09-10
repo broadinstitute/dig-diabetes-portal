@@ -519,7 +519,7 @@ mpgSoftware.dynamicUi = (function () {
                 defaultFollowUp.placeToDisplayData = '#mainVariantDiv table.variantTableHolder';
                 break;
             case "getH3k27acGivenVariantList":
-                defaultFollowUp.displayRefinedContextFunction = displayH3k27acGivenVariantList;
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.h3k27acVariantTable.displayTissueInformationFromH3k27ac;
                 defaultFollowUp.placeToDisplayData = '#mainVariantDiv table.variantTableHolder';
                 break;
 
@@ -1271,27 +1271,53 @@ mpgSoftware.dynamicUi = (function () {
 
                 break;
             case "getH3k27acGivenVariantList":
+                // functionToLaunchDataRetrieval = function () {
+                //     if (accumulatorObjectFieldEmpty("variantNameArray")) {
+                //         var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: "getH3k27acGivenVariantList"});
+                //         actionToUndertake();
+                //     } else {
+                //         var variantsAsJson = "[]";
+                //         if (getAccumulatorObject("variantNameArray").length > 0) {
+                //             variantsAsJson = "[\"" + getAccumulatorObject("variantNameArray").join("\",\"") + "\"]";
+                //         }
+                //         var dataForCall = {variants: variantsAsJson};
+                //         retrieveRemotedContextInformation(buildRemoteContextArray({
+                //             name: "getH3k27acGivenVariantList",
+                //             retrieveDataUrl: additionalParameters.retrieveH3k27acDataUrl,
+                //             dataForCall: dataForCall,
+                //             processEachRecord: processH3k27acRecordsFromVariantBasedRequest,
+                //             displayRefinedContextFunction: displayFunction,
+                //             placeToDisplayData: displayLocation,
+                //             actionId: nextActionId
+                //         }));
+                //     }
+                // };
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("variantNameArray")) {
-                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: "getH3k27acGivenVariantList"});
+                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
+                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: actionId});
                         actionToUndertake();
                     } else {
                         var variantsAsJson = "[]";
-                        if (getAccumulatorObject("variantNameArray").length > 0) {
-                            variantsAsJson = "[\"" + getAccumulatorObject("variantNameArray").join("\",\"") + "\"]";
+                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
+                            var variantNameArray = _.map(getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex), function(variantRec){return variantRec.var_id;});
+                            variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";
                         }
                         var dataForCall = {variants: variantsAsJson};
                         retrieveRemotedContextInformation(buildRemoteContextArray({
-                            name: "getH3k27acGivenVariantList",
-                            retrieveDataUrl: additionalParameters.retrieveH3k27acDataUrl,
+                            name: actionId,
+                            retrieveDataUrl: additionalParameters.retrieveDnaseDataUrl,
                             dataForCall: dataForCall,
-                            processEachRecord: processH3k27acRecordsFromVariantBasedRequest,
+                            processEachRecord: mpgSoftware.dynamicUi.h3k27acVariantTable.processRecordsFromH3k27ac,
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
-                            actionId: nextActionId
+                            actionId: nextActionId,
+                            nameOfAccumulatorField:dataAnnotationType.nameOfAccumulatorField,
+                            code:dataAnnotationType.code,
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                         }));
                     }
                 };
+
                 break;
 
 
