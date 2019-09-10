@@ -481,25 +481,33 @@ mpgSoftware.burdenTestShared = (function () {
         var sampleMetadata = getStoredSampleMetadata();
         var phenotypeFilterValue = $(parmHolder.dropDownPhenoSelector).val();
         var stratifyDesignationValue = $(parmHolder.stratifyDesignation).val();
+        var caseControlDesignatorVal = $(parmHolder.caseControlDesignator).prop('checked');
         var convertedPhenotypeNames = convertPhenotypeNames(phenotypeFilterValue); // when phenotypes have been harmonized the step will be unnecessary...
         var filterDetails = _.find(sampleMetadata.filters, function (o) {
-            return o.name === convertedPhenotypeNames || o.name === phenotypeFilterValue;
-        })
+            const nameToCompare = ( convertedPhenotypeNames  ) ;
+            return ((nameToCompare===o.name)||(nameToCompare===(o.name+"_ADJ")));
+        });
+        let caseControlDesignatorDisabled =  false;
+        let caseControlDesignatorChecked =  caseControlDesignatorVal;
         if (typeof filterDetails !== 'undefined') {
             if (filterDetails.type === 'STRING') { // no case control switches in a real valued phenotype
-                $(parmHolder.caseControlDesignator).prop('disabled', false);
+                caseControlDesignatorDisabled =  false
             } else {
-                $(parmHolder.caseControlDesignator).prop('checked', false);
-                $(parmHolder.caseControlDesignator).prop('disabled', true);
+                caseControlDesignatorChecked = false;
+                caseControlDesignatorDisabled = true;
             }
         }else {  // if it's a phenotype we haven't seen before then default to hiding the case control box
-                // I think this arises due to a mismatch between the sample metadata and the metadata, but it's common enough to correct for
-            $(parmHolder.caseControlDesignator).prop('checked', false);
-            $(parmHolder.caseControlDesignator).prop('disabled', true);
+            // I think this arises due to a mismatch between the sample metadata and the metadata, but it's common enough to correct for
+            caseControlDesignatorChecked = false;
+            caseControlDesignatorDisabled = true;
         }
         $('#stratsTabs').empty();
-        var caseControlFiltering = $('#caseControlFiltering').prop('checked');
+        var caseControlFiltering = caseControlDesignatorChecked;
         stratifiedSampleAndCovariateSection($(parmHolder.datasetFilter), phenotypeFilterValue, stratifyDesignationValue, sampleMetadata.filters, caseControlFiltering, parmHolder);
+        if (caseControlDesignatorDisabled){
+            $(parmHolder.caseControlDesignator).prop('disabled', caseControlDesignatorDisabled);
+        }
+        $(parmHolder.caseControlDesignator).prop('checked', caseControlDesignatorChecked);
         displayTestResultsSection(false);
     };
 

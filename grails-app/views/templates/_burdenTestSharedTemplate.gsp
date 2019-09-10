@@ -697,53 +697,53 @@ the individual filters themselves. That work is handled later as part of a loop-
                                             </div>
                                         </div>
                                     </div>
-                                    <div  class="row">
-                                          <div style="margin:15px 8px 15px 10px" class="separator"></div>
-                                    </div>
+                                    %{--<div  class="row">--}%
+                                          %{--<div style="margin:15px 8px 15px 10px" class="separator"></div>--}%
+                                    %{--</div>--}%
 
-                                <div  class="row" style="margin: 10px 0 0px 0">
-                                    <div class="col-md-offset-2 col-md-8 col-sm-12 col-xs-12">
-                                        <div  class="row">
+                                %{--<div  class="row" style="margin: 10px 0 0px 0">--}%
+                                    %{--<div class="col-md-offset-2 col-md-8 col-sm-12 col-xs-12">--}%
+                                        %{--<div  class="row">--}%
 
 
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <div  class="row">
-                                                    <div class="col-md-12 col-sm-12 col-xs-12">
-                                                        <label>Add a new variant to list</label>
-                                                    </div>
-                                                    <div class="col-md-12 col-sm-12 col-xs-12">
-                                                        <div class="form-inline mafOptionChooser">
-                                                            <div class="radio">
-                                                                <label  style="font-size: 11px">
-                                                                    <input type="radio" name="additionalVariantOption" value="1" onclick="mpgSoftware.burdenTestShared.swapSingleMultipleVariantAdditionMode(1)" checked/>
-                                                                    &nbsp;Single variant
-                                                                </label>
-                                                            </div>
-                                                            <div class="radio">
-                                                                <label style="font-size: 11px">
-                                                                    <input type="radio" name="additionalVariantOption"  value="2" onclick="mpgSoftware.burdenTestShared.swapSingleMultipleVariantAdditionMode(2)"/>
-                                                                    &nbsp;Multiple
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>                                            </div>
-                                            <div class="col-md-5 col-sm-5 col-xs-12">
-                                                <input style="display: inline-block" type="text" class="form-control input-sm" id="proposedVariant"/>
-                                                <textarea style="display: none" type="text" class="form-control" cols=20 rows=4 id="proposedMultiVariant"/>
-                                            </div>
-                                            <div class="col-md-1 col-sm-1 col-xs-4">
-                                                <button id="addVariant" class="btn btn-secondary"
-                                                onclick="mpgSoftware.burdenTestShared.respondedToAddVariantButtonClick(
-                                                '${createLink(controller: "variantInfo", action: "variantAndDsAjax")}',
-                                                '${createLink(controller: 'variantInfo', action: 'variantInfo')}')">
-                                                    Add
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2"></div>
-                                </div>
+                                            %{--<div class="col-md-6 col-sm-6 col-xs-12">--}%
+                                                %{--<div  class="row">--}%
+                                                    %{--<div class="col-md-12 col-sm-12 col-xs-12">--}%
+                                                        %{--<label>Add a new variant to list</label>--}%
+                                                    %{--</div>--}%
+                                                    %{--<div class="col-md-12 col-sm-12 col-xs-12">--}%
+                                                        %{--<div class="form-inline mafOptionChooser">--}%
+                                                            %{--<div class="radio">--}%
+                                                                %{--<label  style="font-size: 11px">--}%
+                                                                    %{--<input type="radio" name="additionalVariantOption" value="1" onclick="mpgSoftware.burdenTestShared.swapSingleMultipleVariantAdditionMode(1)" checked/>--}%
+                                                                    %{--&nbsp;Single variant--}%
+                                                                %{--</label>--}%
+                                                            %{--</div>--}%
+                                                            %{--<div class="radio">--}%
+                                                                %{--<label style="font-size: 11px">--}%
+                                                                    %{--<input type="radio" name="additionalVariantOption"  value="2" onclick="mpgSoftware.burdenTestShared.swapSingleMultipleVariantAdditionMode(2)"/>--}%
+                                                                    %{--&nbsp;Multiple--}%
+                                                                %{--</label>--}%
+                                                            %{--</div>--}%
+                                                        %{--</div>--}%
+                                                    %{--</div>--}%
+                                                %{--</div>                                            </div>--}%
+                                            %{--<div class="col-md-5 col-sm-5 col-xs-12">--}%
+                                                %{--<input style="display: inline-block" type="text" class="form-control input-sm" id="proposedVariant"/>--}%
+                                                %{--<textarea style="display: none" type="text" class="form-control" cols=20 rows=4 id="proposedMultiVariant"/>--}%
+                                            %{--</div>--}%
+                                            %{--<div class="col-md-1 col-sm-1 col-xs-4">--}%
+                                                %{--<button id="addVariant" class="btn btn-secondary"--}%
+                                                %{--onclick="mpgSoftware.burdenTestShared.respondedToAddVariantButtonClick(--}%
+                                                %{--'${createLink(controller: "variantInfo", action: "variantAndDsAjax")}',--}%
+                                                %{--'${createLink(controller: 'variantInfo', action: 'variantInfo')}')">--}%
+                                                    %{--Add--}%
+                                                %{--</button>--}%
+                                            %{--</div>--}%
+                                        %{--</div>--}%
+                                    %{--</div>--}%
+                                    %{--<div class="col-md-2"></div>--}%
+                                %{--</div>--}%
                                 {{/variantsSetRefinement}}
 
 

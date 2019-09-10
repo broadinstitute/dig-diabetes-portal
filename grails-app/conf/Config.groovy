@@ -1018,6 +1018,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "",
                                           "",
                                           '8578131941543427205',
+                                          'http://raremetal.type2diabeteskb.org/aggregation/covariance',//URL for UMich aggregation tests
+                                          'http://raremetal.type2diabeteskb.org/aggregation/metadata',//URL for metadata needed by aggregation tests
                                           1, // expose the common variant tab have on the gene page
                                           1, // expose the high-impact variant tab on the gene page
                                           1,
