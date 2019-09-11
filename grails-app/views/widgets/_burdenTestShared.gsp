@@ -11,7 +11,9 @@ $( document ).ready( function (){
             allowPhenotypeChoice : ${allowPhenotypeChoice},
             allowStratificationChoice: ${allowStratificationChoice},
             grsVariantSet:'${grsVariantSet}',
-            modifiedGaitSummary:'${modifiedGaitSummary}',
+            modifiedGaitSummary:'${modifiedGaitSummary}'||('<g:message code="singleVariantTesting.label.introduction.p1" default="GAIT test" />'+
+                                    '<g:message code="singleVariantTesting.label.introduction.p2" default="" />'),
+            modifiedInitialInstruction:'${modifiedInitialInstruction}'||'<g:message code="singleVariantTesting.label.initial.user.instruction" default="" />',
             standAloneTool:'${standAloneTool}'
         },
         '${geneName}',

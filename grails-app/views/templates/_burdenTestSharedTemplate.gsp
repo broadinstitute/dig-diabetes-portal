@@ -87,7 +87,12 @@
 
         <div class="">
             <h3>
-                Choose a method, phenotype, and partitioning strategy
+                    {{#modifiedInitialInstruction}}
+                        {{{modifiedInitialInstruction}}}
+                    {{/modifiedInitialInstruction}}
+                    {{^modifiedInitialInstruction}}
+                        <g:message code="aggregationTesting.label.initial.user.instruction"/>
+                    {{/modifiedInitialInstruction}}
             </h3>
         </div>
         <div id="chooseSamples" class="">
@@ -180,33 +185,7 @@
 
                 <div class="row">
                     <div class="col-sm-12 col-xs-12 text-left">
-                        %{--<div class="burdenMethodChoiceHolder">--}%
-        %{--<label for="burdenMethodChoice">Method:</label>--}%
-        %{--<select id="burdenMethodChoice">--}%
-            %{--<option value="sum">Burden test</option>--}%
-            %{--<option value="max">Collapse test</option>--}%
-            %{--<option value="skat">SKAT</option>--}%
-            %{--<option value="vt">Variable threshold</option>--}%
-            %{--<option value="burden">UMich burden</option>--}%
-        %{--</select>--}%
-    %{--</div>--}%
 
-%{--                        <div  id="caseControlFilteringWithLabel" class="checkbox" style="margin:20px 0 10px 0">--}%
-%{--                                <span style="margin: 0 25px 0 0; font-weight: bold">Samples:</span>--}%
-%{--                                <input id="caseControlFiltering" type="checkbox" name="caseControlFiltering"--}%
-%{--                                       value="caseControlFiltering"--}%
-%{--                                        onchange="mpgSoftware.burdenTestShared.refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering',false,--}%
-%{--                                         {linkToTypeaheadUrl:'${createLink(controller:"gene", action:"variantOnlyTypeAhead")}',--}%
-%{--                                         sampleMetadataAjaxUrl:'${createLink(controller: "VariantInfo", action: "sampleMetadataAjax")}',--}%
-%{--                                         generateListOfVariantsFromFiltersAjaxUrl:'${createLink(controller: "gene", action: "generateListOfVariantsFromFiltersAjax")}',--}%
-%{--                                         variantInfoUrl:'${createLink(controller: "variantInfo", action: "variantInfo")}',--}%
-%{--                                         retrieveSampleSummaryUrl:'${createLink(controller: "variantInfo", action: "retrieveSampleSummary")}',--}%
-%{--                                         variantAndDsAjaxUrl:'${createLink(controller: "variantInfo", action: "variantAndDsAjax")}',--}%
-%{--                                         burdenTestVariantSelectionOptionsAjaxUrl:'${createLink(controller: "gene", action: "burdenTestVariantSelectionOptionsAjax")}',--}%
-%{--                                         getGRSListOfVariantsAjaxUrl:'${createLink(controller:"gait",action: "getGRSListOfVariantsAjax")}'})">--}%
-%{--                                        <label style="padding-left:0">Filter cases and controls separately</label>--}%
-%{--                                </input>--}%
-%{--                        </div>--}%
                     </div>
                 </div>
 
@@ -817,13 +796,11 @@ the individual filters themselves. That work is handled later as part of a loop-
             <div class="container">
                 <h5>
                     {{#modifiedGaitSummary}}
-                        {{modifiedGaitSummary}}
+                        {{{modifiedGaitSummary}}}
                     {{/modifiedGaitSummary}}
                     {{^modifiedGaitSummary}}
-                        <p>The Genetic Association Interactive Tool allows you to compute custom association statistics by specifying the phenotype to test for association, a subset of samples to analyze based on specific phenotypic criteria, and a set of covariates to control for in the analysis.
-     In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.</p>
-
-     <p>In the custom burden test and GAIT, results for the T2D phenotype are powered by the AMP T2D-GENES exome sequence analysis dataset; results for other traits are powered by the 19k exome sequence analysis subset.</p>
+                        <g:message code="aggregationTesting.label.introduction.p1"/>
+                        <g:message code="aggregationTesting.label.introduction.p2"/>
                     {{/modifiedGaitSummary}}
                 </h5>
 
