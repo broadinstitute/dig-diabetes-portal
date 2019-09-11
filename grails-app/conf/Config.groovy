@@ -984,7 +984,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "GWAS_UKBiobankGEFOS_eu_mdv140",// used to pick a default data set for a gene query
                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
-                                          ["SkeletalMuscle", "HSMM"],
+                                          ["SkeletalMuscle", "HSMM", "hASC-t1", "hASC-t2", "hASC-t3", "hASC-t4"],
                                           ["MUSCULOSKELETAL", "ANTHROPOMETRIC"], // most important phenotype group name
                                           [],
                                           "[3]",
@@ -1003,7 +1003,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "false",
                                           "",
                                           "",
-                                          '8578131941543427205',
+                                          '1762387418132093579',
                                           1, // expose the common variant tab have on the gene page
                                           1, // expose the high-impact variant tab on the gene page
                                           1,
