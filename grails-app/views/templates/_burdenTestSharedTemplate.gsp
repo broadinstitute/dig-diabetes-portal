@@ -113,7 +113,7 @@
                             <option value="skat">SKAT</option>
                             <option value="skat-o">SKAT-O</option>
                             <option value="vt">Variable threshold</option>
-                            <option value="burden">UMich burden</option>
+%{--                            <option value="burden">UMich burden</option>--}%
                         </select>
                     </div>
 

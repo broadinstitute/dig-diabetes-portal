@@ -75,7 +75,7 @@ var mpgSoftware = mpgSoftware || {};
                 }
             });
             promise.fail( function (jqXHR, textStatus, errorThrown){
-                    alert('Burden test calculation failed, text='+textStatus+', error='+errorThrown+'.');
+                    alert('Test calculation failed, text='+textStatus+', error='+errorThrown+'.');
                 }
             );
             promiseArray.push(
@@ -101,8 +101,11 @@ var mpgSoftware = mpgSoftware || {};
             return promiseArray;
         };
         var buildAndRunUMichTest = function (asynchronousPromiseRunner, url, variableList, phenotype, subtype, displayResults) {
-            var covariance_request_spec = generateObjectForLdServer(variableList,phenotype);
-            asynchronousPromiseRunner(buildUMichBurdenTestPromiseArray(url, covariance_request_spec, subtype,displayResults),undefined);
+
+                var covariance_request_spec = generateObjectForLdServer(variableList,phenotype);
+                asynchronousPromiseRunner(buildUMichBurdenTestPromiseArray(url, covariance_request_spec, subtype,displayResults),undefined);
+
+
         }
         var showOnlyRelevantInterfaceSections = function (currentDropdown) {
             const method = $(currentDropdown).val();
@@ -110,15 +113,23 @@ var mpgSoftware = mpgSoftware || {};
                 case 'sum':
                 case 'max':
                     $('#chooseFiltersLocation').show();
-                    $('#chooseCovariatesLocation').show();
+                    $('div.covariateHolder input.covariate').attr('disabled',false)
                     $('#stratifyDesignation').attr("disabled", false);
+                    $('div.covariateHolder label').css('color','#000');
                     break;
                 case 'skat':
                 case 'skat-o':
                 case 'vt':
                 case 'burden':
                     $('#chooseFiltersLocation').hide();
-                    $('#chooseCovariatesLocation').hide();
+                    $('div.covariateHolder input.covariate').attr('checked',false);
+                    $('#covariate_strat1_C1').prop('checked',true);
+                    $('#covariate_strat1_C2').prop('checked',true);
+                    $('#covariate_strat1_C3').prop('checked',true);
+                    $('#covariate_strat1_C4').prop('checked',true);
+                    $('#covariate_strat1_Age').prop('checked',true);
+                    $('#covariate_strat1_SEX').prop('checked',true);
+                    $('div.covariateHolder label').css('color','#aaa');
                     $('#stratifyDesignation').attr("disabled", true);
                     break;
                 default:

@@ -2111,27 +2111,31 @@ mpgSoftware.burdenTestShared = (function () {
             case 'vt':
             case 'burden':
                 var coreVariables = mpgSoftware.geneSignalSummaryMethods.getSignalSummarySectionVariables();
-                mpgSoftware.externalBurdenTestMethods.buildAndRunUMichTest(asynchronousPromiseRunner,
-                    coreVariables.aggregationCovarianceUrl,
-                    variantsToUse.map(function(o){return o.replace(/\"/g,"")}),
-                    phenotypeToPredict,methodChoice,
-                    function(results){
-                        if (( typeof results !== 'undefined') &&
-                            (results.length>0)){
-                            console.log("hurray!");
-                            console.log(results)  ;
-                            const renderData = _.map(results,function(oneResult){
-                                oneResult["variantCount"] = function(){return oneResult.variants.length};
-                                oneResult["pValuePrintable"] = function(){return UTILS.realNumberFormatter(oneResult.pvalue)};
-                                oneResult["statPrintable"] = function(){return UTILS.realNumberFormatter(oneResult.stat)};
-                                return oneResult
-                            });
-                            displayTestResultsSection(true);
-                            $("div.strataResults").empty().append(Mustache.render($('#uMichAggregationTestResults')[0].innerHTML,
-                                renderData));
-                        }
+                    mpgSoftware.externalBurdenTestMethods.buildAndRunUMichTest(asynchronousPromiseRunner,
+                        coreVariables.aggregationCovarianceUrl,
+                        variantsToUse.map(function(o){return o.replace(/\"/g,"")}),
+                        phenotypeToPredict,methodChoice,
+                        function(results){
+                            if (( typeof results !== 'undefined') &&
+                                (results.length>0)){
+                                console.log(results)  ;
+                                if ((results.length===1)&&
+                                    (isNaN(results[0].pvalue))&&
+                                    (isNaN(results[0].stat))){
+                                    alert('Test failed to converge on a solution.  Choose a different type of test, or else submit a different list of variants');
+                                }
+                                const renderData = _.map(results,function(oneResult){
+                                    oneResult["variantCount"] = function(){return oneResult.variants.length};
+                                    oneResult["pValuePrintable"] = function(){return UTILS.realNumberFormatter(oneResult.pvalue)};
+                                    oneResult["statPrintable"] = function(){return UTILS.realNumberFormatter(oneResult.stat)};
+                                    return oneResult
+                                });
+                                displayTestResultsSection(true);
+                                $("div.strataResults").empty().append(Mustache.render($('#uMichAggregationTestResults')[0].innerHTML,
+                                    renderData));
+                            }
+                        });
 
-                    });
                 break;
             default:
                 alert('unrecognized aggregation test type ='+methodChoice+'.');
@@ -2946,12 +2950,12 @@ mpgSoftware.burdenTestShared = (function () {
      */
     var asynchronousPromiseRunner = function (arrayOfPromises, followUpRoutine) {
         $('#rSpinner').show();
-        $.when.apply($, arrayOfPromises).then(function () {
+        $.when.apply($, arrayOfPromises).then(function (a,b) {
             if( typeof  followUpRoutine !== 'undefined'){
                 followUpRoutine();
             }
             $('#rSpinner').hide();
-        });
+        }).fail(function(a){alert('Aggregation test failed.  Please try a different test, or a different collection of variants')});
     };
 
 

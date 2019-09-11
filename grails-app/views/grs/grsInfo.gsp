@@ -71,9 +71,6 @@ ul.nav-tabs > li.active > a { background-color: #fff !important; }
         <div class="gene-info-container row">
 
             <g:render template="/templates/burdenTestSharedTemplate" />
-%{--            'modifiedGaitSummary': '<g:message code="grsTesting.label.introduction.p1"/>',--}%
-%{--            <g:message code="grsTesting.label.initial.user.instruction"/>--}%
-%{--            <g:set var="abc" value="<g:message code='grsTesting.label.introduction.p1'/>"/>--}%
             <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': '',
                                                                    'accordionHeaderClass': 'accordion-heading',
                                                                    'modifiedTitle': 'Genetic risk score module',
