@@ -3,7 +3,7 @@ records={{numberRecords}}
 </script>
 
 <script id="dnaseVariantTableTissueHeaderLabel"  type="x-tmpl-mustache">
-<div class="initialLinearIndex_{{indexInOneDimensionalArray}}">Annotations</div>
+<div class="initialLinearIndex_{{indexInOneDimensionalArray}}">Epigenetics</div>
 </script>
 
 <script id="dnaseVariantTableTissueRowLabel"  type="x-tmpl-mustache">
@@ -22,7 +22,7 @@ records={{numberRecords}}
              <div significance_sortField="{{significanceValue}}" sortField="{{significanceValue}}"
              class="tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'ABC predictions for {{tissueName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
-               data-target="#open_chromatin_tissue_{{tissueNameKey}}" style="color:black">tissues with open chromatin
+               data-target="#open_chromatin_tissue_{{tissueNameKey}}" style="color:black">tissues
                </a>
 
                <div  class="collapse openEffectorGeneInformationInGeneTable" id="open_chromatin_tissue_{{tissueNameKey}}">
@@ -30,7 +30,7 @@ records={{numberRecords}}
                         <table class="expandableDrillDownTable openEffectorGeneInformationInGeneTable" style="margin: 0 auto">
                          <thead>
                           <tr role="row">
-                            <th class="text-center otherCols">Tissue</th>
+                            <th class="text-center leftMostCol">Tissue</th>
                             <th class="text-center otherCols">Value</th>
                           </tr>
                          </thead>
@@ -38,7 +38,7 @@ records={{numberRecords}}
                      {{/recordsExist}}
                          {{#tissueRecords}}
                           <tr role="row">
-                               <td class="text-center otherCols">{{SOURCE}}</td>
+                               <td class="text-center leftMostCol">{{SOURCE}}</td>
                                <td class="text-center otherCols">{{VALUE}}</td>
                            </tr>
                           {{/tissueRecords}}

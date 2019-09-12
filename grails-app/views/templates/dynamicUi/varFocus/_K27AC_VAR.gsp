@@ -3,11 +3,11 @@ records={{numberRecords}}
 </script>
 
 <script id="k27acVariantTableTissueHeaderLabel"  type="x-tmpl-mustache">
-<div class="initialLinearIndex_{{indexInOneDimensionalArray}}">Annotations</div>
+<div class="initialLinearIndex_{{indexInOneDimensionalArray}}">Epigenetics</div>
 </script>
 
 <script id="k27acVariantTableTissueRowLabel"  type="x-tmpl-mustache">
-<div class="tissueTableHeader staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">DNase&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/></div>
+<div class="tissueTableHeader staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">H3k27ac&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/></div>
 </script>
 
 <script id="k27acVariantTableTissueHeader"  type="x-tmpl-mustache">
@@ -20,9 +20,9 @@ records={{numberRecords}}
 
 <script id="k27acVariantTableBody"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortField="{{significanceValue}}"
-             class="tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
+             class="k27ac tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'ABC predictions for {{tissueName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
-               data-target="#k27ac_tissue_{{tissueNameKey}}" style="color:black">tissues with H3K27ac marks
+               data-target="#k27ac_tissue_{{tissueNameKey}}" style="color:black">tissues
                </a>
 
                <div  class="collapse openEffectorGeneInformationInGeneTable" id="k27ac_tissue_{{tissueNameKey}}">

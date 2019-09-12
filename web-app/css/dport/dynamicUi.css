@@ -16,6 +16,9 @@ div.contextHolder{
     padding: 80px 20px 20px 20px;
     border: solid 1px #fff;
 }
+div.k27ac {
+    word-break:break-all;
+}
 
 /*.dataTables_wrapper.dk-zoom-0, .dataTables_wrapper.dk-zoom-0 .btn { font-size: 14px; }*/
 /*.dataTables_wrapper.dk-zoom-1, .dataTables_wrapper.dk-zoom-1 .btn { font-size: 12px; }*/

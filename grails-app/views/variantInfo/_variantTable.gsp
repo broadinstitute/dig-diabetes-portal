@@ -131,6 +131,23 @@
                             nameOfAccumulatorField:'dnaseVariantInfo',
                             nameOfAccumulatorFieldWithIndex:'variantInfoArray'
                         }
+                        ,
+                        {
+                            code: 'K27AC_VAR',
+                            category: 'H3K27ac',
+                            displayCategory: 'H3K27ac',
+                            subcategory: 'H3K27ac list',
+                            displaySubcategory: 'H3K27ac list',
+                            headerWriter:'k27acVariantTableTissueHeader',
+                            cellBodyWriter:'k27acVariantTableBody',
+                            categoryWriter:'k27acVariantTableTissueHeaderLabel',
+                            subCategoryWriter:'k27acVariantTableTissueRowLabel',
+                            numberRecordsCellPresentationStringWriter:'k27acVariantTableNumberRecordsCellPresentationString',
+                            significanceCellPresentationStringWriter:'k27acVariantTableSignificanceCellPresentationString',
+                            internalIdentifierString:'getH3k27acGivenVariantList',
+                            nameOfAccumulatorField:'h3k27acVariantInfo',
+                            nameOfAccumulatorFieldWithIndex:'variantInfoArray'
+                        }
 
                     ],
                     dynamicTableConfiguration: {

@@ -5,7 +5,7 @@ Annotation
 </script>
 
 <script id="variantIsSplicingSubcategoryLabel"  type="x-tmpl-mustache">
-<div class="variantAnnotation initialLinearIndex_{{indexInOneDimensionalArray}}">
+<div class="variantAnnotation staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">
 Splice
 <g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/>
 </div>

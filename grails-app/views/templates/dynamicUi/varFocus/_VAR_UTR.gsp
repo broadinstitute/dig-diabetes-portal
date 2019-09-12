@@ -5,7 +5,7 @@ Annotation
 </script>
 
 <script id="variantIsUtrSubcategoryLabel"  type="x-tmpl-mustache">
-<div class="variantAnnotation initialLinearIndex_{{indexInOneDimensionalArray}}">
+<div class="variantAnnotation staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">
 UTR
 <g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/>
 </div>

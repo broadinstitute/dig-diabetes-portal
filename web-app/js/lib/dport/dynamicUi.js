@@ -1220,28 +1220,6 @@ mpgSoftware.dynamicUi = (function () {
                 break;
 
             case "getDnaseGivenVariantList":
-                // functionToLaunchDataRetrieval = function () {
-                //     if (accumulatorObjectFieldEmpty("variantNameArray")) {
-                //         var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: "getDnaseGivenVariantList"});
-                //         actionToUndertake();
-                //     } else {
-                //         var variantsAsJson = "[]";
-                //         if (getAccumulatorObject("variantNameArray").length > 0) {
-                //             variantsAsJson = "[\"" + getAccumulatorObject("variantNameArray").join("\",\"") + "\"]";
-                //         }
-                //         var dataForCall = {variants: variantsAsJson};
-                //         retrieveRemotedContextInformation(buildRemoteContextArray({
-                //             name: "getDnaseGivenVariantList",
-                //             retrieveDataUrl: additionalParameters.retrieveDnaseDataUrl,
-                //             dataForCall: dataForCall,
-                //             processEachRecord: processDnaseRecordsFromVariantBasedRequest,
-                //             displayRefinedContextFunction: displayFunction,
-                //             placeToDisplayData: displayLocation,
-                //             actionId: nextActionId
-                //         }));
-                //     }
-                // };
-
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
                         var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: "getDnaseGivenVariantList"});
@@ -1305,7 +1283,7 @@ mpgSoftware.dynamicUi = (function () {
                         var dataForCall = {variants: variantsAsJson};
                         retrieveRemotedContextInformation(buildRemoteContextArray({
                             name: actionId,
-                            retrieveDataUrl: additionalParameters.retrieveDnaseDataUrl,
+                            retrieveDataUrl: additionalParameters.retrieveH3k27acDataUrl,
                             dataForCall: dataForCall,
                             processEachRecord: mpgSoftware.dynamicUi.h3k27acVariantTable.processRecordsFromH3k27ac,
                             displayRefinedContextFunction: displayFunction,
@@ -5355,7 +5333,6 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             }
         }
         $(zoomWrapper).data("zoomParmHolder",currentSize);
-        console.log("currentsize="+currentSize+".")
 
         $(zoomWrapper).find(".dataTables_wrapper").removeClass("dk-zoom-0 dk-zoom-1 dk-zoom-2 dk-zoom-3 dk-zoom-4 dk-zoom-5 dk-zoom-6").addClass("dk-zoom-"+currentSize);
 
