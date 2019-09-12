@@ -116,7 +116,24 @@
                             {"name":"Webinar video: gene-specific resources in the T2DKP","link":"https://www.youtube.com/watch?v=ylPn6D1hpY4","class":"resource","type":"new"}]);
                     </script>
                 </g:if>
-
+                <g:elseif test="${g.portalTypeString()?.equals('mi')}">
+                    <script type="text/javascript">
+                        /* Example to add 'new' or 'updated' feature buttons;
+                         mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]);
+                         */
+                        mpgSoftware.homePage.newFeatures([{"name":"Tissue enrichments","link":"${createLink(controller:'trait',action:'tissueTable')}","class":"resource","type":"new"},
+                            {"name":"Webinar video: gene-specific resources in the Portals","link":"https://www.youtube.com/watch?v=ylPn6D1hpY4","class":"resource","type":"new"}]);
+                    </script>
+                </g:elseif>
+                <g:elseif test="${g.portalTypeString()?.equals('stroke')}">
+                    <script type="text/javascript">
+                        /* Example to add 'new' or 'updated' feature buttons;
+                         mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]);
+                         */
+                        mpgSoftware.homePage.newFeatures([{"name":"Tissue enrichments","link":"${createLink(controller:'trait',action:'tissueTable')}","class":"feature","type":"new"},
+                            {"name":"Webinar video: gene-specific resources in the Portals","link":"https://www.youtube.com/watch?v=ylPn6D1hpY4","class":"resource","type":"new"}]);
+                    </script>
+                </g:elseif>
 
             <!-- New features buttons end -->
 
@@ -670,9 +687,9 @@
                     </div>
                 </div>
                 </div>
-                    <g:if test="${g.portalTypeString()?.equals('t2d')}">
-                        <a href="http://t2d-genetics-portal.blogspot.com/2019/07/t2dkp-webinar-thursday-july-18.html" target="_blank" style="display:block; float:right; margin: 20px 15px -20px 0;"><img src="${resource(dir: 'images', file: 'webinar_jul_18.png')}" style="" ></a>
-                    </g:if>
+                    %{--<g:if test="${g.portalTypeString()?.equals('t2d')}">--}%
+                        %{--<a href="http://t2d-genetics-portal.blogspot.com/2019/07/t2dkp-webinar-thursday-july-18.html" target="_blank" style="display:block; float:right; margin: 20px 15px -20px 0;"><img src="${resource(dir: 'images', file: 'webinar_jul_18.png')}" style="" ></a>--}%
+                    %{--</g:if>--}%
                     <div class="col-md-5 col-md-offset-1" style="margin-top:30px;">
                         <h3 style="font-weight:700; font-size:30px; font-family:'Oswald'; color:#000000; text-align: left; margin-top: 10px;"><g:message code="portal.home.news_headline" default="What's new" />&nbsp;<span style="color:#4eadcd; vertical-align: 5px;" class="glyphicon glyphicon-comment" aria-hidden="true"></span></h3>
                         <ul id="newsFeedHolder" class="dk-news-items gallery-fade"></ul>
@@ -708,20 +725,6 @@
                             </div>
 
                         </g:elseif>
-
-                        <g:elseif test="${g.portalTypeString()?.equals('bone')}">
-                            <div style="position:absolute; top: 25px; right:-40px; ">
-                                <p style="margin-bottom:3px;">
-                                    <a href="mailto:help@kp4cd.org">
-                                        <img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'email_update.svg')}" />
-                                    </a>
-                                </p>
-                                <p style="margin-bottom:3px;"><a href="https://twitter.com/KPortalNetwork" target="_blank"><img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'twitter_icn.svg')}" /></a></p>
-
-                            </div>
-
-                        </g:elseif>
-
 
                         <g:else>
                             <div style="position:absolute; top: 25px; right:-40px; ">
@@ -765,15 +768,13 @@
 
                     <g:elseif test="${g.portalTypeString()?.equals('lung')}"> 
                         <p><g:message code="about.the.lung.portal.text1"/></p>
-                         </g:elseif>
+ </g:elseif>
 
                     <g:elseif test="${g.portalTypeString()?.equals('bone')}"> 
                         <p><g:message code="about.the.bone.portal.text"/></p>
                         <p><g:message code="about.the.bone.portal.text2"/></p>
-                        <p><g:message code="about.the.bone.portal.text3"/></p>
-                        <p><a href="http://www.ifmrs.org" target="_blank"><img src="${resource(dir:'images/organizations', file:'IFMRS_logo_large.jpg')}" style="width:350px"></a></p>
-                         <p><a href="http://www.asbmr.org" target="_blank"><img src="${resource(dir:'images/organizations', file:'ASBMR_logo.png')}" style="width:180px"></a></p>
-                         <p><a href="http://www.asbmr.org" target="_blank"><img src="${resource(dir:'images/organizations', file:'ICMH_logo.png')}" style="width:280px"></a></p>
+                        <p><a href="http://www.ifmrs.org" target="_blank"><img src="${resource(dir:'images/organizations', file:'IFMRS_Logo.jpg')}" style="width:200px"></a></p>
+ <p><a href="http://www.asbmr.org" target="_blank"><img src="${resource(dir:'images/organizations', file:'ASBMR_logo.png')}" style="width:200px"></a></p>
                     </g:elseif>
 
                     <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
