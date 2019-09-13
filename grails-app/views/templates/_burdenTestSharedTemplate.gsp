@@ -787,7 +787,7 @@ the individual filters themselves. That work is handled later as part of a loop-
 
             {{#variantsSetRefinement}}
                 <div style="float: right; margin-top: 15px;" class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact ">
-                    <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/KP_GAIT_guide.pdf" target="_blank">Custom association analysis guide</a>
+                    <a href="" target="_blank">Aggregation test guide</a>
                 </div>
             {{/variantsSetRefinement}}
 
@@ -800,7 +800,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                     {{/modifiedGaitSummary}}
                     {{^modifiedGaitSummary}}
                         <g:message code="aggregationTesting.label.introduction.p1"/>
-                        <g:message code="aggregationTesting.label.introduction.p2"/>
+
                     {{/modifiedGaitSummary}}
                 </h5>
 
