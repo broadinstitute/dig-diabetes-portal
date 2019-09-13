@@ -108,11 +108,11 @@
                     <div class="chooseAggregationMethod">
                         <select id="burdenMethodChoice" class="traitFilter form-control text-left"
                         onchange="mpgSoftware.externalBurdenTestMethods.showOnlyRelevantInterfaceSections(this)">
-                            <option value="sum">Burden test</option>
-                            <option value="max">Collapse test</option>
+                            <option value="sum">Additive burden test</option>
+                            <option value="max">Collapsing burden test</option>
                             <option value="skat">SKAT</option>
                             <option value="skat-o">SKAT-O</option>
-                            <option value="vt">Variable threshold</option>
+                            <option value="vt">Variable threshold burden test</option>
 %{--                            <option value="burden">UMich burden</option>--}%
                         </select>
                     </div>
@@ -202,12 +202,20 @@ the individual filters themselves. That work is handled later as part of a loop-
 
 <div class="panel panel-default">%{--should hold the Choose filters panel--}%
 
+            %{--<div class="panel-heading">--}%
+                %{--<h4 class="panel-title">--}%
+                    %{--<a data-toggle="collapse" data-parent="#filterSamples"--}%
+                       %{--href="#filterSamples" onclick="checkGaitTabs(event);" >Step {{sectionNumber}}: Select a subset of samples based on phenotypic criteria</a>--}%
+                %{--</h4>--}%
+            %{--</div>--}%
+
             <div class="panel-heading">
                 <h4 class="panel-title">
                     <a data-toggle="collapse" data-parent="#filterSamples"
-                       href="#filterSamples" onclick="checkGaitTabs(event);" >Step {{sectionNumber}}: Select a subset of samples based on phenotypic criteria</a>
+                       href="#filterSamples" onclick="checkGaitTabs(event);" >Select a subset of samples based on phenotypic criteria</a>
                 </h4>
             </div>
+
 
             <div id="filterSamples" class="panel-collapse collapse">
                 <div class="panel-body  secBody">
@@ -469,13 +477,19 @@ the individual filters themselves. That work is handled later as part of a loop-
 <script id="chooseCovariatesTemplate"  type="x-tmpl-mustache">
         <div class="panel panel-default">%{--should hold the initiate analysis set panel--}%
 
+            %{--<div class="panel-heading">--}%
+                %{--<h4 class="panel-title">--}%
+                    %{--<a data-toggle="collapse" data-parent="#initiateAnalysis_{{stratum}}"--}%
+                       %{--href="#initiateAnalysis_{{stratum}}">Step {{sectionNumber}}: Control for covariates</a>--}%
+                %{--</h4>--}%
+            %{--</div>--}%
+
             <div class="panel-heading">
                 <h4 class="panel-title">
                     <a data-toggle="collapse" data-parent="#initiateAnalysis_{{stratum}}"
-                       href="#initiateAnalysis_{{stratum}}">Step {{sectionNumber}}: Control for covariates</a>
+                       href="#initiateAnalysis_{{stratum}}">Control for covariates</a>
                 </h4>
             </div>
-
 
             <div id="initiateAnalysis_{{stratum}}" class="panel-collapse collapse">
                 <div class="panel-body secBody">
@@ -593,13 +607,19 @@ the individual filters themselves. That work is handled later as part of a loop-
 <script id="variantFilterSelectionTemplate"  type="x-tmpl-mustache">
         <div class="panel panel-default">%{--should hold the initiate analysis set panel--}%
 
+            %{--<div class="panel-heading">--}%
+                %{--<h4 class="panel-title">--}%
+                    %{--<a data-toggle="collapse" data-parent="#variantFilterSelection"--}%
+                       %{--href="#variantFilterSelection">Step {{sectionNumber}}: Manage variant selection</a>--}%
+                %{--</h4>--}%
+            %{--</div>--}%
+
             <div class="panel-heading">
                 <h4 class="panel-title">
                     <a data-toggle="collapse" data-parent="#variantFilterSelection"
-                       href="#variantFilterSelection">Step {{sectionNumber}}: Manage variant selection</a>
+                       href="#variantFilterSelection">Manage variant selection</a>
                 </h4>
             </div>
-
 
             <div id="variantFilterSelection" class="panel-collapse collapse">
                 <div class="panel-body secBody">
@@ -607,7 +627,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                     <div class="row">
                         <div class="col-sm-12 col-xs-12">
                             <p>
-                                Choose a collection of variants for analysis. Choose a variant filter; set a MAF threshold if desired (this overrides the MAF thresholds in the variant filters) and apply the threshold across all samples or each ancestry; add variants to the list; or remove variants by using the check boxes at the left of the table.
+                                Choose a collection of variants for analysis. Choose a variant filter; set a MAF threshold if desired (this overrides the MAF thresholds in the variant filters) and apply the threshold across all samples or each ancestry. Remove variants from the list using the check boxes at the left of the table.
                             </p>
                         </div>
                     </div>
@@ -787,7 +807,7 @@ the individual filters themselves. That work is handled later as part of a loop-
 
             {{#variantsSetRefinement}}
                 <div style="float: right; margin-top: 15px;" class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact ">
-                    <a href="" target="_blank">Aggregation test guide</a>
+                    <a href="https://broad-portal-resources.s3.amazonaws.com/tutorials/Custom_aggregation_test_guide.pdf" target="_blank">Aggregation test guide</a>
                 </div>
             {{/variantsSetRefinement}}
 
