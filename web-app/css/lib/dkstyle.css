@@ -1400,6 +1400,7 @@ div.traits-filter-wrapper > .radio-inline {
 /* banner setting for Bone and Muscle portal */
 .front-top-banner-bone {
     background-image:url(../../images/bone/front_boneKP_banner_bg.png), linear-gradient(#BCAFD6, #918BC3);
+    margin-top: 0;
 }
 
 .front-top-banner-bone .front-banner-btn {
@@ -1408,6 +1409,7 @@ div.traits-filter-wrapper > .radio-inline {
 
 #header-bottom-bone {
     background-color: #BCAFD6;
+    position: relative;
 }
 
 

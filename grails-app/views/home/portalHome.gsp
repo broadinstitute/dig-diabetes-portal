@@ -787,9 +787,7 @@
                         <p><g:message code="about.the.bone.portal.text"/></p>
                         <p><g:message code="about.the.bone.portal.text2"/></p>
                         <p><g:message code="about.the.bone.portal.text3"/></p>
-                        <p><a href="http://www.ifmrs.org" target="_blank"><img src="${resource(dir:'images/organizations', file:'IFMRS_logo_large.jpg')}" style="width:280px"></a></p>
- <p><a href="http://www.asbmr.org" target="_blank"><img src="${resource(dir:'images/organizations', file:'ASBMR_logo.png')}" style="width:150px"></a></p>
-                        <p><a href="https://medicine.iu.edu/research/centers-institutes/musculoskeletal-health/" target="_blank"><img src="${resource(dir:'images/organizations', file:'ICMH_logo.png')}" style="width:200px"></a></p>
+                        <p><a href="http://www.ifmrs.org" target="_blank" style="float: left; display:block; margin-right: 20px;"><img src="${resource(dir:'images/organizations', file:'IFMRS_logo_large.jpg')}" style="width:200px; margin-top: 10px;"></a> <a href="http://www.asbmr.org" target="_blank" style="float: left; display:block; margin-right: 10px;"><img src="${resource(dir:'images/organizations', file:'ASBMR_logo.png')}" style="width:150px"></a><a href="https://medicine.iu.edu/research/centers-institutes/musculoskeletal-health/" target="_blank" style="float: left; display:block; margin-right: 10px;"><img src="${resource(dir:'images/organizations', file:'ICMH_logo.png')}" style="width:200px; margin-top:15px; margin-left:5px;"></a></p>
                     </g:elseif>
 
                     <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
