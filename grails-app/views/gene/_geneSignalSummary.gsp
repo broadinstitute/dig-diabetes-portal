@@ -352,6 +352,8 @@ td.tissueTable.informationIsPresent{
                         emptyHeaderRecord:'#emptyHeaderRecord',
                         domSpecificationForAccumulatorStorage:'#configurableUiTabStorage',
                         formOfStorage: 'loadFromTable',
+                        initializeSharedTableMemory:  'table.combinedGeneTableHolder',
+                        organizingDiv:  '#DataTables_Table_0_wrapper',
                         initialOrientation:'geneTableGeneHeaders'
                     }
                 };

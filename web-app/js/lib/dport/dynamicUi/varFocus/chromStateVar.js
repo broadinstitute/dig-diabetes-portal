@@ -1,7 +1,7 @@
 var mpgSoftware = mpgSoftware || {};  // encapsulating variable
 mpgSoftware.dynamicUi = mpgSoftware.dynamicUi || {};   // second level encapsulating variable
 
-mpgSoftware.dynamicUi.h3k27acVariantTable = (function () {
+mpgSoftware.dynamicUi.chromState = (function () {
     "use strict";
 
 
@@ -11,7 +11,7 @@ mpgSoftware.dynamicUi.h3k27acVariantTable = (function () {
      * @param rawGeneAssociationRecords
      * @returns {*}
      */
-    var processRecordsFromH3k27ac = function (data, arrayOfRecords) {
+    var processRecordsFromChromState = function (data, arrayOfRecords) {
         if ( typeof data !== 'undefined'){
             arrayOfRecords.splice(0,arrayOfRecords.length);
             var recordsGroupedByVarId = _.groupBy(data, function (o) { return o.VAR_ID });
@@ -26,7 +26,7 @@ mpgSoftware.dynamicUi.h3k27acVariantTable = (function () {
 
 
 
-    var createSingleH3k27acCell = function (recordsPerTissue,dataAnnotationType) {
+    var createSingleChromStateCell = function (recordsPerTissue,dataAnnotationType) {
         var significanceValue = 0;
         var returnValue = {};
         if (( typeof recordsPerTissue !== 'undefined')&&
@@ -53,7 +53,7 @@ mpgSoftware.dynamicUi.h3k27acVariantTable = (function () {
      * @param idForTheTargetDiv
      * @param objectContainingRetrievedRecords
      */
-    var displayTissueInformationFromH3k27ac = function (idForTheTargetDiv, objectContainingRetrievedRecords, callingParameters ) {
+    var displayTissueInformationFromChromState = function (idForTheTargetDiv, objectContainingRetrievedRecords, callingParameters ) {
 
         mpgSoftware.dynamicUi.displayForVariantTable(idForTheTargetDiv, // which table are we adding to
             callingParameters.code, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
@@ -84,8 +84,9 @@ mpgSoftware.dynamicUi.h3k27acVariantTable = (function () {
                     tissueNameKey:( typeof tissueName !== 'undefined')?tissueName.replace(/ /g,"_"):'var_name_missing',
                     tissueName:tissueName,
                     tissuesFilteredByAnnotation:tissueRecords};
+
             },
-            createSingleH3k27acCell
+            createSingleChromStateCell
         )
 
     };
@@ -104,7 +105,7 @@ mpgSoftware.dynamicUi.h3k27acVariantTable = (function () {
 
 // public routines are declared below
     return {
-        processRecordsFromH3k27ac: processRecordsFromH3k27ac,
-        displayTissueInformationFromH3k27ac:displayTissueInformationFromH3k27ac
+        processRecordsFromChromState: processRecordsFromChromState,
+        displayTissueInformationFromChromState:displayTissueInformationFromChromState
     }
 }());
