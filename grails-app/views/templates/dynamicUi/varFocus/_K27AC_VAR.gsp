@@ -21,7 +21,7 @@ records={{numberRecords}}
 <script id="k27acVariantTableBody"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortField="{{significanceValue}}"
              class="k27ac tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
-               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'ABC predictions for {{tissueName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
+               <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'H3K27ac marks for {{tissueName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
                data-target="#k27ac_tissue_{{tissueNameKey}}" style="color:black">tissues
                </a>
 
@@ -30,7 +30,7 @@ records={{numberRecords}}
                         <table class="expandableDrillDownTable openEffectorGeneInformationInGeneTable" style="margin: 0 auto">
                          <thead>
                           <tr role="row">
-                            <th class="text-center otherCols">Tissue</th>
+                            <th class="text-center leftMostCol">Tissue</th>
                             <th class="text-center otherCols">Value</th>
                           </tr>
                          </thead>
@@ -38,7 +38,7 @@ records={{numberRecords}}
                      {{/recordsExist}}
                          {{#tissueRecords}}
                           <tr role="row">
-                               <td class="text-center otherCols">{{SOURCE}}</td>
+                               <td class="text-center leftMostCol">{{SOURCE}}</td>
                                <td class="text-center otherCols">{{VALUE}}</td>
                            </tr>
                           {{/tissueRecords}}

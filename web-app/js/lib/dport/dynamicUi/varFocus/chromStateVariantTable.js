@@ -1,7 +1,7 @@
 var mpgSoftware = mpgSoftware || {};  // encapsulating variable
 mpgSoftware.dynamicUi = mpgSoftware.dynamicUi || {};   // second level encapsulating variable
 
-mpgSoftware.dynamicUi.chromState = (function () {
+mpgSoftware.dynamicUi.chromStateVariantTable = (function () {
     "use strict";
 
 
@@ -11,14 +11,45 @@ mpgSoftware.dynamicUi.chromState = (function () {
      * @param rawGeneAssociationRecords
      * @returns {*}
      */
-    var processRecordsFromChromState = function (data, arrayOfRecords) {
-        if ( typeof data !== 'undefined'){
+    var processRecordsFromChromState = function (data, arrayOfRecords, callingParameters) {
+        // We want to come away with a list so that for each variant we know all of that tissues it contains
+        if (( typeof data !== 'undefined')&&
+            ( typeof data.data !== 'undefined')){
             arrayOfRecords.splice(0,arrayOfRecords.length);
-            var recordsGroupedByVarId = _.groupBy(data, function (o) { return o.VAR_ID });
-            _.forEach(recordsGroupedByVarId, function (value,key) {
+            // first go through and take all of our variants and find their position. Commit this to an array.
+            mpgSoftware.dynamicUi.getAccumulatorObject(callingParameters.nameOfAccumulatorFieldWithIndex);
+            const varIdsAndPositions = _.map(mpgSoftware.dynamicUi.getAccumulatorObject(callingParameters.nameOfAccumulatorFieldWithIndex),
+                                            function (varId){
+                                                const varIdElements =  varId.var_id.split("_");
+                                                let varIdPosition = 0;
+                                                if (varIdElements.length>2){
+                                                    varIdPosition = parseInt(varIdElements[1]);
+                                                }
+                                                return {name:varId.var_id,position:varIdPosition,arrayOfRecords:[]}
+                                            });
+            // Now let's go through each tissue, and figure out the mapping to each variant
+            var uniqueAnnotations = _.map(_.groupBy(data.data, function (o) { return o.annotation }),
+                                                    function(value,key) {return key});
+            var recordsGroupedByTissueId = _.groupBy(data.data, function (o) { return o.tissue_id });
+            let tissues = [];
+            _.forEach(recordsGroupedByTissueId, function (value,key) {
+                tissues.push(key);
                 var allRecordsForOneVariety = {name:key,arrayOfRecords:value};
-                arrayOfRecords.push(allRecordsForOneVariety);
+                _.forEach(allRecordsForOneVariety.arrayOfRecords, function (overlap) {
+                    _.forEach(varIdsAndPositions, function (varIds) {
+                        if ((overlap.start<=varIds.position) &&
+                            (overlap.end>=varIds.position)) {
+                            varIds.arrayOfRecords.push (overlap);
+                        }
+                    });
+
+                });
+
             });
+            arrayOfRecords.push({header:{   uniqueAnnotations:uniqueAnnotations,
+                                            uniqueTissues:tissues
+                                        },
+                                data:varIdsAndPositions});
 
         }
         return arrayOfRecords;

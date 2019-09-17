@@ -522,6 +522,10 @@ mpgSoftware.dynamicUi = (function () {
                 defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.h3k27acVariantTable.displayTissueInformationFromH3k27ac;
                 defaultFollowUp.placeToDisplayData = '#mainVariantDiv table.variantTableHolder';
                 break;
+            case "getChromStateGivenVariantList":
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.chromStateVariantTable.displayTissueInformationFromChromState;
+                defaultFollowUp.placeToDisplayData = '#mainVariantDiv table.variantTableHolder';
+                break;
 
 
 
@@ -1260,6 +1264,35 @@ mpgSoftware.dynamicUi = (function () {
                             retrieveDataUrl: additionalParameters.retrieveH3k27acDataUrl,
                             dataForCall: dataForCall,
                             processEachRecord: mpgSoftware.dynamicUi.h3k27acVariantTable.processRecordsFromH3k27ac,
+                            displayRefinedContextFunction: displayFunction,
+                            placeToDisplayData: displayLocation,
+                            actionId: nextActionId,
+                            nameOfAccumulatorField:dataAnnotationType.nameOfAccumulatorField,
+                            code:dataAnnotationType.code,
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                        }));
+                    }
+                };
+
+                break;
+
+            case "getChromStateGivenVariantList":
+                functionToLaunchDataRetrieval = function () {
+                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
+                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: actionId});
+                        actionToUndertake();
+                    } else {
+                        var variantsAsJson = "[]";
+                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
+                            var variantNameArray = _.map(getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex), function(variantRec){return variantRec.var_id;});
+                            variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";
+                        }
+                        var dataForCall = {variants: variantsAsJson};
+                        retrieveRemotedContextInformation(buildRemoteContextArray({
+                            name: actionId,
+                            retrieveDataUrl: additionalParameters.retrieveChromatinStateUrl,
+                            dataForCall: dataForCall,
+                            processEachRecord: mpgSoftware.dynamicUi.chromStateVariantTable.processRecordsFromChromState,
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
                             actionId: nextActionId,
@@ -2451,7 +2484,9 @@ mpgSoftware.dynamicUi = (function () {
         var arrayOfDataToDisplay = getAccumulatorObject(nameOfAccumulatorField);
 
         // do we have any data at all?  If we do, then make a row
-        if (( typeof arrayOfDataToDisplay !== 'undefined') && ( arrayOfDataToDisplay.length > 0)) {
+        if (( typeof arrayOfDataToDisplay !== 'undefined') &&
+            ( arrayOfDataToDisplay.length > 0) &&
+            ( arrayOfDataToDisplay[0].data.length > 0)) {
             addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
 
             // set up the headers, even though we know we won't use them. Is this step necessary?
@@ -2469,7 +2504,7 @@ mpgSoftware.dynamicUi = (function () {
 
 
             // fill in all of the column cells
-            _.forEach(arrayOfDataToDisplay, function (oneRecord) {
+            _.forEach(arrayOfDataToDisplay[0].data, function (oneRecord) {
                 var indexOfColumn = _.indexOf(headerNames, oneRecord.name);
                 if (indexOfColumn === -1) {
                     console.log("Did not find index of ABC var_id.  Shouldn't we?")
@@ -3250,9 +3285,11 @@ mpgSoftware.dynamicUi = (function () {
 
                     var accumulatorObject;
                     if ( typeof collectionOfRemoteCallingParameters.nameOfAccumulatorField  !== 'undefined'){
-                        accumulatorObject =  getAccumulatorObject(collectionOfRemoteCallingParameters.nameOfAccumulatorField);
+                        accumulatorObject =  getAccumulatorObject(collectionOfRemoteCallingParameters.nameOfAccumulatorField, );
                     }
-                    objectContainingRetrievedRecords = eachRemoteCallingParameter.processEachRecord( data, accumulatorObject);
+                    objectContainingRetrievedRecords = eachRemoteCallingParameter.processEachRecord(    data,
+                                                                                                        accumulatorObject,
+                                                                                                        collectionOfRemoteCallingParameters );
 
                 }).fail(function (jqXHR, textStatus, errorThrown) {
                     loading.hide();
@@ -5916,7 +5953,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         retrieveDataFromServer:retrieveDataFromServer,
         retrieveGwasCodingCredibleSetFromServer: retrieveGwasCodingCredibleSetFromServer,
         displayHeaderForVariantTable:displayHeaderForVariantTable,
-        displayForVariantTable:displayForVariantTable
+        displayForVariantTable:displayForVariantTable,
+        getAccumulatorObject:getAccumulatorObject
     }
 }());
 

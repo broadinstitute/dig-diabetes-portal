@@ -263,7 +263,7 @@ modules = {
         resource url: 'js/lib/dport/dynamicUi/varFocus/dnaseVariantTable.js'
         resource url: 'js/lib/dport/dynamicUi/varFocus/h3k27acVariantTable.js'
         resource url: 'js/lib/dport/dynamicUi/varFocus/abcVariantTable.js'
-        resource url: 'js/lib/dport/dynamicUi/varFocus/chromStateVar.js'
+        resource url: 'js/lib/dport/dynamicUi/varFocus/chromStateVariantTable.js'
         resource url: 'js/lib/dport/matrixMath.js'
 
         resource url: 'js/lib/bootstrap-multiselect.js'

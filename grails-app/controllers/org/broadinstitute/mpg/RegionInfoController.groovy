@@ -1333,4 +1333,38 @@ class RegionInfoController {
 
 
 
+    def retrieveChromatinState() {
+        String tissue = ""
+        boolean looksOkay = true
+        JSONObject jsonReturn
+        JSONArray variants
+        List <String> variantList = []
+        def slurper = new JsonSlurper()
+
+        if (params.tissue) {
+            tissue = params.tissue
+        }
+
+        if (params.variants) {
+            variants = slurper.parseText( params.variants as String)  as JSONArray
+            //variantList = variants as List <String>
+            variantList = variants.collect{o->o}
+        } else {
+            looksOkay = false
+        }
+
+        if (looksOkay){
+            jsonReturn = restServerService.gatherChromatinStateData( tissue, variantList )
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+            jsonReturn =  slurper.parseText(proposedJsonString) as JSONArray;
+        }
+
+        render(status: 200, contentType: "application/json") {jsonReturn}
+        return
+    }
+
+
+
+
 }

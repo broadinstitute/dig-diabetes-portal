@@ -28,6 +28,7 @@
                     retrieveDepictGeneSetUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveDepictGeneSetData")}',
                     retrieveDnaseDataUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveDnaseData")}',
                     retrieveH3k27acDataUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveH3k27acData")}',
+                    retrieveChromatinStateUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveChromatinState")}',
                     retrieveGeneLevelAssociationsUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveGeneLevelAssociations")}',
                     retrieveListOfGenesInARangeUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveListOfGenesInARange")}',
                     retrieveEffectorGeneInformationUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveEffectorGeneInformation")}',
@@ -146,6 +147,23 @@
                             significanceCellPresentationStringWriter:'k27acVariantTableSignificanceCellPresentationString',
                             internalIdentifierString:'getH3k27acGivenVariantList',
                             nameOfAccumulatorField:'h3k27acVariantInfo',
+                            nameOfAccumulatorFieldWithIndex:'variantInfoArray'
+                        }
+                        ,
+                        {
+                            code: 'CHROMESTATE_VAR',
+                            category: 'ChromState',
+                            displayCategory: 'ChromState state',
+                            subcategory: 'ChromState list',
+                            displaySubcategory: 'ChromState list',
+                            headerWriter:'chromStateVariantTableTissueHeader',
+                            cellBodyWriter:'chromStateVariantTableBody',
+                            categoryWriter:'chromStateVariantTableTissueHeaderLabel',
+                            subCategoryWriter:'chromStateVariantTableTissueRowLabel',
+                            numberRecordsCellPresentationStringWriter:'chromStateVariantTableNumberRecordsCellPresentationString',
+                            significanceCellPresentationStringWriter:'chromStateVariantTableSignificanceCellPresentationString',
+                            internalIdentifierString:'getChromStateGivenVariantList',
+                            nameOfAccumulatorField:'chromStateVariantInfo',
                             nameOfAccumulatorFieldWithIndex:'variantInfoArray'
                         }
 
