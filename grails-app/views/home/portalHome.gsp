@@ -135,6 +135,16 @@
                     </script>
                 </g:elseif>
 
+                <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
+                    <script type="text/javascript">
+                        /* Example to add 'new' or 'updated' feature buttons;
+                         mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]);
+                         */
+                        mpgSoftware.homePage.newFeatures([{"name":"Tissue enrichments","link":"${createLink(controller:'trait',action:'tissueTable')}","class":"feature","type":"new"},
+                            {"name":"Webinar video: gene-specific resources in the Portals","link":"https://www.youtube.com/watch?v=ylPn6D1hpY4","class":"resource","type":"new"}]);
+                    </script>
+                </g:elseif>
+
             <!-- New features buttons end -->
 
                 <!-- Search UI & drop-down UI in the top banner -->
