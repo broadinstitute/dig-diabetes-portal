@@ -2677,7 +2677,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     public JSONArray gatherECaviarData( String gene, String tissue,
                                          String variant, String phenotype,
                                          int  startPosition, int  endPosition,
-                                        String chromosome) {
+                                         String chromosome, List <String> credibleSetIdList ) {
         List<String> specifyRequestList = []
         if ((gene) && (gene.length() > 0)) {
             specifyRequestList << "gene=${gene}"
@@ -2701,6 +2701,10 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         if (endPosition > -1) {
             specifyRequestList << "end_pos=${endPosition}"
         }
+        if ((credibleSetIdList) && (credibleSetIdList.size() > 0)) {
+            specifyRequestList << "credible_set=${credibleSetIdList.join(",").replace("\"","")}"
+        }
+
 
         String rawReturnFromApi =  getRestCall("${GET_VARIANT_ECAVIAR_COLOCALIZATION_FROM_URL}?${specifyRequestList.join("&")}".toString())
         JsonSlurper slurper = new JsonSlurper()

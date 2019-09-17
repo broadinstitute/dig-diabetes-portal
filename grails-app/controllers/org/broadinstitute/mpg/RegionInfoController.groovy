@@ -983,9 +983,50 @@ class RegionInfoController {
         return
     }
 
+    /***
+     * This is a special case of retrieveECaviarData. Here we want to first issue a region-based call to
+     * get every variant associated with a phenotype in a range. From this list we will extract the credible sets
+     * that are referenced, and then execute a second call to pull back every variant in each of these credible sets.
+     * @return
+     */
+    def retrieveECaviarDataViaCredibleSets() {
+        String phenotype = ""
+        int startPosition = -1
+        int endPosition = -1
+        String chromosome = ""
+        JSONArray intermediateResult
 
+        if (params.phenotype) {
+            phenotype = params.phenotype
+        }
 
+        if (params.startPos) {
+            try {
+                startPosition = Double.parseDouble(params.startPos).intValue()
+            } catch (Exception e) {
+                looksOkay = false
+                e.printStackTrace()
+                log.error("retrieveAbcData:failed to convert startPos value=${params.startPos}")
+            }
+        }
+        if (params.endPos) {
+            try {
+                endPosition = Double.parseDouble(params.endPos).intValue()
+            } catch (Exception e) {
+                looksOkay = false
+                e.printStackTrace()
+                log.error("retrieveAbcData:failed to convert endPos value=${params.startPos}")
+            }
+        }
 
+        if (params.chromosome) {
+            chromosome = params.chromosome
+        }
+
+        intermediateResult = restServerService.gatherECaviarData(   "", "", "",
+                phenotype,startPosition, endPosition,
+                chromosome, [] )
+    }
 
 
 
@@ -997,10 +1038,13 @@ class RegionInfoController {
         int startPosition = -1
         int endPosition = -1
         String chromosome = ""
+        JSONArray credibleSets
+        List <String> credibleSetList = []
         boolean looksOkay = true
         JSONArray jsonReturn
         Map ensemblMapper
         Map geneNameMap = [:]
+        def slurper = new JsonSlurper()
 
         if (params.gene) {
             gene = params.gene
@@ -1041,11 +1085,18 @@ class RegionInfoController {
             chromosome = params.chromosome
         }
 
+        if (params.credibleSets) {
+            credibleSets = slurper.parseText( params.credibleSets as String)  as JSONArray
+            credibleSetList = credibleSets.collect{o->o}
+        }
+
         if (looksOkay){
-            jsonReturn = restServerService.gatherECaviarData( gene, tissue, variant, phenotype,startPosition, endPosition, chromosome)
+            jsonReturn = restServerService.gatherECaviarData(   gene, tissue, variant,
+                                                                phenotype,startPosition, endPosition,
+                                                                chromosome, credibleSetList )
         } else {
             String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
-            def slurper = new JsonSlurper()
+
             jsonReturn =  slurper.parseText(proposedJsonString) as JSONArray;
         }
 
