@@ -995,6 +995,8 @@ class RegionInfoController {
         int endPosition = -1
         String chromosome = ""
         JSONArray intermediateResult
+        def slurper = new JsonSlurper()
+        JSONArray jsonReturn
 
         if (params.phenotype) {
             phenotype = params.phenotype
@@ -1026,6 +1028,25 @@ class RegionInfoController {
         intermediateResult = restServerService.gatherECaviarData(   "", "", "",
                 phenotype,startPosition, endPosition,
                 chromosome, [] )
+        List<String> credibleSetList = []
+        if (intermediateResult){
+            credibleSetList = intermediateResult.collect{o->o.credible_set_id}.unique()
+        }
+
+        if (credibleSetList) {
+            jsonReturn = restServerService.gatherECaviarData("", "", "",
+                    phenotype, -1, -1,
+                    "", credibleSetList)
+        } else {
+            String proposedJsonString = new JsonBuilder("[\"is_error\"]" ).toPrettyString()
+
+            jsonReturn = slurper.parseText(proposedJsonString) as JSONArray;
+        }
+
+
+        render(status: 200, contentType: "application/json") {jsonReturn}
+        return
+
     }
 
 

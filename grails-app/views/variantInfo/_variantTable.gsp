@@ -38,6 +38,8 @@
                     retrieveVariantsWithQtlRelationshipsUrl:'${g.createLink(controller: "RegionInfo", action: "retrieveVariantsWithQtlRelationships")}',
                     retrieveTopVariantsAcrossSgsUrl:'${g.createLink(controller: "VariantSearch", action: "retrieveTopVariantsAcrossSgs")}',
                     getVariantsForRangeAjaxUrl:"${createLink(controller:'RegionInfo',action: 'retrieveVariantsInRange')}",
+                    retrieveECaviarDataViaCredibleSetsUrl:"${createLink(controller:'RegionInfo',action: 'retrieveECaviarDataViaCredibleSets')}",
+
                     dynamicTableType:'variantTable',
                     dataAnnotationTypes: [
                         {
@@ -94,6 +96,20 @@
                             cellBodyWriter:'variantIsUtrBody',
                             categoryWriter:'variantIsUtrCategoryLabel',
                             subCategoryWriter:'variantIsUtrSubcategoryLabel',
+                            internalIdentifierString:'doesNotHaveAnIndependentFunction',
+                            nameOfAccumulatorField:'notUsed',
+                            nameOfAccumulatorFieldWithIndex:'notUsed'
+                        }
+                        ,
+                        {
+                            code: 'VAR_PVALUE',
+                            category: 'Association',
+                            displayCategory: 'Association',
+                            subcategory: 'Association with phenotype',
+                            displaySubcategory: 'Association with phenotype',
+                            cellBodyWriter:'variantPValueBody',
+                            categoryWriter:'variantPValueCategoryLabel',
+                            subCategoryWriter:'variantPValueSubcategoryLabel',
                             internalIdentifierString:'doesNotHaveAnIndependentFunction',
                             nameOfAccumulatorField:'notUsed',
                             nameOfAccumulatorFieldWithIndex:'notUsed'

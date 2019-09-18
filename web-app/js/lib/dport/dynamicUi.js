@@ -1095,6 +1095,7 @@ mpgSoftware.dynamicUi = (function () {
                     retrieveRemotedContextInformation(buildRemoteContextArray({
                         name: actionId,
                         retrieveDataUrl: additionalParameters.getVariantsForRangeAjaxUrl,
+                       // retrieveDataUrl: additionalParameters.retrieveECaviarDataViaCredibleSetsUrl,
                         dataForCall: dataNecessaryToRetrieveVariantsPerPhenotype,
                         processEachRecord: mpgSoftware.dynamicUi.variantTableHeaders.processRecordsFromProximitySearch,
                         displayRefinedContextFunction: displayFunction,
@@ -2981,7 +2982,7 @@ mpgSoftware.dynamicUi = (function () {
             sharedTable["numberOfColumns"] = objectContainingRetrievedRecords.length+2;
 
 
-            const rowTypesToAdd = ["VAR_CODING","VAR_SPLICE","VAR_UTR"];
+            const rowTypesToAdd = ["VAR_CODING","VAR_SPLICE","VAR_UTR","VAR_PVALUE"];
             _.forEach(rowTypesToAdd, function (rowTypeToAdd, rowIndex) {
                 addRowHolderToIntermediateDataStructure(rowTypeToAdd,intermediateDataStructure)
                 // fill in all of the column cells
@@ -2991,21 +2992,27 @@ mpgSoftware.dynamicUi = (function () {
                         console.log("Did not find index of ABC var_id.  Shouldn't we?")
                     } else {
                         let emphasisSwitch = "false";
+                        let pValue = 0.0;
                         switch(rowTypeToAdd){
                             case "VAR_CODING":
                                 if ((oneRecord.most_del_score>0)&&
                                     (oneRecord.most_del_score<4)){
-                                    emphasisSwitch = "true"
+                                    emphasisSwitch = "true";
                                 }
                                 break;
                             case "VAR_SPLICE":
-                                if (oneRecord.consequence.join(",").indexOf('splice')>-1){
-                                    emphasisSwitch = "true"
+                                if (( typeof oneRecord.consequence !== 'undefined')&&(oneRecord.consequence.join(",").indexOf('splice')>-1)){
+                                    emphasisSwitch = "true";
                                 }
                                 break;
                             case "VAR_UTR":
-                                if (oneRecord.consequence.join(",").indexOf('UTR')>-1){
-                                    emphasisSwitch = "true"
+                                if (( typeof oneRecord.consequence !== 'undefined')&&(oneRecord.consequence.join(",").indexOf('UTR')>-1)){
+                                    emphasisSwitch = "true";
+                                }
+                                break;
+                            case "VAR_PVALUE":
+                                if ( typeof oneRecord.p_value !== 'undefined'){
+                                    pValue = oneRecord.p_value;
                                 }
                                 break;
                             default:
@@ -3015,7 +3022,7 @@ mpgSoftware.dynamicUi = (function () {
                         var renderData = placeDataIntoRenderForm(   "",
                             oneRecord.name,
                             (sharedTable["numberOfColumns"]*(rowIndex+1))+indexOfColumn+2,
-                            emphasisSwitch);
+                            emphasisSwitch,pValue);
                         _.last(intermediateDataStructure.rowsToAdd).columnCells[indexOfColumn] = new IntermediateStructureDataCell(oneRecord.name,
                             renderData,rowTypeToAdd,dataAnnotationTypeCode );
 

@@ -35,4 +35,5 @@
 <g:render template="/templates/dynamicUi/varFocus/VAR_CODING" />
 <g:render template="/templates/dynamicUi/varFocus/VAR_SPLICE" />
 <g:render template="/templates/dynamicUi/varFocus/VAR_UTR" />
+<g:render template="/templates/dynamicUi/varFocus/VAR_PVALUE" />
 <g:render template="/templates/dynamicUi/varFocus/CHROMESTATE_VAR" />
