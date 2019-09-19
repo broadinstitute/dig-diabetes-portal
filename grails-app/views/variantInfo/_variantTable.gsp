@@ -116,6 +116,20 @@
                         }
                         ,
                         {
+                            code: 'VAR_POSTERIORPVALUE',
+                            category: 'Association',
+                            displayCategory: 'Association',
+                            subcategory: 'Association with phenotype',
+                            displaySubcategory: 'Association with phenotype',
+                            cellBodyWriter:'variantPosteriorPValueBody',
+                            categoryWriter:'variantPosteriorPValueCategoryLabel',
+                            subCategoryWriter:'variantPosteriorPValueSubcategoryLabel',
+                            internalIdentifierString:'doesNotHaveAnIndependentFunction',
+                            nameOfAccumulatorField:'notUsed',
+                            nameOfAccumulatorFieldWithIndex:'notUsed'
+                        }
+                        ,
+                        {
                             code: 'ABC_VAR',
                             category: 'ABC Tissue',
                             displayCategory: 'ABC Tissue',

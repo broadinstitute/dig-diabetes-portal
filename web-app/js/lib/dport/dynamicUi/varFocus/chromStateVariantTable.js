@@ -17,8 +17,8 @@ mpgSoftware.dynamicUi.chromStateVariantTable = (function () {
             ( typeof data.data !== 'undefined')){
             arrayOfRecords.splice(0,arrayOfRecords.length);
             // first go through and take all of our variants and find their position. Commit this to an array.
-            mpgSoftware.dynamicUi.getAccumulatorObject(callingParameters.nameOfAccumulatorFieldWithIndex);
-            const varIdsAndPositions = _.map(mpgSoftware.dynamicUi.getAccumulatorObject(callingParameters.nameOfAccumulatorFieldWithIndex),
+            const nameList = mpgSoftware.dynamicUi.getAccumulatorObject(callingParameters.nameOfAccumulatorFieldWithIndex)[0].data;
+            const varIdsAndPositions = _.map(nameList,
                                             function (varId){
                                                 const varIdElements =  varId.var_id.split("_");
                                                 let varIdPosition = 0;

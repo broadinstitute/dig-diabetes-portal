@@ -265,6 +265,7 @@ modules = {
         resource url: 'js/lib/dport/dynamicUi/varFocus/abcVariantTable.js'
         resource url: 'js/lib/dport/dynamicUi/varFocus/chromStateVariantTable.js'
         resource url: 'js/lib/dport/matrixMath.js'
+        resource url: 'js/lib/gwas-credible-sets.js'
 
         resource url: 'js/lib/bootstrap-multiselect.js'
         resource url: 'css/lib/bootstrap-multiselect.css'

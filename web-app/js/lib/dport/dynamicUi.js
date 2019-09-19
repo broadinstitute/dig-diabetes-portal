@@ -1134,13 +1134,14 @@ mpgSoftware.dynamicUi = (function () {
                 break;
             case "getABCGivenVariantList":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("variantInfoArray")) {
+                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
                         var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: actionId});
                         actionToUndertake();
                     } else {
                         var variantsAsJson = "[]";
-                        if (getAccumulatorObject("variantInfoArray").length > 0) {
-                            var variantNameArray = _.map(getAccumulatorObject("variantInfoArray"), function(variantRec){return variantRec.var_id;});
+                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
+                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
+                            var variantNameArray = _.map(dataVector, function(variantRec){return variantRec.var_id;});
                             variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";
                         }
                         var dataForCall = {variants: variantsAsJson};
@@ -1227,9 +1228,9 @@ mpgSoftware.dynamicUi = (function () {
                     } else {
                         var variantsAsJson = "[]";
                         if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
-                            var variantNameArray = _.map(getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex), function(variantRec){return variantRec.var_id;});
-                            variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";
-                        }
+                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
+                            var variantNameArray = _.map(dataVector, function(variantRec){return variantRec.var_id;});
+                            variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";                        }
                         var dataForCall = {variants: variantsAsJson};
                         retrieveRemotedContextInformation(buildRemoteContextArray({
                             name: actionId,
@@ -1256,7 +1257,8 @@ mpgSoftware.dynamicUi = (function () {
                     } else {
                         var variantsAsJson = "[]";
                         if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
-                            var variantNameArray = _.map(getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex), function(variantRec){return variantRec.var_id;});
+                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
+                            var variantNameArray = _.map(dataVector, function(variantRec){return variantRec.var_id;});
                             variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";
                         }
                         var dataForCall = {variants: variantsAsJson};
@@ -1285,7 +1287,8 @@ mpgSoftware.dynamicUi = (function () {
                     } else {
                         var variantsAsJson = "[]";
                         if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
-                            var variantNameArray = _.map(getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex), function(variantRec){return variantRec.var_id;});
+                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
+                            var variantNameArray = _.map(dataVector, function(variantRec){return variantRec.var_id;});
                             variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";
                         }
                         var dataForCall = {variants: variantsAsJson};
@@ -1584,6 +1587,26 @@ mpgSoftware.dynamicUi = (function () {
             }
         }
         return returnValue;
+    };
+    var accumulatorObjectSubFieldEmpty = function (specificField,subField) {
+        var returnValue = true;
+        var accumulatorObjectField = getAccumulatorObject(specificField);
+        if ( typeof subField === 'undefined'){
+            alert("subfield record should not be empty. Data problem?")
+        } else {
+
+            if ((Array.isArray(accumulatorObjectField)) &&
+                (accumulatorObjectField.length>0)){
+                const singleElement = accumulatorObjectField[0];
+                if (Array.isArray(singleElement[subField])) {
+                    if (singleElement[subField].length > 0) {
+                        returnValue = false;
+                    }
+                }
+
+            }
+        }
+         return returnValue;
     };
 
 
@@ -2492,11 +2515,12 @@ mpgSoftware.dynamicUi = (function () {
 
             // set up the headers, even though we know we won't use them. Is this step necessary?
             var headerNames = [];
-            if (accumulatorObjectFieldEmpty(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex)) {
+            if (accumulatorObjectSubFieldEmpty(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex,"data")) {
                 console.log("We should have a list of variants, otherwise we shouldn't be here. We have a problem.");
             } else {
-                headerNames  = _.map(getAccumulatorObject(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex),'name');
-                _.forEach(getAccumulatorObject(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex), function (oneRecord) {
+                const dataVector = getAccumulatorObject(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex)[0].data;
+                headerNames  = _.map(dataVector,'name');
+                _.forEach(dataVector, function (oneRecord) {
                     intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
                         {},"header",'EMC'));
                 });
@@ -2967,10 +2991,14 @@ mpgSoftware.dynamicUi = (function () {
         var objectContainingRetrievedRecords = getAccumulatorObject(nameOfAccumulatorField);
 
         var intermediateDataStructure = new IntermediateDataStructure();
+        let vectorOfVariantRecords = [];
 
-        if (typeof objectContainingRetrievedRecords !== 'undefined') {
+        if ((typeof objectContainingRetrievedRecords !== 'undefined')||
+            ( objectContainingRetrievedRecords.length > 0)
+            (typeof objectContainingRetrievedRecords[0].data !== 'undefined')){
             // set up the headers, and give us an empty row of column cells
-            _.forEach(objectContainingRetrievedRecords, function (oneRecord,index) {
+            vectorOfVariantRecords = objectContainingRetrievedRecords[0].data;
+            _.forEach(vectorOfVariantRecords, function (oneRecord,index) {
                 intermediateDataStructure.headerNames.push(oneRecord.var_id);
                 intermediateDataStructure.headerContents.push(Mustache.render($('#'+dataAnnotationType.dataAnnotation.cellBodyWriter)[0].innerHTML, oneRecord));
                 intermediateDataStructure.headers.push(new IntermediateStructureDataCell(oneRecord.name,
@@ -2979,20 +3007,21 @@ mpgSoftware.dynamicUi = (function () {
 
             intermediateDataStructure.tableToUpdate = idForTheTargetDiv;
             var sharedTable = getSharedTable(idForTheTargetDiv);
-            sharedTable["numberOfColumns"] = objectContainingRetrievedRecords.length+2;
+            sharedTable["numberOfColumns"] = vectorOfVariantRecords.length+2;
 
 
-            const rowTypesToAdd = ["VAR_CODING","VAR_SPLICE","VAR_UTR","VAR_PVALUE"];
+            const rowTypesToAdd = ["VAR_CODING","VAR_SPLICE","VAR_UTR","VAR_PVALUE","VAR_POSTERIORPVALUE"];
             _.forEach(rowTypesToAdd, function (rowTypeToAdd, rowIndex) {
                 addRowHolderToIntermediateDataStructure(rowTypeToAdd,intermediateDataStructure)
                 // fill in all of the column cells
-                _.forEach(objectContainingRetrievedRecords, function (oneRecord) {
+                _.forEach(vectorOfVariantRecords, function (oneRecord) {
                     var indexOfColumn = _.indexOf(intermediateDataStructure.headerNames, oneRecord.name);
                     if (indexOfColumn === -1) {
                         console.log("Did not find index of ABC var_id.  Shouldn't we?")
                     } else {
                         let emphasisSwitch = "false";
                         let pValue = 0.0;
+                        let posteriorPValue = 0.0;
                         switch(rowTypeToAdd){
                             case "VAR_CODING":
                                 if ((oneRecord.most_del_score>0)&&
@@ -3015,6 +3044,11 @@ mpgSoftware.dynamicUi = (function () {
                                     pValue = oneRecord.p_value;
                                 }
                                 break;
+                            case "VAR_POSTERIORPVALUE":
+                                if ( typeof oneRecord.POSTERIOR_PROBABILITY !== 'undefined'){
+                                    posteriorPValue = oneRecord.POSTERIOR_PROBABILITY;
+                                }
+                                break;
                             default:
                                 alert(" unexpected rowTypeToAdd="+rowTypeToAdd+".");
                                 break;
@@ -3022,7 +3056,9 @@ mpgSoftware.dynamicUi = (function () {
                         var renderData = placeDataIntoRenderForm(   "",
                             oneRecord.name,
                             (sharedTable["numberOfColumns"]*(rowIndex+1))+indexOfColumn+2,
-                            emphasisSwitch,pValue);
+                            emphasisSwitch,
+                            pValue,
+                            posteriorPValue);
                         _.last(intermediateDataStructure.rowsToAdd).columnCells[indexOfColumn] = new IntermediateStructureDataCell(oneRecord.name,
                             renderData,rowTypeToAdd,dataAnnotationTypeCode );
 
@@ -3035,7 +3071,7 @@ mpgSoftware.dynamicUi = (function () {
 
         prepareToPresentToTheScreen(idForTheTargetDiv,
             '#notUsed',
-            objectContainingRetrievedRecords,
+            vectorOfVariantRecords,
             clearBeforeStarting,
             intermediateDataStructure,
             true,
