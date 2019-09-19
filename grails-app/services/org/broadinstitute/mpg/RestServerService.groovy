@@ -306,7 +306,7 @@ class RestServerService {
 
     public void changeRestServer(String serverName) {
         for (ServerBean serverBean : grailsApplication.config.getRestServerList) {
-            if (serverBean.getName().equals(serverName)) {
+            if (serverBean!= null && serverBean.getName().equals(serverName)) {
                 //log.info("changing rest server from: " + this.REST_SERVER.getUrl() + " to: " + serverBean.getUrl());
                 this.REST_SERVER = serverBean;
                 break;
