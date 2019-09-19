@@ -127,6 +127,8 @@
 <g:render template="./data/GWAS_DeCODE_eu" />
 <g:render template="./data/GWAS_GEFOS" />
 <g:render template="./data/GWAS_GEFOS2" />
+<g:render template="./data/GWAS_CKDGenConsortiumMA" />
+<g:render template="./data/GWAS_CKDGenConsortiumUACR" />
 
 
 
