@@ -4702,6 +4702,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         });
                     } else { // adjust the coloration of selected squares
                         $('td:has(div.variantAnnotation.emphasisSwitch_true)').addClass('emphasisSwitch_true');
+                        $('div.variantAnnotation:last').parent().parent().children('td').css('border-bottom','2px solid green');
+                        $('div.variantEpigenetics').parent().parent().hide();
                         // if (( typeof adjustVisibilityCategories !== 'undefined') &&
                         //     (adjustVisibilityCategories.length > 0)){
                         //     if (adjustVisibilityCategories[0] === "H3k27ac"){

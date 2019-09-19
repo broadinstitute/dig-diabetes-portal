@@ -3,7 +3,7 @@ records={{numberRecords}}
 </script>
 
 <script id="abcVariantTableTissueHeaderLabel"  type="x-tmpl-mustache">
-<div class="initialLinearIndex_{{indexInOneDimensionalArray}}">Epigenetics</div>
+<div class="variantEpigenetics initialLinearIndex_{{indexInOneDimensionalArray}}">Epigenetics</div>
 </script>
 
 <script id="abcVariantTableTissueRowLabel"  type="x-tmpl-mustache">

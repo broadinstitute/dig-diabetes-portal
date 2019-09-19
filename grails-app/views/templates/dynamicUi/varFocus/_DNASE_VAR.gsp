@@ -3,7 +3,7 @@ records={{numberRecords}}
 </script>
 
 <script id="dnaseVariantTableTissueHeaderLabel"  type="x-tmpl-mustache">
-<div class="initialLinearIndex_{{indexInOneDimensionalArray}}">Epigenetics</div>
+<div class="variantEpigenetics initialLinearIndex_{{indexInOneDimensionalArray}}">Epigenetics</div>
 </script>
 
 <script id="dnaseVariantTableTissueRowLabel"  type="x-tmpl-mustache">

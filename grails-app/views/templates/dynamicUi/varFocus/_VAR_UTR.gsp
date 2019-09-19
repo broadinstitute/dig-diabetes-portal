@@ -1,11 +1,11 @@
 <script id="variantIsUtrCategoryLabel"  type="x-tmpl-mustache">
-<div class="variantAnnotation initialLinearIndex_{{indexInOneDimensionalArray}}">
+<div class="variantAnnotation variantAnnotationCompress initialLinearIndex_{{indexInOneDimensionalArray}}">
 Annotation
 </div>
 </script>
 
 <script id="variantIsUtrSubcategoryLabel"  type="x-tmpl-mustache">
-<div class="variantAnnotation staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">
+<div class="staticValuesLabelInTissueTable variantAnnotationCompress initialLinearIndex_{{indexInOneDimensionalArray}}">
 UTR
 <g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/>
 </div>

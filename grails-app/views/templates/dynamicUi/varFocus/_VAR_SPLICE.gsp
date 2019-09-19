@@ -1,11 +1,11 @@
 <script id="variantIsSplicingCategoryLabel"  type="x-tmpl-mustache">
-<div class="variantAnnotation initialLinearIndex_{{indexInOneDimensionalArray}}">
+<div class="variantAnnotationCompress variantAnnotation initialLinearIndex_{{indexInOneDimensionalArray}}">
 Annotation
 </div>
 </script>
 
 <script id="variantIsSplicingSubcategoryLabel"  type="x-tmpl-mustache">
-<div class="variantAnnotation staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">
+<div class="variantAnnotationCompress staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">
 Splice
 <g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/>
 </div>
