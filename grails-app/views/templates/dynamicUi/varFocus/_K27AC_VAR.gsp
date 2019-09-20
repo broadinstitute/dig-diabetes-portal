@@ -3,15 +3,15 @@ records={{numberRecords}}
 </script>
 
 <script id="k27acVariantTableTissueHeaderLabel"  type="x-tmpl-mustache">
-<div class="variantEpigenetics initialLinearIndex_{{indexInOneDimensionalArray}}">Epigenetics</div>
+<div class="varAllEpigenetics varK27acEpigenetics variantEpigenetics initialLinearIndex_{{indexInOneDimensionalArray}}">Epigenetics</div>
 </script>
 
 <script id="k27acVariantTableTissueRowLabel"  type="x-tmpl-mustache">
-<div class="tissueTableHeader staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">H3k27ac&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/></div>
+<div class="varAllEpigenetics varK27acEpigenetics staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">H3k27ac&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/></div>
 </script>
 
 <script id="k27acVariantTableTissueHeader"  type="x-tmpl-mustache">
-<div class="tissueTableTissueHeader initialLinearIndex_{{initialLinearIndex}}">{{tissueName}}</div>
+<div class="varAllEpigenetics varK27acEpigenetics initialLinearIndex_{{initialLinearIndex}}">{{tissueName}}</div>
 </script>
 
 <script id="k27acVariantTableSignificanceCellPresentationString"  type="x-tmpl-mustache">
@@ -20,7 +20,7 @@ records={{numberRecords}}
 
 <script id="k27acVariantTableBody"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortField="{{significanceValue}}"
-             class="k27ac tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
+             class="varAllEpigenetics varK27acEpigenetics k27ac tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'H3K27ac marks for {{tissueName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
                data-target="#k27ac_tissue_{{tissueNameKey}}" style="color:black">tissues
                </a>

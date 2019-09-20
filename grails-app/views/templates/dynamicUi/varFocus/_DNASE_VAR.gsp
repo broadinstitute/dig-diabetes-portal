@@ -3,24 +3,24 @@ records={{numberRecords}}
 </script>
 
 <script id="dnaseVariantTableTissueHeaderLabel"  type="x-tmpl-mustache">
-<div class="variantEpigenetics initialLinearIndex_{{indexInOneDimensionalArray}}">Epigenetics</div>
+<div class="varAllEpigenetics varDnaseEpigenetics variantEpigenetics initialLinearIndex_{{indexInOneDimensionalArray}}">Epigenetics</div>
 </script>
 
 <script id="dnaseVariantTableTissueRowLabel"  type="x-tmpl-mustache">
-<div class="tissueTableHeader staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">DNase&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/></div>
+<div class="varAllEpigenetics varDnaseEpigenetics  staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">DNase&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/></div>
 </script>
 
 <script id="dnaseVariantTableTissueHeader"  type="x-tmpl-mustache">
-<div class="tissueTableTissueHeader initialLinearIndex_{{initialLinearIndex}}">{{tissueName}}</div>
+<div class="varAllEpigenetics varDnaseEpigenetics  initialLinearIndex_{{initialLinearIndex}}">{{tissueName}}</div>
 </script>
 
 <script id="dnaseVariantTableSignificanceCellPresentationString"  type="x-tmpl-mustache">
-{{significanceValueAsString}}
+{{significanceValueAsString}}No div!
 </script>
 
 <script id="dnaseVariantTableBody"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortField="{{significanceValue}}"
-             class="tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
+             class="varAllEpigenetics varDnaseEpigenetics tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'Open chromatin for {{tissueName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
                data-target="#open_chromatin_tissue_{{tissueNameKey}}" style="color:black">tissues
                </a>

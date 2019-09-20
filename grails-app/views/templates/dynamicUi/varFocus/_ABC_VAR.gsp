@@ -3,22 +3,22 @@ records={{numberRecords}}
 </script>
 
 <script id="abcVariantTableTissueHeaderLabel"  type="x-tmpl-mustache">
-<div class="variantEpigenetics initialLinearIndex_{{indexInOneDimensionalArray}}">Epigenetics</div>
+<div class="varAllEpigenetics varAbcEpigenetics variantEpigenetics initialLinearIndex_{{indexInOneDimensionalArray}}">Epigenetics</div>
 </script>
 
 <script id="abcVariantTableTissueRowLabel"  type="x-tmpl-mustache">
-<div class="tissueTableHeader staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">ABC&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/></div>
+<div class="varAllEpigenetics varAbcEpigenetics staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">ABC&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/></div>
 </script>
 
 <script id="abcVariantTableTissueHeader"  type="x-tmpl-mustache">
-<div class="tissueTableTissueHeader initialLinearIndex_{{initialLinearIndex}}">{{tissueName}}</div>
+<div class="varAllEpigenetics varAbcEpigenetics initialLinearIndex_{{initialLinearIndex}}">{{tissueName}}</div>
 </script>
 
 <script id="abcVariantTableSignificanceCellPresentationString"  type="x-tmpl-mustache">
 {{significanceValueAsString}}
 </script>
 
-<script id="abcVariantTableSubCategory"  type="x-tmpl-mustache">
+<script id="varAllEpigenetics varAbcEpigenetics abcVariantTableSubCategory"  type="x-tmpl-mustache">
      <div significance_sortfield='{{index}}' class='subcategory initialLinearIndex_{{indexInOneDimensionalArray}}'
       sortField='{{index}}' subSortField='-1'>
      {{#dataAnnotation}}
@@ -31,7 +31,7 @@ records={{numberRecords}}
 
 <script id="abcVariantTableBody"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortField="{{significanceValue}}"
-             class="tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
+             class="varAllEpigenetics varAbcEpigenetics tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'ABC predictions for {{tissueName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
                data-target="#depict_tissue_{{tissueNameKey}}" style="color:black">genes
                </a>

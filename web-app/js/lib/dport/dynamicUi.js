@@ -1377,59 +1377,6 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
-    /***
-     * Mod annotation search
-     * @param idForTheTargetDiv
-     * @param objectContainingRetrievedRecords
-     */
-    var processRecordsFromMod = function (data) {
-        var returnObject = {
-            uniqueGenes: [],
-            uniqueGeneDescription: [],
-            uniqueMods: []
-        };
-        var originalGene = data.gene;
-        if ( (data.records.length === 0) ||
-            (data.is_error )) {
-            // no mods.  add an empty record for this gene to the global structure
-            var modNameArray = getAccumulatorObject("modNameArray");
-            modNameArray.push({geneName: originalGene, mods: []});
-            setAccumulatorObject("modNameArray", modNameArray);
-            if (!returnObject.uniqueGenes.includes(originalGene)) {
-                returnObject.uniqueGenes.push(originalGene);
-            }
-            ;
-        } else {
-            // we have mods for this gene. First let's save them
-            _.forEach(data.records, function (oneRec) {
-                if (!returnObject.uniqueGenes.includes(oneRec.Human_gene)) {
-                    returnObject.uniqueGenes.push(oneRec.Human_gene);
-                }
-
-                if (!returnObject.uniqueMods.includes(oneRec.Term)) {
-                    returnObject.uniqueMods.push(oneRec.Term);
-                }
-
-                if (!returnObject.uniqueGeneDescription.includes(oneRec.Name)) {
-                    returnObject.uniqueGeneDescription.push(oneRec.Name);
-                }
-
-                //returnObject.rawData.push(oneRec);
-            });
-            // now let's add them to our global structure.  First, find any record for this gene that we might already have
-            var geneIndex = _.findIndex(getAccumulatorObject("modNameArray"), {geneName: originalGene});
-            if (geneIndex < 0) { // this is the only path we ever take, right
-                var modNameArray = getAccumulatorObject("modNameArray");
-                modNameArray.push({
-                    geneName: originalGene,
-                    mods: returnObject
-                });
-                setAccumulatorObject("modNameArray", modNameArray);
-            }
-        }
-        return returnObject;
-    };
-
 
     /***
      * The object is passed into mustache and describes the display that will be presented to users
@@ -1692,36 +1639,6 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
-    var processRecordsFromQtl = function (data) {
-        // build up an object to describe this
-        var returnObject = {
-            rawData: []
-        };
-
-        var rawQtlInfo = getAccumulatorObject('rawQtlInfo');
-        var sampleGroupWithCredibleSetNames = (data.sampleGroupsWithCredibleSetNames.length > 0) ? data.sampleGroupsWithCredibleSetNames[0] : "";
-        var  uniqueVariants = [];
-        if (sampleGroupWithCredibleSetNames.length > 0) {
-            rawQtlInfo["credSetDataset"] = sampleGroupWithCredibleSetNames;
-            rawQtlInfo["variants"] = _.filter(data.variants.variants, function (o) {
-                return o.dataset === sampleGroupWithCredibleSetNames;
-               // return o.dataset === "GWAS_IBDGenetics_eu_CrdSet_mdv80"
-            });
-        } else {
-            rawQtlInfo["credSetDataset"] = sampleGroupWithCredibleSetNames;
-            rawQtlInfo["variants"] = _.filter(data.variants.variants, function (o, cnt) {
-                var skipIt = true;
-                if (!uniqueVariants.includes(o.VAR_ID)){
-                    uniqueVariants.push(o.VAR_ID);
-                    skipIt = false;
-                }
-                return ((uniqueVariants.length < 11)&&(!skipIt));
-            });
-        }
-
-
-        return rawQtlInfo;
-    };
 
 
     var retrieveExtents = function (geneName, defaultStart, defaultEnd) {
@@ -2946,37 +2863,7 @@ mpgSoftware.dynamicUi = (function () {
         returnObject.uniqueVarIds = returnObject.uniqueVarIds.sort();
         return returnObject;
     };
-    var displayVariantRecordsFromVariantQtlSearch = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-        $(idForTheTargetDiv).empty();
 
-
-        var returnObject = createNewDisplayReturnObject();
-        var selectorForIidForTheTargetDiv = idForTheTargetDiv;
-        $(selectorForIidForTheTargetDiv).empty();
-        _.forEach(_.sortBy(getAccumulatorObject("phenotypesForEveryVariant"), ['position']), function (variantWithPhenotypes) {
-            returnObject.uniqueVariants.push({variantName: variantWithPhenotypes.variantName});
-
-            var recordToDisplay = {phenotypes: []};
-            _.forEach(variantWithPhenotypes.phenotypes, function (eachPhenotype) {
-                recordToDisplay.phenotypes.push({phenotypeName: eachPhenotype})
-            });
-            returnObject.variantPhenotypeQtl.push(recordToDisplay);
-
-        });
-        addAdditionalResultsObject({variantRecordsFromVariantQtlSearch: returnObject});
-
-
-        prepareToPresentToTheScreen(idForTheTargetDiv,
-            '#dynamicPhenotypeTable',
-            returnObject,
-            clearBeforeStarting, null,
-            true,
-            'variantTableVariantHeaders',
-            true,
-            false );
-
-
-    };
 
 
 
@@ -3116,37 +3003,6 @@ mpgSoftware.dynamicUi = (function () {
 
 
     };
-
-    var displayAbcGivenVariantList = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-
-        displayVariantDataWithHiddenTissuesAndSummaryLines(idForTheTargetDiv,"abcAggregatedPerVariant",'ABC','ABC',
-            "noRecordTemplate","undefinedTissueRecord","#dynamicEqtlVariantTableBody",
-            "#dynamicEqtlVariantTableBodySummaryRecord", "table.combinedVariantTableHolder",'variantTableVariantHeaders',
-            undefined, undefined,
-        true, true);
-
-    }
-
-
-    var displayDnaseGivenVariantList = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-
-        displayVariantDataWithHiddenTissuesAndSummaryLines(idForTheTargetDiv,"dnaseAggregatedPerVariant",'DNase','DNase',
-            "noRecordTemplate","undefinedTissueRecord","#dynamicDnaseVariantTableBody",
-            "#dynamicDnaseVariantTableBodySummaryRecord", "table.combinedVariantTableHolder",'variantTableVariantHeaders',
-            undefined, undefined,
-        false, true);
-    };
-
-
-    var displayH3k27acGivenVariantList = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-
-        displayVariantDataWithHiddenTissuesAndSummaryLines(idForTheTargetDiv,"h3k27acAggregatedPerVariant",'H3k27ac','H3k27ac',
-            "noRecordTemplate","undefinedTissueRecord","#dynamicH3k27acVariantTableBody",
-            "#dynamicH3k27acVariantTableBodySummaryRecord", "table.combinedVariantTableHolder",'variantTableVariantHeaders',
-            undefined, undefined,
-        false, true);
-    };
-
 
     /***
      * This complicated routine serves as a general-purpose display IF:
@@ -4604,9 +4460,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             ( typeof datatable.DataTable().columns().header() === 'undefined') ) {
             console.log(" ERROR: invalid parameter in refineTableRecords");
         } else {
-            //var whereTheTableGoes = 'table.combinedGeneTableHolder';
-            var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
-
+            var sharedTable = getSharedTable(whereTheTableGoes);
+            const dyanamicUiVariables = getDyanamicUiVariables();
             switch(headerType){
                 case 'geneTableGeneHeaders':
                     if (headerSpecific){
@@ -4703,7 +4558,13 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     } else { // adjust the coloration of selected squares
                         $('td:has(div.variantAnnotation.emphasisSwitch_true)').addClass('emphasisSwitch_true');
                         $('div.variantAnnotation:last').parent().parent().children('td').css('border-bottom','2px solid green');
-                        $('div.variantEpigenetics').parent().parent().hide();
+
+                        let currentFormVariation = ( typeof sharedTable['currentFormVariation'] === 'undefined') ? 1 : sharedTable['currentFormVariation'];
+                        if (currentFormVariation === 1){
+                            $('div.variantEpigenetics').parent().parent().hide();
+                        } else if (currentFormVariation === 2) {
+                            $('div.variantEpigenetics').parent().parent().show();
+                        }
                         // if (( typeof adjustVisibilityCategories !== 'undefined') &&
                         //     (adjustVisibilityCategories.length > 0)){
                         //     if (adjustVisibilityCategories[0] === "H3k27ac"){
@@ -4735,22 +4596,31 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         // }
 
                     }
+                    adjustTableWrapperWidth("table.fullEffectorGeneTableHolder");
+                    adjustTableWrapperWidth(dyanamicUiVariables.dynamicTableConfiguration.initializeSharedTableMemory);
                     break;
                 case 'variantTableAnnotationHeaders':
                     if (headerSpecific) {
                         ;
                     } else { // turn off the visibility of tissue specific
-                        var tissueColumnsToHide = $('th.tissueRecord');
-                        _.forEach(tissueColumnsToHide,function(oneColumn){
-                            var classListForColumn = $(oneColumn).attr("class").split(/\s+/);
-                            if (_.includes(classListForColumn,'tissueRecord')){
-                                var buildSelector = 'th.'+classListForColumn.join('.');
-                                datatable.DataTable().column(buildSelector).visible(false);
-                            }
+                        let currentFormVariation = ( typeof sharedTable['currentFormVariation'] === 'undefined') ? 1 : sharedTable['currentFormVariation'];
+                        if (currentFormVariation === 1){
+                            $('div.varAllEpigenetics').parent().hide()
+                        } else if (currentFormVariation === 2) {
+                            $('div.varAllEpigenetics').parent().show();
+                        }
 
-                        });
+                        // var tissueColumnsToHide = $('th.tissueRecord');
+                        // _.forEach(tissueColumnsToHide,function(oneColumn){
+                        //     var classListForColumn = $(oneColumn).attr("class").split(/\s+/);
+                        //     if (_.includes(classListForColumn,'tissueRecord')){
+                        //         var buildSelector = 'th.'+classListForColumn.join('.');
+                        //         datatable.DataTable().column(buildSelector).visible(false);
+                        //     }
+                        //
+                        // });
                     }
-
+                    adjustTableWrapperWidth(dyanamicUiVariables.dynamicTableConfiguration.initializeSharedTableMemory);
                      break;
                 case 'fegtAnnotationHeaders':
                     if (headerSpecific){
@@ -5170,7 +5040,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
      * @param whereTheTableGoes
      */
     var transposeThisTable = function (whereTheTableGoes) {
-        var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
+        var sharedTable = getSharedTable(whereTheTableGoes);
 
         sharedTable['matrix'] = retrieveTransposedDataForThisTable(whereTheTableGoes);
         sharedTable['currentForm'] = formConversionOfATranspose(sharedTable.currentForm);
@@ -5178,6 +5048,48 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         destroySharedTable(whereTheTableGoes);
 
         rebuildTableOnPageFromMatrix(sharedTable['matrix'],sharedTable.currentForm,whereTheTableGoes);
+
+    };
+
+    /***
+     * The variant table needs to have a variety of different forms. Can make a way to swap between them:
+     *    formSwitch=1 : toggle between displaying epigenetic data
+     *
+     *    sharedTable['currentFormVariation'] :
+     *       1 = epigenetic data is hidden
+     *       2 = epigenetic data is displayed
+     *
+     * @param whereTheTableGoes
+     * @param formVariation
+     */
+    var reviseDisplayOfVariantTable = function (whereTheTableGoes,formSwitch,originatingObject) {
+        const sharedTable = getSharedTable(whereTheTableGoes);
+
+        if (formSwitch === 1){
+            if ( typeof sharedTable['currentFormVariation'] === 'undefined'){
+                sharedTable['currentFormVariation'] = 1;
+            }
+            switch (sharedTable['currentFormVariation']){
+                case 1:
+                    sharedTable['currentFormVariation'] = 2;
+                    $(originatingObject).text("Hide");
+                    break;
+                case 2:
+                    sharedTable['currentFormVariation'] = 1;
+                    $(originatingObject).text("Display");
+                    break;
+                default:
+                    alert(" Unexpected currentFormVariation = "+sharedTable['currentFormVariation']+".");
+                    break;
+            }
+
+            refineTableRecords( whereTheTableGoes,
+                $(whereTheTableGoes).dataTable(),
+                sharedTable['currentForm'],
+                0,
+                false);
+        }
+
 
     };
 
@@ -5980,6 +5892,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         removeWrapper:removeWrapper,
         createOutOfRegionGraphic:createOutOfRegionGraphic,
         transposeThisTable:transposeThisTable,
+        reviseDisplayOfVariantTable:reviseDisplayOfVariantTable,
         dataTableZoomSet:dataTableZoomSet,
         dataTableZoomDynaSet:dataTableZoomDynaSet,
         displayTissuesForAnnotation:displayTissuesForAnnotation,

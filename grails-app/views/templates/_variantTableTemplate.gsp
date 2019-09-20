@@ -14,8 +14,15 @@
             <div class="col-sm-12">
                 <div class="datatable-control-box">
                     <div class="datatable-transpose-control">
-                        <div class="tool-label">Transpose table&nbsp;&nbsp;<a style="padding:0; text-decoration:none; color:inherit" class="glyphicon glyphicon-question-sign pop-bottom" data-toggle="popover" role="button" data-trigger="focus" tabindex="0" animation="true" data-container="body" data-placement="bottom" title="" data-html="true" data-content="Click to pivot the table so that rows become columns and columns become rows." data-original-title="Transpose table"></a></div>
-                        <button class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table" onclick="mpgSoftware.dynamicUi.transposeThisTable('{{domTableSpecifier}}')">
+                        <div class="tool-label">Transpose table&nbsp;&nbsp;
+                            <a style="padding:0; text-decoration:none; color:inherit"
+                            class="glyphicon glyphicon-question-sign pop-bottom" data-toggle="popover" role="button" data-trigger="focus"
+                            tabindex="0" animation="true" data-container="body" data-placement="bottom" title="" data-html="true"
+                            data-content="Click to pivot the table so that rows become columns and columns become rows."
+                            data-original-title="Transpose table"></a>
+                        </div>
+                        <button class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table"
+                        onclick="mpgSoftware.dynamicUi.transposeThisTable('{{domTableSpecifier}}')">
                             Transpose
                         </button>
                     </div>
@@ -42,9 +49,15 @@
                             </select>
                         </div>
                         <div class="col-md-4">
-                            <span class="tool-label">Epigenetic data&nbsp;&nbsp;<a style="padding:0; text-decoration:none; color:inherit" class="glyphicon glyphicon-question-sign pop-bottom" data-toggle="popover" role="button" data-trigger="focus" tabindex="0" animation="true" data-container="body" data-placement="bottom" title="" data-html="true" data-content="Click to pivot the table so that rows become columns and columns become rows." data-original-title="Transpose table"></a></span>
-                            <button class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table" onclick="mpgSoftware.dynamicUi.transposeThisTable('{{domTableSpecifier}}')">
-                            Transpose
+                            <span class="tool-label">Epigenetic data&nbsp;&nbsp;
+                                <a style="padding:0; text-decoration:none; color:inherit" class="glyphicon glyphicon-question-sign pop-bottom"
+                                data-toggle="popover" role="button" data-trigger="focus" tabindex="0" animation="true" data-container="body"
+                                data-placement="bottom" title="" data-html="true"
+                                data-content="Click to toggle epigenetic data display." data-original-title="Transpose table"></a>
+                            </span>
+                            <button class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table"
+                            onclick="mpgSoftware.dynamicUi.reviseDisplayOfVariantTable('{{domTableSpecifier}}',1,this)">
+                            Display
                             </button>
                         </div>
                     </div>

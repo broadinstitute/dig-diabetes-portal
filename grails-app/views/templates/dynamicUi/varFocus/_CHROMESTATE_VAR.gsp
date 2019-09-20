@@ -3,15 +3,15 @@ records={{numberRecords}}
 </script>
 
 <script id="chromStateVariantTableTissueHeaderLabel"  type="x-tmpl-mustache">
-<div class="initialLinearIndex_{{indexInOneDimensionalArray}}">Epigenetics</div>
+<div class="varAllEpigenetics varChromHmmEpigenetics initialLinearIndex_{{indexInOneDimensionalArray}}">Epigenetics</div>
 </script>
 
 <script id="chromStateVariantTableTissueRowLabel"  type="x-tmpl-mustache">
-<div class="variantEpigenetics tissueTableHeader staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">ChromHMM&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/></div>
+<div class="varAllEpigenetics varChromHmmEpigenetics variantEpigenetics staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">ChromHMM&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/></div>
 </script>
 
 <script id="chromStateVariantTableTissueHeader"  type="x-tmpl-mustache">
-<div class="tissueTableTissueHeader initialLinearIndex_{{initialLinearIndex}}">{{tissueName}}</div>
+<div class="varAllEpigenetics varChromHmmEpigenetics initialLinearIndex_{{initialLinearIndex}}">{{tissueName}}</div>
 </script>
 
 <script id="chromStateVariantTableSignificanceCellPresentationString"  type="x-tmpl-mustache">
@@ -20,7 +20,7 @@ records={{numberRecords}}
 
 <script id="chromStateVariantTableBody"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortField="{{significanceValue}}"
-             class="chromState tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
+             class="varAllEpigenetics varChromHmmEpigenetics chromState tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'Chromatin state predictions for {{tissueName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
                data-target="#chromState_tissue_{{tissueNameKey}}" style="color:black">tissues
                </a>
