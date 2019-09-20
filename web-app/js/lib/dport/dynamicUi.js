@@ -4596,6 +4596,20 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         // }
 
                     }
+                    _.forEach($('div.annotationLabel'), function(domElement,index){
+                        if (index===0){
+                            $(domElement).parent().prop('rowspan',$('div.annotationLabel').length);
+                        } else {
+                            $(domElement).parent().hide();
+                        }
+                    });
+                    _.forEach($('div.associationLabel'), function(domElement,index){
+                        if (index===0){
+                            $(domElement).parent().prop('rowspan',$('div.associationLabel').length);
+                        } else {
+                            $(domElement).parent().hide();
+                        }
+                    });
                     adjustTableWrapperWidth("table.fullEffectorGeneTableHolder");
                     adjustTableWrapperWidth(dyanamicUiVariables.dynamicTableConfiguration.initializeSharedTableMemory);
                     break;

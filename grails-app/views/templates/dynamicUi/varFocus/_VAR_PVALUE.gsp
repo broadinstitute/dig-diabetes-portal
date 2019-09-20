@@ -1,5 +1,5 @@
 <script id="variantPValueCategoryLabel"  type="x-tmpl-mustache">
-<div class="initialLinearIndex_{{indexInOneDimensionalArray}}">
+<div class="associationLabel initialLinearIndex_{{indexInOneDimensionalArray}}">
 Association
 </div>
 </script>

@@ -1,5 +1,5 @@
 <script id="variantIsCodingCategoryLabel"  type="x-tmpl-mustache">
-<div class="variantAnnotationCompress variantAnnotation variantIsCoding initialLinearIndex_{{indexInOneDimensionalArray}}">
+<div class="annotationLabel variantAnnotationCompress variantAnnotation variantIsCoding initialLinearIndex_{{indexInOneDimensionalArray}}">
 Annotation
 </div>
 </script>
