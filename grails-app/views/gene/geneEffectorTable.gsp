@@ -47,6 +47,7 @@
                         retrieveListOfGenesInARangeUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveListOfGenesInARange")}',
                         retrieveEffectorGeneInformationUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveEffectorGeneInformation")}',
                         dynamicTableType:'effectorGeneTable',
+                        columnDefinitions:'static',
                         dataAnnotationTypes: [
                             {   code: 'FEGT',
                                 category: 'Annotation',
@@ -229,6 +230,7 @@
                             emptyHeaderRecord:'#emptyHeaderRecord',
                             domSpecificationForAccumulatorStorage:'#mainTissueDiv',
                             formOfStorage: 'loadOnce',
+                            initializeSharedTableMemory:  '#effectiveGeneTableHolder table.fullEffectorGeneTableHolder',
                             initialOrientation:'fegtAnnotationHeaders'
                         }
                     };

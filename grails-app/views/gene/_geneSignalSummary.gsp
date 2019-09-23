@@ -219,6 +219,7 @@ td.tissueTable.informationIsPresent{
                             subCategoryWriter:'no subcategory writer',
                             numberRecordsCellPresentationStringWriter:'no record numbers string writer',
                             significanceCellPresentationStringWriter:'no significance string writer',
+                            sortingSubroutine:'',
                             internalIdentifierString:'getTissuesFromProximityForLocusContext'
                         },
                         {   code: 'FIR',
@@ -231,6 +232,7 @@ td.tissueTable.informationIsPresent{
                             subCategoryWriter:'geneFirthAssociationTableSubCategory',
                             numberRecordsCellPresentationStringWriter:'geneFirthAssociationTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'geneFirthAssociationTableSignificanceCellPresentationString',
+                            sortingSubroutine:'Firth',
                             internalIdentifierString:'getFirthGeneAssociationsForGeneTable'
                         },
                         {   code: 'SKA',
@@ -243,6 +245,7 @@ td.tissueTable.informationIsPresent{
                             subCategoryWriter:'geneSkatAssociationTableSubCategory',
                             numberRecordsCellPresentationStringWriter:'geneSkatAssociationTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'geneSkatAssociationTableSignificanceCellPresentationString',
+                            sortingSubroutine:'SKAT',
                             internalIdentifierString:'getSkatGeneAssociationsForGeneTable'
                         },
                         {   code: 'MET',
@@ -255,6 +258,7 @@ td.tissueTable.informationIsPresent{
                             subCategoryWriter:'metaxcanTableSubCategory',
                             numberRecordsCellPresentationStringWriter:'metaxcanTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'metaxcanTableSignificanceCellPresentationString',
+                            sortingSubroutine:'MetaXcan',
                             internalIdentifierString:'getGeneAssociationsForGenesTable'
                         },
                         {   code: 'DEP_GS',
@@ -267,6 +271,7 @@ td.tissueTable.informationIsPresent{
                             subCategoryWriter:'depictGeneSetSubCategory',
                             numberRecordsCellPresentationStringWriter:'depictGeneSetTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'depictGeneSetTableSignificanceCellPresentationString',
+                            sortingSubroutine:'DEPICT',
                             internalIdentifierString:'getDepictGeneSetForGenesTable'
                         },
                         {   code: 'DEP_GP',
@@ -279,6 +284,7 @@ td.tissueTable.informationIsPresent{
                             subCategoryWriter:'depictGeneTableSubCategory',
                             numberRecordsCellPresentationStringWriter:'depictGenePvalueTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'depictGenePvalueTableSignificanceCellPresentationString',
+                            sortingSubroutine:'DEPICT',
                             internalIdentifierString:'getInformationFromDepictForGenesTable'
                         },
                         {   code: 'ECA',
@@ -291,6 +297,7 @@ td.tissueTable.informationIsPresent{
                             subCategoryWriter:'eCaviarSubCategory',
                             numberRecordsCellPresentationStringWriter:'eCaviarTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'eCaviarTableSignificanceCellPresentationString',
+                            sortingSubroutine:'eCAVIAR',
                             internalIdentifierString:'getRecordsFromECaviarForGeneTable'
                         },
                         {   code: 'COL',
@@ -303,18 +310,20 @@ td.tissueTable.informationIsPresent{
                             subCategoryWriter:'colocSubCategory',
                             numberRecordsCellPresentationStringWriter:'colocTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'colocTableSignificanceCellPresentationString',
+                            sortingSubroutine:'COLOC',
                             internalIdentifierString:'getRecordsFromColocForGeneTable'
                         },
                         {   code: 'MOD',
                             category: 'Annotation',
                             displayCategory: 'Annotation',
-                            subcategory: 'Mouse knockout phenotype',
+                            subcategory: 'MOD',
                             displaySubcategory: 'Mouse knockout phenotypes',
                             cellBodyWriter:'dynamicGeneTableModBody',
                             categoryWriter:'sharedCategoryWriter',
                             subCategoryWriter:'dynamicGeneTableModSubCategory',
                             numberRecordsCellPresentationStringWriter:'modTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'modTableSignificanceCellPresentationString',
+                            sortingSubroutine:'MOD',
                             internalIdentifierString:'getAnnotationsFromModForGenesTable'
                         },
                         {   code: 'EFF',
@@ -327,7 +336,29 @@ td.tissueTable.informationIsPresent{
                             subCategoryWriter:'dynamicGeneTableEffectorGeneSubCategory',
                             numberRecordsCellPresentationStringWriter:'effectorGeneTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'effectorGeneTableSignificanceCellPresentationString',
+                            sortingSubroutine:'straightAlphabetic',
                             internalIdentifierString:'getInformationFromEffectorGeneListTable'
+                        }
+                        ,
+                        {
+                            sortingSubroutine:'geneHeader',
+                            internalIdentifierString:'doesNotHaveAnIndependentFunction',
+                            nameOfAccumulatorField:'notUsed',
+                            nameOfAccumulatorFieldWithIndex:'notUsed'
+                        }
+                        ,
+                        {
+                            sortingSubroutine:'categoryName',
+                            internalIdentifierString:'doesNotHaveAnIndependentFunction',
+                            nameOfAccumulatorField:'notUsed',
+                            nameOfAccumulatorFieldWithIndex:'notUsed'
+                        }
+                        ,
+                        {
+                            sortingSubroutine:'geneMethods',
+                            internalIdentifierString:'doesNotHaveAnIndependentFunction',
+                            nameOfAccumulatorField:'notUsed',
+                            nameOfAccumulatorFieldWithIndex:'notUsed'
                         }
                         // ,{   code: 'EQT',
                         //     category: 'Annotation',

@@ -48,6 +48,7 @@
                             subCategoryWriter:'gregorTissueTableTissueRowLabel',
                             numberRecordsCellPresentationStringWriter:'gregorTissueTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'gregorTissueTableSignificanceCellPresentationString',
+                            sortingSubroutine:'gregorValuesInTissueTable',
                             internalIdentifierString:'getInformationFromGregorForTissueTable'
                         },
                         {
@@ -62,6 +63,7 @@
                             subCategoryWriter:'ldsrTissueTableTissueRowLabel',
                             numberRecordsCellPresentationStringWriter:'ldsrTissueTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'ldsrTissueTableSignificanceCellPresentationString',
+                            sortingSubroutine:'ldsrValuesInTissueTable',
                             internalIdentifierString:'getInformationFromLdsrForTissueTable'
                         }
                         ,
@@ -77,6 +79,7 @@
                             subCategoryWriter:'depictTissuesTissueTableTissueRowLabel',
                             numberRecordsCellPresentationStringWriter:'depictTissuesTissueTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'depictTissuesTissueTableSignificanceCellPresentationString',
+                            sortingSubroutine:'depictTissueValuesInTissueTable',
                             internalIdentifierString:'getInformationFromDepictForTissueTable'
                         }
 
