@@ -145,9 +145,38 @@ mpgSoftware.dynamicUi.variantTableHeaders = (function () {
 
 
 
+    const sortRoutine = function(a, b, direction, currentSort, sortTermOverride){
+        const defaultSearchField = 'sortField';
+        const textA = $(a).attr(defaultSearchField).toUpperCase();
+        const textAEmpty = (textA.length===0);
+        const textB = $(b).attr(defaultSearchField).toUpperCase();
+        const textBEmpty = (textB.length===0);
+        if ( textAEmpty && textBEmpty ) {
+            return 0;
+        }
+        else if ( textAEmpty ) {
+            if (direction==='asc') {
+                return -1;
+            } else {
+                return 1;
+            }
+        }else if ( textBEmpty )
+        {
+            if (direction==='asc') {
+                return 1;
+            } else {
+                return -1;
+            }
+        }
+        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    }
+
+
+
 // public routines are declared below
     return {
         processRecordsFromProximitySearch: processRecordsFromProximitySearch,
-        displayRefinedVariantsInARange:displayRefinedVariantsInARange
+        displayRefinedVariantsInARange:displayRefinedVariantsInARange,
+        sortRoutine:sortRoutine
     }
 }());

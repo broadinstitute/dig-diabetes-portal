@@ -54,6 +54,8 @@
                             subCategoryWriter:'gregorTissueTableTissueRowLabel',
                             numberRecordsCellPresentationStringWriter:'gregorTissueTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'gregorTissueTableSignificanceCellPresentationString',
+                            sortingSubroutine:'VariantFocusHeader',
+                            packagingString:'mpgSoftware.dynamicUi.variantTableHeaders',
                             internalIdentifierString:'getVariantsWeWillUseToBuildTheVariantTable',
                             nameOfAccumulatorField:'variantInfoArray',
                             nameOfAccumulatorFieldWithIndex:'notUsed'
@@ -68,6 +70,8 @@
                             cellBodyWriter:'variantIsCodingBody',
                             categoryWriter:'variantIsCodingCategoryLabel',
                             subCategoryWriter:'variantIsCodingSubcategoryLabel',
+                            sortingSubroutine:'VariantCoding',
+                            packagingString:'mpgSoftware.dynamicUi.variantTableHeaders',
                             internalIdentifierString:'doesNotHaveAnIndependentFunction',
                             nameOfAccumulatorField:'notUsed',
                             nameOfAccumulatorFieldWithIndex:'notUsed'
@@ -82,6 +86,8 @@
                             cellBodyWriter:'variantIsSplicingBody',
                             categoryWriter:'variantIsSplicingCategoryLabel',
                             subCategoryWriter:'variantIsSplicingSubcategoryLabel',
+                            sortingSubroutine:'VariantSplicing',
+                            packagingString:'mpgSoftware.dynamicUi.variantTableHeaders',
                             internalIdentifierString:'doesNotHaveAnIndependentFunction',
                             nameOfAccumulatorField:'notUsed',
                             nameOfAccumulatorFieldWithIndex:'notUsed'
@@ -96,6 +102,8 @@
                             cellBodyWriter:'variantIsUtrBody',
                             categoryWriter:'variantIsUtrCategoryLabel',
                             subCategoryWriter:'variantIsUtrSubcategoryLabel',
+                            sortingSubroutine:'VariantUtr',
+                            packagingString:'mpgSoftware.dynamicUi.variantTableHeaders',
                             internalIdentifierString:'doesNotHaveAnIndependentFunction',
                             nameOfAccumulatorField:'notUsed',
                             nameOfAccumulatorFieldWithIndex:'notUsed'
@@ -110,6 +118,7 @@
                             cellBodyWriter:'variantPValueBody',
                             categoryWriter:'variantPValueCategoryLabel',
                             subCategoryWriter:'variantPValueSubcategoryLabel',
+                            sortingSubroutine:'VariantAssociationPValue',
                             internalIdentifierString:'doesNotHaveAnIndependentFunction',
                             nameOfAccumulatorField:'notUsed',
                             nameOfAccumulatorFieldWithIndex:'notUsed'
@@ -124,6 +133,7 @@
                             cellBodyWriter:'variantPosteriorPValueBody',
                             categoryWriter:'variantPosteriorPValueCategoryLabel',
                             subCategoryWriter:'variantPosteriorPValueSubcategoryLabel',
+                            sortingSubroutine:'VariantAssociationPosterior',
                             internalIdentifierString:'doesNotHaveAnIndependentFunction',
                             nameOfAccumulatorField:'notUsed',
                             nameOfAccumulatorFieldWithIndex:'notUsed'
@@ -141,6 +151,7 @@
                             subCategoryWriter:'abcVariantTableTissueRowLabel',
                             numberRecordsCellPresentationStringWriter:'abcVariantTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'abcVariantTableSignificanceCellPresentationString',
+                            sortingSubroutine:'VariantAbc',
                             internalIdentifierString:'getABCGivenVariantList',
                             nameOfAccumulatorField:'abcVariantInfo',
                             nameOfAccumulatorFieldWithIndex:'variantInfoArray'
@@ -158,6 +169,7 @@
                             subCategoryWriter:'dnaseVariantTableTissueRowLabel',
                             numberRecordsCellPresentationStringWriter:'dnaseVariantTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'dnaseVariantTableSignificanceCellPresentationString',
+                            sortingSubroutine:'VariantDnase',
                             internalIdentifierString:'getDnaseGivenVariantList',
                             nameOfAccumulatorField:'dnaseVariantInfo',
                             nameOfAccumulatorFieldWithIndex:'variantInfoArray'
@@ -175,6 +187,7 @@
                             subCategoryWriter:'k27acVariantTableTissueRowLabel',
                             numberRecordsCellPresentationStringWriter:'k27acVariantTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'k27acVariantTableSignificanceCellPresentationString',
+                            sortingSubroutine:'VariantK27ac',
                             internalIdentifierString:'getH3k27acGivenVariantList',
                             nameOfAccumulatorField:'h3k27acVariantInfo',
                             nameOfAccumulatorFieldWithIndex:'variantInfoArray'
@@ -192,6 +205,7 @@
                             subCategoryWriter:'chromStateVariantTableTissueRowLabel',
                             numberRecordsCellPresentationStringWriter:'chromStateVariantTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'chromStateVariantTableSignificanceCellPresentationString',
+                            sortingSubroutine:'VariantChromHmm',
                             internalIdentifierString:'getChromStateGivenVariantList',
                             nameOfAccumulatorField:'chromStateVariantInfo',
                             nameOfAccumulatorFieldWithIndex:'variantInfoArray'

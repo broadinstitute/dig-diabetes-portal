@@ -12,6 +12,7 @@ Splice
 </script>
 
 <script id="variantIsSplicingBody"  type="x-tmpl-mustache">
-    <div  class="variantAnnotation emphasisSwitch_{{emphasisSwitch}}  initialLinearIndex_{{indexInOneDimensionalArray}}">
+    <div  class="variantAnnotation emphasisSwitch_{{emphasisSwitch}}  initialLinearIndex_{{indexInOneDimensionalArray}}"
+    sortfield="{{emphasisSwitch}}_Splice">
     </div>
 </script>

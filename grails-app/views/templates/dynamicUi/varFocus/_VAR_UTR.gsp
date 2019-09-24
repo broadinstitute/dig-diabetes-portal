@@ -12,6 +12,7 @@ UTR
 </script>
 
 <script id="variantIsUtrBody"  type="x-tmpl-mustache">
-    <div  class="variantAnnotation emphasisSwitch_{{emphasisSwitch}}  initialLinearIndex_{{indexInOneDimensionalArray}}">
+    <div  class="variantAnnotation emphasisSwitch_{{emphasisSwitch}}  initialLinearIndex_{{indexInOneDimensionalArray}}"
+    sortfield="{{emphasisSwitch}}_UTR">
     </div>
 </script>

@@ -3577,10 +3577,10 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
-        var generalPurposeSort  = function(a, b, direction, currentSort, sortTermOverride ){
+        var generalPurposeSort  = function(a, b, direction, currentSortObject, sortTermOverride ){
 
             var defaultSearchField = 'sortField';
-            switch (currentSort){
+            switch (currentSortObject.currentSort){
                 case 'variantAnnotationCategory':
                 case 'methods':
                     var textA = $(a).attr(defaultSearchField).toUpperCase();
@@ -3766,7 +3766,13 @@ mpgSoftware.dynamicUi = (function () {
                 case 'tissueNameInTissueTable':
                 case 'Genetic_combined':
                 case 'Genomic_combined':
+                case 'Gene_name':
+                case 'Locus_name':
                 case 'Perturbation_combined':
+                case 'GWAS_coding_causal':
+                case 'Exome_array_coding_causal':
+                case 'Exome_sequence_burden':
+                case 'Monogenic':
                      var textA = $(a).text().trim().toUpperCase();
                      var textAEmpty = (textA.length===0);
                      var textB = $(b).text().trim().toUpperCase();
@@ -3816,10 +3822,15 @@ mpgSoftware.dynamicUi = (function () {
                     }
                     return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
                     break;
+                case 'VariantId':
+                case 'VariantCoding':
+                case 'VariantSplicing':
+                case 'VariantUtr':
+                    return eval(currentSortObject.packagingString+'.sortRoutine(a, b, direction, currentSortObject.currentSort, sortTermOverride)');
+                    break;
                 default:
                     break;
             }
-//            alert('currentSort='+currentSort+'.');
             var x = UTILS.extractAnchorTextAsInteger(a);
             var y = UTILS.extractAnchorTextAsInteger(b);
             return ((x < y) ? -1 : ((x > y) ? 1 : 0));
@@ -3853,15 +3864,17 @@ mpgSoftware.dynamicUi = (function () {
         jQuery.fn.dataTableExt.oSort['generalSort-asc'] = function (a, b ) {
             var currentSortRequest = getAccumulatorObject("currentSortRequest");
 
-            return generalPurposeSort(a,b,'asc',currentSortRequest.currentSort,findDesiredSearchTerm());
+            return generalPurposeSort(  a,b,'asc',
+                                        currentSortRequest,
+                                        findDesiredSearchTerm() );
         };
 
         jQuery.fn.dataTableExt.oSort['generalSort-desc'] = function (a, b) {
             var currentSortRequest = getAccumulatorObject("currentSortRequest");
             if (currentSortRequest.currentSort === "variantAnnotationCategory"){
-                return generalPurposeSort(a,b,'desc',currentSortRequest.currentSort,findDesiredSearchTerm());
+                return generalPurposeSort(a,b,'desc',currentSortRequest,findDesiredSearchTerm());
             } else {
-                return generalPurposeSort(b,a,'desc',currentSortRequest.currentSort,findDesiredSearchTerm());
+                return generalPurposeSort(b,a,'desc',currentSortRequest,findDesiredSearchTerm());
             }
         };
 
@@ -3894,12 +3907,34 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
     _.forEach(classList, function (oneClass){
 
         if (dyanamicUiVariables.columnDefinitions === 'static'){
+            // with static columns we can keep the sorting descriptions might be held at multiple possible levels
+            let dataAnnotationTypeIndex = _.findIndex(dyanamicUiVariables.dataAnnotationTypes,['sortingSubroutine',oneClass]);
+            if ((dyanamicUiVariables.dataAnnotationTypes.length > 0) &&
+                ( typeof dyanamicUiVariables.dataAnnotationTypes[0].customColumnOrdering !== 'undefined')){
+                if (dataAnnotationTypeIndex === -1){
+                    dataAnnotationTypeIndex = _.findIndex(dyanamicUiVariables.dataAnnotationTypes[0].customColumnOrdering.topLevelColumns,['sortingSubroutine',oneClass]);
+                }
+                if (dataAnnotationTypeIndex === -1){
+                    dataAnnotationTypeIndex = _.findIndex(dyanamicUiVariables.dataAnnotationTypes[0].customColumnOrdering.constituentColumns,['sortingSubroutine',oneClass]);
+                }
+                if (dataAnnotationTypeIndex>-1){
+                    currentSortRequestObject = {
+                        'currentSort':oneClass,
+                        'table':dyanamicUiVariables.dynamicTableConfiguration.initializeSharedTableMemory
+                    };
+                    return false;
+                }
+                if (sortOrder.length===0){
+                    sortOrder = 'asc';
+                }
+            }
 
         } else {
             let dataAnnotationTypeIndex = _.findIndex(dyanamicUiVariables.dataAnnotationTypes,['sortingSubroutine',oneClass]);
             if (dataAnnotationTypeIndex>-1){
                 currentSortRequestObject = {
                     'currentSort':oneClass,
+                    'packagingString': dyanamicUiVariables.dataAnnotationTypes[dataAnnotationTypeIndex].packagingString,
                     'table':dyanamicUiVariables.dynamicTableConfiguration.initializeSharedTableMemory
                 };
                 return false;
@@ -3907,236 +3942,6 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         }
 
 
-
-        // switch (oneClass){
-        //     case 'Firth':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.combinedGeneTableHolder'
-        //         };
-        //         break;
-        //     case 'SKAT':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.combinedGeneTableHolder'
-        //         };
-        //         break;
-        //     case 'eQTL':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.combinedGeneTableHolder'
-        //         };
-        //         break;
-        //     case 'DEPICT':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.combinedGeneTableHolder'
-        //         };
-        //         break;
-        //     case 'MOD':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.combinedGeneTableHolder'
-        //         };
-        //         break;
-        //     case 'Mouse':
-        //         currentSortRequestObject = {
-        //             'currentSort':'MOD',
-        //             'table':'table.combinedGeneTableHolder'
-        //         };
-        //         break;
-        //     case 'MetaXcan':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.combinedGeneTableHolder'
-        //         };
-        //         break;
-        //     case 'ABC':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.combinedGeneTableHolder'
-        //         };
-        //         break;
-        //     case 'geneHeader':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.combinedGeneTableHolder'
-        //         };
-        //         break;
-        //     case 'categoryName':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.combinedGeneTableHolder'
-        //         };
-        //         break;
-        //     case 'geneMethods':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.combinedGeneTableHolder'
-        //         };
-        //         break;
-        //     case 'methods':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.combinedVariantTableHolder'
-        //         };
-        //         break;
-        //
-        //     case 'variantTableVarHeader':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.combinedVariantTableHolder'
-        //         };
-        //         break;
-        //     case 'variantHeader':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.combinedVariantTableHolder'
-        //         };
-        //         break;
-        //     case 'variantAnnotationCategory':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.combinedVariantTableHolder'
-        //         };
-        //         break;
-        //     case 'Coding':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.combinedVariantTableHolder'
-        //         };
-        //         break;
-        //     case 'Splice_site':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.combinedVariantTableHolder'
-        //         };
-        //         break;
-        //     case 'UTR':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.combinedVariantTableHolder'
-        //         };
-        //         break;
-        //     case 'Promoter':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.combinedVariantTableHolder'
-        //         };
-        //         break;
-        //     case 'P-value':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.combinedVariantTableHolder'
-        //         };
-        //         break;
-        //     case 'H3k27ac':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.combinedVariantTableHolder'
-        //         };
-        //         break;
-        //     case 'DNase':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.combinedVariantTableHolder'
-        //         };
-        //         break;
-        //     case 'ABC':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.combinedVariantTableHolder'
-        //         };
-        //         break;
-        //     case 'eQTL':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.combinedVariantTableHolder'
-        //         };
-        //         break;
-        //     case 'eCAVIAR':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.combinedGeneTableHolder'
-        //         };
-        //         break;
-        //     case 'gregorValuesInTissueTable':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.tissueTableHolder'
-        //         };
-        //         break;
-        //     case 'ldsrValuesInTissueTable':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.tissueTableHolder'
-        //         };
-        //         break;
-        //     case 'depictTissueValuesInTissueTable':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.tissueTableHolder'
-        //         };
-        //         break;
-        //     case 'tissueNameInTissueTable':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.tissueTableHolder'
-        //         };
-        //         break;
-        //
-        //     case 'COLOC':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.combinedGeneTableHolder'
-        //         };
-        //         break;
-        //     case 'Combined_category':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.combinedGeneTableHolder'
-        //         };
-        //         break;
-        //     case 'Genetic_combined':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.combinedGeneTableHolder'
-        //         };
-        //         break;
-        //     case 'Genomic_combined':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.combinedGeneTableHolder'
-        //         };
-        //         break;
-        //     case 'Perturbation_combined':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.combinedGeneTableHolder'
-        //         };
-        //         break;
-        //     case 'external_evidence':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.combinedGeneTableHolder'
-        //         };
-        //         break;
-        //     case 'homologous_gene':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.combinedGeneTableHolder'
-        //         };
-        //         break;
-        //     case 'fegtHeader':
-        //         currentSortRequestObject = {
-        //             'currentSort':oneClass,
-        //             'table':'table.fullEffectorGeneTableHolder'
-        //         };
-        //         break;
-        //
-        //     default:
-        //         break;
-        // }
     });
     var actualColumnIndex = columnNumberValue;
     currentSortRequestObject['sortOrder'] = (sortOrder === 'asc')?'desc':'asc';
@@ -4628,16 +4433,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         } else if (currentFormVariation === 2) {
                             $('div.varAllEpigenetics').parent().show();
                         }
+                        $('td:has(div.variantAnnotation.emphasisSwitch_true)').addClass('emphasisSwitch_true');
 
-                        // var tissueColumnsToHide = $('th.tissueRecord');
-                        // _.forEach(tissueColumnsToHide,function(oneColumn){
-                        //     var classListForColumn = $(oneColumn).attr("class").split(/\s+/);
-                        //     if (_.includes(classListForColumn,'tissueRecord')){
-                        //         var buildSelector = 'th.'+classListForColumn.join('.');
-                        //         datatable.DataTable().column(buildSelector).visible(false);
-                        //     }
-                        //
-                        // });
                     }
                     adjustTableWrapperWidth(dyanamicUiVariables.dynamicTableConfiguration.initializeSharedTableMemory);
                      break;
