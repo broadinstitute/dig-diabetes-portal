@@ -49,6 +49,7 @@
                             numberRecordsCellPresentationStringWriter:'gregorTissueTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'gregorTissueTableSignificanceCellPresentationString',
                             sortingSubroutine:'gregorValuesInTissueTable',
+                            packagingString:'mpgSoftware.dynamicUi.gregorTissueTable',
                             internalIdentifierString:'getInformationFromGregorForTissueTable'
                         },
                         {
@@ -64,6 +65,7 @@
                             numberRecordsCellPresentationStringWriter:'ldsrTissueTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'ldsrTissueTableSignificanceCellPresentationString',
                             sortingSubroutine:'ldsrValuesInTissueTable',
+                            packagingString:'mpgSoftware.dynamicUi.ldsrTissueTable',
                             internalIdentifierString:'getInformationFromLdsrForTissueTable'
                         }
                         ,
@@ -80,9 +82,17 @@
                             numberRecordsCellPresentationStringWriter:'depictTissuesTissueTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'depictTissuesTissueTableSignificanceCellPresentationString',
                             sortingSubroutine:'depictTissueValuesInTissueTable',
+                            packagingString:'mpgSoftware.dynamicUi.depictTissues',
                             internalIdentifierString:'getInformationFromDepictForTissueTable'
                         }
-
+                        ,
+                        {
+                            sortingSubroutine:'tissueHeader',
+                            internalIdentifierString:'doesNotHaveAnIndependentFunction',
+                            packagingString:'mpgSoftware.dynamicUi.gregorTissueTable',
+                            nameOfAccumulatorField:'notUsed',
+                            nameOfAccumulatorFieldWithIndex:'notUsed'
+                        }
                     ],
                     dynamicTableConfiguration: {
                         emptyBodyRecord:'#emptyBodyRecord',

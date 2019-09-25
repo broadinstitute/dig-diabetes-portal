@@ -349,6 +349,7 @@ td.tissueTable.informationIsPresent{
                             packagingString:'mpgSoftware.dynamicUi.effectorGene',
                             internalIdentifierString:'getInformationFromEffectorGeneListTable'
                         }
+                        // additional sorting terms
                         ,
                         {
                             sortingSubroutine:'categoryName',

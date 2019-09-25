@@ -7,7 +7,7 @@
 
 
 <script id="emptyHeaderRecord"  type="x-tmpl-mustache">
-     <div class="{{initialLinearIndex}} {{otherClasses}}" sortField=0>
+     <div class="{{initialLinearIndex}} {{otherClasses}}" sortField="">
                      <div>{{constText}}</div>
      </div>
 </script>

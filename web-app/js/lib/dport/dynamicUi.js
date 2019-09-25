@@ -3661,31 +3661,33 @@ mpgSoftware.dynamicUi = (function () {
                 case 'ldsrValuesInTissueTable':
                 case 'gregorValuesInTissueTable':
                 case 'depictTissueValuesInTissueTable':
-                    var textA = $(a).attr(defaultSearchField);
-                    var textAEmpty = ((textA.length===0)||(textA==="0"));
-                    var textB = $(b).attr(defaultSearchField);
-                    var textBEmpty = ((textB.length===0)||(textB==="0"));
-                    if ( textAEmpty && textBEmpty ) {
-                        return 0;
-                    }
-                    else if ( textAEmpty ) {
-                        if (direction==='desc') {
-                            return -1;
-                        } else {
-                            return 1;
-                        }
-                    }else if ( textBEmpty )
-                    {
-                        if (direction==='desc') {
-                            return 1;
-                        } else {
-                            return -1;
-                        }
-                    }
-                    var x = parseFloat(textB);
-                    var y = parseFloat(textA);
-                    return ((x > y) ? -1 : ((x < y) ? 1 : 0));
-                    break;
+                case 'tissueHeader':
+                    return eval(currentSortObject.dataAnnotationType.packagingString+'.sortRoutine(a, b, direction, currentSortObject)');
+                    // var textA = $(a).attr(defaultSearchField);
+                    // var textAEmpty = ((textA.length===0)||(textA==="0"));
+                    // var textB = $(b).attr(defaultSearchField);
+                    // var textBEmpty = ((textB.length===0)||(textB==="0"));
+                    // if ( textAEmpty && textBEmpty ) {
+                    //     return 0;
+                    // }
+                    // else if ( textAEmpty ) {
+                    //     if (direction==='desc') {
+                    //         return -1;
+                    //     } else {
+                    //         return 1;
+                    //     }
+                    // }else if ( textBEmpty )
+                    // {
+                    //     if (direction==='desc') {
+                    //         return 1;
+                    //     } else {
+                    //         return -1;
+                    //     }
+                    // }
+                    // var x = parseFloat(textB);
+                    // var y = parseFloat(textA);
+                    // return ((x > y) ? -1 : ((x < y) ? 1 : 0));
+                    // break;
                 //case 'eQTL':
                 case 'DEPICT':
                 case 'MetaXcan':
@@ -3794,7 +3796,7 @@ mpgSoftware.dynamicUi = (function () {
             } else if ((currentTableForm==='fegtAnnotationHeaders') || (currentTableForm==='fegtGeneNameHeaders')) { //
                 favoredSortField = 'sortfield';
             } else {
-                favoredSortField = cellColoringScheme;
+                favoredSortField = 'sortfield';
             }
             return favoredSortField;
         }
