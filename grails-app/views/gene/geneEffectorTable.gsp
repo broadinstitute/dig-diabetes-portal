@@ -60,7 +60,8 @@
                                 subCategoryWriter:'dynamicGeneTableEffectorGeneSubCategory',
                                 numberRecordsCellPresentationStringWriter:'effectorGeneTableNumberRecordsCellPresentationString',
                                 significanceCellPresentationStringWriter:'effectorGeneTableSignificanceCellPresentationString',
-                                sortingSubroutine:'Combined_category',
+                                sortingSubroutine:'effectorGeneTable',
+                                packagingString:'mpgSoftware.dynamicUi.fullEffectorGeneTable',
                                 internalIdentifierString:'getFullFromEffectorGeneListTable',
                                 customColumnOrdering:{
                                     topLevelColumns:[

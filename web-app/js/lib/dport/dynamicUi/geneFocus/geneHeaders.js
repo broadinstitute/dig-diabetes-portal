@@ -73,11 +73,21 @@ mpgSoftware.dynamicUi.geneHeaders = (function () {
     var categorizor = new mpgSoftware.dynamicUi.Categorizor();
     categorizor.categorizeSignificanceNumbers = Object.getPrototypeOf(categorizor).posteriorProbabilitySignificance;
 
+    let sortUtility = new mpgSoftware.dynamicUi.SortUtility();
+    const sortRoutine = function(a, b, direction, currentSortObject){
+        if (currentSortObject.desiredSearchTerm==='sortfield'){
+            return Object.getPrototypeOf(sortUtility).numericalComparisonWithEmptiesAtBottom(a, b, direction, currentSortObject);
+        } else if (currentSortObject.desiredSearchTerm==='geneName'){
+            return Object.getPrototypeOf(sortUtility).textComparisonWithEmptiesAtBottom(a, b, direction, currentSortObject);
+        }
+    };
+
 
 
 // public routines are declared below
     return {
         processRecordsFromProximitySearch: processRecordsFromProximitySearch,
-        displayRefinedGenesInARange:displayRefinedGenesInARange
+        displayRefinedGenesInARange:displayRefinedGenesInARange,
+        sortRoutine:sortRoutine
     }
 }());

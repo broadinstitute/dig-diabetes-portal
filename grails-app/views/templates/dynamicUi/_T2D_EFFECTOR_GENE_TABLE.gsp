@@ -1,1 +1,1 @@
-<g:render template="../templates/dynamicUi/FEGT" />
+<g:render template="../templates/dynamicUi/effectorGeneFocus/FEGT" />

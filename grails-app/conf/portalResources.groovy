@@ -231,7 +231,7 @@ modules = {
         resource url: 'js/lib/dport/dynamicUi.js'
         resource url: 'css/dport/dynamicUi.css'
 
-        resource url: 'js/lib/dport/dynamicUi/fullEffectorGeneTable.js'
+        resource url: 'js/lib/dport/dynamicUi/effectorGeneFocus/fullEffectorGeneTable.js'
         resource url: 'js/lib/dport/dynamicUi/geneFocus/geneBurdenSkat.js'
         resource url: 'js/lib/dport/matrixMath.js'
     }
@@ -243,9 +243,9 @@ modules = {
         resource url: 'js/lib/dport/dynamicUi.js'
         resource url: 'css/dport/dynamicUi.css'
 
-        resource url: 'js/lib/dport/dynamicUi/gregorData.js'
-        resource url: 'js/lib/dport/dynamicUi/depictTissue.js'
-        resource url: 'js/lib/dport/dynamicUi/ldsrData.js'
+        resource url: 'js/lib/dport/dynamicUi/tissueFocus/gregorData.js'
+        resource url: 'js/lib/dport/dynamicUi/tissueFocus/depictTissue.js'
+        resource url: 'js/lib/dport/dynamicUi/tissueFocus/ldsrData.js'
         resource url: 'js/lib/dport/matrixMath.js'
 
         resource url: 'js/lib/bootstrap-multiselect.js'

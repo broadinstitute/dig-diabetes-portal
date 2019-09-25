@@ -219,7 +219,7 @@ td.tissueTable.informationIsPresent{
                             subCategoryWriter:'no subcategory writer',
                             numberRecordsCellPresentationStringWriter:'no record numbers string writer',
                             significanceCellPresentationStringWriter:'no significance string writer',
-                            sortingSubroutine:'',
+                            sortingSubroutine:'geneHeader',
                             packagingString:'mpgSoftware.dynamicUi.geneHeaders',
                             internalIdentifierString:'getTissuesFromProximityForLocusContext'
                         },
@@ -351,15 +351,9 @@ td.tissueTable.informationIsPresent{
                         }
                         ,
                         {
-                            sortingSubroutine:'geneHeader',
-                            internalIdentifierString:'doesNotHaveAnIndependentFunction',
-                            nameOfAccumulatorField:'notUsed',
-                            nameOfAccumulatorFieldWithIndex:'notUsed'
-                        }
-                        ,
-                        {
                             sortingSubroutine:'categoryName',
                             internalIdentifierString:'doesNotHaveAnIndependentFunction',
+                            packagingString:'mpgSoftware.dynamicUi.geneHeaders',
                             nameOfAccumulatorField:'notUsed',
                             nameOfAccumulatorFieldWithIndex:'notUsed'
                         }

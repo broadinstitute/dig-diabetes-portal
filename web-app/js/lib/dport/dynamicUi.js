@@ -2247,7 +2247,7 @@ mpgSoftware.dynamicUi = (function () {
 
         var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode);
         var intermediateDataStructure = new IntermediateDataStructure();
-
+        var additionalParameters = getDyanamicUiVariables();
         // for each gene collect up the data we want to display
         var incomingData = getAccumulatorObject(nameOfAccumulatorField);
         var returnObject={headers:[], content:{}};
@@ -2260,13 +2260,17 @@ mpgSoftware.dynamicUi = (function () {
 
         if (returnObject.headers.length > 0){
             placeContentRowsIntoIntermediateObject(returnObject,dataAnnotationType,intermediateDataStructure,initialLinearIndex);
-            intermediateDataStructure.tableToUpdate = idForTheTargetDiv;
+            intermediateDataStructure.tableToUpdate = additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory;
         }
 
         // Set the default exclusions.  We need to do this because we have to find every column in the table, but we don't want
         // to display every column.  Instead we exclude some of them unless a user specifically requests that a column be expanded.
-         var sharedTable = new SharedTableObject( 'fegtAnnotationHeaders',sortedHeaderObjects.length,0);
-        setAccumulatorObject("sharedTable_"+idForTheTargetDiv,sharedTable);
+
+        // var sharedTable = new SharedTableObject( 'fegtAnnotationHeaders',sortedHeaderObjects.length,0);
+        //setAccumulatorObject("sharedTable_"+additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory,sharedTable);
+        //var sharedTable = getSharedTable(idForTheTargetDiv);
+        var sharedTable = getSharedTable(additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory);
+        sharedTable.numberOfColumns = sortedHeaderObjects.length;
         var deleter = {};
         _.forEach(sortedHeaderObjects, function (o,index){
             if (o.withinGroupNum === 0){
@@ -2284,7 +2288,7 @@ mpgSoftware.dynamicUi = (function () {
             sharedTable.addColumnExclusionGroup(deleter.groupNumber,deleter.groupName,deleter.columnIndexes);
         }
 
-        prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
+        prepareToPresentToTheScreen(additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory,
             '#dynamicAbcGeneTable',
             returnObject,
             clearBeforeStarting,
@@ -3419,6 +3423,9 @@ mpgSoftware.dynamicUi = (function () {
             case 'geneTable':
                 break;
             case 'effectorGeneTable':
+                var sharedTable = new SharedTableObject( 'fegtAnnotationHeaders',0,0);
+                // sharedTable.currentForm = additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory;
+                setAccumulatorObject("sharedTable_"+additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory,sharedTable);
                 break;
             case 'tissueTable':
                 resetAccumulatorObject('gregorTissueArray');
@@ -3688,43 +3695,9 @@ mpgSoftware.dynamicUi = (function () {
                 case 'COLOC':
                 case 'Firth':
                 case 'SKAT':
-                    return eval(currentSortObject.dataAnnotationType.packagingString+'.sortRoutine(a, b, direction, currentSortObject)');
-                    break;
-                    // defaultSearchField = sortTermOverride;
-                    // var x = parseFloat($(a).attr(defaultSearchField));
-                    // if (isNaN(x)){
-                    //     x = parseInt($(a).attr('subSortField'));
-                    // }
-                    // var y = parseFloat($(b).attr(defaultSearchField));
-                    // if (isNaN(y)){
-                    //     y = parseInt($(b).attr('subSortField'));
-                    // }
-                    // if (isNaN(x) || isNaN(y)){
-                    //     return emptyFieldHandler(isNaN(x),isNaN(y), direction);
-                    // }else {
-                    //     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-                    // }
-                    // break;
                 case 'geneHeader':
-                    defaultSearchField = sortTermOverride;
-                    var x = parseFloat($(a).attr(defaultSearchField));
-                    if (isNaN(x)){
-                        x = parseInt($(a).attr('subSortField'));
-                    }
-                    var y = parseFloat($(b).attr(defaultSearchField));
-                    if (isNaN(y)){
-                        y = parseInt($(b).attr('subSortField'));
-                    }
-                    if (isNaN(x) || isNaN(y)){
-                        return emptyFieldHandler(isNaN(x),isNaN(y), direction);
-                    }else {
-                        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-                    }
-                    break;
                 case  'categoryName':
-                    var textA = a.trim().toUpperCase();
-                    var textB = b.trim().toUpperCase();
-                    return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+                    return eval(currentSortObject.dataAnnotationType.packagingString+'.sortRoutine(a, b, direction, currentSortObject)');
                     break;
                 case 'straightAlphabetic':
                     var textA = a.trim().toUpperCase();
@@ -3732,55 +3705,7 @@ mpgSoftware.dynamicUi = (function () {
                     return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
                     break;
                 case 'fegtHeader':
-                    var textA = $(a).attr(defaultSearchField).toUpperCase();
-                    var textAEmpty = (textA.length===0);
-                    var textB = $(b).attr(defaultSearchField).toUpperCase();
-                    var textBEmpty = (textB.length===0);
-                    if ( textAEmpty && textBEmpty ) {
-                        return 0;
-                    }
-                    else if ( textAEmpty ) {
-                        if (direction==='desc') {
-                            return -1;
-                        } else {
-                            return 1;
-                        }
-                    }else if ( textBEmpty )
-                    {
-                        if (direction==='desc') {
-                            return 1;
-                        } else {
-                            return -1;
-                        }
-                    }
-                    return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-                    break;
-
                 case 'Combined_category':
-                    var x = parseInt($(a).attr("sortnumber"));
-                    var keepAAtTheBottom = (x===0);
-                    var y = parseInt($(b).attr("sortnumber"));
-                    var keepBAtTheBottom = (y===0);
-                    if ( keepAAtTheBottom && keepBAtTheBottom ) {
-                        return 0;
-                    }
-                    else if ( keepAAtTheBottom ) {
-                        if (direction==='asc') {
-                            return 1;
-                        } else {
-                            return -1;
-                        }
-                    }else if ( keepBAtTheBottom )
-                    {
-                        if (direction==='asc') {
-                            return -1;
-                        } else {
-                            return 1;
-                        }
-                    }
-
-                    return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-                    break;
                 case 'tissueNameInTissueTable':
                 case 'Genetic_combined':
                 case 'Genomic_combined':
@@ -3791,28 +3716,7 @@ mpgSoftware.dynamicUi = (function () {
                 case 'Exome_array_coding_causal':
                 case 'Exome_sequence_burden':
                 case 'Monogenic':
-                     var textA = $(a).text().trim().toUpperCase();
-                     var textAEmpty = (textA.length===0);
-                     var textB = $(b).text().trim().toUpperCase();
-                     var textBEmpty = (textB.length===0);
-                     if ( textAEmpty && textBEmpty ) {
-                         return 0;
-                     }
-                     else if ( textAEmpty ) {
-                         if (direction==='asc') {
-                             return 1;
-                         } else {
-                             return -1;
-                         }
-                     }else if ( textBEmpty )
-                     {
-                         if (direction==='asc') {
-                             return -1;
-                         } else {
-                             return 1;
-                         }
-                     }
-                     return (textA < textB) ? 1 : (textA > textB) ? -1 : 0;
+                    return eval(currentSortObject.dataAnnotationType.packagingString+'.sortRoutine(a, b, direction, currentSortObject)');
                      break;
                 case 'external_evidence':
                 case 'homologous_gene':
@@ -3868,13 +3772,27 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
-    var findDesiredSearchTerm=function(whereTheTableGoes){
+    var findDesiredSearchTerm=function(whereTheTableGoes,requestedSort){
             var favoredSortField = 'sortField';
+            const sharedTable = getSharedTable(whereTheTableGoes);
+            const currentTableForm = sharedTable.currentForm;
             var cellColoringScheme = findCellColoringChoice(whereTheTableGoes);
-            if ( cellColoringScheme === 'Significance'){
-                favoredSortField = 'significance_sortfield'
-            } else if ( cellColoringScheme === 'Records'){
-                favoredSortField = 'sortfield'
+            if ((currentTableForm==='geneTableGeneHeaders') || (currentTableForm==='geneTableAnnotationHeaders')) { // gene table
+                if ( cellColoringScheme === 'Significance'){
+                    favoredSortField = 'significance_sortfield'
+                } else if ( cellColoringScheme === 'Records'){
+                    favoredSortField = 'sortfield'
+                }
+                // the upper left corner gets special treatment, ince it may be sorted differently depending on table orientation
+                 if ( requestedSort==='categoryName'){
+                    if (currentTableForm==='geneTableGeneHeaders') {
+                        favoredSortField = 'sortfield';
+                    } else if (currentTableForm==='geneTableAnnotationHeaders') {
+                        favoredSortField = 'geneName';
+                    }
+                 }
+            } else if ((currentTableForm==='fegtAnnotationHeaders') || (currentTableForm==='fegtGeneNameHeaders')) { //
+                favoredSortField = 'sortfield';
             } else {
                 favoredSortField = cellColoringScheme;
             }
@@ -3942,7 +3860,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     currentSortRequestObject = {
                         'currentSort':oneClass,
                         'dataAnnotationType':dyanamicUiVariables.dataAnnotationTypes[0],
-                        'desiredSearchTerm':findDesiredSearchTerm(dyanamicUiVariables.dynamicTableConfiguration.initializeSharedTableMemory),
+                        'desiredSearchTerm':findDesiredSearchTerm(  dyanamicUiVariables.dynamicTableConfiguration.initializeSharedTableMemory,
+                                                                    oneClass ),
                         'table':dyanamicUiVariables.dynamicTableConfiguration.initializeSharedTableMemory
                     };
                     return false;
@@ -3958,7 +3877,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 currentSortRequestObject = {
                     'currentSort':oneClass,
                     'dataAnnotationType': dyanamicUiVariables.dataAnnotationTypes[dataAnnotationTypeIndex],
-                    'desiredSearchTerm':findDesiredSearchTerm(dyanamicUiVariables.dynamicTableConfiguration.initializeSharedTableMemory),
+                    'desiredSearchTerm':findDesiredSearchTerm(dyanamicUiVariables.dynamicTableConfiguration.initializeSharedTableMemory,
+                        oneClass ),
                     'table':dyanamicUiVariables.dynamicTableConfiguration.initializeSharedTableMemory
                 };
                 return false;
@@ -3983,7 +3903,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
        // setOfColumnsToSort.push([0,'desc']);
     }
     setOfColumnsToSort.push([ currentSortRequestObject.columnNumberValue, currentSortRequestObject.sortOrder ]);
-    findDesiredSearchTerm
+
     setAccumulatorObject("currentSortRequest", currentSortRequestObject );
 
     dataTable
@@ -5489,6 +5409,12 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
     var SortUtility = function(){
 
     };
+    SortUtility.prototype.simpleIntegerComparison = function(a, b, direction, currentSortObject){
+        const defaultSearchField = currentSortObject.desiredSearchTerm;
+        var x = parseInt($(a).attr(defaultSearchField));
+        var y = parseInt($(b).attr(defaultSearchField));
+        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+    };
     SortUtility.prototype.textComparisonWithEmptiesAtBottom = function(a, b, direction, currentSortObject){
         const defaultSearchField = currentSortObject.desiredSearchTerm;
         const textA = $(a).attr(defaultSearchField).toUpperCase();
@@ -5668,6 +5594,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
     var contractColumns = function ( event, offeredThis, direction, whereTheTableGoes) {
         event.stopPropagation();
+        var additionalParameters = getDyanamicUiVariables();
+        whereTheTableGoes = additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory;
         var identifyingNode = $(offeredThis).parent().parent().parent();
         var dataAnnotationType= getDatatypeInformation('FEGT');
         var expectedColumns = dataAnnotationType.dataAnnotation.customColumnOrdering.constituentColumns;
@@ -5676,7 +5604,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         var columnsToDelete = _.filter(expectedColumns,function (o){return ((o.pos===groupNumber) && (o.subPos!==0))});
         var columnsNamesToDelete = _.map(columnsToDelete,function(o){return o.key});
         var indexesOfColumnsToDelete =retrieveIndexesOfColumnsWithMatchingNames (whereTheTableGoes,columnsNamesToDelete);
-        var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
+        //var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
+        var sharedTable = getSharedTable(additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory);
         sharedTable.addColumnExclusionGroup(groupNumber,grouping.key,indexesOfColumnsToDelete);
         redrawTableOnClick(whereTheTableGoes,
             function(sortedData,numberOfRows,numberOfColumns,arguments){
@@ -5687,9 +5616,12 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
     var expandColumns = function ( event, offeredThis, direction, whereTheTableGoes) {
         event.stopPropagation();
+        var additionalParameters = getDyanamicUiVariables();
+        whereTheTableGoes = additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory;
         var identifyingNode = $(offeredThis).parent().parent().parent();
         var groupNumber = extractClassBasedIndex(identifyingNode[0].innerHTML,"groupNum");
-        var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
+        var sharedTable = getSharedTable(additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory);
+        // var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
         sharedTable.removeColumnExclusionGroup(groupNumber);
 
 

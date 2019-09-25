@@ -53,7 +53,7 @@ mpgSoftware.dynamicUi.fullEffectorGeneTable = (function () {
 
         var dataAnnotationTypeCode = "FEGT";
 
-        mpgSoftware.dynamicUi.displayForFullEffectorGeneTable('table.fullEffectorGeneTableHolder', // which table are we adding to
+        mpgSoftware.dynamicUi.displayForFullEffectorGeneTable(idForTheTargetDiv, // which table are we adding to
             dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
             'fullEffectorGeneTable', // name of the persistent field where the data we received is stored
 
@@ -309,10 +309,68 @@ mpgSoftware.dynamicUi.fullEffectorGeneTable = (function () {
 
 
 
+
+   const combinedCategorySorter  = function(a, b, direction, currentSortObject){
+       const x = parseInt($(a).attr("sortnumber"));
+       const keepAAtTheBottom = (x===0);
+       const y = parseInt($(b).attr("sortnumber"));
+       const keepBAtTheBottom = (y===0);
+       if ( keepAAtTheBottom && keepBAtTheBottom ) {
+           return 0;
+       }
+       else if ( keepAAtTheBottom ) {
+           if (direction==='asc') {
+               return 1;
+           } else {
+               return -1;
+           }
+       }else if ( keepBAtTheBottom )
+       {
+           if (direction==='asc') {
+               return -1;
+           } else {
+               return 1;
+           }
+       }
+
+       return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+   }
+
+
+
+    let sortUtility = new mpgSoftware.dynamicUi.SortUtility();
+    const sortRoutine = function(a, b, direction, currentSortObject){
+        switch (currentSortObject.currentSort){
+            case 'fegtHeader':
+            case 'tissueNameInTissueTable':
+            case 'Genetic_combined':
+            case 'Genomic_combined':
+            case 'Gene_name':
+            case 'Locus_name':
+            case 'Perturbation_combined':
+            case 'GWAS_coding_causal':
+            case 'Exome_array_coding_causal':
+            case 'Exome_sequence_burden':
+            case 'Monogenic':
+                return Object.getPrototypeOf(sortUtility).textComparisonWithEmptiesAtBottom(b, a, direction, currentSortObject);
+                break;
+            case 'Combined_category':
+                return combinedCategorySorter(a, b, direction, currentSortObject);
+                break;
+            default:
+                 alert('encountered unexpected sort request from effector gene table=\''+currentSortObject.currentSort+'\'') ;
+                return 0;
+        }
+
+    };
+
+
+
 // public routines are declared below
     return {
         processRecordsFromFullEffectorGeneTable: processRecordsFromFullEffectorGeneTable,
         displayFullEffectorGeneTable:displayFullEffectorGeneTable,
-        processRecordsFromGetData:processRecordsFromGetData
+        processRecordsFromGetData:processRecordsFromGetData,
+        sortRoutine:sortRoutine
     }
 }());

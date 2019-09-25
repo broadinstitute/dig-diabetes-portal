@@ -1,6 +1,6 @@
 <script id="dynamicGeneTableHeaderV3"  type="x-tmpl-mustache">
 
-        <div sortStrategy="alphabetical" sortField="-1"  sortTerm="{{name1}}" class="geneName text-center {{initialLinearIndex}}">
+        <div sortStrategy="alphabetical" sortField="-1" geneName="{{name}}"  sortTerm="{{name1}}" class="geneName text-center {{initialLinearIndex}}">
            <div class="geneHeaderShifters text-center">
                <span class="glyphicon glyphicon-step-backward" aria-hidden="true" onclick="mpgSoftware.dynamicUi.shiftColumnsByOne(event,this,'backward','table.combinedGeneTableHolder')"></span>
                <span class="glyphicon glyphicon-step-forward" aria-hidden="true" onclick="mpgSoftware.dynamicUi.shiftColumnsByOne(event,this,'forward','table.combinedGeneTableHolder')"></span>
