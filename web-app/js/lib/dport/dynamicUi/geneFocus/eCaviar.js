@@ -1,5 +1,5 @@
 /***
- * the DEPICT data pertaining to gene sets
+ * the eCAVIAR version of colocalization
  *
  * The following externally visible functions are required:
  *         1) a function to process records
@@ -11,12 +11,12 @@
  *           categorizeSignificanceNumbers
  * @type {*|{}}
  */
+
 var mpgSoftware = mpgSoftware || {};  // encapsulating variable
 mpgSoftware.dynamicUi = mpgSoftware.dynamicUi || {};   // second level encapsulating variable
 
-mpgSoftware.dynamicUi.depictGenePvalue = (function () {
+mpgSoftware.dynamicUi.eCaviar = (function () {
     "use strict";
-
 
     /***
      * 1) a function to process records
@@ -24,21 +24,26 @@ mpgSoftware.dynamicUi.depictGenePvalue = (function () {
      * @param rawGeneAssociationRecords
      * @returns {*}
      */
-    var processRecordsFromDepictGenePvalue = function (data, rawGeneAssociationRecords) {
+    var processRecordsFromECaviar = function (data, rawGeneAssociationRecords) {
+
+
         var dataArrayToProcess = [];
         if ( typeof data !== 'undefined'){
-            _.forEach(data,function(oneRec){
-                dataArrayToProcess = {
-                    gene: oneRec.gene,
-                    tissues: [{
-                        gene: oneRec.gene,
-                        value: oneRec.pvalue
-                    }]
-                };
-            });
+            var geneName = '';
+            dataArrayToProcess = {
+                tissues:_.map(data,function(oneRec){
+                    geneName = oneRec.gene;
+                    return oneRec;
+                })
+            };
+            dataArrayToProcess ['gene'] = geneName;
         }
         rawGeneAssociationRecords.push(dataArrayToProcess);
+
+
+        return rawGeneAssociationRecords;
     };
+
 
 
     /***
@@ -46,19 +51,22 @@ mpgSoftware.dynamicUi.depictGenePvalue = (function () {
      * @param idForTheTargetDiv
      * @param objectContainingRetrievedRecords
      */
-    var displayGenesFromDepict = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-
+    var displayGenesFromECaviar = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
         mpgSoftware.dynamicUi.displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
-            'DEP_GP', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            'rawDepictInfo', // name of the persistent field where the data we received is stored
+            'ECA', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+            'rawColocalizationInfo', // name of the persistent field where the data we received is stored
             '', // we may wish to pull out one record for summary purposes
             function(records,tissueTranslations){
-                return _.map(_.sortBy(records,['value']),function(tissueRecord){
-                    return {    value:UTILS.realNumberFormatter(''+tissueRecord.value),
-                        numericalValue:tissueRecord.value,
-                        dataset: tissueRecord.dataset };
-                });
-
+                return _.map(_.orderBy( records,["clpp"],["desc"]),function(tissueRecord){
+                    return {  tissue: tissueRecord.tissue_trans,
+                        clpp: UTILS.realNumberFormatter(""+tissueRecord.clpp),
+                        prob_in_causal_set: UTILS.realNumberFormatter(""+tissueRecord.prob_in_causal_set),
+                        gwas_z_score: UTILS.realNumberFormatter(""+tissueRecord.gwas_z_score),
+                        eqtl_z_score: UTILS.realNumberFormatter(""+tissueRecord.eqtl_z_score),
+                        var_id:tissueRecord.var_id,
+                        value:tissueRecord.clpp,
+                        numericalValue: tissueRecord.clpp
+                    }});
             },
             function(records, // all records
                      recordsCellPresentationString,// record count cell text
@@ -66,37 +74,35 @@ mpgSoftware.dynamicUi.depictGenePvalue = (function () {
                      dataAnnotationTypeCode,// driving code
                      significanceValue,
                      gene ){ // value of significance for sorting
-                return {  numberOfRecords:records.length,
+                return {
                     cellPresentationStringMap:{ Records:recordsCellPresentationString,
                         Significance:significanceCellPresentationString },
+                    numberOfRecords:records.length,
+                    tissueCategoryNumber:categorizor.categorizeTissueNumbers( records.length ),
+                    significanceCategoryNumber:categorizor.categorizeSignificanceNumbers( records[0].clpp, "ECA" ),
                     recordsExist:(records.length)?[1]:[],
                     gene:gene,
-                    tissueCategoryNumber:categorizor.categorizeTissueNumbers( records.length ),
-                    significanceCategoryNumber:categorizor.categorizeSignificanceNumbers( significanceValue ),
                     significanceValue:significanceValue,
-                    data:records
+                    records:records
                 }
             } );
 
     };
-
-
 
     /***
      *  3) set of categorizor routines
      * @type {Categorizor}
      */
     var categorizor = new mpgSoftware.dynamicUi.Categorizor();
-    categorizor.categorizeSignificanceNumbers = Object.getPrototypeOf(categorizor).genePValueSignificance;
+    categorizor.categorizeSignificanceNumbers = Object.getPrototypeOf(categorizor).posteriorProbabilitySignificance;
 
-
+    let sortUtility = new mpgSoftware.dynamicUi.SortUtility();
+    const sortRoutine = Object.getPrototypeOf(sortUtility).numericalComparisonWithEmptiesAtBottom;
 
 // public routines are declared below
     return {
-        processRecordsFromDepictGenePvalue: processRecordsFromDepictGenePvalue,
-        displayGenesFromDepict:displayGenesFromDepict
+        processRecordsFromECaviar: processRecordsFromECaviar,
+        displayGenesFromECaviar:displayGenesFromECaviar,
+        sortRoutine:sortRoutine
     }
 }());
-
-
-

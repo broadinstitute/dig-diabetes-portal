@@ -212,16 +212,16 @@ modules = {
         resource url: 'js/lib/dport/dynamicUi.js'
         resource url: 'css/dport/dynamicUi.css'
 
-        resource url: 'js/lib/dport/dynamicUi/geneBurdenFirth.js'
-        resource url: 'js/lib/dport/dynamicUi/geneBurdenSkat.js'
-        resource url: 'js/lib/dport/dynamicUi/metaXcan.js'
-        resource url: 'js/lib/dport/dynamicUi/depictGeneSets.js'
-        resource url: 'js/lib/dport/dynamicUi/depictGenePriority.js'
-        resource url: 'js/lib/dport/dynamicUi/eCaviar.js'
-        resource url: 'js/lib/dport/dynamicUi/coloc.js'
-        resource url: 'js/lib/dport/dynamicUi/mouseKnockout.js'
-        resource url: 'js/lib/dport/dynamicUi/effectorGene.js'
-        resource url: 'js/lib/dport/dynamicUi/geneHeaders.js'
+        resource url: 'js/lib/dport/dynamicUi/geneFocus/geneBurdenFirth.js'
+        resource url: 'js/lib/dport/dynamicUi/geneFocus/geneBurdenSkat.js'
+        resource url: 'js/lib/dport/dynamicUi/geneFocus/metaXcan.js'
+        resource url: 'js/lib/dport/dynamicUi/geneFocus/depictGeneSets.js'
+        resource url: 'js/lib/dport/dynamicUi/geneFocus/depictGenePriority.js'
+        resource url: 'js/lib/dport/dynamicUi/geneFocus/eCaviar.js'
+        resource url: 'js/lib/dport/dynamicUi/geneFocus/coloc.js'
+        resource url: 'js/lib/dport/dynamicUi/geneFocus/mouseKnockout.js'
+        resource url: 'js/lib/dport/dynamicUi/geneFocus/effectorGene.js'
+        resource url: 'js/lib/dport/dynamicUi/geneFocus/geneHeaders.js'
     }
     geneEffectorTable {
         dependsOn "core", "portalHome"
@@ -232,7 +232,7 @@ modules = {
         resource url: 'css/dport/dynamicUi.css'
 
         resource url: 'js/lib/dport/dynamicUi/fullEffectorGeneTable.js'
-        resource url: 'js/lib/dport/dynamicUi/geneBurdenSkat.js'
+        resource url: 'js/lib/dport/dynamicUi/geneFocus/geneBurdenSkat.js'
         resource url: 'js/lib/dport/matrixMath.js'
     }
     tissueTable {

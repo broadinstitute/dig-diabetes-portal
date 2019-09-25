@@ -3577,9 +3577,34 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
-        var generalPurposeSort  = function(a, b, direction, currentSortObject, sortTermOverride ){
+
+    const emptyFieldHandler = function (textAEmpty,textBEmpty,direction){
+        let returnValue =  0;
+        if ( textAEmpty && textBEmpty ) {
+            returnValue = 0;
+        }
+        else if ( textAEmpty ) {
+            if (direction==='desc') {
+                returnValue = -1;
+            } else {
+                returnValue = 1;
+            }
+        }else if ( textBEmpty )
+        {
+            if (direction==='desc') {
+                returnValue = 1;
+            } else {
+                returnValue = -1;
+            }
+        }
+        return returnValue;
+    }
+
+
+        var generalPurposeSort  = function(a, b, direction, currentSortObject  ){
 
             var defaultSearchField = 'sortField';
+            const sortTermOverride = currentSortObject.desiredSearchTerm;
             switch (currentSortObject.currentSort){
                 case 'variantAnnotationCategory':
                 case 'methods':
@@ -3654,43 +3679,32 @@ mpgSoftware.dynamicUi = (function () {
                     var y = parseFloat(textA);
                     return ((x > y) ? -1 : ((x < y) ? 1 : 0));
                     break;
-                case 'eQTL':
+                //case 'eQTL':
                 case 'DEPICT':
                 case 'MetaXcan':
-                case 'ABC':
+                //case 'ABC':
                 case 'MOD':
                 case 'eCAVIAR':
                 case 'COLOC':
                 case 'Firth':
                 case 'SKAT':
-                    defaultSearchField = sortTermOverride;
-                    var x = parseFloat($(a).attr(defaultSearchField));
-                    if (isNaN(x)){
-                        x = parseInt($(a).attr('subSortField'));
-                    }
-                    var y = parseFloat($(b).attr(defaultSearchField));
-                    if (isNaN(y)){
-                        y = parseInt($(b).attr('subSortField'));
-                    }
-                    if ( (-1===x) && (-1===y) ) {
-                        return 0;
-                    }
-                    else if (-1===x) {
-                        if (direction==='asc') {
-                            return -1;
-                        } else {
-                            return 1;
-                        }
-                    }else if (-1===y)
-                    {
-                        if (direction==='asc') {
-                            return 1;
-                        } else {
-                            return -1;
-                        }
-                    }
-                    return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+                    return eval(currentSortObject.dataAnnotationType.packagingString+'.sortRoutine(a, b, direction, currentSortObject)');
                     break;
+                    // defaultSearchField = sortTermOverride;
+                    // var x = parseFloat($(a).attr(defaultSearchField));
+                    // if (isNaN(x)){
+                    //     x = parseInt($(a).attr('subSortField'));
+                    // }
+                    // var y = parseFloat($(b).attr(defaultSearchField));
+                    // if (isNaN(y)){
+                    //     y = parseInt($(b).attr('subSortField'));
+                    // }
+                    // if (isNaN(x) || isNaN(y)){
+                    //     return emptyFieldHandler(isNaN(x),isNaN(y), direction);
+                    // }else {
+                    //     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+                    // }
+                    // break;
                 case 'geneHeader':
                     defaultSearchField = sortTermOverride;
                     var x = parseFloat($(a).attr(defaultSearchField));
@@ -3701,7 +3715,11 @@ mpgSoftware.dynamicUi = (function () {
                     if (isNaN(y)){
                         y = parseInt($(b).attr('subSortField'));
                     }
-                    return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+                    if (isNaN(x) || isNaN(y)){
+                        return emptyFieldHandler(isNaN(x),isNaN(y), direction);
+                    }else {
+                        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+                    }
                     break;
                 case  'categoryName':
                     var textA = a.trim().toUpperCase();
@@ -3826,7 +3844,7 @@ mpgSoftware.dynamicUi = (function () {
                 case 'VariantCoding':
                 case 'VariantSplicing':
                 case 'VariantUtr':
-                    return eval(currentSortObject.packagingString+'.sortRoutine(a, b, direction, currentSortObject.currentSort, sortTermOverride)');
+                    return eval(currentSortObject.dataAnnotationType.packagingString+'.sortRoutine(a, b, direction, currentSortObject)');
                     break;
                 default:
                     break;
@@ -3850,11 +3868,15 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
-    var findDesiredSearchTerm=function(){
+    var findDesiredSearchTerm=function(whereTheTableGoes){
             var favoredSortField = 'sortField';
-            var cellColoringScheme = findCellColoringChoice('table.combinedGeneTableHolder');
+            var cellColoringScheme = findCellColoringChoice(whereTheTableGoes);
             if ( cellColoringScheme === 'Significance'){
                 favoredSortField = 'significance_sortfield'
+            } else if ( cellColoringScheme === 'Records'){
+                favoredSortField = 'sortfield'
+            } else {
+                favoredSortField = cellColoringScheme;
             }
             return favoredSortField;
         }
@@ -3865,16 +3887,15 @@ mpgSoftware.dynamicUi = (function () {
             var currentSortRequest = getAccumulatorObject("currentSortRequest");
 
             return generalPurposeSort(  a,b,'asc',
-                                        currentSortRequest,
-                                        findDesiredSearchTerm() );
+                                        currentSortRequest );
         };
 
         jQuery.fn.dataTableExt.oSort['generalSort-desc'] = function (a, b) {
             var currentSortRequest = getAccumulatorObject("currentSortRequest");
             if (currentSortRequest.currentSort === "variantAnnotationCategory"){
-                return generalPurposeSort(a,b,'desc',currentSortRequest,findDesiredSearchTerm());
+                return generalPurposeSort(a,b,'desc',currentSortRequest);
             } else {
-                return generalPurposeSort(b,a,'desc',currentSortRequest,findDesiredSearchTerm());
+                return generalPurposeSort(b,a,'desc',currentSortRequest);
             }
         };
 
@@ -3920,6 +3941,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 if (dataAnnotationTypeIndex>-1){
                     currentSortRequestObject = {
                         'currentSort':oneClass,
+                        'dataAnnotationType':dyanamicUiVariables.dataAnnotationTypes[0],
+                        'desiredSearchTerm':findDesiredSearchTerm(dyanamicUiVariables.dynamicTableConfiguration.initializeSharedTableMemory),
                         'table':dyanamicUiVariables.dynamicTableConfiguration.initializeSharedTableMemory
                     };
                     return false;
@@ -3934,7 +3957,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             if (dataAnnotationTypeIndex>-1){
                 currentSortRequestObject = {
                     'currentSort':oneClass,
-                    'packagingString': dyanamicUiVariables.dataAnnotationTypes[dataAnnotationTypeIndex].packagingString,
+                    'dataAnnotationType': dyanamicUiVariables.dataAnnotationTypes[dataAnnotationTypeIndex],
+                    'desiredSearchTerm':findDesiredSearchTerm(dyanamicUiVariables.dynamicTableConfiguration.initializeSharedTableMemory),
                     'table':dyanamicUiVariables.dynamicTableConfiguration.initializeSharedTableMemory
                 };
                 return false;
@@ -3959,6 +3983,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
        // setOfColumnsToSort.push([0,'desc']);
     }
     setOfColumnsToSort.push([ currentSortRequestObject.columnNumberValue, currentSortRequestObject.sortOrder ]);
+    findDesiredSearchTerm
     setAccumulatorObject("currentSortRequest", currentSortRequestObject );
 
     dataTable
@@ -4366,6 +4391,9 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
                         });
                     } else { // adjust the coloration of selected squares
+                        if ( typeof sharedTable.cellColoringScheme === 'undefined'){
+                            sharedTable["cellColoringScheme"] = "sortfield";
+                        }
                         $('td:has(div.variantAnnotation.emphasisSwitch_true)').addClass('emphasisSwitch_true');
                         $('div.variantAnnotation:last').parent().parent().children('td').css('border-bottom','2px solid green');
 
@@ -5458,6 +5486,81 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
     Categorizor.prototype.categorizeSignificanceNumbers = categorizeSignificanceNumbers;
 
 
+    var SortUtility = function(){
+
+    };
+    SortUtility.prototype.textComparisonWithEmptiesAtBottom = function(a, b, direction, currentSortObject){
+        const defaultSearchField = currentSortObject.desiredSearchTerm;
+        const textA = $(a).attr(defaultSearchField).toUpperCase();
+        const textAEmpty = (textA.length===0);
+        const textB = $(b).attr(defaultSearchField).toUpperCase();
+        const textBEmpty = (textB.length===0);
+        if ( textAEmpty && textBEmpty ) {
+            return 0;
+        }
+        else if ( textAEmpty ) {
+            if (direction==='asc') {
+                return -1;
+            } else {
+                return 1;
+            }
+        }else if ( textBEmpty )
+        {
+            if (direction==='asc') {
+                return 1;
+            } else {
+                return -1;
+            }
+        }
+        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    }
+    SortUtility.prototype.textComparisonWithEmptiesAtBottom = function(a, b, direction, currentSortObject){
+        const defaultSearchField = currentSortObject.desiredSearchTerm;
+        const textA = $(a).attr(defaultSearchField).toUpperCase();
+        const textAEmpty = (textA.length===0);
+        const textB = $(b).attr(defaultSearchField).toUpperCase();
+        const textBEmpty = (textB.length===0);
+        if ( textAEmpty && textBEmpty ) {
+            return 0;
+        }
+        else if ( textAEmpty ) {
+            if (direction==='asc') {
+                return -1;
+            } else {
+                return 1;
+            }
+        }else if ( textBEmpty )
+        {
+            if (direction==='asc') {
+                return 1;
+            } else {
+                return -1;
+            }
+        }
+        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    };
+    SortUtility.prototype.numericalComparisonWithEmptiesAtBottom = function(a, b, direction, currentSortObject){
+        const defaultSearchField = currentSortObject.desiredSearchTerm;
+        var x = parseFloat($(a).attr(defaultSearchField));
+        if (isNaN(x)){
+            x = parseInt($(a).attr('subSortField'));
+        }
+        var y = parseFloat($(b).attr(defaultSearchField));
+        if (isNaN(y)){
+            y = parseInt($(b).attr('subSortField'));
+        }
+        if (isNaN(x) || isNaN(y)){
+            return emptyFieldHandler(isNaN(x),isNaN(y), direction);
+        }else {
+            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+        }
+    };
+    SortUtility.prototype.notSortable = function(a, b, direction, currentSortObject){
+        return 0;
+    }
+
+
+
 
     var getNumberOfHeaders =function(whereTheTableGoes) {
         var dataTable = $(whereTheTableGoes).dataTable().DataTable();
@@ -5741,6 +5844,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         adjustLowerExtent: adjustLowerExtent,
         adjustUpperExtent: adjustUpperExtent,
         Categorizor:Categorizor,
+        SortUtility:SortUtility,
         translateATissueName:translateATissueName,
         removeColumn:removeColumn,
         contractColumns:contractColumns,

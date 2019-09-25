@@ -777,13 +777,13 @@
 
 
 
-<g:render template="/templates/dynamicUi/GHDR" />
-<g:render template="/templates/dynamicUi/FIR" />
-<g:render template="/templates/dynamicUi/SKA" />
-<g:render template="/templates/dynamicUi/MET" />
-<g:render template="/templates/dynamicUi/DEP_GS" />
-<g:render template="/templates/dynamicUi/DEP_GP" />
-<g:render template="/templates/dynamicUi/ECA" />
-<g:render template="/templates/dynamicUi/COL" />
-<g:render template="/templates/dynamicUi/MOD" />
-<g:render template="/templates/dynamicUi/EFF" />
+<g:render template="/templates/dynamicUi/geneFocus/GHDR" />
+<g:render template="/templates/dynamicUi/geneFocus/FIR" />
+<g:render template="/templates/dynamicUi/geneFocus/SKA" />
+<g:render template="/templates/dynamicUi/geneFocus/MET" />
+<g:render template="/templates/dynamicUi/geneFocus/DEP_GS" />
+<g:render template="/templates/dynamicUi/geneFocus/DEP_GP" />
+<g:render template="/templates/dynamicUi/geneFocus/ECA" />
+<g:render template="/templates/dynamicUi/geneFocus/COL" />
+<g:render template="/templates/dynamicUi/geneFocus/MOD" />
+<g:render template="/templates/dynamicUi/geneFocus/EFF" />
