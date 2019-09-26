@@ -1231,13 +1231,15 @@ mpgSoftware.dynamicUi = (function () {
                             const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
                             var variantNameArray = _.map(dataVector, function(variantRec){return variantRec.var_id;});
                             variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";                        }
-                        var dataForCall = {variants: variantsAsJson};
+                        var dataForCall = {variants: variantsAsJson,method:'MACS'};
                         retrieveRemotedContextInformation(buildRemoteContextArray({
                             name: actionId,
-                            retrieveDataUrl: additionalParameters.retrieveDnaseDataUrl,
+                            retrieveDataUrl: additionalParameters.retrieveVariantAnnotations,
                             dataForCall: dataForCall,
-                            processEachRecord: mpgSoftware.dynamicUi.dnaseVariantTable.processRecordsFromDnase,
-                            displayRefinedContextFunction: displayFunction,
+                            processEachRecord: dataAnnotationType.processEachRecord,
+                            displayRefinedContextFunction: dataAnnotationType.displayEverythingFromThisCall,
+                            // processEachRecord: mpgSoftware.dynamicUi.dnaseVariantTable.processRecordsFromDnase,
+                            // displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
                             actionId: nextActionId,
                             nameOfAccumulatorField:dataAnnotationType.nameOfAccumulatorField,
@@ -1296,8 +1298,8 @@ mpgSoftware.dynamicUi = (function () {
                             name: actionId,
                             retrieveDataUrl: additionalParameters.retrieveChromatinStateUrl,
                             dataForCall: dataForCall,
-                            processEachRecord: mpgSoftware.dynamicUi.chromStateVariantTable.processRecordsFromChromState,
-                            displayRefinedContextFunction: displayFunction,
+                            processEachRecord: dataAnnotationType.processEachRecord,
+                            displayRefinedContextFunction: dataAnnotationType.displayEverythingFromThisCall,
                             placeToDisplayData: displayLocation,
                             actionId: nextActionId,
                             nameOfAccumulatorField:dataAnnotationType.nameOfAccumulatorField,
@@ -3207,6 +3209,10 @@ mpgSoftware.dynamicUi = (function () {
 
             if (( typeof collectionOfRemoteCallingParameters.displayRefinedContextFunction !== 'undefined') &&
                 ( collectionOfRemoteCallingParameters.displayRefinedContextFunction !== null ) ) {
+
+                if ( typeof collectionOfRemoteCallingParameters.displayEverythingFromThisCall === 'undefined'){
+
+                }
 
                 collectionOfRemoteCallingParameters.displayRefinedContextFunction(  collectionOfRemoteCallingParameters.placeToDisplayData,
                                                                                     objectContainingRetrievedRecords,

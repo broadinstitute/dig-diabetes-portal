@@ -157,24 +157,26 @@
                         //     nameOfAccumulatorFieldWithIndex:'variantInfoArray'
                         // }
                         // ,
-                        // {
-                        //     code: 'DNASE_VAR',
-                        //     category: 'DNASE Tissue',
-                        //     displayCategory: 'DNASE Tissue',
-                        //     subcategory: 'VariantDnase',
-                        //     displaySubcategory: 'DNASE list',
-                        //     headerWriter:'dnaseVariantTableTissueHeader',
-                        //     cellBodyWriter:'dnaseVariantTableBody',
-                        //     categoryWriter:'dnaseVariantTableTissueHeaderLabel',
-                        //     subCategoryWriter:'dnaseVariantTableTissueRowLabel',
-                        //     numberRecordsCellPresentationStringWriter:'dnaseVariantTableNumberRecordsCellPresentationString',
-                        //     significanceCellPresentationStringWriter:'dnaseVariantTableSignificanceCellPresentationString',
-                        //     sortingSubroutine:'VariantDnase',
-                        //     internalIdentifierString:'getDnaseGivenVariantList',
-                        //     nameOfAccumulatorField:'dnaseVariantInfo',
-                        //     nameOfAccumulatorFieldWithIndex:'variantInfoArray'
-                        // }
-                        // ,
+                        {
+                            code: 'DNASE_VAR',
+                            category: 'DNASE Tissue',
+                            displayCategory: 'DNASE Tissue',
+                            subcategory: 'VariantDnase',
+                            displaySubcategory: 'DNASE list',
+                            headerWriter:'dnaseVariantTableTissueHeader',
+                            cellBodyWriter:'dnaseVariantTableBody',
+                            categoryWriter:'dnaseVariantTableTissueHeaderLabel',
+                            subCategoryWriter:'dnaseVariantTableTissueRowLabel',
+                            numberRecordsCellPresentationStringWriter:'dnaseVariantTableNumberRecordsCellPresentationString',
+                            significanceCellPresentationStringWriter:'dnaseVariantTableSignificanceCellPresentationString',
+                            sortingSubroutine:'VariantDnase',
+                            internalIdentifierString:'getDnaseGivenVariantList',
+                            processEachRecord:mpgSoftware.dynamicUi.dnaseVariantTable.processRecordsFromDnase,
+                            displayEverythingFromThisCall:mpgSoftware.dynamicUi.dnaseVariantTable.displayTissueInformationFromDnase,
+                            nameOfAccumulatorField:'dnaseVariantInfo',
+                            nameOfAccumulatorFieldWithIndex:'variantInfoArray'
+                        }
+                        ,
                         // {
                         //     code: 'K27AC_VAR',
                         //     category: 'H3K27ac',
@@ -207,6 +209,8 @@
                             significanceCellPresentationStringWriter:'chromStateVariantTableSignificanceCellPresentationString',
                             sortingSubroutine:'VariantChromHmm',
                             internalIdentifierString:'getChromStateGivenVariantList',
+                            processEachRecord:mpgSoftware.dynamicUi.chromStateVariantTable.processRecordsFromChromState,
+                            displayEverythingFromThisCall:mpgSoftware.dynamicUi.chromStateVariantTable.displayTissueInformationFromChromState,
                             nameOfAccumulatorField:'chromStateVariantInfo',
                             nameOfAccumulatorFieldWithIndex:'variantInfoArray'
                         }
