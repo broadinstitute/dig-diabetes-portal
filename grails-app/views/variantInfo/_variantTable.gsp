@@ -39,7 +39,7 @@
                     retrieveTopVariantsAcrossSgsUrl:'${g.createLink(controller: "VariantSearch", action: "retrieveTopVariantsAcrossSgs")}',
                     getVariantsForRangeAjaxUrl:"${createLink(controller:'RegionInfo',action: 'retrieveVariantsInRange')}",
                     retrieveECaviarDataViaCredibleSetsUrl:"${createLink(controller:'RegionInfo',action: 'retrieveECaviarDataViaCredibleSets')}",
-
+                    retrieveVariantAnnotationsUrl:"${createLink(controller:'RegionInfo',action: 'retrieveVariantAnnotations')}",
                     dynamicTableType:'variantTable',
                     dataAnnotationTypes: [
                         {
@@ -139,60 +139,60 @@
                             nameOfAccumulatorFieldWithIndex:'notUsed'
                         }
                         ,
-                        {
-                            code: 'ABC_VAR',
-                            category: 'ABC Tissue',
-                            displayCategory: 'ABC Tissue',
-                            subcategory: 'VariantAbc',
-                            displaySubcategory: 'ABC list',
-                            headerWriter:'abcVariantTableTissueHeader',
-                            cellBodyWriter:'abcVariantTableBody',
-                            categoryWriter:'abcVariantTableTissueHeaderLabel',
-                            subCategoryWriter:'abcVariantTableTissueRowLabel',
-                            numberRecordsCellPresentationStringWriter:'abcVariantTableNumberRecordsCellPresentationString',
-                            significanceCellPresentationStringWriter:'abcVariantTableSignificanceCellPresentationString',
-                            sortingSubroutine:'VariantAbc',
-                            internalIdentifierString:'getABCGivenVariantList',
-                            nameOfAccumulatorField:'abcVariantInfo',
-                            nameOfAccumulatorFieldWithIndex:'variantInfoArray'
-                        }
-                        ,
-                        {
-                            code: 'DNASE_VAR',
-                            category: 'DNASE Tissue',
-                            displayCategory: 'DNASE Tissue',
-                            subcategory: 'VariantDnase',
-                            displaySubcategory: 'DNASE list',
-                            headerWriter:'dnaseVariantTableTissueHeader',
-                            cellBodyWriter:'dnaseVariantTableBody',
-                            categoryWriter:'dnaseVariantTableTissueHeaderLabel',
-                            subCategoryWriter:'dnaseVariantTableTissueRowLabel',
-                            numberRecordsCellPresentationStringWriter:'dnaseVariantTableNumberRecordsCellPresentationString',
-                            significanceCellPresentationStringWriter:'dnaseVariantTableSignificanceCellPresentationString',
-                            sortingSubroutine:'VariantDnase',
-                            internalIdentifierString:'getDnaseGivenVariantList',
-                            nameOfAccumulatorField:'dnaseVariantInfo',
-                            nameOfAccumulatorFieldWithIndex:'variantInfoArray'
-                        }
-                        ,
-                        {
-                            code: 'K27AC_VAR',
-                            category: 'H3K27ac',
-                            displayCategory: 'H3K27ac',
-                            subcategory: 'VariantK27ac',
-                            displaySubcategory: 'H3K27ac list',
-                            headerWriter:'k27acVariantTableTissueHeader',
-                            cellBodyWriter:'k27acVariantTableBody',
-                            categoryWriter:'k27acVariantTableTissueHeaderLabel',
-                            subCategoryWriter:'k27acVariantTableTissueRowLabel',
-                            numberRecordsCellPresentationStringWriter:'k27acVariantTableNumberRecordsCellPresentationString',
-                            significanceCellPresentationStringWriter:'k27acVariantTableSignificanceCellPresentationString',
-                            sortingSubroutine:'VariantK27ac',
-                            internalIdentifierString:'getH3k27acGivenVariantList',
-                            nameOfAccumulatorField:'h3k27acVariantInfo',
-                            nameOfAccumulatorFieldWithIndex:'variantInfoArray'
-                        }
-                        ,
+                        // {
+                        //     code: 'ABC_VAR',
+                        //     category: 'ABC Tissue',
+                        //     displayCategory: 'ABC Tissue',
+                        //     subcategory: 'VariantAbc',
+                        //     displaySubcategory: 'ABC list',
+                        //     headerWriter:'abcVariantTableTissueHeader',
+                        //     cellBodyWriter:'abcVariantTableBody',
+                        //     categoryWriter:'abcVariantTableTissueHeaderLabel',
+                        //     subCategoryWriter:'abcVariantTableTissueRowLabel',
+                        //     numberRecordsCellPresentationStringWriter:'abcVariantTableNumberRecordsCellPresentationString',
+                        //     significanceCellPresentationStringWriter:'abcVariantTableSignificanceCellPresentationString',
+                        //     sortingSubroutine:'VariantAbc',
+                        //     internalIdentifierString:'getABCGivenVariantList',
+                        //     nameOfAccumulatorField:'abcVariantInfo',
+                        //     nameOfAccumulatorFieldWithIndex:'variantInfoArray'
+                        // }
+                        // ,
+                        // {
+                        //     code: 'DNASE_VAR',
+                        //     category: 'DNASE Tissue',
+                        //     displayCategory: 'DNASE Tissue',
+                        //     subcategory: 'VariantDnase',
+                        //     displaySubcategory: 'DNASE list',
+                        //     headerWriter:'dnaseVariantTableTissueHeader',
+                        //     cellBodyWriter:'dnaseVariantTableBody',
+                        //     categoryWriter:'dnaseVariantTableTissueHeaderLabel',
+                        //     subCategoryWriter:'dnaseVariantTableTissueRowLabel',
+                        //     numberRecordsCellPresentationStringWriter:'dnaseVariantTableNumberRecordsCellPresentationString',
+                        //     significanceCellPresentationStringWriter:'dnaseVariantTableSignificanceCellPresentationString',
+                        //     sortingSubroutine:'VariantDnase',
+                        //     internalIdentifierString:'getDnaseGivenVariantList',
+                        //     nameOfAccumulatorField:'dnaseVariantInfo',
+                        //     nameOfAccumulatorFieldWithIndex:'variantInfoArray'
+                        // }
+                        // ,
+                        // {
+                        //     code: 'K27AC_VAR',
+                        //     category: 'H3K27ac',
+                        //     displayCategory: 'H3K27ac',
+                        //     subcategory: 'VariantK27ac',
+                        //     displaySubcategory: 'H3K27ac list',
+                        //     headerWriter:'k27acVariantTableTissueHeader',
+                        //     cellBodyWriter:'k27acVariantTableBody',
+                        //     categoryWriter:'k27acVariantTableTissueHeaderLabel',
+                        //     subCategoryWriter:'k27acVariantTableTissueRowLabel',
+                        //     numberRecordsCellPresentationStringWriter:'k27acVariantTableNumberRecordsCellPresentationString',
+                        //     significanceCellPresentationStringWriter:'k27acVariantTableSignificanceCellPresentationString',
+                        //     sortingSubroutine:'VariantK27ac',
+                        //     internalIdentifierString:'getH3k27acGivenVariantList',
+                        //     nameOfAccumulatorField:'h3k27acVariantInfo',
+                        //     nameOfAccumulatorFieldWithIndex:'variantInfoArray'
+                        // }
+                        // ,
                         {
                             code: 'CHROMESTATE_VAR',
                             category: 'ChromState',

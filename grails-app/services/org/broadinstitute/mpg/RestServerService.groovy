@@ -73,6 +73,8 @@ class RestServerService {
     private String GET_H3K27AC_RECORDS_URL= "testcalls/region/h3k27ac/object"
     private String GET_BOTTOM_LINE_RESULTS_URL= "graph/meta/variant/object"
     private String GET_TISSUES_FROM_GREGOR_URL= "graph/gregor/phenotype/object"
+    private String GET_VARIANT_ANNOTATIONS_URL= "graph/region/bylocus/object"
+    private String GET_ANNOTATIONS_BY_RANGE_URL= "graph/region/bylocus/object"
     private String GET_VARIANTS_FROM_RANGE_URL= "graph/prioritization/variant/object"
     private String GET_CHROMATIN_STATE_FROM_VARIANTS_URL= "graph/region/variant/object"
     private String GET_TISSUES_FROM_LDSR_URL = "testcalls/ldscore/tissue/object"
@@ -2527,6 +2529,70 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         }
         return jsonObject
     }
+
+
+
+
+
+     public JSONObject gatherVariantsAnnotations(    String chromosome,
+                                                    int startPosition,
+                                                    int endPosition,
+                                                    String method,
+                                                    List <String> variantList,
+                                                    List <String> tissueList,
+                                                    int limit ) {
+        List<String> specifyRequestList = []
+        boolean callByRange = false
+        boolean callByVarId = false
+
+
+        if ((chromosome) && (chromosome.length() > 0)) {
+            specifyRequestList << "chrom=${chromosome}"
+            callByRange = true
+        }
+        if ((startPosition > -1) && (endPosition > -1)) {
+            specifyRequestList << "pos=${startPosition},${endPosition}"
+            if (!callByRange){
+                log.error("calling error in gatherVariantsAnnotations.  Range provided, but no chromosome.")
+            }
+        }
+        if (method > -1) {
+            specifyRequestList << "method=${method}"
+        }
+        if ((variantList) && (variantList.size() > 0)) {
+            specifyRequestList << "var_id=${variantList.join(",").replace("\"","")}"
+            callByVarId = true
+        }
+        if ((tissueList) && (tissueList.size() > 0)) {
+            specifyRequestList << "tissue=${tissueList.join(",").replace("\"","")}"
+        }
+
+        if (limit > -1) {
+            specifyRequestList << "limit=${limit}"
+        }
+         String rawReturnFromApi
+         if (callByRange){
+             rawReturnFromApi =  getRestCall("${GET_ANNOTATIONS_BY_RANGE_URL}?${specifyRequestList.join("&")}".toString())
+         } else if (callByVarId){
+             rawReturnFromApi =  getRestCall("${GET_VARIANT_ANNOTATIONS_URL}?${specifyRequestList.join("&")}".toString())
+         } else {
+             log.error("calling error in gatherVariantsAnnotations. Neither range nor var IDs provided")
+         }
+
+         JsonSlurper slurper = new JsonSlurper()
+         JSONObject jsonObject
+
+        try{
+            jsonObject = slurper.parseText(rawReturnFromApi)
+        } catch(Exception e){
+            log.error("ERROR: gatherVariantsInRange. problem parsing the data we received from the KB")
+        }
+        return jsonObject
+    }
+
+
+
+
 
 
 

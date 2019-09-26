@@ -1439,4 +1439,79 @@ class RegionInfoController {
 
 
 
+
+    def retrieveVariantAnnotations() {
+        boolean looksOkay = true
+        JSONObject jsonReturn
+        def slurper = new JsonSlurper()
+        int startPosition = -1
+        int endPosition = -1
+        int limit = -1
+        String chromosome = ""
+        String method = ""
+        List <String> variantList = []
+        List <String> tissueList = []
+
+        if (params.chromosome) {
+            chromosome = params.chromosome
+        }
+
+        if (params.startPos) {
+            try {
+                startPosition = Double.parseDouble(params.startPos).intValue()
+            } catch (Exception e) {
+                looksOkay = false
+                e.printStackTrace()
+                log.error("retrieveVariantsInRange:failed to convert startPos value=${params.startPos}")
+            }
+        } else {
+            looksOkay = false
+        }
+        if (params.endPos) {
+            try {
+                endPosition = Double.parseDouble(params.endPos).intValue()
+            } catch (Exception e) {
+                looksOkay = false
+                e.printStackTrace()
+                log.error("retrieveVariantsInRange:failed to convert endPos value=${params.endPos}")
+            }
+        } else {
+            looksOkay = false
+        }
+
+
+        if (params.tissues) {
+            JSONArray tissues  = slurper.parseText( params.tissues as String)  as JSONArray
+            tissueList = tissues.collect{o->o}
+        }
+
+        if (params.variants) {
+            JSONArray variants = slurper.parseText( params.variants as String)  as JSONArray
+            variantList = variants.collect{o->o}
+        } else {
+            looksOkay = false
+        }
+
+        if (looksOkay){
+            jsonReturn = restServerService.gatherVariantsAnnotations( chromosome,
+                                                                    startPosition,
+                                                                    endPosition,
+                                                                    method,
+                                                                    variantList,
+                                                                    tissueList,
+                                                                    limit )
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+            jsonReturn =  slurper.parseText(proposedJsonString) as JSONArray;
+        }
+
+        render(status: 200, contentType: "application/json") {jsonReturn}
+        return
+    }
+
+
+
+
+
+
 }

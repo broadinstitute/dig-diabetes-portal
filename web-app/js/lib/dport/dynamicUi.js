@@ -1291,7 +1291,7 @@ mpgSoftware.dynamicUi = (function () {
                             var variantNameArray = _.map(dataVector, function(variantRec){return variantRec.var_id;});
                             variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";
                         }
-                        var dataForCall = {variants: variantsAsJson};
+                        var dataForCall = {variants: variantsAsJson, method:'ChromHMM'};
                         retrieveRemotedContextInformation(buildRemoteContextArray({
                             name: actionId,
                             retrieveDataUrl: additionalParameters.retrieveChromatinStateUrl,
