@@ -177,6 +177,29 @@
                             nameOfAccumulatorFieldWithIndex:'variantInfoArray'
                         }
                         ,
+                        {
+                            code: 'TFBS_VAR',
+                            category: 'TFBS Tissue',
+                            displayCategory: 'TFBS Tissue',
+                            subcategory: 'VariantTfbs',
+                            displaySubcategory: 'TFBS list',
+                            headerWriter:'tfbsVariantTableTissueHeader',
+                            cellBodyWriter:'tfbsVariantTableBody',
+                            categoryWriter:'tfbsVariantTableTissueHeaderLabel',
+                            subCategoryWriter:'tfbsVariantTableTissueRowLabel',
+                            numberRecordsCellPresentationStringWriter:'tfbsVariantTableNumberRecordsCellPresentationString',
+                            significanceCellPresentationStringWriter:'tfbsVariantTableSignificanceCellPresentationString',
+                            sortingSubroutine:'VariantDnase',
+                            internalIdentifierString:'getTfbsGivenVariantList',
+                            processEachRecord:mpgSoftware.dynamicUi.dnaseVariantTable.processRecordsFromDnase,
+                            displayEverythingFromThisCall:mpgSoftware.dynamicUi.dnaseVariantTable.displayTissueInformationFromDnase,
+                            nameOfAccumulatorField:'tfbsVariantInfo',
+                            nameOfAccumulatorFieldWithIndex:'variantInfoArray'
+                        }
+                        ,
+
+
+
                         // {
                         //     code: 'K27AC_VAR',
                         //     category: 'H3K27ac',

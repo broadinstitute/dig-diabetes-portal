@@ -32,6 +32,7 @@
 <g:render template="/templates/dynamicUi/varFocus/ABC_VAR" />
 <g:render template="/templates/dynamicUi/varFocus/DNASE_VAR" />
 <g:render template="/templates/dynamicUi/varFocus/K27AC_VAR" />
+<g:render template="/templates/dynamicUi/varFocus/TFBS_VAR" />
 <g:render template="/templates/dynamicUi/varFocus/VAR_CODING" />
 <g:render template="/templates/dynamicUi/varFocus/VAR_SPLICE" />
 <g:render template="/templates/dynamicUi/varFocus/VAR_UTR" />

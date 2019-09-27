@@ -1246,9 +1246,36 @@ mpgSoftware.dynamicUi = (function () {
                         }));
                     }
                 };
-
-
                 break;
+
+            case "getTfbsGivenVariantList":
+                functionToLaunchDataRetrieval = function () {
+                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
+                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: actionId});
+                        actionToUndertake();
+                    } else {
+                        var variantsAsJson = "[]";
+                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
+                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
+                            var variantNameArray = _.map(dataVector, function(variantRec){return variantRec.var_id;});
+                            variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";                        }
+                        var dataForCall = {variants: variantsAsJson,method:'SPP'};
+                        retrieveRemotedContextInformation(buildRemoteContextArray({
+                            name: actionId,
+                            retrieveDataUrl: additionalParameters.retrieveVariantAnnotationsUrl,
+                            dataForCall: dataForCall,
+                            processEachRecord: dataAnnotationType.processEachRecord,
+                            displayRefinedContextFunction: dataAnnotationType.displayEverythingFromThisCall,
+                            placeToDisplayData: displayLocation,
+                            actionId: nextActionId,
+                            nameOfAccumulatorField:dataAnnotationType.nameOfAccumulatorField,
+                            code:dataAnnotationType.code,
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                        }));
+                    }
+                };
+                break;
+
             case "getH3k27acGivenVariantList":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
@@ -4329,37 +4356,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         } else if (currentFormVariation === 2) {
                             $('div.variantEpigenetics').parent().parent().show();
                         }
-                        // if (( typeof adjustVisibilityCategories !== 'undefined') &&
-                        //     (adjustVisibilityCategories.length > 0)){
-                        //     if (adjustVisibilityCategories[0] === "H3k27ac"){
-                        //         for( var i = 0 ; i < 5 ; i++ ){
-                        //             $('td:has(div.tissueTable.matchingRegion1_'+i+')').addClass('tissueTable matchingRegion1_'+i);
-                        //         }
-                        //     } else if (adjustVisibilityCategories[0] === "DNase"){
-                        //         for( var i = 0 ; i < 5 ; i++ ){
-                        //             $('td:has(div.tissueTable.matchingRegion2_'+i+')').addClass('tissueTable matchingRegion2_'+i);
-                        //         }
-                        //     }
-                        //     _.forEach(adjustVisibilityCategories,function(adjustVisibilityCategory){
-                        //         if (($.isArray(adjustVisibilityCategory))&&(adjustVisibilityCategory.length>0)){
-                        //             var elementsToHide = $('div.noDataHere.'+adjustVisibilityCategory);
-                        //             if (elementsToHide.length>0){
-                        //                 elementsToHide.parent().parent().hide();
-                        //             }
-                        //             elementsToHide = $('div.variantRecordExists.'+adjustVisibilityCategory);
-                        //             if (elementsToHide.length>0){
-                        //                 elementsToHide.parent().parent().hide();
-                        //             }
-                        //         }
-                        //
-                        //     });
-                        //     _.forEach($('div.tissueRecord'),function(oneRecord){
-                        //         $(oneRecord).parent().parent().hide();
-                        //     });
-                        //
-                        // }
-
-                    }
+                     }
                     _.forEach($('div.annotationLabel'), function(domElement,index){
                         if (index===0){
                             $(domElement).parent().prop('rowspan',$('div.annotationLabel').length);
