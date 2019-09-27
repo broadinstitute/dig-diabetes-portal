@@ -16,7 +16,7 @@ mpgSoftware.dynamicUi.dnaseVariantTable = (function () {
             ( typeof data.data !== 'undefined')){
             arrayOfRecords.splice(0,arrayOfRecords.length);
             let arrayOfData = [];
-            var recordsGroupedByVarId = _.groupBy(data.data, function (o) { return o.VAR_ID });
+            var recordsGroupedByVarId = _.groupBy(data.data, function (o) { return o.var_id });
             _.forEach(recordsGroupedByVarId, function (value,key) {
                 var allRecordsForOneVariety = {name:key,arrayOfRecords:value};
                 arrayOfData.push(allRecordsForOneVariety);
@@ -26,21 +26,7 @@ mpgSoftware.dynamicUi.dnaseVariantTable = (function () {
         }
         return arrayOfRecords;
     };
-    // var processRecordsFromDnase = function (data, arrayOfRecords) {
-    //     if ( typeof data !== 'undefined'){
-    //         arrayOfRecords.splice(0,arrayOfRecords.length);
-    //         let arrayOfData = [];
-    //         var recordsGroupedByVarId = _.groupBy(data, function (o) { return o.VAR_ID });
-    //         _.forEach(recordsGroupedByVarId, function (value,key) {
-    //             var allRecordsForOneVariety = {name:key,arrayOfRecords:value};
-    //             //arrayOfRecords.push(allRecordsForOneVariety);
-    //             arrayOfData.push(allRecordsForOneVariety);
-    //         });
-    //         arrayOfRecords.push({header:{ },
-    //             data:arrayOfData});
-    //     }
-    //     return arrayOfRecords;
-    // };
+
 
 
 

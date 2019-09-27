@@ -1234,12 +1234,10 @@ mpgSoftware.dynamicUi = (function () {
                         var dataForCall = {variants: variantsAsJson,method:'MACS'};
                         retrieveRemotedContextInformation(buildRemoteContextArray({
                             name: actionId,
-                            retrieveDataUrl: additionalParameters.retrieveVariantAnnotations,
+                            retrieveDataUrl: additionalParameters.retrieveVariantAnnotationsUrl,
                             dataForCall: dataForCall,
                             processEachRecord: dataAnnotationType.processEachRecord,
                             displayRefinedContextFunction: dataAnnotationType.displayEverythingFromThisCall,
-                            // processEachRecord: mpgSoftware.dynamicUi.dnaseVariantTable.processRecordsFromDnase,
-                            // displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
                             actionId: nextActionId,
                             nameOfAccumulatorField:dataAnnotationType.nameOfAccumulatorField,
@@ -1296,7 +1294,7 @@ mpgSoftware.dynamicUi = (function () {
                         var dataForCall = {variants: variantsAsJson, method:'ChromHMM'};
                         retrieveRemotedContextInformation(buildRemoteContextArray({
                             name: actionId,
-                            retrieveDataUrl: additionalParameters.retrieveChromatinStateUrl,
+                            retrieveDataUrl: additionalParameters.retrieveVariantAnnotationsUrl,
                             dataForCall: dataForCall,
                             processEachRecord: dataAnnotationType.processEachRecord,
                             displayRefinedContextFunction: dataAnnotationType.displayEverythingFromThisCall,
@@ -4376,7 +4374,6 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                             $(domElement).parent().hide();
                         }
                     });
-                    adjustTableWrapperWidth("table.fullEffectorGeneTableHolder");
                     adjustTableWrapperWidth(dyanamicUiVariables.dynamicTableConfiguration.initializeSharedTableMemory);
                     break;
                 case 'variantTableAnnotationHeaders':

@@ -73,7 +73,7 @@ class RestServerService {
     private String GET_H3K27AC_RECORDS_URL= "testcalls/region/h3k27ac/object"
     private String GET_BOTTOM_LINE_RESULTS_URL= "graph/meta/variant/object"
     private String GET_TISSUES_FROM_GREGOR_URL= "graph/gregor/phenotype/object"
-    private String GET_VARIANT_ANNOTATIONS_URL= "graph/region/bylocus/object"
+    private String GET_VARIANT_ANNOTATIONS_URL= "graph/region/variant/object"
     private String GET_ANNOTATIONS_BY_RANGE_URL= "graph/region/bylocus/object"
     private String GET_VARIANTS_FROM_RANGE_URL= "graph/prioritization/variant/object"
     private String GET_CHROMATIN_STATE_FROM_VARIANTS_URL= "graph/region/variant/object"
@@ -2556,7 +2556,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                 log.error("calling error in gatherVariantsAnnotations.  Range provided, but no chromosome.")
             }
         }
-        if (method > -1) {
+        if ((method) && (method.length() > 0)) {
             specifyRequestList << "method=${method}"
         }
         if ((variantList) && (variantList.size() > 0)) {

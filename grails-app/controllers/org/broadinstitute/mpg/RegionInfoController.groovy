@@ -1456,7 +1456,11 @@ class RegionInfoController {
             chromosome = params.chromosome
         }
 
-        if (params.startPos) {
+        if (params.method) {
+            method = params.method
+        }
+
+        if ((params.startPos!=null)&&(params.startPos)) {
             try {
                 startPosition = Double.parseDouble(params.startPos).intValue()
             } catch (Exception e) {
@@ -1464,10 +1468,9 @@ class RegionInfoController {
                 e.printStackTrace()
                 log.error("retrieveVariantsInRange:failed to convert startPos value=${params.startPos}")
             }
-        } else {
-            looksOkay = false
         }
-        if (params.endPos) {
+
+        if ((params.endPos!=null)&&(params.endPos)) {
             try {
                 endPosition = Double.parseDouble(params.endPos).intValue()
             } catch (Exception e) {
@@ -1475,8 +1478,6 @@ class RegionInfoController {
                 e.printStackTrace()
                 log.error("retrieveVariantsInRange:failed to convert endPos value=${params.endPos}")
             }
-        } else {
-            looksOkay = false
         }
 
 
@@ -1488,8 +1489,6 @@ class RegionInfoController {
         if (params.variants) {
             JSONArray variants = slurper.parseText( params.variants as String)  as JSONArray
             variantList = variants.collect{o->o}
-        } else {
-            looksOkay = false
         }
 
         if (looksOkay){
@@ -1502,8 +1501,9 @@ class RegionInfoController {
                                                                     limit )
         } else {
             String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
-            jsonReturn =  slurper.parseText(proposedJsonString) as JSONArray;
+            jsonReturn =  slurper.parseText(proposedJsonString) as JSONObject;
         }
+
 
         render(status: 200, contentType: "application/json") {jsonReturn}
         return

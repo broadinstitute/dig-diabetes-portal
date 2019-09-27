@@ -30,16 +30,14 @@ records={{numberRecords}}
                         <table class="expandableDrillDownTable openEffectorGeneInformationInGeneTable" style="margin: 0 auto">
                          <thead>
                           <tr role="row">
-                            <th class="text-center leftMostCol">Tissue</th>
-                            <th class="text-center otherCols">Value</th>
+                            <th class="text-center onlyCol">Tissue</th>
                           </tr>
                          </thead>
                          <tbody>
                      {{/recordsExist}}
                          {{#tissueRecords}}
                           <tr role="row">
-                               <td class="text-center leftMostCol">{{SOURCE}}</td>
-                               <td class="text-center otherCols">{{VALUE}}</td>
+                               <td class="text-center onlyCol">{{tissue_name}}</td>
                            </tr>
                           {{/tissueRecords}}
                       {{#recordsExist}}
