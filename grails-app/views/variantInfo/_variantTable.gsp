@@ -191,10 +191,30 @@
                             significanceCellPresentationStringWriter:'tfbsVariantTableSignificanceCellPresentationString',
                             sortingSubroutine:'VariantDnase',
                             internalIdentifierString:'getTfbsGivenVariantList',
-                            processEachRecord:mpgSoftware.dynamicUi.dnaseVariantTable.processRecordsFromDnase,
-                            displayEverythingFromThisCall:mpgSoftware.dynamicUi.dnaseVariantTable.displayTissueInformationFromDnase,
+                            processEachRecord:mpgSoftware.dynamicUi.tfbsVariantTable.processRecordsFromTfbs,
+                            displayEverythingFromThisCall:mpgSoftware.dynamicUi.tfbsVariantTable.displayTissueInformationFromTfbs,
                             nameOfAccumulatorField:'tfbsVariantInfo',
                             nameOfAccumulatorFieldWithIndex:'variantInfoArray'
+                        }
+                        ,
+                        {
+                            code: 'GREGOR_FOR_VAR',
+                            category: 'not for focus table display',
+                            displayCategory: 'not for focus table display',
+                            subcategory: 'gregorTable',
+                            displaySubcategory: 'gregorTable',
+                            headerWriter:'gregorVariantTableTissueHeader',
+                            cellBodyWriter:'gregorVariantTableBody',
+                            categoryWriter:'gregorVariantTableTissueHeaderLabel',
+                            subCategoryWriter:'gregorVariantTableTissueRowLabel',
+                            numberRecordsCellPresentationStringWriter:'gregorVariantTableNumberRecordsCellPresentationString',
+                            significanceCellPresentationStringWriter:'gregorVariantTableSignificanceCellPresentationString',
+                            sortingSubroutine:'VariantGregor',
+                            internalIdentifierString:'gregorSubTable',
+                            processEachRecord:mpgSoftware.dynamicUi.gregorSubTableVariantTable.processRecordsFromGregor,
+                            displayEverythingFromThisCall:mpgSoftware.dynamicUi.gregorSubTableVariantTable.displayGregorSubTable,
+                            nameOfAccumulatorField:'gregorVariantInfo',
+                            nameOfAccumulatorFieldWithIndex:'none'
                         }
                         ,
 

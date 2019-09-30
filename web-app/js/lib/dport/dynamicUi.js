@@ -526,9 +526,14 @@ mpgSoftware.dynamicUi = (function () {
                 defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.chromStateVariantTable.displayTissueInformationFromChromState;
                 defaultFollowUp.placeToDisplayData = '#mainVariantDiv table.variantTableHolder';
                 break;
-
-
-
+            case "getTfbsGivenVariantList":
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.tfbsVariantTable.displayTissueInformationFromTfbs;
+                defaultFollowUp.placeToDisplayData = '#mainVariantDiv table.variantTableHolder';
+                break;
+            case "gregorSubTable":
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.gregorSubTableVariantTable.displayGregorSubTable;
+                defaultFollowUp.placeToDisplayData = '#gregorSubTableDiv table.gregorSubTable';
+                break;
             default:
                 break;
         }
@@ -1273,6 +1278,26 @@ mpgSoftware.dynamicUi = (function () {
                             nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                         }));
                     }
+                };
+                break;
+
+            case "gregorSubTable":
+                functionToLaunchDataRetrieval = function () {
+                    var phenotype = getAccumulatorObject("phenotype");
+                    retrieveRemotedContextInformation(buildRemoteContextArray({
+                        name: actionId,
+                        retrieveDataUrl: additionalParameters.retrieveGregorDataUrl,
+                        dataForCall: {
+                            phenotype: phenotype
+                        },
+                        processEachRecord: dataAnnotationType.processEachRecord,
+                        displayRefinedContextFunction: dataAnnotationType.displayEverythingFromThisCall,
+                        placeToDisplayData: displayLocation,
+                        actionId: nextActionId,
+                        nameOfAccumulatorField:dataAnnotationType.nameOfAccumulatorField,
+                        code:dataAnnotationType.code,
+                        nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                    }));
                 };
                 break;
 

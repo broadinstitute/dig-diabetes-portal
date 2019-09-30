@@ -63,6 +63,13 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-6"></div>
+            <div class="col-md-6">
+                <div id="gregorSubTableDiv">
+                    <table class="gregorSubTable">
+                    </table>
+                </div>
+            </div>
             <div class="col-md-12">
                 <div id="mainVariantDiv">
                     <table class="variantTableHolder">
