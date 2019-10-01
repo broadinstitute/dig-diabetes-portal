@@ -31,23 +31,18 @@ mpgSoftware.dynamicUi.chromStateVariantTable = (function () {
             var uniqueAnnotations = _.map(_.groupBy(data.data, function (o) { return o.annotation }),
                                                     function(value,key) {return key});
             var recordsGroupedByTissueId = _.groupBy(data.data, function (o) { return o.tissue_id });
-            let tissues = [];
-            _.forEach(recordsGroupedByTissueId, function (value,key) {
-                tissues.push(key);
-                var allRecordsForOneVariety = {name:key,arrayOfRecords:value};
-                _.forEach(allRecordsForOneVariety.arrayOfRecords, function (overlap) {
-                    _.forEach(varIdsAndPositions, function (varIds) {
-                        if ((overlap.start<=varIds.position) &&
-                            (overlap.end>=varIds.position)) {
-                            varIds.arrayOfRecords.push (overlap);
-                        }
-                    });
-
+            var uniqueTissues =  _.map(recordsGroupedByTissueId,
+                function(value,key) {return key});
+            var recordsGroupedByVarId = _.groupBy(data.data, function (o) { return o.var_id });
+            _.forEach(varIdsAndPositions, function (varIdsRecord) {
+                //varIdsRecord.arrayOfRecords = _.orderBy(recordsGroupedByVarId[varIdsRecord.name],['tissue_name'],['asc']);
+                varIdsRecord.arrayOfRecords = _.map(_.orderBy(recordsGroupedByVarId[varIdsRecord.name],['tissue_name'],['asc']), function (oneValue){
+                    oneValue['safeTissueId'] = oneValue.tissue_id.replace(":","_");
+                    return oneValue;
                 });
-
             });
             arrayOfRecords.push({header:{   uniqueAnnotations:uniqueAnnotations,
-                                            uniqueTissues:tissues
+                                            uniqueTissues:uniqueTissues
                                         },
                                 data:varIdsAndPositions});
 

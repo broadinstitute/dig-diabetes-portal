@@ -7,7 +7,8 @@ records={{numberRecords}}
 </script>
 
 <script id="tfbsVariantTableTissueRowLabel"  type="x-tmpl-mustache">
-<div class="varAllEpigenetics varTfbsEpigenetics  staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">tfbs&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/></div>
+<div class="varAllEpigenetics varTfbsEpigenetics  staticValuesLabelInTissueTable methodName_SPP">
+tfbs&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/></div>
 </script>
 
 <script id="tfbsVariantTableTissueHeader"  type="x-tmpl-mustache">
@@ -30,14 +31,16 @@ records={{numberRecords}}
                         <table class="expandableDrillDownTable openEffectorGeneInformationInGeneTable" style="margin: 0 auto">
                          <thead>
                           <tr role="row">
-                            <th class="text-center onlyCol">Tissue</th>
+                            <th class="text-center leftMostCol">Tissue</th>
+                            <th class="text-center">TF</th>
                           </tr>
                          </thead>
                          <tbody>
                      {{/recordsExist}}
                          {{#tissueRecords}}
-                          <tr role="row">
-                               <td class="text-center onlyCol">{{tissue_name}}</td>
+                          <tr class="epigeneticCellElement tissueId_{{safeTissueId}} annotationName_{{annotation}}" role="row">
+                               <td class="text-center leftMostCol">{{tissue_name}}</td>
+                               <td class="text-center">{{annotation}}</td>
                            </tr>
                           {{/tissueRecords}}
                       {{#recordsExist}}

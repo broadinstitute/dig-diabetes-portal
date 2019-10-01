@@ -87,7 +87,7 @@ mpgSoftware.dynamicUi.variantTableHeaders = (function () {
                 dataArray = data;
             }
             if (dataArray.length === 0) {
-                alert(' No variants in the specified region')
+                //alert(' No variants in the specified region')
             } else {
                 rawVariantAssociationRecords.splice(0,rawVariantAssociationRecords.length);
                 _.forEach(dataArray, function (variantRec) {

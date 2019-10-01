@@ -35,18 +35,14 @@ mpgSoftware.dynamicUi.gregorSubTableVariantTable = (function () {
             geneRecord.header['ancestries'] = _.map(_.uniqBy(data.data,'ancestry'),function(o){return o.ancestry});
             geneRecord.header['tissues'] = _.map(_.uniqBy(data.data,'tissue'),function(o){return o.tissue.replace('\'','').toLowerCase()});
             const recordsToDrawFrom = _.take(_.orderBy(data.data,['p_value'],['asc']),10)
-            geneRecord.header['bestAnnotations'] = _.map(_.uniqBy(recordsToDrawFrom,'annotation'),function(o){return o.annotation});
-            geneRecord.header['bestAncestries'] = _.map(_.uniqBy(recordsToDrawFrom,'ancestry'),function(o){return o.ancestry});
-            geneRecord.header['bestTissues'] = _.map(_.uniqBy(recordsToDrawFrom,'tissue'),function(o){return o.tissue.replace('\'','').toLowerCase()});
+            geneRecord.header['bestAnnotations'] = _.uniqBy(recordsToDrawFrom,'annotation');
+            geneRecord.header['bestAncestries'] = _.uniqBy(recordsToDrawFrom,'ancestry');
+            geneRecord.header['bestTissues'] = _.uniqBy(recordsToDrawFrom,'tissue');
 
             _.forEach(recordsToDrawFrom, function (oneRec) {
-                geneRecord.data.push({
-                    ancestry:oneRec.ancestry,
-                    annotation:oneRec.annotation,
-                    tissue:oneRec.tissue.replace('\'','').toLowerCase(),
-                    p_value:oneRec.p_value,
-                    pValueString:UTILS.realNumberFormatter(""+oneRec.p_value)
-                })
+                let holder = oneRec;
+                holder['safeTissueId'] = oneRec.tissue_id.replace(":","_");
+                geneRecord.data.push(holder)
             });
             rawGeneAssociationRecords.push(geneRecord);
         }

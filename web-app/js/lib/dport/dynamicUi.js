@@ -2953,10 +2953,10 @@ mpgSoftware.dynamicUi = (function () {
             // set up the headers, and give us an empty row of column cells
             vectorOfHeadersToUse = objectContainingRetrievedRecords[0].header[chosenHeaderField];
             _.forEach(vectorOfHeadersToUse, function (oneRecord,index) {
-                intermediateDataStructure.headerNames.push(oneRecord);
+                intermediateDataStructure.headerNames.push(oneRecord[headerRecordField]);
                // intermediateDataStructure.headerContents.push(Mustache.render($('#'+dataAnnotationType.dataAnnotation.cellBodyWriter)[0].innerHTML, oneRecord));
                 intermediateDataStructure.headers.push(new IntermediateStructureDataCell(oneRecord[headerRecordField],
-                    Mustache.render($('#'+dataAnnotationType.dataAnnotation.headerWriter)[0].innerHTML, {annotation:oneRecord}),"asc ",'LIT'));
+                    Mustache.render($('#'+dataAnnotationType.dataAnnotation.headerWriter)[0].innerHTML, oneRecord),"asc ",'LIT'));
             });
 
             intermediateDataStructure.tableToUpdate = idForTheTargetDiv;
@@ -2969,8 +2969,8 @@ mpgSoftware.dynamicUi = (function () {
                 _.last(intermediateDataStructure.rowsToAdd).columnCells = _.map(_.range(0,numberOfColumns),function( index)
                                                                                     {
                                                                                         if (index === 0){
-                                                                                            return new IntermediateStructureDataCell(rowTitle,
-                                                                                                Mustache.render($('#'+dataAnnotationType.dataAnnotation.categoryWriter)[0].innerHTML, {title:rowTitle}),"asc ",'LIT')
+                                                                                            return new IntermediateStructureDataCell(rowTitle[rowRecordField],
+                                                                                                Mustache.render($('#'+dataAnnotationType.dataAnnotation.categoryWriter)[0].innerHTML, rowTitle),"asc ",'LIT')
                                                                                         }else{
                                                                                             return new IntermediateStructureDataCell('farLeftCorner',{},'emptyGregorSubTableCell','EMP')
                                                                                         }
@@ -2981,7 +2981,7 @@ mpgSoftware.dynamicUi = (function () {
                     var indexOfColumn = _.indexOf(intermediateDataStructure.headerNames, oneRecord[headerRecordField]);
                     if (indexOfColumn === -1) {
                         console.log("Did not find index of header.  Shouldn't we?")
-                    } else if (rowTitle ===  oneRecord[rowRecordField]) {
+                    } else if (rowTitle[rowRecordField] ===  oneRecord[rowRecordField]) {
                         var renderData = oneRecord;
                         renderData['prettyPValue']= UTILS.realNumberFormatter(""+oneRecord.p_value);
                         // var renderData = placeDataIntoRenderForm(   "",
