@@ -34,7 +34,12 @@ mpgSoftware.dynamicUi.gregorSubTableVariantTable = (function () {
             geneRecord.header['annotations'] = _.map(_.uniqBy(data.data,'annotation'),function(o){return o.annotation});
             geneRecord.header['ancestries'] = _.map(_.uniqBy(data.data,'ancestry'),function(o){return o.ancestry});
             geneRecord.header['tissues'] = _.map(_.uniqBy(data.data,'tissue'),function(o){return o.tissue.replace('\'','').toLowerCase()});
-            _.forEach(data.data, function (oneRec) {
+            const recordsToDrawFrom = _.take(_.orderBy(data.data,['p_value'],['asc']),10)
+            geneRecord.header['bestAnnotations'] = _.map(_.uniqBy(recordsToDrawFrom,'annotation'),function(o){return o.annotation});
+            geneRecord.header['bestAncestries'] = _.map(_.uniqBy(recordsToDrawFrom,'ancestry'),function(o){return o.ancestry});
+            geneRecord.header['bestTissues'] = _.map(_.uniqBy(recordsToDrawFrom,'tissue'),function(o){return o.tissue.replace('\'','').toLowerCase()});
+
+            _.forEach(recordsToDrawFrom, function (oneRec) {
                 geneRecord.data.push({
                     ancestry:oneRec.ancestry,
                     annotation:oneRec.annotation,
@@ -80,16 +85,9 @@ mpgSoftware.dynamicUi.gregorSubTableVariantTable = (function () {
      */
     var displayGregorSubTable = function (idForTheTargetDiv, objectContainingRetrievedRecords, callingParameters ) {
 
-        mpgSoftware.dynamicUi.displayForVariantTable(idForTheTargetDiv, // which table are we adding to
+        mpgSoftware.dynamicUi.displayGregorSubTableForVariantTable(idForTheTargetDiv, // which table are we adding to
             callingParameters.code, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
             callingParameters.nameOfAccumulatorField, // name of the persistent field where the data we received is stored
-            callingParameters.nameOfAccumulatorFieldWithIndex,
-            // insert header records as necessary into the intermediate structure, and return header names that we can match on for the columns
-            function(records,tissueTranslations){
-                //return _.orderBy(_.filter(records,function(o){return (o.p_value<0.05)}),['p_value'],['asc']);
-                return _.orderBy(records,['SOURCE'],['asc']);
-            },
-
             // take all the records for each row and insert them into the intermediateDataStructure
             function(tissueRecords,
                      recordsCellPresentationString,

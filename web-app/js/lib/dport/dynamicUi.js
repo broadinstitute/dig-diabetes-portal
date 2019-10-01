@@ -2923,6 +2923,103 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
+
+
+    var displayGregorSubTableForVariantTable = function (idForTheTargetDiv, // which table are we adding to
+                                                 dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+                                                 nameOfAccumulatorField, // name of the persistent field where the data we received is stored
+                                                 placeDataIntoRenderForm )
+    { // sort and filter the records we will use.  Resulting array must have fields tissue, value, and numericalValue
+        const chosenHeaderField = 'bestAnnotations';
+        const headerRecordField = 'annotation';
+        const chosenRowField = 'bestTissues';
+        const rowRecordField = 'tissue';
+        var selectorForIidForTheTargetDiv = idForTheTargetDiv;
+        $(selectorForIidForTheTargetDiv).empty();
+        var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode);
+        var objectContainingRetrievedRecords = getAccumulatorObject(nameOfAccumulatorField);
+
+        var intermediateDataStructure = new IntermediateDataStructure();
+        let vectorOfHeadersToUse = [];
+
+        if ((typeof objectContainingRetrievedRecords !== 'undefined')||
+            ( objectContainingRetrievedRecords.length > 0)
+            (typeof objectContainingRetrievedRecords[0].header !== 'undefined')){
+
+            // start with a blank, since the first column will label tissues
+            intermediateDataStructure.headerNames.push('');
+            intermediateDataStructure.headers.push(new IntermediateStructureDataCell('blank',
+                Mustache.render($('#'+dataAnnotationType.dataAnnotation.headerWriter)[0].innerHTML, {}),"asc ",'LIT'));
+            // set up the headers, and give us an empty row of column cells
+            vectorOfHeadersToUse = objectContainingRetrievedRecords[0].header[chosenHeaderField];
+            _.forEach(vectorOfHeadersToUse, function (oneRecord,index) {
+                intermediateDataStructure.headerNames.push(oneRecord);
+               // intermediateDataStructure.headerContents.push(Mustache.render($('#'+dataAnnotationType.dataAnnotation.cellBodyWriter)[0].innerHTML, oneRecord));
+                intermediateDataStructure.headers.push(new IntermediateStructureDataCell(oneRecord[headerRecordField],
+                    Mustache.render($('#'+dataAnnotationType.dataAnnotation.headerWriter)[0].innerHTML, {annotation:oneRecord}),"asc ",'LIT'));
+            });
+
+            intermediateDataStructure.tableToUpdate = idForTheTargetDiv;
+            let numberOfColumns = vectorOfHeadersToUse.length+1;
+
+            let vectorOfRowsToUse = objectContainingRetrievedRecords[0].header[chosenRowField];
+            _.forEach(vectorOfRowsToUse, function (rowTitle,index) {
+
+                addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure)
+                _.last(intermediateDataStructure.rowsToAdd).columnCells = _.map(_.range(0,numberOfColumns),function( index)
+                                                                                    {
+                                                                                        if (index === 0){
+                                                                                            return new IntermediateStructureDataCell(rowTitle,
+                                                                                                Mustache.render($('#'+dataAnnotationType.dataAnnotation.categoryWriter)[0].innerHTML, {title:rowTitle}),"asc ",'LIT')
+                                                                                        }else{
+                                                                                            return new IntermediateStructureDataCell('farLeftCorner',{},'emptyGregorSubTableCell','EMP')
+                                                                                        }
+
+                                                                                    });
+                // fill in all of the column cells
+                _.forEach(objectContainingRetrievedRecords[0].data, function (oneRecord) {
+                    var indexOfColumn = _.indexOf(intermediateDataStructure.headerNames, oneRecord[headerRecordField]);
+                    if (indexOfColumn === -1) {
+                        console.log("Did not find index of header.  Shouldn't we?")
+                    } else if (rowTitle ===  oneRecord[rowRecordField]) {
+                        var renderData = oneRecord;
+                        renderData['prettyPValue']= UTILS.realNumberFormatter(""+oneRecord.p_value);
+                        // var renderData = placeDataIntoRenderForm(   "",
+                        //     oneRecord[rowRecordField],
+                        //     (sharedTable["numberOfColumns"]*(rowIndex+1))+indexOfColumn+2,
+                        //     emphasisSwitch,
+                        //     pValue,
+                        //     posteriorPValue);
+                        _.last(intermediateDataStructure.rowsToAdd).columnCells[indexOfColumn] = new IntermediateStructureDataCell([headerRecordField],
+                            renderData,'gregorSubTableCell',dataAnnotationTypeCode );
+
+                    }
+                });
+            });
+
+        }
+
+
+        prepareToPresentToTheScreen(idForTheTargetDiv,
+            '#notUsed',
+            {},
+            true,
+            intermediateDataStructure,
+            false,
+            'gregorSubTable',
+            false,
+            true ); // we want to display blank rows in this case, since they are informative
+    };
+
+
+
+
+
+
+
+
+
+
     var displayHeaderForVariantTable = function (idForTheTargetDiv, // which table are we adding to
                                                  dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
                                                  nameOfAccumulatorField, // name of the persistent field where the data we received is stored
@@ -4008,14 +4105,21 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 var displayDetails = getDatatypeInformation(intermediateStructureDataCell.annotation);
                 returnValue = Mustache.render($('#'+displayDetails.dataAnnotation.cellBodyWriter)[0].innerHTML,intermediateStructureDataCell.renderData);
                 break;
+            case "GREGOR_FOR_VAR":
+                var displayDetails = getDatatypeInformation(intermediateStructureDataCell.dataAnnotationTypeCode);
+                returnValue = Mustache.render($('#'+displayDetails.dataAnnotation.cellBodyWriter)[0].innerHTML,intermediateStructureDataCell.renderData);
+                break;
+
             case undefined:
                 returnValue = "wtf";
                 break;
 
             default:  //  the standard case, where a cell renders its own data using its chosen mustache template
                 var cellColoringScheme ="records";
+
                 intermediateStructureDataCell.renderData["cellPresentationString"] =
                     intermediateStructureDataCell.renderData.cellPresentationStringMap[findCellColoringChoice('table.combinedGeneTableHolder')];
+
                 var displayDetails = getDatatypeInformation(intermediateStructureDataCell.dataAnnotationTypeCode);
                 returnValue = Mustache.render($('#'+displayDetails.dataAnnotation.cellBodyWriter)[0].innerHTML,intermediateStructureDataCell.renderData);
                 break;
@@ -5814,6 +5918,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         retrieveGwasCodingCredibleSetFromServer: retrieveGwasCodingCredibleSetFromServer,
         displayHeaderForVariantTable:displayHeaderForVariantTable,
         displayForVariantTable:displayForVariantTable,
+        displayGregorSubTableForVariantTable:displayGregorSubTableForVariantTable,
         getAccumulatorObject:getAccumulatorObject
     }
 }());
