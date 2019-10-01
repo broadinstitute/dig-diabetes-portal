@@ -48,7 +48,7 @@ var mpgSoftware = mpgSoftware || {};
 
         var buildNewsSlides = function(PORTAL) {
             $.getJSON('http://kp4cd.org/rest/views/news2portals', function(news) {
-                //console.log(news);
+                console.log(news);
 
                 var newsContent = "";
                 var portalNews = 0;
@@ -60,9 +60,9 @@ var mpgSoftware = mpgSoftware || {};
                     if ( portalsList.indexOf(PORTAL) >= 0 || portalsList.indexOf("all") >= 0) {
 
                         if(portalNews < 4) {
-                            var newsBody = item.body;
+                            var newsBody = getFirstWordsOfPost(item.body, 15);
 
-                            newsContent += (portalNews == 0 )?'<li style="position: absolute; top: 50px;"><span><b>'+item.title+'</b>: '+newsBody+'...</span> <a href="http://kp4cd.org/new_features/'+PORTAL+'" target="_blank">Read more</a></li>':'<li style="position: absolute; top: 50px; display: none;"><span><b>'+item.title+'</b>: '+newsBody+'...</span> <a href="http://kp4cd.org/new_features/\'+PORTAL+\'" target="_blank">Read more</a></li>';
+                            newsContent += (portalNews == 0 )?'<li style="position: absolute; top: 50px;"><span><b>'+item.title+'</b>: '+newsBody+'...</span> <a href="http://kp4cd.org/new_features/'+PORTAL+'?nid='+item.nid+'" target="_blank">Read more</a></li>':'<li style="position: absolute; top: 50px; display: none;"><span><b>'+item.title+'</b>: '+newsBody+'...</span> <a href="http://kp4cd.org/new_features/'+PORTAL+'?nid='+item.nid+'" target="_blank">Read more</a></li>';
 
                             portalNews ++;
                         }
