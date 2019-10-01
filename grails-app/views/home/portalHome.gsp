@@ -52,8 +52,9 @@
         );
 
         $(document).ready(function(){
-            mpgSoftware.homePage.loadNewsFeed(newsItems.posts);
-            mpgSoftware.homePage.setSlideWindows();
+            //mpgSoftware.homePage.loadNewsFeed(newsItems.posts);
+            //mpgSoftware.homePage.setSlideWindows();
+            mpgSoftware.homePage.buildNewsSlides("${g.portalTypeString()}");
             mpgSoftware.homePage.retrievePhenotypes('variant-association-ui','trait-input','traitSearchLaunch');
             mpgSoftware.homePage.retrieveGenePhenotypes('gene-association-ui','gene-trait-input','geneTraitSearchLaunch');
             mpgSoftware.homePage.initializeInputFields ();

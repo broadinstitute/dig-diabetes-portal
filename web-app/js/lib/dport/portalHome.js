@@ -46,6 +46,38 @@ var mpgSoftware = mpgSoftware || {};
             });
         }
 
+        var buildNewsSlides = function(PORTAL) {
+            $.getJSON('http://kp4cd.org/rest/views/news2portals', function(news) {
+                //console.log(news);
+
+                var newsContent = "";
+                var portalNews = 0;
+
+                $.each(news, function(index, item) {
+
+                    var portalsList = item.field_portals;
+
+                    if ( portalsList.indexOf(PORTAL) >= 0 || portalsList.indexOf("all") >= 0) {
+
+                        if(portalNews < 4) {
+                            var newsBody = item.body;
+
+                            newsContent += (portalNews == 0 )?'<li style="position: absolute; top: 50px;"><span><b>'+item.title+'</b>: '+newsBody+'...</span> <a href="http://kp4cd.org/new_features/'+PORTAL+'" target="_blank">Read more</a></li>':'<li style="position: absolute; top: 50px; display: none;"><span><b>'+item.title+'</b>: '+newsBody+'...</span> <a href="http://kp4cd.org/new_features/\'+PORTAL+\'" target="_blank">Read more</a></li>';
+
+                            portalNews ++;
+                        }
+
+                    }
+                });
+
+                if(newsContent == "") { newsContent = "<li><b>Coming soon!</b></li>" };
+
+                $("#newsFeedHolder").html(newsContent);
+                $(".gallery-fade-nav").remove();
+                mpgSoftware.homePage.setSlideWindows();
+            });
+        }
+
         function setUpSlideDiv(e) {
             var liHeight = 0;
             var newHeight = 0;
@@ -420,6 +452,7 @@ var mpgSoftware = mpgSoftware || {};
             retrievePhenotypes:retrievePhenotypes,
             switchVisibility:switchVisibility,
             newFeatures:newFeatures,
+            buildNewsSlides:buildNewsSlides,
         }
     })();
 })();
