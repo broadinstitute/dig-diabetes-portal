@@ -73,6 +73,7 @@
                         <img class="front-logo-img" src="${resource(file:g.message(code: portalVersionBean.frontLogo, default:portalVersionBean.frontLogo)) }" />
                         <span class="front-logo-tagline front-logo-tagline-${g.portalTypeString()}"><g:message code="${portalVersionBean.tagline}" />
                         <!-- Language options only for T2DKP -->
+                            <!--
                         <br />
                             <small style="font-size: 16px;">
                             <g:each in="${portalVersionBean.alternateLanguages}">
@@ -86,6 +87,7 @@
                                 </g:elseif>
                             </g:each>
                             </small>
+                            -->
                         </span>
                     </div>
                 </div>
