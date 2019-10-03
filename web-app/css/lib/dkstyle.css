@@ -1200,31 +1200,32 @@ span.new-dataset-flag {
     transform: rotate(-10deg);
 }
 
-.analysis-modules-btn ul {
+.home-drop-down-menu ul {
 	display: none;
 	position: absolute;
 	padding: 0;
 	margin: 0;
 }
 
-.analysis-modules-btn ul > li {
+.home-drop-down-menu ul > li {
 	background-color: rgba(120, 120, 120, .75);
 	font-size: 0.8em;
 	padding: 5px 15px 5px 15px;
 	border-bottom: solid 1px #666;
 	text-align: left;
 	list-style: none;
+	white-space: nowrap;
 }
 
-.analysis-modules-btn ul > li:hover {
+.home-drop-down-menu ul > li:hover {
     background-color: rgba(90, 90, 90, 1);
 }
 
-.analysis-modules-btn ul > li:last-child {
+.home-drop-down-menu ul > li:last-child {
 	border-bottom: none;
 }
 
-.analysis-modules-btn:hover ul {
+.home-drop-down-menu:hover ul {
 	display: block;
 }
 
