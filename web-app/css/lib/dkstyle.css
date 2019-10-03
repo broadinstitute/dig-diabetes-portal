@@ -1200,6 +1200,8 @@ span.new-dataset-flag {
     transform: rotate(-10deg);
 }
 
+.dk-general-menu li { font-size: 16px; }
+
 .home-drop-down-menu ul {
 	display: none;
 	position: absolute;
@@ -1209,7 +1211,7 @@ span.new-dataset-flag {
 
 .home-drop-down-menu ul > li {
 	background-color: rgba(120, 120, 120, .75);
-	font-size: 0.8em;
+	font-size: 14px;
 	padding: 5px 15px 5px 15px;
 	border-bottom: solid 1px #666;
 	text-align: left;
