@@ -3593,6 +3593,12 @@ mpgSoftware.dynamicUi = (function () {
                 setAccumulatorObject("chromosome","8");
                 setAccumulatorObject("extentBegin","117862462");
                 setAccumulatorObject("extentEnd","118289003");
+
+                const chromosomeInput = $('input#chromosomeInput').val();
+                const startExtentInput = $('input#startExtentInput').val();
+                const endExtentInput = $('input#endExtentInput').val();
+                const chosenChromosome = $('input#chromosomeInput').val();
+
                 destroySharedTable(additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory);
                 var sharedTable = new SharedTableObject('variantTableVariantHeaders',0,0);
                 setAccumulatorObject("sharedTable_" + additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory,sharedTable);

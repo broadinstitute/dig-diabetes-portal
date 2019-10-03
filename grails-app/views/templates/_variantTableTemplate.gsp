@@ -11,6 +11,20 @@
 <g:message code="tissueTable.interface-help2"></g:message></p>
 <p><g:message code="tissueTable.interface-help3"></g:message></p>
         <div class="row">
+            <div class="col-sm-4">
+                <label for="chromosomeInput" placeholder="Choose chromosome">chromosome</label>
+                <input id="chromosomeInput" type="text">
+            </div>
+            <div class="col-sm-4">
+                <label for="startExtentInput" placeholder="Choose chromosome">start extent</label>
+                <input id="startExtentInput" type="text">
+            </div>
+            <div class="col-sm-4">
+                <label for="endExtentInput" placeholder="Choose chromosome">and extent</label>
+                <input id="endExtentInput" type="text">
+            </div>
+        </div>
+        <div class="row">
             <div class="col-sm-12">
                 <div class="datatable-control-box">
                     <div class="datatable-transpose-control">
