@@ -1088,10 +1088,11 @@ mpgSoftware.dynamicUi = (function () {
                     } else {
                         dataNecessaryToRetrieveVariantsPerPhenotype = {
                             phenotype: phenotype,
+                            geneToSummarize: "chr" + chromosome + ":" + startExtent + "-" + endExtent,
                             chromosome: chromosome,
                             startPos: startExtent,
                             endPos: endExtent,
-                            limit: "10"
+                            limit: "50"
                         }
 
                     }
@@ -1099,8 +1100,8 @@ mpgSoftware.dynamicUi = (function () {
 
                     retrieveRemotedContextInformation(buildRemoteContextArray({
                         name: actionId,
-                        retrieveDataUrl: additionalParameters.getVariantsForRangeAjaxUrl,
-                       // retrieveDataUrl: additionalParameters.retrieveECaviarDataViaCredibleSetsUrl,
+                        //retrieveDataUrl: additionalParameters.getVariantsForRangeAjaxUrl,
+                        retrieveDataUrl: additionalParameters.retrieveTopVariantsAcrossSgsUrl,
                         dataForCall: dataNecessaryToRetrieveVariantsPerPhenotype,
                         processEachRecord: mpgSoftware.dynamicUi.variantTableHeaders.processRecordsFromProximitySearch,
                         displayRefinedContextFunction: displayFunction,
@@ -2508,8 +2509,8 @@ mpgSoftware.dynamicUi = (function () {
                     console.log("Did not find index of ABC var_id.  Shouldn't we?")
                 } else {
                     if ((oneRecord.arrayOfRecords.length === 0)) {
-                        alert('should not happen, right?');
-                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.gene,
+                        //alert('should not happen, right?');
+                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(oneRecord.name,
                             {}, "tissue specific",'EMC');
                     } else {
                         //var tissueTranslations = recordsPerGene["TISSUE_TRANSLATIONS"]; // if no translations are provided, it is fine to leave this value as undefined

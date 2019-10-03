@@ -74,33 +74,59 @@ mpgSoftware.dynamicUi.variantTableHeaders = (function () {
      * @returns {*}
      */
     var processRecordsFromProximitySearch = function (data, rawVariantAssociationRecords) {
-        var geneInfoArray = [];
+//the approach when we were using the graph database
+        // if (( typeof data !== 'undefined') &&
+        //     ( data !== null ) ){
+        //     // data from the old API call comes back as an array, while the new API call
+        //     // comes back as an object with the array held in a field. Let's support either.
+        //     let dataArray = [];
+        //     let returnValue = { header: {}, data: []};
+        //     if  ( typeof data.data !== 'undefined') {
+        //         dataArray = data.data;
+        //     } else {
+        //         dataArray = data;
+        //     }
+        //     if (dataArray.length === 0) {
+        //         //alert(' No variants in the specified region')
+        //     } else {
+        //         rawVariantAssociationRecords.splice(0,rawVariantAssociationRecords.length);
+        //         _.forEach(dataArray, function (variantRec) {
+        //             var variantRecToExtend  = variantRec;
+        //             variantRecToExtend["name"] = variantRec.var_id; // standard field in which to store the index value?
+        //             returnValue.data.push(variantRecToExtend);
+        //         });
+        //         let filteredVariants = calculatePosteriorPValues(returnValue);
+        //         rawVariantAssociationRecords.push(filteredVariants);
+        //     }
+        // }
+        // return rawVariantAssociationRecords;
+        //
+        // rewritten to use the MySQL call
+        let returnValue = { header: {}, data: []};
         if (( typeof data !== 'undefined') &&
-            ( data !== null ) ){
-            // data from the old API call comes back as an array, while the new API call
-            // comes back as an object with the array held in a field. Let's support either.
-            let dataArray = [];
-            let returnValue = { header: {}, data: []};
-            if  ( typeof data.data !== 'undefined') {
-                dataArray = data.data;
-            } else {
-                dataArray = data;
+            ( data !== null ) &&
+            ( typeof data.variants !== 'undefined') &&
+            ( typeof data.variants.variants !== 'undefined') ){
+                if ( data.variants.variants.length === 0) {
+                    console.log(' No variants in the specified region')
+                } else {
+                    rawVariantAssociationRecords.splice(0,rawVariantAssociationRecords.length);
+                    _.forEach(_.uniqBy(data.variants.variants,'VAR_ID'), function (variantRec,index) {
+                        var variantRecToExtend  = variantRec;
+                        variantRecToExtend["name"] = variantRec.VAR_ID;
+                        variantRecToExtend["var_id"] = variantRec.VAR_ID;
+                        variantRecToExtend["p_value"] = variantRec.P_VALUE;
+                        variantRecToExtend["consequence"] = [variantRec.Consequence];
+                        variantRecToExtend["most_del_score"] = variantRec.MOST_DEL_SCORE;
+                        returnValue.data.push(variantRecToExtend);
+                        if (index>9) { return false;}
+                    });
+                    let filteredVariants = calculatePosteriorPValues(returnValue);
+                    rawVariantAssociationRecords.push(filteredVariants);
+                }
             }
-            if (dataArray.length === 0) {
-                //alert(' No variants in the specified region')
-            } else {
-                rawVariantAssociationRecords.splice(0,rawVariantAssociationRecords.length);
-                _.forEach(dataArray, function (variantRec) {
-                    var variantRecToExtend  = variantRec;
-                    variantRecToExtend["name"] = variantRec.var_id; // standard field in which to store the index value?
-                    returnValue.data.push(variantRecToExtend);
-                    // rawVariantAssociationRecords.push(variantRecToExtend);
-                });
-                let filteredVariants = calculatePosteriorPValues(returnValue);
-                rawVariantAssociationRecords.push(filteredVariants);
-            }
-        }
-        return rawVariantAssociationRecords;
+            return rawVariantAssociationRecords;
+
     };
 
 
