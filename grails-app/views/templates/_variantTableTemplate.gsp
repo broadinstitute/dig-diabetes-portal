@@ -66,6 +66,20 @@
                             <select id="tissueToPhenotypePicker" class="phenotypePicker" onchange="mpgSoftware.tissueTable.refreshTableForPhenotype(this)">
                             </select>
                     </div>
+                    <div class="col-md-4"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row" >
+            <div class="col-md-12" style="background: white">
+                <div id="gregorSubTableDiv">
+                    <table class="gregorSubTable">
+                    </table>
+                </div>
+            </div>
+        </div>
+                <div class="row">
+                    <div class="col-md-8"></div>
                     <div class="col-md-4">
                         <span class="tool-label">Epigenetic data&nbsp;&nbsp;
                             <a style="padding:0; text-decoration:none; color:inherit" class="glyphicon glyphicon-question-sign pop-bottom"
@@ -77,19 +91,16 @@
                         onclick="mpgSoftware.dynamicUi.reviseDisplayOfVariantTable('{{domTableSpecifier}}',1,this)">
                         Display
                         </button>
+                          <button class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table" onclick="mpgSoftware.dynamicUi.transposeThisTable('{{domTableSpecifier}}')">
+                            Transpose
+                          </button>
 
                     </div>
                 </div>
-            </div>
-        </div>
+
         <div class="row" >
-            <div class="col-md-12" style="background: white">
-                <div id="gregorSubTableDiv">
-                    <table class="gregorSubTable">
-                    </table>
-                </div>
-            </div>
             <div class="col-md-12">
+
                 <div id="mainVariantDiv">
                     <table class="variantTableHolder">
                     </table>

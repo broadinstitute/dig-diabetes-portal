@@ -7,7 +7,7 @@ records={{numberRecords}}
 </script>
 
 <script id="tfbsVariantTableTissueRowLabel"  type="x-tmpl-mustache">
-<div class="varAllEpigenetics varTfbsEpigenetics  staticValuesLabelInTissueTable methodName_SPP">
+<div class="varAllEpigenetics varTfbsEpigenetics  staticValuesLabelInTissueTable methodName_SPP  initialLinearIndex_{{indexInOneDimensionalArray}}">
 tfbs&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/></div>
 </script>
 
