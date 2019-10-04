@@ -23,6 +23,10 @@
                 <label for="endExtentInput" placeholder="Choose chromosome">and extent</label>
                 <input id="endExtentInput" type="text">
             </div>
+            <div class="col-md-12">
+                <label for="variantTablePhenotypePicker">Choose a phenotype</label>
+                <select id="variantTablePhenotypePicker" class="phenotypePicker" onchange="mpgSoftware.variantTable.refreshTableForPhenotype(this)">
+            </div>
         </div>
         <div class="row">
             <div class="col-sm-12">
@@ -54,30 +58,32 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row" >
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-8">
-                        <label for="tissueToPhenotypePicker">Choose a phenotype</label>
+                            <label for="tissueToPhenotypePicker">Choose a phenotype</label>
                             <select id="tissueToPhenotypePicker" class="phenotypePicker" onchange="mpgSoftware.tissueTable.refreshTableForPhenotype(this)">
                             </select>
-                        </div>
-                        <div class="col-md-4">
-                            <span class="tool-label">Epigenetic data&nbsp;&nbsp;
-                                <a style="padding:0; text-decoration:none; color:inherit" class="glyphicon glyphicon-question-sign pop-bottom"
-                                data-toggle="popover" role="button" data-trigger="focus" tabindex="0" animation="true" data-container="body"
-                                data-placement="bottom" title="" data-html="true"
-                                data-content="Click to toggle epigenetic data display." data-original-title="Transpose table"></a>
-                            </span>
-                            <button class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table"
-                            onclick="mpgSoftware.dynamicUi.reviseDisplayOfVariantTable('{{domTableSpecifier}}',1,this)">
-                            Display
-                            </button>
-                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <span class="tool-label">Epigenetic data&nbsp;&nbsp;
+                            <a style="padding:0; text-decoration:none; color:inherit" class="glyphicon glyphicon-question-sign pop-bottom"
+                            data-toggle="popover" role="button" data-trigger="focus" tabindex="0" animation="true" data-container="body"
+                            data-placement="bottom" title="" data-html="true"
+                            data-content="Click to toggle epigenetic data display." data-original-title="Transpose table"></a>
+                        </span>
+                        <button class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table"
+                        onclick="mpgSoftware.dynamicUi.reviseDisplayOfVariantTable('{{domTableSpecifier}}',1,this)">
+                        Display
+                        </button>
+
                     </div>
                 </div>
             </div>
-            <div class="col-md-12">
+        </div>
+        <div class="row" >
+            <div class="col-md-12" style="background: white">
                 <div id="gregorSubTableDiv">
                     <table class="gregorSubTable">
                     </table>

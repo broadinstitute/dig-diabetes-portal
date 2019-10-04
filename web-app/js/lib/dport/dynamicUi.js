@@ -1091,7 +1091,13 @@ mpgSoftware.dynamicUi = (function () {
                             geneToSummarize: "chr" + chromosome + ":" + startExtent + "-" + endExtent,
                             chromosome: chromosome,
                             startPos: startExtent,
+                            start: startExtent,
                             endPos: endExtent,
+                            end: endExtent,
+                            gene:"",
+                            dataSet:"",
+                            dataType:"static",
+                            propertyName:"POSTERIOR_PROBABILITY",
                             limit: "50"
                         }
 
@@ -1100,8 +1106,10 @@ mpgSoftware.dynamicUi = (function () {
 
                     retrieveRemotedContextInformation(buildRemoteContextArray({
                         name: actionId,
-                        retrieveDataUrl: additionalParameters.getVariantsForRangeAjaxUrl,
+                        //retrieveDataUrl: additionalParameters.getVariantsForRangeAjaxUrl,
                         //retrieveDataUrl: additionalParameters.retrieveTopVariantsAcrossSgsUrl,
+                        //retrieveDataUrl: additionalParameters.retrieveOnlyTopVariantsAcrossSgsUrl,
+                        retrieveDataUrl: additionalParameters.fillCredibleSetTableUrl,
                         dataForCall: dataNecessaryToRetrieveVariantsPerPhenotype,
                         processEachRecord: mpgSoftware.dynamicUi.variantTableHeaders.processRecordsFromProximitySearch,
                         displayRefinedContextFunction: displayFunction,
@@ -1285,6 +1293,7 @@ mpgSoftware.dynamicUi = (function () {
             case "gregorSubTable":
                 functionToLaunchDataRetrieval = function () {
                     var phenotype = getAccumulatorObject("phenotype");
+                    destroySharedTable(displayLocation);
                     retrieveRemotedContextInformation(buildRemoteContextArray({
                         name: actionId,
                         retrieveDataUrl: additionalParameters.retrieveGregorDataUrl,
@@ -3590,21 +3599,22 @@ mpgSoftware.dynamicUi = (function () {
                 break;
             case 'variantTable':
                 setAccumulatorObject("phenotype","T2D");
-                setAccumulatorObject("chromosome","9");
-                // setAccumulatorObject("chromosome","6");
-                // setAccumulatorObject("extentBegin","117862462");
-                // setAccumulatorObject("extentEnd","118289003");
-                setAccumulatorObject("extentBegin","112000000");
-                setAccumulatorObject("extentEnd","113000000");
+                // setAccumulatorObject("chromosome","9");
+                setAccumulatorObject("chromosome","8");
+                setAccumulatorObject("extentBegin","117862462");
+                setAccumulatorObject("extentEnd","118289003");
+                // setAccumulatorObject("extentBegin","112000000");
+                // setAccumulatorObject("extentEnd","113000000");
 
                 const chromosomeInput = $('input#chromosomeInput').val();
                 const startExtentInput = $('input#startExtentInput').val();
                 const endExtentInput = $('input#endExtentInput').val();
-                //const chosenChromosome = $('input#chromosomeInput').val();
+                const chosenPhenotype = $('select.phenotypePicker').children("option:selected"). val();
 
                 if (chromosomeInput.length>0){setAccumulatorObject("chromosome",chromosomeInput);}
                 if (startExtentInput.length>0){setAccumulatorObject("extentBegin",startExtentInput);}
                 if (endExtentInput.length>0){setAccumulatorObject("extentEnd",endExtentInput);}
+                if (( typeof chosenPhenotype !== 'undefined')&&(chosenPhenotype.length>0)){setAccumulatorObject("phenotype",chosenPhenotype);}
 
                 destroySharedTable(additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory);
                 var sharedTable = new SharedTableObject('variantTableVariantHeaders',0,0);
@@ -4376,7 +4386,11 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
             }
             // update our notion of the header contents
-            sharedTable.mostRecentHeaders  =headerContents;
+            if( typeof sharedTable !== 'undefined'){
+                sharedTable.mostRecentHeaders  =headerContents;// sometimes I update other tables, which may not
+                // reference the shared table memory structure
+            }
+
         }
         return $(whereTheTableGoes).dataTable();
 
