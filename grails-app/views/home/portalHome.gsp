@@ -142,8 +142,8 @@
                                     <g:if test="${portalVersionBean.variantAssociationsExists}">
                                         <span><g:message code="site.shared.phrases.examples" />: </span>
                                         <g:each in="${portalVersionBean.geneExamples}">
-                                            <a class="front-search-example" href='<g:createLink controller="gene" action="geneInfo"
-                                                                                                params="[id:it]"/>'>${it}</a>
+                                            <i><a class="front-search-example" href='<g:createLink controller="gene" action="geneInfo"
+                                                                                                params="[id:it]"/>'>${it}</a></i>
                                             <g:helpText title="input.searchTerm.geneExample.help.header" placement="bottom"
                                                         body="input.searchTerm.geneExample.help.text"/>,
                                         </g:each>
