@@ -1100,8 +1100,8 @@ mpgSoftware.dynamicUi = (function () {
 
                     retrieveRemotedContextInformation(buildRemoteContextArray({
                         name: actionId,
-                        //retrieveDataUrl: additionalParameters.getVariantsForRangeAjaxUrl,
-                        retrieveDataUrl: additionalParameters.retrieveTopVariantsAcrossSgsUrl,
+                        retrieveDataUrl: additionalParameters.getVariantsForRangeAjaxUrl,
+                        //retrieveDataUrl: additionalParameters.retrieveTopVariantsAcrossSgsUrl,
                         dataForCall: dataNecessaryToRetrieveVariantsPerPhenotype,
                         processEachRecord: mpgSoftware.dynamicUi.variantTableHeaders.processRecordsFromProximitySearch,
                         displayRefinedContextFunction: displayFunction,
@@ -3590,14 +3590,21 @@ mpgSoftware.dynamicUi = (function () {
                 break;
             case 'variantTable':
                 setAccumulatorObject("phenotype","T2D");
-                setAccumulatorObject("chromosome","8");
-                setAccumulatorObject("extentBegin","117862462");
-                setAccumulatorObject("extentEnd","118289003");
+                setAccumulatorObject("chromosome","9");
+                // setAccumulatorObject("chromosome","6");
+                // setAccumulatorObject("extentBegin","117862462");
+                // setAccumulatorObject("extentEnd","118289003");
+                setAccumulatorObject("extentBegin","112000000");
+                setAccumulatorObject("extentEnd","113000000");
 
                 const chromosomeInput = $('input#chromosomeInput').val();
                 const startExtentInput = $('input#startExtentInput').val();
                 const endExtentInput = $('input#endExtentInput').val();
-                const chosenChromosome = $('input#chromosomeInput').val();
+                //const chosenChromosome = $('input#chromosomeInput').val();
+
+                if (chromosomeInput.length>0){setAccumulatorObject("chromosome",chromosomeInput);}
+                if (startExtentInput.length>0){setAccumulatorObject("extentBegin",startExtentInput);}
+                if (endExtentInput.length>0){setAccumulatorObject("extentEnd",endExtentInput);}
 
                 destroySharedTable(additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory);
                 var sharedTable = new SharedTableObject('variantTableVariantHeaders',0,0);
