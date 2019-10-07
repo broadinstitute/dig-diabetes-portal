@@ -4396,6 +4396,61 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
     };
 
+    const filterEpigeneticTable = function(){
+        const filteringFields = _.map($('div.gregorSubTableRow'),function(oneDiv){
+            return {method:extractClassBasedTrailingString(oneDiv,"methodName_"),
+                annotation:extractClassBasedTrailingString(oneDiv,"annotationName_")}
+        });
+        const uniqueMethods = _.map(_.filter(_.uniqBy(filteringFields,'method'),function(o){return (o.method.length>0)}),'method');
+        const uniqueAnnotations = _.map(_.filter(_.uniqBy(filteringFields,'annotation'),function(o){return (o.annotation.length>0)}),'annotation');
+        const uniqueTissues = _.map(_.filter(_.uniqBy(_.map($('div.gregorSubTableHeader'),function(oneDiv){
+            return {tissue:extractClassBasedTrailingString(oneDiv,"tissueId_")}
+        }),'tissue'),function(o){return (o.tissue.length>0)}),'tissue');
+        if ((uniqueMethods.length>0) &&
+            (uniqueAnnotations.length>0) &&
+            (uniqueTissues.length>0)) {
+            // first filter out the rows based on methods
+            _.forEach($('div.staticMethodLabels'),function(oneDiv){
+                const currentMethod = extractClassBasedTrailingString(oneDiv,"methodName_");
+                if (_.includes(uniqueMethods,currentMethod)) {
+                    $(oneDiv).parent().parent().show();
+                } else {
+                    $(oneDiv).parent().parent().hide();
+                }
+            });
+            $('tr.epigeneticCellElement').removeClass('yesDisplay');
+            $('tr.epigeneticCellElement').removeClass('skipDisplay');
+            _.forEach($('tr.epigeneticCellElement'),function(oneTr){
+                const currentAnnotation = extractClassBasedTrailingString(oneTr,"annotationName_");
+                const currentTissue = extractClassBasedTrailingString(oneTr,"tissueId_");
+                if ( ((currentAnnotation.length===0)||(_.includes(uniqueAnnotations,currentAnnotation))) &&
+                    (_.includes(uniqueTissues,currentTissue)) ){
+                    $(oneTr).show();
+                    $(oneTr).addClass('yesDisplay');
+                } else {
+                    $(oneTr).hide();
+                    $(oneTr).addClass('skipDisplay');
+                }
+            });
+            $('table.expandableDrillDownTable').parent().parent().removeClass('undisplayed');
+            _.forEach($('table.expandableDrillDownTable'),function(oneTable){
+                const domTable = $(oneTable);
+                let somethingToDisplay = false;
+                _.forEach(domTable.find('tr.yesDisplay'),function(o){
+                    somethingToDisplay = true;
+                    return false;
+                });
+                if (!somethingToDisplay){
+                    $(domTable).parent().parent().addClass('undisplayed');
+                    $(domTable).parent().parent().hide();
+                } else {
+                    $(domTable).parent().parent().show();
+                }
+
+            })
+        }
+    };
+
 
     var refineTableRecords = function (whereTheTableGoes,datatable,headerType,adjustVisibilityCategories,headerSpecific){
         if( typeof datatable === 'undefined'){
@@ -4529,6 +4584,38 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         }
                     });
                     adjustTableWrapperWidth(dyanamicUiVariables.dynamicTableConfiguration.initializeSharedTableMemory);
+                    // const filteringFields = _.map($('div.gregorSubTableRow'),function(oneDiv){
+                    //     return {method:extractClassBasedTrailingString(oneDiv,"methodName_"),
+                    //             annotation:extractClassBasedTrailingString(oneDiv,"annotationName_")}
+                    // });
+                    // const uniqueMethods = _.uniqBy(filteringFields,'method');
+                    // const uniqueAnnotations = _.uniqBy(filteringFields,'annotation');
+                    // const uniqueTissues = _.uniqBy(_.map($('div.gregorSubTableHeader'),function(oneDiv){
+                    //     return {tissue:extractClassBasedTrailingString(oneDiv,"tissueName_")}
+                    // }),'tissue');
+                    // if ((uniqueMethods.length>0) &&
+                    //     (uniqueAnnotations.length>0) &&
+                    //     (uniqueTissues.length>0)) {
+                    //         // first filter out the rows based on methods
+                    //         _.forEach($('div.staticMethodLabels'),function(oneDiv){
+                    //             const currentMethod = extractClassBasedTrailingString(oneDiv,"methodName_");
+                    //             if (_.find(uniqueMethods,currentMethod)) {
+                    //                 $(oneDiv).parent().parent().show();
+                    //             } else {
+                    //                 $(oneDiv).parent().parent().hide();
+                    //             }
+                    //         });
+                    //         _.forEach($('tr.epigeneticCellElement'),function(oneTr){
+                    //             const currentAnnotation = extractClassBasedTrailingString(oneTr,"annotationName_");
+                    //             const currentTissue = extractClassBasedTrailingString(oneTr,"tissueName_");
+                    //             if ( (_.find(currentAnnotation,uniqueAnnotations)) ||
+                    //                 (_.find(currentTissue,uniqueTissues)) ){
+                    //                 $(oneTr).show();
+                    //             } else {
+                    //                 $(oneTr).hide();
+                    //             }
+                    //         });
+                    // }
                     break;
                 case 'variantTableAnnotationHeaders':
                     if (headerSpecific) {
@@ -5947,7 +6034,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         displayHeaderForVariantTable:displayHeaderForVariantTable,
         displayForVariantTable:displayForVariantTable,
         displayGregorSubTableForVariantTable:displayGregorSubTableForVariantTable,
-        getAccumulatorObject:getAccumulatorObject
+        getAccumulatorObject:getAccumulatorObject,
+        filterEpigeneticTable:filterEpigeneticTable
     }
 }());
 

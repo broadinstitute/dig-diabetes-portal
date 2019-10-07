@@ -7,7 +7,7 @@ records={{numberRecords}}
 </script>
 
 <script id="chromStateVariantTableTissueRowLabel"  type="x-tmpl-mustache">
-<div class="varAllEpigenetics varChromHmmEpigenetics variantEpigenetics staticValuesLabelInTissueTable methodName_ChromHMM initialLinearIndex_{{indexInOneDimensionalArray}}">ChromHMM&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/></div>
+<div class="varAllEpigenetics varChromHmmEpigenetics variantEpigenetics staticMethodLabels methodName_ChromHMM initialLinearIndex_{{indexInOneDimensionalArray}}">ChromHMM&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/></div>
 </script>
 
 <script id="chromStateVariantTableTissueHeader"  type="x-tmpl-mustache">

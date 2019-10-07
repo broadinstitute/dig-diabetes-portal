@@ -18,7 +18,12 @@ mpgSoftware.dynamicUi.tfbsVariantTable = (function () {
             let arrayOfData = [];
             var recordsGroupedByVarId = _.groupBy(data.data, function (o) { return o.var_id });
             _.forEach(recordsGroupedByVarId, function (value,key) {
-                const allRecords = _.map(value, function (oneValue){
+                const uniqueRecords = _.uniqWith(value,
+                    (recA, recB) =>
+                        recA.annotation === recB.annotation &&
+                        recA.tissue_id === recB.tissue_id
+                );
+                const allRecords = _.map(uniqueRecords, function (oneValue){
                     oneValue['safeTissueId'] = oneValue.tissue_id.replace(":","_");
                     return oneValue;
                 });

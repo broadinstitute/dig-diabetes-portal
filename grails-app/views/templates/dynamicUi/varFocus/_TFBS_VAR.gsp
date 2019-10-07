@@ -7,7 +7,7 @@ records={{numberRecords}}
 </script>
 
 <script id="tfbsVariantTableTissueRowLabel"  type="x-tmpl-mustache">
-<div class="varAllEpigenetics varTfbsEpigenetics  staticValuesLabelInTissueTable methodName_SPP  initialLinearIndex_{{indexInOneDimensionalArray}}">
+<div class="varAllEpigenetics varTfbsEpigenetics  staticMethodLabels methodName_SPP  initialLinearIndex_{{indexInOneDimensionalArray}}">
 tfbs&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/></div>
 </script>
 
@@ -23,16 +23,16 @@ tfbs&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" 
              <div significance_sortField="{{significanceValue}}" sortField="{{significanceValue}}"
              class="varAllEpigenetics varTfbsEpigenetics tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'Open chromatin for {{tissueName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
-               data-target="#open_chromatin_tissue_{{tissueNameKey}}" style="color:black">tissues
+               data-target="#open_tfbs_{{tissueNameKey}}" style="color:black">tissues
                </a>
 
-               <div  class="collapse openEffectorGeneInformationInGeneTable" id="open_chromatin_tissue_{{tissueNameKey}}">
+               <div  class="collapse openEffectorGeneInformationInGeneTable" id="open_tfbs_{{tissueNameKey}}">
                     {{#recordsExist}}
                         <table class="expandableDrillDownTable openEffectorGeneInformationInGeneTable" style="margin: 0 auto">
                          <thead>
                           <tr role="row">
                             <th class="text-center leftMostCol">Tissue</th>
-                            <th class="text-center">TF</th>
+                            <th class="text-center otherCols">TF</th>
                           </tr>
                          </thead>
                          <tbody>
@@ -40,7 +40,7 @@ tfbs&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" 
                          {{#tissueRecords}}
                           <tr class="epigeneticCellElement tissueId_{{safeTissueId}} annotationName_{{annotation}}" role="row">
                                <td class="text-center leftMostCol">{{tissue_name}}</td>
-                               <td class="text-center">{{annotation}}</td>
+                               <td class="text-center otherCols">{{annotation}}</td>
                            </tr>
                           {{/tissueRecords}}
                       {{#recordsExist}}

@@ -35,8 +35,13 @@ mpgSoftware.dynamicUi.chromStateVariantTable = (function () {
                 function(value,key) {return key});
             var recordsGroupedByVarId = _.groupBy(data.data, function (o) { return o.var_id });
             _.forEach(varIdsAndPositions, function (varIdsRecord) {
-                //varIdsRecord.arrayOfRecords = _.orderBy(recordsGroupedByVarId[varIdsRecord.name],['tissue_name'],['asc']);
-                varIdsRecord.arrayOfRecords = _.map(_.orderBy(recordsGroupedByVarId[varIdsRecord.name],['tissue_name'],['asc']), function (oneValue){
+                const uniqueRecords = _.uniqWith(
+                    recordsGroupedByVarId[varIdsRecord.name],
+                  (recA, recB) =>
+                      recA.annotation === recB.annotation &&
+                      recA.tissue_id === recB.tissue_id
+                );
+                varIdsRecord.arrayOfRecords = _.map(_.orderBy(uniqueRecords,['tissue_name'],['asc']), function (oneValue){
                     oneValue['safeTissueId'] = oneValue.tissue_id.replace(":","_");
                     return oneValue;
                 });

@@ -23,7 +23,7 @@ mpgSoftware.dynamicUi.dnaseVariantTable = (function () {
                     return oneValue;
                 });
 
-                var allRecordsForOneVariety = {name:key,arrayOfRecords:allRecords};
+                var allRecordsForOneVariety = {name:key,arrayOfRecords:_.uniqBy(allRecords,'tissue_id')};
                 arrayOfData.push(allRecordsForOneVariety);
             });
             arrayOfRecords.push({header:{ },

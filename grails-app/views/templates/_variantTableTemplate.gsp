@@ -94,6 +94,9 @@
                           <button class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table" onclick="mpgSoftware.dynamicUi.transposeThisTable('{{domTableSpecifier}}')">
                             Transpose
                           </button>
+                          <button class="btn btn-secondary btn-default transpose" type="button" title="click to filter table" onclick="mpgSoftware.dynamicUi.filterEpigeneticTable('{{domTableSpecifier}}')">
+                            Filter
+                          </button>
 
                     </div>
                 </div>

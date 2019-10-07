@@ -529,6 +529,9 @@ th.tissueNameInTissueTable>div {
 div.staticValuesLabelInTissueTable {
     font-weight: bold;
 }
+div.staticMethodLabels {
+    font-weight: bold;
+}
 select.phenotypePicker {
     padding: 8px;
     margin-bottom: 10px;
