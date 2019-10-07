@@ -34,7 +34,7 @@
                 </ul>
             </li>
 
-            <li class="analysis-modules-btn home-drop-down-menu" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="${createLink(controller:'informational', action:'modules')}">Analyze</a>
+            <li class="analysis-modules-btn home-drop-down-menu" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="${createLink(controller:'informational', action:'modules')}">Tools</a>
                 <ul>
                 <g:if test="${g.portalTypeString()?.equals('t2d')} || ${g.portalTypeString()?.equals('mi')}">
                     <!--<li class="" style=""><a href="javascript:;">Custom Association Analysis</a></li>-->
@@ -59,7 +59,7 @@
                 </ul>
             </li>
 
-            <li class="about-btn home-drop-down-menu" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="javascript:;">Learn</a>
+            <li class="about-btn home-drop-down-menu" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="javascript:;">Information</a>
                 <ul>
                     <li class="" style=""><a href="http://www.kp4cd.org/about/${g.portalTypeString()}" target="_blank"><g:message code="portal.header.nav.about"/></a></li>
 
@@ -69,7 +69,7 @@
 
                     <li class="" style=""><a href="http://www.kp4cd.org/policies/${g.portalTypeString()}" target="_blank"><g:message code="portal.header.nav.policies"/></a></li>
 
-                    <li class="" style=""><a href="http://www.kp4cd.org/resources/${g.portalTypeString()}" target="_blank">Help</a></li>
+                    <li class="" style=""><a href="http://www.kp4cd.org/resources/${g.portalTypeString()}" target="_blank">Documentation</a></li>
 
                     <li class="" style=""><a href="http://www.kp4cd.org/new_features/${g.portalTypeString()}" target="_blank">Blog</a></li>
 
