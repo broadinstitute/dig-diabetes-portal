@@ -28,13 +28,16 @@
                 <ul>
                     <li class="" style=""><a href="http://www.kp4cd.org/datasets/${g.portalTypeString()}" target="_blank">Datasets</a></li>
                     <li class="" style=""><a href="http://www.kp4cd.org/dataset_downloads/${g.portalTypeString()}" target="_blank">Downloads</a></li>
+                <g:if test="${g.portalTypeString()?.equals('t2d')}">
+                    <li class="" style=""><a href="http://www.kp4cd.org/apis/${g.portalTypeString()}">APIs</a></li>
+                </g:if>
                 </ul>
             </li>
 
             <li class="analysis-modules-btn home-drop-down-menu" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="${createLink(controller:'informational', action:'modules')}">Analyze</a>
                 <ul>
                 <g:if test="${g.portalTypeString()?.equals('t2d')} || ${g.portalTypeString()?.equals('mi')}">
-                    <li class="" style=""><a href="javascript:;">Custom Association Analysis</a></li>
+                    <!--<li class="" style=""><a href="javascript:;">Custom Association Analysis</a></li>-->
                 </g:if>
 
                 <g:if test="${g.portalTypeString()?.equals('t2d')}">
