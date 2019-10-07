@@ -21,58 +21,64 @@
     </div>
 
     <div class="menu-wrapper" style="float:right;">
-
-        <ul class="dk-general-menu" style="list-style: none; float:right; margin:0; padding:10px 0 0 15px; text-align: right;  ">
+        <ul class="dk-general-menu" style="list-style: none; float:right; margin:0; padding:10px 0 0 15px; text-align: right;">
             <li class="home-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="${createLink(controller:'home',action:'portalHome')}"><g:message code="localized.home"/></a></li>
-            <!--<li class="variant-search-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="${createLink(controller:'variantSearch', action:'variantSearchWF')}"><g:message code="variant.search.header"/></a></li>-->
 
-            <li class="data-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="${createLink(controller:'informational', action:'data')}"><g:message code="portal.header.nav.about_data"/></a></li>
-            <li class="analysis-modules-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="${createLink(controller:'informational', action:'modules')}"><g:message code="analysis.module.header"/> </a>
+            <li class="data-btn home-drop-down-menu" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="javascript:;"><g:message code="portal.header.nav.about_data"/></a>
                 <ul>
-                    <li class="" style=""><a href="${createLink(controller:'trait', action:'traitSearch')}?trait=T2D&significance=0.0005"><g:message code="LD.clumping.header"/></a></li>
-                    <li class="" style=""><a href="${createLink(controller:'variantSearch', action:'variantSearchWF')}"><g:message code="variant.search.header"/></a></li>
+                    <li class="" style=""><a href="http://www.kp4cd.org/datasets/${g.portalTypeString()}" target="_blank">Datasets</a></li>
+                    <li class="" style=""><a href="http://www.kp4cd.org/dataset_downloads/${g.portalTypeString()}" target="_blank">Downloads</a></li>
+                    <g:if test="${g.portalTypeString()?.equals('t2d')}">
+                        <li class="" style=""><a href="http://www.kp4cd.org/apis/${g.portalTypeString()}">APIs</a></li>
+                    </g:if>
+                </ul>
+            </li>
+
+            <li class="analysis-modules-btn home-drop-down-menu" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="${createLink(controller:'informational', action:'modules')}">Tools</a>
+                <ul>
+                    <g:if test="${g.portalTypeString()?.equals('t2d')} || ${g.portalTypeString()?.equals('mi')}">
+                        <!--<li class="" style=""><a href="javascript:;">Custom Association Analysis</a></li>-->
+                    </g:if>
+
                     <g:if test="${g.portalTypeString()?.equals('t2d')}">
                         <g:if test="${restServer.retrieveBeanForCurrentPortal().exposeGrsModule}">
                             <li class="grs-btn" style=""><a href="${createLink(controller:'grs', action:'grsInfo')}"><g:message code="portal.header.nav.grs"/></a></li>
                         </g:if>
-                    %{--<li class="grs-btn" style=""><a href="${createLink(controller:'gait', action:'gaitInfo')}/SLC30A8"><g:message code="portal.header.nav.geneGait"/></a></li>--}%
-                    %{--<li class="grs-btn" style=""><a href="${createLink(controller:'gait', action:'gaitInfo')}/rs13266634"><g:message code="portal.header.nav.variantGait"/></a></li>--}%
                     </g:if>
 
+                    <li class="" style=""><a href="${createLink(controller:'trait', action:'traitSearch')}?trait=${g.defaultPhenotype()}&significance=0.0005"><g:message code="LD.clumping.header"/></a></li>
+
+                    <g:if test="${g.portalTypeString()?.equals('t2d')}">
+                        <li class="" style=""><a href="${createLink(controller:'gene',action:'effectorGeneTable')}">Predicted T2D Effector Genes</a></li>
+                    </g:if>
+
+                    <li class="" style=""><a href="${createLink(controller:'trait',action:'tissueTable')}">Tissue FOCUS</a></li>
+
+                    <li class="" style=""><a href="${createLink(controller:'variantSearch', action:'variantSearchWF')}"><g:message code="variant.search.header"/></a></li>
 
                 </ul>
             </li>
-            %{--<li class="data-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="${createLink(controller:'trait', action:'tissueTable')}"><g:message code="portal.header.tissue.table"/><span class="new-dataset-flag" style="position:relative; width: 30px; background-size: 30px; margin-right: -10px;">&nbsp;</span></a></li>--}%
-            %{--<g:if test="${restServer.retrieveBeanForCurrentPortal().getExposeEffectorGeneTableUi()}">--}%
-            %{--<li class="data-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="${createLink(controller:'gene', action:'effectorGeneTable')}"><g:message code="portal.header.effector.gene.table"/><span class="new-dataset-flag" style="position:relative; width: 30px; background-size: 30px; margin-right: -10px;">&nbsp;</span></a></li>--}%
-            %{--</g:if>--}%
-            <li class="about-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="http://www.kp4cd.org/about/${g.portalTypeString()}" target="_blank"><g:message code="portal.header.nav.about"/></a></li>
-            <li class="policies-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="http://www.kp4cd.org/policies/${g.portalTypeString()}" target="_blank"><g:message code="portal.header.nav.policies"/></a></li>
-            <li class="tutorials-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="http://www.kp4cd.org/resources/${g.portalTypeString()}" target="_blank"><g:message code="portal.header.nav.tutorials"/></a></li>
-            <g:if test="${g.portalTypeString()?.equals('stroke')}">
-                <li class="contact-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="http://www.kp4cd.org/contacts/${g.portalTypeString()}" target="_blank"><g:message code="portal.header.nav.contact_plural"/></a></li>
-            %{--<li class="downloads-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="${createLink(controller:'informational', action:'downloads')}"><g:message code="portal.header.nav.downloads"/></a></li>--}%
-                <li style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="https://CV-disease-portal.blogspot.com/" target="_blank"><g:message code="portal.header.nav.blog" default="blog" /></a></li>
 
-            </g:if>
-            <g:elseif test="${g.portalTypeString()?.equals('mi')}">
-                <li class="contact-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="http://www.kp4cd.org/contacts/${g.portalTypeString()}" target="_blank"><g:message code="portal.header.nav.contact_plural"/></a></li>
-                <li style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="https://cvdgenetics.blogspot.com/" target="_blank"><g:message code="portal.header.nav.blog" default="blog" /></a></li>
-            </g:elseif>
-            <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
-                <li class="contact-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="http://www.kp4cd.org/contacts/${g.portalTypeString()}" target="_blank"><g:message code="portal.header.nav.contact_plural"/></a></li>
-            </g:elseif>
-            <g:elseif test="${g.portalTypeString()?.equals('t2d')}">
-                <li class="contact-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="http://www.kp4cd.org/contacts/${g.portalTypeString()}" target="_blank"><g:message code="portal.header.nav.contact"/></a></li>
-                <li class="data-submission-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="http://www.kp4cd.org/collaborate/${g.portalTypeString()}" target="_blank"><g:message code="portal.header.nav.submit"/></a></li>
-                <li style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="https://t2d-genetics-portal.blogspot.com/" target="_blank"><g:message code="portal.header.nav.blog" default="blog" /></a></li>
-            </g:elseif>
-            <g:elseif test="${g.portalTypeString()?.equals('epilepsy')}">
-                <li class="contact-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="http://www.kp4cd.org/contacts/${g.portalTypeString()}" target="_blank"><g:message code="portal.header.nav.contact_plural"/></a></li>
-            </g:elseif>
-            <g:else>
-                <li class="contact-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="http://www.kp4cd.org/contacts/${g.portalTypeString()}" target="_blank"><g:message code="portal.header.nav.contact_plural"/></a></li>
-            </g:else>
+            <li class="about-btn home-drop-down-menu" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="javascript:;">Information</a>
+                <ul>
+                    <li class="" style=""><a href="http://www.kp4cd.org/about/${g.portalTypeString()}" target="_blank"><g:message code="portal.header.nav.about"/></a></li>
+
+                    <g:if test="${g.portalTypeString()?.equals('t2d')}">
+                        <li class="" style=""><a href="http://www.kp4cd.org/collaborate/${g.portalTypeString()}" target="_blank"><g:message code="portal.header.nav.submit"/></a></li>
+                    </g:if>
+
+                    <li class="" style=""><a href="http://www.kp4cd.org/policies/${g.portalTypeString()}" target="_blank"><g:message code="portal.header.nav.policies"/></a></li>
+
+                    <li class="" style=""><a href="http://www.kp4cd.org/resources/${g.portalTypeString()}" target="_blank">Documentation</a></li>
+
+                    <li class="" style=""><a href="http://www.kp4cd.org/new_features/${g.portalTypeString()}" target="_blank">Blog</a></li>
+
+                </ul>
+            </li>
+
+            <li class="contact-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="http://www.kp4cd.org/contacts/${g.portalTypeString()}" target="_blank"><g:message code="portal.header.nav.contact_plural"/></a></li>
+
+
             <sec:ifLoggedIn>
 
 
@@ -106,8 +112,8 @@
             </sec:ifNotLoggedIn>
 
             <li id="userNotificationDisplay" message='<g:message code="mainpage.user.notification"/>' style="display:inline-block; margin-left: -13px; text-align: left; margin-right:15px; border-radius: 5px; padding: 2px 5px 2px 5px; font-size: 12px;text-shadow: none; background-color:#f68920; color: #fff; width: 75px; height: 21px; overflow: hidden; text-overflow: ellipsis; vertical-align: -6px;"><g:message code="mainpage.user.notification"/></li>
-
         </ul>
+
     </div>
 
 </div>
