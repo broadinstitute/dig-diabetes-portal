@@ -338,7 +338,7 @@
                 mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]);
              */
                 mpgSoftware.homePage.newFeatures([
-                    {"name":"Video: Custom aggregation tests","link":"https://www.youtube.com/watch?v=O78rN5A7SAw&list=PLlMMtlgw6qNj6ICrkMu2BAPhs-6XFBpTr&index=7&t=0s","class":"resource","type":"new"},
+                    {"name":"Tutorial video: Custom aggregation tests","link":"https://www.youtube.com/watch?v=O78rN5A7SAw&list=PLlMMtlgw6qNj6ICrkMu2BAPhs-6XFBpTr&index=7&t=0s","class":"resource","type":"new"},
                     {"name":"Webinar video: Diabetes Epigenome Atlas","link":"","class":"resource","type":"new"}]);
             </script>
         </g:if>
