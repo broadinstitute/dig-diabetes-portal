@@ -337,10 +337,9 @@
                 /* Example to add 'new' or 'updated' feature buttons;
                 mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]);
              */
-                mpgSoftware.homePage.newFeatures([{"name":"Predicted T2D effector genes","link":"${createLink(controller:'gene',action:'effectorGeneTable')}","class":"feature","type":"new"},
-                    {"name":"Tissue enrichments","link":"${createLink(controller:'trait',action:'tissueTable')}","class":"feature","type":"new"},
-                    {"name":"Video: predicted T2D effector genes","link":"https://youtu.be/cG6gxFunHt8","class":"resource","type":"new"},
-                    {"name":"Webinar video: gene-specific resources in the T2DKP","link":"https://www.youtube.com/watch?v=ylPn6D1hpY4","class":"resource","type":"new"}]);
+                mpgSoftware.homePage.newFeatures([
+                    {"name":"Video: Custom aggregation tests","link":"https://www.youtube.com/watch?v=O78rN5A7SAw&list=PLlMMtlgw6qNj6ICrkMu2BAPhs-6XFBpTr&index=7&t=0s","class":"resource","type":"new"},
+                    {"name":"Webinar video: Diabetes Epigenome Atlas","link":"","class":"resource","type":"new"}]);
             </script>
         </g:if>
         <g:elseif test="${g.portalTypeString()?.equals('mi')}">
