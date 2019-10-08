@@ -3,7 +3,7 @@ records={{numberRecords}}
 </script>
 
 <script id="tfbsVariantTableTissueHeaderLabel"  type="x-tmpl-mustache">
-<div class="varAllEpigenetics varTfbsEpigenetics variantEpigenetics initialLinearIndex_{{indexInOneDimensionalArray}}">Epigenetics</div>
+<div class="varEpigeneticsLabel varAllEpigenetics varTfbsEpigenetics variantEpigenetics initialLinearIndex_{{indexInOneDimensionalArray}}">Epigenetics</div>
 </script>
 
 <script id="tfbsVariantTableTissueRowLabel"  type="x-tmpl-mustache">

@@ -4402,10 +4402,10 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         const domCallingObject = $(callingObject);
         if (domToAdjust.css('display')==='none'){
             domToAdjust.show();
-            domCallingObject.text('Hide filter table');
+            domCallingObject.text('Hide filters from GREGOR enrichment');
         } else {
             domToAdjust.hide();
-            domCallingObject.text('Adjust filters');
+            domCallingObject.text('Adjust filters from GREGOR enrichment');
         }
     }
 
@@ -4413,18 +4413,28 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         const heightContainer = parseInt($('#gregorSubTableDiv').css('height').replace("px",""));
         const widthContainer= parseInt($('#gregorSubTableDiv').css('width').replace("px",""));
         const containerOffest = $('div.gregorSubTableHeader').parent().offset();
-        const allowableAnnotations = _.filter($('div.gregorSubTableRow'), function(cell){
+        let someOffsetsGreaterThanZero = false;
+        let allowableAnnotations = _.filter($('div.gregorSubTableRow'), function(cell){
             const cellOffset = $(cell).offset();
+            if(cellOffset.left>0) {someOffsetsGreaterThanZero = true;}
             return  ((widthContainer+containerOffest.left)>cellOffset.left);
         });
+        if (someOffsetsGreaterThanZero===false) {
+            allowableAnnotations=_.take(allowableAnnotations,9);
+        }
         const filteringFields = _.map(allowableAnnotations,function(oneDiv){
             return {method:extractClassBasedTrailingString(oneDiv,"methodName_"),
                 annotation:extractClassBasedTrailingString(oneDiv,"annotationName_")}
         });
-        const allowableTissues = _.filter($('div.gregorSubTableHeader'), function(cell){
+        someOffsetsGreaterThanZero = false;
+        let allowableTissues = _.filter($('div.gregorSubTableHeader'), function(cell){
             const cellOffset = $(cell).offset();
+            if(cellOffset.top>0) {someOffsetsGreaterThanZero = true;}
             return  ((heightContainer+containerOffest.top)>cellOffset.top);
         });
+        if (someOffsetsGreaterThanZero===false) {
+            allowableTissues=_.take(allowableTissues,6);
+        }
         const uniqueMethods = _.map(_.filter(_.uniqBy(filteringFields,'method'),function(o){return (o.method.length>0)}),'method');
         const uniqueAnnotations = _.map(_.filter(_.uniqBy(filteringFields,'annotation'),function(o){return (o.annotation.length>0)}),'annotation');
         const uniqueTissues = _.map(_.filter(_.uniqBy(_.map(allowableTissues,function(oneDiv){
@@ -4590,7 +4600,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                             sharedTable["cellColoringScheme"] = "sortfield";
                         }
                         $('td:has(div.variantAnnotation.emphasisSwitch_true)').addClass('emphasisSwitch_true');
-                        $('div.variantAnnotation:last').parent().parent().children('td').css('border-bottom','2px solid green');
+                        $('div.variantAnnotation:last').parent().parent().children('td').css('border-bottom','2px solid black');
 
                         let currentFormVariation = ( typeof sharedTable['currentFormVariation'] === 'undefined') ? 1 : sharedTable['currentFormVariation'];
                         if (currentFormVariation === 1){
@@ -4609,6 +4619,15 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     _.forEach($('div.associationLabel'), function(domElement,index){
                         if (index===0){
                             $(domElement).parent().prop('rowspan',$('div.associationLabel').length);
+                        } else {
+                            $(domElement).parent().hide();
+                        }
+                    });
+                    $('div.associationLabel:last').parent().parent().children('td').css('border-bottom','2px solid black');
+
+                    _.forEach($('div.varEpigeneticsLabel'), function(domElement,index){
+                        if (index===0){
+                            $(domElement).parent().prop('rowspan',$('div.varEpigeneticsLabel').length);
                         } else {
                             $(domElement).parent().hide();
                         }
@@ -5113,6 +5132,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 case 1:
                     sharedTable['currentFormVariation'] = 2;
                     $(originatingObject).text("Hide");
+                    filterEpigeneticTable();
                     break;
                 case 2:
                     sharedTable['currentFormVariation'] = 1;

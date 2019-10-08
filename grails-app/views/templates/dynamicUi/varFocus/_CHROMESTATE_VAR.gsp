@@ -3,7 +3,7 @@ records={{numberRecords}}
 </script>
 
 <script id="chromStateVariantTableTissueHeaderLabel"  type="x-tmpl-mustache">
-<div class="varAllEpigenetics varChromHmmEpigenetics initialLinearIndex_{{indexInOneDimensionalArray}}">Epigenetics</div>
+<div class="varEpigeneticsLabel varAllEpigenetics varChromHmmEpigenetics initialLinearIndex_{{indexInOneDimensionalArray}}">Epigenetics</div>
 </script>
 
 <script id="chromStateVariantTableTissueRowLabel"  type="x-tmpl-mustache">

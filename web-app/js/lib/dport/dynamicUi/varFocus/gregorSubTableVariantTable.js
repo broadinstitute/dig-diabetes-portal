@@ -34,10 +34,14 @@ mpgSoftware.dynamicUi.gregorSubTableVariantTable = (function () {
             geneRecord.header['annotations'] = _.map(_.uniqBy(data.data,'annotation'),function(o){return o.annotation});
             geneRecord.header['ancestries'] = _.map(_.uniqBy(data.data,'ancestry'),function(o){return o.ancestry});
             geneRecord.header['tissues'] = _.map(_.uniqBy(data.data,'tissue'),function(o){return o.tissue.replace('\'','').toLowerCase()});
-            const recordsToDrawFrom = _.take(_.orderBy(data.data,['p_value'],['asc']),50)
+            const recordsToDrawFrom = _.take(_.orderBy(data.data,['p_value'],['asc']),250)
             geneRecord.header['bestAnnotations'] = _.uniqBy(recordsToDrawFrom,'annotation');
             geneRecord.header['bestAncestries'] = _.uniqBy(recordsToDrawFrom,'ancestry');
             geneRecord.header['bestTissues'] = _.uniqBy(recordsToDrawFrom,'tissue');
+            // const recordsToDrawFrom = _.take(data.data,50)
+            // geneRecord.header['bestAnnotations'] = _.uniqBy(recordsToDrawFrom,'annotation');
+            // geneRecord.header['bestAncestries'] = _.uniqBy(recordsToDrawFrom,'ancestry');
+            // geneRecord.header['bestTissues'] = _.uniqBy(recordsToDrawFrom,'tissue');
 
             _.forEach(recordsToDrawFrom, function (oneRec) {
                 let holder = oneRec;

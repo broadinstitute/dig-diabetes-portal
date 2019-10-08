@@ -14,6 +14,7 @@ Coding
 <script id="variantIsCodingBody"  type="x-tmpl-mustache">
     <div  class="variantAnnotation variantIsCoding emphasisSwitch_{{emphasisSwitch}}  initialLinearIndex_{{indexInOneDimensionalArray}}"
     sortfield="{{emphasisSwitch}}_Coding">
+    <span class="glyphicon glyphicon-ok"></span>
     </div>
 </script>
 
