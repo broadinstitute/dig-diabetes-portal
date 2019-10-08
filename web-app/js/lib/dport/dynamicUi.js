@@ -4632,13 +4632,23 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                             $(domElement).parent().hide();
                         }
                     });
-                    $('#gregorSubTableDiv').resizable({
-                        stop: function( event, ui ) {
-                            filterEpigeneticTable();
-                            adjustAnnotationTable('#adjustFilterTableButton','#gregorSubTableDiv')
+
+                    var handle = $( "#custom-handle" );
+                    $( "#gregorPValueSlider" ).slider({
+                        create: function() {
+                            handle.text( $( this ).slider( "value" ) );
+                        },
+                        slide: function( event, ui ) {
+                            handle.text( ui.value );
                         }
                     });
-                    $('#gregorSubTableDiv').css('width','1200px').css('height','400px')
+                    // $('#gregorSubTableDiv').resizable({
+                    //     stop: function( event, ui ) {
+                    //         filterEpigeneticTable();
+                    //         adjustAnnotationTable('#adjustFilterTableButton','#gregorSubTableDiv')
+                    //     }
+                    // });
+                    //$('#gregorSubTableDiv').css('width','1200px').css('height','400px')
                     // $('#gregorSubTableDiv').find('div.dataTables_wrapper').css('height','100%');
                    // adjustTableWrapperWidth(dyanamicUiVariables.dynamicTableConfiguration.initializeSharedTableMemory);
 

@@ -69,6 +69,10 @@ div.k27ac {
 div.variantAnnotationCompress {
     height: 10px;
 }
+#gregorSubTableDiv{
+    height: 500px;
+    overflow-y: scroll;
+}
 td.emphasisSwitch_true {
     background-color: #0000FF;
 }

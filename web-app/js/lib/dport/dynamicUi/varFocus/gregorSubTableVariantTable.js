@@ -34,7 +34,9 @@ mpgSoftware.dynamicUi.gregorSubTableVariantTable = (function () {
             geneRecord.header['annotations'] = _.map(_.uniqBy(data.data,'annotation'),function(o){return o.annotation});
             geneRecord.header['ancestries'] = _.map(_.uniqBy(data.data,'ancestry'),function(o){return o.ancestry});
             geneRecord.header['tissues'] = _.map(_.uniqBy(data.data,'tissue'),function(o){return o.tissue.replace('\'','').toLowerCase()});
-            const recordsToDrawFrom = _.take(_.orderBy(data.data,['p_value'],['asc']),250)
+            const recordsToDrawFrom = _.take(_.orderBy(data.data,['p_value'],['asc']),500);
+            geneRecord.header['minimumGregorPValue'] = _.map(_.minBy(data.data,'p_value'),function(o){return o.p_value});
+            geneRecord.header['maximumGregorPValue'] = _.map(_.maxBy(data.data,'p_value'),function(o){return o.p_value});
             geneRecord.header['bestAnnotations'] = _.uniqBy(recordsToDrawFrom,'annotation');
             geneRecord.header['bestAncestries'] = _.uniqBy(recordsToDrawFrom,'ancestry');
             geneRecord.header['bestTissues'] = _.uniqBy(recordsToDrawFrom,'tissue');
@@ -85,6 +87,8 @@ mpgSoftware.dynamicUi.gregorSubTableVariantTable = (function () {
      */
     var displayGregorSubTable = function (idForTheTargetDiv, objectContainingRetrievedRecords, callingParameters ) {
 
+        $('div.minimumGregorPValue').text(77);
+        $('div.maximumGregorPValue').text(99);
         mpgSoftware.dynamicUi.displayGregorSubTableForVariantTable(idForTheTargetDiv, // which table are we adding to
             callingParameters.code, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
             callingParameters.nameOfAccumulatorField, // name of the persistent field where the data we received is stored
