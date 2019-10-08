@@ -159,11 +159,11 @@
 
 <div id="main">
 
-    <div class="container">
+    <div class="container-fluid" style="padding: 0 2.5%;">
 
         <div class="gene-info-container row">
             <div class="gene-info-view">
-                <h1 class="dk-page-title" style="vertical-align: bottom; margin-bottom: 0; ">
+                <h1 class="dk-page-title" style="margin-bottom: 0; ">
                     <em style="font-weight: 900;"><%=geneName%></em>
 
                     <g:if test="${g.portalTypeString()?.equals('t2d')}">

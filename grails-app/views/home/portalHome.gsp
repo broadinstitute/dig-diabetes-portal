@@ -105,7 +105,7 @@
                 <!-- Search UI & drop-down UI in the top banner -->
                 <div class="col-md-12">
                 <!-- Tabs for search Ui and drop-down UI -->
-                <g:if test="${g.portalTypeString()?.equals('v2f')}">
+                <g:if test="${ g.portalTypeString() == 'v2f' || g.portalTypeString() == 'ibd' }">
                     <h2 class="front-banner-ui-tabs" style="font-size: 45px; padding-bottom: 15px;"><g:message code="primary.text.input.header"/></h2>
                 </g:if>
                 <g:else>
