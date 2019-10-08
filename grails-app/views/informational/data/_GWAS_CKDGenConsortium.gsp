@@ -5,6 +5,12 @@
 
         <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
+            %{--<p><div class="paper">--}%
+%{--<g:message code="informational.shared.publications.Wuttke_2019_NatGenet"></g:message><br>--}%
+%{--<g:message code="informational.shared.publications.Wuttke_2019_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>--}%
+%{--<div class="citation"><g:message code="informational.shared.publications.Wuttke_2019_NatGenet.citation"></g:message> </div>--}%
+%{--</div></p>--}%
+
             <p><div class="paper">
 <g:message code="informational.shared.publications.Gorski_2017_SciRep"></g:message><br>
 <g:message code="informational.shared.publications.Gorski_2017_SciRep.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
@@ -25,7 +31,9 @@
 <li><g:message code="informational.shared.traits.eGFR-creat"></g:message></li>
 <li><g:message code="informational.shared.traits.eGFR-cys"></g:message></li>
 <li><g:message code="informational.shared.traits.microalbuminuria"></g:message></li>
+%{--<li><g:message code="metadata.BUN"></g:message></li>--}%
 </ul>
+%{--For mdv41, remove eGFR-cys and MA, add BUN--}%
 
 <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
 

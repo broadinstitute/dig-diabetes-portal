@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by mduby on 8/21/15.
@@ -83,6 +85,10 @@ public class BurdenJsonBuilder {
         // local variables
         String finalString;
         StringBuilder stringBuilder = new StringBuilder();
+        Boolean biallelicBurdenTest = false;
+        if ((alleleType != null)  && (alleleType.length()>0) && ("multi".equals(alleleType))) {
+            biallelicBurdenTest = true;
+        }
 
         // open the json object
         stringBuilder.append("{");
@@ -102,13 +108,13 @@ public class BurdenJsonBuilder {
             stringBuilder.append("\", ");
         }
 
-        if (variantSetId!= null) {
+//        if (variantSetId!= null) {
             stringBuilder.append("\"");
             stringBuilder.append(PortalConstants.JSON_BURDEN_OPERATION_KEY);
             stringBuilder.append("\": \"");
             stringBuilder.append(PortalConstants.JSON_BURDEN_OPERATION_SUM_KEY);
             stringBuilder.append("\", ");
-        }
+//        }
 
         // add in the phenotype
         stringBuilder.append("\"");
@@ -140,9 +146,34 @@ public class BurdenJsonBuilder {
         } else if (variantList.size() == 0) {
                 throw new PortalException("Got empty variant list for the burden test");
         } else {
-            for (int i = 0; i < variantList.size(); i++) {
-                stringBuilder.append("\"" + variantList.get(i) + "\"");
-                if (i < variantList.size() - 1) {
+            List<String> adjustedVariantList = new ArrayList<String>();
+            if (biallelicBurdenTest){
+                for (int i = 0; i < variantList.size(); i++) {
+                    if (variantList.get(i).contains(",")) { // need to break every multi allelic into alleles
+                        String rawAlternatives[] = variantList.get(i).split(",");
+                        String firstAlternateAllele = rawAlternatives[0];
+                        Pattern p = Pattern.compile(".*_");
+                        Matcher m = p.matcher(firstAlternateAllele);
+                        String chromPosRef = "";
+                        if (m.find()) {
+                            chromPosRef = m.group(0);
+                        }
+                        adjustedVariantList.add("\"" + firstAlternateAllele + "\"");
+                        for (int j = 1; j < rawAlternatives.length; j++) {
+                            adjustedVariantList.add("\"" + chromPosRef + rawAlternatives[j] + "\"");
+                        }
+                    } else {
+                        adjustedVariantList.add("\"" + variantList.get(i) + "\"");
+                    }
+                }
+            } else {
+                for (int i = 0; i < variantList.size(); i++) {
+                    adjustedVariantList.add("\"" + variantList.get(i) + "\"");
+                }
+            }
+            for (int i = 0; i < adjustedVariantList.size(); i++) {
+                stringBuilder.append(adjustedVariantList.get(i));
+                if (i < adjustedVariantList.size() - 1) {
                     stringBuilder.append(",");
                 }
             }
@@ -301,7 +332,10 @@ public class BurdenJsonBuilder {
                     //TODO can I make this simple branch here, or do I have to do something more elaborate?
                     variant.setVariantId((String)map.get(PortalConstants.JSON_VARIANT_ID_KEY));
                     variant.setChromosome((String) map.get(PortalConstants.JSON_VARIANT_CHROMOSOME_KEY));
-                    if (map.get("MAF") != null) {
+                    if ((map.get("AF") != null) && (map.get("AF") != JSONObject.NULL)) {
+                            Double mafValue = (Double) map.get("AF");
+                            variant.setMaf(mafValue.floatValue());
+                    } else if ((map.get("MAF") != null)  && (map.get("MAF") != JSONObject.NULL)){
                         JSONObject jsonObject1 = (JSONObject) map.get("MAF");
 
                         String key = (String)jsonObject1.keySet().iterator().next();
@@ -310,32 +344,38 @@ public class BurdenJsonBuilder {
                             variant.setMaf(mafValue.floatValue() );
                         }
                     }
-                    if (map.get(PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY) == null) {
+                    if ((map.get(PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY) == null) ||
+                        (map.get(PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY) == JSONObject.NULL)){
                         variant.setPolyphenPredictor((String)"");
                     }else{
                         variant.setPolyphenPredictor((String) map.get(PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY));
                     }
-                    if (map.get(PortalConstants.JSON_VARIANT_SIFT_PRED_KEY) == null) {
+                    if ((map.get(PortalConstants.JSON_VARIANT_SIFT_PRED_KEY) == null) ||
+                            (map.get(PortalConstants.JSON_VARIANT_SIFT_PRED_KEY) == JSONObject.NULL)){
                         variant.setSiftPredictor((String)"");
                     }else{
                         variant.setSiftPredictor((String) map.get(PortalConstants.JSON_VARIANT_SIFT_PRED_KEY));
                     }
-                    if (map.get(PortalConstants.JSON_VARIANT_POLYPHEN2_HDIV_PRED_KEY) == null) {
+                    if ((map.get(PortalConstants.JSON_VARIANT_POLYPHEN2_HDIV_PRED_KEY) == null)||
+                            (map.get(PortalConstants.JSON_VARIANT_POLYPHEN2_HDIV_PRED_KEY) == JSONObject.NULL)) {
                         variant.setPolyphenHdivPredictor((String)"");
                     }else{
                         variant.setPolyphenHdivPredictor((String) map.get(PortalConstants.JSON_VARIANT_POLYPHEN2_HDIV_PRED_KEY));
                     }
-                    if (map.get(PortalConstants.JSON_VARIANT_POLYPHEN2_HVAR_PRED_KEY) == null) {
+                    if ((map.get(PortalConstants.JSON_VARIANT_POLYPHEN2_HVAR_PRED_KEY) == null)||
+                            (map.get(PortalConstants.JSON_VARIANT_POLYPHEN2_HVAR_PRED_KEY) == JSONObject.NULL)) {
                         variant.setPolyphenHvarPredictor((String)"");
                     }else{
                         variant.setPolyphenHvarPredictor((String) map.get(PortalConstants.JSON_VARIANT_POLYPHEN2_HVAR_PRED_KEY));
                     }
-                    if (map.get(PortalConstants.JSON_VARIANT_MUTATION_TASTER_PRED_KEY) == null) {
+                    if ((map.get(PortalConstants.JSON_VARIANT_MUTATION_TASTER_PRED_KEY) == null)||
+                            (map.get(PortalConstants.JSON_VARIANT_MUTATION_TASTER_PRED_KEY) == JSONObject.NULL)) {
                         variant.setMutationTasterPredictor((String)"");
                     }else{
                         variant.setMutationTasterPredictor((String) map.get(PortalConstants.JSON_VARIANT_MUTATION_TASTER_PRED_KEY));
                     }
-                    if (map.get(PortalConstants.JSON_VARIANT_LRT_PRED_KEY) == null) {
+                    if ((map.get(PortalConstants.JSON_VARIANT_LRT_PRED_KEY) == null)||
+                            (map.get(PortalConstants.JSON_VARIANT_LRT_PRED_KEY) == JSONObject.NULL)) {
                         variant.setLrtPredictor((String)"");
                     }else{
                         variant.setLrtPredictor((String) map.get(PortalConstants.JSON_VARIANT_LRT_PRED_KEY));
@@ -400,14 +440,15 @@ public class BurdenJsonBuilder {
         // always add a check that MAF is greater than 0 for the root data set specified to make sure we are not pulling variants that do not occur
         try {
             rootProperty = parser.getExpectedUniquePropertyFromSampleGroup("MAF", rootDataSet);
-            queryFilterList.add(new QueryFilterBean(rootProperty, PortalConstants.OPERATOR_MORE_THAN_NOT_EQUALS, "0.0"));
+
         } catch (PortalException e) {
             unexpectedData = true;
         }
 
 
         // if mafValue not null, then look at mafSampleGroupOption
-        if ((!unexpectedData)&&(mafValue != null)) {
+        if ((!unexpectedData)
+                &&(mafValue != null)) {
             // populate the sample group list
             if (mafSampleGroupOption == PortalConstants.BURDEN_MAF_OPTION_ID_ANCESTRY) {
                 // if ancestry, get the list of child sample groups
@@ -430,6 +471,8 @@ public class BurdenJsonBuilder {
 
             // return
             return queryFilterList;
+        } else {
+            queryFilterList.add(new QueryFilterBean(rootProperty, PortalConstants.OPERATOR_MORE_THAN_NOT_EQUALS, "0.0"));
         }
 
 

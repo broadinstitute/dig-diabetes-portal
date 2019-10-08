@@ -59,6 +59,10 @@
         color: red;
     }
 
+    .data-status-pre-publication {
+        color: red;
+    }
+
     .dataset-info {
         color: #777;
     }
@@ -96,6 +100,15 @@
                 </div>
                 <div class="col-md-12">
                     <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.lung.title" default="about the data"/></p>
+                </div>
+            </g:elseif>
+
+            <g:elseif test="${g.portalTypeString()?.equals('bone')}">
+                <div class="col-md-12">
+                    <h1 class="dk-page-title">Data</h1>
+                </div>
+                <div class="col-md-12">
+                    <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.bone.title" default="about the data"/></p>
                 </div>
             </g:elseif>
 
@@ -149,7 +162,7 @@
                 <table class="table table-condensed table-responsive table-striped" border="1">
                     <tr><th><b>PubMed ID</b></th><th><b>Title</b></th><th><b>Download files</b></th><th><b>README files</b></th></tr>
 
-
+                    <tr><td>&nbsp;</td><td>ATAC-seq data from human adult left atrium/cardiomyocytes</td><td><a href="https://console.cloud.google.com/storage/browser/cvdi_epigenome" target="_blank">Download files</a></td><td><a href="https://broad-portal-resources.s3.amazonaws.com/CVDKP/cardiomyocyte-ATAC-seq_README" target="_blank">README</a></td></tr>
                     <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/30535219" target="_blank">PMID:30535219</a></td><td>Association between titin loss-of-function variants and early-onset atrial fibrillation.</td><td><a href="https://personal.broadinstitute.org/mvon/2018.AF.WGS.TOPMed.zip" target="_blank">Download files</a></td><td><a href="https://s3.amazonaws.com/broad-portal-resources/CVDKP/AF_WGS_TOPMed_Freeze4_GWAS.README.txt" target="_blank">README</a></td></tr>
                     <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/30586722" target="_blank">PMID:30586722</a></td><td>Phenotypic Refinement of Heart Failure in a National Biobank Facilitates Genetic Discovery.</td><td><a href="https://personal.broadinstitute.org/mvon/2018.HRC.GWAS.UKBB.zip" target="_blank">Download files</a></td><td><a href="https://s3.amazonaws.com/broad-portal-resources/CVDKP/Heart_failure_GWAS_README.txt" target="_blank">README</a></td></tr>
                     <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/30220432" target="_blank">PMID:30220432</a></td><td>Genetic Association of Albuminuria with Cardiometabolic Disease and Blood Pressure.</td><td><a href="https://personal.broadinstitute.org/mvon/UKB.v2.albuminuria.n382500.zip" target="_blank">Download files</a></td><td><a href="https://s3.amazonaws.com/broad-portal-resources/CVDKP/UKB.v2.albuminuria.n382500.README.txt" target="_blank">README</a></td></tr>

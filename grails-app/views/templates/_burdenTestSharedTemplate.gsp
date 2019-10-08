@@ -20,6 +20,7 @@
         </div>
 
         <div class="col-md-offset-4 col-md-4 vcenter center burden-test-btn-wrapper">
+
             <button name="singlebutton" style="height: 50px; z-index: 10;" id="singleRunButton"
                                                    class="btn btn-primary btn-lg burden-test-btn vcenter"
                                                    onclick="mpgSoftware.burdenTestShared.immediateFilterAndRun('${createLink(controller: "variantInfo", action: "metadataAjax")}',
@@ -31,6 +32,8 @@
                                                    {{^variantsSetRefinement}}
                                                    'K'
                                                    {{/variantsSetRefinement}}
+
+
                                                    )">Launch analysis</button>
         </div>
 
@@ -108,7 +111,7 @@
                                          retrieveSampleSummaryUrl:'${createLink(controller: "variantInfo", action: "retrieveSampleSummary")}',
                                          variantAndDsAjaxUrl:'${createLink(controller: "variantInfo", action: "variantAndDsAjax")}',
                                          burdenTestVariantSelectionOptionsAjaxUrl:'${createLink(controller: "gene", action: "burdenTestVariantSelectionOptionsAjax")}',
-                                         getGRSListOfVariantsAjaxUrl:'${createLink(controller:"grs",action: "getGRSListOfVariantsAjax")}'})">
+                                         getGRSListOfVariantsAjaxUrl:'${createLink(controller:"gait",action: "getGRSListOfVariantsAjax")}'})">
                         </select>
                     </div>
                 </div>
@@ -130,7 +133,7 @@
                                          retrieveSampleSummaryUrl:'${createLink(controller: "variantInfo", action: "retrieveSampleSummary")}',
                                          variantAndDsAjaxUrl:'${createLink(controller: "variantInfo", action: "variantAndDsAjax")}',
                                          burdenTestVariantSelectionOptionsAjaxUrl:'${createLink(controller: "gene", action: "burdenTestVariantSelectionOptionsAjax")}',
-                                         getGRSListOfVariantsAjaxUrl:'${createLink(controller:"grs",action: "getGRSListOfVariantsAjax")}'})">
+                                         getGRSListOfVariantsAjaxUrl:'${createLink(controller:"gait",action: "getGRSListOfVariantsAjax")}'})">
                      </select>
                 </div>
             </div>
@@ -153,7 +156,7 @@
                                          retrieveSampleSummaryUrl:'${createLink(controller: "variantInfo", action: "retrieveSampleSummary")}',
                                          variantAndDsAjaxUrl:'${createLink(controller: "variantInfo", action: "variantAndDsAjax")}',
                                          burdenTestVariantSelectionOptionsAjaxUrl:'${createLink(controller: "gene", action: "burdenTestVariantSelectionOptionsAjax")}',
-                                         getGRSListOfVariantsAjaxUrl:'${createLink(controller:"grs",action: "getGRSListOfVariantsAjax")}'})">
+                                         getGRSListOfVariantsAjaxUrl:'${createLink(controller:"gait",action: "getGRSListOfVariantsAjax")}'})">
                                 <option value="none">none</option>
                                 <option value="origin">ancestry</option>
                     </select>
@@ -176,7 +179,7 @@
                                          retrieveSampleSummaryUrl:'${createLink(controller: "variantInfo", action: "retrieveSampleSummary")}',
                                          variantAndDsAjaxUrl:'${createLink(controller: "variantInfo", action: "variantAndDsAjax")}',
                                          burdenTestVariantSelectionOptionsAjaxUrl:'${createLink(controller: "gene", action: "burdenTestVariantSelectionOptionsAjax")}',
-                                         getGRSListOfVariantsAjaxUrl:'${createLink(controller:"grs",action: "getGRSListOfVariantsAjax")}'})">
+                                         getGRSListOfVariantsAjaxUrl:'${createLink(controller:"gait",action: "getGRSListOfVariantsAjax")}'})">
                                         <label style="padding-left:0">Filter cases and controls separately</label>
                                 </input>
                         </div>
@@ -603,9 +606,10 @@ the individual filters themselves. That work is handled later as part of a loop-
                                         <label><g:message code="gene.burdenTesting.label.available_variant_filter"/>:
                                             {{#variantsSetRefinement}}
                                             <select id= "burdenProteinEffectFilter" class="burdenProteinEffectFilter form-control"
-                                            onchange="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters({generateListOfVariantsFromFiltersAjaxUrl:'${createLink(controller: 'gene', action: 'generateListOfVariantsFromFiltersAjax')}'},
-                                                                                         mpgSoftware.burdenTestShared.buildVariantTable,
-                                            '${createLink(controller: 'variantInfo', action: 'variantInfo')}')">
+                                            onchange="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters(
+                                            {generateListOfVariantsFromFiltersAjaxUrl:'${createLink(controller: 'gene', action: 'generateListOfVariantsFromFiltersAjax')}'},
+                                            mpgSoftware.burdenTestShared.buildVariantTable,
+                                            {variantInfoUrl:'${createLink(controller: 'variantInfo', action: 'variantInfo')}'})">
                                             </select>
                                             {{/variantsSetRefinement}}
                                             {{^variantsSetRefinement}}
@@ -614,6 +618,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                                             </select>
                                             {{/variantsSetRefinement}}
                                         </label>
+
                                     </div>
                                 </div>
                                 <div  class="row">
@@ -626,9 +631,10 @@ the individual filters themselves. That work is handled later as part of a loop-
                                             <div class="labelAndInput">
                                                 MAF &lt;&nbsp;
                                                 <input style="display: inline-block" type="text" class="form-control" id="mafInput" placeholder="value"
-                                                onkeyup="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters({generateListOfVariantsFromFiltersAjaxUrl:'${createLink(controller: 'gene', action: 'generateListOfVariantsFromFiltersAjax')}'},
-                                                                                             mpgSoftware.burdenTestShared.buildVariantTable,
-                                                '${createLink(controller: 'variantInfo', action: 'variantInfo')}')">
+                                                onkeyup="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters(
+                                                {generateListOfVariantsFromFiltersAjaxUrl:'${createLink(controller: 'gene', action: 'generateListOfVariantsFromFiltersAjax')}'},
+                                                mpgSoftware.burdenTestShared.buildVariantTable,
+                                                {variantInfoUrl:'${createLink(controller: 'variantInfo', action: 'variantInfo')}'})">
                                             </div>
 
                                         </div>
@@ -636,14 +642,18 @@ the individual filters themselves. That work is handled later as part of a loop-
                                             <label><g:message code="gene.burdenTesting.label.apply_maf"/>:&nbsp;&nbsp;</label>
                                             <div class="form-inline mafOptionChooser">
                                                 <div class="radio">
-                                                    <label><input type="radio" name="mafOption" value="1" onclick="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters({generateListOfVariantsFromFiltersAjaxUrl:'${createLink(controller: 'gene', action: 'generateListOfVariantsFromFiltersAjax')}'},
-                                                                                                 mpgSoftware.burdenTestShared.buildVariantTable,
-                                                '${createLink(controller: 'variantInfo', action: 'variantInfo')}')"/>&nbsp;<g:message code="gene.burdenTesting.label.all_samples"/></label>
+                                                    <label><input type="radio" name="mafOption" value="1" onclick="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters(
+                                                    {generateListOfVariantsFromFiltersAjaxUrl:'${createLink(controller: 'gene', action: 'generateListOfVariantsFromFiltersAjax')}'},
+                                                    mpgSoftware.burdenTestShared.buildVariantTable,
+                                                {variantInfoUrl:'${createLink(controller: 'variantInfo', action: 'variantInfo')}'})"/>
+                                                &nbsp;<g:message code="gene.burdenTesting.label.all_samples"/></label>
                                                 </div>
                                                 <div class="radio">
-                                                    <label><input type="radio" name="mafOption"  value="2" checked onclick="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters({generateListOfVariantsFromFiltersAjaxUrl:'${createLink(controller: 'gene', action: 'generateListOfVariantsFromFiltersAjax')}'},
+                                                    <label><input type="radio" name="mafOption"  value="2" checked onclick="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters(
+                                                    {generateListOfVariantsFromFiltersAjaxUrl:'${createLink(controller: 'gene', action: 'generateListOfVariantsFromFiltersAjax')}'},
                                                     mpgSoftware.burdenTestShared.buildVariantTable,
-                                                '${createLink(controller: 'variantInfo', action: 'variantInfo')}')"/>&nbsp;<g:message code="gene.burdenTesting.label.each_ancestry"/></label>
+                                                {variantInfoUrl:'${createLink(controller: 'variantInfo', action: 'variantInfo')}'})"/>
+                                                &nbsp;<g:message code="gene.burdenTesting.label.each_ancestry"/></label>
                                                 </div>
                                             </div>
                                         </div>
@@ -696,6 +706,9 @@ the individual filters themselves. That work is handled later as part of a loop-
                                     <div class="col-md-2"></div>
                                 </div>
                                 {{/variantsSetRefinement}}
+
+
+
                             </div>
                             <div  class="col-md-1 col-sm-1 col-xs-12 burden-test-btn-wrapper vcenter">
                             </div>
@@ -743,13 +756,24 @@ the individual filters themselves. That work is handled later as part of a loop-
     {{/variantsSetRefinement}}
     >
 
+    <div id="collapseBurden"
+    {{#standaloneTool}}
+    class="accordion-body collapse in"
+    {{/standaloneTool}}
+    {{^standaloneTool}}
+    class="accordion-body collapse in"
+    {{/standaloneTool}}
+    >
+
         <div class="accordion-inner">
 
             {{#variantsSetRefinement}}
                 <div style="float: right; margin-top: 15px;" class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact ">
-                    <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/KP_GAIT_guide.pdf" target="_blank">GAIT guide</a>
+                    <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/KP_GAIT_guide.pdf" target="_blank">Custom association analysis guide</a>
                 </div>
             {{/variantsSetRefinement}}
+
+
 
             <div class="container">
                 <h5>

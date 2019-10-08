@@ -47,16 +47,16 @@
 </script>
 
 <g:if test="${portalVersionBean.getExposePhewasModule()}">
-    %{--<p><g:message code="variant.PheWAShelp1a"></g:message></p>--}%
-    %{--<p><g:message code="variant.PheWAShelp2"></g:message></p>--}%
-    %{--<p><g:message code="variant.PheWAShelp2a"></g:message></p>--}%
-    %{--<p><g:message code="variant.PheWAShelp3"></g:message></p>--}%
-    %{--<p><g:message code="variant.PheWAShelp4"></g:message></p>--}%
-
-    <p><g:message code="variant.PheWAShelp_nonT2D1"></g:message></p>
-    <p><g:message code="variant.PheWAShelp_nonT2D2"></g:message></p>
+    <p><g:message code="variant.PheWAShelp1a"></g:message></p>
+    <p><g:message code="variant.PheWAShelp2"></g:message></p>
+    <p><g:message code="variant.PheWAShelp2a"></g:message></p>
     <p><g:message code="variant.PheWAShelp3"></g:message></p>
     <p><g:message code="variant.PheWAShelp4"></g:message></p>
+
+    %{--<p><g:message code="variant.PheWAShelp_nonT2D1"></g:message></p>--}%
+    %{--<p><g:message code="variant.PheWAShelp_nonT2D2"></g:message></p>--}%
+    %{--<p><g:message code="variant.PheWAShelp3"></g:message></p>--}%
+    %{--<p><g:message code="variant.PheWAShelp4"></g:message></p>--}%
 
 
 

@@ -12,6 +12,29 @@
     <r:layoutResources/>
 
     <script>
+
+    mpgSoftware.homePage.setHomePageVariables(
+        {
+            "defaultPhenotype":"${g.defaultPhenotype()}",
+            "generalizedVariantInput":"#generalized-input",
+            "generalizedVariantGo":"#generalized-go",
+            "generalizedGeneInput":"#generalized-gene-input",
+            "generalizedGeneGo":"#generalized-gene-go",
+            "traitSearchLaunch":"#traitSearchLaunch",
+            "traitInput":"#trait-input",
+            "geneTraitSearchLaunch":"#geneTraitSearchLaunch",
+            "geneTraitInput":"#gene-trait-input",
+            "geneIndexUrl":"${createLink(controller:'gene', action:'index')}",
+            "traitSearchUrl":"${createLink(controller:'trait',action:'traitSearch')}",
+            "genePrioritizationUrl":"${createLink(controller:'trait',action:'genePrioritization')}",
+            "findTheRightDataPageUrl": "${createLink(controller:'gene',action:'findTheRightDataPage')}",
+            "findTheRightGenePageUrl": "${createLink(controller:'variantSearch',action:'findTheRightGenePage')}",
+            "retrieveGwasSpecificPhenotypesAjaxUrl":"${createLink(controller:'VariantSearch', action:'retrieveGwasSpecificPhenotypesAjax')}",
+            "getGeneLevelResultsUrl":"${createLink(controller:'home', action:'getGeneLevelResults')}",
+            "findEveryVariantForAGeneUrl": "${createLink(controller:'variantSearch', action:'findEveryVariantForAGene')}"
+        }
+    );
+
         var drivingVariables = {
             phenotypeName: '${g.defaultPhenotype()}',
             traitSearchUrl: "${createLink(controller: 'trait', action: 'traitSearch')}",
@@ -29,7 +52,47 @@
         mpgSoftware.moduleLaunch.setMySavedVariables(drivingVariables);
 
         $(function () {
+            "use strict";
 
+            function goToSelectedItem(item) {
+                var loading = $('#spinner').show();
+                window.location.href = "${createLink(controller:'gait', action:'gaitInfo')}" +"/" + item;
+            }
+
+            /***
+             * type ahead recognizing genes
+             */
+            $('#generalized-input').typeahead({
+                source: function (query, process) {
+                    $.get('<g:createLink controller="gene" action="index"/>', {query: query}, function (data) {
+                        process(data);
+                    })
+                },
+                afterSelect: function(selection) {
+                    goToSelectedItem(selection);
+                }
+            });
+
+            /***
+             * respond to end-of-search-line button
+             */
+            $('#generalized-go').on('click', function () {
+                var somethingSymbol = $('#generalized-input').val();
+                somethingSymbol = somethingSymbol.replace(/\//g,"_"); // forward slash crashes app (even though it is the LZ standard variant format
+                if (somethingSymbol) {
+                    goToSelectedItem(somethingSymbol)
+                }
+            });
+
+            /***
+             * capture enter key, make it equivalent to clicking on end-of-search-line button
+             */
+            $("input").keypress(function (e) { // capture enter keypress
+                var k = e.keyCode || e.which;
+                if (k == 13) {
+                    $('#generalized-go').click();
+                }
+            });
         });
 
 
@@ -62,6 +125,8 @@
                 $('#mode3Modal').modal();
             }
         });
+
+
     </script>
 
     <style>
@@ -95,6 +160,27 @@
                     </tr>
                     </thead>
                     <tbody>
+
+                    <g:if test="${g.portalTypeString()?.equals('t2d')}">
+                        <tr>
+                            <td><h4><g:message code="informational.modules.GAIT.title"></g:message></h4></td>
+                            <td><img  src="${resource(dir: 'images', file: 'gait.png')}" align="left" style="width: 200px; border: solid 1px #ddd; margin-right: 15px;"><g:message code="informational.modules.GAIT.description"></g:message>
+                                <div style="float: left; margin-top: 5px; margin-left: 215px;" class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact "><a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/KP_GAIT_guide.pdf" target="_blank">Custom association analysis guide</a></div>
+                                <div class="errorReporter">${errorText}</div>
+                            </td>
+                            %{--<td><div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact"><a href="${createLink(controller:'gait', action:'gaitInfo')}">Launch Gait</a></div></td>--}%
+                            <td style="position: relative;">
+                            <label>Enter a gene name or variant rsID to start.<br>
+                                Select a name or ID from the list of suggestions to launch Custom Association Analysis.</label>
+
+                            <div class="form-inline">
+                                <input id="generalized-input" value="" type="text" class="form-control input-default" style="width: 100%;">
+                            </div>
+                            </td>
+                        </tr>
+                    </g:if>
+
+
                     <tr>
                         <td><h4><g:message code="informational.modules.LDClumping.title"></g:message></h4></td>
                         <td>
@@ -102,9 +188,8 @@
                             <p><g:message code="informational.modules.LDClumping.description1"></g:message></p>
                             <p><g:message code="informational.modules.LDClumping.description2"></g:message></td></p>
 
-                    </td>
+                        </td>
                         <td>
-
                             <label>Select phenotype</label>
                             <div id="phenotypeDropdownWrapper">
 
@@ -114,6 +199,7 @@
 
                         </td>
                     </tr>
+
                     <tr>
                         <td><h4><g:message code="informational.modules.VariantFinder.title"></g:message></h4></td>
                         <td><img  src="${resource(dir: 'images', file: 'variant_finder.png')}" align="left" style="width: 200px; border: solid 1px #ddd; margin-right: 15px;">
@@ -124,17 +210,20 @@
                     </tr>
                     <g:if test="${g.portalTypeString()?.equals('t2d')}">
                         <tr>
-                            <td class=""><span class='new-dataset-flag' style="margin-top:-10px; margin-left: 10px;">&nbsp;</span><h4><g:message code="informational.modules.GRS.title"></g:message></h4></td>
+                            <td class=""><h4><g:message code="informational.modules.GRS.title"></g:message></h4></td>
                             <td><img  src="${resource(dir: 'images', file: 'GRS.png')}" align="left" style="width: 200px; border: solid 1px #ddd; margin-right: 15px;"><g:message code="informational.modules.GRS.description"></g:message></td>
                             <td><div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact"><a href="${createLink(controller:'grs', action:'grsInfo')}">Launch GRS</a></div></td>
                         </tr>
                     </g:if>
+
+
+
 
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-
+</div>
 </body>
 </html>

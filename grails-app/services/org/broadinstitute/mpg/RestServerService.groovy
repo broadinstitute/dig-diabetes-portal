@@ -52,10 +52,6 @@ class RestServerService {
     private String GET_DATA_URL = "getData"
     private String GET_GENE_DATA_URL = "getGeneData"
     private String GET_DATA_AGGREGATION_URL = "getAggregatedData"
-    private String GET_TEMPORARY_EQTL_URL = "http://ec2-34-237-63-26.compute-1.amazonaws.com:8083/dccgraph/"
-    private String GET_TEMPORARY_MODS_URL = "http://ec2-34-229-106-174.compute-1.amazonaws.com:8090/dccservices/"
-    private String GET_DATA_AGGREGATION_BY_RANGE_URL= "getAggregatedData"
-    private String GET_DATA_AGGREGATION_BY_RANGE_PHEWAS_URL= "getAggregatedData/PheWAS"
     private String GET_DATA_AGGREGATION_BY_RANGE_PHENOTYPES_URL= "getAggregatedData/phenotypes"
     private String GET_DATA_AGGREGATION_BY_RANGE_VARIANTS_URL= "getAggregatedData/variants"
     private String GET_DATA_AGGREGATION_PHEWAS_URL= "getAggregatedData/PheWAS"
@@ -64,16 +60,20 @@ class RestServerService {
     private String GET_BOTTOM_LINE_PHENOTYPES_VIA_VARIANTS_URL= "variant/phenotype/array"
     private String GET_TISSUE_ASSOCIATION_BASED_ON_LDSR_URL= "ld_score/by_phenotype/object"
     private String GET_VARIANT_GTEX_EQTL_FROM_URL= "ledge/gtex_eqtl/object"
+    private String GET_EFFECTOR_GENE_INFO_URL= "testcalls/genepriority/gene/object"
     private String GET_EQTLS_FOR_A_VARIANT_LIST_URL= "testcalls/ledge/eqtl/object"
     private String GET_VARIANT_ECAVIAR_COLOCALIZATION_FROM_URL= "testcalls/ecaviar/colocalization_max/object"
     private String GET_VARIANT_COLOC_COLOCALIZATION_FROM_URL= "testcalls/ecaviar/colocalization_expanded_max/object"
     private String GET_REGION_FROM_ABC_URL= "testcalls/abc/region/object"
     private String GET_GENE_BASED_RECORDS_FROM_DEPICT_URL= "testcalls/depict/region/object"
+    private String GET_TISSUE_BASED_RECORDS_FROM_DEPICT_URL= "testcalls/depict/tissue/object"
     private String GET_GENE_BASED_RECORDS_FROM_MODS_URL= "testcalls/knockout/object"
     private String GET_GENESET_RECORDS_FROM_DEPICT_URL= "testcalls/depict/genepathway/object"
     private String GET_DNASE_RECORDS_URL= "testcalls/region/dnase/object"
     private String GET_H3K27AC_RECORDS_URL= "testcalls/region/h3k27ac/object"
     private String GET_BOTTOM_LINE_RESULTS_URL= "graph/meta/variant/object"
+    private String GET_TISSUES_FROM_GREGOR_URL= "graph/gregor/phenotype/object"
+    private String GET_TISSUES_FROM_LDSR_URL = "testcalls/ldscore/tissue/object"
     private String GET_HAIL_DATA_URL = "getHailData"
     private String GET_SAMPLE_DATA_URL = "getSampleData"
     private String GET_SAMPLE_METADATA_URL = "getSampleMetadata"
@@ -306,7 +306,7 @@ class RestServerService {
 
     public void changeRestServer(String serverName) {
         for (ServerBean serverBean : grailsApplication.config.getRestServerList) {
-            if (serverBean.getName().equals(serverName)) {
+            if (serverBean!= null && serverBean.getName().equals(serverName)) {
                 //log.info("changing rest server from: " + this.REST_SERVER.getUrl() + " to: " + serverBean.getUrl());
                 this.REST_SERVER = serverBean;
                 break;
@@ -387,7 +387,8 @@ class RestServerService {
                     existingPortalVersionBean.getExposeGenesInRegionTab(),
                     existingPortalVersionBean.getExposeRegionAdjustmentOnGenePage(),
                     existingPortalVersionBean.getExposeGeneTableOnDynamicUi(),
-                    existingPortalVersionBean.getExposeVariantTableOfDynamicUi()
+                    existingPortalVersionBean.getExposeVariantTableOfDynamicUi(),
+                    existingPortalVersionBean.getExposeEffectorGeneTableUi()
             )
 
             removePortalVersion(portalType)
@@ -2459,10 +2460,70 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         try{
             jsonArray = slurper.parseText(rawReturnFromApi) as List
         } catch(Exception e){
-            // are you telling me this stupid library interprets a list of one as not a list at all, but an object?  eat me, Java
             jsonArray = [slurper.parseText(rawReturnFromApi)] as List
         }
         return jsonArray
+    }
+
+
+
+
+
+
+    public JSONArray gatherDepictTissues(  String phenotype ) {
+        List<String> specifyRequestList = []
+        if ((phenotype) && (phenotype.length() > 0)) {
+            specifyRequestList << "phenotype=${phenotype}"
+        }
+
+        String rawReturnFromApi =  getRestCall("${GET_TISSUE_BASED_RECORDS_FROM_DEPICT_URL}?${specifyRequestList.join("&")}".toString())
+        JsonSlurper slurper = new JsonSlurper()
+        JSONArray jsonArray
+        try{
+            jsonArray = slurper.parseText(rawReturnFromApi) as List
+        } catch(Exception e){
+            jsonArray = [slurper.parseText(rawReturnFromApi)] as List
+        }
+        return jsonArray
+    }
+
+
+
+
+
+    public JSONObject gatherGregorData(  String phenotype ) {
+        List<String> specifyRequestList = []
+        if ((phenotype) && (phenotype.length() > 0)) {
+            specifyRequestList << "phenotype=${phenotype}"
+        }
+
+        String rawReturnFromApi =  getRestCall("${GET_TISSUES_FROM_GREGOR_URL}?${specifyRequestList.join("&")}".toString())
+        JsonSlurper slurper = new JsonSlurper()
+        JSONObject jsonObject
+        try{
+            jsonObject = slurper.parseText(rawReturnFromApi)
+        } catch(Exception e){
+            log.error("ERROR: gatherGregorData. problem parsing the data we received from the KB")
+        }
+        return jsonObject
+    }
+
+
+    public JSONObject gatherLdsrData(  String phenotype ) {
+        List<String> specifyRequestList = []
+        if ((phenotype) && (phenotype.length() > 0)) {
+            specifyRequestList << "phenotype=${phenotype}"
+        }
+
+        String rawReturnFromApi =  getRestCall("${GET_TISSUES_FROM_LDSR_URL}?${specifyRequestList.join("&")}".toString())
+        JsonSlurper slurper = new JsonSlurper()
+        JSONObject jsonObject
+        try{
+            jsonObject = slurper.parseText(rawReturnFromApi)
+        } catch(Exception e){
+            log.error("ERROR: gatherGregorData. problem parsing the data we received from the KB")
+        }
+        return jsonObject
     }
 
 
@@ -2537,6 +2598,18 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
+    public JSONObject gatherEffectorGeneData(  List <String> geneList ) {
+        List<String> specifyRequestList = []
+
+        if ((geneList) && (geneList.length() > 0)) {
+            specifyRequestList << "gene=${geneList.join(",").replace("\"","")}"
+        }
+
+        String rawReturnFromApi =  getRestCall("${GET_EFFECTOR_GENE_INFO_URL}?${specifyRequestList.join("&")}".toString())
+        JsonSlurper slurper = new JsonSlurper()
+        JSONObject jsonObject = slurper.parseText(rawReturnFromApi) as JSONObject
+        return jsonObject
+    }
 
 
 
@@ -2896,7 +2969,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                         MetaDataService.METADATA_GENE)
                 boolean sampleGroupChosen = false
                 if (preferredSampleGroup) { // if a specific sample group was requested then try to get it
-                    SampleGroup requestedSampleGroup =  sampleGroupList?.find{it.getSystemId()==preferredSampleGroup}
+                    SampleGroup requestedSampleGroup =  sampleGroupList?.find{it.getSystemId().contains(preferredSampleGroup)}
                     if (requestedSampleGroup){
                         listOfSampleGroupsToWorkWith << sampleGroupList?.first()
                         sampleGroupChosen = true
@@ -3258,25 +3331,22 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             int numberOfVariants = apiResults.numRecords
             for (int j = 0; j < numberOfVariants; j++) {
                 List<String> keys = []
-                if (!retrieveBeanForCurrentPortal().utilizeBiallelicGait){
+                def valueToLoopOver
+                if (apiResults.variants[j] instanceof JSONObject) {
+                    valueToLoopOver = (apiResults.variants[j] as Map).keySet()
+                } else {
                     for (int i = 0; i < apiResults.variants[j]?.size(); i++) {
                         keys << (new JSONObject(apiResults.variants[j][i]).keys()).next()
                     }
-                }
-                def valueToLoopOver
-                if (retrieveBeanForCurrentPortal().utilizeBiallelicGait){
-                    valueToLoopOver = (apiResults.variants[j] as Map).keySet()
-                }else {
                     valueToLoopOver = keys
                 }
                 List<String> variantSpecificList = []
                 for (def key in valueToLoopOver) {
                     def value
-                    if (retrieveBeanForCurrentPortal().utilizeBiallelicGait){
-                        value = apiResults.variants[j][key]
+                    if (apiResults.variants[j][key] instanceof ArrayList){
+                        value = apiResults.variants[j][key].findAll { it }[0]
                     } else {
-                        ArrayList valueArray = apiResults.variants[j][key]
-                        value = valueArray.findAll { it }[0]
+                        value = apiResults.variants[j][key]
                     }
                     if (value instanceof String) {
                         String stringValue = value as String

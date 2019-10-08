@@ -59,6 +59,10 @@
                     <p><g:message code="informational.dataSubmission.section7"></g:message></p>
                 </div>
                 <div class="dk-notice">
+                    <p class="dk-notice-header"><g:message code="informational.dataSubmission.section7aheader"></g:message></p>
+                    <p><g:message code="informational.dataSubmission.section7a"></g:message></p>
+                </div>
+                <div class="dk-notice">
                     <p class="dk-notice-header"><g:message code="informational.dataSubmission.section8header"></g:message></p>
                     <p><g:message code="informational.dataSubmission.section8"></g:message></p>
                 </div>

@@ -1,6 +1,7 @@
 <script class="panel-body" id="GWAS_DIAMANTE_eu_script" type="x-tmpl-mustache">
 
     <h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
+    <p><g:message code="informational.data.download.DIAMANTE"></g:message></p>
     <p><g:message code="informational.data.overlaps.DIAMANTE1"></g:message></p>
     <p><g:message code="informational.data.overlaps.DIAMANTE2"></g:message></p>
 

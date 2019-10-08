@@ -3,6 +3,7 @@ package org.broadinstitute.mpg
 import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.Property
+import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 import groovy.json.*
@@ -11,6 +12,7 @@ class RegionInfoController {
     RestServerService restServerService
     MetaDataService metaDataService
     WidgetService widgetService
+    SharedToolsService sharedToolsService
 
     def regionInfo() {
         LinkedHashMap extractedNumbers =  restServerService.extractNumbersWeNeed(params.id)
@@ -37,6 +39,7 @@ class RegionInfoController {
         String startString = params.start; // ex "29737203"
         String endString = params.end; // ex "29937203"
         String phenotype = params.phenotype;
+        String gene = params.gene;
         String dataSet = params.dataSet
         String dataType = params.datatype
         String propertyName = params.propertyName
@@ -52,38 +55,131 @@ class RegionInfoController {
         String errorJsonString = "{\"data\": {}, \"error\": true}";
         def slurper = new JsonSlurper()
 
-        // if have all the information, call the widget service
-        try {
-            startInteger = Integer.parseInt(startString);
-            endInteger = Integer.parseInt(endString);
-
-            if (chromosome != null) {
-
-                if (chromosome.startsWith('chr')) { chromosome = chromosome.substring(3) }
-
-                if ((dataType=='static')&&(dataSet!='')){ // dynamically get the property name for static datasets
-                    Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataSet,
-                                                propertyName,MetaDataService.METADATA_VARIANT)
-                    propertyName = property.name
-                }
-                jsonReturn = widgetService.getCredibleOrAlternativeSetInformation(chromosome, startInteger, endInteger, dataSet, phenotype,propertyName,minimumAllowablePosteriorProbability, false);
-                jsonReturn["credibleSetInfoCode"] = g.message(code: restServerService.retrieveBeanForCurrentPortal().getCredibleSetInfoCode(), default: restServerService.retrieveBeanForCurrentPortal().getCredibleSetInfoCode())
-            } else {
-                jsonReturn = slurper.parse(errorJsonString);
+        // let's allow a user to omit the region information if they include a gene name In that case we can derive a region around the gene
+        if ((gene)&&
+                (!chromosome)&&
+                (!startString)&&
+                (!endString)){
+            LinkedHashMap geneExtents = sharedToolsService.getGeneExpandedExtent(gene,restServerService.EXPAND_ON_EITHER_SIDE_OF_GENE)
+            if (!geneExtents.is_error){
+                startInteger = geneExtents.startExtent
+                endInteger = geneExtents.endExtent
+                chromosome = geneExtents.chrom
             }
-
-            // log end
-            Date endTime = new Date();
-
-        } catch (NumberFormatException exception) {
-            log.error("got incorrect parameters for LZ call: " + params);
-            jsonReturn =  slurper.parse(errorJsonString);
+        }else {
+            try {
+                startInteger = Integer.parseInt(startString);
+                endInteger = Integer.parseInt(endString);
+            } catch (NumberFormatException exception) {
+                log.error("got incorrect parameters for fillCredibleSetTable call: " + params);
+                jsonReturn =  slurper.parse(errorJsonString);
+            }
         }
+
+
+        if (chromosome != null) {
+            // if have all the information, call the widget service
+            if (chromosome.startsWith('chr')) { chromosome = chromosome.substring(3) }
+
+            if ((dataType=='static')&&(dataSet!='')){ // dynamically get the property name for static datasets
+                Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataSet,
+                                            propertyName,MetaDataService.METADATA_VARIANT)
+                propertyName = property.name
+            }
+            jsonReturn = widgetService.getCredibleOrAlternativeSetInformation(chromosome, startInteger, endInteger, dataSet, phenotype,propertyName,minimumAllowablePosteriorProbability, false);
+            jsonReturn["credibleSetInfoCode"] = g.message(code: restServerService.retrieveBeanForCurrentPortal().getCredibleSetInfoCode(), default: restServerService.retrieveBeanForCurrentPortal().getCredibleSetInfoCode())
+        } else {
+            jsonReturn = slurper.parse(errorJsonString);
+        }
+
+
+
+
         jsonReturn.datasetReadable = g.message(code: "metadata." + jsonReturn.dataset, default: jsonReturn.dataset)
         jsonReturn.phenotypeReadable = g.message(code: "metadata." + jsonReturn.phenotype, default: jsonReturn.phenotype)
         render(status: 200, contentType: "application/json") {jsonReturn}
         return
     }
+
+
+
+
+
+    def getVariantsForNearbyCredibleSets() {
+        JSONObject jsonReturn;
+        String chromosome = params.chromosome; // ex "22"
+        String startString = params.start; // ex "29737203"
+        String endString = params.end; // ex "29937203"
+        String phenotype = params.phenotype;
+        String gene = params.gene;
+        String propertyName = "POSTERIOR_PROBABILITY"
+
+        float minimumAllowablePosteriorProbability = -1f
+        if (params.minimumAllowablePosteriorProbability){
+            minimumAllowablePosteriorProbability = Float.parseFloat(params.minimumAllowablePosteriorProbability)
+        }
+
+        int startInteger;
+        int endInteger;
+
+        String errorJsonString = "{\"data\": {}, \"error\": true}";
+        def slurper = new JsonSlurper()
+
+        // let's allow a user to omit the region information if they include a gene name In that case we can derive a region around the gene
+        if ((gene)&&
+                (!chromosome)&&
+                (!startString)&&
+                (!endString)){
+            LinkedHashMap geneExtents = sharedToolsService.getGeneExpandedExtent(gene,restServerService.EXPAND_ON_EITHER_SIDE_OF_GENE)
+            if (!geneExtents.is_error){
+                startInteger = geneExtents.startExtent
+                endInteger = geneExtents.endExtent
+                chromosome = geneExtents.chrom
+            }
+        }else {
+            try {
+                startInteger = Integer.parseInt(startString);
+                endInteger = Integer.parseInt(endString);
+            } catch (NumberFormatException exception) {
+                log.error("got incorrect parameters for fillCredibleSetTable call: " + params);
+                jsonReturn =  slurper.parse(errorJsonString);
+            }
+        }
+
+
+        if (chromosome != null) {
+            // if have all the information, call the widget service
+            if (chromosome.startsWith('chr')) { chromosome = chromosome.substring(3) }
+
+            List<SampleGroup> sampleGroupList = metaDataService.getSampleGroupsBasedOnPhenotypeAndMeaning(phenotype,propertyName,
+                    MetaDataService.METADATA_VARIANT)
+            String dataSet
+            if (sampleGroupList.size()>0){
+                List<SampleGroup> orderedSampleGroupList = sampleGroupList.sort{SampleGroup a,SampleGroup b-> b.subjectsNumber<=>a.subjectsNumber}
+                dataSet = orderedSampleGroupList.first().getSystemId()
+            }
+
+            jsonReturn = widgetService.getCredibleOrAlternativeSetInformation(chromosome, startInteger, endInteger, dataSet, phenotype,propertyName,minimumAllowablePosteriorProbability, false);
+            jsonReturn["credibleSetInfoCode"] = g.message(code: restServerService.retrieveBeanForCurrentPortal().getCredibleSetInfoCode(), default: restServerService.retrieveBeanForCurrentPortal().getCredibleSetInfoCode())
+        } else {
+            jsonReturn = slurper.parse(errorJsonString);
+        }
+
+
+
+
+        jsonReturn.datasetReadable = g.message(code: "metadata." + jsonReturn.dataset, default: jsonReturn.dataset)
+        jsonReturn.phenotypeReadable = g.message(code: "metadata." + jsonReturn.phenotype, default: jsonReturn.phenotype)
+        render(status: 200, contentType: "application/json") {jsonReturn}
+        return
+    }
+
+
+
+
+
+
+
 
 
 
@@ -688,6 +784,87 @@ class RegionInfoController {
 
 
 
+    def retrieveDepictTissues() {
+        String phenotype = ""
+        boolean looksOkay = true
+        JSONArray jsonArray
+        def slurper = new JsonSlurper()
+
+        if (params.phenotype) {
+            phenotype = params.phenotype  ?: restServerService.retrieveBeanForCurrentPortal().phenotype
+        }
+
+        if (looksOkay){
+            jsonArray = restServerService.gatherDepictTissues(  phenotype )
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+            jsonArray =  slurper.parseText(proposedJsonString) as JSONArray;
+        }
+
+        render(status: 200, contentType: "application/json") {jsonArray}
+        return
+    }
+
+
+
+
+
+
+    def retrieveGregorData() {
+        String phenotype = ""
+        boolean looksOkay = true
+        JSONObject jsonObject
+        def slurper = new JsonSlurper()
+
+        if (params.phenotype) {
+            phenotype = params.phenotype
+        } else {
+            looksOkay = falls
+        }
+
+        if (looksOkay){
+            jsonObject = restServerService.gatherGregorData(  phenotype )
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+            jsonObject =  slurper.parseText(proposedJsonString) as JSONObject;
+        }
+
+        render(status: 200, contentType: "application/json") {jsonObject}
+        return
+    }
+
+
+
+
+
+    def retrieveLdsrData() {
+        String phenotype = ""
+        boolean looksOkay = true
+        JSONObject jsonObject
+        def slurper = new JsonSlurper()
+
+        if (params.phenotype) {
+            phenotype = params.phenotype
+        } else {
+            looksOkay = falls
+        }
+
+        if (looksOkay){
+            jsonObject = restServerService.gatherLdsrData(  phenotype )
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+            jsonObject =  slurper.parseText(proposedJsonString) as JSONObject;
+        }
+
+        render(status: 200, contentType: "application/json") {jsonObject}
+        return
+    }
+
+
+
+
+
+
 
     def retrieveDepictGeneSetData() {
         String gene = ""
@@ -886,6 +1063,26 @@ class RegionInfoController {
 
 
 
+    def retrieveEffectorGeneInformation() {
+        boolean looksOkay = true
+
+        def slurper = new JsonSlurper()
+        List<String> geneList = []
+        if (params.geneList) {
+            geneList = slurper.parseText( params.geneList as String)  as JSONArray
+            looksOkay = true
+        }
+
+        JSONObject jsonReturn
+        if (looksOkay){
+            jsonReturn = restServerService.gatherEffectorGeneData( geneList )
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+            jsonReturn =  slurper.parseText(proposedJsonString)
+        }
+        render(status: 200, contentType: "application/json") {jsonReturn}
+        return
+}
 
 
 

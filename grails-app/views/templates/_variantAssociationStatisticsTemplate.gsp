@@ -69,11 +69,12 @@ Choose associations to view:
                             <g:helpText title="geneTable.TopVar.phewas.help.header" placement="bottom" body="geneTable.TopVar.phewas.help.text"/>
                             </label>
 
-                                                        %{--<label  for="phewasBottomLineResults" class="radio">--}%
-                                %{--<input class="radio" id="phewasBottomLineResults" name="optRadio" type="radio">--}%
-                                %{--Bottom line analysis&nbsp;--}%
-                                %{--<g:helpText title="geneTable.BottomLine.phewas.help.header" placement="bottom" body="geneTable.BottomLine.phewas.help.text"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--}%
-                            %{--&nbsp;<span class='new-dataset-flag' style="display: inline-flex; margin:-3px 0 0 -30px">&nbsp;</span></label>--}%
+
+                                                        <label  for="phewasBottomLineResults" class="radio">
+                                <input class="radio" id="phewasBottomLineResults" name="optRadio" type="radio">
+                                Bottom line analysis&nbsp;
+                                <g:helpText title="geneTable.BottomLine.phewas.help.header" placement="bottom" body="geneTable.BottomLine.phewas.help.text"/></label>
+
 
 
 

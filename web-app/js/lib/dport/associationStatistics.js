@@ -25,9 +25,9 @@ var mpgSoftware = mpgSoftware || {};
 
         var initializePage = function(config){
             console.log("in mpgSoftware.associationStatistics.initializePage.");
-            $(".collapse").on('show.bs.collapse', function (a, b) {
-                console.log('The collapsible content is about to show.');
-            });
+            // $(".collapse").on('show.bs.collapse', function (a, b) {
+            //     console.log('The collapsible content is about to show.');
+            // });
             $("#collapseVariantTraitAssociation").on("show.bs.collapse", function () {
                 console.log("a mpgSoftware.associationStatistics.initializePage.");
                 if (getAssociationStatisticsVariables().tableNotLoaded) {
@@ -46,6 +46,13 @@ var mpgSoftware = mpgSoftware || {};
                     }
                 }
 
+            });
+            $("#collapseVariantAssociationStatistics").on("show.bs.collapse", function () {
+                console.log("a mpgSoftware.associationStatistics.initializePage.");
+                // if (getAssociationStatisticsVariables().tableNotLoaded) {
+                //     loadAssociationTable();
+                //     getAssociationStatisticsVariables().tableNotLoaded = false;
+                // }
             });
             $('#traitsPerVariantTable').on('order.dt', UTILS.labelIndenter('traitsPerVariantTable'));
             console.log("out mpgSoftware.associationStatistics.initializePage.");
@@ -67,11 +74,9 @@ var mpgSoftware = mpgSoftware || {};
             if (jqueryElement.find("span").hasClass('glyphicon-resize-full')) {
                 jqueryElement.find("span").removeClass('glyphicon-resize-full');
                 jqueryElement.find("span").addClass('glyphicon-resize-small');
-                jqueryElement.attr('title', "Click to remove additional associations for GIANT GWAS across other data sets");
             } else if (jqueryElement.find("span").hasClass('glyphicon-resize-small')) {
                 jqueryElement.find("span").addClass('glyphicon-resize-full');
                 jqueryElement.find("span").removeClass('glyphicon-resize-small');
-                jqueryElement.attr('title', "Click to open additional associations for GIANT GWAS across other data sets");
             }
         };
 

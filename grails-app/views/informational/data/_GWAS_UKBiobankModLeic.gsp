@@ -1,27 +1,17 @@
-<script class="panel-body" id="GWAS_UKBiobankModLeic_script" type="x-tmpl-mustache">  
-
-%{--<h4><g:message code="informational.shared.headers.dataset"></g:message></h4>--}%
-
- %{--<p><g:message code="informational.data.download.UKBBHRC"></g:message> | <g:message code="informational.data.download.UKBBHRC.README"></g:message></p>--}%  
-
-<h4><g:message code="informational.shared.headers.publications"></g:message></h4>  
-
-<p><div class="paper">
- <g:message code="informational.shared.publications.Sakornsakolpat_2019_NatGenet"></g:message><br>
- <g:message code="informational.shared.publications.Sakornsakolpat_2019_NatGenet.author"></g:message>
-<g:message code="informational.shared.publications.etal"></g:message> 
+<script class="panel-body" id="GWAS_UKBiobankModLeic_script" type="x-tmpl-mustache">
+<h4><g:message code="informational.shared.headers.publications"></g:message></h4>
+<p><div class="paper"> <g:message code="informational.shared.publications.Sakornsakolpat_2019_NatGenet"></g:message><br>
+<g:message code="informational.shared.publications.Sakornsakolpat_2019_NatGenet.author"></g:message>
+<g:message code="informational.shared.publications.etal"></g:message>
 <div class="citation"><g:message code="informational.shared.publications.Sakornsakolpat_2019_NatGenet.citation"></g:message></div>
- </div></p>  
-
+</div></p>
 <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
-
- <ul> <li><g:message code="informational.shared.traits.COPD"></g:message></li> </ul>
-
-  <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>  
-
+<ul>
+<li><g:message code="informational.shared.traits.COPD"></g:message></li>
+</ul>
+<h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
 <table class="table table-condensed table-responsive table-striped">
-
- <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>
+<tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>
 <tr><td>21,081</td><td>179,711</td><td>UK Biobank</td><td>European</td></tr>
 <tr><td>1,060</td><td>6,164</td><td>Atherosclerosis Risk in Communities (ARIC)</td><td>Caucasian</td></tr>
 <tr><td>736</td><td>1,586</td><td>Cardiovascular Health Study European (CHS EA)</td><td>European</td></tr>
@@ -47,13 +37,11 @@
 <tr><td>94</td><td>532</td><td>Multi-Ethnic Study of Atherosclerosis (MESA) AA</td><td>African American</td></tr>
 <tr><td>52</td><td>548</td><td>Multi-Ethnic Study of Atherosclerosis (MESA) Hispanic</td><td>Hispanic</td></tr>
 <tr><td>153</td><td>205</td><td>Transcontinental COPD Genetics Study (TCGS) Korea</td><td>East Asian</td></tr>
-  </table>
-
+</table>
 <h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
-
- <p><g:message code="informational.data.exptsumm.UKBBCOPD"></g:message></p>
-
-   <h4>Accessing COPD GWAS results</h4>  
-<p><g:message code="informational.data.accessing.UKBBCOPD1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.UKBBCOPD2"></g:message></p>    
-
+<p><g:message code="informational.data.exptsumm.UKBBCOPD"></g:message></p>
+<h4>Accessing COPD GWAS results</h4>
+<p><g:message code="informational.data.accessing.UKBBCOPD1"></g:message>
+<a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a>
+<g:message code="informational.data.accessing.UKBBCOPD2"></g:message></p>
 </script>

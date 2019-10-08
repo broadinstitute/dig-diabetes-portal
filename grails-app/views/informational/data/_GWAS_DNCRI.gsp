@@ -1,4 +1,17 @@
 <script class="panel-body" id="GWAS_DNCRI_script" type="x-tmpl-mustache">
+
+
+
+
+
+
+
+
+
+
+<p></p>
+
+
 <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
 <p><div class="paper">
@@ -11,28 +24,26 @@
 <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
 
 <ul>
-<li><g:message code="informational.shared.traits.microalbuminuria"></g:message></li>
-<li><g:message code="informational.shared.traits.microalbuminuriaAdjHbA1cBMI"></g:message></li>
-<li><g:message code="informational.shared.traits.macroalbuminuria"></g:message></li>
-<li><g:message code="informational.shared.traits.macroalbuminuriaAdjHbA1cBMI"></g:message></li>
-<li><g:message code="informational.shared.traits.ESRDvsControl"></g:message></li>
-<li><g:message code="informational.shared.traits.ESRDvsControlsAdjHbA1cBMI"></g:message></li>
-<li><g:message code="informational.shared.traits.ESRDvsnoESRD"></g:message></li>
-<li><g:message code="informational.shared.traits.ESRDvsnoESRDAdjHbA1cBMI"></g:message></li>
-<li><g:message code="informational.shared.traits.ESRDvsMacro"></g:message></li>
-<li><g:message code="informational.shared.traits.ESRDvsMacroAdjHbA1cBMI"></g:message></li>
-<li><g:message code="informational.shared.traits.CKD"></g:message></li>
-<li><g:message code="informational.shared.traits.CKDAdjHbA1cBMI"></g:message></li>
-<li><g:message code="informational.shared.traits.CKDextremes"></g:message></li>
-<li><g:message code="informational.shared.traits.CKDextremesAdjHbA1cBMI"></g:message></li>
-<li><g:message code="informational.shared.traits.CKDpDKD"></g:message></li>
-<li><g:message code="informational.shared.traits.CKDpDKDAdjHbA1cBMI"></g:message></li>
-
-<li><g:message code="informational.shared.traits.lateDKD_T1D"></g:message></li>
-<li><g:message code="informational.shared.traits.lateDKDAdjHbA1cBMI"></g:message></li>
-
-<li><g:message code="informational.shared.traits.allDKD"></g:message></li>
-<li><g:message code="informational.shared.traits.allDKDAdjHbA1cBMI"></g:message></li>
+<li><g:message code="informational.shared.traits.microalbuminuria"></g:message> | <g:message code="download.microalbuminuria.min.DNCRI"></g:message> | <g:message code="informational.data.download.DNCRI.README"></g:message></li>
+<li><g:message code="informational.shared.traits.microalbuminuriaAdjHbA1cBMI"></g:message> | <g:message code="download.microalbuminuria.full.DNCRI"></g:message> | <g:message code="informational.data.download.DNCRI.README"></g:message></li>
+<li><g:message code="informational.shared.traits.macroalbuminuria"></g:message> | <g:message code="download.macroalbuminuria.min.DNCRI"></g:message> | <g:message code="informational.data.download.DNCRI.README"></g:message></li>
+<li><g:message code="informational.shared.traits.macroalbuminuriaAdjHbA1cBMI"></g:message> | <g:message code="download.macroalbuminuria.full.DNCRI"></g:message> | <g:message code="informational.data.download.DNCRI.README"></g:message></li>
+<li><g:message code="informational.shared.traits.ESRDvsControl"></g:message> | <g:message code="download.ESRDvControl.min.DNCRI"></g:message> | <g:message code="informational.data.download.DNCRI.README"></g:message></li>
+<li><g:message code="informational.shared.traits.ESRDvsControlsAdjHbA1cBMI"></g:message> | <g:message code="download.ESRDvControl.full.DNCRI"></g:message> | <g:message code="informational.data.download.DNCRI.README"></g:message></li>
+<li><g:message code="informational.shared.traits.ESRDvsnoESRD"></g:message> | <g:message code="download.ESRDvNoESRD.min.DNCRI"></g:message> | <g:message code="informational.data.download.DNCRI.README"></g:message></li>
+<li><g:message code="informational.shared.traits.ESRDvsnoESRDAdjHbA1cBMI"></g:message> | <g:message code="download.ESRDvNoESRD.full.DNCRI"></g:message> | <g:message code="informational.data.download.DNCRI.README"></g:message></li>
+<li><g:message code="informational.shared.traits.ESRDvsMacro"></g:message> | <g:message code="download.ESRDvMacro.min.DNCRI"></g:message> | <g:message code="informational.data.download.DNCRI.README"></g:message></li>
+<li><g:message code="informational.shared.traits.ESRDvsMacroAdjHbA1cBMI"></g:message> | <g:message code="download.ESRDvMacro.full.DNCRI"></g:message> | <g:message code="informational.data.download.DNCRI.README"></g:message></li>
+<li><g:message code="informational.shared.traits.CKD"></g:message> | <g:message code="download.CKD.min.DNCRI"></g:message> | <g:message code="informational.data.download.DNCRI.README"></g:message></li>
+<li><g:message code="informational.shared.traits.CKDAdjHbA1cBMI"></g:message> | <g:message code="download.CKD.full.DNCRI"></g:message> | <g:message code="informational.data.download.DNCRI.README"></g:message></li>
+<li><g:message code="informational.shared.traits.CKDextremes"></g:message> | <g:message code="download.CKDextreme.min.DNCRI"></g:message> | <g:message code="informational.data.download.DNCRI.README"></g:message></li>
+<li><g:message code="informational.shared.traits.CKDextremesAdjHbA1cBMI"></g:message> | <g:message code="download.CKDextreme.full.DNCRI"></g:message> | <g:message code="informational.data.download.DNCRI.README"></g:message></li>
+<li><g:message code="informational.shared.traits.CKDpDKD"></g:message> | <g:message code="download.CKDpDKD.min.DNCRI"></g:message> | <g:message code="informational.data.download.DNCRI.README"></g:message></li>
+<li><g:message code="informational.shared.traits.CKDpDKDAdjHbA1cBMI"></g:message> | <g:message code="download.CKDpDKD.full.DNCRI"></g:message> | <g:message code="informational.data.download.DNCRI.README"></g:message></li>
+<li><g:message code="informational.shared.traits.lateDKD_T1D"></g:message> | <g:message code="download.lateDKD_T1D.min.DNCRI"></g:message> | <g:message code="informational.data.download.DNCRI.README"></g:message></li>
+<li><g:message code="informational.shared.traits.lateDKDAdjHbA1cBMI"></g:message> | <g:message code="download.lateDKD_T1D.full.DNCRI"></g:message> | <g:message code="informational.data.download.DNCRI.README"></g:message></li>
+<li><g:message code="informational.shared.traits.allDKD"></g:message> | <g:message code="download.allDKD.min.DNCRI"></g:message> | <g:message code="informational.data.download.DNCRI.README"></g:message></li>
+<li><g:message code="informational.shared.traits.allDKDAdjHbA1cBMI"></g:message> | <g:message code="download.allDKD.full.DNCRI"></g:message> | <g:message code="informational.data.download.DNCRI.README"></g:message></li>
 
 
 

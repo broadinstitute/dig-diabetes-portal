@@ -16,6 +16,10 @@ class GrsController {
         render (view: 'grsInfo', model:[])
     }
 
+    def gaitInfo(){
+        render (view: 'gaitInfo', model:[])
+    }
+
     def getGRSListOfVariantsAjax() {
         String grsName = params.grsName
 

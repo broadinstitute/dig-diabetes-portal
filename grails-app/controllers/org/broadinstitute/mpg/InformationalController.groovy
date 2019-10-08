@@ -22,7 +22,7 @@ class InformationalController {
     }
 
     def modules() {
-        render(view: 'modules')
+        render(view: 'modules', model:[portalVersionBean:restServerService.retrieveBeanForCurrentPortal()])
     }
 
     def data() {
