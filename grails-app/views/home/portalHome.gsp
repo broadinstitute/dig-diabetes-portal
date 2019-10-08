@@ -105,25 +105,30 @@
                 <!-- Search UI & drop-down UI in the top banner -->
                 <div class="col-md-12">
                 <!-- Tabs for search Ui and drop-down UI -->
+                <g:if test="${g.portalTypeString()?.equals('v2f')}">
+                    <h2 class="front-banner-ui-tabs" style="font-size: 45px; padding-bottom: 15px;"><g:message code="primary.text.input.header"/></h2>
+                </g:if>
+                <g:else>
                     <ul class="nav nav-tabs front-banner-ui-tabs" role="tablist">
-                    <g:if test="${portalVersionBean.variantAssociationsExists}">
-                        <li role="presentation" class="active">
-                            <a href="#search-box" aria-controls="seach-box" role="tab" data-toggle="tab">
-                                <g:if test="${!portalVersionBean.regionSpecificVersion}">
-                                    <g:message code="primary.text.input.header"/>
-                                </g:if>
-                                <g:else>
-                                    <g:message code="regionSpecificVersion.text.input.header"/>
-                                </g:else>
-                            </a>
-                        </li>
-                    </g:if>
+                        <g:if test="${portalVersionBean.variantAssociationsExists}">
+                            <li role="presentation" class="active">
+                                <a href="#search-box" aria-controls="seach-box" role="tab" data-toggle="tab">
+                                    <g:if test="${!portalVersionBean.regionSpecificVersion}">
+                                        <g:message code="primary.text.input.header"/>
+                                    </g:if>
+                                    <g:else>
+                                        <g:message code="regionSpecificVersion.text.input.header"/>
+                                    </g:else>
+                                </a>
+                            </li>
+                        </g:if>
                         <li role="presentation">
                             <a href="#drop-down" aria-controls="drop-down" role="tab" data-toggle="tab">
                                 <g:message code="trait.search.header" default="View full GWAS results for a phenotype" />
                             </a>
                         </li>
                     </ul>
+                </g:else>
 
                 <!-- Tabs for search Ui and drop-down UI end -->
 
