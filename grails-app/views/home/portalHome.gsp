@@ -225,7 +225,7 @@
                             </li>
                             <g:if test="${portalVersionBean.getExposeEffectorGeneTableUi()}">
                                 <li class="radio-inline">
-                                    <label><input type="radio" name="radio-gene-association" class="radio" onchange="mpgSoftware.homePage.switchVisibility(['effector-gene-list-ui-wrapper'], ['variant-association-ui-wrapper', 'gene-association-ui-wrapper']);" > <span style="float: left;">View predicted T2D effector genes</span> <span class='new-dataset-flag' style="display: inline-flex; margin:-3px 0 0 5px; width: 30px; background-size: 30px;">&nbsp;</span></label>
+                                    <label><input type="radio" name="radio-gene-association" class="radio" onchange="mpgSoftware.homePage.switchVisibility(['effector-gene-list-ui-wrapper'], ['variant-association-ui-wrapper', 'gene-association-ui-wrapper']);" > <span style="float: left;">View predicted T2D effector genes</span> </label>
                                 </li>
                             </g:if>
                         </g:if>
