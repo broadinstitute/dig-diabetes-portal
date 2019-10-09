@@ -22,6 +22,15 @@ div.k27ac {
 #gregorSubTableDiv .dataTables_info { display: none; }
 #gregorSubTableDiv .dataTables_length { display: none; }
 #gregorSubTableDiv .dataTables_paginate { display: none; }
+div.gregorPVals {
+    font-size: 10px;
+}
+div.gregorPVals dynamicDisplay {
+    color: blue;
+}
+div.gregorSubTableRow{
+
+}
 /*.dataTables_wrapper.dk-zoom-0, .dataTables_wrapper.dk-zoom-0 .btn { font-size: 14px; }*/
 /*.dataTables_wrapper.dk-zoom-1, .dataTables_wrapper.dk-zoom-1 .btn { font-size: 12px; }*/
 /*.dataTables_wrapper.dk-zoom-2, .dataTables_wrapper.dk-zoom-2 .btn { font-size: 10px; }*/

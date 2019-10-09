@@ -31,25 +31,27 @@ mpgSoftware.dynamicUi.gregorSubTableVariantTable = (function () {
         if ( ( typeof data !== 'undefined') &&
             ( typeof data.data !== 'undefined') ){
             var geneRecord = {header:{}, data:[]};
-            geneRecord.header['annotations'] = _.map(_.uniqBy(data.data,'annotation'),function(o){return o.annotation});
-            geneRecord.header['ancestries'] = _.map(_.uniqBy(data.data,'ancestry'),function(o){return o.ancestry});
-            geneRecord.header['tissues'] = _.map(_.uniqBy(data.data,'tissue'),function(o){return o.tissue.replace('\'','').toLowerCase()});
-            const recordsToDrawFrom = _.take(_.orderBy(data.data,['p_value'],['asc']),500);
-            geneRecord.header['minimumGregorPValue'] = _.map(_.minBy(data.data,'p_value'),function(o){return o.p_value});
-            geneRecord.header['maximumGregorPValue'] = _.map(_.maxBy(data.data,'p_value'),function(o){return o.p_value});
-            geneRecord.header['bestAnnotations'] = _.uniqBy(recordsToDrawFrom,'annotation');
-            geneRecord.header['bestAncestries'] = _.uniqBy(recordsToDrawFrom,'ancestry');
-            geneRecord.header['bestTissues'] = _.uniqBy(recordsToDrawFrom,'tissue');
-            // const recordsToDrawFrom = _.take(data.data,50)
-            // geneRecord.header['bestAnnotations'] = _.uniqBy(recordsToDrawFrom,'annotation');
-            // geneRecord.header['bestAncestries'] = _.uniqBy(recordsToDrawFrom,'ancestry');
-            // geneRecord.header['bestTissues'] = _.uniqBy(recordsToDrawFrom,'tissue');
-
-            _.forEach(recordsToDrawFrom, function (oneRec) {
+            const allRecs = _.filter(data.data,["ancestry","EU"]);
+            _.forEach(allRecs, function (oneRec) {
+                oneRec['p_value'] = _.min([oneRec.p_value,1.0]);
+            });
+            geneRecord.header['annotations'] = _.map(_.uniqBy(allRecs,'annotation'),function(o){return o.annotation});
+            geneRecord.header['ancestries'] = _.map(_.uniqBy(allRecs,'ancestry'),function(o){return o.ancestry});
+            geneRecord.header['tissues'] = _.map(_.uniqBy(allRecs,'tissue'),function(o){return o.tissue.replace('\'','').toLowerCase()});
+            geneRecord.header['defaultGregorPValueUpperValue'] = _.last(_.take(_.orderBy(allRecs,['p_value'],['asc']),5)).p_value;
+            geneRecord.header['minimumGregorPValue'] = _.minBy(allRecs,'p_value').p_value;
+            geneRecord.header['maximumGregorPValue'] = _.maxBy(allRecs,'p_value').p_value;
+            geneRecord.header['bestAnnotations'] = _.uniqBy(allRecs,'annotation');
+            geneRecord.header['bestAncestries'] = _.uniqBy(allRecs,'ancestry');
+            geneRecord.header['bestTissues'] = _.uniqBy(allRecs,'tissue');
+            // add an additional tissue name
+            let vectorWithAllRecords = [];
+            _.forEach(allRecs, function (oneRec) {
                 let holder = oneRec;
                 holder['safeTissueId'] = oneRec.tissue_id.replace(":","_");
-                geneRecord.data.push(holder)
+                vectorWithAllRecords.push(holder)
             });
+            geneRecord.data = _.groupBy(vectorWithAllRecords,'tissue');
             rawGeneAssociationRecords.push(geneRecord);
         }
         return rawGeneAssociationRecords;
@@ -77,7 +79,15 @@ mpgSoftware.dynamicUi.gregorSubTableVariantTable = (function () {
         return returnValue;
     };
 
+const setGregorSubTableByPValue = function(currentValue){
+    $('div.gregorVariantTableBody').filter(function() {return $(this).attr("sortField") <= currentValue;}).show();
+    $('div.gregorVariantTableBody').filter(function() {return $(this).attr("sortField") > currentValue;}).hide();
+    $('div.gregorSubTableRow').filter(function() {return $(this).attr("sortvalue") <= currentValue;}).find('input.gregorSubTableRowHeader').prop('checked', true);
+    $('div.gregorSubTableRow').filter(function() {return $(this).attr("sortvalue") > currentValue;}).find('input.gregorSubTableRowHeader').prop('checked', false);
+    $('div.gregorSubTableHeader').filter(function() {return $(this).attr("sortvalue") <= currentValue;}).find('input.gregorSubTableRowHeader').prop('checked', true);
+    $('div.gregorSubTableHeader').filter(function() {return $(this).attr("sortvalue") > currentValue;}).find('input.gregorSubTableRowHeader').prop('checked', false);
 
+};
 
 
     /***
@@ -86,9 +96,32 @@ mpgSoftware.dynamicUi.gregorSubTableVariantTable = (function () {
      * @param objectContainingRetrievedRecords
      */
     var displayGregorSubTable = function (idForTheTargetDiv, objectContainingRetrievedRecords, callingParameters ) {
+        var handle = $( "#custom-handle" );
+        var valueDisplay = $( "div.dynamicDisplay" );
+        const minVal = (objectContainingRetrievedRecords[0].header.minimumGregorPValue<=1)?
+            objectContainingRetrievedRecords[0].header.minimumGregorPValue:1;
+        const maxVal = (objectContainingRetrievedRecords[0].header.maximumGregorPValue<=1)?
+            objectContainingRetrievedRecords[0].header.maximumGregorPValue:1;
+        const defaultGregorPValueUpperValue = objectContainingRetrievedRecords[0].header.defaultGregorPValueUpperValue;
+        const logMinVal = 0-Math.log10(minVal);
+        const logMaxVal = 0-Math.log10(maxVal);
+        $( "#gregorPValueSlider" ).slider({
+            range: "max",
+                min: 0,
+                max: 100,
+                value: ((logMinVal+Math.log10(defaultGregorPValueUpperValue))/(logMinVal-logMaxVal))*100,
+            create: function() {
+                valueDisplay.text( UTILS.realNumberFormatter(defaultGregorPValueUpperValue));
 
-        $('div.minimumGregorPValue').text(77);
-        $('div.maximumGregorPValue').text(99);
+            },
+            slide: function( event, ui ) {
+                const currentValue = Math.pow(10, 0-(logMinVal+(ui.value*(logMaxVal-logMinVal)/100.0)));
+                valueDisplay.text( UTILS.realNumberFormatter(currentValue) );
+                setGregorSubTableByPValue(currentValue);
+            }
+        });
+        $('div.minimumGregorPValue').text(UTILS.realNumberFormatter(minVal));
+        $('div.maximumGregorPValue').text(UTILS.realNumberFormatter(maxVal));
         mpgSoftware.dynamicUi.displayGregorSubTableForVariantTable(idForTheTargetDiv, // which table are we adding to
             callingParameters.code, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
             callingParameters.nameOfAccumulatorField, // name of the persistent field where the data we received is stored
@@ -114,7 +147,8 @@ mpgSoftware.dynamicUi.gregorSubTableVariantTable = (function () {
 
             },
             createSingleDnaseCell
-        )
+        );
+        setGregorSubTableByPValue(defaultGregorPValueUpperValue);
 
     };
 

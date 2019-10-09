@@ -2987,7 +2987,7 @@ mpgSoftware.dynamicUi = (function () {
 
                                                                                     });
                 // fill in all of the column cells
-                _.forEach(objectContainingRetrievedRecords[0].data, function (oneRecord) {
+                _.forEach(objectContainingRetrievedRecords[0].data[rowTitle.tissue], function (oneRecord) {
                     var indexOfColumn = _.indexOf(intermediateDataStructure.headerNames, oneRecord[headerRecordField]);
                     if (indexOfColumn === -1) {
                         console.log("Did not find index of header.  Shouldn't we?")
@@ -4633,15 +4633,15 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         }
                     });
 
-                    var handle = $( "#custom-handle" );
-                    $( "#gregorPValueSlider" ).slider({
-                        create: function() {
-                            handle.text( $( this ).slider( "value" ) );
-                        },
-                        slide: function( event, ui ) {
-                            handle.text( ui.value );
-                        }
-                    });
+                    // var handle = $( "#custom-handle" );
+                    // $( "#gregorPValueSlider" ).slider({
+                    //     create: function() {
+                    //         handle.text( $( this ).slider( "value" ) );
+                    //     },
+                    //     slide: function( event, ui ) {
+                    //         handle.text( ui.value );
+                    //     }
+                    // });
                     // $('#gregorSubTableDiv').resizable({
                     //     stop: function( event, ui ) {
                     //         filterEpigeneticTable();

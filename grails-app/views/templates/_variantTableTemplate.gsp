@@ -93,12 +93,22 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-xs-2">
-                            <div class="minimumGregorPValue"></div>
+                        <div class="col-xs-3">
+                            <div class="gregorPVals minimumGregorPValue"></div>
                         </div>
-                        <div class="col-xs-8"></div>
-                        <div class="col-xs-2">
-                            <div class="maximumGregorPValue"></div>
+                        <div class="col-xs-6"></div>
+                        <div class="col-xs-3">
+                            <div class="gregorPVals maximumGregorPValue"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-4">
+                        </div>
+                        <div class="col-xs-4">
+                            <div>Current value:</div>
+                            <div class="gregorPVals dynamicDisplay"></div>
+                        </div>
+                        <div class="col-xs-4">
                         </div>
                     </div>
                 </div>

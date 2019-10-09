@@ -39,7 +39,6 @@
                     retrieveTopVariantsAcrossSgsUrl:'${g.createLink(controller: "VariantSearch", action: "retrieveTopVariantsAcrossSgs")}',
                     retrieveOnlyTopVariantsAcrossSgsUrl:'${g.createLink(controller: "VariantSearch", action: "retrieveOnlyTopVariantsAcrossSgs")}',
                     getVariantsForRangeAjaxUrl:"${createLink(controller:'RegionInfo',action: 'retrieveVariantsInRange')}",
-                    fillCredibleSetTableUrl:"${createLink(controller:'RegionInfo',action: 'fillCredibleSetTable')}",
                     retrieveECaviarDataViaCredibleSetsUrl:"${createLink(controller:'RegionInfo',action: 'retrieveECaviarDataViaCredibleSets')}",
                     retrieveVariantAnnotationsUrl:"${createLink(controller:'RegionInfo',action: 'retrieveVariantAnnotations')}",
                     dynamicTableType:'variantTable',
