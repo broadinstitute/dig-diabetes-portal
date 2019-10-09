@@ -12,7 +12,8 @@ records={{numberRecords}}
 </script>
 
 <script id="gregorSubTableHeaderHeader"  type="x-tmpl-mustache">
-<div class="gregorSubTableRow annotationName_{{annotation}} methodName_{{method}} text-center" sortValue="{{p_value}}"><div><input class="gregorSubTableRowHeader" type="checkbox" value="{{annotation}}_{{method}}"></div>
+<div class="gregorSubTableRow annotationName_{{annotation}} methodName_{{method}} text-center" sortValue="{{p_value}}">
+<div><input class="gregorSubTableRowHeader" type="checkbox" value="{{annotation}}_{{method}}"></div>
 {{annotation}}</div>
 </script>
 

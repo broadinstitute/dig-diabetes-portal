@@ -4410,36 +4410,21 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
     }
 
     const filterEpigeneticTable = function(){
-        const heightContainer = parseInt($('#gregorSubTableDiv').css('height').replace("px",""));
-        const widthContainer= parseInt($('#gregorSubTableDiv').css('width').replace("px",""));
-        const containerOffest = $('div.gregorSubTableHeader').parent().offset();
-        let someOffsetsGreaterThanZero = false;
-        let allowableAnnotations = _.filter($('div.gregorSubTableRow'), function(cell){
-            const cellOffset = $(cell).offset();
-            if(cellOffset.left>0) {someOffsetsGreaterThanZero = true;}
-            return  ((widthContainer+containerOffest.left)>cellOffset.left);
+        const arrayForMethodsAndAnnotations = $('div.gregorSubTableRow').find('input.gregorSubTableRowHeader:checked');
+        let uniqueMethods = [];
+        let uniqueAnnotations = [];
+        let uniqueTissues = [];
+        _.forEach(arrayForMethodsAndAnnotations,function(annotationMethodInput){
+            const annotationMethod = $(annotationMethodInput).attr('value');
+            if (annotationMethod.length>2){
+                const annotationMethodArray = annotationMethod.split("_");
+                uniqueAnnotations.push(annotationMethodArray[0]);
+                uniqueMethods.push(annotationMethodArray[1]);
+            }
         });
-        if (someOffsetsGreaterThanZero===false) {
-            allowableAnnotations=_.take(allowableAnnotations,9);
-        }
-        const filteringFields = _.map(allowableAnnotations,function(oneDiv){
-            return {method:extractClassBasedTrailingString(oneDiv,"methodName_"),
-                annotation:extractClassBasedTrailingString(oneDiv,"annotationName_")}
+        _.forEach($('div.gregorSubTableHeader').find('input.gregorSubTableRowHeader:checked'),function(tissueInput){
+            uniqueTissues.push($(tissueInput).attr('value'));
         });
-        someOffsetsGreaterThanZero = false;
-        let allowableTissues = _.filter($('div.gregorSubTableHeader'), function(cell){
-            const cellOffset = $(cell).offset();
-            if(cellOffset.top>0) {someOffsetsGreaterThanZero = true;}
-            return  ((heightContainer+containerOffest.top)>cellOffset.top);
-        });
-        if (someOffsetsGreaterThanZero===false) {
-            allowableTissues=_.take(allowableTissues,6);
-        }
-        const uniqueMethods = _.map(_.filter(_.uniqBy(filteringFields,'method'),function(o){return (o.method.length>0)}),'method');
-        const uniqueAnnotations = _.map(_.filter(_.uniqBy(filteringFields,'annotation'),function(o){return (o.annotation.length>0)}),'annotation');
-        const uniqueTissues = _.map(_.filter(_.uniqBy(_.map(allowableTissues,function(oneDiv){
-            return {tissue:extractClassBasedTrailingString(oneDiv,"tissueId_")}
-        }),'tissue'),function(o){return (o.tissue.length>0)}),'tissue');
         if ((uniqueMethods.length>0) &&
             (uniqueAnnotations.length>0) &&
             (uniqueTissues.length>0)) {
@@ -4457,14 +4442,9 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             _.forEach($('tr.epigeneticCellElement'),function(oneTr){
                 const currentAnnotation = extractClassBasedTrailingString(oneTr,"annotationName_");
                 const currentTissue = extractClassBasedTrailingString(oneTr,"tissueId_");
-                // const filteringFieldsInbounds = _.filter($('div.gregorSubTableRow'), function(cell){
-                //     const cellOffset = $(cell).offset();
-                //     return ((heightContainer>cellOffset.top) && (widthContainer<cellOffset.left));
-                // });
                 const cellOffset = $(oneTr).offset();
-                if ( ((heightContainer>cellOffset.top) && (widthContainer>cellOffset.left))&&
-                    ((currentAnnotation.length===0)||(_.includes(uniqueAnnotations,currentAnnotation))) &&
-                    (_.includes(uniqueTissues,currentTissue)) ){
+                if (_.includes(uniqueTissues,currentTissue)&&
+                    ((currentAnnotation.length===0)||(_.includes(uniqueAnnotations,currentAnnotation)))){
                     $(oneTr).show();
                     $(oneTr).addClass('yesDisplay');
                 } else {
