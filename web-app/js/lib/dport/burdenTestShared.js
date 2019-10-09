@@ -193,15 +193,6 @@ mpgSoftware.burdenTestShared = (function () {
                                        allowStratificationByAncestry,
                                        selectionForDataSetFilter,
                                        urlHolder) {
-        //sampleMetadataExperimentAjaxUrl,
-        //sampleMetadataAjaxWithAssumedExperimentUrl,
-        //variantOnlyTypeAheadUrl,
-        //sampleMetadataAjaxUrl,
-        //generateListOfVariantsFromFiltersAjaxUrl,
-        //retrieveSampleSummaryUrl,
-        //variantInfoUrl,
-        //variantAndDsAjaxUrl,
-        //burdenTestVariantSelectionOptionsAjaxUrl){
         displayParameters["variantsSetRefinement"] = (( typeof displayParameters.grsVariantSet === 'undefined') ||
             (displayParameters.grsVariantSet.length === 0)) ? [1] : [];
 
@@ -218,13 +209,6 @@ mpgSoftware.burdenTestShared = (function () {
         mpgSoftware.burdenTestShared.retrieveExperimentMetadata(selectionForDataSetFilter, urlHolder.sampleMetadataExperimentAjaxUrl,
             geneName, displayParameters.grsVariantSet);
         mpgSoftware.burdenTestShared.preloadInteractiveAnalysisData(urlHolder.sampleMetadataAjaxWithAssumedExperimentUrl, urlHolder,
-            //urlHolder.variantOnlyTypeAheadUrl,
-            //urlHolder.sampleMetadataAjaxUrl,
-            //urlHolder.generateListOfVariantsFromFiltersAjaxUrl,
-            //urlHolder.retrieveSampleSummaryUrl,
-            //urlHolder.variantInfoUrl,
-            //urlHolder.variantAndDsAjaxUrl,
-            //urlHolder.burdenTestVariantSelectionOptionsAjaxUrl,
             displayParameters);
     };
 
@@ -397,24 +381,10 @@ mpgSoftware.burdenTestShared = (function () {
      *  Use this if you have only one data set, since then we don't need to burden the user with the choice
      */
     var preloadInteractiveAnalysisData = function (sampleMetadataAjaxWithAssumedExperimentUrl, urlHolder,
-                                                   //linkToTypeaheadUrl,
-                                                   //sampleMetadataAjaxUrl,
-                                                   //generateListOfVariantsFromFiltersAjaxUrl,
-                                                   //retrieveSampleSummaryUrl,
-                                                   //variantInfoUrl,
-                                                   //variantAndDsAjaxUrl,
-                                                   //burdenTestVariantSelectionOptionsAjaxUrl,
                                                    displayParameters) {
         $('.caatSpinner').show();
         var dropDownSelector = '#phenotypeFilter';
         var strataChooserMarker = [];
-        //var rememberLinkToTypeaheadUrl = linkToTypeaheadUrl;
-        //var rememberSampleMetadataAjaxUrl = sampleMetadataAjaxUrl;
-        //var rememberGenerateListOfVariantsFromFiltersAjaxUrl = generateListOfVariantsFromFiltersAjaxUrl;
-        //var rememberRetrieveSampleSummaryUrl = retrieveSampleSummaryUrl;
-        //var rememberVariantInfoUrl = variantInfoUrl;
-        //var rememberVariantAndDsAjaxUrl = variantAndDsAjaxUrl;
-        //var rememberBurdenTestVariantSelectionOptionsAjaxUrl = burdenTestVariantSelectionOptionsAjaxUrl;
         var rememberDisplayParameters = displayParameters;
         var rememberUrlHolder = urlHolder;
         if (portalTypeWithAncestry) {
@@ -459,20 +429,16 @@ mpgSoftware.burdenTestShared = (function () {
                 }
 
                 refreshGaitDisplay('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering', true, rememberUrlHolder);
-                //{
-                //    linkToTypeaheadUrl:rememberLinkToTypeaheadUrl,
-                //    sampleMetadataAjaxUrl:rememberSampleMetadataAjaxUrl,
-                //    generateListOfVariantsFromFiltersAjaxUrl:rememberGenerateListOfVariantsFromFiltersAjaxUrl,
-                //    variantInfoUrl:rememberVariantInfoUrl,
-                //    retrieveSampleSummaryUrl:rememberRetrieveSampleSummaryUrl,
-                //    variantAndDsAjaxUrl:rememberVariantAndDsAjaxUrl,
-                //    burdenTestVariantSelectionOptionsAjaxUrl:rememberBurdenTestVariantSelectionOptionsAjaxUrl
-                //});
                 // make sections visible or invisible
                 if ((typeof rememberDisplayParameters.allowExperimentChoice !== 'undefined') && (rememberDisplayParameters.allowExperimentChoice)) {
                     $(".chooseExperiment").css('display', 'block');
                 } else {
                     $(".chooseExperiment").css('display', 'none');
+                }
+                if ((typeof rememberDisplayParameters.allowAggregationMethodChoice !== 'undefined') && (rememberDisplayParameters.allowAggregationMethodChoice)) {
+                    $(".chooseAggregationMethod").css('display', 'block');
+                } else {
+                    $(".chooseAggregationMethod").css('display', 'none');
                 }
                 if ((typeof rememberDisplayParameters.allowPhenotypeChoice !== 'undefined') && (rememberDisplayParameters.allowPhenotypeChoice)) {
                     $(".choosePhenotype").css('display', 'block');
@@ -515,25 +481,33 @@ mpgSoftware.burdenTestShared = (function () {
         var sampleMetadata = getStoredSampleMetadata();
         var phenotypeFilterValue = $(parmHolder.dropDownPhenoSelector).val();
         var stratifyDesignationValue = $(parmHolder.stratifyDesignation).val();
+        var caseControlDesignatorVal = $(parmHolder.caseControlDesignator).prop('checked');
         var convertedPhenotypeNames = convertPhenotypeNames(phenotypeFilterValue); // when phenotypes have been harmonized the step will be unnecessary...
         var filterDetails = _.find(sampleMetadata.filters, function (o) {
-            return o.name === convertedPhenotypeNames || o.name === phenotypeFilterValue;
-        })
+            const nameToCompare = ( convertedPhenotypeNames  ) ;
+            return ((nameToCompare===o.name)||(nameToCompare===(o.name+"_ADJ")));
+        });
+        let caseControlDesignatorDisabled =  false;
+        let caseControlDesignatorChecked =  caseControlDesignatorVal;
         if (typeof filterDetails !== 'undefined') {
             if (filterDetails.type === 'STRING') { // no case control switches in a real valued phenotype
-                $(parmHolder.caseControlDesignator).prop('disabled', false);
+                caseControlDesignatorDisabled =  false
             } else {
-                $(parmHolder.caseControlDesignator).prop('checked', false);
-                $(parmHolder.caseControlDesignator).prop('disabled', true);
+                caseControlDesignatorChecked = false;
+                caseControlDesignatorDisabled = true;
             }
         }else {  // if it's a phenotype we haven't seen before then default to hiding the case control box
-                // I think this arises due to a mismatch between the sample metadata and the metadata, but it's common enough to correct for
-            $(parmHolder.caseControlDesignator).prop('checked', false);
-            $(parmHolder.caseControlDesignator).prop('disabled', true);
+            // I think this arises due to a mismatch between the sample metadata and the metadata, but it's common enough to correct for
+            caseControlDesignatorChecked = false;
+            caseControlDesignatorDisabled = true;
         }
         $('#stratsTabs').empty();
-        var caseControlFiltering = $('#caseControlFiltering').prop('checked');
+        var caseControlFiltering = caseControlDesignatorChecked;
         stratifiedSampleAndCovariateSection($(parmHolder.datasetFilter), phenotypeFilterValue, stratifyDesignationValue, sampleMetadata.filters, caseControlFiltering, parmHolder);
+        if (caseControlDesignatorDisabled){
+            $(parmHolder.caseControlDesignator).prop('disabled', caseControlDesignatorDisabled);
+        }
+        $(parmHolder.caseControlDesignator).prop('checked', caseControlDesignatorChecked);
         displayTestResultsSection(false);
     };
 
@@ -1071,7 +1045,6 @@ mpgSoftware.burdenTestShared = (function () {
                     filterFloatTemplate: $('#filterFloatTemplate')[0].innerHTML,
                     filterCategoricalTemplate: $('#filterCategoricalTemplate')[0].innerHTML
                 });
-           console.log(temp)
             $("#chooseFiltersLocation").empty().append(Mustache.render($('#chooseFiltersTemplate')[0].innerHTML, renderData,
                 {
                     allFiltersTemplate: $('#allFiltersTemplate')[0].innerHTML,
@@ -1488,10 +1461,30 @@ mpgSoftware.burdenTestShared = (function () {
             (isDichotomousTrait ? 'odds ratio = ' + oddsRatio : 'beta = ' + beta),
             ciDisplay, isDichotomousTrait, additionalText);
 
+    };
+
+    var retrieveCheckedVariantsFromBurdenInterface = function (tableIdentifier){
+        var listOfVariantsToCheck = [];
+        if ($(tableIdentifier).children().length > 0) { // check that we have a table
+            var gaitTableCheckboxes = $($(tableIdentifier).DataTable().rows().nodes()).find('td input.geneGaitVariantSelector:checked');
+            _.forEach(gaitTableCheckboxes, function (eachVariantId) {
+                var gaitTableCheckboxId = $(eachVariantId).attr('id');
+                listOfVariantsToCheck.push('"' + gaitTableCheckboxId.substr(12) + '"');
+            });
+        }
+        return listOfVariantsToCheck;
     }
 
-
-    var executeAssociationTest = function (filterValues, covariateValues, propertyName, stratum, compoundedFilterValues, burdenTestAjaxUrl, variantIdentifier, variantSetId) {
+    var executeAssociationTest = function (filterValues,
+                                           covariateValues,
+                                           propertyName,
+                                           stratum,
+                                           compoundedFilterValues,
+                                           burdenTestAjaxUrl,
+                                           variantIdentifier,
+                                           variantSetId,
+                                           listOfVariantsToCheck,
+                                           burdenMethod ) {
 
         var isCategoricalF = function (stats) {
             var isDichotomousTrait = false;
@@ -1508,21 +1501,13 @@ mpgSoftware.burdenTestShared = (function () {
 
         var phenotypeToPredict = $('#phenotypeFilter').val();
         var datasetUse = $('#datasetFilter').val();
-        var listOfVariantsToCheck = [];
-        if ($('#gaitTable').children().length > 0) { // check that we have a table
 
-
-            var gaitTableCheckboxes = $($('#gaitTable').DataTable().rows().nodes()).find('td input.geneGaitVariantSelector:checked');
-            _.forEach(gaitTableCheckboxes, function (eachVariantId) {
-                var gaitTableCheckboxId = $(eachVariantId).attr('id');
-                listOfVariantsToCheck.push('"' + gaitTableCheckboxId.substr(12) + '"');
-            });
-        }
         return $.ajax({
             cache: false,
             type: "post",
             url: burdenTestAjaxUrl,
             data: {
+                burdenMethod: burdenMethod,
                 variantName: variantIdentifier,
                 variantList: "[" + listOfVariantsToCheck.join(',') + "]",
                 covariates: covariateValues,
@@ -2094,21 +2079,68 @@ mpgSoftware.burdenTestShared = (function () {
 
             }
         }
-        // var compoundedFilterValues = compoundingFilterValues(phenotypeTabs);
 
-        var deferreds = [];
-        _.forEach(nonPhenotypeTabs, function (stratum) {
-            var compoundedFilterValues = compoundingStrataFilterValues(stratum);
-            var strataPropertyName = stratum[0].strataPropertyName;
-            var stratumName = stratum[0].stratumName;
-            deferreds.push(executeAssociationTest('{}', collectingCovariateValues(strataPropertyName, stratumName), strataPropertyName, stratumName, compoundedFilterValues.strataFilters,
-                burdenTestAjaxUrl, variantIdentifier, variantSetId));
 
-        });
-        $.when.apply($, deferreds).then(function () {
-            runMetaAnalysis();
-            $('#rSpinner').hide();
-        });
+        var variantsToUse =  retrieveCheckedVariantsFromBurdenInterface('#gaitTable');
+        var phenotypeToPredict = $('#phenotypeFilter').val();
+        var methodChoice = $('#burdenMethodChoice').val();
+        switch (methodChoice){
+            case 'sum':
+            case 'max':
+                var deferreds = [];
+                _.forEach(nonPhenotypeTabs, function (stratum) {
+                    var compoundedFilterValues = compoundingStrataFilterValues(stratum);
+                    var strataPropertyName = stratum[0].strataPropertyName;
+                    var stratumName = stratum[0].stratumName;
+                    deferreds.push(executeAssociationTest('{}',
+                        collectingCovariateValues(strataPropertyName, stratumName),
+                        strataPropertyName,
+                        stratumName,
+                        compoundedFilterValues.strataFilters,
+                        burdenTestAjaxUrl,
+                        variantIdentifier,
+                        variantSetId,
+                        variantsToUse,
+                        methodChoice ));
+
+                });
+                asynchronousPromiseRunner(deferreds,runMetaAnalysis);
+                break;
+            case 'skat':
+            case 'skat-o':
+            case 'vt':
+            case 'burden':
+                var coreVariables = mpgSoftware.geneSignalSummaryMethods.getSignalSummarySectionVariables();
+                    mpgSoftware.externalBurdenTestMethods.buildAndRunUMichTest(asynchronousPromiseRunner,
+                        coreVariables.aggregationCovarianceUrl,
+                        variantsToUse.map(function(o){return o.replace(/\"/g,"")}),
+                        phenotypeToPredict,methodChoice,
+                        function(results){
+                            if (( typeof results !== 'undefined') &&
+                                (results.length>0)){
+                                console.log(results)  ;
+                                if ((results.length===1)&&
+                                    (isNaN(results[0].pvalue))&&
+                                    (isNaN(results[0].stat))){
+                                    alert('Test failed to converge on a solution.  Choose a different type of test, or else submit a different list of variants');
+                                }
+                                const renderData = _.map(results,function(oneResult){
+                                    oneResult["variantCount"] = function(){return oneResult.variants.length};
+                                    oneResult["pValuePrintable"] = function(){return UTILS.realNumberFormatter(oneResult.pvalue)};
+                                    oneResult["statPrintable"] = function(){return UTILS.realNumberFormatter(oneResult.stat)};
+                                    return oneResult
+                                });
+                                displayTestResultsSection(true);
+                                $("div.strataResults").empty().append(Mustache.render($('#uMichAggregationTestResults')[0].innerHTML,
+                                    renderData));
+                            }
+                        });
+
+                break;
+            default:
+                alert('unrecognized aggregation test type ='+methodChoice+'.');
+                break;
+        }
     }; // runBurdenTest
 
 
@@ -2742,6 +2774,194 @@ mpgSoftware.burdenTestShared = (function () {
     };
 
 
+    var runSkatTest = function (mode) {
+        var sample_mask_payload = {
+            "chrom": "22",
+            "start": 50276998,
+            "stop": 50357719,
+            "genotypeDataset": 1,
+            "phenotypeDataset": 1,
+            "phenotype": "ldl",
+            "samples": "ALL",
+            "genomeBuild": "GRCh37",
+            "maskDefinitions": [
+                {
+                    "id": 10,
+                    "name": "On-the-fly mask",
+                    "description": "Mask created on the fly, potentially by using a browser UI",
+                    "genome_build": "GRCh37",
+                    "group_type": "GENE",
+                    "identifier_type": "ENSEMBL",
+                    "groups": {
+                        "CRELD2": [
+                            "22:50312454_C/T",
+                            "22:50313452_C/T",
+                            "22:50313465_C/A",
+                            "22:50315537_A/G",
+                            "22:50315971_C/G",
+                            "22:50316015_C/T",
+                            "22:50316301_A/G",
+                            "22:50316902_G/A",
+                            "22:50316906_C/T",
+                            "22:50317418_C/T",
+                            "22:50318061_G/C",
+                            "22:50318402_C/T",
+                            "22:50318757_C/T",
+                            "22:50319373_C/T",
+                            "22:50319968_G/A",
+                            "22:50320921_G/A"
+                        ]
+                    }
+                }
+            ]
+        };
+
+        var generateObjectForLdServer = function ( arrayOfVariants,
+                                                   phenotype ){
+            var chromosome;
+            var startPosition;
+            var endPosition;
+            var returnValue;
+            var refinedArrayOfVariants = _.map(arrayOfVariants, function (rawVariant){
+                var extractedParts = UTILS.extractParts(rawVariant);
+                if (typeof chromosome === 'undefined'){
+                    chromosome = extractedParts.chromosome;
+                }
+                var position = _.parseInt(extractedParts.position);
+                if ((typeof startPosition === 'undefined')||( startPosition >  position)){
+                    startPosition = position;
+                }
+                if ((typeof endPosition === 'undefined')||( endPosition <  position)){
+                    endPosition = position;
+                }
+                return extractedParts.chromosome+":"+extractedParts.position+"_"+extractedParts.reference+"/"+extractedParts.alternate;
+            } );
+
+            if (    ( typeof chromosome !== 'undefined' ) &&
+                    ( typeof startPosition !== 'undefined' ) &&
+                    ( typeof endPosition !== 'undefined' ) &&
+                    ( refinedArrayOfVariants.length>0 ) ) {
+                returnValue = {
+                    "chrom": chromosome,
+                    "start": startPosition,
+                    "stop": endPosition,
+                    "genotypeDataset": 1,
+                    "phenotypeDataset": 1,
+                    "phenotype": phenotype,
+                    "samples": "ALL",
+                    "genomeBuild": "GRCh37",
+                    "maskDefinitions": [
+                        {
+                            "id": 10,
+                            "name": "On-the-fly mask",
+                            "description": "Mask created on the fly, potentially by using a browser UI",
+                            "genome_build": "GRCh37",
+                            "group_type": "GENE",
+                            "identifier_type": "ENSEMBL",
+                            "groups": {
+                                "CRELD2": refinedArrayOfVariants
+                            }
+                        }
+                    ]
+                }
+
+            }
+             return returnValue;
+        }
+
+
+        var buildUMichBurdenTestPromiseArray = function (url, covariance_request_spec ) {
+            var promiseArray = [];
+            var promise = $.ajax({
+                cache: false,
+                type: "post",
+                contentType: "application/json",
+                url: url,
+                data: JSON.stringify(covariance_request_spec),
+                async: true
+            });
+            promise.done(resp => {
+                if (resp.ok) {
+                    return resp.json();
+                }
+            });
+            promise.fail( function (jqXHR, textStatus, errorThrown){
+                    alert('LD server call failed, text='+textStatus+', error='+errorThrown+'.');
+                }
+            );
+            promiseArray.push(
+                promise.then(
+                    function(json){ // Use the returned covariance data to run aggregation tests and return results (note that runner.run() returns a Promise)
+                        const [groups, variants] = raremetal.helpers.parsePortalJSON(json);
+                        const runner = new raremetal.helpers.PortalTestRunner(groups, variants, [ // One or more test names can be specified!
+                            // 'burden',
+                            'skat',
+                            //'vt'
+                        ]);
+                        return runner.run();
+                    }
+                ).then(res =>
+                    {
+                        console.log(`Ran ${res.length} test(s)`);
+                        console.log(res);
+                    }
+            ).catch(e => {
+                results.value = 'Calculations failed; see JS console for details.'
+            })
+            );
+            return promiseArray;
+        };
+        var buildAndRunScatTest = function (url, covariance_request_spec) {
+            asynchronousPromiseRunner(buildUMichBurdenTestPromiseArray(url, covariance_request_spec),undefined);
+        }
+
+
+
+        // When the page loads, get the data and display the results
+        var results = document.getElementById('results-display');
+//        buildAndRunScatTest('https://portaldev.sph.umich.edu/raremetal/v1/aggregation/covariance', generateObjectForLdServer([
+        buildAndRunScatTest('http://raremetal.type2diabeteskb.org/aggregation/covariance', generateObjectForLdServer([
+            "22:50312454_C/T",
+            "22:50313452_C/T",
+            "22:50313465_C/A",
+            "22:50315537_A/G",
+            "22:50315971_C/G",
+            "22:50316015_C/T",
+            "22:50316301_A/G",
+            "22:50316902_G/A",
+            "22:50316906_C/T",
+            "22:50317418_C/T",
+            "22:50318061_G/C",
+            "22:50318402_C/T",
+            "22:50318757_C/T",
+            "22:50319373_C/T",
+            "22:50319968_G/A",
+            "22:50320921_G/A"
+        ], "LDL"));
+    };
+
+
+    /***
+     *  top-level asynchronous Ajax call runner. Runs an array of promises and executes a follow-up routine after they are all complete. Also responsible
+     *  for turning on and off the spinner.
+     * @param url
+     * @param covariance_request_spec
+     * @returns {*}
+     */
+    var asynchronousPromiseRunner = function (arrayOfPromises, followUpRoutine) {
+        $('#rSpinner').show();
+        $.when.apply($, arrayOfPromises).then(function (a,b) {
+            if( typeof  followUpRoutine !== 'undefined'){
+                followUpRoutine();
+            }
+            $('#rSpinner').hide();
+        }).fail(function(a){alert('Aggregation test failed.  Please try a different test, or a different collection of variants')});
+    };
+
+
+
+
+
     var swapSingleMultipleVariantAdditionMode = function (mode) {
         var singleVariantInput = $('#proposedVariant');
         var multiVariantInput = $('#proposedMultiVariant');
@@ -2763,7 +2983,6 @@ mpgSoftware.burdenTestShared = (function () {
         preloadInteractiveAnalysisData: preloadInteractiveAnalysisData, // assuming there is only one data set we can get most everything at page load
         retrieveExperimentMetadata: retrieveExperimentMetadata, //Retrieve sample metadata only to get the experiment list
         immediateFilterAndRun: immediateFilterAndRun, // apply filters locally and then launch IAT
-//    retrieveMatchingDataSets:retrieveMatchingDataSets, // retrieve data set matching phenotype.  not currently used
         refreshGaitDisplay: refreshGaitDisplay, // refresh the filters, covariates, and results sections
         carryCovChanges: carryCovChanges, // Terry across strata.  Similar to carryTheAllFiltersAcrossStrata but much simpler
         displayTestResultsSection: displayTestResultsSection,  // simply display results section (show() or hide()
@@ -2778,7 +2997,8 @@ mpgSoftware.burdenTestShared = (function () {
         storeGrsVariantSet: storeGrsVariantSet,
         getGRSListOfVariants: getGRSListOfVariants,
         buildVariantTable: buildVariantTable,
-        respondedToAddVariantButtonClick:respondedToAddVariantButtonClick
+        respondedToAddVariantButtonClick:respondedToAddVariantButtonClick,
+        runSkatTest:runSkatTest
     }
 
 }());

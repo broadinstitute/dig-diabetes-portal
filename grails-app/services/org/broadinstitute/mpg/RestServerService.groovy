@@ -362,6 +362,8 @@ class RestServerService {
                     existingPortalVersionBean.getGenePageWarning(),
                     existingPortalVersionBean.getCredibleSetInfoCode(),
                     existingPortalVersionBean.getBlogId(),
+                    existingPortalVersionBean.getAggregationCovarianceUrl(),
+                    existingPortalVersionBean.getAggregationMetadataUrl(),
                     existingPortalVersionBean.getExposeCommonVariantTab(),
                     existingPortalVersionBean.getExposeRareVariantTab(),
                     existingPortalVersionBean.getVariantAssociationsExists(),
@@ -658,7 +660,7 @@ class RestServerService {
      * @param targetUrl
      * @return
      */
-    private String getRestCallBase(String targetUrl, String currentRestServer) {
+    public String getRestCallBase(String targetUrl, String currentRestServer) {
         String returnValue = null
         RestResponse response
         RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
@@ -693,7 +695,7 @@ class RestServerService {
      * @param targetUrl
      * @return
      */
-    private JSONObject postRestCallBase(String drivingJson, String targetUrl, currentRestServer) {
+    public JSONObject postRestCallBase(String drivingJson, String targetUrl, currentRestServer) {
         JSONObject returnValue = null
         Date beforeCall = new Date()
         Date afterCall

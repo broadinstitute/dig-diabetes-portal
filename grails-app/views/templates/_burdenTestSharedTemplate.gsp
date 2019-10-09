@@ -87,19 +87,37 @@
 
         <div class="">
             <h3>
-                Choose a phenotype and partitioning strategy
+                    {{#modifiedInitialInstruction}}
+                        {{{modifiedInitialInstruction}}}
+                    {{/modifiedInitialInstruction}}
+                    {{^modifiedInitialInstruction}}
+                        <g:message code="aggregationTesting.label.initial.user.instruction"/>
+                    {{/modifiedInitialInstruction}}
             </h3>
         </div>
-
         <div id="chooseSamples" class="">
             <div class="secBody">
             <div class="row">
                 <div class="col-md-4 text-left">
                     <div class="secHeader chooseExperiment">
-                        <!-- <div class="col-sm-4 col-xs-4 text-left"> -->
-                            <label>Dataset</label>
-                        <!-- </div> -->
+                        <label>Dataset</label>
                     </div>
+                    <div class="secHeader chooseAggregationMethod">
+                        <label for="burdenMethodChoice">Aggregation method</label>
+                    </div>
+                    <div class="chooseAggregationMethod">
+                        <select id="burdenMethodChoice" class="traitFilter form-control text-left"
+                        onchange="mpgSoftware.externalBurdenTestMethods.showOnlyRelevantInterfaceSections(this)">
+                            <option value="sum">Additive burden test</option>
+                            <option value="max">Collapsing burden test</option>
+                            <option value="skat">SKAT</option>
+                            <option value="skat-o">SKAT-O</option>
+                            <option value="vt">Variable threshold burden test</option>
+%{--                            <option value="burden">UMich burden</option>--}%
+                        </select>
+                    </div>
+
+
 
                     <div class="chooseExperiment">
                         <select id="datasetFilter" class="traitFilter form-control text-left"
@@ -167,22 +185,7 @@
 
                 <div class="row">
                     <div class="col-sm-12 col-xs-12 text-left">
-                        <div  id="caseControlFilteringWithLabel" class="checkbox" style="margin:20px 0 10px 0">
-                                <span style="margin: 0 25px 0 0; font-weight: bold">Samples:</span>
-                                <input id="caseControlFiltering" type="checkbox" name="caseControlFiltering"
-                                       value="caseControlFiltering"
-                                        onchange="mpgSoftware.burdenTestShared.refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering',false,
-                                         {linkToTypeaheadUrl:'${createLink(controller:"gene", action:"variantOnlyTypeAhead")}',
-                                         sampleMetadataAjaxUrl:'${createLink(controller: "VariantInfo", action: "sampleMetadataAjax")}',
-                                         generateListOfVariantsFromFiltersAjaxUrl:'${createLink(controller: "gene", action: "generateListOfVariantsFromFiltersAjax")}',
-                                         variantInfoUrl:'${createLink(controller: "variantInfo", action: "variantInfo")}',
-                                         retrieveSampleSummaryUrl:'${createLink(controller: "variantInfo", action: "retrieveSampleSummary")}',
-                                         variantAndDsAjaxUrl:'${createLink(controller: "variantInfo", action: "variantAndDsAjax")}',
-                                         burdenTestVariantSelectionOptionsAjaxUrl:'${createLink(controller: "gene", action: "burdenTestVariantSelectionOptionsAjax")}',
-                                         getGRSListOfVariantsAjaxUrl:'${createLink(controller:"gait",action: "getGRSListOfVariantsAjax")}'})">
-                                        <label style="padding-left:0">Filter cases and controls separately</label>
-                                </input>
-                        </div>
+
                     </div>
                 </div>
 
@@ -196,20 +199,45 @@
 %{--Handles the filters section, both with and without strata.  Note however that we do not fill in
 the individual filters themselves. That work is handled later as part of a loop--}%
 <script id="chooseFiltersTemplate"  type="x-tmpl-mustache">
+
 <div class="panel panel-default">%{--should hold the Choose filters panel--}%
+
+            %{--<div class="panel-heading">--}%
+                %{--<h4 class="panel-title">--}%
+                    %{--<a data-toggle="collapse" data-parent="#filterSamples"--}%
+                       %{--href="#filterSamples" onclick="checkGaitTabs(event);" >Step {{sectionNumber}}: Select a subset of samples based on phenotypic criteria</a>--}%
+                %{--</h4>--}%
+            %{--</div>--}%
 
             <div class="panel-heading">
                 <h4 class="panel-title">
                     <a data-toggle="collapse" data-parent="#filterSamples"
-                       href="#filterSamples" onclick="checkGaitTabs(event);" >Step {{sectionNumber}}: Select a subset of samples based on phenotypic criteria</a>
+                       href="#filterSamples" onclick="checkGaitTabs(event);" >Select a subset of samples based on phenotypic criteria</a>
                 </h4>
             </div>
+
 
             <div id="filterSamples" class="panel-collapse collapse">
                 <div class="panel-body  secBody">
 
                     <div class="row">
                         <div class="col-sm-12 col-xs-12">
+                             <div  id="caseControlFilteringWithLabel" class="checkbox" style="margin:20px 0 10px 0">
+                                    <span style="margin: 0 25px 0 0; font-weight: bold">Samples:</span>
+                                    <input id="caseControlFiltering" type="checkbox" name="caseControlFiltering"
+                                           value="caseControlFiltering"
+                                            onchange="mpgSoftware.burdenTestShared.refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering',false,
+                                             {linkToTypeaheadUrl:'${createLink(controller:"gene", action:"variantOnlyTypeAhead")}',
+                                             sampleMetadataAjaxUrl:'${createLink(controller: "VariantInfo", action: "sampleMetadataAjax")}',
+                                             generateListOfVariantsFromFiltersAjaxUrl:'${createLink(controller: "gene", action: "generateListOfVariantsFromFiltersAjax")}',
+                                             variantInfoUrl:'${createLink(controller: "variantInfo", action: "variantInfo")}',
+                                             retrieveSampleSummaryUrl:'${createLink(controller: "variantInfo", action: "retrieveSampleSummary")}',
+                                             variantAndDsAjaxUrl:'${createLink(controller: "variantInfo", action: "variantAndDsAjax")}',
+                                             burdenTestVariantSelectionOptionsAjaxUrl:'${createLink(controller: "gene", action: "burdenTestVariantSelectionOptionsAjax")}',
+                                             getGRSListOfVariantsAjaxUrl:'${createLink(controller:"gait",action: "getGRSListOfVariantsAjax")}'})">
+                                            <label style="padding-left:0">Filter cases and controls separately</label>
+                                    </input>
+                            </div>
                             <p>
                                 Each of the boxes below enables you to define a criterion for inclusion of samples in your analysis; each criterion is specified as a filter based on a single phenotype.
                                 The final subset of samples used will be those that match all of the specified criteria; to omit a criterion leave the text box blank.
@@ -449,13 +477,19 @@ the individual filters themselves. That work is handled later as part of a loop-
 <script id="chooseCovariatesTemplate"  type="x-tmpl-mustache">
         <div class="panel panel-default">%{--should hold the initiate analysis set panel--}%
 
+            %{--<div class="panel-heading">--}%
+                %{--<h4 class="panel-title">--}%
+                    %{--<a data-toggle="collapse" data-parent="#initiateAnalysis_{{stratum}}"--}%
+                       %{--href="#initiateAnalysis_{{stratum}}">Step {{sectionNumber}}: Control for covariates</a>--}%
+                %{--</h4>--}%
+            %{--</div>--}%
+
             <div class="panel-heading">
                 <h4 class="panel-title">
                     <a data-toggle="collapse" data-parent="#initiateAnalysis_{{stratum}}"
-                       href="#initiateAnalysis_{{stratum}}">Step {{sectionNumber}}: Control for covariates</a>
+                       href="#initiateAnalysis_{{stratum}}">Control for covariates</a>
                 </h4>
             </div>
-
 
             <div id="initiateAnalysis_{{stratum}}" class="panel-collapse collapse">
                 <div class="panel-body secBody">
@@ -573,13 +607,19 @@ the individual filters themselves. That work is handled later as part of a loop-
 <script id="variantFilterSelectionTemplate"  type="x-tmpl-mustache">
         <div class="panel panel-default">%{--should hold the initiate analysis set panel--}%
 
+            %{--<div class="panel-heading">--}%
+                %{--<h4 class="panel-title">--}%
+                    %{--<a data-toggle="collapse" data-parent="#variantFilterSelection"--}%
+                       %{--href="#variantFilterSelection">Step {{sectionNumber}}: Manage variant selection</a>--}%
+                %{--</h4>--}%
+            %{--</div>--}%
+
             <div class="panel-heading">
                 <h4 class="panel-title">
                     <a data-toggle="collapse" data-parent="#variantFilterSelection"
-                       href="#variantFilterSelection">Step {{sectionNumber}}: Manage variant selection</a>
+                       href="#variantFilterSelection">Manage variant selection</a>
                 </h4>
             </div>
-
 
             <div id="variantFilterSelection" class="panel-collapse collapse">
                 <div class="panel-body secBody">
@@ -587,9 +627,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                     <div class="row">
                         <div class="col-sm-12 col-xs-12">
                             <p>
-                                Choose a collection of variants which will be analyzed together to assess disease burden.
-                                You may choose a set of variants with a specific consequence or minor allele frequency, and
-                                potentially remove variants from this set by using the check boxes at the left of the table.
+                                Choose a collection of variants for analysis. Choose a variant filter; set a MAF threshold if desired (this overrides the MAF thresholds in the variant filters) and apply the threshold across all samples or each ancestry. Remove variants from the list using the check boxes at the left of the table.
                             </p>
                         </div>
                     </div>
@@ -658,53 +696,53 @@ the individual filters themselves. That work is handled later as part of a loop-
                                             </div>
                                         </div>
                                     </div>
-                                    <div  class="row">
-                                          <div style="margin:15px 8px 15px 10px" class="separator"></div>
-                                    </div>
+                                    %{--<div  class="row">--}%
+                                          %{--<div style="margin:15px 8px 15px 10px" class="separator"></div>--}%
+                                    %{--</div>--}%
 
-                                <div  class="row" style="margin: 10px 0 0px 0">
-                                    <div class="col-md-offset-2 col-md-8 col-sm-12 col-xs-12">
-                                        <div  class="row">
+                                %{--<div  class="row" style="margin: 10px 0 0px 0">--}%
+                                    %{--<div class="col-md-offset-2 col-md-8 col-sm-12 col-xs-12">--}%
+                                        %{--<div  class="row">--}%
 
 
-                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                <div  class="row">
-                                                    <div class="col-md-12 col-sm-12 col-xs-12">
-                                                        <label>Add a new variant to list</label>
-                                                    </div>
-                                                    <div class="col-md-12 col-sm-12 col-xs-12">
-                                                        <div class="form-inline mafOptionChooser">
-                                                            <div class="radio">
-                                                                <label  style="font-size: 11px">
-                                                                    <input type="radio" name="additionalVariantOption" value="1" onclick="mpgSoftware.burdenTestShared.swapSingleMultipleVariantAdditionMode(1)" checked/>
-                                                                    &nbsp;Single variant
-                                                                </label>
-                                                            </div>
-                                                            <div class="radio">
-                                                                <label style="font-size: 11px">
-                                                                    <input type="radio" name="additionalVariantOption"  value="2" onclick="mpgSoftware.burdenTestShared.swapSingleMultipleVariantAdditionMode(2)"/>
-                                                                    &nbsp;Multiple
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>                                            </div>
-                                            <div class="col-md-5 col-sm-5 col-xs-12">
-                                                <input style="display: inline-block" type="text" class="form-control input-sm" id="proposedVariant"/>
-                                                <textarea style="display: none" type="text" class="form-control" cols=20 rows=4 id="proposedMultiVariant"/>
-                                            </div>
-                                            <div class="col-md-1 col-sm-1 col-xs-4">
-                                                <button id="addVariant" class="btn btn-secondary"
-                                                onclick="mpgSoftware.burdenTestShared.respondedToAddVariantButtonClick(
-                                                '${createLink(controller: "variantInfo", action: "variantAndDsAjax")}',
-                                                '${createLink(controller: 'variantInfo', action: 'variantInfo')}')">
-                                                    Add
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2"></div>
-                                </div>
+                                            %{--<div class="col-md-6 col-sm-6 col-xs-12">--}%
+                                                %{--<div  class="row">--}%
+                                                    %{--<div class="col-md-12 col-sm-12 col-xs-12">--}%
+                                                        %{--<label>Add a new variant to list</label>--}%
+                                                    %{--</div>--}%
+                                                    %{--<div class="col-md-12 col-sm-12 col-xs-12">--}%
+                                                        %{--<div class="form-inline mafOptionChooser">--}%
+                                                            %{--<div class="radio">--}%
+                                                                %{--<label  style="font-size: 11px">--}%
+                                                                    %{--<input type="radio" name="additionalVariantOption" value="1" onclick="mpgSoftware.burdenTestShared.swapSingleMultipleVariantAdditionMode(1)" checked/>--}%
+                                                                    %{--&nbsp;Single variant--}%
+                                                                %{--</label>--}%
+                                                            %{--</div>--}%
+                                                            %{--<div class="radio">--}%
+                                                                %{--<label style="font-size: 11px">--}%
+                                                                    %{--<input type="radio" name="additionalVariantOption"  value="2" onclick="mpgSoftware.burdenTestShared.swapSingleMultipleVariantAdditionMode(2)"/>--}%
+                                                                    %{--&nbsp;Multiple--}%
+                                                                %{--</label>--}%
+                                                            %{--</div>--}%
+                                                        %{--</div>--}%
+                                                    %{--</div>--}%
+                                                %{--</div>                                            </div>--}%
+                                            %{--<div class="col-md-5 col-sm-5 col-xs-12">--}%
+                                                %{--<input style="display: inline-block" type="text" class="form-control input-sm" id="proposedVariant"/>--}%
+                                                %{--<textarea style="display: none" type="text" class="form-control" cols=20 rows=4 id="proposedMultiVariant"/>--}%
+                                            %{--</div>--}%
+                                            %{--<div class="col-md-1 col-sm-1 col-xs-4">--}%
+                                                %{--<button id="addVariant" class="btn btn-secondary"--}%
+                                                %{--onclick="mpgSoftware.burdenTestShared.respondedToAddVariantButtonClick(--}%
+                                                %{--'${createLink(controller: "variantInfo", action: "variantAndDsAjax")}',--}%
+                                                %{--'${createLink(controller: 'variantInfo', action: 'variantInfo')}')">--}%
+                                                    %{--Add--}%
+                                                %{--</button>--}%
+                                            %{--</div>--}%
+                                        %{--</div>--}%
+                                    %{--</div>--}%
+                                    %{--<div class="col-md-2"></div>--}%
+                                %{--</div>--}%
                                 {{/variantsSetRefinement}}
 
 
@@ -769,7 +807,7 @@ the individual filters themselves. That work is handled later as part of a loop-
 
             {{#variantsSetRefinement}}
                 <div style="float: right; margin-top: 15px;" class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact ">
-                    <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/KP_GAIT_guide.pdf" target="_blank">Custom association analysis guide</a>
+                    <a href="https://broad-portal-resources.s3.amazonaws.com/tutorials/Custom_aggregation_test_guide.pdf" target="_blank">Aggregation test guide</a>
                 </div>
             {{/variantsSetRefinement}}
 
@@ -778,13 +816,11 @@ the individual filters themselves. That work is handled later as part of a loop-
             <div class="container">
                 <h5>
                     {{#modifiedGaitSummary}}
-                        {{modifiedGaitSummary}}
+                        {{{modifiedGaitSummary}}}
                     {{/modifiedGaitSummary}}
                     {{^modifiedGaitSummary}}
-                        <p>The Genetic Association Interactive Tool allows you to compute custom association statistics by specifying the phenotype to test for association, a subset of samples to analyze based on specific phenotypic criteria, and a set of covariates to control for in the analysis.
-     In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.</p>
+                        <g:message code="aggregationTesting.label.introduction.p1"/>
 
-     <p>In the custom burden test and GAIT, results for the T2D phenotype are powered by the AMP T2D-GENES exome sequence analysis dataset; results for other traits are powered by the 19k exome sequence analysis subset.</p>
                     {{/modifiedGaitSummary}}
                 </h5>
 
@@ -820,3 +856,17 @@ the individual filters themselves. That work is handled later as part of a loop-
 </div> %{--end accordion group--}%
 
 </script>
+
+
+<script id="uMichAggregationTestResults"  type="x-tmpl-mustache">
+    <div class="strat1 strataHolder">
+    {{#.}}
+        <div class="stratum_strat1 stratumName"></div>
+        <div class="pValue_strat1">pValue = {{pValuePrintable}}</div>
+        <div class="orValue_strat1">stat = {{statPrintable}}</div>
+        <div class="">variants used = {{variantCount}}</div>
+        <div id="chart"></div>
+    {{/.}}
+    </div>
+</script>
+
