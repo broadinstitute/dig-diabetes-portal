@@ -2486,81 +2486,118 @@ mpgSoftware.dynamicUi = (function () {
         var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode);
         //var returnObject = createNewDisplayReturnObject();
         var intermediateDataStructure = new IntermediateDataStructure();
+        var sharedTable = getSharedTable(idForTheTargetDiv);
 
         // for each gene collect up the data we want to display
         var arrayOfDataToDisplay = getAccumulatorObject(nameOfAccumulatorField);
 
         // do we have any data at all?  If we do, then make a row
         if (( typeof arrayOfDataToDisplay !== 'undefined') &&
-            ( arrayOfDataToDisplay.length > 0) &&
-            ( arrayOfDataToDisplay[0].data.length > 0)) {
-            addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
+            ( arrayOfDataToDisplay.length > 0) ){
+            if ( arrayOfDataToDisplay[0].data.length > 0) {
+                addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode, intermediateDataStructure);
 
-            // set up the headers, even though we know we won't use them. Is this step necessary?
-            var headerNames = [];
-            if (accumulatorObjectSubFieldEmpty(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex,"data")) {
-                console.log("We should have a list of variants, otherwise we shouldn't be here. We have a problem.");
-            } else {
-                const dataVector = getAccumulatorObject(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex)[0].data;
-                headerNames  = _.map(dataVector,'name');
-                _.forEach(dataVector, function (oneRecord) {
-                    intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
-                        {},"header",'EMC'));
-                });
+                // set up the headers, even though we know we won't use them. Is this step necessary?
+                var headerNames = [];
+                if (accumulatorObjectSubFieldEmpty(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex, "data")) {
+                    console.log("We should have a list of variants, otherwise we shouldn't be here. We have a problem.");
+                } else {
+                    const dataVector = getAccumulatorObject(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex)[0].data;
+                    headerNames = _.map(dataVector, 'name');
+                    _.forEach(dataVector, function (oneRecord) {
+                        intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
+                            {}, "header", 'EMC'));
+                    });
+                }
             }
             // set up the headers, and give us an empty row of column cells
 
 
             // fill in all of the column cells
-            _.forEach(arrayOfDataToDisplay[0].data, function (oneRecord) {
-                var indexOfColumn = _.indexOf(headerNames, oneRecord.name);
-                if (indexOfColumn === -1) {
-                    console.log("Did not find index of ABC var_id.  Shouldn't we?")
-                } else {
-                    if ((oneRecord.arrayOfRecords.length === 0)) {
-                        //alert('should not happen, right?');
-                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(oneRecord.name,
-                            {}, "tissue specific",'EMC');
+            if ($.isArray(arrayOfDataToDisplay[0].data)){
+                _.forEach(arrayOfDataToDisplay[0].data, function (oneRecord) {
+                    var indexOfColumn = _.indexOf(headerNames, oneRecord.name);
+                    if (indexOfColumn === -1) {
+                        console.log("Did not find index of var_id.  Shouldn't we?")
                     } else {
-                        //var tissueTranslations = recordsPerGene["TISSUE_TRANSLATIONS"]; // if no translations are provided, it is fine to leave this value as undefined
-                        var tissueTranslations = undefined;
-                        var tissueRecords = mapSortAndFilterFunction (oneRecord.arrayOfRecords,tissueTranslations);
+                        if ((oneRecord.arrayOfRecords.length === 0)) {
+                            //alert('should not happen, right?');
+                            intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(oneRecord.name,
+                                {}, "tissue specific",'EMC');
+                        } else {
+                            //var tissueTranslations = recordsPerGene["TISSUE_TRANSLATIONS"]; // if no translations are provided, it is fine to leave this value as undefined
+                            var tissueTranslations = undefined;
+                            var tissueRecords = mapSortAndFilterFunction (oneRecord.arrayOfRecords,tissueTranslations);
 
-                        var recordsCellPresentationString = Mustache.render($('#'+dataAnnotationType.dataAnnotation.numberRecordsCellPresentationStringWriter)[0].innerHTML, {
-                            numberRecords:tissueRecords.length
-                        });
-                        var significanceCellPresentationString = "0";
-                        var significanceValue = 0;
-                        if (( typeof tissueRecords !== 'undefined')&&
-                            (tissueRecords.length>0)){
-                            var mostSignificantRecord;
-                            if (( typeof preferredSummaryKey !== 'undefined') && (preferredSummaryKey.length>0)){ // we have a key telling us which record to pick
-                                mostSignificantRecord=_.find(tissueRecords,function(t){return t.tissue.includes(preferredSummaryKey)});
-                            }else{// no specific key, but we have sorted the keys in ascending order by value, so we can just pick the first one
-                                mostSignificantRecord=tissueRecords[0];
+                            var recordsCellPresentationString = Mustache.render($('#'+dataAnnotationType.dataAnnotation.numberRecordsCellPresentationStringWriter)[0].innerHTML, {
+                                numberRecords:tissueRecords.length
+                            });
+                            var significanceCellPresentationString = "0";
+                            var significanceValue = 0;
+                            if (( typeof tissueRecords !== 'undefined')&&
+                                (tissueRecords.length>0)){
+                                var mostSignificantRecord;
+                                if (( typeof preferredSummaryKey !== 'undefined') && (preferredSummaryKey.length>0)){ // we have a key telling us which record to pick
+                                    mostSignificantRecord=_.find(tissueRecords,function(t){return t.tissue.includes(preferredSummaryKey)});
+                                }else{// no specific key, but we have sorted the keys in ascending order by value, so we can just pick the first one
+                                    mostSignificantRecord=tissueRecords[0];
+                                }
+                                significanceValue = mostSignificantRecord.value;
+                                significanceCellPresentationString = Mustache.render($('#'+dataAnnotationType.dataAnnotation.significanceCellPresentationStringWriter)[0].innerHTML,
+                                    {significanceValue:significanceValue,
+                                        significanceValueAsString:UTILS.realNumberFormatter(""+significanceValue),
+                                        recordDescription:translateATissueName(tissueTranslations,mostSignificantRecord.tissue),
+                                        numberRecords:tissueRecords.length});
+
                             }
-                            significanceValue = mostSignificantRecord.value;
-                            significanceCellPresentationString = Mustache.render($('#'+dataAnnotationType.dataAnnotation.significanceCellPresentationStringWriter)[0].innerHTML,
-                                {significanceValue:significanceValue,
-                                    significanceValueAsString:UTILS.realNumberFormatter(""+significanceValue),
-                                    recordDescription:translateATissueName(tissueTranslations,mostSignificantRecord.tissue),
-                                    numberRecords:tissueRecords.length});
+                            //  this is the information we carry around each cell and that we will later use to display it
+                            var renderData = placeDataIntoRenderForm(   tissueRecords,
+                                recordsCellPresentationString,
+                                significanceCellPresentationString,
+                                dataAnnotationTypeCode,
+                                significanceValue,
+                                oneRecord.name );
+                            oneRecord["numberOfRecords"] = oneRecord.arrayOfRecords.length;//not sure if this is used
+                            intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(oneRecord.name,
+                                renderData,"tissue specific",dataAnnotationTypeCode );
+                        }
+
+                    }
+                });
+            } else if ( typeof arrayOfDataToDisplay[0].data.groupByAnnotation !== 'undefined'){
+                let rowIndex = 0;
+                _.forEach(arrayOfDataToDisplay[0].data.groupByAnnotation, function (recordsForAnnotation, annotation) {
+                    addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
+                    const dataVector = getAccumulatorObject(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex)[0].data;
+                    headerNames = _.map(dataVector, 'name');
+                    _.forEach(dataVector, function (oneRecord) {
+                        intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
+                            {}, "header", 'EMC'));
+                    });
+                    // fill in all of the column cells
+                    _.forEach(recordsForAnnotation.arrayOfRecords, function (oneRecord) {
+                        var indexOfColumn = _.indexOf(headerNames, oneRecord.name);
+                        if (indexOfColumn === -1) {
+                            console.log("Did not find index of ABC var_id.  Shouldn't we?")
+                        } else {
+                            var renderData = placeDataIntoRenderForm(   oneRecord.arrayOfRecords,
+                                "","",
+                                dataAnnotationTypeCode,
+                                0.5,
+                                oneRecord.name);
+                                // (sharedTable["numberOfColumns"]*(rowIndex+1))+indexOfColumn+2,
+                                // true,
+                                // 0.5,
+                                // posteriorPValue);
+                            _.last(intermediateDataStructure.rowsToAdd).columnCells[indexOfColumn] = new IntermediateStructureDataCell(oneRecord.name,
+                                renderData,"tissue specific",dataAnnotationTypeCode );
 
                         }
-                        //  this is the information we carry around each cell and that we will later use to display it
-                        var renderData = placeDataIntoRenderForm(   tissueRecords,
-                            recordsCellPresentationString,
-                            significanceCellPresentationString,
-                            dataAnnotationTypeCode,
-                            significanceValue,
-                            oneRecord.name );
-                        oneRecord["numberOfRecords"] = oneRecord.arrayOfRecords.length;//not sure if this is used
-                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(oneRecord.name,
-                            renderData,"tissue specific",dataAnnotationTypeCode );
-                    }
+                    });
+                });
 
-                }
-            });
+            }
+
             intermediateDataStructure.tableToUpdate = idForTheTargetDiv;
         }
 
