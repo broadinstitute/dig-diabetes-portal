@@ -1166,7 +1166,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         significanceLevelDoms.addClass('unemphasize');
 
 
-        $('#trafficLightHolder').empty();
+        //$('#trafficLightHolder').empty();
         var significanceLevelDom = $('.trafficExplanation'+significanceLevel);
         significanceLevelDom.removeClass('unemphasize');
         significanceLevelDom.addClass('emphasize');
@@ -1179,11 +1179,14 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         }*/
 
         if (significanceLevel == 1){
-            $('#trafficLightHolder').append("<div class='red-signal'>&nbsp;</div>");
+            //$('#trafficLightHolder').append("<div class='red-signal'>&nbsp;</div>");
         } else if (significanceLevel == 2){
-            $('#trafficLightHolder').append("<div class='yellow-signal'>&nbsp;</div>");
+            //$('#trafficLightHolder').append("<div class='yellow-signal'>&nbsp;</div>");
+            $('#trafficLightHolder').find(".signal-level-2").addClass("signal-on");
         } else if (significanceLevel == 3){
-            $('#trafficLightHolder').append("<div class='green-signal'>&nbsp;</div>");
+            //$('#trafficLightHolder').append("<div class='green-signal'>&nbsp;</div>");
+            $('#trafficLightHolder').find(".signal-level-2").addClass("signal-on");
+            $('#trafficLightHolder').find(".signal-level-3").addClass("signal-on");
         }
 
         $('#signalLevelHolder').text(significanceLevel);

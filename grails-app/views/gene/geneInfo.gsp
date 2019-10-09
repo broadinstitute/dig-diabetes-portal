@@ -120,6 +120,11 @@
                     endPosition: data.geneInfo.END + genePageExtent
                 };
 
+
+                $("#gene-info-summary-content").find(".gene-chromosome").append(positioningInformation.chromosome+": "+ positioningInformation.startPosition +" - "+positioningInformation.endPosition);
+                //$("#gene-info-summary-content").find(".gene-region-start").append(""+positioningInformation.startPosition);
+                //$("#gene-info-summary-content").find(".gene-region-end").append(""+positioningInformation.endPosition);
+
                 $(".pop-top").popover({placement: 'top'});
                 $(".pop-right").popover({placement: 'right'});
                 $(".pop-bottom").popover({placement: 'bottom'});
@@ -162,9 +167,41 @@
     <div class="container-fluid" style="padding: 0 2.5%;">
 
         <div class="gene-info-container row">
-            <div class="gene-info-view">
-                <h1 class="dk-page-title" style="margin-bottom: 0; ">
-                    <em style="font-weight: 900;"><%=geneName%></em>
+            <div class="gene-info-view col-md-12">
+                <div id="gene-info-summary-wrapper">
+                    <div id="gene-info-summary-header">
+                        <div class="gene-name" style="width:20%;">Gene</div>
+                        <div class="gene-chromosome" style="width:20%;">Chromosome: Start position - End position</div>
+                        <div class="gene-phenotype" style="width:20%;">Phenotype</div>
+                        <div class="gene-traffic-light" style="width:20%;">Signal</div>
+                        <div class="gene-search" style="width:20%; text-align: right; ">Look for another gene or region</div>
+                    </div>
+                    <div id="gene-info-summary-content">
+                        <div class="gene-name" style="width:20%;"><%=geneName%></div>
+                        <div class="gene-chromosome" style="width:20%;"></div>
+                        <div class="gene-phenotype" style="width:20%;">Phenotype</div>
+                        <div class="gene-traffic-light" style="width:20%;">
+                            <div id='trafficLightHolder'>
+                                <div class='signal-level-2'>&nbsp;</div>
+                                <div class='signal-level-3'>&nbsp;</div>
+                            </div>
+                            <div class="trafficExplanations trafficExplanation1 unemphasize" style="font-size:16px; text-align: left;">
+                                No evidence for signal&nbsp;<g:helpText title="no.evidence.help.header" placement="right" body="no.evidence.help.text"/>
+                            </div>
+                            <div class="trafficExplanations trafficExplanation2 unemphasize" style="font-size:18px; text-align: left;">
+                                Suggestive evidence for signal&nbsp;<g:helpText title="suggestive.evidence.help.header" placement="right" body="suggestive.evidence.help.text"/>
+                            </div>
+                            <div class="trafficExplanations trafficExplanation3 unemphasize" style="font-size:18px; text-align: left;">
+                                Strong evidence for signal&nbsp;<g:helpText title="strong.evidence.help.header" placement="right" body="strong.evidence.help.text"/>
+                            </div>
+                        </div>
+                        <div class="gene-search" style="width:20%;">
+                            <button id="generalized-go" class="btn btn-primary" type="button" style="float: right; height: 41px; width:45px; border-radius:2px; margin: -1px 0 0 0;">Go</button>
+                            <input id="generalized-input" value="" type="text" class="form-control input-default" style="float: right; height: 41px; width:200px; border-radius: 2px; margin: -1px 0 0 0;">
+                        </div>
+                    </div>
+                </div>
+
 
                     <g:if test="${g.portalTypeString()?.equals('t2d')}">
                         <div class="dk-t2d-green dk-reference-button dk-right-column-buttons-compact f" style="float:right; border-radius: 2px; margin: 0 15px 0 -140px; font-size:12px;">
@@ -181,29 +218,9 @@
                             <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/CVDKP_gene_page_guide.pdf" style="border-radius: 2px;" target="_blank">Gene Page guide</a>
                         </div>
                     </g:elseif>
-                </h1>
-                <div class="col-md-6" style="height: 40px; padding:0 0 0 15px; border-bottom: solid 1px #ccc; ">
-                    <div id='trafficLightHolder' style="width:200px; float: left; margin-top: -12px;">
-                        <r:img uri="/images/undeterminedlight2.png"/>
-                        <div id="signalLevelHolder" style=""></div>
-                    </div>
-                    <div class="trafficExplanations trafficExplanation1 unemphasize" style="font-size:16px; text-align: left;">
-                        No evidence for signal&nbsp;<g:helpText title="no.evidence.help.header" placement="right" body="no.evidence.help.text"/>
-                    </div>
-                    <div class="trafficExplanations trafficExplanation2 unemphasize" style="font-size:18px; text-align: left;">
-                        Suggestive evidence for signal&nbsp;<g:helpText title="suggestive.evidence.help.header" placement="right" body="suggestive.evidence.help.text"/>
-                    </div>
-                    <div class="trafficExplanations trafficExplanation3 unemphasize" style="font-size:18px; text-align: left;">
-                        Strong evidence for signal&nbsp;<g:helpText title="strong.evidence.help.header" placement="right" body="strong.evidence.help.text"/>
-                    </div>
-                </div>
-                <div class="form-inline col-md-6" style="height: 40px; padding:0; border-bottom: solid 1px #ccc; ">
 
-                    <button id="generalized-go" class="btn btn-primary" type="button" style="float: right; height: 41px; width:45px; border-radius:2px; margin: -1px 15px 0 0;">Go</button>
-                    <input id="generalized-input" value="" type="text" class="form-control input-default" style="float: right; height: 41px; width:200px; border-radius: 2px; margin: -1px 0 0 0;">
-                    <div style="padding:10px 15px 0 0; text-align: right; float: right; ">Look for another gene or region</div>
 
-                </div>
+
 
 
 
