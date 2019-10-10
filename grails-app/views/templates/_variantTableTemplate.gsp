@@ -119,7 +119,8 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="mpgSoftware.dynamicUi.filterEpigeneticTable()">Close</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+        onclick="mpgSoftware.dynamicUi.reviseDisplayOfVariantTable('{{domTableSpecifier}}',2,'')">Close</button>
       </div>
     </div>
   </div>

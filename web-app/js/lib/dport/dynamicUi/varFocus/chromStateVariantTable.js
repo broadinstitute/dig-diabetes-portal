@@ -17,39 +17,73 @@ mpgSoftware.dynamicUi.chromStateVariantTable = (function () {
             ( typeof data.data !== 'undefined')){
             arrayOfRecords.splice(0,arrayOfRecords.length);
             // first go through and take all of our variants and find their position. Commit this to an array.
-            const nameList = mpgSoftware.dynamicUi.getAccumulatorObject(callingParameters.nameOfAccumulatorFieldWithIndex)[0].data;
-            const varIdsAndPositions = _.map(nameList,
-                                            function (varId){
-                                                const varIdElements =  varId.var_id.split("_");
-                                                let varIdPosition = 0;
-                                                if (varIdElements.length>2){
-                                                    varIdPosition = parseInt(varIdElements[1]);
-                                                }
-                                                return {name:varId.var_id,position:varIdPosition,arrayOfRecords:[]}
-                                            });
-            // Now let's go through each tissue, and figure out the mapping to each variant
-            var uniqueAnnotations = _.map(_.groupBy(data.data, function (o) { return o.annotation }),
-                                                    function(value,key) {return key});
-            var recordsGroupedByTissueId = _.groupBy(data.data, function (o) { return o.tissue_id });
-            var uniqueTissues =  _.map(recordsGroupedByTissueId,
-                function(value,key) {return key});
-            var recordsGroupedByVarId = _.groupBy(data.data, function (o) { return o.var_id });
-            _.forEach(varIdsAndPositions, function (varIdsRecord) {
-                const uniqueRecords = _.uniqWith(
-                    recordsGroupedByVarId[varIdsRecord.name],
-                  (recA, recB) =>
-                      recA.annotation === recB.annotation &&
-                      recA.tissue_id === recB.tissue_id
-                );
-                varIdsRecord.arrayOfRecords = _.map(_.orderBy(uniqueRecords,['tissue_name'],['asc']), function (oneValue){
-                    oneValue['safeTissueId'] = oneValue.tissue_id.replace(":","_");
-                    return oneValue;
-                });
+            // const nameList = mpgSoftware.dynamicUi.getAccumulatorObject(callingParameters.nameOfAccumulatorFieldWithIndex)[0].data;
+            // const varIdsAndPositions = _.map(nameList,
+            //                                 function (varId){
+            //                                     const varIdElements =  varId.var_id.split("_");
+            //                                     let varIdPosition = 0;
+            //                                     if (varIdElements.length>2){
+            //                                         varIdPosition = parseInt(varIdElements[1]);
+            //                                     }
+            //                                     return {name:varId.var_id,position:varIdPosition,arrayOfRecords:[]}
+            //                                 });
+            // // Now let's go through each tissue, and figure out the mapping to each variant
+            // var uniqueAnnotations = _.map(_.groupBy(data.data, function (o) { return o.annotation }),
+            //                                         function(value,key) {return key});
+            // var recordsGroupedByTissueId = _.groupBy(data.data, function (o) { return o.tissue_id });
+            // var uniqueTissues =  _.map(recordsGroupedByTissueId,
+            //     function(value,key) {return key});
+            // var recordsGroupedByVarId = _.groupBy(data.data, function (o) { return o.var_id });
+            // _.forEach(varIdsAndPositions, function (varIdsRecord) {
+            //     const uniqueRecords = _.uniqWith(
+            //         recordsGroupedByVarId[varIdsRecord.name],
+            //       (recA, recB) =>
+            //           recA.annotation === recB.annotation &&
+            //           recA.tissue_id === recB.tissue_id
+            //     );
+            //     varIdsRecord.arrayOfRecords = _.map(_.orderBy(uniqueRecords,['tissue_name'],['asc']), function (oneValue){
+            //         oneValue['safeTissueId'] = oneValue.tissue_id.replace(":","_");
+            //         return oneValue;
+            //     });
+            // });
+            // arrayOfRecords.push({header:{   uniqueAnnotations:uniqueAnnotations,
+            //         uniqueTissues:uniqueTissues
+            //     },
+            //     data:varIdsAndPositions});
+            let uniqueRecords = _.uniqWith(
+                data.data,
+                (recA, recB) =>
+                    recA.annotation === recB.annotation &&
+                    recA.var_id === recB.var_id &&
+                    recA.tissue_id === recB.tissue_id
+            );
+            _.forEach(uniqueRecords,function (oneValue){oneValue['safeTissueId'] = oneValue.tissue_id.replace(":","_");});
+            let dataGroupings = {groupByVarId:[],
+                groupByAnnotation:[],
+                groupByTissue:[],
+                groupByTissueAnnotation:[]
+            };
+            _.forEach(_.groupBy(uniqueRecords, function (o) { return o.var_id }), function (value,key) {
+                dataGroupings.groupByVarId.push({name:key,arrayOfRecords:value});
             });
-            arrayOfRecords.push({header:{   uniqueAnnotations:uniqueAnnotations,
-                                            uniqueTissues:uniqueTissues
+            _.forEach( _.groupBy(uniqueRecords, function (o) { return o.annotation }), function (recordsGroupedByAnnotation,annotation) {
+                let groupedByAnnotation = {name:annotation, arrayOfRecords:[]};
+                _.forEach( _.groupBy(recordsGroupedByAnnotation, function (o) { return o.var_id }), function (recordsSubGroupedByVarId,varId) {
+                    groupedByAnnotation.arrayOfRecords.push({name:varId,arrayOfRecords:recordsSubGroupedByVarId});
+                });
+                dataGroupings.groupByAnnotation.push(groupedByAnnotation);
+            });
+            _.forEach( _.groupBy(uniqueRecords, function (o) { return o.tissue_id }), function (recordsGroupedByTissue,tissue) {
+                let groupedByTissue = {name:tissue, arrayOfRecords:[]};
+                _.forEach( _.groupBy(groupedByTissue, function (o) { return o.var_id }), function (recordsSubGroupedByVarId,varId) {
+                    groupedByTissue.arrayOfRecords.push({name:varId,arrayOfRecords:recordsSubGroupedByVarId});
+                });
+                dataGroupings.groupByTissue.push(groupedByTissue);
+            });
+
+            arrayOfRecords.push({header:{
                                         },
-                                data:varIdsAndPositions});
+                                data:dataGroupings});
 
         }
         return arrayOfRecords;

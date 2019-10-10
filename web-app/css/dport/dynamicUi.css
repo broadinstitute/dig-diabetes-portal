@@ -80,14 +80,16 @@ div.variantAnnotationCompress {
 }
 #gregorSubTableDiv{
     height: 500px;
+    font-size: 12px;
     overflow-y: scroll;
 }
-td.emphasisSwitch_true {
-    background-color: #0000FF;
-}
-td.emphasisSwitch_false {
-    background-color: #FFFFFF;
-}
+/*td.emphasisSwitch_true {*/
+    /*background-color: #0000FF;*/
+/*}*/
+/*td.emphasisSwitch_false {*/
+    /*background-color: #FFFFFF;*/
+/*}*/
+
 div.openMetaXcanInGeneTable {
     font-size: 10px;
 }
@@ -637,6 +639,12 @@ table.variantTableHolder, th  {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+table.variantTableHolder div.epigeneticCellElement   {
+    font-size: 10px;
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 div.variantHeaderHolder{
     position: relative;
     top:0;
@@ -647,4 +655,7 @@ table.variantTableHolder th.headersWithVarIds {
     width: 80px;
     padding:0;
     overflow: auto;
+}
+table.variantTableHolder tr.doNotDisplay{
+    display: none;
 }

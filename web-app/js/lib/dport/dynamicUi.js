@@ -2490,7 +2490,7 @@ mpgSoftware.dynamicUi = (function () {
 
         // for each gene collect up the data we want to display
         var arrayOfDataToDisplay = getAccumulatorObject(nameOfAccumulatorField);
-
+        let prepend = true;
         // do we have any data at all?  If we do, then make a row
         if (( typeof arrayOfDataToDisplay !== 'undefined') &&
             ( arrayOfDataToDisplay.length > 0) ){
@@ -2566,13 +2566,24 @@ mpgSoftware.dynamicUi = (function () {
                 });
             } else if ( typeof arrayOfDataToDisplay[0].data.groupByAnnotation !== 'undefined'){
                 let rowIndex = 0;
-                _.forEach(arrayOfDataToDisplay[0].data.groupByAnnotation, function (recordsForAnnotation, annotation) {
+                prepend = false;
+                let uniqueLists = getMethodsAnnotationsAndTissuesFromGregorTable(true);
+                _.forEach(arrayOfDataToDisplay[0].data.groupByAnnotation, function (recordsForAnnotation ) {
+                    const annotation = recordsForAnnotation.name;
                     addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
                     const dataVector = getAccumulatorObject(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex)[0].data;
                     headerNames = _.map(dataVector, 'name');
+                    let rowWeAreAddingTo = _.last(intermediateDataStructure.rowsToAdd);
+                    rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(annotation,
+                        Mustache.render($('#'+dataAnnotationType.dataAnnotation.drillDownCategoryWriter)[0].innerHTML,{}),
+                        "header", 'LIT'));
+                    rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(annotation,
+                        Mustache.render($('#'+dataAnnotationType.dataAnnotation.drillDownSubCategoryWriter)[0].innerHTML,
+                            {annotationName:annotation}),
+                        "header", 'LIT'));
                     _.forEach(dataVector, function (oneRecord) {
-                        intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
-                            {}, "header", 'EMC'));
+                        rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
+                            {}, "header", 'EMP'));
                     });
                     // fill in all of the column cells
                     _.forEach(recordsForAnnotation.arrayOfRecords, function (oneRecord) {
@@ -2585,11 +2596,7 @@ mpgSoftware.dynamicUi = (function () {
                                 dataAnnotationTypeCode,
                                 0.5,
                                 oneRecord.name);
-                                // (sharedTable["numberOfColumns"]*(rowIndex+1))+indexOfColumn+2,
-                                // true,
-                                // 0.5,
-                                // posteriorPValue);
-                            _.last(intermediateDataStructure.rowsToAdd).columnCells[indexOfColumn] = new IntermediateStructureDataCell(oneRecord.name,
+                            _.last(intermediateDataStructure.rowsToAdd).columnCells[indexOfColumn+2] = new IntermediateStructureDataCell(oneRecord.name,
                                 renderData,"tissue specific",dataAnnotationTypeCode );
 
                         }
@@ -2609,8 +2616,8 @@ mpgSoftware.dynamicUi = (function () {
             intermediateDataStructure,
             true,
             'variantTableVariantHeaders',
-            true,
-            false );
+            prepend,
+            true );
 
 
 
@@ -4446,22 +4453,55 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         }
     }
 
-    const filterEpigeneticTable = function(){
-        const arrayForMethodsAndAnnotations = $('div.gregorSubTableRow').find('input.gregorSubTableRowHeader:checked');
-        let uniqueMethods = [];
-        let uniqueAnnotations = [];
-        let uniqueTissues = [];
+    const getMethodsAnnotationsAndTissuesFromGregorTable = function(getEverything){
+        let getEverythingString = (!getEverything)?":checked":"";
+        const arrayForMethodsAndAnnotations = $('div.gregorSubTableRow').find('input.gregorSubTableRowHeader'+getEverythingString);
+        let  allMethods = [];
+        let allAnnotations = [];
+        let allTissues = []
+        let returnValue = {
+            uniqueMethods:[],
+            uniqueAnnotations:[],
+            uniqueTissues:[]
+        };
         _.forEach(arrayForMethodsAndAnnotations,function(annotationMethodInput){
             const annotationMethod = $(annotationMethodInput).attr('value');
             if (annotationMethod.length>2){
                 const annotationMethodArray = annotationMethod.split("_");
-                uniqueAnnotations.push(annotationMethodArray[0]);
-                uniqueMethods.push(annotationMethodArray[1]);
+                allAnnotations.push(annotationMethodArray[0]);
+                allMethods.push(annotationMethodArray[1]);
             }
         });
-        _.forEach($('div.gregorSubTableHeader').find('input.gregorSubTableRowHeader:checked'),function(tissueInput){
-            uniqueTissues.push($(tissueInput).attr('value'));
+        _.forEach($('div.gregorSubTableHeader').find('input.gregorSubTableRowHeader'+getEverythingString),function(tissueInput){
+            allTissues.push($(tissueInput).attr('value'));
         });
+        returnValue.uniqueMethods = _.uniq(allMethods);
+        returnValue.uniqueAnnotations = _.uniq(allAnnotations);
+        returnValue.uniqueTissues = _.uniq(allTissues);
+    return returnValue;
+    }
+
+
+
+
+
+    const filterEpigeneticTable = function(){
+        // const arrayForMethodsAndAnnotations = $('div.gregorSubTableRow').find('input.gregorSubTableRowHeader:checked');
+        let uniqueLists = getMethodsAnnotationsAndTissuesFromGregorTable(false);
+        let uniqueMethods = uniqueLists.uniqueMethods;
+        let uniqueAnnotations = uniqueLists.uniqueAnnotations;
+        let uniqueTissues = uniqueLists.uniqueTissues;
+        // _.forEach(arrayForMethodsAndAnnotations,function(annotationMethodInput){
+        //     const annotationMethod = $(annotationMethodInput).attr('value');
+        //     if (annotationMethod.length>2){
+        //         const annotationMethodArray = annotationMethod.split("_");
+        //         uniqueAnnotations.push(annotationMethodArray[0]);
+        //         uniqueMethods.push(annotationMethodArray[1]);
+        //     }
+        // });
+        // _.forEach($('div.gregorSubTableHeader').find('input.gregorSubTableRowHeader:checked'),function(tissueInput){
+        //     uniqueTissues.push($(tissueInput).attr('value'));
+        // });
         if ((uniqueMethods.length>0) &&
             (uniqueAnnotations.length>0) &&
             (uniqueTissues.length>0)) {
@@ -4505,6 +4545,34 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 }
 
             })
+            $('div.epigeneticCellElement').removeClass('yesDisplay');
+            $('div.epigeneticCellElement').removeClass('skipDisplay');
+            _.forEach($('div.epigeneticCellElement'),function(oneTr){
+                const currentAnnotation = extractClassBasedTrailingString(oneTr,"annotationName_");
+                const currentTissue = extractClassBasedTrailingString(oneTr,"tissueId_");
+                const cellOffset = $(oneTr).offset();
+                if (_.includes(uniqueTissues,currentTissue)&&
+                    ((currentAnnotation.length===0)||(_.includes(uniqueAnnotations,currentAnnotation)))){
+                    $(oneTr).show();
+                    $(oneTr).addClass('yesDisplay');
+                } else {
+                    $(oneTr).hide();
+                    $(oneTr).addClass('skipDisplay');
+                }
+            });
+            _.forEach($('div.varAnnotation'),function(oneDiv){
+                const currentAnnotation = extractClassBasedTrailingString(oneDiv,"annotationName_");
+                if (_.includes(uniqueAnnotations,currentAnnotation)){
+                    //$(oneDiv).parent().parent().show();
+                    $(oneDiv).parent().parent().removeClass('doNotDisplay');
+                    //$(oneDiv).parent().parent().css('display','none');
+                } else {
+                   // $(oneDiv).parent().parent().hide();
+                    $(oneDiv).parent().parent().addClass('doNotDisplay');
+                   // $(oneDiv).parent().parent().css('display','none');
+                }
+            });
+
         }
     };
 
@@ -4649,6 +4717,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                             $(domElement).parent().hide();
                         }
                     });
+                    $('div.emphasisSwitch_false span').hide();
 
                     // var handle = $( "#custom-handle" );
                     // $( "#gregorPValueSlider" ).slider({
@@ -5152,6 +5221,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         const sharedTable = getSharedTable(whereTheTableGoes);
 
         if (formSwitch === 1){
+
             if ( typeof sharedTable['currentFormVariation'] === 'undefined'){
                 sharedTable['currentFormVariation'] = 1;
             }
@@ -5175,7 +5245,26 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 sharedTable['currentForm'],
                 0,
                 false);
+
+            // I don't understand why I have to perform this final revision in the next line
+            $('tr.doNotDisplay').css('display','none');
+        } else         if (formSwitch === 2){
+
+            if ( typeof sharedTable['currentFormVariation'] === 'undefined'){
+                sharedTable['currentFormVariation'] = 1;
+            }
+                   filterEpigeneticTable();
+
+            refineTableRecords( whereTheTableGoes,
+                $(whereTheTableGoes).dataTable(),
+                sharedTable['currentForm'],
+                0,
+                false);
+
+            // I don't understand why I have to perform this final revision in the next line
+            $('tr.doNotDisplay').css('display','none');
         }
+
 
 
     };

@@ -29,18 +29,25 @@ mpgSoftware.dynamicUi.gregorSubTableVariantTable = (function () {
     var processRecordsFromGregor = function (data,rawGeneAssociationRecords) {
 
         if ( ( typeof data !== 'undefined') &&
-            ( typeof data.data !== 'undefined') ){
+            ( typeof data.data !== 'undefined') &&
+            (  data.data.length > 0)){
             var geneRecord = {header:{}, data:[]};
-            const allRecs = _.filter(data.data,["ancestry","EU"]);
+            let allRecs = _.filter(data.data,["ancestry","EU"]);
+            if (allRecs.length===0){
+                allRecs = data.data;
+            }
             _.forEach(allRecs, function (oneRec) {
                 oneRec['p_value'] = _.min([oneRec.p_value,1.0]);
             });
             geneRecord.header['annotations'] = _.map(_.uniqBy(allRecs,'annotation'),function(o){return o.annotation});
             geneRecord.header['ancestries'] = _.map(_.uniqBy(allRecs,'ancestry'),function(o){return o.ancestry});
             geneRecord.header['tissues'] = _.map(_.uniqBy(allRecs,'tissue'),function(o){return o.tissue.replace('\'','').toLowerCase()});
-            geneRecord.header['defaultGregorPValueUpperValue'] = _.last(_.take(_.orderBy(allRecs,['p_value'],['asc']),5)).p_value;
-            geneRecord.header['minimumGregorPValue'] = _.minBy(allRecs,'p_value').p_value;
-            geneRecord.header['maximumGregorPValue'] = _.maxBy(allRecs,'p_value').p_value;
+            const defaultGregorPValueUpperValue = _.last(_.take(_.orderBy(allRecs,['p_value'],['asc']),5));
+            geneRecord.header['defaultGregorPValueUpperValue'] = ( typeof defaultGregorPValueUpperValue === 'undefined')?1:defaultGregorPValueUpperValue.p_value;
+            const minimumGregorPValue = _.minBy(allRecs,'p_value');
+            geneRecord.header['minimumGregorPValue'] = ( typeof minimumGregorPValue === 'undefined')?0:minimumGregorPValue.p_value;
+            const maximumGregorPValue = _.maxBy(allRecs,'p_value');
+            geneRecord.header['maximumGregorPValue'] = ( typeof maximumGregorPValue === 'undefined')?1:maximumGregorPValue.p_value;
             geneRecord.header['bestAnnotations'] = _.uniqBy(allRecs,'annotation');
             geneRecord.header['bestAncestries'] = _.uniqBy(allRecs,'ancestry');
             geneRecord.header['bestTissues'] = _.uniqBy(allRecs,'tissue');
