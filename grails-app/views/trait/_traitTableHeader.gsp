@@ -2,14 +2,15 @@
 <h1 class="dk-page-title" xmlns="http://www.w3.org/1999/html">Interactive Manhattan plot</h1>
 
 
-
 <script>
+
     var drivingVariables = {
         phenotypeName: '<%=phenotypeKey%>',
         ajaxClumpDataUrl: '${createLink(controller: "trait", action: "ajaxClumpData")}',
         traitSearchUrl: "${createLink(controller: 'trait', action: 'traitSearch')}",
         retrievePhenotypesAjaxUrl:'<g:createLink controller="variantSearch" action="retrievePhenotypesAjax" />',
         ajaxSampleGroupsPerTraitUrl: '${createLink(controller: "trait", action: "ajaxSampleGroupsPerTrait")}',
+        retrieveGwasSpecificPhenotypesAjaxUrl:"${createLink(controller:'VariantSearch', action:'retrieveGwasSpecificPhenotypesAjax')}",
         phenotypeAjaxUrl: '${createLink(controller: "trait", action: "phenotypeAjax")}',
         variantInfoUrl: '${createLink(controller: "variantInfo", action: "variantInfo")}',
         requestedSignificance:'<%=requestedSignificance%>',
@@ -21,7 +22,7 @@
 
     $( document ).ready(function() {
         mpgSoftware.manhattanplotTableHeader.fillSampleGroupDropdown('<%=phenotypeKey%>');
-        mpgSoftware.manhattanplotTableHeader.fillPhenotypesDropdownNew('T2D', '<%=phenotypeKey%>');
+        mpgSoftware.manhattanplotTableHeader.fillPhenotypesDropdown('T2D', 'manhattanPhenotypeDropdownWrapper','phenotypeDropdown');
         mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis('<%=phenotypeKey%>','');
     });
 </script>
@@ -34,20 +35,23 @@
 
 <div style = "width: 30%; float: left; padding-right: 15px">
     <p class= "dk-footnote" style="width:83%;">Phenotype</p>
-    <select  style = " width:100%; overflow: hidden; text-overflow: ellipsis;" id="phenotypeVFChoser" selected = "selected" name="phenotypeVFChoser" onchange="mpgSoftware.manhattanplotTableHeader.onCLickPhenotype(this.value)">
-    </select>
+
+    %{--<select  style = " width:100%; overflow: hidden; text-overflow: ellipsis;" id="phenotypeVFChoser" selected = "selected" name="phenotypeVFChoser" onchange="mpgSoftware.manhattanplotTableHeader.onCLickPhenotype(this.value)">--}%
+    %{--</select>--}%
+
+    <div id = "manhattanPhenotypeDropdownWrapper" ></div>
 </div>
 
 <div style = "width: 30%; float: left; padding-right: 15px">
     <p class= "dk-footnote" style="width:83%;">Dataset&nbsp;&nbsp;<g:helpText title="manhattan_datasets_help.header" placement="bottom" body="manhattan_datasets_help.text"/></p>
     <span id="traitTableDescription"></span>
-    <select  style = " width:100%; overflow: hidden; text-overflow: ellipsis;" id="manhattanSampleGroupChooser" name="manhattanSampleGroupChooser" onchange="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants()">
+    <select  class = "form-control" style = " width:100%; overflow: hidden; text-overflow: ellipsis;" id="manhattanSampleGroupChooser" name="manhattanSampleGroupChooser" onchange="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants()">
     </select>
 </div>
 
-<div id = "r2dropdown" style = "width: auto;" >
+<div id = "r2dropdown" >
     <p class = "dk-footnote" style="width:83%;">r<sup>2</sup> threshold&nbsp;&nbsp;<g:helpText title="r_squared.help.header" placement="bottom" body="r_squared.help.text"/></p>
-    <select style = "width: 150px; overflow: hidden; text-overflow: ellipsis;" id="rthreshold" name="rthreshold" onchange="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants()">
+    <select class = "phenotypeDropdown selectpicker" style = "width: 150px; overflow: hidden; text-overflow: ellipsis;" id="rthreshold" name="rthreshold" onchange="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants()">
         <option value="0.1000001" >0.1 </option>
         <option value="0.2" >0.2 </option>
         <option value="0.4" >0.4 </option>

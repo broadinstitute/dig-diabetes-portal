@@ -407,6 +407,7 @@ var UTILS = {
                         .html("&nbsp;&nbsp;&nbsp;" + groupContents[j][1]));
                 }
                 options.append("</optgroup>");
+                $(phenotypeDropDownIdentifier).selectpicker('refresh');
             });
             // enable the input
             options.prop('disabled', false);
@@ -439,7 +440,9 @@ var UTILS = {
                     }
                 }
                 options.append("</optgroup>");
+                // $(phenotypeDropDownIdentifier).selectpicker('refresh');
             });
+
             // enable the input
             options.prop('disabled', false);
 
