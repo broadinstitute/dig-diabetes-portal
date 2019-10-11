@@ -32,26 +32,32 @@
 <p><g:message code="informational.traitTableHeader.help3"></g:message></p>
 <p><g:message code="informational.traitTableHeader.help4"></g:message></p>
 <p>&nbsp;</p>
+<style>
+    /* DK is adding the following styles since they are Manhattan plot page specific */
 
-<div style = "width: 30%; float: left; padding-right: 15px">
+    #datasetdropdown .btn-group.bootstrap-select, #r2dropdown .btn-group.bootstrap-select { width: 100% !important;}
+
+</style>
+
+<div id="phenotypedropdown" style = "width: 30%; float: left; padding-right: 15px">
     <p class= "dk-footnote" style="width:83%;">Phenotype</p>
 
     %{--<select  style = " width:100%; overflow: hidden; text-overflow: ellipsis;" id="phenotypeVFChoser" selected = "selected" name="phenotypeVFChoser" onchange="mpgSoftware.manhattanplotTableHeader.onCLickPhenotype(this.value)">--}%
     %{--</select>--}%
 
-    <div id = "manhattanPhenotypeDropdownWrapper" ></div>
+    <div id = "manhattanPhenotypeDropdownWrapper" style="padding-top: 1px;"></div>
 </div>
 
-<div style = "width: 30%; float: left; padding-right: 15px">
+<div id="datasetdropdown" style = "width: 30%; float: left; padding-right: 15px">
     <p class= "dk-footnote" style="width:83%;">Dataset&nbsp;&nbsp;<g:helpText title="manhattan_datasets_help.header" placement="bottom" body="manhattan_datasets_help.text"/></p>
     <span id="traitTableDescription"></span>
-    <select  class = "form-control" style = " width:100%; overflow: hidden; text-overflow: ellipsis;" id="manhattanSampleGroupChooser" name="manhattanSampleGroupChooser" onchange="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants()">
+    <select  class = "selectpicker" style = " width:100%; overflow: hidden; text-overflow: ellipsis;" id="manhattanSampleGroupChooser" name="manhattanSampleGroupChooser" onchange="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants()">
     </select>
 </div>
 
-<div id = "r2dropdown" >
+<div id = "r2dropdown" style = "width: 30%; float: left; padding-right: 15px">
     <p class = "dk-footnote" style="width:83%;">r<sup>2</sup> threshold&nbsp;&nbsp;<g:helpText title="r_squared.help.header" placement="bottom" body="r_squared.help.text"/></p>
-    <select class = "phenotypeDropdown selectpicker" style = "width: 150px; overflow: hidden; text-overflow: ellipsis;" id="rthreshold" name="rthreshold" onchange="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants()">
+    <select class = "selectpicker" style = "width: 100%; overflow: hidden; text-overflow: ellipsis;" id="rthreshold" name="rthreshold" onchange="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants()">
         <option value="0.1000001" >0.1 </option>
         <option value="0.2" >0.2 </option>
         <option value="0.4" >0.4 </option>
@@ -59,7 +65,6 @@
         <option value="0.8" >0.8 </option>
         <option value="1" selected="selected"> 1 </option>
     </select>
-
 </div>
 
 <style>

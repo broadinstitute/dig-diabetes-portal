@@ -39,12 +39,14 @@ var mpgSoftware = mpgSoftware || {};
                             //assume we have data and process it
                             for (var i = 0; i < data.sampleGroups.length; i++) {
                                 var sampleGroup = data.sampleGroups[i];
-                                $('#manhattanSampleGroupChooser').append(new Option(sampleGroup.sgn, sampleGroup.sg, sampleGroup.default))
-
+                                console.log("sample group default: "+sampleGroup.default);
+                                $('#manhattanSampleGroupChooser').append(new Option(sampleGroup.sgn, sampleGroup.sg, sampleGroup.default));
                             }
+
                             }
                          }
                     loader.hide();
+                    $('#manhattanSampleGroupChooser.selectpicker').selectpicker('refresh');
                 },
                 error: function (jqXHR, exception) {
                     loader.hide();
@@ -77,6 +79,9 @@ var mpgSoftware = mpgSoftware || {};
                 async: true,
                 success: function (data) {
                     loading.hide();
+
+                    document.getElementById("r2dropdown").style.display = "block";
+
                     if(data.variant.results[0].isClump == false){
                         document.getElementById("r2dropdown").style.display = "none";
                         mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis(phenotype,dataset);
@@ -152,6 +157,8 @@ var mpgSoftware = mpgSoftware || {};
             var rememberportaltype = portaltype;
             var wrapper = '#' + WRAPPER;
 
+            $(wrapper).append('<select onchange="mpgSoftware.manhattanplotTableHeader.onCLickPhenotype(this.value)" class="'+ PHENOTYPELIST +' form-control selectpicker" data-live-search="true" id="'+ PHENOTYPELIST +'" name="'+ PHENOTYPELIST +'"></select>');
+
             $.ajax({
                 cache: false,
                 type: "post",
@@ -163,7 +170,7 @@ var mpgSoftware = mpgSoftware || {};
                         ( typeof data !== 'undefined') &&
                         ( typeof data.datasets !== 'undefined' ) &&
                         (  data.datasets !== null )) {
-                         $(wrapper).append('<select onchange="mpgSoftware.manhattanplotTableHeader.onCLickPhenotype(this.value)" class="'+ PHENOTYPELIST +' form-control selectpicker" data-live-search="true" id="'+ PHENOTYPELIST +'" name="'+ PHENOTYPELIST +'"></select>');
+
 
                         while ($("#"+ PHENOTYPELIST).length) {
                             UTILS.fillPhenotypeCompoundDropdown(data.datasets, "#" + PHENOTYPELIST, true, [], rememberportaltype);
@@ -185,7 +192,7 @@ var mpgSoftware = mpgSoftware || {};
                         break;
                     }
 
-                    $('.'+PHENOTYPELIST+'.selectpicker').selectpicker('refresh');
+                    $('#'+PHENOTYPELIST+'.selectpicker').selectpicker('refresh');
 
 
                 },
