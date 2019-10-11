@@ -39,11 +39,14 @@ var mpgSoftware = mpgSoftware || {};
                             //assume we have data and process it
                             for (var i = 0; i < data.sampleGroups.length; i++) {
                                 var sampleGroup = data.sampleGroups[i];
-                                $('#manhattanSampleGroupChooser').append(new Option(sampleGroup.sgn, sampleGroup.sg, sampleGroup.default))
+                                console.log("sample group default: "+sampleGroup.default);
+                                $('#manhattanSampleGroupChooser').append(new Option(sampleGroup.sgn, sampleGroup.sg, sampleGroup.default));
                             }
+
                             }
                          }
                     loader.hide();
+                    $('#manhattanSampleGroupChooser.selectpicker').selectpicker('refresh');
                 },
                 error: function (jqXHR, exception) {
                     loader.hide();
@@ -76,6 +79,9 @@ var mpgSoftware = mpgSoftware || {};
                 async: true,
                 success: function (data) {
                     loading.hide();
+
+                    document.getElementById("r2dropdown").style.display = "block";
+
                     if(data.variant.results[0].isClump == false){
                         document.getElementById("r2dropdown").style.display = "none";
                         mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis(phenotype,dataset);
@@ -146,11 +152,13 @@ var mpgSoftware = mpgSoftware || {};
         };
 
 
-        // called when page loads
-        var fillPhenotypesDropdown = function (portaltype) {
+        var fillPhenotypesDropdown = function (portaltype, WRAPPER, PHENOTYPELIST) {
             var rememVars = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
-            var loading = $('#spinner').show();
             var rememberportaltype = portaltype;
+            var wrapper = '#' + WRAPPER;
+
+            $(wrapper).append('<select onchange="mpgSoftware.manhattanplotTableHeader.onCLickPhenotype(this.value)" class="'+ PHENOTYPELIST +' form-control selectpicker" data-live-search="true" id="'+ PHENOTYPELIST +'" name="'+ PHENOTYPELIST +'"></select>');
+
             $.ajax({
                 cache: false,
                 type: "post",
@@ -162,43 +170,43 @@ var mpgSoftware = mpgSoftware || {};
                         ( typeof data !== 'undefined') &&
                         ( typeof data.datasets !== 'undefined' ) &&
                         (  data.datasets !== null )) {
-                        UTILS.fillPhenotypeCompoundDropdown(data.datasets, '#phenotypeVFChoser', true, [], rememberportaltype);
+
+
+                        while ($("#"+ PHENOTYPELIST).length) {
+                            UTILS.fillPhenotypeCompoundDropdown(data.datasets, "#" + PHENOTYPELIST, true, [], rememberportaltype);
+
+                            break;
+                        }
                     }
-                    loading.hide();
+
+                    if (data.message == 'There is an error')
+                    {
+                        mpgSoftware.moduleLaunch.handleAjaxError();
+                        return;
+                    }
+
+                    var startTime = new Date();
+
+                    while ($("#"+ PHENOTYPELIST).find("option").length > 0) {
+                        console.log("phenotype list loaded");
+                        break;
+                    }
+
+                    $('#'+PHENOTYPELIST+'.selectpicker').selectpicker('refresh');
+
+
                 },
                 error: function (jqXHR, exception) {
-                    loading.hide();
+
+                    console.log(jqXHR);
+                    console.log(exception);
+
+                    mpgSoftware.moduleLaunch.handleAjaxError();
                     core.errorReporter(jqXHR, exception);
                 }
             });
         };
 
-        // called when page loads
-        var fillPhenotypesDropdownNew = function (portaltype, selectedHomePagePhenotype) {
-            var rememVars = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
-            var loading = $('#spinner').show();
-            var rememberportaltype = portaltype;
-            $.ajax({
-                cache: false,
-                type: "post",
-                url: rememVars.retrievePhenotypesAjaxUrl,
-                data: {getNonePhenotype: false},
-                async: true,
-                success: function (data) {
-                    if (( data !== null ) &&
-                        ( typeof data !== 'undefined') &&
-                        ( typeof data.datasets !== 'undefined' ) &&
-                        (  data.datasets !== null )) {
-                        UTILS.fillPhenotypeCompoundDropdownNew(data.datasets, '#phenotypeVFChoser', true, [], rememberportaltype, selectedHomePagePhenotype);
-                    }
-                    loading.hide();
-                },
-                error: function (jqXHR, exception) {
-                    loading.hide();
-                    core.errorReporter(jqXHR, exception);
-                }
-            });
-        };
 
 
 
@@ -314,7 +322,6 @@ var mpgSoftware = mpgSoftware || {};
             setMySavedVariables:setMySavedVariables,
             getMySavedVariables:getMySavedVariables,
             fillPhenotypesDropdown: fillPhenotypesDropdown,
-            fillPhenotypesDropdownNew: fillPhenotypesDropdownNew,
             onCLickPhenotype: onCLickPhenotype
         }
 
