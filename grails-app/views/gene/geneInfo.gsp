@@ -223,12 +223,13 @@
 
 
 
-
+<!--
                 <div class="col-md-12" style="padding-top: 30px;">
 
                     <g:render template="geneSummary" model="[geneToSummarize:geneName]"/>
 
                 </div>
+                -->
 
 
 
