@@ -1353,7 +1353,7 @@ mpgSoftware.dynamicUi = (function () {
                             var variantNameArray = _.map(dataVector, function(variantRec){return variantRec.var_id;});
                             variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";
                         }
-                        var dataForCall = {variants: variantsAsJson, method:'ChromHMM'};
+                        var dataForCall = {variants: variantsAsJson, method:'ChromHMM', limit:2000};
                         retrieveRemotedContextInformation(buildRemoteContextArray({
                             name: actionId,
                             retrieveDataUrl: additionalParameters.retrieveVariantAnnotationsUrl,
@@ -4546,7 +4546,17 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
             })
             $('div.epigeneticCellElement').removeClass('yesDisplay');
+            $('div.epigeneticCellElement').removeClass('gregorQuantile_1');
+            $('div.epigeneticCellElement').removeClass('gregorQuantile_2');
+            $('div.epigeneticCellElement').removeClass('gregorQuantile_3');
+            $('div.epigeneticCellElement').removeClass('gregorQuantile_4');
+            $('div.epigeneticCellElement').removeClass('gregorQuantile_5');
             $('div.epigeneticCellElement').removeClass('skipDisplay');
+            const gregorAcc = getAccumulatorObject("gregorVariantInfo");
+            let quantileDef = {};
+            if (gregorAcc.length>0){
+                quantileDef =  gregorAcc[0].header['quickLookup']
+            }
             _.forEach($('div.epigeneticCellElement'),function(oneTr){
                 const currentAnnotation = extractClassBasedTrailingString(oneTr,"annotationName_");
                 const currentTissue = extractClassBasedTrailingString(oneTr,"tissueId_");
@@ -4555,6 +4565,11 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     ((currentAnnotation.length===0)||(_.includes(uniqueAnnotations,currentAnnotation)))){
                     $(oneTr).show();
                     $(oneTr).addClass('yesDisplay');
+                    if (!$.isEmptyObject(quantileDef)){
+                        const quanAss = quantileDef[currentAnnotation+"_"+currentTissue.replace("_",":")];
+                        if ( typeof quanAss !== 'undefined')
+                        $(oneTr).addClass('gregorQuantile_'+quanAss.quantile);
+                    }
                 } else {
                     $(oneTr).hide();
                     $(oneTr).addClass('skipDisplay');

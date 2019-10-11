@@ -126,8 +126,8 @@ mpgSoftware.dynamicUi.chromStateVariantTable = (function () {
             callingParameters.nameOfAccumulatorFieldWithIndex,
             // insert header records as necessary into the intermediate structure, and return header names that we can match on for the columns
             function(records,tissueTranslations){
-                //return _.orderBy(_.filter(records,function(o){return (o.p_value<0.05)}),['p_value'],['asc']);
-                return _.orderBy(records,['SOURCE'],['asc']);
+                let recs =  _.orderBy(records,['SOURCE'],['asc']);
+                return recs;
             },
 
             // take all the records for each row and insert them into the intermediateDataStructure

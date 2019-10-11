@@ -25,8 +25,9 @@ div.k27ac {
 div.gregorPVals {
     font-size: 10px;
 }
-div.gregorPVals dynamicDisplay {
+div.gregorPVals.dynamicDisplay {
     color: blue;
+    font-weight: bold;
 }
 div.gregorSubTableRow{
 
@@ -82,6 +83,10 @@ div.variantAnnotationCompress {
     height: 500px;
     font-size: 12px;
     overflow-y: scroll;
+    overflow-x: hidden;
+}
+#gregorPValueSlider{
+    margin-top: 10px;
 }
 /*td.emphasisSwitch_true {*/
     /*background-color: #0000FF;*/
@@ -141,7 +146,24 @@ body::-webkit-scrollbar-thumb {
     overflow:auto;
     font-size: 12px;
 }
-
+/*div.epigeneticCellElement.gregorQuantile_0{*/
+    /*background: #0000FF;*/
+/*}*/
+/*div.epigeneticCellElement.gregorQuantile_0{*/
+    /*background: #4682B4;*/
+/*}*/
+div.epigeneticCellElement.gregorQuantile_0{
+    background: #1E90FF;
+}
+div.epigeneticCellElement.gregorQuantile_1{
+    background: #87CEFA;
+}
+div.epigeneticCellElement.gregorQuantile_2{
+    background: #B0E0E6;
+}
+div.epigeneticCellElement.gregorQuantile_3{
+    background: #E6E6FA;
+}
 #dynamicGeneHolder > div.row { background-color: #fff !important; border: none !important; }
 div.datatable-control-box { float: right; padding: 30px 10px 15px 0px; }
 div.datatable-transpose-control, div.datatable-cell-color-control, div.datatable-zoom-control { float: left; padding-left: 15px; }
@@ -641,6 +663,7 @@ table.variantTableHolder, th  {
 }
 table.variantTableHolder div.epigeneticCellElement   {
     font-size: 10px;
+    font-weight: bold;
     white-space: normal;
     overflow: hidden;
     text-overflow: ellipsis;

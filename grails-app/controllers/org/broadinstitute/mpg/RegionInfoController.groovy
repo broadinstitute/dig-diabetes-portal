@@ -1460,6 +1460,17 @@ class RegionInfoController {
             method = params.method
         }
 
+        if ((params.limit!=null)&&(params.limit)) {
+            try {
+                limit = Double.parseDouble(params.limit).intValue()
+            } catch (Exception e) {
+                looksOkay = false
+                e.printStackTrace()
+                log.error("retrieveVariantAnnotations:failed to convert limit value=${params.limit}")
+            }
+        }
+
+
         if ((params.startPos!=null)&&(params.startPos)) {
             try {
                 startPosition = Double.parseDouble(params.startPos).intValue()

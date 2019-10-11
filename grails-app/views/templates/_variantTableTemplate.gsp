@@ -94,11 +94,11 @@
                     </div>
                     <div class="row">
                         <div class="col-xs-3">
-                            <div class="gregorPVals minimumGregorPValue"></div>
+                            <div class="gregorPVals minimumGregorPValue left-text"></div>
                         </div>
                         <div class="col-xs-6"></div>
                         <div class="col-xs-3">
-                            <div class="gregorPVals maximumGregorPValue"></div>
+                            <div class="gregorPVals maximumGregorPValue right-text"></div>
                         </div>
                     </div>
                     <div class="row">

@@ -32,21 +32,25 @@ mpgSoftware.dynamicUi.gregorSubTableVariantTable = (function () {
             ( typeof data.data !== 'undefined') &&
             (  data.data.length > 0)){
             var geneRecord = {header:{}, data:[]};
-            let allRecs = _.filter(data.data,["ancestry","EU"]);
-            if (allRecs.length===0){
-                allRecs = data.data;
+            let everyAncestry = _.map(_.uniqBy(data.data,'ancestry'),function(o){return o.ancestry});
+            let allRecs = data.data;
+            if (_.includes(everyAncestry,"EU")){
+                allRecs = _.filter(data.data,["ancestry","EU"])
+            } else if (everyAncestry.length>0){
+                allRecs = _.filter(data.data,["ancestry",_.first(everyAncestry)])
             }
             _.forEach(allRecs, function (oneRec) {
                 oneRec['p_value'] = _.min([oneRec.p_value,1.0]);
             });
+            const recordsOrderedByP = _.orderBy(allRecs,['p_value'],['asc']);
             geneRecord.header['annotations'] = _.map(_.uniqBy(allRecs,'annotation'),function(o){return o.annotation});
             geneRecord.header['ancestries'] = _.map(_.uniqBy(allRecs,'ancestry'),function(o){return o.ancestry});
             geneRecord.header['tissues'] = _.map(_.uniqBy(allRecs,'tissue'),function(o){return o.tissue.replace('\'','').toLowerCase()});
-            const defaultGregorPValueUpperValue = _.last(_.take(_.orderBy(allRecs,['p_value'],['asc']),5));
+            const defaultGregorPValueUpperValue = _.last(_.take(recordsOrderedByP,5));
             geneRecord.header['defaultGregorPValueUpperValue'] = ( typeof defaultGregorPValueUpperValue === 'undefined')?1:defaultGregorPValueUpperValue.p_value;
-            const minimumGregorPValue = _.minBy(allRecs,'p_value');
+            const minimumGregorPValue = _.first(recordsOrderedByP);
             geneRecord.header['minimumGregorPValue'] = ( typeof minimumGregorPValue === 'undefined')?0:minimumGregorPValue.p_value;
-            const maximumGregorPValue = _.maxBy(allRecs,'p_value');
+            const maximumGregorPValue = _.last(recordsOrderedByP);
             geneRecord.header['maximumGregorPValue'] = ( typeof maximumGregorPValue === 'undefined')?1:maximumGregorPValue.p_value;
             geneRecord.header['bestAnnotations'] = _.uniqBy(allRecs,'annotation');
             geneRecord.header['bestAncestries'] = _.uniqBy(allRecs,'ancestry');
@@ -58,6 +62,19 @@ mpgSoftware.dynamicUi.gregorSubTableVariantTable = (function () {
                 holder['safeTissueId'] = oneRec.tissue_id.replace(":","_");
                 vectorWithAllRecords.push(holder)
             });
+            const numberOfQuantiles = 5;
+            const quantileBreak = Math.floor(allRecs.length/numberOfQuantiles);
+            const quantiles = [];
+            _.forEach(_.range(0,numberOfQuantiles-1),function(rec, index){
+                quantiles.push(allRecs.splice(index*quantileBreak,(index+1)*quantileBreak));
+            });
+            const quickLookup = {};
+            _.forEach(quantiles,function(quantileArray,currentQuantile){
+                _.forEach(quantileArray,function(rec) {
+                    quickLookup[rec.annotation + "_" + rec.tissue_id] = {p_value:rec.p_value,quantile:currentQuantile};
+                })
+            });
+            geneRecord.header['quickLookup'] =quickLookup;
             geneRecord.data = _.groupBy(vectorWithAllRecords,'tissue');
             rawGeneAssociationRecords.push(geneRecord);
         }
