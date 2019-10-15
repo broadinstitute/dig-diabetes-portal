@@ -22,7 +22,7 @@
 
     $( document ).ready(function() {
         mpgSoftware.manhattanplotTableHeader.fillSampleGroupDropdown('<%=phenotypeKey%>');
-        mpgSoftware.manhattanplotTableHeader.fillPhenotypesDropdown('T2D', 'manhattanPhenotypeDropdownWrapper','phenotypeDropdown');
+        mpgSoftware.manhattanplotTableHeader.fillPhenotypesDropdown('<%=params.trait%>' || 'T2D', 'manhattanPhenotypeDropdownWrapper','phenotypeDropdown');
         mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis('<%=phenotypeKey%>','');
     });
 </script>

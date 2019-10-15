@@ -386,7 +386,7 @@ var UTILS = {
         }
     },
     // phenotypesToOmit is an array of the phenotype keys that should not be included
-    fillPhenotypeCompoundDropdown: function (dataSetJson,phenotypeDropDownIdentifier,includeDefault, phenotypesToOmit,portaltype) { // help text for each row
+    fillPhenotypeCompoundDropdown: function (dataSetJson,phenotypeDropDownIdentifier,includeDefault, phenotypesToOmit,selectedPhenotype) { // help text for each row
         if ((typeof dataSetJson !== 'undefined')  &&
             (typeof dataSetJson["is_error"] !== 'undefined')&&
             (dataSetJson["is_error"] === false))
@@ -402,12 +402,20 @@ var UTILS = {
                     if(_.includes(phenotypesToOmit, groupContents[j][0])) {
                         continue;
                     }
-                    options.append($("<option />").val(groupContents[j][0])
-                    // add some whitespace to create indentation
-                        .html("&nbsp;&nbsp;&nbsp;" + groupContents[j][1]));
+                    if(selectedPhenotype === groupContents[j][0]){
+                        options.append($("<option selected='' />").val(groupContents[j][0]).html("&nbsp;&nbsp;&nbsp;" + groupContents[j][1]));
+                    }
+                    else{
+                        options.append($("<option />").val(groupContents[j][0])
+                        // add some whitespace to create indentation
+                            .html("&nbsp;&nbsp;&nbsp;" + groupContents[j][1]));
+
+                    }
+
                 }
                 options.append("</optgroup>");
-                $(phenotypeDropDownIdentifier).selectpicker('refresh');
+                //$(phenotypeDropDownIdentifier).selectpicker('refresh');
+
             });
             // enable the input
             options.prop('disabled', false);
