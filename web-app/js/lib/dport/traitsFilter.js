@@ -386,9 +386,12 @@ var mpgSoftware = mpgSoftware || {};
 
                 });
 
-                $("#dk_lz_phenotype_list").addClass("list-allset")
+                $("#dk_lz_phenotype_list").addClass("list-allset");
+
+
 
             }
+            filterLZDatasets("trackList-static",$(".gene-phenotype").text());
 
         }
 
@@ -402,6 +405,19 @@ var mpgSoftware = mpgSoftware || {};
                 var trimmedPName = $.trim($(this).text());
 
                 (trimmedPName == phenotypeName)? $(this).closest("li").css("display","block") : $(this).closest("li").css("display","none");
+            })
+        }
+
+        var filterLZDatasets = function (TGDATALIST, PHENOTYPE) {
+
+            console.log("filterLZDatasets called");
+
+            $("#"+TGDATALIST).find("span.dk-lz-dataset").each(function(liIndex) {
+                var trimmedPName = $.trim($(this).text());
+
+                console.log(liIndex+" phenotype: "+PHENOTYPE+", trimmed name: "+trimmedPName);
+
+                (trimmedPName == PHENOTYPE)? $("#"+TGDATALIST).find("li").eq(liIndex).css("display","block") : $("#"+TGDATALIST).find("li").eq(liIndex).closest("li").css("display","none");
             })
         }
 
@@ -428,6 +444,7 @@ var mpgSoftware = mpgSoftware || {};
             setHomePageVariables:setHomePageVariables,
             massageLZ:massageLZ,
             setLZDatasets:setLZDatasets,
+            filterLZDatasets:filterLZDatasets,
             showLZlist:showLZlist
         }
     }());

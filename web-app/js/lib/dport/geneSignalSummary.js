@@ -1057,7 +1057,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var favoredPhenotype = params.favoredPhenotype;
         if (listOfInterestingPhenotypes.length > 0) {
             $('.interestingPhenotypesHolder').css('display','block');
-            var phenotypeDescriptions = '<label style="font-size:20px; text-transform: uppercase;">Phenotypes with signals</label><ul class="nav nav-pills">';
+            var phenotypeDescriptions = '<ul class="nav nav-pills">';
             _.forEach(listOfInterestingPhenotypes, function (o,curIndex) {
                 if (o['signalStrength'] == 1) {
                     phenotypeDescriptions += ('<li id="'+o['phenotype']+'" ds="'+o['ds']+'" dsr="'+o['dsr']+'" class="nav-item redPhenotype phenotypeStrength">' + o['pname'] + '</li>');
@@ -1988,6 +1988,10 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var datasetReadableName = additionalParameters.dsr;
         var pName = additionalParameters.pname;
 
+        // Adding initial phenotype name to the page header
+        $("#gene-info-summary-content").find(".gene-phenotype").html(pName);
+
+
         if ((typeof datasetName === 'undefined') ||
             (datasetName === null))   {
             var suboptimalDefaultDataSets = _.map(_.filter(data.datasetToChoose,function(o){return o.suitableForDefaultDisplay==="false"}),function(oo){return oo.dataset});
@@ -2100,15 +2104,23 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         }
 
         var genePageConfigurationParameters = buildPageConfigurationVariable(additionalParameters,displayCommonTab,displayHighImpactTab,pName,credibleSetTab,incredibleSetTab);
+
+        /* hiding High-impact variants on V2fKP */
+        /*
          $("#organizeSignalSummaryHeaderGoesHere").empty().append(Mustache.render($('#organizeSignalSummaryHeader')[0].innerHTML,
              genePageConfigurationParameters
                 ));
+                */
+
         $("#commonVariantTabHolder").empty().append(Mustache.render($('#organizeSignalSummaryCommon')[0].innerHTML,
             genePageConfigurationParameters
                 ));
+        /* hiding High-impact variants on V2fKP */
+        /*
         $("#highImpactVariantTabHolder").empty().append(Mustache.render($('#organizeSignalSummaryHighImpact')[0].innerHTML,
             genePageConfigurationParameters
-                ));
+                ));*/
+
         if (credibleSetTab.length>0){
             $("#credibleSetTabHolder").empty().append(Mustache.render($('#organizeSignalSummaryCredibleSet')[0].innerHTML,
                 genePageConfigurationParameters
@@ -2338,6 +2350,9 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         //     mpgSoftware.locusZoom.setNewDefaultLzPlot('#lz-'+additionalParameters.lzCredSet);
         //     mpgSoftware.locusZoom.rescaleSVG(mpgSoftware.locusZoom.getNewDefaultLzPlot());
         // });
+
+        /* muting for V2F KP */
+        /*
         $('a[href="#credibleSetTabHolder"]').on('shown.bs.tab', function (e) {
             var signalSummarySectionVariables = getSignalSummarySectionVariables();
             buildOutSetPresentation(signalSummarySectionVariables['rememberOriginalData'],
@@ -2347,6 +2362,17 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
            // mpgSoftware.locusZoom.rescaleSVG(mpgSoftware.locusZoom.getNewDefaultLzPlot());
             mpgSoftware.regionInfo.removeAllCredSetHeaderPopUps();
         });
+        */
+
+        var signalSummarySectionVariables = getSignalSummarySectionVariables();
+        buildOutSetPresentation(signalSummarySectionVariables['rememberOriginalData'],
+            signalSummarySectionVariables,
+            false,'P_VALUE');
+        mpgSoftware.locusZoom.setNewDefaultLzPlot('#lz-'+additionalParameters.lzCredSet);
+        // mpgSoftware.locusZoom.rescaleSVG(mpgSoftware.locusZoom.getNewDefaultLzPlot());
+        mpgSoftware.regionInfo.removeAllCredSetHeaderPopUps();
+
+
         if (!commonSectionShouldComeFirst) {
             $('.commonVariantChooser').removeClass('active');
             $('.highImpacVariantChooser').addClass('active');

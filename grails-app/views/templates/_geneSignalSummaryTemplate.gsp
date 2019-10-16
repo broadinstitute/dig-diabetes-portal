@@ -42,15 +42,18 @@
 
             <div class="row interestingPhenotypesHolder">
                 <div class="col-md-12">
-                    <div id="interestingPhenotypes">
+                <h2><span style="text-transform: uppercase;">Phenotypes with signals</span> <small>(Click button to reset phenotype)</small></h2>
+                {{#genePageWarning}}
+                <p style="font-size: 16px;">
+                    {{.}}
+                </p>
+                {{/genePageWarning}}
+
+                    <div id="interestingPhenotypes well">
 
                     </div>
                 </div>
-                {{#genePageWarning}}
-                <div class="col-md-12" style="font-size:13px">
-                    {{.}}
-                </div>
-                {{/genePageWarning}}
+
 
             </div>
             <div class="row geneWindowDescriptionHolder">
@@ -86,12 +89,12 @@
 
 <script id="locusZoomTemplate"  type="x-tmpl-mustache">
 <div class="row" style="border-bottom:solid 1px #ddd; padding-left: 15px;">
-<strong>To add a new track, select a phenotype, then a dataset</strong>
-        <!-- DK test begin -->
+<strong style="font-size: 16px;">To add a new track, select a dataset</strong>
+
         <div class="col-md-12">
 
             <div class="lz-list col-md-2" style="padding: 10px 10px">
-                <span style="padding: 1px;background-color: #1184e8;font-size: 12px;color: #fff;width: 20px;display: inline-block;border-radius: 14px;text-align: center;margin-right: 5px;">1</span>
+                <span style="padding: 1px;background-color: #1184e8;font-size: 16px; color: #fff;width: 20px;display: inline-block;border-radius: 14px;text-align: center;margin-right: 5px;">1</span>
                 <a href="javascript:;" onclick="mpgSoftware.traitsFilter.massageLZ(); mpgSoftware.traitsFilter.showLZlist(event);"> Phenotype <b class="caret"></b></a>
 
                 <ul id="dk_lz_phenotype_list">
@@ -106,7 +109,7 @@
                 </ul>
             </div>
             <div class="dropdown col-md-4 lz-list" style="border-right: solid 1px #ddd; padding: 10px 10px">
-                <span style="padding: 1px;background-color: #1184e8;font-size: 12px;color: #fff;width: 20px;display: inline-block;border-radius: 14px;text-align: center;margin-right: 5px;">2</span>
+                <!--<span style="padding: 1px;background-color: #1184e8;font-size: 12px;color: #fff;width: 20px;display: inline-block;border-radius: 14px;text-align: center;margin-right: 5px;">2</span>-->
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span class="selected-phenotype"></span> Dataset <b class="caret"></b></a>
                 <ul id="trackList-static" class="dropdown-menu" style="height:auto; max-height:500px; overflow:auto; ">
 
@@ -199,117 +202,11 @@
             {{/atacDataExists}}
         </div>
 </div>
-            <!-- DK test end -->
-<!-- original
-            <ul class="nav navbar-nav navbar-left" style="display: flex;">
-                {{#dynamicDataExists}}
-                <li class="dropdown" id="tracks-menu-dropdown-dynamic">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Phenotypes (dynamically calculated associations)<b class="caret"></b></a>
-                    <ul id="trackList-dynamic" class="dropdown-menu">
-                    {{/dynamicDataExists}}
-                    {{#dynamic}}
-                        <li>
-                            <a onclick="mpgSoftware.locusZoom.addLZPhenotype({
-                                                phenotype: '{{key}}',
-                                                dataSet: '{{dataSet}}',
-                                                datasetReadableName: '{{dataSetReadable}}',
-                                                propertyName: '{{propertyName}}',
-                                                description: '{{description}}',
-                                                assayIdList: '{{assayIdList}}'
-                                        },
-                                        '{{dataSet}}',
-                                        '${createLink(controller:"gene", action:"getLocusZoom")}',
-                                        '${createLink(controller:"variantInfo", action:"variantInfo")}',
-                                        '{{dataType}}',
-                                        ('#'+'{{lzDomSpec}}'),
-                                        {colorBy:1,positionBy:1})">
-                                        {{description}} ({{dataSetReadable}})
-                            </a>
-                        </li>
-                    {{/dynamic}}
-                    {{#dynamicDataExists}}
-                    </ul>
-                </li>
-                {{/dynamicDataExists}}
-                {{#staticDataExists}}
-                <li class="dropdown" id="tracks-menu-dropdown-static">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Phenotypes<b class="caret"></b></a>
-                    <ul id="trackList-static" class="dropdown-menu">
-                    {{/staticDataExists}}
-                        {{#static}}
-                        <li>
-                            <a onclick="mpgSoftware.locusZoom.addLZPhenotype({
-                                                phenotype: '{{key}}',
-                                                dataSet: '{{dataSet}}',
-                                                datasetReadableName: '{{dataSetReadable}}',
-                                                propertyName: '{{propertyName}}',
-                                                description: '{{description}}',
-                                                assayIdList: '{{assayIdList}}'
-                                        },
-                                        '{{dataSet}}',
-                                        '${createLink(controller:"gene", action:"getLocusZoom")}',
-                                        '${createLink(controller:"variantInfo", action:"variantInfo")}',
-                                        '{{dataType}}',
-                                        ('#'+'{{lzDomSpec}}'),
-                                        {colorBy:1,positionBy:1})">
-                                        {{description}} ({{dataSetReadable}})
-                            </a>
-                        </li>
-                        {{/static}}
-                    {{#staticDataExists}}
-                    </ul>
-                </li>
-                {{/staticDataExists}}
-                {{#tissueDataExists}}
-                <li class="dropdown" id="tracks-menu-dropdown-functional">
-                       <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tissues<b class="caret"></b></a>
-                       <ul id="trackList-tissue" class="dropdown-menu">
-                           {{/tissueDataExists}}
-                           {{#tissues}}
-                                <li>
-                                    <a onclick="mpgSoftware.locusZoom.addLZTissueAnnotations({
-                                                    tissueCode: '{{name}}',
-                                                    tissueDescriptiveName: '{{description}}',
-                                                    retrieveFunctionalDataAjaxUrl:'${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',
-                                                    assayIdList: '{{assayIdList}}'
-                                                },
-                                            ('#'+'{{lzDomSpec}}'),
-                                            {colorBy:1,positionBy:1})">{{description}}
-                                    </a>
-                                </li>
-                           {{/tissues}}
-                           {{#tissueDataExists}}
-                       </ul>
-                </li>
-                {{/tissueDataExists}}
-                {{#atacDataExists}}
-                <li class="dropdown" id="tracks-menu-dropdown-functional">
-                       <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tissues<b class="caret"></b></a>
-                       <ul id="trackList-tissue" class="dropdown-menu">
-                           {{/atacDataExists}}
-                           {{#atacData}}
-                                <li>
-                                    <a onclick="mpgSoftware.locusZoom.addLZTissueAnnotations({
-                                                    tissueCode: '{{name}}',
-                                                    tissueDescriptiveName: '{{description}}',
-                                                    retrieveFunctionalDataAjaxUrl:'${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',
-                                                    assayIdList: '{{assayIdList}}'
-                                                },
-                                            ('#'+'{{lzDomSpec}}'),
-                                            {colorBy:1,positionBy:1})">{{description}}
-                                    </a>
-                                </li>
-                           {{/atacData}}
-                           {{#atacDataExists}}
-                       </ul>
-                </li>
-                {{/atacDataExists}}
-            </ul>
--->
+
+
         <div style="margin-top: 20px">
-            <div class="accordion-inner">
+
                 <div id="{{lzDomSpec}}" class="lz-container-responsive"></div>
-            </div>
 
         </div>
  </script>
@@ -486,11 +383,17 @@
 <script id="organizeSignalSummaryOutline"  type="x-tmpl-mustache">
     <div id="organizeSignalSummaryHeaderGoesHere"></div>
     <div id="cDataModalGoesHere"></div>
-    <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active commonVariantChooser" id="commonVariantTabHolder"></div>
-        <div role="tabpanel" class="tab-pane highImpacVariantChooser" id="highImpactVariantTabHolder"></div>
-        <div role="tabpanel" class="tab-pane credibleSetChooser" id="credibleSetTabHolder"></div>
-        <div role="tabpanel" class="tab-pane genePrioritizationChooser" id="genePrioritizationTabHolder">
+    <div class="col-md-12" style="background-color: #fff;">
+        <h2><span style="text-transform: uppercase;">Top variants</span></h2>
+        <div class="commonVariantChooser well" id="commonVariantTabHolder"></div>
+
+        <!-- <div role="tabpanel" class="tab-pane highImpacVariantChooser" id="highImpactVariantTabHolder"></div> -->
+
+        <h2><span style="text-transform: uppercase;">Calculated credible set</span></h2>
+        <div class="credibleSetChooser well" id="credibleSetTabHolder"></div>
+
+        <h2><span style="text-transform: uppercase;">Genes in region</span></h2>
+        <div class="genePrioritizationChooser well" id="genePrioritizationTabHolder">
             {{#genePrioritizationTab}}
                    <div class="row" style="border: none">
                         <div class="col-sm-12">
@@ -1046,7 +949,7 @@
                         <div class="row"   style="border: none">
                             <div class="col-xs-12">
                                 <div class="variantCategoryHolder">
-                                    <div  style="margin: 0 0 -15px 10px">This tab displays variants:
+                                    <!--<div  style="margin: 0 0 -15px 10px">This tab displays variants:
                                          <div>
                                             <ul style="margin: 0 0 0 10px">
                                                  <li>located on chromosome {{chromosome}} between {{geneExtentBegin}} and {{geneExtentEnd}}</li>
@@ -1054,12 +957,12 @@
 
                                             </ul>
                                          </div>
-                                    </div>
+                                    </div>-->
 
                                     <div id="commonVariantsLocation"></div>
                                     <div class="browserChooserGoesHere"></div>
                                     <div id="locusZoomLocation" class="locusZoomLocation" style="border: solid 1px #ccc; padding: 15px;"></div>
-                                    <div class="igvGoesHere"></div>
+                                    <!--<div class="igvGoesHere"></div>-->
                                 </div>
                             </div>
                         </div>
@@ -1102,7 +1005,8 @@
 
                     <div class="row" style="border: none">
                         <div class="col-sm-12">
-                            <div class="variantCategoryHolder">Credible sets are collections of variants in which posterior probabilities are calculated to indicate the likelihood that each variant is causal for association with the selected phenotype.
+                            <div class="variantCategoryHolder">
+                            <p>Credible sets are collections of variants in which posterior probabilities are calculated to indicate the likelihood that each variant is causal for association with the selected phenotype.</p>
                                 <p>&nbsp;</p>
                                 <div class="clearfix credibleSetHeader" style="margin: 5px 0 0 0">
                                     <div class="col-md-12">

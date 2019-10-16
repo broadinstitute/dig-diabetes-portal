@@ -170,38 +170,43 @@
             <div class="gene-info-view col-md-12">
                 <div id="gene-info-summary-wrapper">
                     <div id="gene-info-summary-header">
-                        <div class="gene-name" style="width:20%;">Gene</div>
-                        <div class="gene-chromosome" style="width:20%;">Chromosome: Start position - End position</div>
-                        <div class="gene-phenotype" style="width:20%;">Phenotype</div>
-                        <div class="gene-traffic-light" style="width:20%;">Signal</div>
-                        <div class="gene-search" style="width:20%; text-align: right; ">Look for another gene or region</div>
+                        <div class="gene-name" style="width:25%;">Gene</div>
+                        <div class="gene-chromosome" style="width:30%;">Chromosome: Start position - End position</div>
+                        <div class="gene-phenotype" style="width:45%;">Phenotype</div>
                     </div>
                     <div id="gene-info-summary-content">
-                        <div class="gene-name" style="width:20%;"><%=geneName%></div>
-                        <div class="gene-chromosome" style="width:20%;"></div>
-                        <div class="gene-phenotype" style="width:20%;">Phenotype</div>
-                        <div class="gene-traffic-light" style="width:20%;">
-                            <div id='trafficLightHolder'>
-                                <div class='signal-level-2'>&nbsp;</div>
-                                <div class='signal-level-3'>&nbsp;</div>
-                            </div>
-                            <div class="trafficExplanations trafficExplanation1 unemphasize" style="font-size:16px; text-align: left;">
-                                No evidence for signal&nbsp;<g:helpText title="no.evidence.help.header" placement="right" body="no.evidence.help.text"/>
-                            </div>
-                            <div class="trafficExplanations trafficExplanation2 unemphasize" style="font-size:18px; text-align: left;">
-                                Suggestive evidence for signal&nbsp;<g:helpText title="suggestive.evidence.help.header" placement="right" body="suggestive.evidence.help.text"/>
-                            </div>
-                            <div class="trafficExplanations trafficExplanation3 unemphasize" style="font-size:18px; text-align: left;">
-                                Strong evidence for signal&nbsp;<g:helpText title="strong.evidence.help.header" placement="right" body="strong.evidence.help.text"/>
-                            </div>
-                        </div>
-                        <div class="gene-search" style="width:20%;">
-                            <button id="generalized-go" class="btn btn-primary" type="button" style="float: right; height: 41px; width:45px; border-radius:2px; margin: -1px 0 0 0;">Go</button>
-                            <input id="generalized-input" value="" type="text" class="form-control input-default" style="float: right; height: 41px; width:200px; border-radius: 2px; margin: -1px 0 0 0;">
-                        </div>
+                        <div class="gene-name" style="width:25%; font-size: 2em; height: 65px; "><%=geneName%></div>
+                        <div class="gene-chromosome" style="width:30%; height: 65px; font-size: 1.25em; padding-top: 12px;"></div>
+                        <div class="gene-phenotype" style="width:45%; height: 65px; font-size: 1.25em; padding-top: 12px;"></div>
                     </div>
                 </div>
 
+                <div class="gene-info-bellow-title">
+                    <div class="gene-traffic-light" style="width:50%; float: left;">
+                        <div id='trafficLightHolder'>
+                            <div class='signal-level-2'>&nbsp;</div>
+                            <div class='signal-level-3'>&nbsp;</div>
+                        </div>
+                        <div class="trafficExplanations trafficExplanation1 unemphasize" style="font-size:18px; text-align: left;">
+                            No evidence for signal&nbsp;<g:helpText title="no.evidence.help.header" placement="right" body="no.evidence.help.text"/>
+                        </div>
+                        <div class="trafficExplanations trafficExplanation2 unemphasize" style="font-size:18px; text-align: left;">
+                            Suggestive evidence for signal&nbsp;<g:helpText title="suggestive.evidence.help.header" placement="right" body="suggestive.evidence.help.text"/>
+                        </div>
+                        <div class="trafficExplanations trafficExplanation3 unemphasize" style="font-size:18px; text-align: left;">
+                            Strong evidence for signal&nbsp;<g:helpText title="strong.evidence.help.header" placement="right" body="strong.evidence.help.text"/>
+                        </div>
+                    </div>
+
+                    <div class="gene-search-holder" style="float: right; width: 50%; position: relative;">
+                        <div class="gene-search" style=" text-align: right; position: absolute; top: 10px; right: 305px;">Look for another gene or region</div>
+                        <div class="gene-search" style=" position: absolute; padding: 0; top: 0; right: 0;">
+                            <input id="generalized-input" value="" type="text" class="form-control input-default">
+                            <button id="generalized-go" class="btn btn-primary" type="button" >Go</button>
+
+                        </div>
+                    </div>
+                </div>
 
                     <g:if test="${g.portalTypeString()?.equals('t2d')}">
                         <div class="dk-t2d-green dk-reference-button dk-right-column-buttons-compact f" style="float:right; border-radius: 2px; margin: 0 15px 0 -140px; font-size:12px;">
@@ -330,7 +335,7 @@
 
 
 
-                <div style="padding: 7px; border: solid 1px #ddd; border-radius: 3px; margin-top: 15px; background-color:#eee; ">
+                <div style="padding: 7px; border: solid 1px #ddd; border-left: none; border-right: none; border-radius: 0px; margin-top: 15px; background-color:#e6e6e6; ">
 
                     <span class="glyphicon glyphicon-link" aria-hidden="true"></span> External resources:
                         <g:render template="findOutMoreCompact"/>
