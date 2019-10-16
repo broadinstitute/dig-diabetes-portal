@@ -393,7 +393,7 @@
         <div class="credibleSetChooser well" id="credibleSetTabHolder"></div>
 
         <h2><span style="text-transform: uppercase;">Genes in region</span></h2>
-        <div class="genePrioritizationChooser well" id="genePrioritizationTabHolder">
+        <div class="genePrioritizationChooser" id="genePrioritizationTabHolder">
             {{#genePrioritizationTab}}
                    <div class="row" style="border: none">
                         <div class="col-sm-12">
@@ -502,7 +502,7 @@
             </div>
             {{/chromatinConformationTab}}
         </div>
-        <div role="tabpanel" class="tab-pane exposeDynamicUiChooser" id="exposeDynamicUiTabHolder">
+        <div class="exposeDynamicUiChooser well" id="exposeDynamicUiTabHolder">
             {{#dynamicUiTab}}
                 <div class="row" style="border: none; {{suppressionOfRange}}">
                     <div id="configurableUiTabStorage" style="display: none"></div>
@@ -556,15 +556,15 @@
                     </div>
                 </div>
 
-                <div class="tab-content sub-tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="dynamicGeneHolder">
-<div class="popup">Click me!
+                <div class="">
+                    <div role="tabpanel" class="" id="dynamicGeneHolder">
+<!--<div class="popup">Click me!
   <span class="popuptext" id="myPopup"></span>
-</div>
-                        <div class="row">
-                            <div class="col-sm-12 sub-content">
+</div>-->
+                        <div class="">
+                            <div class="col-sm-12">
                                 %{--<h3>Gene directors</h3>--}%
-                                <div class="row" style="display:block">
+                                <div class="row">
                                     <div class="col-sm-12">
                                         <div class="directorButtonHolder">
 
@@ -572,7 +572,7 @@
                                     </div>
                                 </div>
 
-                                <div  style="margin: 0 0 -15px 10px"><p><g:message code="GenePrioritization.interface.help1"></g:message>
+                                <div style="font-size: 16px;"><p><g:message code="GenePrioritization.interface.help1"></g:message>
 <g:helpText title="gene.overall.help.header" placement="bottom" body="gene.overall.help.text"/>
 <g:message code="GenePrioritization.interface.help2"></g:message></p>
 
@@ -647,7 +647,7 @@
                                         %{--<div class="refinementTable dynamicUiHolder">--}%
 
                                         %{--</div>--}%
-                                        <div class="row">
+                                        <!--<div class="row">
                                             <div class="col-sm-1">
                                                 <button type="button" class="btn btn-link transpose" title="click to transpose table"
                                                 style="font-size: 32pt"
@@ -672,7 +672,7 @@
                                                     </button>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div>-->
                                         <table class="combinedVariantTableHolder" style="border:0">
                                         </table>
                                     </div>

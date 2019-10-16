@@ -1722,4 +1722,9 @@ ul.traits-filter-options > li {
 	overflow: visible !important;
 }
 
+div.datatable-control-box {
+    float: right !important;
+    padding: 10px 10px 15px 0px !important;
+}
+
 /* changes for V2FKP end */

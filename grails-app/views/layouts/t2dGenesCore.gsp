@@ -439,7 +439,7 @@
 
             $( window ).resize(function() {
                 menuHeaderSet();
-                adjustTableWrapperWidth(".combinedGeneTableHolder");
+                //adjustTableWrapperWidth(".combinedGeneTableHolder");
             })
 
             adjustTableWrapperWidth(".combinedGeneTableHolder");
