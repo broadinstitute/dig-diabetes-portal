@@ -42,17 +42,20 @@
 
             <div class="row interestingPhenotypesHolder">
                 <div class="col-md-12">
+                    <h2><span style="text-transform: uppercase;">Phenotypes with signals</span> <small>(Click button to reset phenotype)</small></h2>
+                    {{#genePageWarning}}
+                    <p style="font-size: 16px;">
+                        {{.}}
+                    </p>
+                    {{/genePageWarning}}
+
                     <div id="interestingPhenotypes">
 
                     </div>
                 </div>
-                {{#genePageWarning}}
-                <div class="col-md-12" style="font-size:13px">
-                    {{.}}
-                </div>
-                {{/genePageWarning}}
 
             </div>
+
             <div class="row geneWindowDescriptionHolder">
 
                 <div class="col-md-12">

@@ -159,35 +159,32 @@
 
 <div id="main">
 
-    <div class="container">
-
+    <div class="container-fluid" style="padding: 0 2.5%;">
         <div class="gene-info-container row">
             <div class="gene-info-view">
-                <h1 class="dk-page-title" style="vertical-align: bottom; margin-bottom: 0; ">
-                    <em style="font-weight: 900;"><%=geneName%></em>
 
-                    <g:if test="${g.portalTypeString()?.equals('t2d')}">
-                        <div class="dk-t2d-green dk-reference-button dk-right-column-buttons-compact f" style="float:right; border-radius: 2px; margin: 0 15px 0 -140px; font-size:12px;">
-                        <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/gene_page_guide.pdf" style="border-radius: 2px;" target="_blank">Gene Page guide</a>
-                        </div>
-                    </g:if>
-                    <g:elseif test="${g.portalTypeString()?.equals('stroke')}">
-                        <div class="dk-t2d-green dk-reference-button dk-right-column-buttons-compact" style="float:right; border-radius: 2px; margin: 0 15px 0 -140px; font-size:12px;">
-                            <a href="https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/CDKP_gene_page_guide.pdf" style="border-radius: 2px;" target="_blank">Gene Page guide</a>
-                        </div>
-                    </g:elseif>
-                    <g:elseif test="${g.portalTypeString()?.equals('mi')}">
-                        <div class="dk-t2d-green dk-reference-button dk-right-column-buttons-compact" style="float:right; border-radius: 2px; margin: 0 15px 0 -140px; font-size:12px;">
-                            <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/CVDKP_gene_page_guide.pdf" style="border-radius: 2px;" target="_blank">Gene Page guide</a>
-                        </div>
-                    </g:elseif>
-                </h1>
-                <div class="col-md-6" style="height: 40px; padding:0 0 0 15px; border-bottom: solid 1px #ccc; ">
-                    <div id='trafficLightHolder' style="width:200px; float: left; margin-top: -12px;">
-                        <r:img uri="/images/undeterminedlight2.png"/>
-                        <div id="signalLevelHolder" style=""></div>
+        <g:if test="${ g.portalTypeString() == 'v2f' || g.portalTypeString() == 'ibd' }">
+
+            <div id="gene-info-summary-wrapper">
+                <div id="gene-info-summary-header">
+                    <div class="gene-name" style="width:25%;">Gene</div>
+                    <div class="gene-chromosome" style="width:30%;">Chromosome: Start position - End position</div>
+                    <div class="gene-phenotype" style="width:45%;">Phenotype</div>
+                </div>
+                <div id="gene-info-summary-content">
+                    <div class="gene-name" style="width:25%; font-size: 2em; height: 65px; "><%=geneName%></div>
+                    <div class="gene-chromosome" style="width:30%; height: 65px; font-size: 1.25em; padding-top: 12px;"></div>
+                    <div class="gene-phenotype" style="width:45%; height: 65px; font-size: 1.25em; padding-top: 12px;"></div>
+                </div>
+            </div>
+
+            <div class="gene-info-bellow-title">
+                <div class="gene-traffic-light" style="width:50%; float: left;">
+                    <div id='trafficLightHolder'>
+                        <div class='signal-level-2'>&nbsp;</div>
+                        <div class='signal-level-3'>&nbsp;</div>
                     </div>
-                    <div class="trafficExplanations trafficExplanation1 unemphasize" style="font-size:16px; text-align: left;">
+                    <div class="trafficExplanations trafficExplanation1 unemphasize" style="font-size:18px; text-align: left;">
                         No evidence for signal&nbsp;<g:helpText title="no.evidence.help.header" placement="right" body="no.evidence.help.text"/>
                     </div>
                     <div class="trafficExplanations trafficExplanation2 unemphasize" style="font-size:18px; text-align: left;">
@@ -197,18 +194,67 @@
                         Strong evidence for signal&nbsp;<g:helpText title="strong.evidence.help.header" placement="right" body="strong.evidence.help.text"/>
                     </div>
                 </div>
-                <div class="form-inline col-md-6" style="height: 40px; padding:0; border-bottom: solid 1px #ccc; ">
 
-                    <button id="generalized-go" class="btn btn-primary" type="button" style="float: right; height: 41px; width:45px; border-radius:2px; margin: -1px 15px 0 0;">Go</button>
-                    <input id="generalized-input" value="" type="text" class="form-control input-default" style="float: right; height: 41px; width:200px; border-radius: 2px; margin: -1px 0 0 0;">
-                    <div style="padding:10px 15px 0 0; text-align: right; float: right; ">Look for another gene or region</div>
+                <div class="gene-search-holder" style="float: right; width: 50%; position: relative;">
+                    <div class="gene-search" style=" text-align: right; position: absolute; top: 10px; right: 305px;">Look for another gene or region</div>
+                    <div class="gene-search" style=" position: absolute; padding: 0; top: 0; right: 0;">
+                        <input id="generalized-input" value="" type="text" class="form-control input-default">
+                        <button id="generalized-go" class="btn btn-primary" type="button" >Go</button>
 
+                    </div>
                 </div>
+            </div>
+        </g:if>
+        <g:else>
+
+                    <h1 class="dk-page-title" style="vertical-align: bottom; margin-bottom: 0; ">
+                        <em style="font-weight: 900;"><%=geneName%></em>
+
+                        <g:if test="${g.portalTypeString()?.equals('t2d')}">
+                            <div class="dk-t2d-green dk-reference-button dk-right-column-buttons-compact f" style="float:right; border-radius: 2px; margin: 0 15px 0 -140px; font-size:12px;">
+                                <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/gene_page_guide.pdf" style="border-radius: 2px;" target="_blank">Gene Page guide</a>
+                            </div>
+                        </g:if>
+                        <g:elseif test="${g.portalTypeString()?.equals('stroke')}">
+                            <div class="dk-t2d-green dk-reference-button dk-right-column-buttons-compact" style="float:right; border-radius: 2px; margin: 0 15px 0 -140px; font-size:12px;">
+                                <a href="https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/CDKP_gene_page_guide.pdf" style="border-radius: 2px;" target="_blank">Gene Page guide</a>
+                            </div>
+                        </g:elseif>
+                        <g:elseif test="${g.portalTypeString()?.equals('mi')}">
+                            <div class="dk-t2d-green dk-reference-button dk-right-column-buttons-compact" style="float:right; border-radius: 2px; margin: 0 15px 0 -140px; font-size:12px;">
+                                <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/CVDKP_gene_page_guide.pdf" style="border-radius: 2px;" target="_blank">Gene Page guide</a>
+                            </div>
+                        </g:elseif>
+                    </h1>
+                    <div class="col-md-6" style="height: 40px; padding:0 0 0 15px; border-bottom: solid 1px #ccc; ">
+                        <div id='trafficLightHolder' style="width:200px; float: left; margin-top: -12px;">
+                            <r:img uri="/images/undeterminedlight2.png"/>
+                            <div id="signalLevelHolder" style=""></div>
+                        </div>
+                        <div class="trafficExplanations trafficExplanation1 unemphasize" style="font-size:16px; text-align: left;">
+                            No evidence for signal&nbsp;<g:helpText title="no.evidence.help.header" placement="right" body="no.evidence.help.text"/>
+                        </div>
+                        <div class="trafficExplanations trafficExplanation2 unemphasize" style="font-size:18px; text-align: left;">
+                            Suggestive evidence for signal&nbsp;<g:helpText title="suggestive.evidence.help.header" placement="right" body="suggestive.evidence.help.text"/>
+                        </div>
+                        <div class="trafficExplanations trafficExplanation3 unemphasize" style="font-size:18px; text-align: left;">
+                            Strong evidence for signal&nbsp;<g:helpText title="strong.evidence.help.header" placement="right" body="strong.evidence.help.text"/>
+                        </div>
+                    </div>
+                    <div class="form-inline col-md-6" style="height: 40px; padding:0; border-bottom: solid 1px #ccc; ">
+
+                        <button id="generalized-go" class="btn btn-primary" type="button" style="float: right; height: 41px; width:45px; border-radius:2px; margin: -1px 15px 0 0;">Go</button>
+                        <input id="generalized-input" value="" type="text" class="form-control input-default" style="float: right; height: 41px; width:200px; border-radius: 2px; margin: -1px 0 0 0;">
+                        <div style="padding:10px 15px 0 0; text-align: right; float: right; ">Look for another gene or region</div>
+
+                    </div>
+
+        </g:else>
 
 
 
-                <div class="col-md-12" style="padding-top: 30px;">
-<!--
+                    <div class="col-md-12" style="padding-top: 30px;">
+                        <!--
                     <a class="find-out-more-opener" data-toggle="collapse" data-parent="#accordion2" href="#findOutMoreCompact2">
                         <span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span><br />External<br />resources</a>
 
@@ -219,126 +265,130 @@
                     </div>
 
                     -->
+                    <g:if test="${ g.portalTypeString() == 'v2f' || g.portalTypeString() == 'ibd' }">
 
-                    <g:render template="geneSummary" model="[geneToSummarize:geneName]"/>
+                    </g:if>
+                    <g:else>
+                        <g:render template="geneSummary" model="[geneToSummarize:geneName]"/>
+                    </g:else>
 
-                </div>
-
-
-
-                <g:render template="../templates/dynamicUiTemplate"/>
-                <g:render template="../templates/geneSignalSummaryTemplate"/>
-                <g:render template="../templates/variantSearchResultsTemplate" />
-                <g:render template="geneSignalSummary"  model="[signalLevel:1,geneToSummarize:geneName]"/>
-                <g:render template="../templates/variantSearchResultsTemplate" />
+                    </div>
 
 
-                <div class="accordion" id="accordion2">
-                <g:if test="${portalVersionBean.exposeVariantAndAssociationTable}">
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2"
-                               href="#collapseOne" aria-expanded="true">
-                                <h2><strong><g:message code="gene.variantassociations.title"
-                                                       default="Variants and associations"/></strong></h2>
-                            </a>
-                        </div>
+                    <g:render template="../templates/dynamicUiTemplate"/>
+                    <g:render template="../templates/geneSignalSummaryTemplate"/>
+                    <g:render template="../templates/variantSearchResultsTemplate" />
+                    <g:render template="geneSignalSummary"  model="[signalLevel:1,geneToSummarize:geneName]"/>
+                    <g:render template="../templates/variantSearchResultsTemplate" />
 
-                        <div id="collapseOne" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                <g:render template="variantsAndAssociations"/>
+
+                    <div class="accordion" id="accordion2">
+                        <g:if test="${portalVersionBean.exposeVariantAndAssociationTable}">
+                            <div class="accordion-group">
+                                <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2"
+                                       href="#collapseOne" aria-expanded="true">
+                                        <h2><strong><g:message code="gene.variantassociations.title"
+                                                               default="Variants and associations"/></strong></h2>
+                                    </a>
+                                </div>
+
+                                <div id="collapseOne" class="accordion-body collapse">
+                                    <div class="accordion-inner">
+                                        <g:render template="variantsAndAssociations"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </g:if>
+                        <g:if test="${portalVersionBean.exposeIgvDisplay}">
+
+                            <div class="separator"></div>
+
+                            <g:render template="../templates/igvBrowserTemplate"/>
+
+                            <div class="accordion-group">
+                                <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2"
+                                       href="#collapseIgv">
+                                        <h2><strong><g:message code="variant.igvBrowser.title"
+                                                               default="Explore with IGV"/></strong></h2>
+                                    </a>
+                                </div>
+
+                                <div id="collapseIgv" class="accordion-body collapse">
+                                    <div class="accordion-inner">
+                                        <div class="igvGoesHere"></div>
+                                        <g:render template="../templates/igvBrowserTemplate"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </g:if>
+
+
+
+                        <script>
+                            $('#accordion2').on('shown.bs.collapse', function (e) {
+                                if (e.target.id === "collapseIgv") {
+
+                                    igvLauncher.setUpIgv('<%=geneName%>',
+                                        '.igvGoesHere',
+                                        "<g:message code='controls.shared.igv.tracks.recomb_rate' />",
+                                        "<g:message code='controls.shared.igv.tracks.genes' />",
+                                        "${createLink(controller: 'trait', action: 'retrievePotentialIgvTracks')}",
+                                        "${createLink(controller:'trait', action:'getData', absolute:'false')}",
+                                        "${createLink(controller:'variantInfo', action:'variantInfo', absolute:'true')}",
+                                        "${createLink(controller:'trait', action:'traitInfo', absolute:'true')}",
+                                        '${igvIntro}');
+                                } else if (e.target.id === "collapseFunctionalData") {
+                                    $("#functionalDataTableGoesHere").DataTable().draw();
+                                }
+
+                            });
+                            $('#accordion2').on('show.bs.collapse', function (e) {
+                                if (e.target.id === "collapseIgv") {
+
+                                }
+                            });
+
+
+                            $('#collapseOne').collapse({hide: true})
+                        </script>
+
+
+                        <g:if test="${portalVersionBean.exposeIgvDisplay}">
+                            <div class="separator"></div>
+
+                            <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': '',
+                                                                                   'accordionHeaderClass': 'accordion-heading',
+                                                                                   'modifiedTitle': 'Interactive burden test',
+                                                                                   'modifiedGaitSummary': 'The Genetic Association Interactive Tool (GAIT) allows you to compute the disease or phenotype burden for this gene, using custom sets of variants, samples, and covariates. In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.',
+                                                                                   'allowExperimentChoice': 0,
+                                                                                   'allowPhenotypeChoice' : 1,
+                                                                                   'allowStratificationChoice': 1,
+                                                                                   'grsVariantSet':'']"/>
+                        </g:if>
+
+
+
+
+                        <div class="accordion-group" style="padding: 7px; border: solid 1px #ddd; border-radius: 3px; margin-top: 15px; background-color:#eee;">
+
+                            <a data-toggle="collapse" data-parent="#accordion2" href="#findOutMoreCompact3" style="outline: none; font-size: 16px;"><span class="glyphicon glyphicon-link" aria-hidden="true"></span> External resources</a>
+
+                            <div id="findOutMoreCompact3" class="" style="margin-top: 10px;">
+                                <div class="accordion-inner">
+                                    <g:render template="findOutMoreCompact"/>
+                                </div>
                             </div>
                         </div>
+
+
+
                     </div>
-                </g:if>
-                <g:if test="${portalVersionBean.exposeIgvDisplay}">
-
-                    <div class="separator"></div>
-
-                    <g:render template="../templates/igvBrowserTemplate"/>
-
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2"
-                               href="#collapseIgv">
-                                <h2><strong><g:message code="variant.igvBrowser.title"
-                                                       default="Explore with IGV"/></strong></h2>
-                            </a>
-                        </div>
-
-                        <div id="collapseIgv" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                <div class="igvGoesHere"></div>
-                                <g:render template="../templates/igvBrowserTemplate"/>
-                            </div>
-                        </div>
-                    </div>
-
-                </g:if>
-
-
-
-                <script>
-                    $('#accordion2').on('shown.bs.collapse', function (e) {
-                        if (e.target.id === "collapseIgv") {
-
-                            igvLauncher.setUpIgv('<%=geneName%>',
-                                    '.igvGoesHere',
-                                    "<g:message code='controls.shared.igv.tracks.recomb_rate' />",
-                                    "<g:message code='controls.shared.igv.tracks.genes' />",
-                                    "${createLink(controller: 'trait', action: 'retrievePotentialIgvTracks')}",
-                                    "${createLink(controller:'trait', action:'getData', absolute:'false')}",
-                                    "${createLink(controller:'variantInfo', action:'variantInfo', absolute:'true')}",
-                                    "${createLink(controller:'trait', action:'traitInfo', absolute:'true')}",
-                                    '${igvIntro}');
-                        } else if (e.target.id === "collapseFunctionalData") {
-                            $("#functionalDataTableGoesHere").DataTable().draw();
-                        }
-
-                    });
-                    $('#accordion2').on('show.bs.collapse', function (e) {
-                        if (e.target.id === "collapseIgv") {
-
-                        }
-                    });
-
-
-                    $('#collapseOne').collapse({hide: true})
-                </script>
-
-
-                <g:if test="${portalVersionBean.exposeIgvDisplay}">
-                    <div class="separator"></div>
-
-                    <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': '',
-                                                                           'accordionHeaderClass': 'accordion-heading',
-                                                                           'modifiedTitle': 'Interactive burden test',
-                                                                           'modifiedGaitSummary': 'The Genetic Association Interactive Tool (GAIT) allows you to compute the disease or phenotype burden for this gene, using custom sets of variants, samples, and covariates. In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.',
-                                                                           'allowExperimentChoice': 0,
-                                                                           'allowPhenotypeChoice' : 1,
-                                                                           'allowStratificationChoice': 1,
-                                                                           'grsVariantSet':'']"/>
-                </g:if>
-
-
-
-
-                <div class="accordion-group" style="padding: 7px; border: solid 1px #ddd; border-radius: 3px; margin-top: 15px; background-color:#eee;">
-
-                    <a data-toggle="collapse" data-parent="#accordion2" href="#findOutMoreCompact3" style="outline: none; font-size: 16px;"><span class="glyphicon glyphicon-link" aria-hidden="true"></span> External resources</a>
-
-                    <div id="findOutMoreCompact3" class="" style="margin-top: 10px;">
-                        <div class="accordion-inner">
-                            <g:render template="findOutMoreCompact"/>
-                        </div>
-                    </div>
-                </div>
-
-
-
                 </div>
             </div>
-        </div>
+
     </div>
 
 </div>
