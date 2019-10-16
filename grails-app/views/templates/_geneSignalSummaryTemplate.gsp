@@ -49,7 +49,7 @@
                 </p>
                 {{/genePageWarning}}
 
-                    <div id="interestingPhenotypes well">
+                    <div id="interestingPhenotypes" class="well">
 
                     </div>
                 </div>
@@ -94,7 +94,7 @@
         <div class="col-md-12">
 
             <div class="lz-list col-md-2" style="padding: 10px 10px">
-                <span style="padding: 1px;background-color: #1184e8;font-size: 16px; color: #fff;width: 20px;display: inline-block;border-radius: 14px;text-align: center;margin-right: 5px;">1</span>
+                <!--<span style="padding: 1px;background-color: #1184e8;font-size: 16px; color: #fff;width: 20px;display: inline-block;border-radius: 14px;text-align: center;margin-right: 5px;">1</span>-->
                 <a href="javascript:;" onclick="mpgSoftware.traitsFilter.massageLZ(); mpgSoftware.traitsFilter.showLZlist(event);"> Phenotype <b class="caret"></b></a>
 
                 <ul id="dk_lz_phenotype_list">

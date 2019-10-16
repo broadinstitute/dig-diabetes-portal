@@ -334,7 +334,7 @@ var mpgSoftware = mpgSoftware || {};
                 var lzPhenotypeListContent = "<div><label style='display:block; margin-left: 20px;'>Filter phenotypes</label><input id='phenotype_search' type='text' name='search' style='margin: 0 20px 10px 20px; width: 250px;' placeholder='Filter phenotypes (keyword, keyword)'></div>";
 
                 $.each(lzPhenotypes, function(key, value) {
-                    lzPhenotypeListContent += "<li><a href='javascript:;' onclick='mpgSoftware.traitsFilter.setLZDatasets(event); mpgSoftware.traitsFilter.showLZlist(event);'>"+value+"</a></li>";
+                    lzPhenotypeListContent += "<li><a href='javascript:;' onclick='mpgSoftware.traitsFilter.setLZDatasets(\""+value+"\"); mpgSoftware.traitsFilter.showLZlist(event);'>"+value+"</a></li>";
                 });
 
                 $("#dk_lz_phenotype_list").html(lzPhenotypeListContent);
@@ -395,11 +395,11 @@ var mpgSoftware = mpgSoftware || {};
 
         }
 
-        var setLZDatasets = function (event) {
+        var setLZDatasets = function (PHENOTYPENAME) {
 
-            $(event.target).closest(".col-md-12").find(".selected-phenotype").text("(Phenotype: " + $(event.target).text()+")");
+            $(event.target).closest(".col-md-12").find(".selected-phenotype").text("(Phenotype: " + PHENOTYPENAME+")");
 
-            var phenotypeName = $.trim($(event.target).text());
+            var phenotypeName = $.trim(PHENOTYPENAME);
 
             $("span.dk-lz-dataset").each(function() {
                 var trimmedPName = $.trim($(this).text());
