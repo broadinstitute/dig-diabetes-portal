@@ -1678,7 +1678,7 @@ ul.traits-filter-options > li {
 #main { padding-top: 20px !important; }
 
 #gene-info-summary-header, #gene-info-summary-content {  }
-#gene-info-summary-header > div, #gene-info-summary-content > div { float: left; border-bottom: solid 1px #ddd; border-right: solid 1px #ddd; padding: 2px 5px; }
+#gene-info-summary-header > div, #gene-info-summary-content > div { float: left; border-bottom: solid 1px #ddd; border-right: solid 1px #ddd; padding: 2px 5px; background-color: #fff; }
 #gene-info-summary-header > div:first-child, #gene-info-summary-content > div:first-child { clear: both; }
 #gene-info-summary-header > div:last-child, #gene-info-summary-content > div:last-child { border-right: none; }
 #gene-info-summary-header { font-size: 0.9em; }
@@ -1689,7 +1689,7 @@ ul.traits-filter-options > li {
 #trafficLightHolder .signal-level-2.signal-on { background-color: #4ea701; }
 #trafficLightHolder .signal-level-3.signal-on { background-color: #4ea701; }
 
-.gene-info-bellow-title { height: 40px; border-bottom: solid 1px #ddd; background-color: #e6e6e6; clear: both; }
+.gene-info-bellow-title { height: 40px; border-bottom: solid 1px #ddd; background-color: #fff; clear: both; margin-bottom: 30px; }
 
 .gene-search-holder #generalized-input {
 	height: 39px;
@@ -1700,6 +1700,7 @@ ul.traits-filter-options > li {
 	right: 0;
 	border-left: solid 1px #ddd;
 	border-radius: 0;
+
 }
 .gene-search-holder #generalized-go {
 	position: absolute;
@@ -1707,6 +1708,8 @@ ul.traits-filter-options > li {
 	right: 0;
 	height: 41px;
 	border-radius: 0;
+    background-color: #b998ef;
+    border:solid 1px #b998ef;
 }
 
 #commonVariantsLocationHolder_wrapper {
@@ -1714,7 +1717,7 @@ ul.traits-filter-options > li {
 }
 
 .interestingPhenotypesHolder { border-top: none !important; }
-#interestingPhenotypes { margin-top: 30px;}
+#interestingPhenotypes { }
 
 #lz-lzCommon { min-height: 600px !important; }
 
@@ -1725,6 +1728,23 @@ ul.traits-filter-options > li {
 div.datatable-control-box {
     float: right !important;
     padding: 10px 10px 15px 0px !important;
+}
+
+.well-gene-page { border-radius: 0; border: solid 1px #ffffff; box-shadow: none; -webkit-box-shadow: none; background-color: #fff;  }
+
+.gene-page-section-header {
+    padding: 5px 20px;
+    /*background-color: #ece8f7;*/
+    background-color: #fff;
+    border: solid 1px #ffffff;
+    border-bottom: solid 1px #dfdfdf;
+}
+.gene-page-section-header h2 { margin:0; font-size: 26px; }
+
+#main {
+    background-color: #eaeaea;
+    padding-bottom: 50px !important;
+    margin-bottom: -50px;
 }
 
 /* changes for V2FKP end */

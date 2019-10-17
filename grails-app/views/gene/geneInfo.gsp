@@ -335,9 +335,9 @@
 
 
 
-                <div style="padding: 7px; border: solid 1px #ddd; border-left: none; border-right: none; border-radius: 0px; margin-top: 15px; background-color:#e6e6e6; ">
+                <div style="padding: 7px 0 3px 15px; border-radius: 0px; margin-top: 15px; background-color:#fff; ">
 
-                    <span class="glyphicon glyphicon-link" aria-hidden="true"></span> External resources:
+                    <span class="glyphicon glyphicon-link" aria-hidden="true"></span> External resources:&nbsp;
                         <g:render template="findOutMoreCompact"/>
 
                 </div>

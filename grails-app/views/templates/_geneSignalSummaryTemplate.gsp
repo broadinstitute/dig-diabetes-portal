@@ -40,21 +40,21 @@
 
 
 
-            <div class="row interestingPhenotypesHolder">
+            <div class="row">
                 <div class="col-md-12">
-                <h2><span style="text-transform: uppercase;">Phenotypes with signals</span> <small>(Click button to reset phenotype)</small></h2>
-                {{#genePageWarning}}
-                <p style="font-size: 16px;">
-                    {{.}}
-                </p>
-                {{/genePageWarning}}
+                    <div class="gene-page-section-header">
+                        <h2>Phenotypes with signals <small>(Click button to reset phenotype)</small></h2>
+                        {{#genePageWarning}}
+                        <div style="font-size: 16px;">
+                            {{.}}
+                        </div>
+                        {{/genePageWarning}}
+                    </div>
 
-                    <div id="interestingPhenotypes" class="well">
+                    <div id="interestingPhenotypes" class="well well-gene-page">
 
                     </div>
                 </div>
-
-
             </div>
             <div class="row geneWindowDescriptionHolder">
 
@@ -93,7 +93,7 @@
 
         <div class="col-md-12">
 
-            <div class="lz-list col-md-2" style="padding: 10px 10px">
+            <div class="lz-list col-md-2" style="padding: 10px 10px; display: none;">
                 <!--<span style="padding: 1px;background-color: #1184e8;font-size: 16px; color: #fff;width: 20px;display: inline-block;border-radius: 14px;text-align: center;margin-right: 5px;">1</span>-->
                 <a href="javascript:;" onclick="mpgSoftware.traitsFilter.massageLZ(); mpgSoftware.traitsFilter.showLZlist(event);"> Phenotype <b class="caret"></b></a>
 
@@ -383,16 +383,20 @@
 <script id="organizeSignalSummaryOutline"  type="x-tmpl-mustache">
     <div id="organizeSignalSummaryHeaderGoesHere"></div>
     <div id="cDataModalGoesHere"></div>
-    <div class="col-md-12" style="background-color: #fff;">
-        <h2><span style="text-transform: uppercase;">Top variants</span></h2>
-        <div class="commonVariantChooser well" id="commonVariantTabHolder"></div>
+    <div>
+        <div class="gene-page-section-header">
+            <h2><span style="">Top variants</span></h2>
+        </div>
+        <div class="commonVariantChooser well well-gene-page" id="commonVariantTabHolder"></div>
 
         <!-- <div role="tabpanel" class="tab-pane highImpacVariantChooser" id="highImpactVariantTabHolder"></div> -->
 
-        <h2><span style="text-transform: uppercase;">Calculated credible set</span></h2>
-        <div class="credibleSetChooser well" id="credibleSetTabHolder"></div>
+        <div class="gene-page-section-header">
+            <h2><span style="">Calculated credible set</span></h2>
+        </div>
+        <div class="credibleSetChooser well well-gene-page" id="credibleSetTabHolder"></div>
 
-        <h2><span style="text-transform: uppercase;">Genes in region</span></h2>
+
         <div class="genePrioritizationChooser" id="genePrioritizationTabHolder">
             {{#genePrioritizationTab}}
                    <div class="row" style="border: none">
@@ -502,7 +506,11 @@
             </div>
             {{/chromatinConformationTab}}
         </div>
-        <div class="exposeDynamicUiChooser well" id="exposeDynamicUiTabHolder">
+
+        <div class="gene-page-section-header">
+            <h2><span style="">Genes in region</span></h2>
+        </div>
+        <div class="exposeDynamicUiChooser well well-gene-page" id="exposeDynamicUiTabHolder">
             {{#dynamicUiTab}}
                 <div class="row" style="border: none; {{suppressionOfRange}}">
                     <div id="configurableUiTabStorage" style="display: none"></div>
