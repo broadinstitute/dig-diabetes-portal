@@ -85,6 +85,13 @@
     $(document).ready(function() {
         var positioningInformation = {};
         if ('<%=geneName%>'.indexOf(':')>-1){ // this looks like a range, not a gene
+
+            $("#gene-info-summary-header").find(".gene-chromosome").css({"display":"none"});
+            $("#gene-info-summary-content").find(".gene-chromosome").css({"display":"none"});
+
+            $("#gene-info-summary-header").find(".gene-name").css({"width":"55%"}).html('Chromosome: Start position - End position');
+            $("#gene-info-summary-content").find(".gene-name").css({"width":"55%"});
+
             var rangeList = '<%=geneName%>'.split(':');
             if (rangeList.length === 2){
                 positioningInformation['chromosome'] = rangeList[0];
@@ -96,7 +103,8 @@
             }
 
             $('#placeForAUniprotSummary').hide();
-            $('div.geneWindowDescription').hide()
+            $('div.geneWindowDescription').hide();
+
         } else { // this looks like a gene, which means that we need to figure out it's genomic coordinates
             $.ajax({
                 cache: false,

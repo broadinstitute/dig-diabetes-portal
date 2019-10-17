@@ -311,6 +311,8 @@ var mpgSoftware = mpgSoftware || {};
         /* LocusZoom UI */
         var massageLZ = function () {
 
+            console.log(" massage lz called");
+
             if($("#dk_lz_phenotype_list").hasClass("list-allset")) {
 
             } else {
@@ -391,13 +393,12 @@ var mpgSoftware = mpgSoftware || {};
 
 
             }
-            filterLZDatasets("trackList-static",$(".gene-phenotype").text());
 
         }
 
         var setLZDatasets = function (PHENOTYPENAME) {
 
-            $(event.target).closest(".col-md-12").find(".selected-phenotype").text("(Phenotype: " + PHENOTYPENAME+")");
+            $(".selected-phenotype").text("(Phenotype: " + PHENOTYPENAME+")");
 
             var phenotypeName = $.trim(PHENOTYPENAME);
 
