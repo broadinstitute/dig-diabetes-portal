@@ -3,7 +3,7 @@ records={{numberRecords}}
 </script>
 
 <script id="abcVariantTableTissueHeaderLabel"  type="x-tmpl-mustache">
-<div class="varAllEpigenetics varAbcEpigenetics variantEpigenetics initialLinearIndex_{{indexInOneDimensionalArray}}">Epigenetics</div>
+<div class="varEpigeneticsLabel varAllEpigenetics varAbcEpigenetics variantEpigenetics initialLinearIndex_{{indexInOneDimensionalArray}}">Epigenetics</div>
 </script>
 
 <script id="abcVariantTableTissueRowLabel"  type="x-tmpl-mustache">
@@ -50,9 +50,9 @@ records={{numberRecords}}
                      {{/recordsExist}}
                          {{#tissueRecords}}
                           <tr role="row">
-                               <td class="leftMostCol"">{{GENE}}</td>
-                               <td class="text-center otherCols">{{SOURCE}}</td>
-                               <td class="text-center otherCols">{{VALUE}}</td>
+                               <td class="leftMostCol"">{{details.GENE}}</td>
+                               <td class="text-center otherCols">{{details.SOURCE}}</td>
+                               <td class="text-center otherCols">{{details.VALUE}}</td>
                            </tr>
                           {{/tissueRecords}}
                       {{#recordsExist}}

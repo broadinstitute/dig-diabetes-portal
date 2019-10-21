@@ -151,7 +151,7 @@
                             categoryWriter:'abcVariantTableTissueHeaderLabel',
                             drillDownCategoryWriter:'abcVariantTableTissueHeaderLabel',
                             subCategoryWriter:'abcVariantTableTissueRowLabel',
-                            drillDownSubCategoryWriter:'dnaseVariantTableTissueRowLabel',
+                            drillDownSubCategoryWriter:'abcVariantTableTissueRowLabel',
                             numberRecordsCellPresentationStringWriter:'abcVariantTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'abcVariantTableSignificanceCellPresentationString',
                             sortingSubroutine:'VariantAbc',

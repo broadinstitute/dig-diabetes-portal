@@ -2522,6 +2522,8 @@ mpgSoftware.dynamicUi = (function () {
 
 
             // fill in all of the column cells
+            var numberOfExistingRows = $(idForTheTargetDiv).dataTable().DataTable().rows()[0].length+1;
+            var numberOfColumns  = sharedTable.numberOfColumns;
             if ($.isArray(arrayOfDataToDisplay[0].data)){
                 _.forEach(arrayOfDataToDisplay[0].data, function (oneRecord) {
                     var indexOfColumn = _.indexOf(headerNames, oneRecord.name);
@@ -2583,11 +2585,12 @@ mpgSoftware.dynamicUi = (function () {
                     headerNames = _.map(dataVector, 'name');
                     let rowWeAreAddingTo = _.last(intermediateDataStructure.rowsToAdd);
                     rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(annotation,
-                        Mustache.render($('#'+dataAnnotationType.dataAnnotation.drillDownCategoryWriter)[0].innerHTML,{}),
+                        Mustache.render($('#'+dataAnnotationType.dataAnnotation.drillDownCategoryWriter)[0].innerHTML,
+                            {indexInOneDimensionalArray:(numberOfExistingRows*numberOfColumns)}),
                         "header", 'LIT'));
                     rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(annotation,
                         Mustache.render($('#'+dataAnnotationType.dataAnnotation.drillDownSubCategoryWriter)[0].innerHTML,
-                            {annotationName:annotation}),
+                            {annotationName:annotation,indexInOneDimensionalArray:((numberOfExistingRows*numberOfColumns)+1)}),
                         "header", 'LIT'));
                     _.forEach(dataVector, function (oneRecord) {
                         rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
@@ -3654,7 +3657,7 @@ mpgSoftware.dynamicUi = (function () {
                 // setAccumulatorObject("chromosome","8");
                 // setAccumulatorObject("extentBegin","117862462");
                 // setAccumulatorObject("extentEnd","118289003");
-                setAccumulatorObject("phenotype","CAD");
+                setAccumulatorObject("phenotype","T2D");
                 setAccumulatorObject("chromosome","19");
                 setAccumulatorObject("extentBegin","58838000");
                 setAccumulatorObject("extentEnd","58875000");
@@ -4742,25 +4745,6 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         }
                     });
                     $('div.emphasisSwitch_false span').hide();
-
-                    // var handle = $( "#custom-handle" );
-                    // $( "#gregorPValueSlider" ).slider({
-                    //     create: function() {
-                    //         handle.text( $( this ).slider( "value" ) );
-                    //     },
-                    //     slide: function( event, ui ) {
-                    //         handle.text( ui.value );
-                    //     }
-                    // });
-                    // $('#gregorSubTableDiv').resizable({
-                    //     stop: function( event, ui ) {
-                    //         filterEpigeneticTable();
-                    //         adjustAnnotationTable('#adjustFilterTableButton','#gregorSubTableDiv')
-                    //     }
-                    // });
-                    //$('#gregorSubTableDiv').css('width','1200px').css('height','400px')
-                    // $('#gregorSubTableDiv').find('div.dataTables_wrapper').css('height','100%');
-                   // adjustTableWrapperWidth(dyanamicUiVariables.dynamicTableConfiguration.initializeSharedTableMemory);
 
                     break;
                 case 'variantTableAnnotationHeaders':

@@ -11,11 +11,11 @@ records={{numberRecords}}
 </script>
 
 <script id="chromStateVariantTableTissueHeader"  type="x-tmpl-mustache">
-<div class="varAllEpigenetics varChromHmmEpigenetics initialLinearIndex_{{initialLinearIndex}}">{{tissueName}}</div>
+<div class="varAllEpigenetics varChromHmmEpigenetics initialLinearIndex_{{indexInOneDimensionalArray}}">{{tissueName}}</div>
 </script>
 
 <script id="chromStateVariantTableIndividualAnnotationLabel"  type="x-tmpl-mustache">
-<div class="varAllEpigenetics varChromHmmEpigenetics variantEpigenetics initialLinearIndex_{{initialLinearIndex}} varAnnotation annotationName_{{annotationName}}">
+<div class="varAllEpigenetics varChromHmmEpigenetics variantEpigenetics initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation annotationName_{{annotationName}}">
 <div style="font-weight: bold">ChromHMM</div>
 {{annotationName}}
 </div>
