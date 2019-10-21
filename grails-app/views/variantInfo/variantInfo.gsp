@@ -128,14 +128,22 @@
 
 <div id="main">
 
-    <div class="container">
+    <div class="container-fluid" style="padding: 0 2.5%">
 
         <div class="variant-info-container">
             <div class="variant-info-view">
 
-                <h1 class="dk-page-title">
-                    <span id="variantTitle" class="parentsFont"></span> summary
-                </h1>
+                <div id="variant-info-summary-wrapper">
+                    <div id="variant-info-summary-header">
+                        <div class="variant-name" style="width:25%;">Variant</div>
+                        <div class="variant-summary" style="width:75%;">Summary</div>
+                    </div>
+                    <div id="variant-info-summary-content">
+                        <div class="variant-name" id="variantTitle" style="width:25%; font-size: 42px;"></div>
+                        <div class="variant-summary" style="width:75%; font-size: 18px; " id="variantSummaryText"><g:message code="variant.summaryText.summary" /></div>
+                    </div>
+                </div>
+
 
 
                 <!--

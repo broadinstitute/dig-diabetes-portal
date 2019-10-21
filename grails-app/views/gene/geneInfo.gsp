@@ -190,7 +190,7 @@
                 </div>
 
                 <div class="gene-info-bellow-title">
-                    <div class="gene-traffic-light" style="width:50%; float: left;">
+                    <div class="gene-traffic-light" style="width:30%; float: left;">
                         <div id='trafficLightHolder'>
                             <div class='signal-level-2'>&nbsp;</div>
                             <div class='signal-level-3'>&nbsp;</div>
@@ -206,7 +206,7 @@
                         </div>
                     </div>
 
-                    <div class="gene-search-holder" style="float: right; width: 50%; position: relative;">
+                    <div class="gene-search-holder" style="width: 70%; float: right; position: relative;">
                         <div class="gene-search" style=" text-align: right; position: absolute; top: 10px; right: 305px;">Look for another gene or region</div>
                         <div class="gene-search" style=" position: absolute; padding: 0; top: 0; right: 0;">
                             <input id="generalized-input" value="" type="text" class="form-control input-default">
@@ -215,6 +215,12 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="gene-page-section-header">
+                    <h2><span style="">Gene in the region</span></h2>
+                </div>
+
+                <div class="matchedGenesGoHere well well-gene-page"></div>
 
                     <g:if test="${g.portalTypeString()?.equals('t2d')}">
                         <div class="dk-t2d-green dk-reference-button dk-right-column-buttons-compact f" style="float:right; border-radius: 2px; margin: 0 15px 0 -140px; font-size:12px;">
