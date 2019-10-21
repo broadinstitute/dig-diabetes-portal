@@ -1076,8 +1076,16 @@ mpgSoftware.dynamicUi = (function () {
 
                     var phenotype = getAccumulatorObject("phenotype");
                     var chromosome = getAccumulatorObject("chromosome");
-                    var startExtent = getAccumulatorObject("extentBegin");
-                    var endExtent = getAccumulatorObject("extentEnd");
+                    var startExtent = getAccumulatorObject("extentBegin").replace(/,/g,"");
+                    var endExtent = getAccumulatorObject("extentEnd").replace(/,/g,"");
+
+                    if (chromosome.startsWith("chr")){
+                        chromosome =  chromosome.substring(3)
+                    }
+                    $('input#chromosomeInput').val(chromosome);
+                    $('input#startExtentInput').val(startExtent);
+                    $('input#endExtentInput').val(endExtent);
+                    $('select.phenotypePicker').val(phenotype);
 
                     var dataNecessaryToRetrieveVariantsPerPhenotype;
                     if (( typeof phenotype === 'undefined') ||
@@ -3642,13 +3650,14 @@ mpgSoftware.dynamicUi = (function () {
                 setAccumulatorObject("sharedTable_" + additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory,sharedTable);
                 break;
             case 'variantTable':
-                setAccumulatorObject("phenotype","T2D");
-                // setAccumulatorObject("chromosome","9");
-                setAccumulatorObject("chromosome","8");
-                setAccumulatorObject("extentBegin","117862462");
-                setAccumulatorObject("extentEnd","118289003");
-                // setAccumulatorObject("extentBegin","112000000");
-                // setAccumulatorObject("extentEnd","113000000");
+                // setAccumulatorObject("phenotype","T2D");
+                // setAccumulatorObject("chromosome","8");
+                // setAccumulatorObject("extentBegin","117862462");
+                // setAccumulatorObject("extentEnd","118289003");
+                setAccumulatorObject("phenotype","CAD");
+                setAccumulatorObject("chromosome","19");
+                setAccumulatorObject("extentBegin","58838000");
+                setAccumulatorObject("extentEnd","58875000");
 
                 const chromosomeInput = $('input#chromosomeInput').val();
                 const startExtentInput = $('input#startExtentInput').val();
@@ -5263,7 +5272,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
             // I don't understand why I have to perform this final revision in the next line
             $('tr.doNotDisplay').css('display','none');
-        } else         if (formSwitch === 2){
+        } else if (formSwitch === 2){
 
             if ( typeof sharedTable['currentFormVariation'] === 'undefined'){
                 sharedTable['currentFormVariation'] = 1;

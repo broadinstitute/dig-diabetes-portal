@@ -140,24 +140,26 @@
                             nameOfAccumulatorFieldWithIndex:'notUsed'
                         }
                         ,
-                        // {
-                        //     code: 'ABC_VAR',
-                        //     category: 'ABC Tissue',
-                        //     displayCategory: 'ABC Tissue',
-                        //     subcategory: 'VariantAbc',
-                        //     displaySubcategory: 'ABC list',
-                        //     headerWriter:'abcVariantTableTissueHeader',
-                        //     cellBodyWriter:'abcVariantTableBody',
-                        //     categoryWriter:'abcVariantTableTissueHeaderLabel',
-                        //     subCategoryWriter:'abcVariantTableTissueRowLabel',
-                        //     numberRecordsCellPresentationStringWriter:'abcVariantTableNumberRecordsCellPresentationString',
-                        //     significanceCellPresentationStringWriter:'abcVariantTableSignificanceCellPresentationString',
-                        //     sortingSubroutine:'VariantAbc',
-                        //     internalIdentifierString:'getABCGivenVariantList',
-                        //     nameOfAccumulatorField:'abcVariantInfo',
-                        //     nameOfAccumulatorFieldWithIndex:'variantInfoArray'
-                        // }
-                        // ,
+                        {
+                            code: 'ABC_VAR',
+                            category: 'ABC Tissue',
+                            displayCategory: 'ABC Tissue',
+                            subcategory: 'VariantAbc',
+                            displaySubcategory: 'ABC list',
+                            headerWriter:'abcVariantTableTissueHeader',
+                            cellBodyWriter:'abcVariantTableBody',
+                            categoryWriter:'abcVariantTableTissueHeaderLabel',
+                            drillDownCategoryWriter:'abcVariantTableTissueHeaderLabel',
+                            subCategoryWriter:'abcVariantTableTissueRowLabel',
+                            drillDownSubCategoryWriter:'dnaseVariantTableTissueRowLabel',
+                            numberRecordsCellPresentationStringWriter:'abcVariantTableNumberRecordsCellPresentationString',
+                            significanceCellPresentationStringWriter:'abcVariantTableSignificanceCellPresentationString',
+                            sortingSubroutine:'VariantAbc',
+                            internalIdentifierString:'getABCGivenVariantList',
+                            nameOfAccumulatorField:'abcVariantInfo',
+                            nameOfAccumulatorFieldWithIndex:'variantInfoArray'
+                        }
+                        ,
                         {
                             code: 'DNASE_VAR',
                             category: 'DNASE Tissue',

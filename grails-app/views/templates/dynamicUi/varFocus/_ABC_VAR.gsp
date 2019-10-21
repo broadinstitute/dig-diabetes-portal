@@ -7,7 +7,7 @@ records={{numberRecords}}
 </script>
 
 <script id="abcVariantTableTissueRowLabel"  type="x-tmpl-mustache">
-<div class="varAllEpigenetics varAbcEpigenetics staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">ABC&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/></div>
+<div class="varAllEpigenetics varAbcEpigenetics staticMethodLabels annotationName_ABC methodName_ABC  initialLinearIndex_{{indexInOneDimensionalArray}}">ABC&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/></div>
 </script>
 
 <script id="abcVariantTableTissueHeader"  type="x-tmpl-mustache">

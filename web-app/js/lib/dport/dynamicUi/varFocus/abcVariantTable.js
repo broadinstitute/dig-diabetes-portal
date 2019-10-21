@@ -14,14 +14,50 @@ mpgSoftware.dynamicUi.abcVariantTable = (function () {
     var processRecordsFromAbc = function (data, arrayOfRecords) {
         if ( typeof data !== 'undefined'){
             arrayOfRecords.splice(0,arrayOfRecords.length);
-            let arrayOfData = [];
-            var recordsGroupedByVarId = _.groupBy(data, function (o) { return o.VAR_ID });
-            _.forEach(recordsGroupedByVarId, function (value,key) {
-                var allRecordsForOneVariety = {name:key,arrayOfRecords:value};
-                arrayOfData.push(allRecordsForOneVariety);
+            const myData = _.map(data,function(o){return {var_id:o.VAR_ID,annotation:'ABC', tissue_id:o.SOURCE, details:o}})
+            // let arrayOfData = [];
+            // var recordsGroupedByVarId = _.groupBy(data, function (o) { return o.VAR_ID });
+            // _.forEach(recordsGroupedByVarId, function (value,key) {
+            //     var allRecordsForOneVariety = {name:key,arrayOfRecords:value};
+            //     arrayOfData.push(allRecordsForOneVariety);
+            // });
+            // arrayOfRecords.push({header:{ },
+            //     data:arrayOfData});
+            let uniqueRecords = _.uniqWith(
+                myData,
+                (recA, recB) =>
+                    recA.annotation === recB.annotation &&
+                    recA.var_id === recB.var_id &&
+                    recA.tissue_id === recB.tissue_id
+            );
+            _.forEach(uniqueRecords,function (oneValue){oneValue['safeTissueId'] = oneValue.tissue_id.replace(":","_");});
+            let dataGroupings = {groupByVarId:[],
+                groupByAnnotation:[],
+                groupByTissue:[],
+                groupByTissueAnnotation:[]
+            };
+            _.forEach(_.groupBy(uniqueRecords, function (o) { return o.var_id }), function (value,key) {
+                dataGroupings.groupByVarId.push({name:key,arrayOfRecords:value});
             });
-            arrayOfRecords.push({header:{ },
-                data:arrayOfData});
+            _.forEach( _.groupBy(uniqueRecords, function (o) { return o.annotation }), function (recordsGroupedByAnnotation,annotation) {
+                let groupedByAnnotation = {name:annotation, arrayOfRecords:[]};
+                _.forEach( _.groupBy(recordsGroupedByAnnotation, function (o) { return o.var_id }), function (recordsSubGroupedByVarId,varId) {
+                    groupedByAnnotation.arrayOfRecords.push({name:varId,arrayOfRecords:recordsSubGroupedByVarId});
+                });
+                dataGroupings.groupByAnnotation.push(groupedByAnnotation);
+            });
+            _.forEach( _.groupBy(uniqueRecords, function (o) { return o.tissue_id }), function (recordsGroupedByTissue,tissue) {
+                let groupedByTissue = {name:tissue, arrayOfRecords:[]};
+                _.forEach( _.groupBy(groupedByTissue, function (o) { return o.var_id }), function (recordsSubGroupedByVarId,varId) {
+                    groupedByTissue.arrayOfRecords.push({name:varId,arrayOfRecords:recordsSubGroupedByVarId});
+                });
+                dataGroupings.groupByTissue.push(groupedByTissue);
+            });
+
+            arrayOfRecords.push({header:{
+                },
+                data:dataGroupings});
+
         }
         return arrayOfRecords;
     };

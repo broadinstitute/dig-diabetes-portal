@@ -14,7 +14,7 @@
             <div class="col-sm-2 text-center" style="">
                 <label style="padding-top:35px">Change genomic region or phenotype</label>
             </div>
-            <div class="col-sm-6" style="border: 1px solid black">
+            <div class="col-sm-8" style="border: 1px solid black">
                 <div class="row">
                     <div class="col-sm-1 text-center"></div>
                     <div class="col-sm-2 text-center">
@@ -32,45 +32,41 @@
                     </div>
                 </div>
                 <div class="row" style="margin-top: 15px">
-                    <div class="col-md-12">
-                        <label for="variantTablePhenotypePicker">Phenotype</label>
-                        <select id="variantTablePhenotypePicker" class="phenotypePicker" onchange="mpgSoftware.variantTable.refreshTableForPhenotype(this)">
-                    </div>
-                </div>
-                %{--<div class="row" style="margin-top: 11px">--}%
                     <div class="col-md-10">
+                        <label for="variantTablePhenotypePicker">Phenotype</label>
+                        <select id="varishiftantTablePhenotypePicker" class="phenotypePicker" onchange="mpgSoftware.variantTable.refreshTableForPhenotype(this)"></select>
                     </div>
-                    <div class="col-md-2">
+                                        <div class="col-md-2">
                         <button class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table"
                         onclick="mpgSoftware.variantTable.refreshTableForPhenotype('#variantTablePhenotypePicker')">
                         Update</button>
                     </div>
                 </div>
+                %{--<div class="row" style="margin-top: 11px">--}%
+                    %{--<div class="col-md-10">--}%
+                    %{--</div>--}%
+                    %{--<div class="col-md-2">--}%
+                        %{--<button class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table"--}%
+                        %{--onclick="mpgSoftware.variantTable.refreshTableForPhenotype('#variantTablePhenotypePicker')">--}%
+                        %{--Update</button>--}%
+                    %{--</div>--}%
+                %{--</div>--}%
             </div>
-            <div class="col-sm-4"></div>
+            <div class="col-sm-2"></div>
         </div>
         <div class="row" >
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-8">
-                            <label for="tissueToPhenotypePicker">Choose a phenotype</label>
-                            <select id="tissueToPhenotypePicker" class="phenotypePicker" onchange="mpgSoftware.tissueTable.refreshTableForPhenotype(this)">
-                            </select>
-                    </div>
-                    <div class="col-md-4"></div>
-                </div>
-            </div>
-        </div>
-        %{--<div class="row" >--}%
-            %{--<div class="col-md-12" style="position: relative">--}%
-                %{--<div id="gregorSubTableDiv"  style="position: absolute; z-index: 10; display: none; top:60px; border: 1px solid black">--}%
-                   %{--<button class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table"--}%
-                        %{--onclick="mpgSoftware.dynamicUi.maximizeGregorSubTable('{{domTableSpecifier}}',1,this)">fff</button>--}%
-                    %{--<table class="gregorSubTable">--}%
-                    %{--</table>--}%
+            %{--<div class="col-md-12">--}%
+                %{--<div class="row">--}%
+                    %{--<div class="col-md-8">--}%
+                            %{--<label for="tissueToPhenotypePicker">Choose a phenotype</label>--}%
+                            %{--<select id="tissueToPhenotypePicker" class="phenotypePicker" onchange="mpgSoftware.tissueTable.refreshTableForPhenotype(this)">--}%
+                            %{--</select>--}%
+                    %{--</div>--}%
+                    %{--<div class="col-md-4"></div>--}%
                 %{--</div>--}%
             %{--</div>--}%
-        %{--</div>--}%
+        </div>
+
 <div class="modal fade" id="gregorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document" style="width: 90%">
     <div class="modal-content">

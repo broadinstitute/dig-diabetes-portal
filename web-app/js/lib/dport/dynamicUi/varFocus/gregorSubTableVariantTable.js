@@ -122,6 +122,7 @@ const setGregorSubTableByPValue = function(currentValue){
     var displayGregorSubTable = function (idForTheTargetDiv, objectContainingRetrievedRecords, callingParameters ) {
         var handle = $( "#custom-handle" );
         var valueDisplay = $( "div.dynamicDisplay" );
+        if (objectContainingRetrievedRecords.length<1) return;
         const minVal = (objectContainingRetrievedRecords[0].header.minimumGregorPValue<=1)?
             objectContainingRetrievedRecords[0].header.minimumGregorPValue:1;
         const maxVal = (objectContainingRetrievedRecords[0].header.maximumGregorPValue<=1)?
