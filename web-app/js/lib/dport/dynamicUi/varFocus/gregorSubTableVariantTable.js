@@ -52,7 +52,19 @@ mpgSoftware.dynamicUi.gregorSubTableVariantTable = (function () {
             geneRecord.header['minimumGregorPValue'] = ( typeof minimumGregorPValue === 'undefined')?0:minimumGregorPValue.p_value;
             const maximumGregorPValue = _.last(recordsOrderedByP);
             geneRecord.header['maximumGregorPValue'] = ( typeof maximumGregorPValue === 'undefined')?1:maximumGregorPValue.p_value;
-            geneRecord.header['bestAnnotations'] = _.uniqBy(allRecs,'annotation');
+            let bestAnnos = [];
+            _.forEach(_.uniqBy(allRecs,'annotation'),function(oo){
+                if ((oo.method==='MACS')||(oo.method==='ChromHMM')){
+                    let temp = oo;
+                    temp['prettyAnnotation'] = oo.annotation.match(/[A-Z][a-z]+/g).join(" ");
+                    bestAnnos.push(temp);
+                }else{
+                    let temp = oo;
+                    temp['prettyAnnotation'] = oo.annotation;
+                    bestAnnos.push(temp);
+                }
+            });
+            geneRecord.header['bestAnnotations'] = bestAnnos;
             geneRecord.header['bestAncestries'] = _.uniqBy(allRecs,'ancestry');
             geneRecord.header['bestTissues'] = _.uniqBy(allRecs,'tissue');
             // add an additional tissue name
