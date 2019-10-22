@@ -43,7 +43,8 @@ mpgSoftware.dynamicUi.tfbsVariantTable = (function () {
             let dataGroupings = {groupByVarId:[],
                 groupByAnnotation:[],
                 groupByTissue:[],
-                groupByTissueAnnotation:[]
+                groupByTissueAnnotation:[],
+                currentMethod:'TSS'
             };
             _.forEach(_.groupBy(uniqueRecords, function (o) { return o.var_id }), function (value,key) {
                 dataGroupings.groupByVarId.push({name:key,arrayOfRecords:value});

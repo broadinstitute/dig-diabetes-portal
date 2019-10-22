@@ -36,8 +36,8 @@
                         <label for="variantTablePhenotypePicker">Phenotype</label>
                         <select id="varishiftantTablePhenotypePicker" class="phenotypePicker" onchange="mpgSoftware.variantTable.refreshTableForPhenotype(this)"></select>
                     </div>
-                                        <div class="col-md-2">
-                        <button class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table"
+                    <div class="col-md-2">
+                        <button class="btn btn-secondary btn-default transpose" type="button" title="click to update table"
                         onclick="mpgSoftware.variantTable.refreshTableForPhenotype('#variantTablePhenotypePicker')">
                         Update</button>
                     </div>
@@ -103,68 +103,87 @@
   </div>
 </div>
                 <div class="row">
-                    <div class="col-md-4">
-                        <div class="variantTableFilterChoice">
-                            <input class="form-check-input" type="checkbox" value="" id="gregorFilterCheckbox">
-                            <label class="form-check-label" for="gregorFilterCheckbox">
-                            GREGOR filter
-                            </label>
+                    <div class="col-md-8" style="border:0.5px solid #eee">
+                        <div class="row" style="border-bottom:0.5px solid #ccc">
+                            <div class="col-md-4">
+                                 <div class="variantTableFilterChoice">
+                                    <input class="form-check-input" type="checkbox" value="" id="gregorFilterCheckbox" checked>
+                                    <label class="form-check-label" for="gregorFilterCheckbox">
+                                    GREGOR filter
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="variantTableFilterChoice">
+                                    <button id="adjustFilterTableButton"  class="btn  btn-link" type="button"  data-toggle="modal" data-target="#gregorModal">
+                                    Adjust filters from GREGOR enrichment
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="variantTableFilterChoice">
-                            <input class="form-check-input" type="checkbox" value="" id="methodFilterCheckbox">
-                            <label class="form-check-label" for="methodFilterCheckbox">
-                            Choose desired methods
-                            </label>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="variantTableFilterChoice">
+                                    <input class="form-check-input" type="checkbox" value="" id="methodFilterCheckbox">
+                                    <label class="form-check-label" for="methodFilterCheckbox">
+                                    Choose desired methods
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="variantTableFilterChoice">
+                                     <span style="display: inline-block; float: none; vertical-align: middle; width: 100%">
+                                        <label class="specifyAnnotationsText" for="annotationSelectorChoice">Specify annotations explicitly:</label>
+                                        <g:helpText title="tissue.selection.help.header" placement="top" body="tissue.selection.help.text"/>
+                                         <select id="annotationSelectorChoice" multiple="multiple">
+                                        </select>
+                                     </span>
+                                </div>
+                            </div>
                         </div>
+
+
+
+
+
                     </div>
                     <div class="col-md-4">
-                        <div class="variantTableFilterChoice">
-                          <button id="adjustFilterTableButton"  class="btn btn-primary btn-default" type="button"  data-toggle="modal" data-target="#gregorModal">
-                            Adjust filters from GREGOR enrichment
-                          </button>
+                        <div class="row" >
+                            <div class="col-md-12">
+                              <span class="tool-label" style="z-index: 20">Epigenetic data&nbsp;&nbsp;
+                                    <a style="padding:0; text-decoration:none; color:inherit" class="glyphicon glyphicon-question-sign pop-bottom"
+                                    data-toggle="popover" role="button" data-trigger="focus" tabindex="0" animation="true" data-container="body"
+                                    data-placement="bottom" title="" data-html="true"
+                                    data-content="Click to toggle epigenetic data display." data-original-title="Transpose table"></a>
+                              </span>
+                              <button class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table"
+                                onclick="mpgSoftware.dynamicUi.reviseDisplayOfVariantTable('{{domTableSpecifier}}',1,this)">
+                                Display
+                              </button>
+                              <button  class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table" onclick="mpgSoftware.dynamicUi.transposeThisTable('{{domTableSpecifier}}')">
+                                Transpose
+                              </button>
+                            </div>
                         </div>
-                        <div class="variantTableFilterChoice">
-                             <span style="display: inline-block; float: none; vertical-align: middle; width: 100%">
-                                <label for="annotationSelectorChoice">Select tissues based on overlap with:&nbsp;</label>
-                                <g:helpText title="tissue.selection.help.header" placement="top" body="tissue.selection.help.text"/>
-                                 <select id="annotationSelectorChoice" multiple="multiple">
-                                </select>
-                             </span>
+                        <div class="row" >
+                            <div class="col-md-offset-6 col-md-6">
+                                <div class="datatable-zoom-control">
+                                    <div class="tool-label">Zoom</div>
+                                    <button type="button" class="btn btn-default btn-secondary" aria-label="Zoom out" title="click to zoom out" onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('{{organizingDiv}}',false,event)">
+                                        <span class="glyphicon glyphicon-minus" aria-hidden="true" onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#mainVariantDiv',false,event)"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-default btn-secondary" aria-label="Zoom in" title="click to zoom in" onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('{{organizingDiv}}',true,event)">
+                                        <span class="glyphicon glyphicon-plus" aria-hidden="true" onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#mainVariantDiv',true,event)"></span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-
-                    </div>
-                    <div class="col-md-4">
-                        <span class="tool-label" style="z-index: 20">Epigenetic data&nbsp;&nbsp;
-                            <a style="padding:0; text-decoration:none; color:inherit" class="glyphicon glyphicon-question-sign pop-bottom"
-                            data-toggle="popover" role="button" data-trigger="focus" tabindex="0" animation="true" data-container="body"
-                            data-placement="bottom" title="" data-html="true"
-                            data-content="Click to toggle epigenetic data display." data-original-title="Transpose table"></a>
-                        </span>
-                        <button class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table"
-                        onclick="mpgSoftware.dynamicUi.reviseDisplayOfVariantTable('{{domTableSpecifier}}',1,this)">
-                        Display
-                        </button>
-                          <button  class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table" onclick="mpgSoftware.dynamicUi.transposeThisTable('{{domTableSpecifier}}')">
-                            Transpose
-                          </button>
-
-
-
                     </div>
                 </div>
         <div class="row" >
         <div class="col-md-9"></div>
         <div class="col-md-3">
-                            <div class="datatable-zoom-control">
-                        <div class="tool-label">Zoom</div>
-                        <button type="button" class="btn btn-default btn-secondary" aria-label="Zoom out" title="click to zoom out" onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('{{organizingDiv}}',false,event)">
-                            <span class="glyphicon glyphicon-minus" aria-hidden="true" onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#mainVariantDiv',false,event)"></span>
-                        </button>
-                        <button type="button" class="btn btn-default btn-secondary" aria-label="Zoom in" title="click to zoom in" onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('{{organizingDiv}}',true,event)">
-                            <span class="glyphicon glyphicon-plus" aria-hidden="true" onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#mainVariantDiv',true,event)"></span>
-                        </button>
 
-                    </div>
         </div>
         </div>
         <div class="row" >

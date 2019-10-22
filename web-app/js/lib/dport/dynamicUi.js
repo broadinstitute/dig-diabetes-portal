@@ -1078,6 +1078,8 @@ mpgSoftware.dynamicUi = (function () {
                     var chromosome = getAccumulatorObject("chromosome");
                     var startExtent = getAccumulatorObject("extentBegin").replace(/,/g,"");
                     var endExtent = getAccumulatorObject("extentEnd").replace(/,/g,"");
+                    var sharedTable = getSharedTable(displayLocation);
+                    sharedTable['currentFormVariation'] = 2;
 
                     if (chromosome.startsWith("chr")){
                         chromosome =  chromosome.substring(3)
@@ -1086,6 +1088,8 @@ mpgSoftware.dynamicUi = (function () {
                     $('input#startExtentInput').val(startExtent);
                     $('input#endExtentInput').val(endExtent);
                     $('select.phenotypePicker').val(phenotype);
+                    $('#annotationSelectorChoice').empty().multiselect('refresh');
+                    $('#annotationSelectorChoice').multiselect('rebuild');
 
                     var dataNecessaryToRetrieveVariantsPerPhenotype;
                     if (( typeof phenotype === 'undefined') ||
@@ -2577,9 +2581,11 @@ mpgSoftware.dynamicUi = (function () {
             } else if ( typeof arrayOfDataToDisplay[0].data.groupByAnnotation !== 'undefined'){
                 let rowIndex = 0;
                 prepend = false;
-                let uniqueLists = getMethodsAnnotationsAndTissuesFromGregorTable(true);
+                const currentMethod = arrayOfDataToDisplay[0].data.currentMethod;
+                let annotationOptions = [];
                 _.forEach(arrayOfDataToDisplay[0].data.groupByAnnotation, function (recordsForAnnotation ) {
-                    $('#annotationSelectorChoice').append(new Option(recordsForAnnotation.name, recordsForAnnotation.name));
+                    //$('#annotationSelectorChoice').append(new Option(recordsForAnnotation.name, recordsForAnnotation.name));
+                    annotationOptions.push(new Option(recordsForAnnotation.name, recordsForAnnotation.name+"_"+currentMethod));
                     const annotation = recordsForAnnotation.name;
                     addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
                     const dataVector = getAccumulatorObject(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex)[0].data;
@@ -2614,6 +2620,9 @@ mpgSoftware.dynamicUi = (function () {
                         }
                     });
                 });
+                _.forEach(_.sortBy(annotationOptions,function(ooo){return ooo.text}), function (recordsForAnnotation ) {
+                    $('#annotationSelectorChoice').append(recordsForAnnotation);
+                });
                 $('#annotationSelectorChoice').multiselect('rebuild');
             }
 
@@ -2630,6 +2639,7 @@ mpgSoftware.dynamicUi = (function () {
             'variantTableVariantHeaders',
             prepend,
             true );
+        filterEpigeneticTable();
 
 
 
@@ -3671,7 +3681,9 @@ mpgSoftware.dynamicUi = (function () {
                 if (chromosomeInput.length>0){setAccumulatorObject("chromosome",chromosomeInput);}
                 if (startExtentInput.length>0){setAccumulatorObject("extentBegin",startExtentInput);}
                 if (endExtentInput.length>0){setAccumulatorObject("extentEnd",endExtentInput);}
-                if (( typeof chosenPhenotype !== 'undefined')&&(chosenPhenotype.length>0)){setAccumulatorObject("phenotype",chosenPhenotype);}
+                if (( typeof chosenPhenotype !== 'undefined')&&(chosenPhenotype.length>0)){
+                    setAccumulatorObject("phenotype",chosenPhenotype);
+                }
 
                 destroySharedTable(additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory);
                 var sharedTable = new SharedTableObject('variantTableVariantHeaders',0,0);
@@ -4247,7 +4259,6 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 var sharedTable = getAccumulatorObject("sharedTable_"+whereTheTableGoes);
                 var dyanamicUiVariables = getDyanamicUiVariables();
                 var headerDescriber = {
-                   // "aaSorting": [[ 1, "asc" ]],
                     "dom": '<"top">rt<"bottom"iplB>',
                     "buttons": [
                         {extend: "copy", text: "Copy all to clipboard"},
@@ -4492,32 +4503,45 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         returnValue.uniqueAnnotations = _.uniq(allAnnotations);
         returnValue.uniqueTissues = _.uniq(allTissues);
     return returnValue;
-    }
+    };
 
 
-
+    const getMethodsAnnotationsAndTissuesFromExplicitAnnotationSpecification= function(getEverything){
+        var selectedElements = $('#annotationSelectorChoice option:selected');
+        var selectedValuesAndText = [];
+        _.forEach(selectedElements,function(oe){
+            const annotationAndMethod = $(oe).val().split("_");
+            selectedValuesAndText.push({name:annotationAndMethod[0],
+                             method:annotationAndMethod[1],
+                             text:$(oe).text()});
+        });
+        return {uniqueMethods:_.uniq(_.map(selectedValuesAndText,function(o){return o.method})),
+            uniqueTissues:[1],
+            uniqueAnnotations:_.map(selectedValuesAndText,function(o){return o.name})};
+    };
 
 
     const filterEpigeneticTable = function(){
-        // const arrayForMethodsAndAnnotations = $('div.gregorSubTableRow').find('input.gregorSubTableRowHeader:checked');
-        let uniqueLists = getMethodsAnnotationsAndTissuesFromGregorTable(false);
+        // we can filter either on tissue enrichments, or explicitly selected annotations, or we can accept either
+        let uniqueLists = {};
+        const filterByGregor =  ($('#gregorFilterCheckbox').is(":checked"));
+        const filterByExplicitMethod =  ($('#methodFilterCheckbox').is(":checked"));
+        if ( filterByGregor &&
+             (!filterByExplicitMethod) ){
+            uniqueLists = getMethodsAnnotationsAndTissuesFromGregorTable(false);
+        } else if ( (!filterByGregor) &&
+                    filterByExplicitMethod ){
+            uniqueLists = getMethodsAnnotationsAndTissuesFromExplicitAnnotationSpecification(false)
+        } else {
+
+        }
+
         let uniqueMethods = uniqueLists.uniqueMethods;
         let uniqueAnnotations = uniqueLists.uniqueAnnotations;
         let uniqueTissues = uniqueLists.uniqueTissues;
-        // _.forEach(arrayForMethodsAndAnnotations,function(annotationMethodInput){
-        //     const annotationMethod = $(annotationMethodInput).attr('value');
-        //     if (annotationMethod.length>2){
-        //         const annotationMethodArray = annotationMethod.split("_");
-        //         uniqueAnnotations.push(annotationMethodArray[0]);
-        //         uniqueMethods.push(annotationMethodArray[1]);
-        //     }
-        // });
-        // _.forEach($('div.gregorSubTableHeader').find('input.gregorSubTableRowHeader:checked'),function(tissueInput){
-        //     uniqueTissues.push($(tissueInput).attr('value'));
-        // });
-        if ((uniqueMethods.length>0) &&
-            (uniqueAnnotations.length>0) &&
-            (uniqueTissues.length>0)) {
+        if ( ( typeof uniqueMethods !== 'undefined') && (uniqueMethods.length>0) &&
+            ( typeof uniqueAnnotations !== 'undefined') && (uniqueAnnotations.length>0) &&
+            ( typeof uniqueTissues !== 'undefined') &&  (uniqueTissues.length>0)) {
             // first filter out the rows based on methods
             _.forEach($('div.staticMethodLabels'),function(oneDiv){
                 const currentMethod = extractClassBasedTrailingString(oneDiv,"methodName_");
@@ -4527,21 +4551,22 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     $(oneDiv).parent().parent().hide();
                 }
             });
-            $('tr.epigeneticCellElement').removeClass('yesDisplay');
-            $('tr.epigeneticCellElement').removeClass('skipDisplay');
-            _.forEach($('tr.epigeneticCellElement'),function(oneTr){
-                const currentAnnotation = extractClassBasedTrailingString(oneTr,"annotationName_");
-                const currentTissue = extractClassBasedTrailingString(oneTr,"tissueId_");
-                const cellOffset = $(oneTr).offset();
-                if (_.includes(uniqueTissues,currentTissue)&&
-                    ((currentAnnotation.length===0)||(_.includes(uniqueAnnotations,currentAnnotation)))){
-                    $(oneTr).show();
-                    $(oneTr).addClass('yesDisplay');
-                } else {
-                    $(oneTr).hide();
-                    $(oneTr).addClass('skipDisplay');
-                }
-            });
+            // not used
+            // $('tr.epigeneticCellElement').removeClass('yesDisplay');
+            // $('tr.epigeneticCellElement').removeClass('skipDisplay');
+            // _.forEach($('tr.epigeneticCellElement'),function(oneTr){
+            //     const currentAnnotation = extractClassBasedTrailingString(oneTr,"annotationName_");
+            //     const currentTissue = extractClassBasedTrailingString(oneTr,"tissueId_");
+            //     //const cellOffset = $(oneTr).offset();
+            //     if (_.includes(uniqueTissues,currentTissue)&&
+            //         ((currentAnnotation.length===0)||(_.includes(uniqueAnnotations,currentAnnotation)))){
+            //         $(oneTr).show();
+            //         $(oneTr).addClass('yesDisplay');
+            //     } else {
+            //         $(oneTr).hide();
+            //         $(oneTr).addClass('skipDisplay');
+            //     }
+            // });
             $('table.expandableDrillDownTable').parent().parent().removeClass('undisplayed');
             _.forEach($('table.expandableDrillDownTable'),function(oneTable){
                 const domTable = $(oneTable);
@@ -4558,46 +4583,64 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 }
 
             })
-            $('div.epigeneticCellElement').removeClass('yesDisplay');
-            $('div.epigeneticCellElement').removeClass('gregorQuantile_1');
-            $('div.epigeneticCellElement').removeClass('gregorQuantile_2');
-            $('div.epigeneticCellElement').removeClass('gregorQuantile_3');
-            $('div.epigeneticCellElement').removeClass('gregorQuantile_4');
-            $('div.epigeneticCellElement').removeClass('gregorQuantile_5');
-            $('div.epigeneticCellElement').removeClass('skipDisplay');
+
+           // if (filterByGregor){ // only color by Gregor if we are filtering by Gregor
+                $('div.epigeneticCellElement').removeClass('yesDisplay');
+                $('div.epigeneticCellElement').removeClass('gregorQuantile_1');
+                $('div.epigeneticCellElement').removeClass('gregorQuantile_2');
+                $('div.epigeneticCellElement').removeClass('gregorQuantile_3');
+                $('div.epigeneticCellElement').removeClass('gregorQuantile_4');
+                $('div.epigeneticCellElement').removeClass('gregorQuantile_5');
+                $('div.epigeneticCellElement').removeClass('skipDisplay');
+            //}
+
             const gregorAcc = getAccumulatorObject("gregorVariantInfo");
             let quantileDef = {};
             if (gregorAcc.length>0){
                 quantileDef =  gregorAcc[0].header['quickLookup']
             }
-            _.forEach($('div.epigeneticCellElement'),function(oneTr){
-                const currentAnnotation = extractClassBasedTrailingString(oneTr,"annotationName_");
-                const currentTissue = extractClassBasedTrailingString(oneTr,"tissueId_");
-                const cellOffset = $(oneTr).offset();
-                if (_.includes(uniqueTissues,currentTissue)&&
-                    ((currentAnnotation.length===0)||(_.includes(uniqueAnnotations,currentAnnotation)))){
-                    $(oneTr).show();
-                    $(oneTr).addClass('yesDisplay');
-                    if (!$.isEmptyObject(quantileDef)){
-                        const quanAss = quantileDef[currentAnnotation+"_"+currentTissue.replace("_",":")];
-                        if ( typeof quanAss !== 'undefined')
-                        $(oneTr).addClass('gregorQuantile_'+quanAss.quantile);
+            // now go through every cell and determine if we want to display it
+            if (filterByGregor){
+                _.forEach($('div.epigeneticCellElement'),function(oneTr){
+                    const currentAnnotation = extractClassBasedTrailingString(oneTr,"annotationName_");
+                    const currentTissue = extractClassBasedTrailingString(oneTr,"tissueId_");
+                    if (_.includes(uniqueTissues,currentTissue)&&
+                        ((currentAnnotation.length===0)||(_.includes(uniqueAnnotations,currentAnnotation)))){
+                        $(oneTr).show();
+                        $(oneTr).addClass('yesDisplay');
+                        if (!$.isEmptyObject(quantileDef)){
+
+                            const quanAss = quantileDef[currentAnnotation+"_"+currentTissue.replace("_",":")];
+                            if ( typeof quanAss !== 'undefined'){
+                                $(oneTr).addClass('gregorQuantile_'+quanAss.quantile);
+                            }
+                        }
+                    } else {
+                        $(oneTr).hide();
+                        $(oneTr).addClass('skipDisplay');
                     }
-                } else {
-                    $(oneTr).hide();
-                    $(oneTr).addClass('skipDisplay');
-                }
-            });
+                });
+            } else if (filterByExplicitMethod){
+                _.forEach($('div.epigeneticCellElement'),function(oneTr){
+                    const currentAnnotation = extractClassBasedTrailingString(oneTr,"annotationName_");
+
+                    if ((_.includes(uniqueMethods,currentAnnotation)||
+                        ((currentAnnotation.length===0)||(_.includes(uniqueAnnotations,currentAnnotation))))){
+                        $(oneTr).show();
+                        $(oneTr).addClass('yesDisplay');
+
+                    } else {
+                        $(oneTr).hide();
+                        $(oneTr).addClass('skipDisplay');
+                    }
+                });
+            }
             _.forEach($('div.varAnnotation'),function(oneDiv){
                 const currentAnnotation = extractClassBasedTrailingString(oneDiv,"annotationName_");
                 if (_.includes(uniqueAnnotations,currentAnnotation)){
-                    //$(oneDiv).parent().parent().show();
                     $(oneDiv).parent().parent().removeClass('doNotDisplay');
-                    //$(oneDiv).parent().parent().css('display','none');
                 } else {
-                   // $(oneDiv).parent().parent().hide();
                     $(oneDiv).parent().parent().addClass('doNotDisplay');
-                   // $(oneDiv).parent().parent().css('display','none');
                 }
             });
 
@@ -4688,6 +4731,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     }
                   break;
                 case 'variantTableVariantHeaders':
+                   // setUpDraggable(whereTheTableGoes);
                     if (headerSpecific) {
                         _.forEach(datatable.DataTable().columns().header(),function(o,columnIndex){ //  make nice headers out of VAR_IDs
                             var domElement = $(o);
@@ -6057,12 +6101,14 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
     var setUpDraggable = function(whereTheTableGoes) {
         var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
         var classNameToIdentifyHeader;
-        if ((sharedTable.currentForm === 'geneTableGeneHeaders') || (sharedTable.currentForm === 'variantTableVariantHeaders')){
+        if ((sharedTable.currentForm === 'geneTableGeneHeaders')){
             classNameToIdentifyHeader =  "th.geneHeader";
-        } else if ((sharedTable.currentForm === 'geneTableAnnotationHeaders') || (sharedTable.currentForm === 'variantTableAnnotationHeaders')){
+        } else if ((sharedTable.currentForm === 'geneTableAnnotationHeaders')){
             classNameToIdentifyHeader =  "th.categoryNameToUse";
         } else if ((sharedTable.currentForm === 'tissueTableMethodHeaders') ){
             classNameToIdentifyHeader =  "th.tissueTableHeader";
+        } else if ((sharedTable.currentForm === 'variantTableVariantHeaders') ){
+            classNameToIdentifyHeader =  "th.headersWithVarIds";
         }
 
         $( classNameToIdentifyHeader ).draggable({

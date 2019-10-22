@@ -78,14 +78,17 @@ mpgSoftware.variantTable = (function () {
                 organizingDiv: drivingVariables.dynamicTableConfiguration.organizingDiv  }
         ));
         fillPhenotypeDropDown('select.phenotypePicker',preferredPhenotype);
-        // $('#annotationSelectorChoice').multiselect({includeSelectAllOption: true,
-        //     allSelectedText: 'All Selected',
-        //     buttonWidth: '60%',onChange: function() {
-        //         console.log($('#annotationSelectorChoice').val());
-        //     }});
+        $('#annotationSelectorChoice').multiselect({includeSelectAllOption: true,
+            onDropdownHide: function(event) {
+                mpgSoftware.dynamicUi.filterEpigeneticTable();
+                // to reload the page
+                // location.reload();
+            }
+            });
         // $('#annotationSelectorChoice').append(new Option('fee', 'fo'));
         // $('#annotationSelectorChoice').append(new Option('fum', 'fo2'));
         // $('#annotationSelectorChoice').multiselect('refresh');
+
         mpgSoftware.dynamicUi.modifyScreenFields({phenotype:preferredPhenotype},getVariablesToRemember());
     }
 

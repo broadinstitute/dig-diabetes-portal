@@ -26,7 +26,8 @@ mpgSoftware.dynamicUi.dnaseVariantTable = (function () {
             let dataGroupings = {groupByVarId:[],
                                 groupByAnnotation:[],
                                 groupByTissue:[],
-                                groupByTissueAnnotation:[]
+                                groupByTissueAnnotation:[],
+                                currentMethod:'MACS'
                                 };
             _.forEach(_.groupBy(uniqueRecords, function (o) { return o.var_id }), function (value,key) {
                 dataGroupings.groupByVarId.push({name:key,arrayOfRecords:value});

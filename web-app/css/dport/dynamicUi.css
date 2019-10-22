@@ -699,3 +699,10 @@ table.gregorSubTable tbody>tr>td {
     height: 20px;
     padding: 0px 5px;
 }
+#mainVariantDiv .dataTables_info { display: none; }
+#mainVariantDiv .dataTables_length { display: none; }
+#mainVariantDiv .dataTables_paginate { display: none; }
+label.specifyAnnotationsText{
+    color: #337ab7;
+    font-weight: normal;
+}
