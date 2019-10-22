@@ -14,7 +14,7 @@
 
 <div class="container-fluid header-bottom" id="header-bottom-${g.portalTypeString()}">
 
-    <div class="logo-wrapper" style="position:relative; z-index: 1001; float: left;">
+    <div class="logo-wrapper " style="position:relative; z-index: 1001; float: left;">
         <a href="${createLink(controller:'home',action:'portalHome')}">
             <img src="${resource( file:restServer.retrieveBeanForCurrentPortal().getLogoCode())}" style=" height: 50px; margin-left: 10px;" />
         </a>

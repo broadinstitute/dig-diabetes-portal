@@ -1397,6 +1397,8 @@ div.traits-filter-wrapper > .radio-inline {
 	z-index: 100;
 }
 
+#header-bottom-bone > .logo-wrapper img { padding-top: 2px; }
+
 .front-top-banner {
 	font-size:16px;
 	background-repeat: no-repeat;
@@ -1429,8 +1431,13 @@ div.traits-filter-wrapper > .radio-inline {
 	color: #918BC3;
 }
 
+
 #header-bottom-bone {
 	background-color: #BCAFD6;
+	background-image:url(../../images/under_construction.png);
+	background-position: center;
+	background-size: 250px;
+	background-repeat: no-repeat;
 	position: relative;
 }
 
@@ -1536,7 +1543,7 @@ div.traits-filter-wrapper > .radio-inline {
 }
 
 .front-logo-tagline-bone {
-	transform: translate(0%,15%);
+	transform: translate(0%,4%);
 }
 
 .front-logo-tagline-v2f, .front-logo-tagline-ibd {
@@ -1672,3 +1679,8 @@ ul.traits-filter-options {
 ul.traits-filter-options > li {
 	display: inline-flex;
 }
+
+
+.front-top-banner-bone .front-logo-wrapper { width: 930px; }
+
+.front-top-banner-bone .front-logo-img { width: 500px; }
