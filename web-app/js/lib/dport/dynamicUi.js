@@ -2579,6 +2579,7 @@ mpgSoftware.dynamicUi = (function () {
                 prepend = false;
                 let uniqueLists = getMethodsAnnotationsAndTissuesFromGregorTable(true);
                 _.forEach(arrayOfDataToDisplay[0].data.groupByAnnotation, function (recordsForAnnotation ) {
+                    $('#annotationSelectorChoice').append(new Option(recordsForAnnotation.name, recordsForAnnotation.name));
                     const annotation = recordsForAnnotation.name;
                     addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
                     const dataVector = getAccumulatorObject(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex)[0].data;
@@ -2613,7 +2614,7 @@ mpgSoftware.dynamicUi = (function () {
                         }
                     });
                 });
-
+                $('#annotationSelectorChoice').multiselect('rebuild');
             }
 
             intermediateDataStructure.tableToUpdate = idForTheTargetDiv;

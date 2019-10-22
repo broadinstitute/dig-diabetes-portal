@@ -3,13 +3,13 @@
     <div class="container">
         <div class="row">
             <div class="text-center">
-                <h1 class="dk-page-title">Variant enrichments for <span class="phenotypeSpecifier">{{phenotype}}</span></h1>
+                <h1 class="dk-page-title">Variant FOCUS table for <span class="phenotypeSpecifier">{{phenotype}}</span></h1>
             </div>
         </div>
-        <p><g:message code="tissueTable.interface-help1"></g:message>
-<g:helpText title="tissueTable.overall.help.header" placement="bottom" body="tissueTable.help.text"/>
-<g:message code="tissueTable.interface-help2"></g:message></p>
-<p><g:message code="tissueTable.interface-help3"></g:message></p>
+        <p><g:message code="variantTable.introduction.1"></g:message>
+<g:helpText title="variantTable.overall.help.header" placement="bottom" body="variantTable.help.text"/>
+<g:message code="variantTable.introduction.2"></g:message></p>
+<p><g:message code="variantTable.introduction.3"></g:message></p>
         <div class="row" style="margin: 20px">
             <div class="col-sm-2 text-center" style="">
                 <label style="padding-top:35px">Change genomic region or phenotype</label>
@@ -42,29 +42,10 @@
                         Update</button>
                     </div>
                 </div>
-                %{--<div class="row" style="margin-top: 11px">--}%
-                    %{--<div class="col-md-10">--}%
-                    %{--</div>--}%
-                    %{--<div class="col-md-2">--}%
-                        %{--<button class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table"--}%
-                        %{--onclick="mpgSoftware.variantTable.refreshTableForPhenotype('#variantTablePhenotypePicker')">--}%
-                        %{--Update</button>--}%
-                    %{--</div>--}%
-                %{--</div>--}%
             </div>
             <div class="col-sm-2"></div>
         </div>
         <div class="row" >
-            %{--<div class="col-md-12">--}%
-                %{--<div class="row">--}%
-                    %{--<div class="col-md-8">--}%
-                            %{--<label for="tissueToPhenotypePicker">Choose a phenotype</label>--}%
-                            %{--<select id="tissueToPhenotypePicker" class="phenotypePicker" onchange="mpgSoftware.tissueTable.refreshTableForPhenotype(this)">--}%
-                            %{--</select>--}%
-                    %{--</div>--}%
-                    %{--<div class="col-md-4"></div>--}%
-                %{--</div>--}%
-            %{--</div>--}%
         </div>
 
 <div class="modal fade" id="gregorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -122,11 +103,35 @@
   </div>
 </div>
                 <div class="row">
-                    <div class="col-md-4"></div>
                     <div class="col-md-4">
+                        <div class="variantTableFilterChoice">
+                            <input class="form-check-input" type="checkbox" value="" id="gregorFilterCheckbox">
+                            <label class="form-check-label" for="gregorFilterCheckbox">
+                            GREGOR filter
+                            </label>
+                        </div>
+                        <div class="variantTableFilterChoice">
+                            <input class="form-check-input" type="checkbox" value="" id="methodFilterCheckbox">
+                            <label class="form-check-label" for="methodFilterCheckbox">
+                            Choose desired methods
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="variantTableFilterChoice">
                           <button id="adjustFilterTableButton"  class="btn btn-primary btn-default" type="button"  data-toggle="modal" data-target="#gregorModal">
                             Adjust filters from GREGOR enrichment
                           </button>
+                        </div>
+                        <div class="variantTableFilterChoice">
+                             <span style="display: inline-block; float: none; vertical-align: middle; width: 100%">
+                                <label for="annotationSelectorChoice">Select tissues based on overlap with:&nbsp;</label>
+                                <g:helpText title="tissue.selection.help.header" placement="top" body="tissue.selection.help.text"/>
+                                 <select id="annotationSelectorChoice" multiple="multiple">
+                                </select>
+                             </span>
+                        </div>
+
                     </div>
                     <div class="col-md-4">
                         <span class="tool-label" style="z-index: 20">Epigenetic data&nbsp;&nbsp;

@@ -6,7 +6,7 @@ Association
 
 <script id="variantPosteriorPValueSubcategoryLabel"  type="x-tmpl-mustache">
 <div class="staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">
-posterior p-value
+posterior probabilities
 <g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/>
 </div>
 </script>
