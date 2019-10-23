@@ -667,6 +667,7 @@ table.variantTableHolder div.epigeneticCellElement   {
     white-space: normal;
     overflow: hidden;
     text-overflow: ellipsis;
+    margin-bottom: 1px;
 }
 div.variantHeaderHolder{
     position: relative;
@@ -705,4 +706,11 @@ table.gregorSubTable tbody>tr>td {
 label.specifyAnnotationsText{
     color: #337ab7;
     font-weight: normal;
+}
+#mainVariantDiv table.dataTable tbody td {
+    padding: 4px 2px;
+}
+div.variantTableFilterChoice{
+    /*overflow-x: scroll;*/
+    white-space: nowrap;
 }

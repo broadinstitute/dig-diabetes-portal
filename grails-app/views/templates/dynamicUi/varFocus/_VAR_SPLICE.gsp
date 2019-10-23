@@ -12,7 +12,7 @@ Splice
 </script>
 
 <script id="variantIsSplicingBody"  type="x-tmpl-mustache">
-    <div  class="variantAnnotation emphasisSwitch_{{emphasisSwitch}}  initialLinearIndex_{{indexInOneDimensionalArray}}"
+    <div  class="variantAnnotation emphasisSwitch_{{emphasisSwitch}}  initialLinearIndex_{{indexInOneDimensionalArray}} text-center"
     sortfield="{{emphasisSwitch}}_Splice">
     <span class="glyphicon glyphicon-ok"></span>
     </div>

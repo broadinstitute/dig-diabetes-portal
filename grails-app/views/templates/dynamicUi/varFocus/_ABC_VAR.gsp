@@ -1,4 +1,4 @@
-<script id="abcVariantTableNumberRecordsCellPresentationString"  type="x-tmpl-mustache">
+ <script id="abcVariantTableNumberRecordsCellPresentationString"  type="x-tmpl-mustache">
 records={{numberRecords}}
 </script>
 
@@ -32,8 +32,13 @@ records={{numberRecords}}
 <script id="abcVariantTableBody"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortField="{{significanceValue}}"
              class="epigeneticCellElement tissueId_none annotationName_ABC varAllEpigenetics varAbcEpigenetics tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
+                <div style="padding: 50% 0 50% 0">
+               {{#tissueRecords}}
+                  <div class="text-center">{{details.SOURCE}}</div>
+               {{/tissueRecords}}
+               </div>
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'ABC predictions for {{tissueName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
-               data-target="#depict_abc_{{tissueNameKey}}" style="color:black">genes
+               data-target="#depict_abc_{{tissueNameKey}}" style="color:black">expand&gt;&gt;
                </a>
 
                <div  class="collapse openEffectorGeneInformationInGeneTable" id="depict_abc_{{tissueNameKey}}">

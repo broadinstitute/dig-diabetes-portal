@@ -2494,7 +2494,7 @@ mpgSoftware.dynamicUi = (function () {
                                         nameOfAccumulatorFieldWithIndex, // we may wish to pull out one record for summary purposes
                                         mapSortAndFilterFunction,
                                         placeDataIntoRenderForm ) { // sort and filter the records we will use.  Resulting array must have fields tissue, value, and numericalValue
-
+        console.log("displayForVariantTable/type="+dataAnnotationTypeCode+".");
         var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode);
         //var returnObject = createNewDisplayReturnObject();
         var intermediateDataStructure = new IntermediateDataStructure();
@@ -4539,43 +4539,35 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         let uniqueMethods = uniqueLists.uniqueMethods;
         let uniqueAnnotations = uniqueLists.uniqueAnnotations;
         let uniqueTissues = uniqueLists.uniqueTissues;
+        $('div.epigeneticCellElement').removeClass('yesDisplay');
+        $('div.epigeneticCellElement').removeClass('gregorQuantile_1');
+        $('div.epigeneticCellElement').removeClass('gregorQuantile_2');
+        $('div.epigeneticCellElement').removeClass('gregorQuantile_3');
+        $('div.epigeneticCellElement').removeClass('gregorQuantile_4');
+        $('div.epigeneticCellElement').removeClass('gregorQuantile_5');
+        $('div.epigeneticCellElement').removeClass('skipDisplay');
         if ( ( typeof uniqueMethods !== 'undefined') && (uniqueMethods.length>0) &&
             ( typeof uniqueAnnotations !== 'undefined') && (uniqueAnnotations.length>0) &&
             ( typeof uniqueTissues !== 'undefined') &&  (uniqueTissues.length>0)) {
             // first filter out the rows based on methods
-            _.forEach($('div.staticMethodLabels'),function(oneDiv){
-                const currentMethod = extractClassBasedTrailingString(oneDiv,"methodName_");
-                if (_.includes(uniqueMethods,currentMethod)) {
-                    $(oneDiv).parent().parent().show();
-                } else {
-                    $(oneDiv).parent().parent().hide();
-                }
-            });
-            // not used
-            // $('tr.epigeneticCellElement').removeClass('yesDisplay');
-            // $('tr.epigeneticCellElement').removeClass('skipDisplay');
-            // _.forEach($('tr.epigeneticCellElement'),function(oneTr){
-            //     const currentAnnotation = extractClassBasedTrailingString(oneTr,"annotationName_");
-            //     const currentTissue = extractClassBasedTrailingString(oneTr,"tissueId_");
-            //     //const cellOffset = $(oneTr).offset();
-            //     if (_.includes(uniqueTissues,currentTissue)&&
-            //         ((currentAnnotation.length===0)||(_.includes(uniqueAnnotations,currentAnnotation)))){
-            //         $(oneTr).show();
-            //         $(oneTr).addClass('yesDisplay');
+            // _.forEach($('div.staticMethodLabels'),function(oneDiv){
+            //     const currentMethod = extractClassBasedTrailingString(oneDiv,"methodName_");
+            //     if (_.includes(uniqueMethods,currentMethod)) {
+            //         $(oneDiv).parent().parent().show();
             //     } else {
-            //         $(oneTr).hide();
-            //         $(oneTr).addClass('skipDisplay');
+            //         $(oneDiv).parent().parent().hide();
             //     }
             // });
+
             $('table.expandableDrillDownTable').parent().parent().removeClass('undisplayed');
-            _.forEach($('table.expandableDrillDownTable'),function(oneTable){
+            _.forEach($('table.expandableDrillDownTable'), function (oneTable) {
                 const domTable = $(oneTable);
                 let somethingToDisplay = false;
-                _.forEach(domTable.find('tr.yesDisplay'),function(o){
+                _.forEach(domTable.find('tr.yesDisplay'), function (o) {
                     somethingToDisplay = true;
                     return false;
                 });
-                if (!somethingToDisplay){
+                if (!somethingToDisplay) {
                     $(domTable).parent().parent().addClass('undisplayed');
                     $(domTable).parent().parent().hide();
                 } else {
@@ -4583,15 +4575,9 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 }
 
             })
-
+        }
            // if (filterByGregor){ // only color by Gregor if we are filtering by Gregor
-                $('div.epigeneticCellElement').removeClass('yesDisplay');
-                $('div.epigeneticCellElement').removeClass('gregorQuantile_1');
-                $('div.epigeneticCellElement').removeClass('gregorQuantile_2');
-                $('div.epigeneticCellElement').removeClass('gregorQuantile_3');
-                $('div.epigeneticCellElement').removeClass('gregorQuantile_4');
-                $('div.epigeneticCellElement').removeClass('gregorQuantile_5');
-                $('div.epigeneticCellElement').removeClass('skipDisplay');
+
             //}
 
             const gregorAcc = getAccumulatorObject("gregorVariantInfo");
@@ -4644,7 +4630,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 }
             });
 
-        }
+
     };
 
 
