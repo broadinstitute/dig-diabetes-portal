@@ -220,9 +220,8 @@
                         <div class="gene-phenotype" style="width:45%; height: 65px; font-size: 1.25em; padding-top: 12px;">
                             <div class="phenotype-search-holder hide-element" id="phenotypeSearchHolder" style="display: none;">
                                 <div class="phenotype-search">
-                                    <label id="generalized-label">Search a gene</label>
-                                    <input id="generalized-input" value="" type="text" class="form-control input-default">
-                                    <button id="generalized-go" class="btn btn-primary" type="button" >Go</button>
+                                    <select id="phenotypeInput" class="form-control input-sm trait-input selectpicker" data-live-search="true">
+                                    </select>
                                 </div>
                             </div>
                         </div>

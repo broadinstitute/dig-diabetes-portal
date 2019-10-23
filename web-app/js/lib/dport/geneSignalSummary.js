@@ -1075,6 +1075,17 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             phenotypeDescriptions += '</ul>';
             $('#interestingPhenotypes').append(phenotypeDescriptions);
 
+            /* adding phenotypes pulldown menu to gene page header */
+
+            var phenotypePullDown = '';
+
+            $.each(listOfInterestingPhenotypes, function (phenotypeIndex, phenotype) {
+                console.log(phenotype);
+                phenotypePullDown += '<option id="'+phenotype.phenotype+'" ds="'+phenotype.ds+'" dsr="'+phenotype.dsr+'" class="strength-'+phenotype.signalStrength+'">'+phenotype.pname+'</option>';
+            });
+
+            $("#phenotypeInput").append(phenotypePullDown).selectpicker('refresh');
+
         }
 
         $('.phenotypeStrength').on("click",updateSignalSummaryBasedOnPhenotype);

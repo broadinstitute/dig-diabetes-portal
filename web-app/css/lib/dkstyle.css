@@ -1858,4 +1858,20 @@ a.edit-btn { position: absolute; top:0; right: 0; background-color: #ddd; color:
 	text-align: center;
 }
 
+
+#phenotypeSearchHolder {
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	border-radius: 0;
+	z-index: 10;
+	background-color: #fff;
+	padding: 10px 15px;
+}
+
+#phenotypeSearchHolder li:not(.selected) a.strength-3 { background-color: #ccffcc; }
+#phenotypeSearchHolder li:not(.selected) a.strength-2 { background-color: #ffffb3; }
+
 /* changes for V2FKP end */
