@@ -107,7 +107,7 @@
                         <div class="row" style="border-bottom:0.5px solid #ccc">
                             <div class="col-md-4">
                                  <div class="variantTableFilterChoice">
-                                    <input class="form-check-input" type="checkbox" value="" id="gregorFilterCheckbox" checked>
+                                    <input class="form-check-input" type="radio"  name="preferredAnnotationFiltering" value="" id="gregorFilterCheckbox" checked>
                                     <label class="form-check-label" for="gregorFilterCheckbox">
                                     GREGOR filter
                                     </label>
@@ -115,7 +115,7 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="variantTableFilterChoice">
-                                    <button id="adjustFilterTableButton"  class="btn  btn-link" type="button"  data-toggle="modal" data-target="#gregorModal">
+                                    <button id="adjustFilterTableButton"  class="btn  btn-link" type="button"  data-toggle="modal" data-target="#gregorModal" onclick="$('#gregorFilterCheckbox').prop('checked',true)">
                                     Adjust filters from GREGOR enrichment
                                     </button>
                                 </div>
@@ -124,7 +124,7 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="variantTableFilterChoice">
-                                    <input class="form-check-input" type="checkbox" value="" id="methodFilterCheckbox">
+                                    <input class="form-check-input" type="radio" name="preferredAnnotationFiltering" value="" id="methodFilterCheckbox">
                                     <label class="form-check-label" for="methodFilterCheckbox">
                                     Choose desired methods
                                     </label>

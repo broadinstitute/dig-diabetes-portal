@@ -32,7 +32,7 @@ records={{numberRecords}}
 <script id="abcVariantTableBody"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortField="{{significanceValue}}"
              class="epigeneticCellElement tissueId_none annotationName_ABC varAllEpigenetics varAbcEpigenetics tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
-                <div style="padding: 50% 0 50% 0">
+                <div>
                {{#tissueRecords}}
                   <div class="text-center">{{details.SOURCE}}</div>
                {{/tissueRecords}}

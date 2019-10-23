@@ -2585,7 +2585,8 @@ mpgSoftware.dynamicUi = (function () {
                 let annotationOptions = [];
                 _.forEach(arrayOfDataToDisplay[0].data.groupByAnnotation, function (recordsForAnnotation ) {
                     //$('#annotationSelectorChoice').append(new Option(recordsForAnnotation.name, recordsForAnnotation.name));
-                    annotationOptions.push(new Option(recordsForAnnotation.name, recordsForAnnotation.name+"_"+currentMethod));
+                    //annotationOptions.push(new Option(recordsForAnnotation.name, recordsForAnnotation.name+"_"+currentMethod));
+                    annotationOptions.push({name:recordsForAnnotation.name, value: recordsForAnnotation.name+"_"+currentMethod});
                     const annotation = recordsForAnnotation.name;
                     addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
                     const dataVector = getAccumulatorObject(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex)[0].data;
@@ -2620,9 +2621,42 @@ mpgSoftware.dynamicUi = (function () {
                         }
                     });
                 });
-                _.forEach(_.sortBy(annotationOptions,function(ooo){return ooo.text}), function (recordsForAnnotation ) {
-                    $('#annotationSelectorChoice').append(recordsForAnnotation);
-                });
+                switch(currentMethod){
+                    case "MACS":
+                        _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
+                            $('#annotationSelectorChoice').append(new Option("<span class='boldit'>ATAC-Seq</span>",rec.value));
+                        });
+                        break;
+                    case "ABC":
+                        _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
+                            $('#annotationSelectorChoice').append(new Option("<span class='boldit'>ABC</span>",rec.value));
+                        });
+                        break;
+                    case "TSS":
+                        if (annotationOptions.length>1){
+                            $('#annotationSelectorChoice').append("<optgroup label='TF Binding Sites'></optgroup>");
+                            _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
+                                $('#annotationSelectorChoice').append(new Option('&nbsp;&nbsp;&nbsp;&nbsp;'+rec.name,rec.value));
+                            });
+                            $('#annotationSelectorChoice').append("</optgroup>");
+                        } else {
+                            _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
+                                $('#annotationSelectorChoice').append(new Option("<span class='boldit'>TF Binding Site</span>",rec.value));
+                            });
+                        }
+                        break;
+                    case "ChromHMM":
+                        $('#annotationSelectorChoice').append("<optgroup label='ChromHMM'></optgroup>");
+                        _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
+                            $('#annotationSelectorChoice').append(new Option('&nbsp;&nbsp;&nbsp;&nbsp;'+rec.name,rec.value));
+                        });
+                        $('#annotationSelectorChoice').append("</optgroup>");
+                        break;
+                    default:
+                        _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
+                            $('#annotationSelectorChoice').append(new Option(rec.name,rec.value));
+                        });
+                }
                 $('#annotationSelectorChoice').multiselect('rebuild');
             }
 

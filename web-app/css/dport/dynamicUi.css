@@ -714,3 +714,6 @@ div.variantTableFilterChoice{
     /*overflow-x: scroll;*/
     white-space: nowrap;
 }
+span.boldit{
+    font-weight: bold;
+}
