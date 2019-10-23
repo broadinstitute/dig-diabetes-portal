@@ -1939,6 +1939,9 @@ var mpgSoftware = mpgSoftware || {};
 
         function addLZPhenotype(lzParameters,  dataSetName, geneGetLZ,variantInfoUrl,makeDynamic,lzGraphicDomId,graphicalOptions) {
 
+            console.log("it's breaking here");
+            console.log(lzParameters.description);
+
             mpgSoftware.traitsFilter.setLZDatasets(lzParameters.description); //this function called to filter datasets list above LZ plot on gene page
 
             var colorBy = 1;  //colorBy:1=LD,2=MDS

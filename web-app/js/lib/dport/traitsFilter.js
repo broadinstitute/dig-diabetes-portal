@@ -390,8 +390,6 @@ var mpgSoftware = mpgSoftware || {};
 
                 $("#dk_lz_phenotype_list").addClass("list-allset");
 
-
-
             }
 
         }
