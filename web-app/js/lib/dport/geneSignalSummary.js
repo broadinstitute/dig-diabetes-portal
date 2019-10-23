@@ -1080,7 +1080,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             var phenotypePullDown = '';
 
             $.each(listOfInterestingPhenotypes, function (phenotypeIndex, phenotype) {
-                console.log(phenotype);
+                //console.log(phenotype);
                 phenotypePullDown += '<option id="'+phenotype.phenotype+'" ds="'+phenotype.ds+'" dsr="'+phenotype.dsr+'" class="strength-'+phenotype.signalStrength+'">'+phenotype.pname+'</option>';
             });
 
