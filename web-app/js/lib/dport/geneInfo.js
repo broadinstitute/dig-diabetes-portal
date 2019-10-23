@@ -666,6 +666,10 @@ var mpgSoftware = mpgSoftware || {};
             fillUniprotSummary(rawGeneInfo);
         };
 
+        var launchRegionPage = function (CH,START,END) {
+            location.replace("../geneInfo/chr"+CH+":"+START+"-"+END+"?startExtent="+START+"&endExtent="+END+"&chromosomeNumber="+CH);
+        }
+
 
         return {
             // private routines MADE PUBLIC FOR UNIT TESTING ONLY (find a way to do this in test mode only)
@@ -684,7 +688,8 @@ var mpgSoftware = mpgSoftware || {};
             fillVariationAcrossEthnicityTable:fillVariationAcrossEthnicityTable,
             retrieveDelayedBiologicalHypothesisOneDataPresenter: retrieveDelayedBiologicalHypothesisOneDataPresenter,
             fillVariantsAndAssociationsTable: fillVariantsAndAssociationsTable,
-            fillUpBarChart: fillUpBarChart
+            fillUpBarChart: fillUpBarChart,
+            launchRegionPage:launchRegionPage
         }
 
 

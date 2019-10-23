@@ -86,11 +86,18 @@
         var positioningInformation = {};
         if ('<%=geneName%>'.indexOf(':')>-1){ // this looks like a range, not a gene
 
-            $("#gene-info-summary-header").find(".gene-chromosome").css({"display":"none"});
-            $("#gene-info-summary-content").find(".gene-chromosome").css({"display":"none"});
+            $("#gene-info-summary-header").find(".gene-name").css({"display":"none"});
+            $("#gene-info-summary-content").find(".gene-name").css({"display":"none"});
 
-            $("#gene-info-summary-header").find(".gene-name").css({"width":"55%"}).html('Chromosome: Start position - End position');
-            $("#gene-info-summary-content").find(".gene-name").css({"width":"55%"});
+            $("#gene-info-summary-header").find(".gene-chromosome").css({"width":"55%"});
+            $("#gene-info-summary-content").find(".gene-chromosome").css({"width":"55%", "font-size":"2em", "padding-top":"0"});
+
+            var geneName = "<%=geneName%>";
+            var geneNameSplit = geneName.split(":");
+            var chromosomeNum = geneNameSplit[0].replace("CHR","");
+            var genePosition = geneNameSplit[1].split("-");
+
+            $("#gene-info-summary-content").find(".gene-chromosome").append("CHR<span class='chromosome'>"+chromosomeNum+"</span>: <span class='start-position'>"+ genePosition[0] +"</span> - <span class='end-position'>"+genePosition[1]+"</span>");
 
             var rangeList = '<%=geneName%>'.split(':');
             if (rangeList.length === 2){
@@ -129,7 +136,7 @@
                 };
 
 
-                $("#gene-info-summary-content").find(".gene-chromosome").append(positioningInformation.chromosome+": "+ positioningInformation.startPosition +" - "+positioningInformation.endPosition);
+                $("#gene-info-summary-content").find(".gene-chromosome").append("<span class='chromosome'>"+positioningInformation.chromosome+"</span>: <span class='start-position'>"+ positioningInformation.startPosition +"</span> - <span class='end-position'>"+positioningInformation.endPosition+"</span>");
                 //$("#gene-info-summary-content").find(".gene-region-start").append(""+positioningInformation.startPosition);
                 //$("#gene-info-summary-content").find(".gene-region-end").append(""+positioningInformation.endPosition);
 
@@ -178,14 +185,47 @@
             <div class="gene-info-view col-md-12">
                 <div id="gene-info-summary-wrapper">
                     <div id="gene-info-summary-header">
-                        <div class="gene-name" style="width:25%;">Gene</div>
-                        <div class="gene-chromosome" style="width:30%;">Chromosome: Start position - End position</div>
-                        <div class="gene-phenotype" style="width:45%;">Phenotype</div>
+                        <div class="gene-name" style="width:25%;">Gene<a class="edit-btn" onclick="showHideElement('#geneSearchHolder')">Edit</a></div>
+                        <div class="gene-chromosome" style="width:30%;">Chromosome: Start position - End position<a class="edit-btn" onclick="showHideElement('#regionSearchHolder'); feedInitialInput('#regionSearchHolder');">Edit</a></div>
+                        <div class="gene-phenotype" style="width:45%;">Phenotype<a class="edit-btn" onclick="showHideElement('#phenotypeSearchHolder')">Edit</a></div>
                     </div>
                     <div id="gene-info-summary-content">
-                        <div class="gene-name" style="width:25%; font-size: 2em; height: 65px; "><%=geneName%></div>
-                        <div class="gene-chromosome" style="width:30%; height: 65px; font-size: 1.25em; padding-top: 12px;"></div>
-                        <div class="gene-phenotype" style="width:45%; height: 65px; font-size: 1.25em; padding-top: 12px;"></div>
+                        <div class="gene-name" style="width:25%; font-size: 2em; height: 65px; "><%=geneName%>
+
+                            <div class="gene-search-holder" id="geneSearchHolder" style="display: none;">
+                                <div class="gene-search">
+                                    <input id="generalized-input" value="" type="text" class="form-control input-default">
+                                    <button id="generalized-go" class="btn btn-primary" type="button" >GO</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="gene-chromosome" style="width:30%; height: 65px; font-size: 1.25em; padding-top: 12px;">
+                            <div class="region-search-holder hide-element" id="regionSearchHolder" style="display: none;">
+                                <div class="region-search">
+                                    <div class="col-md-2 input-wrapper">
+                                        <input id="chromosomeInput" value="" type="text" class="form-control input-default">
+                                    </div>
+                                    <div class="col-md-4 input-wrapper">
+                                        <input id="startPositionInput" value="" type="text" class="form-control input-default">
+                                    </div>
+                                    <div class="col-md-4 input-wrapper">
+                                        <input id="endPositionInput" value="" type="text" class="form-control input-default">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button id="regionSearchGo" class="btn btn-primary" type="button" onclick="mpgSoftware.geneInfo.launchRegionPage($('#chromosomeInput').val(),$('#startPositionInput').val(),$('#endPositionInput').val());">GO</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="gene-phenotype" style="width:45%; height: 65px; font-size: 1.25em; padding-top: 12px;">
+                            <div class="phenotype-search-holder hide-element" id="phenotypeSearchHolder" style="display: none;">
+                                <div class="phenotype-search">
+                                    <label id="generalized-label">Search a gene</label>
+                                    <input id="generalized-input" value="" type="text" class="form-control input-default">
+                                    <button id="generalized-go" class="btn btn-primary" type="button" >Go</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -205,7 +245,7 @@
                             Strong evidence for signal&nbsp;<g:helpText title="strong.evidence.help.header" placement="right" body="strong.evidence.help.text"/>
                         </div>
                     </div>
-
+<!--
                     <div class="gene-search-holder" style="width: 70%; float: right; position: relative;">
                         <div class="gene-search" style=" text-align: right; position: absolute; top: 10px; right: 305px;">Look for another gene or region</div>
                         <div class="gene-search" style=" position: absolute; padding: 0; top: 0; right: 0;">
@@ -213,7 +253,7 @@
                             <button id="generalized-go" class="btn btn-primary" type="button" >Go</button>
 
                         </div>
-                    </div>
+                    </div>-->
                 </div>
 
                 <div class="gene-page-section-header">

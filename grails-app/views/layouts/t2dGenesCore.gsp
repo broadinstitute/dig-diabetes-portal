@@ -425,6 +425,26 @@
             /* copy URL function end */
 
 
+            /* functions for V2F KP */
+
+            var showHideElement = function (TGELEMENT) {
+                $(TGELEMENT).fadeToggle("slow","swing");
+            }
+
+            var feedInitialInput = function (INPUTWRAPPER) {
+                switch (INPUTWRAPPER) {
+                    case "#regionSearchHolder":
+
+                        $('#chromosomeInput').val($("#gene-info-summary-content").find(".chromosome").text());
+                        $('#startPositionInput').val($("#gene-info-summary-content").find(".start-position").text());
+                        $('#endPositionInput').val($("#gene-info-summary-content").find(".end-position").text());
+
+                        break;
+                }
+            }
+            /* functions for V2F KP end */
+
+
 
             function adjustTableWrapperWidth(TABLE) {
 

@@ -1988,8 +1988,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var datasetReadableName = additionalParameters.dsr;
         var pName = additionalParameters.pname;
 
-        // Adding initial phenotype name to the page header
-        $("#gene-info-summary-content").find(".gene-phenotype").html(pName);
+        // Adding initial phenotype name to page header
+        $("#gene-info-summary-content").find(".gene-phenotype").append(pName);
 
 
         if ((typeof datasetName === 'undefined') ||

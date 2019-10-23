@@ -1676,7 +1676,7 @@ ul.traits-filter-options > li {
 /* changes for V2FKP */
 
 #gene-info-summary-header, #gene-info-summary-content {  }
-#gene-info-summary-header > div, #gene-info-summary-content > div { float: left; border-bottom: solid 1px #ddd; border-right: solid 1px #ddd; padding: 2px 5px; background-color: #fff; }
+#gene-info-summary-header > div, #gene-info-summary-content > div { position: relative; float: left; border-bottom: solid 1px #ddd; border-right: solid 1px #ddd; padding: 2px 5px; background-color: #fff; }
 #gene-info-summary-header > div:first-child, #gene-info-summary-content > div:first-child { clear: both; }
 #gene-info-summary-header > div:last-child, #gene-info-summary-content > div:last-child { border-right: none; }
 #gene-info-summary-header { font-size: 0.9em; }
@@ -1755,5 +1755,107 @@ div.datatable-control-box {
 #variant-info-summary-header { font-size: 0.9em; }
 #variant-info-summary-content { font-size: 18px; }
 #variantSummaryText { margin: 0 !important; }
+
+a.edit-btn { position: absolute; top:0; right: 0; background-color: #ddd; color: #fff; font-size: 12px; padding: 2px 5px; z-index: 15; }
+
+.show-element { display: block; }
+.hide-element { display: none; }
+
+#geneSearchHolder {
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	border-radius: 0;
+	z-index: 10;
+	background-color: #fff;
+}
+
+#geneSearchHolder #generalized-label {
+	display: block;
+	position: absolute;
+	top: 2px;
+	font-size: 14px;
+
+}
+
+#geneSearchHolder #generalized-input {
+	height: 100%;
+	width: 100%;
+	border: 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	border-left: solid 1px #ddd;
+	border-radius: 0;
+
+}
+#geneSearchHolder #generalized-go {
+	position: absolute;
+	padding:0;
+	top: 13px;
+	right: 6px;
+	height: 40px;
+	width: 40px;
+	border-radius: 30px;
+	background-color: #b998ef;
+	border: solid 1px #b998ef;
+	text-align: center;
+}
+
+#regionSearchHolder {
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	border-radius: 0;
+	z-index: 10;
+	background-color: #fff;
+}
+
+#regionSearchHolder .region-search { height: 100%; }
+
+#regionSearchHolder .input-wrapper {
+	overflow: hidden;
+	min-height: 100%;
+	position: relative;
+	padding: 0;
+	margin: 0;
+}
+
+#regionSearchHolder #generalized-label {
+	display: block;
+	position: absolute;
+	top: 2px;
+	font-size: 14px;
+
+}
+
+#regionSearchHolder .input-default {
+	height: 100%;
+	width: 100%;
+	border: 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	border-left: solid 1px #ddd;
+	border-radius: 0;
+	font-size: 20px;
+}
+
+#regionSearchHolder #regionSearchGo {
+	position: absolute;
+	padding:0;
+	top: 13px;
+	right: 6px;
+	height: 40px;
+	width: 40px;
+	border-radius: 30px;
+	background-color: #b998ef;
+	border: solid 1px #b998ef;
+	text-align: center;
+}
 
 /* changes for V2FKP end */
