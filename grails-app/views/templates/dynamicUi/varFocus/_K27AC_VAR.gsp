@@ -7,7 +7,8 @@ records={{numberRecords}}
 </script>
 
 <script id="k27acVariantTableTissueRowLabel"  type="x-tmpl-mustache">
-<div class="varAllEpigenetics varK27acEpigenetics staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">H3k27ac&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/></div>
+<div class="varAllEpigenetics varK27acEpigenetics staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation">
+H3k27ac&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/></div>
 </script>
 
 <script id="k27acVariantTableTissueHeader"  type="x-tmpl-mustache">

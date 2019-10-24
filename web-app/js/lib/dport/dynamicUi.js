@@ -2494,7 +2494,6 @@ mpgSoftware.dynamicUi = (function () {
                                         nameOfAccumulatorFieldWithIndex, // we may wish to pull out one record for summary purposes
                                         mapSortAndFilterFunction,
                                         placeDataIntoRenderForm ) { // sort and filter the records we will use.  Resulting array must have fields tissue, value, and numericalValue
-        console.log("displayForVariantTable/type="+dataAnnotationTypeCode+".");
         var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode);
         //var returnObject = createNewDisplayReturnObject();
         var intermediateDataStructure = new IntermediateDataStructure();
@@ -2579,58 +2578,85 @@ mpgSoftware.dynamicUi = (function () {
                     }
                 });
             } else if ( typeof arrayOfDataToDisplay[0].data.groupByAnnotation !== 'undefined'){
-                let rowIndex = 0;
                 prepend = false;
                 const currentMethod = arrayOfDataToDisplay[0].data.currentMethod;
                 let annotationOptions = [];
-                _.forEach(arrayOfDataToDisplay[0].data.groupByAnnotation, function (recordsForAnnotation ) {
-                    //$('#annotationSelectorChoice').append(new Option(recordsForAnnotation.name, recordsForAnnotation.name));
-                    //annotationOptions.push(new Option(recordsForAnnotation.name, recordsForAnnotation.name+"_"+currentMethod));
-                    annotationOptions.push({name:recordsForAnnotation.name, value: recordsForAnnotation.name+"_"+currentMethod});
-                    const annotation = recordsForAnnotation.name;
+                // create a row for each epigenetic annotation even if it's empty
+                if (arrayOfDataToDisplay[0].data.groupByAnnotation.length===0){
                     addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
                     const dataVector = getAccumulatorObject(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex)[0].data;
-                    headerNames = _.map(dataVector, 'name');
                     let rowWeAreAddingTo = _.last(intermediateDataStructure.rowsToAdd);
-                    rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(annotation,
+                    rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(currentMethod,
                         Mustache.render($('#'+dataAnnotationType.dataAnnotation.drillDownCategoryWriter)[0].innerHTML,
                             {indexInOneDimensionalArray:(numberOfExistingRows*numberOfColumns)}),
                         "header", 'LIT'));
-                    rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(annotation,
+                    rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(currentMethod,
                         Mustache.render($('#'+dataAnnotationType.dataAnnotation.drillDownSubCategoryWriter)[0].innerHTML,
-                            {annotationName:annotation,indexInOneDimensionalArray:((numberOfExistingRows*numberOfColumns)+1)}),
+                            {annotationName:currentMethod,indexInOneDimensionalArray:((numberOfExistingRows*numberOfColumns)+1)}),
                         "header", 'LIT'));
                     _.forEach(dataVector, function (oneRecord) {
                         rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
                             {}, "header", 'EMP'));
                     });
-                    // fill in all of the column cells
-                    _.forEach(recordsForAnnotation.arrayOfRecords, function (oneRecord) {
-                        var indexOfColumn = _.indexOf(headerNames, oneRecord.name);
-                        if (indexOfColumn === -1) {
-                            console.log("Did not find index of ABC var_id.  Shouldn't we?")
-                        } else {
-                            var renderData = placeDataIntoRenderForm(   oneRecord.arrayOfRecords,
-                                "","",
-                                dataAnnotationTypeCode,
-                                0.5,
-                                oneRecord.name);
-                            _.last(intermediateDataStructure.rowsToAdd).columnCells[indexOfColumn+2] = new IntermediateStructureDataCell(oneRecord.name,
-                                renderData,"tissue specific",dataAnnotationTypeCode );
 
-                        }
+                } else { // we have real data
+                    _.forEach(arrayOfDataToDisplay[0].data.groupByAnnotation, function (recordsForAnnotation ) {
+                        annotationOptions.push({name:recordsForAnnotation.name, value: recordsForAnnotation.name+"_"+currentMethod});
+                        const annotation = recordsForAnnotation.name;
+                        addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
+                        const dataVector = getAccumulatorObject(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex)[0].data;
+                        headerNames = _.map(dataVector, 'name');
+                        let rowWeAreAddingTo = _.last(intermediateDataStructure.rowsToAdd);
+                        rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(annotation,
+                            Mustache.render($('#'+dataAnnotationType.dataAnnotation.drillDownCategoryWriter)[0].innerHTML,
+                                {indexInOneDimensionalArray:(numberOfExistingRows*numberOfColumns)}),
+                            "header", 'LIT'));
+                        rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(annotation,
+                            Mustache.render($('#'+dataAnnotationType.dataAnnotation.drillDownSubCategoryWriter)[0].innerHTML,
+                                {annotationName:annotation,indexInOneDimensionalArray:((numberOfExistingRows*numberOfColumns)+1)}),
+                            "header", 'LIT'));
+                        _.forEach(dataVector, function (oneRecord) {
+                            rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
+                                {}, "header", 'EMP'));
+                        });
+                        // fill in all of the column cells
+                        _.forEach(recordsForAnnotation.arrayOfRecords, function (oneRecord) {
+                            var indexOfColumn = _.indexOf(headerNames, oneRecord.name);
+                            if (indexOfColumn === -1) {
+                                console.log("Did not find index of ABC var_id.  Shouldn't we?")
+                            } else {
+                                var renderData = placeDataIntoRenderForm(   oneRecord.arrayOfRecords,
+                                    "","",
+                                    dataAnnotationTypeCode,
+                                    0.5,
+                                    oneRecord.name);
+                                _.last(intermediateDataStructure.rowsToAdd).columnCells[indexOfColumn+2] = new IntermediateStructureDataCell(oneRecord.name,
+                                    renderData,"tissue specific",dataAnnotationTypeCode );
+
+                            }
+                        });
                     });
-                });
+                }
+
                 switch(currentMethod){
                     case "MACS":
-                        _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
-                            $('#annotationSelectorChoice').append(new Option("<span class='boldit'>ATAC-Seq</span>",rec.value));
-                        });
+                        if (annotationOptions.length === 0){
+                            $('#annotationSelectorChoice').append(new Option("<span class='boldit'>ATAC-Seq</span>","MACS_MACS"));
+                        } else {
+                            _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
+                                $('#annotationSelectorChoice').append(new Option("<span class='boldit'>ATAC-Seq</span>",rec.value));
+                            });
+                        }
+
                         break;
                     case "ABC":
-                        _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
-                            $('#annotationSelectorChoice').append(new Option("<span class='boldit'>ABC</span>",rec.value));
-                        });
+                        if (annotationOptions.length === 0){
+                            $('#annotationSelectorChoice').append(new Option("<span class='boldit'>ABC</span>","ABC_ABC"));
+                        } else {
+                            _.forEach(_.sortBy(annotationOptions, 'name'), function (rec) {
+                                $('#annotationSelectorChoice').append(new Option("<span class='boldit'>ABC</span>", rec.value));
+                            });
+                        }
                         break;
                     case "TSS":
                         if (annotationOptions.length>1){
@@ -2639,10 +2665,12 @@ mpgSoftware.dynamicUi = (function () {
                                 $('#annotationSelectorChoice').append(new Option('&nbsp;&nbsp;&nbsp;&nbsp;'+rec.name,rec.value));
                             });
                             $('#annotationSelectorChoice').append("</optgroup>");
-                        } else {
+                        } else if (annotationOptions.length === 1) {
                             _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
                                 $('#annotationSelectorChoice').append(new Option("<span class='boldit'>TF Binding Site</span>",rec.value));
                             });
+                        } else if (annotationOptions.length === 0) {
+                                $('#annotationSelectorChoice').append(new Option("<span class='boldit'>TF Binding Site</span>",'TSS_TSS'));
                         }
                         break;
                     case "ChromHMM":
@@ -4560,6 +4588,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         let uniqueLists = {};
         const filterByGregor =  ($('#gregorFilterCheckbox').is(":checked"));
         const filterByExplicitMethod =  ($('#methodFilterCheckbox').is(":checked"));
+        const blankRowsAreOkay = ($('#displayBlankRows').is(":checked"));
         if ( filterByGregor &&
              (!filterByExplicitMethod) ){
             uniqueLists = getMethodsAnnotationsAndTissuesFromGregorTable(false);
@@ -4574,6 +4603,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         let uniqueAnnotations = uniqueLists.uniqueAnnotations;
         let uniqueTissues = uniqueLists.uniqueTissues;
         $('div.epigeneticCellElement').removeClass('yesDisplay');
+        $('div.epigeneticCellElement').removeClass('gregorQuantile_0');
         $('div.epigeneticCellElement').removeClass('gregorQuantile_1');
         $('div.epigeneticCellElement').removeClass('gregorQuantile_2');
         $('div.epigeneticCellElement').removeClass('gregorQuantile_3');
@@ -4610,59 +4640,85 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
             })
         }
-           // if (filterByGregor){ // only color by Gregor if we are filtering by Gregor
 
-            //}
+        const gregorAcc = getAccumulatorObject("gregorVariantInfo");
+        let quantileDef = {};
+        if (gregorAcc.length>0){
+            quantileDef =  gregorAcc[0].header['quickLookup']
+        }
+        // now go through every cell and determine if we want to display it
+        if (filterByGregor){
+            _.forEach($('div.epigeneticCellElement'),function(oneTr){
+                const currentAnnotation = extractClassBasedTrailingString(oneTr,"annotationName_");
+                const currentTissue = extractClassBasedTrailingString(oneTr,"tissueId_");
+                if (_.includes(uniqueTissues,currentTissue)&&
+                    ((currentAnnotation.length===0)||(_.includes(uniqueAnnotations,currentAnnotation)))){
+                    $(oneTr).show();
+                    $(oneTr).addClass('yesDisplay');
+                    if (!$.isEmptyObject(quantileDef)){
 
-            const gregorAcc = getAccumulatorObject("gregorVariantInfo");
-            let quantileDef = {};
-            if (gregorAcc.length>0){
-                quantileDef =  gregorAcc[0].header['quickLookup']
-            }
-            // now go through every cell and determine if we want to display it
-            if (filterByGregor){
-                _.forEach($('div.epigeneticCellElement'),function(oneTr){
-                    const currentAnnotation = extractClassBasedTrailingString(oneTr,"annotationName_");
-                    const currentTissue = extractClassBasedTrailingString(oneTr,"tissueId_");
-                    if (_.includes(uniqueTissues,currentTissue)&&
-                        ((currentAnnotation.length===0)||(_.includes(uniqueAnnotations,currentAnnotation)))){
-                        $(oneTr).show();
-                        $(oneTr).addClass('yesDisplay');
-                        if (!$.isEmptyObject(quantileDef)){
-
-                            const quanAss = quantileDef[currentAnnotation+"_"+currentTissue.replace("_",":")];
-                            if ( typeof quanAss !== 'undefined'){
-                                $(oneTr).addClass('gregorQuantile_'+quanAss.quantile);
-                            }
+                        const quanAss = quantileDef[currentAnnotation+"_"+currentTissue.replace("_",":")];
+                        if ( typeof quanAss !== 'undefined'){
+                            $(oneTr).addClass('gregorQuantile_'+quanAss.quantile);
                         }
-                    } else {
-                        $(oneTr).hide();
-                        $(oneTr).addClass('skipDisplay');
                     }
-                });
-            } else if (filterByExplicitMethod){
-                _.forEach($('div.epigeneticCellElement'),function(oneTr){
-                    const currentAnnotation = extractClassBasedTrailingString(oneTr,"annotationName_");
-
-                    if ((_.includes(uniqueMethods,currentAnnotation)||
-                        ((currentAnnotation.length===0)||(_.includes(uniqueAnnotations,currentAnnotation))))){
-                        $(oneTr).show();
-                        $(oneTr).addClass('yesDisplay');
-
-                    } else {
-                        $(oneTr).hide();
-                        $(oneTr).addClass('skipDisplay');
-                    }
-                });
-            }
-            _.forEach($('div.varAnnotation'),function(oneDiv){
-                const currentAnnotation = extractClassBasedTrailingString(oneDiv,"annotationName_");
-                if (_.includes(uniqueAnnotations,currentAnnotation)){
-                    $(oneDiv).parent().parent().removeClass('doNotDisplay');
                 } else {
-                    $(oneDiv).parent().parent().addClass('doNotDisplay');
+                    $(oneTr).hide();
+                    $(oneTr).addClass('skipDisplay');
                 }
             });
+        } else if (filterByExplicitMethod){
+            _.forEach($('div.epigeneticCellElement'),function(oneTr){
+                const currentAnnotation = extractClassBasedTrailingString(oneTr,"annotationName_");
+
+                if ((_.includes(uniqueMethods,currentAnnotation)||
+                    ((currentAnnotation.length===0)||(_.includes(uniqueAnnotations,currentAnnotation))))){
+                    $(oneTr).show();
+                    $(oneTr).addClass('yesDisplay');
+
+                } else {
+                    $(oneTr).hide();
+                    $(oneTr).addClass('skipDisplay');
+                }
+            });
+        }
+        // there are two reasons we might want to NOT display a row.
+        //   1) it is not one of our 'uniqueAnnotations' that the user has asked about
+        //   2) it has no values that make the significance cut off
+        _.forEach($('div.varAnnotation'),function(oneDiv){
+            const currentAnnotation = extractClassBasedTrailingString(oneDiv,"annotationName_");
+            let suppressRowDisplay = false;
+            if (!blankRowsAreOkay){
+                suppressRowDisplay = ($(oneDiv).parent().parent().find('div.epigeneticCellElement.yesDisplay').length === 0);
+            }
+            if ((_.includes(uniqueAnnotations,currentAnnotation))||
+                (_.includes(uniqueMethods,currentAnnotation))){
+
+
+                if (suppressRowDisplay){
+                    $(oneDiv).parent().parent().addClass('doNotDisplay');
+                    $(oneDiv).parent().parent().hide();
+                } else {
+                    $(oneDiv).parent().parent().show();
+                    $(oneDiv).parent().parent().removeClass('doNotDisplay');
+                }
+            } else {
+                 if (suppressRowDisplay){
+                    $(oneDiv).parent().parent().addClass('doNotDisplay');
+                     $(oneDiv).parent().parent().hide();
+                }
+
+            }
+        });
+        const cellsToCollapse = $('div.varEpigeneticsLabel');
+        _.forEach(cellsToCollapse, function(domElement,index){
+            if (index===0){
+                $(domElement).parent().prop('rowspan',cellsToCollapse.length);
+            } else {
+                $(domElement).parent().hide();
+            }
+        });
+
 
 
     };
@@ -4780,12 +4836,14 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         $('div.variantAnnotation:last').parent().parent().children('td').css('border-bottom','2px solid black');
 
                         let currentFormVariation = ( typeof sharedTable['currentFormVariation'] === 'undefined') ? 1 : sharedTable['currentFormVariation'];
-                        if (currentFormVariation === 1){
-                            $('div.variantEpigenetics').parent().parent().hide();
-                        } else if (currentFormVariation === 2) {
-                            $('div.variantEpigenetics').parent().parent().show();
-                        }
+                        // if (currentFormVariation === 1){
+                        //     $('div.variantEpigenetics').parent().parent().hide();
+                        // } else if (currentFormVariation === 2) {
+                        //     $('div.variantEpigenetics').parent().parent().show();
+                        // }
                      }
+
+                     // collapse first cell across all 'Annotation' rows
                     _.forEach($('div.annotationLabel'), function(domElement,index){
                         if (index===0){
                             $(domElement).parent().prop('rowspan',$('div.annotationLabel').length);
@@ -4793,6 +4851,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                             $(domElement).parent().hide();
                         }
                     });
+
+                    // collapse first cell across all 'Association' rows
                     _.forEach($('div.associationLabel'), function(domElement,index){
                         if (index===0){
                             $(domElement).parent().prop('rowspan',$('div.associationLabel').length);
@@ -4802,14 +4862,16 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     });
                     $('div.associationLabel:last').parent().parent().children('td').css('border-bottom','2px solid black');
 
-                    _.forEach($('div.varEpigeneticsLabel'), function(domElement,index){
+                    // collapse first cell across all 'Epigenetics' rows
+                    const cellsToCollapse = $('div.varEpigeneticsLabel');
+                    _.forEach(cellsToCollapse, function(domElement,index){
                         if (index===0){
-                            $(domElement).parent().prop('rowspan',$('div.varEpigeneticsLabel').length);
+                            $(domElement).parent().prop('rowspan',cellsToCollapse.length);
                         } else {
                             $(domElement).parent().hide();
                         }
                     });
-                    $('div.emphasisSwitch_false span').hide();
+
 
                     break;
                 case 'variantTableAnnotationHeaders':

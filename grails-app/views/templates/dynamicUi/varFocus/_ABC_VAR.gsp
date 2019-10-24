@@ -7,7 +7,8 @@ records={{numberRecords}}
 </script>
 
 <script id="abcVariantTableTissueRowLabel"  type="x-tmpl-mustache">
-<div class="varAllEpigenetics varAbcEpigenetics staticMethodLabels annotationName_ABC methodName_ABC  initialLinearIndex_{{indexInOneDimensionalArray}}">ABC&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/></div>
+<div class="varAllEpigenetics varAbcEpigenetics staticMethodLabels annotationName_ABC methodName_ABC  initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation">
+ABC&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/></div>
 </script>
 
 <script id="abcVariantTableTissueHeader"  type="x-tmpl-mustache">
@@ -18,15 +19,6 @@ records={{numberRecords}}
 {{significanceValueAsString}}
 </script>
 
-<script id="varAllEpigenetics varAbcEpigenetics abcVariantTableSubCategory"  type="x-tmpl-mustache">
-     <div significance_sortfield='{{index}}' class='subcategory initialLinearIndex_{{indexInOneDimensionalArray}}'
-      sortField='{{index}}' subSortField='-1'>
-     {{#dataAnnotation}}
-          {{displaySubcategory}}
-          <g:helpText title="gene.COLOC.help.header" placement="bottom" body="gene.COLOC.help.text"/>
-     {{/dataAnnotation}}
-     </div>
-</script>
 
 
 <script id="abcVariantTableBody"  type="x-tmpl-mustache">

@@ -94,6 +94,9 @@ mpgSoftware.variantTable = (function () {
         $('#methodFilterCheckbox').change(function(){
             mpgSoftware.dynamicUi.filterEpigeneticTable();
         });
+        $('#displayBlankRows').click(function(){
+            mpgSoftware.dynamicUi.filterEpigeneticTable();
+        });
         mpgSoftware.dynamicUi.modifyScreenFields({phenotype:preferredPhenotype},getVariablesToRemember());
     }
 

@@ -141,6 +141,19 @@
                                 </div>
                             </div>
                         </div>
+                        %{--<div class="row">--}%
+                            %{--<div class="col-md-9">--}%
+
+                            %{--</div>--}%
+                            %{--<div class="col-md-3 text-right">--}%
+                                %{--<div class="variantTableFilterChoice">--}%
+                                    %{--<label class="form-check-label" for="displayBlankRows">--}%
+                                    %{--Display blank rows&nbsp;&nbsp;--}%
+                                    %{--</label>--}%
+                                    %{--<input class="form-check-input" type="checkbox" value="" id="displayBlankRows">--}%
+                                %{--</div>--}%
+                            %{--</div>--}%
+                        %{--</div>--}%
 
 
 
@@ -180,11 +193,27 @@
                         </div>
                     </div>
                 </div>
-        <div class="row" >
-        <div class="col-md-9"></div>
-        <div class="col-md-3">
 
-        </div>
+        <div class="row" >
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-9">
+
+                    </div>
+                    <div class="col-md-3 text-right">
+                        <div class="variantTableFilterChoice">
+                            <label class="form-check-label" for="displayBlankRows">
+                            Display blank rows&nbsp;&nbsp;
+                            </label>
+                            <input class="form-check-input" type="checkbox" value="" id="displayBlankRows">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-4">
+
+            </div>
         </div>
         <div class="row" >
             <div class="col-md-12" style="margin-top:60px">

@@ -681,7 +681,7 @@ table.variantTableHolder th.headersWithVarIds {
     overflow: auto;
 }
 table.variantTableHolder tr.doNotDisplay{
-    display: none;
+    /*display: none;*/
 }
 table.gregorSubTable>thead>tr>th  {
     border-top: 0;
@@ -716,4 +716,7 @@ div.variantTableFilterChoice{
 }
 span.boldit{
     font-weight: bold;
+}
+#mainVariantDiv div.emphasisSwitch_false span {
+    display: none;
 }
