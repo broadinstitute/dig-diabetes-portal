@@ -1,6 +1,40 @@
 var mpgSoftware = mpgSoftware || {};
 
 var UTILS = {
+    
+
+     extractParts:  function (varId){
+        // broad form example: 8_118183491_C_T
+        // UM form example: 8:118183491_C/T
+        var returnValue = {};
+        if (( typeof varId !== 'undefined')&&(varId.length>0)){
+            var broadIdSplit = varId.split("_");
+            if (broadIdSplit.length==4){
+                returnValue = {"chromosome":broadIdSplit[0],
+                    "position":broadIdSplit[1],
+                    "reference":broadIdSplit[2],
+                    "alternate":broadIdSplit[3]};
+            } else if (broadIdSplit.length==3){
+                returnValue = {"chromosome":broadIdSplit[0],
+                    "position":broadIdSplit[1],
+                    "reference":broadIdSplit[2],
+                    "alternate":""};
+            } else{
+                var umIdSplit1 = varId.split("_");
+                if (umIdSplit1.length!=2){console.log("Unexpected var ID format: "+varId+".")}
+                var umIdSplit2 = umIdSplit1[0].split(":");
+                if (umIdSplit2.length!=2){console.log("Unexpected var ID format: "+varId+".")}
+                var umIdSplit3 = umIdSplit1[1].split("/");
+                if (umIdSplit3.length!=2){console.log("Unexpected var ID format: "+varId+".")}
+                returnValue = {"chromosome":umIdSplit2[0],
+                    "position":umIdSplit2[1],
+                    "reference":umIdSplit3[0],
+                    "alternate":umIdSplit3[1]};
+            }
+        }
+        return returnValue;
+    },
+    
     /***
      * Everyone seems to use three digits of precision. I wonder why
      * @param incoming
@@ -352,7 +386,7 @@ var UTILS = {
         }
     },
     // phenotypesToOmit is an array of the phenotype keys that should not be included
-    fillPhenotypeCompoundDropdown: function (dataSetJson,phenotypeDropDownIdentifier,includeDefault, phenotypesToOmit,portaltype) { // help text for each row
+    fillPhenotypeCompoundDropdown: function (dataSetJson,phenotypeDropDownIdentifier,includeDefault, phenotypesToOmit,selectedPhenotype) { // help text for each row
         if ((typeof dataSetJson !== 'undefined')  &&
             (typeof dataSetJson["is_error"] !== 'undefined')&&
             (dataSetJson["is_error"] === false))
@@ -368,11 +402,20 @@ var UTILS = {
                     if(_.includes(phenotypesToOmit, groupContents[j][0])) {
                         continue;
                     }
-                    options.append($("<option />").val(groupContents[j][0])
-                    // add some whitespace to create indentation
-                        .html("&nbsp;&nbsp;&nbsp;" + groupContents[j][1]));
+                    if(selectedPhenotype === groupContents[j][0]){
+                        options.append($("<option selected='' />").val(groupContents[j][0]).html("&nbsp;&nbsp;&nbsp;" + groupContents[j][1]));
+                    }
+                    else{
+                        options.append($("<option />").val(groupContents[j][0])
+                        // add some whitespace to create indentation
+                            .html("&nbsp;&nbsp;&nbsp;" + groupContents[j][1]));
+
+                    }
+
                 }
                 options.append("</optgroup>");
+                //$(phenotypeDropDownIdentifier).selectpicker('refresh');
+
             });
             // enable the input
             options.prop('disabled', false);
@@ -405,7 +448,9 @@ var UTILS = {
                     }
                 }
                 options.append("</optgroup>");
+                // $(phenotypeDropDownIdentifier).selectpicker('refresh');
             });
+
             // enable the input
             options.prop('disabled', false);
 
@@ -1039,7 +1084,24 @@ var UTILS = {
 
 
         passedThis.href = "data:text/plain;charset=UTF-8,"  + encodeURIComponent(dataForFile);
+    },
+    convertVarIdToUmichFavoredForm: function (varId){
+        // broad form example: 8_118183491_C_T
+        // UM form example: 8:118183491_C/T
+        var extractedParts = extractParts(varId);
+        var returnValue = UTILS.extractedParts.chromosome+":"+extractedParts.position+"_"+extractedParts.reference+"/"+extractedParts.alternate;
+        return returnValue;
+    },
+    convertVarIdToBroadFavoredForm: function (varId){
+        // broad form example: 8_118183491_C_T
+        // UM form example: 8:118183491_C/T
+        var extractedParts = extractParts(varId);
+        var returnValue = UTILS.extractedParts.chromosome+"_"+extractedParts.position+"_"+extractedParts.reference+"_"+extractedParts.alternate;
+
+        return returnValue;
     }
+
+
 
 
 };

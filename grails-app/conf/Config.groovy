@@ -318,11 +318,11 @@ environments {
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 
-//     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
 
 //
 //        grails.serverURL = "http://mdgkp.us-east-1.elasticbeanstalk.com"
-        grails.serverURL = "http://musculoskeletalgenomics.org"
+//        grails.serverURL = "http://musculoskeletalgenomics.org"
 
 
 
@@ -629,6 +629,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                 "gene.genePage.warning",
                                                 "",
                                                 '5010306206573083521',
+                                                'http://raremetal.type2diabeteskb.org/aggregation/covariance',//URL for UMich aggregation tests
+                                                'http://raremetal.type2diabeteskb.org/aggregation/metadata',//URL for metadata needed by aggregation tests
                                                 1, // expose the common variant tab have on the gene page
                                                 1, // expose the high-impact variant tab on the gene page
                                                 1, // do we have parent level associations to show
@@ -685,6 +687,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "",
                                           "",
                                           '7961982646849648720',
+                                          'http://raremetal.type2diabeteskb.org/aggregation/covariance',//URL for UMich aggregation tests
+                                          'http://raremetal.type2diabeteskb.org/aggregation/metadata',//URL for metadata needed by aggregation tests
                                           1, // expose the common variant tab have on the gene page
                                           1, // expose the high-impact variant tab on the gene page
                                           1,
@@ -737,6 +741,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "",
                                           "",
                                           '3944203828206499294',
+                                          'http://raremetal.type2diabeteskb.org/aggregation/covariance',//URL for UMich aggregation tests
+                                          'http://raremetal.type2diabeteskb.org/aggregation/metadata',//URL for metadata needed by aggregation tests
                                           1, // expose the common variant tab have on the gene page
                                           1, // expose the high-impact variant tab on the gene page
                                           1,
@@ -793,6 +799,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "",
                                           "",
                                           '7857348124942584918',
+                                          'http://raremetal.type2diabeteskb.org/aggregation/covariance',//URL for UMich aggregation tests
+                                          'http://raremetal.type2diabeteskb.org/aggregation/metadata',//URL for metadata needed by aggregation tests
                                           0, // expose the common variant tab have on the gene page
                                           0, // expose the high-impact variant tab on the gene page
                                           1,
@@ -846,6 +854,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "",
                                           "",
                                           '5414069947481666863',
+                                          'http://raremetal.type2diabeteskb.org/aggregation/covariance',//URL for UMich aggregation tests
+                                          'http://raremetal.type2diabeteskb.org/aggregation/metadata',//URL for metadata needed by aggregation tests
                                           1, // expose the common variant tab have on the gene page
                                           1, // expose the high-impact variant tab on the gene page
                                           0,
@@ -899,6 +909,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "",
                                           "",
                                           '3616035242050290841',
+                                          'http://raremetal.type2diabeteskb.org/aggregation/covariance',//URL for UMich aggregation tests
+                                          'http://raremetal.type2diabeteskb.org/aggregation/metadata',//URL for metadata needed by aggregation tests
                                           1, // expose the common variant tab have on the gene page
                                           1, // expose the high-impact variant tab on the gene page
                                           1,
@@ -952,6 +964,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "",
                                           "",
                                           '8578131941543427205',
+                                          'http://raremetal.type2diabeteskb.org/aggregation/covariance',//URL for UMich aggregation tests
+                                          'http://raremetal.type2diabeteskb.org/aggregation/metadata',//URL for metadata needed by aggregation tests
                                           1, // expose the common variant tab have on the gene page
                                           1, // expose the high-impact variant tab on the gene page
                                           1,
@@ -989,7 +1003,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           [],
                                           "[3]",
                                           "GWAS_UKBiobankGEFOS_eu_mdv140",
-                                          "images/bone/front_boneKP_logo_2019_4.svg",
+                                          "images/bone/front_MGKP_2019.png",
                                           "portal.bone.header.tagline",
                                           "portal.bone.header.title.short",
                                           [],
@@ -998,12 +1012,14 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["chr7:120,500,000-121,500,000"],
                                           "images/bone/front_boneKP_banner_bg.png",
                                           "",
-                                          "images/bone/header_boneKP_logo2.svg",
+                                          "images/bone/header_MGKP_2019.png",
                                           "images/menu_bg_2017_5.png",
                                           "false",
                                           "",
                                           "",
                                           '1762387418132093579',
+                                          'http://raremetal.type2diabeteskb.org/aggregation/covariance',//URL for UMich aggregation tests
+                                          'http://raremetal.type2diabeteskb.org/aggregation/metadata',//URL for metadata needed by aggregation tests
                                           1, // expose the common variant tab have on the gene page
                                           1, // expose the high-impact variant tab on the gene page
                                           1,

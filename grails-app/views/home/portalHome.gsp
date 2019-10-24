@@ -279,7 +279,7 @@
                                         </div>
                                     </div>
                                     <a href="${createLink(controller:'trait',action:'genePrioritization')}?trait=T2D&significance=0.0005">
-                                        <button class="btn btn-primary btn-sm" type="button" style="width:15%; height: 50px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; font-size: 14px;" ><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button></a>
+                                        <button class="btn btn-primary btn-sm" type="button" style="width:15%; height: 50px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; font-size: 14px; margin-top: 15px;" ><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button></a>
                                 </div>
                             </div>
                         </g:if>
@@ -306,7 +306,7 @@
                                         </div>
                                     </div>
                                     <a href="${createLink(controller:'gene', action:'effectorGeneTable')}">
-                                        <button class="btn btn-primary btn-sm" type="button" style="width:15%; height: 50px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; font-size: 14px;" ><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button></a>
+                                        <button class="btn btn-primary btn-sm" type="button" style="width:15%; height: 50px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; font-size: 14px; margin-top: 15px;" ><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button></a>
                                 </div>
                             </div>
                         </g:if>
@@ -344,7 +344,7 @@
              */
                 mpgSoftware.homePage.newFeatures([
                     {"name":"Tutorial video: Custom aggregation tests","link":"https://www.youtube.com/watch?v=O78rN5A7SAw&list=PLlMMtlgw6qNj6ICrkMu2BAPhs-6XFBpTr&index=7&t=0s","class":"resource","type":"new"},
-                    {"name":"Webinar video: Diabetes Epigenome Atlas","link":"","class":"resource","type":"new"}]);
+                    {"name":"Webinar video: Diabetes Epigenome Atlas","link":"https://www.youtube.com/watch?v=zMHFSMkYNLk&feature=youtu.be","class":"resource","type":"new"}]);
             </script>
         </g:if>
         <g:elseif test="${g.portalTypeString()?.equals('mi')}">
@@ -352,8 +352,8 @@
                 /* Example to add 'new' or 'updated' feature buttons;
                  mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]);
                  */
-                mpgSoftware.homePage.newFeatures([{"name":"Tissue enrichments","link":"${createLink(controller:'trait',action:'tissueTable')}","class":"resource","type":"new"},
-                    {"name":"Webinar video: gene-specific resources in the Portals","link":"https://www.youtube.com/watch?v=ylPn6D1hpY4","class":"resource","type":"new"}]);
+                %{--mpgSoftware.homePage.newFeatures([{"name":"Tissue enrichments","link":"${createLink(controller:'trait',action:'tissueTable')}","class":"resource","type":"new"},--}%
+                    %{--{"name":"Webinar video: gene-specific resources in the Portals","link":"https://www.youtube.com/watch?v=ylPn6D1hpY4","class":"resource","type":"new"}]);--}%
             </script>
         </g:elseif>
         <g:elseif test="${g.portalTypeString()?.equals('stroke')}">
@@ -361,8 +361,8 @@
                 /* Example to add 'new' or 'updated' feature buttons;
                  mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]);
                  */
-                mpgSoftware.homePage.newFeatures([{"name":"Tissue enrichments","link":"${createLink(controller:'trait',action:'tissueTable')}","class":"feature","type":"new"},
-                    {"name":"Webinar video: gene-specific resources in the Portals","link":"https://www.youtube.com/watch?v=ylPn6D1hpY4","class":"resource","type":"new"}]);
+                %{--mpgSoftware.homePage.newFeatures([{"name":"Tissue enrichments","link":"${createLink(controller:'trait',action:'tissueTable')}","class":"feature","type":"new"},--}%
+                    %{--{"name":"Webinar video: gene-specific resources in the Portals","link":"https://www.youtube.com/watch?v=ylPn6D1hpY4","class":"resource","type":"new"}]);--}%
             </script>
         </g:elseif>
 
@@ -371,8 +371,8 @@
                 /* Example to add 'new' or 'updated' feature buttons;
                  mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]);
                  */
-                mpgSoftware.homePage.newFeatures([{"name":"Tissue enrichments","link":"${createLink(controller:'trait',action:'tissueTable')}","class":"feature","type":"new"},
-                    {"name":"Webinar video: gene-specific resources in the Portals","link":"https://www.youtube.com/watch?v=ylPn6D1hpY4","class":"resource","type":"new"}]);
+                %{--mpgSoftware.homePage.newFeatures([{"name":"Tissue enrichments","link":"${createLink(controller:'trait',action:'tissueTable')}","class":"feature","type":"new"},--}%
+                    %{--{"name":"Webinar video: gene-specific resources in the Portals","link":"https://www.youtube.com/watch?v=ylPn6D1hpY4","class":"resource","type":"new"}]);--}%
             </script>
         </g:elseif>
 

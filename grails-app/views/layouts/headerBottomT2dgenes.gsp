@@ -14,7 +14,7 @@
 
 <div class="container-fluid header-bottom" id="header-bottom-${g.portalTypeString()}">
 
-    <div class="logo-wrapper" style="position:relative; z-index: 1001; float: left;">
+    <div class="logo-wrapper " style="position:relative; z-index: 1001; float: left;">
         <a href="${createLink(controller:'home',action:'portalHome')}">
             <img src="${resource( file:restServer.retrieveBeanForCurrentPortal().getLogoCode())}" style=" height: 50px; margin-left: 10px;" />
         </a>
@@ -26,8 +26,8 @@
 
             <li class="data-btn home-drop-down-menu" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="javascript:;"><g:message code="portal.header.nav.about_data"/></a>
                 <ul>
-                    <li class="" style=""><a href="http://www.kp4cd.org/datasets/${g.portalTypeString()}" target="_blank">Datasets</a></li>
-                    <li class="" style=""><a href="http://www.kp4cd.org/dataset_downloads/${g.portalTypeString()}" target="_blank">Downloads</a></li>
+                    <li class="" style=""><a href="http://www.kp4cd.org/datasets/${g.portalTypeString()}">Datasets</a></li>
+                    <li class="" style=""><a href="http://www.kp4cd.org/dataset_downloads/${g.portalTypeString()}">Downloads</a></li>
                     <g:if test="${g.portalTypeString()?.equals('t2d')}">
                         <li class="" style=""><a href="http://www.kp4cd.org/apis/${g.portalTypeString()}">APIs</a></li>
                     </g:if>
@@ -61,22 +61,22 @@
 
             <li class="about-btn home-drop-down-menu" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="javascript:;">Information</a>
                 <ul>
-                    <li class="" style=""><a href="http://www.kp4cd.org/about/${g.portalTypeString()}" target="_blank"><g:message code="portal.header.nav.about"/></a></li>
+                    <li class="" style=""><a href="http://www.kp4cd.org/about/${g.portalTypeString()}"><g:message code="portal.header.nav.about"/></a></li>
 
                     <g:if test="${g.portalTypeString()?.equals('t2d')}">
-                        <li class="" style=""><a href="http://www.kp4cd.org/collaborate/${g.portalTypeString()}" target="_blank"><g:message code="portal.header.nav.submit"/></a></li>
+                        <li class="" style=""><a href="http://www.kp4cd.org/collaborate/${g.portalTypeString()}"><g:message code="portal.header.nav.submit"/></a></li>
                     </g:if>
 
-                    <li class="" style=""><a href="http://www.kp4cd.org/policies/${g.portalTypeString()}" target="_blank"><g:message code="portal.header.nav.policies"/></a></li>
+                    <li class="" style=""><a href="http://www.kp4cd.org/policies/${g.portalTypeString()}"><g:message code="portal.header.nav.policies"/></a></li>
 
-                    <li class="" style=""><a href="http://www.kp4cd.org/resources/${g.portalTypeString()}" target="_blank">Documentation</a></li>
+                    <li class="" style=""><a href="http://www.kp4cd.org/resources/${g.portalTypeString()}">Resources</a></li>
 
-                    <li class="" style=""><a href="http://www.kp4cd.org/new_features/${g.portalTypeString()}" target="_blank">Blog</a></li>
+                    <li class="" style=""><a href="http://www.kp4cd.org/new_features/${g.portalTypeString()}">Blog</a></li>
 
                 </ul>
             </li>
 
-            <li class="contact-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="http://www.kp4cd.org/contacts/${g.portalTypeString()}" target="_blank"><g:message code="portal.header.nav.contact_plural"/></a></li>
+            <li class="contact-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="http://www.kp4cd.org/contacts/${g.portalTypeString()}"><g:message code="portal.header.nav.contact_plural"/></a></li>
 
 
             <sec:ifLoggedIn>

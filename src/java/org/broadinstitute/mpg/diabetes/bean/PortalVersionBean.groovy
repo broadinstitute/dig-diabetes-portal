@@ -42,6 +42,8 @@ class PortalVersionBean {
     private String genePageWarning=""
     private String credibleSetInfoCode=""
     private String blogId=""
+    private String aggregationCovarianceUrl=""
+    private String aggregationMetadataUrl=""
     private Integer exposeCommonVariantTab=0
     private Integer exposeRareVariantTab=0
     private Integer variantAssociationsExists=0
@@ -101,6 +103,8 @@ class PortalVersionBean {
                              String genePageWarning,
                              String credibleSetInfoCode,
                              String blogId,
+                             String aggregationCovarianceUrl,
+                             String aggregationMetadataUrl,
                              Integer exposeCommonVariantTab,
                              Integer exposeRareVariantTab,
                              Integer variantAssociationsExists,
@@ -157,6 +161,8 @@ class PortalVersionBean {
         this.genePageWarning = genePageWarning
         this.credibleSetInfoCode = credibleSetInfoCode
         this.blogId = blogId
+        this.aggregationCovarianceUrl = aggregationCovarianceUrl
+        this.aggregationMetadataUrl = aggregationMetadataUrl
         this.exposeCommonVariantTab = exposeCommonVariantTab
         this.exposeRareVariantTab = exposeRareVariantTab
         this.variantAssociationsExists =  variantAssociationsExists
@@ -312,6 +318,12 @@ class PortalVersionBean {
 
     public String getBlogId() {
         return blogId
+    }
+    public String getAggregationCovarianceUrl() {
+        return aggregationCovarianceUrl
+    }
+    public String getAggregationMetadataUrl() {
+        return aggregationMetadataUrl
     }
 
     public Integer getExposeCommonVariantTab() {

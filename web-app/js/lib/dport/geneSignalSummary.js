@@ -2197,9 +2197,10 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             (displayHighImpactTab.length>0)){
             mpgSoftware.burdenTestShared.buildGaitInterface('#burdenGoesHere', {
                     accordionHeaderClass: 'toned-down-accordion-heading',
-                    modifiedTitle: 'Run a custom burden test',
+                    modifiedTitle: 'Custom aggregation tests',
                     modifiedTitleStyling: 'font-size: 18px;text-decoration: underline;padding-left: 20px; float: right; margin-right: 20px;',
                     allowExperimentChoice: false,
+                    allowAggregationMethodChoice: true,
                     allowPhenotypeChoice: true,
                     allowStratificationChoice: true,
                     defaultPhenotype: phenotypeName
@@ -2316,10 +2317,6 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 $('#aggregateVariantsLocation').css('display', 'block');
                 $('#noAggregatedVariantsLocation').css('display', 'none');
                 var arrayOfPromises = [];
-                // arrayOfPromises.push(mpgSoftware.geneSignalSummaryMethods.refreshVariantAggregates(sampleBasedPhenotypeName, "0", additionalParameters.sampleDataSet, additionalParameters.burdenDataSet,
-                //         "2", "NaN", additionalParameters.geneName, mpgSoftware.geneSignalSummaryMethods.updateAggregateVariantsDisplay, "#allVariants"));
-                // arrayOfPromises.push(mpgSoftware.geneSignalSummaryMethods.refreshVariantAggregates(sampleBasedPhenotypeName, "1", additionalParameters.sampleDataSet, additionalParameters.burdenDataSet,
-                //         "2", "NaN", additionalParameters.geneName, mpgSoftware.geneSignalSummaryMethods.updateAggregateVariantsDisplay, "#allCoding"));
                 arrayOfPromises.push(mpgSoftware.geneSignalSummaryMethods.refreshVariantAggregates(sampleBasedPhenotypeName, "8", additionalParameters.sampleDataSet, additionalParameters.burdenDataSet,
                         "2", "NaN", additionalParameters.geneName, mpgSoftware.geneSignalSummaryMethods.updateAggregateVariantsDisplay, "#allMissense"))
                 arrayOfPromises.push(mpgSoftware.geneSignalSummaryMethods.refreshVariantAggregates(sampleBasedPhenotypeName, "7", additionalParameters.sampleDataSet, additionalParameters.burdenDataSet,

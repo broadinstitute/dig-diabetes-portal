@@ -4,6 +4,7 @@ import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.BurdenService
 import org.broadinstitute.mpg.diabetes.MetaDataService
+import org.broadinstitute.mpg.diabetes.bean.PortalVersionBean
 import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
@@ -467,6 +468,7 @@ class GeneController {
 
         // cast the parameters
         Boolean explicitlySelectSamples = false
+        String burdenMethod = params.burdenMethod
         String geneName = params.geneName
         String dataSet = params.dataSet
         String sampleDataSet = params.sampleDataSet
@@ -479,7 +481,7 @@ class GeneController {
 
         // TODO - eventually create new bean to hold all the options and have smarts for double checking validity
         JSONObject result = this.burdenService.callBurdenTest(burdenTraitFilterSelectedOption, geneName, variantFilterOptionId, mafOption, mafValue,
-                dataSet, sampleDataSet, explicitlySelectSamples,portalType,variantSetId);
+                dataSet, sampleDataSet, explicitlySelectSamples,portalType,variantSetId,burdenMethod);
 
         // send json response back
         render(status: 200, contentType: "application/json") {result}
@@ -719,6 +721,24 @@ class GeneController {
         render(status: 200, contentType: "application/json") {resultLZJson}
         return;
     }
+
+
+
+    def aggregationCovariance(){
+        PortalVersionBean portalVersionBean = restServerService.retrieveBeanForCurrentPortal()
+        String incomingRequest = request.JSON.toString()
+        JSONObject returnObject =  restServerService.postRestCallBase( incomingRequest, portalVersionBean.getAggregationCovarianceUrl(), "")
+        render(status: 200, contentType: "application/json") {returnObject}
+    }
+    def aggregationMetadata(){
+        PortalVersionBean portalVersionBean = restServerService.retrieveBeanForCurrentPortal()
+        JSONObject returnObject =  restServerService.getRestCallBase( portalVersionBean.getAggregationMetadataUrl(), "")
+        render(status: 200, contentType: "application/json") {returnObject}
+    }
+
+
+
+
 
 
     def list(Integer max) {
