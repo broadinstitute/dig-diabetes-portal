@@ -74,12 +74,12 @@ grails.plugin.databasemigration.updateOnStart = true
 
 
 if  (Environment.current == Environment.DEVELOPMENT)  {
-     println('\n\n*** Preparing DEV environment ***\n\n')
+    println('\n\n*** Preparing DEV environment ***\n\n')
 } else if  (Environment.current == Environment.TEST)  {
     println('\n\n*** Preparing TEST environment ***\n\n')
 }   else if  (Environment.current == Environment.PRODUCTION)  {
     println('\n\n*** Preparing PROD environment ***\n\n')
- }  else {
+}  else {
     println("\n\n*** Preparing ${Environment.current} environment ***\n\n")
 }
 
@@ -117,7 +117,7 @@ if (appName) {
             grails.config.locations << "file:$secondaryFullName"
         }
     }
- }
+}
 
 if (grails.config.locations.isEmpty()){
     println "\n** No config override  in effect **"
@@ -205,19 +205,19 @@ grails.project.groupId = appName // change this to alter the default package nam
 // The ACCEPT header will not be used for content negotiation for user agents containing the following strings (defaults to the 4 major rendering engines)
 grails.mime.disable.accept.header.userAgents = ['Gecko', 'WebKit', 'Presto', 'Trident']
 grails.mime.types = [ // the first one is the default format
-    all:           '*/*', // 'all' maps to '*' or the first available format in withFormat
-    atom:          'application/atom+xml',
-    css:           'text/css',
-    csv:           'text/csv',
-    form:          'application/x-www-form-urlencoded',
-    html:          ['text/html','application/xhtml+xml'],
-    js:            'text/javascript',
-    json:          ['application/json', 'text/json'],
-    multipartForm: 'multipart/form-data',
-    rss:           'application/rss+xml',
-    text:          'text/plain',
-    hal:           ['application/hal+json','application/hal+xml'],
-    xml:           ['text/xml', 'application/xml']
+                      all:           '*/*', // 'all' maps to '*' or the first available format in withFormat
+                      atom:          'application/atom+xml',
+                      css:           'text/css',
+                      csv:           'text/csv',
+                      form:          'application/x-www-form-urlencoded',
+                      html:          ['text/html','application/xhtml+xml'],
+                      js:            'text/javascript',
+                      json:          ['application/json', 'text/json'],
+                      multipartForm: 'multipart/form-data',
+                      rss:           'application/rss+xml',
+                      text:          'text/plain',
+                      hal:           ['application/hal+json','application/hal+xml'],
+                      xml:           ['text/xml', 'application/xml']
 ]
 
 // URL Mapping Cache Max Size, defaults to 5000
@@ -318,7 +318,7 @@ environments {
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 
-     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+        grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
 
 //
 //        grails.serverURL = "http://mdgkp.us-east-1.elasticbeanstalk.com"
@@ -601,77 +601,77 @@ portal.type.override = "v2f"     // options are "t2d", "stroke", "mi", "ibd", "e
 
 
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
-                                                        "T2D",  // displayable label for this portal type
-                                                        "mdv41",    // the MDV number for this portal
-                                                        "T2DKP", // name of KB data we want
-                                                        "T2D",      // the default phenotype for this portal
-                                                        "ExSeq_19k_mdv28",  // default data set.  Used rarely.
-                                                        ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
-                                                        ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
+        "T2D",  // displayable label for this portal type
+        "mdv41",    // the MDV number for this portal
+        "T2DKP", // name of KB data we want
+        "T2D",      // the default phenotype for this portal
+        "ExSeq_19k_mdv28",  // default data set.  Used rarely.
+        ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
+        ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
         ["Islets","Liver","SkeletalMuscle","Adipose"],  // tissues to display beneath a LocusZoom plot -- use these for the DCC
- //       ["islet of Langerhans","liver","adipocyte"],  // tissues to display beneath a LocusZoom plot -- use these for UCSD
-                                                        ["GLYCEMIC", "ANTHROPOMETRIC", "RENAL", "HEPATIC", "LIPIDS", "CARDIOVASCULAR", "BLOOD PRESSURE"], // most important phenotype group name
-                                                        [], // any data sets that should be omitted from LZ display
-                                                        "[3]",  // the assays we should search
-                                                        "ExSeq_13k_mdv23",
-                                                "images/t2d/front_T2DKP_logo_2019.svg",
-                                                "portal.header.tagline",
-                                                "portal.header.title.short",
-                                                ["English", "Spanish"],
-                                                ["SLC30A8"],
-                                                ["rs13266634"],
-                                                ["chr9:21,940,000-22,190,000"],
-                                                "images/t2d/T2DKP_bg_2019.png",
-                                                "pheno.help.text",
-                                                "images/t2d/header_T2DKP_logo.svg",
-                                                "images/menu_bg_2017_5.png",
-                                                "true",
-                                                "gene.genePage.warning",
-                                                "",
-                                                '5010306206573083521',
-                                                'http://raremetal.type2diabeteskb.org/aggregation/covariance',//URL for UMich aggregation tests
-                                                'http://raremetal.type2diabeteskb.org/aggregation/metadata',//URL for metadata needed by aggregation tests
-                                                1, // expose the common variant tab have on the gene page
-                                                1, // expose the high-impact variant tab on the gene page
-                                                1, // do we have parent level associations to show
-                                                1, // Do we have gene level associations to show?
-                                                1, // add a link to the GRS module into the headers. Note that the GRS module is available whether or not the link is in place
-                                                1, // no longer used?
-                                                0, // if true then entering a gene takes you to a region page around that chain
-                                                1, // show the pheWAS plot
-                                                1, // show the forest pheWAS plot
-                                                1, // should we show the variant Association section on the variant info page
-                                                0, // expose the green boxes on the variant info page
-                                                0, // expose a secondary table and the credible set page built around genes, not just variants
-                                                0, // clicking on a variant can take you to the variant info page, or else to a range page (as in V2F)
-                                                1, // utilize bi-allelic gate, as opposed to the version that depends on multi-allelic definitions
-                                                0,  // access UC San Diego data remotely? I'm not sure if this works anymore
-                                                0, // LEDGE tab on the gene page
-                                                0, // Hi-C tab on the gene page
-                                                1, // expose dynamic UI
-                                                0, // expose the data set hierarchy in the sunburst visualization on the data page
-                                                0, // expose the old school variant and association table.  Potentially useful for debugging
-                                                0, // expose the IGV interface in its own accordion section
-                                                0, // expose an accordion section with the burden test on the gene page
-                                                0, // expose the 'genes in region' tab on the gene page
-                                                0, // expose the region adjuster for the gene page
-                                                0, // expose the gene table on the dynamic UI
-                                                0,  // expose the variant table on the dynamic UI
-                                                1  // expose the effector gene table
-                                            ),
+        //       ["islet of Langerhans","liver","adipocyte"],  // tissues to display beneath a LocusZoom plot -- use these for UCSD
+        ["GLYCEMIC", "ANTHROPOMETRIC", "RENAL", "HEPATIC", "LIPIDS", "CARDIOVASCULAR", "BLOOD PRESSURE"], // most important phenotype group name
+        [], // any data sets that should be omitted from LZ display
+        "[3]",  // the assays we should search
+        "ExSeq_13k_mdv23",
+        "images/t2d/front_T2DKP_logo_2019.svg",
+        "portal.header.tagline",
+        "portal.header.title.short",
+        ["English", "Spanish"],
+        ["SLC30A8"],
+        ["rs13266634"],
+        ["chr9:21,940,000-22,190,000"],
+        "images/t2d/T2DKP_bg_2019.png",
+        "pheno.help.text",
+        "images/t2d/header_T2DKP_logo.svg",
+        "images/menu_bg_2017_5.png",
+        "true",
+        "gene.genePage.warning",
+        "",
+        '5010306206573083521',
+        'http://raremetal.type2diabeteskb.org/aggregation/covariance',//URL for UMich aggregation tests
+        'http://raremetal.type2diabeteskb.org/aggregation/metadata',//URL for metadata needed by aggregation tests
+        1, // expose the common variant tab have on the gene page
+        1, // expose the high-impact variant tab on the gene page
+        1, // do we have parent level associations to show
+        1, // Do we have gene level associations to show?
+        1, // add a link to the GRS module into the headers. Note that the GRS module is available whether or not the link is in place
+        1, // no longer used?
+        0, // if true then entering a gene takes you to a region page around that chain
+        1, // show the pheWAS plot
+        1, // show the forest pheWAS plot
+        1, // should we show the variant Association section on the variant info page
+        0, // expose the green boxes on the variant info page
+        0, // expose a secondary table and the credible set page built around genes, not just variants
+        0, // clicking on a variant can take you to the variant info page, or else to a range page (as in V2F)
+        1, // utilize bi-allelic gate, as opposed to the version that depends on multi-allelic definitions
+        0,  // access UC San Diego data remotely? I'm not sure if this works anymore
+        0, // LEDGE tab on the gene page
+        0, // Hi-C tab on the gene page
+        1, // expose dynamic UI
+        0, // expose the data set hierarchy in the sunburst visualization on the data page
+        0, // expose the old school variant and association table.  Potentially useful for debugging
+        0, // expose the IGV interface in its own accordion section
+        0, // expose an accordion section with the burden test on the gene page
+        0, // expose the 'genes in region' tab on the gene page
+        0, // expose the region adjuster for the gene page
+        0, // expose the gene table on the dynamic UI
+        0,  // expose the variant table on the dynamic UI
+        1  // expose the effector gene table
+),
                                   new PortalVersionBean("stroke",
-                                                          "Stroke",
-                                                          "mdv75",
+                                          "Stroke",
+                                          "mdv75",
                                           "CDKP", // name of KB data we want
-                                                          "Stroke_all",
-                                                          "GWAS_Stroke_mdv70",
-                                                          ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
-                                                          ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
-                                                          ["InferiorTemporalLobe","AnteriorCaudate"],
-                                                          ["STROKE", "ISCHEMIC STROKE", "HEMORRHAGIC STROKE", "MRI TRAITS", "CARDIOVASCULAR", "LIPIDS"], // most important phenotype group name
-                                                          ["SIGN", "MetaStroke"], // any data sets that should be omitted from LZ display
-                                                          "[3]",
-                                                          "ExSeq_13k_mdv23",
+                                          "Stroke_all",
+                                          "GWAS_Stroke_mdv70",
+                                          ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
+                                          ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
+                                          ["InferiorTemporalLobe","AnteriorCaudate"],
+                                          ["STROKE", "ISCHEMIC STROKE", "HEMORRHAGIC STROKE", "MRI TRAITS", "CARDIOVASCULAR", "LIPIDS"], // most important phenotype group name
+                                          ["SIGN", "MetaStroke"], // any data sets that should be omitted from LZ display
+                                          "[3]",
+                                          "ExSeq_13k_mdv23",
                                           "images/stroke/front_strokeKP_logo_2019.svg",
                                           "portal.stroke.header.tagline",
                                           "portal.stroke.header.title.short",
@@ -700,8 +700,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           0,
                                           0,
-                                            0,
-                                            0,0,0, // Hi-C tab on the gene page
+                                          0,
+                                          0,0,0, // Hi-C tab on the gene page
                                           1,  // expose dynamic UI
                                           0, // expose the data set hierarchy in the sunburst visualization on the data page
                                           0, // expose the old school variant and association table.  Potentially useful for debugging
@@ -714,18 +714,18 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0  // expose the effector gene table
                                   ),
                                   new PortalVersionBean("mi",
-                                                          "Myocardial Infarction",
-                                                          "mdv96",
+                                          "Myocardial Infarction",
+                                          "mdv96",
                                           "CVDKP", // name of KB data we want
-                                                          "MI",
-                                                          "GWAS_CARDIoGRAM_mdv91",
-                                                          ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
-                                                          ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
-                                                          ["SkeletalMuscle"],
-                                                          ["CARDIOVASCULAR", "ATRIAL FIBRILLATION", "LIPIDS", "ECG TRAITS", "ANTHROPOMETRIC"], // most important phenotype group name
-                                                          [],
-                                                          "[3]",
-                                                          "GWAS_CARDIoGRAM_mdv91",
+                                          "MI",
+                                          "GWAS_CARDIoGRAM_mdv91",
+                                          ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
+                                          ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
+                                          ["SkeletalMuscle"],
+                                          ["CARDIOVASCULAR", "ATRIAL FIBRILLATION", "LIPIDS", "ECG TRAITS", "ANTHROPOMETRIC"], // most important phenotype group name
+                                          [],
+                                          "[3]",
+                                          "GWAS_CARDIoGRAM_mdv91",
                                           "images/mi/front_miKP_logo_2019.svg",
                                           "portal.mi.header.tagline",
                                           "portal.mi.header.title.short",
@@ -734,7 +734,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["rs10965215"],
                                           ["chr9:20,940,000-21,800,000"],
                                           "images/mi/front_mi_banner_2018.png",
-                                        "",
+                                          "",
                                           "images/mi/header_miKP_logo.svg",
                                           "images/mi/menu_band_2017_mi.png",
                                           "false",
@@ -757,7 +757,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           0,
                                           0,0, // Hi-C tab on the gene page
-                                         1,  // expose dynamic UI
+                                          1,  // expose dynamic UI
                                           0, // expose the data set hierarchy in the sunburst visualization on the data page
                                           0, // expose the old school variant and association table.  Potentially useful for debugging
                                           0, // expose the IGV interface in its own accordion section
@@ -771,18 +771,18 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                   new PortalVersionBean("ibd",
                                           //"Inflammatory Bowel Disease",
                                           "Variant to Function",
-                                                          "mdv37",//"mdv80",
+                                          "mdv37",//"mdv80",
                                           "T2DKP", // name of KB data we want
-                                                          "CD",// another option would be "IBD"
-                                                            "GWAS_IBDGenomics_eu_mdv80",
-                                                          ["UCSC annotation","ATACSeq_QTL","Enhancer-gene link"],
-                                                          ["UCSC annotation","ATACSeq_QTL","Enhancer-gene link"],
-                                                          ["E071","E106","E088","E085"],
-                                                          ["INFLAMMATORY BOWEL"], // most important phenotype group name
-                                                          [],
+                                          "CD",// another option would be "IBD"
+                                          "GWAS_IBDGenomics_eu_mdv80",
+                                          ["UCSC annotation","ATACSeq_QTL","Enhancer-gene link"],
+                                          ["UCSC annotation","ATACSeq_QTL","Enhancer-gene link"],
+                                          ["E071","E106","E088","E085"],
+                                          ["INFLAMMATORY BOWEL"], // most important phenotype group name
+                                          [],
 //                                          "[1,2,3,4,5,6,7,8,9,10,11,12,13,14]",
                                           "[1,2,4,5,6,9,10,11,12,13,14,15,16,17,18]",
-                                                          "GWAS_IBDGenomics_eu_mdv80",
+                                          "GWAS_IBDGenomics_eu_mdv80",
                                           "images/v2f/front_V2FKP_logo_2019.svg",
                                           "portal.ibd.header.tagline",
                                           "portal.ibd.header.title",
@@ -791,8 +791,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["6_31628397_T_A"],
                                           ["chr1:67,500,000-67,800,000"],
                                           "images/ibd/front_ibd_bg_2018.png",
-                                        "",
-                                         // "images/ibd/ibd_header_logo.svg",
+                                          "",
+                                          // "images/ibd/ibd_header_logo.svg",
                                           "images/v2f/front_V2FKP_banner_bg.png",
                                           "images/ibd/ibd_menu_wrapper_bg.png",
                                           "false",
@@ -825,7 +825,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0, // expose the gene table on the dynamic UI
                                           0, // expose the variant table on the dynamic UI
                                           0  // expose the effector gene table
-                                 ),
+                                  ),
                                   new PortalVersionBean("epilepsy",
                                           "Epilepsy",
                                           "mdv100",
@@ -1045,7 +1045,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0  // expose the effector gene table
                                   ),
                                   new PortalVersionBean("v2f",      // label for this portal type
-                                          "v2f",  // displayable label for this portal type
+                                          "T2D",  // displayable label for this portal type
                                           "mdv41",    // the MDV number for this portal
                                           "T2DKP", // name of KB data we want
                                           "T2D",      // the default phenotype for this portal
@@ -1065,7 +1065,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["SLC30A8"],
                                           ["rs13266634"],
                                           ["chr9:21,940,000-22,190,000"],
-                                          "images/v2f/front_V2FKP_banner_bg.png",
+                                          "images/t2d/T2DKP_bg_2019.png",
                                           "pheno.help.text",
                                           "images/v2f/header_V2FKP_logo.svg",
                                           "images/menu_bg_2017_5.png",
@@ -1073,6 +1073,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "gene.genePage.warning",
                                           "",
                                           '5010306206573083521',
+                                          'http://raremetal.type2diabeteskb.org/aggregation/covariance',//URL for UMich aggregation tests
+                                          'http://raremetal.type2diabeteskb.org/aggregation/metadata',//URL for metadata needed by aggregation tests
                                           1, // expose the common variant tab have on the gene page
                                           1, // expose the high-impact variant tab on the gene page
                                           1, // do we have parent level associations to show
@@ -1102,5 +1104,4 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           1  // expose the effector gene table
                                   )
 ]
-
 
