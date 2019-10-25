@@ -2658,7 +2658,7 @@ mpgSoftware.dynamicUi = (function () {
                             });
                         }
                         break;
-                    case "TSS":
+                    case "SPP":
                         if (annotationOptions.length>1){
                             $('#annotationSelectorChoice').append("<optgroup label='TF Binding Sites'></optgroup>");
                             _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
@@ -2670,7 +2670,7 @@ mpgSoftware.dynamicUi = (function () {
                                 $('#annotationSelectorChoice').append(new Option("<span class='boldit'>TF Binding Site</span>",rec.value));
                             });
                         } else if (annotationOptions.length === 0) {
-                                $('#annotationSelectorChoice').append(new Option("<span class='boldit'>TF Binding Site</span>",'TSS_TSS'));
+                                $('#annotationSelectorChoice').append(new Option("<span class='boldit'>TF Binding Site</span>",'SPP_SPP'));
                         }
                         break;
                     case "ChromHMM":
@@ -4703,21 +4703,34 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     $(oneDiv).parent().parent().removeClass('doNotDisplay');
                 }
             } else {
-                 if (suppressRowDisplay){
-                    $(oneDiv).parent().parent().addClass('doNotDisplay');
-                     $(oneDiv).parent().parent().hide();
-                }
+                $(oneDiv).parent().parent().addClass('doNotDisplay');
+                $(oneDiv).parent().parent().hide();
+            }
 
-            }
+
+
+
+
+
+            // else {
+            //      if (suppressRowDisplay){
+            //         $(oneDiv).parent().parent().addClass('doNotDisplay');
+            //          $(oneDiv).parent().parent().hide();
+            //     } else {
+            //          $(oneDiv).parent().parent().show();
+            //          $(oneDiv).parent().parent().removeClass('doNotDisplay');
+            //      }
+            //
+            // }
         });
-        const cellsToCollapse = $('div.varEpigeneticsLabel');
-        _.forEach(cellsToCollapse, function(domElement,index){
-            if (index===0){
-                $(domElement).parent().prop('rowspan',cellsToCollapse.length);
-            } else {
-                $(domElement).parent().hide();
-            }
-        });
+        // const cellsToCollapse = $('div.varEpigeneticsLabel');
+        // _.forEach(cellsToCollapse, function(domElement,index){
+        //     if (index===0){
+        //         $(domElement).parent().prop('rowspan',cellsToCollapse.length);
+        //     } else {
+        //         $(domElement).parent().hide();
+        //     }
+        // });
 
 
 
@@ -4863,14 +4876,14 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     $('div.associationLabel:last').parent().parent().children('td').css('border-bottom','2px solid black');
 
                     // collapse first cell across all 'Epigenetics' rows
-                    const cellsToCollapse = $('div.varEpigeneticsLabel');
-                    _.forEach(cellsToCollapse, function(domElement,index){
-                        if (index===0){
-                            $(domElement).parent().prop('rowspan',cellsToCollapse.length);
-                        } else {
-                            $(domElement).parent().hide();
-                        }
-                    });
+                    // const cellsToCollapse = $('div.varEpigeneticsLabel');
+                    // _.forEach(cellsToCollapse, function(domElement,index){
+                    //     if (index===0){
+                    //         $(domElement).parent().prop('rowspan',cellsToCollapse.length);
+                    //     } else {
+                    //         $(domElement).parent().hide();
+                    //     }
+                    // });
 
 
                     break;
