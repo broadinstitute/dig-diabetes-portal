@@ -7,7 +7,7 @@ records={{numberRecords}}
 </script>
 
 <script id="dnaseVariantTableTissueRowLabel"  type="x-tmpl-mustache">
-<div class="varAllEpigenetics varDnaseEpigenetics  staticMethodLabels annotationName_MACS methodName_MACS initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation">
+<div class="varAllEpigenetics varDnaseEpigenetics  staticMethodLabels annotationName_AccessibleChromatin methodName_MACS initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation">
 ATAC-seq&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/></div>
 </script>
 

@@ -2597,7 +2597,7 @@ mpgSoftware.dynamicUi = (function () {
                         "header", 'LIT'));
                     _.forEach(dataVector, function (oneRecord) {
                         rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
-                            {}, "header", 'EMP'));
+                            {otherClasses:"methodName_"+currentMethod}, "header", 'EMP'));
                     });
 
                 } else { // we have real data
@@ -2612,13 +2612,21 @@ mpgSoftware.dynamicUi = (function () {
                             Mustache.render($('#'+dataAnnotationType.dataAnnotation.drillDownCategoryWriter)[0].innerHTML,
                                 {indexInOneDimensionalArray:((numberOfExistingRows+addedRows)*numberOfColumns)}),
                             "header", 'LIT'));
+                        let alternateAnnotation =annotation;
+                        switch(annotation){
+                            case "MACS":
+                                alternateAnnotation = "AccessibleChromatin"
+                                break;
+                            default:
+                                break;
+                        }
                         rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(annotation,
                             Mustache.render($('#'+dataAnnotationType.dataAnnotation.drillDownSubCategoryWriter)[0].innerHTML,
-                                {annotationName:annotation,indexInOneDimensionalArray:(((numberOfExistingRows+addedRows)*numberOfColumns)+1)}),
+                                {annotationName:alternateAnnotation,indexInOneDimensionalArray:(((numberOfExistingRows+addedRows)*numberOfColumns)+1)}),
                             "header", 'LIT'));
                         _.forEach(dataVector, function (oneRecord) {
                             rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
-                                {}, "header", 'EMP'));
+                                {otherClasses:"methodName_"+currentMethod+" annotationName_"+annotation}, "discoDownAndCheckOutTheShow", 'EMP'));
                         });
                         // fill in all of the column cells
                         _.forEach(recordsForAnnotation.arrayOfRecords, function (oneRecord) {
@@ -4677,14 +4685,27 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 }
             });
         }
+
         // there are two reasons we might want to NOT display a row.
         //   1) it is not one of our 'uniqueAnnotations' that the user has asked about
         //   2) it has no values that make the significance cut off
         _.forEach($('div.varAnnotation'),function(oneDiv){
             const currentAnnotation = extractClassBasedTrailingString(oneDiv,"annotationName_");
+            let methodNameToProcess;
+            let annotationNameToProcess;
+            if (currentTableForm === 'variantTableAnnotationHeaders'){
+                methodNameToProcess = extractClassBasedTrailingString(oneDiv,"methodName_");
+                annotationNameToProcess = extractClassBasedTrailingString(oneDiv,"annotationName_");
+            }
+
             let suppressRowDisplay = false;
             if (!blankRowsAreOkay){
-                suppressRowDisplay = ($(oneDiv).parent().parent().find('div.epigeneticCellElement.yesDisplay').length === 0);
+                if (currentTableForm === 'variantTableVariantHeaders'){ // If the variants are on top then we simply look for elements in the containing row
+                    suppressRowDisplay = ($(oneDiv).parent().parent().find('div.epigeneticCellElement.yesDisplay').length === 0);
+                } else { // Otherwise we have to pull out the elements by name
+                    suppressRowDisplay = ($('#mainVariantDiv td div.yesDisplay.annotationName_'+annotationNameToProcess).length === 0);
+                }
+
             }
             if ((_.includes(uniqueAnnotations,currentAnnotation))||
                 (_.includes(uniqueMethods,currentAnnotation))){
@@ -4699,11 +4720,18 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     }
                 } else  if (currentTableForm === 'variantTableAnnotationHeaders') {
                     if (suppressRowDisplay){
-                        $(oneDiv).parent().addClass('doNotDisplay');
-                        $(oneDiv).parent().hide();
+                        $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.varAllEpigenetics').hide();
+                        $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.header').hide();
+                        // $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.varAllEpigenetics').hide();
+                        // $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.header').hide();
+                        // $(oneDiv).parent().addClass('doNotDisplay');
+                        // $(oneDiv).parent().hide();
                     } else {
-                        $(oneDiv).parent().show();
-                        $(oneDiv).parent().removeClass('doNotDisplay');
+
+                        $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.varAllEpigenetics').show();
+                        $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.header').show();
+                        // $(oneDiv).parent().show();
+                        // $(oneDiv).parent().removeClass('doNotDisplay');
                     }
                 }
 
@@ -4714,8 +4742,19 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     $(oneDiv).parent().parent().hide();
                 }
                 else  if (currentTableForm === 'variantTableAnnotationHeaders') {
-                    // $(oneDiv).parent().addClass('doNotDisplay');
-                    // $(oneDiv).parent().hide();
+                    if (($('#mainVariantDiv th div.annotationName_'+annotationNameToProcess).length>0)&&
+                        ($('#mainVariantDiv td div.annotationName_'+annotationNameToProcess).length===0)){
+                        //we have a header with one annotation but no table cells. This must mean that we had no data, this is a blank row, and we have to work strictly with the method
+                        $('#mainVariantDiv th div.methodName_'+annotationNameToProcess).parent().hide();
+                        $('#mainVariantDiv td div.methodName_'+annotationNameToProcess).parent().hide();
+                    } else {
+
+                    }
+                    $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent().hide();
+                    $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent().hide();
+                    // now hide the header
+                    //$(oneDiv).parent().hide();
+                    // now all of the empty cells
                 }
 
             }
@@ -4907,10 +4946,10 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         }
                         $('td:has(div.variantAnnotation.emphasisSwitch_true)').addClass('emphasisSwitch_true');
                         $('div.variantAnnotation:last').parent().parent().children('td').css('border-bottom','2px solid black');
-
+                        filterEpigeneticTable(whereTheTableGoes);
                     }
 
-                    filterEpigeneticTable(whereTheTableGoes);
+;
                     adjustTableWrapperWidth("table.variantTableHolder");
                     break;
                 case 'fegtAnnotationHeaders':
