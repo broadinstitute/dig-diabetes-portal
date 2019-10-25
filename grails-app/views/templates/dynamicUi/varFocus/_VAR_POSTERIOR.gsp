@@ -12,7 +12,7 @@ posterior prob
 </script>
 
 <script id="variantPosteriorPValueBody"  type="x-tmpl-mustache">
-    <div  class="initialLinearIndex_{{indexInOneDimensionalArray}}">
+    <div  class="initialLinearIndex_{{indexInOneDimensionalArray}} text-center">
     {{posteriorPValueDisplayable}}
     </div>
 </script>

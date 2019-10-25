@@ -2581,6 +2581,7 @@ mpgSoftware.dynamicUi = (function () {
                 prepend = false;
                 const currentMethod = arrayOfDataToDisplay[0].data.currentMethod;
                 let annotationOptions = [];
+                let addedRows = 0;
                 // create a row for each epigenetic annotation even if it's empty
                 if (arrayOfDataToDisplay[0].data.groupByAnnotation.length===0){
                     addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
@@ -2588,11 +2589,11 @@ mpgSoftware.dynamicUi = (function () {
                     let rowWeAreAddingTo = _.last(intermediateDataStructure.rowsToAdd);
                     rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(currentMethod,
                         Mustache.render($('#'+dataAnnotationType.dataAnnotation.drillDownCategoryWriter)[0].innerHTML,
-                            {indexInOneDimensionalArray:(numberOfExistingRows*numberOfColumns)}),
+                            {indexInOneDimensionalArray:((numberOfExistingRows+addedRows)*numberOfColumns)}),
                         "header", 'LIT'));
                     rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(currentMethod,
                         Mustache.render($('#'+dataAnnotationType.dataAnnotation.drillDownSubCategoryWriter)[0].innerHTML,
-                            {annotationName:currentMethod,indexInOneDimensionalArray:((numberOfExistingRows*numberOfColumns)+1)}),
+                            {annotationName:currentMethod,indexInOneDimensionalArray:(((numberOfExistingRows+addedRows)*numberOfColumns)+1)}),
                         "header", 'LIT'));
                     _.forEach(dataVector, function (oneRecord) {
                         rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
@@ -2609,11 +2610,11 @@ mpgSoftware.dynamicUi = (function () {
                         let rowWeAreAddingTo = _.last(intermediateDataStructure.rowsToAdd);
                         rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(annotation,
                             Mustache.render($('#'+dataAnnotationType.dataAnnotation.drillDownCategoryWriter)[0].innerHTML,
-                                {indexInOneDimensionalArray:(numberOfExistingRows*numberOfColumns)}),
+                                {indexInOneDimensionalArray:((numberOfExistingRows+addedRows)*numberOfColumns)}),
                             "header", 'LIT'));
                         rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(annotation,
                             Mustache.render($('#'+dataAnnotationType.dataAnnotation.drillDownSubCategoryWriter)[0].innerHTML,
-                                {annotationName:annotation,indexInOneDimensionalArray:((numberOfExistingRows*numberOfColumns)+1)}),
+                                {annotationName:annotation,indexInOneDimensionalArray:(((numberOfExistingRows+addedRows)*numberOfColumns)+1)}),
                             "header", 'LIT'));
                         _.forEach(dataVector, function (oneRecord) {
                             rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
@@ -2635,6 +2636,7 @@ mpgSoftware.dynamicUi = (function () {
 
                             }
                         });
+                        addedRows++;
                     });
                 }
 
@@ -2701,8 +2703,6 @@ mpgSoftware.dynamicUi = (function () {
             'variantTableVariantHeaders',
             prepend,
             true );
-        filterEpigeneticTable();
-
 
 
     };
@@ -4583,9 +4583,10 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
     };
 
 
-    const filterEpigeneticTable = function(){
+    const filterEpigeneticTable = function(whereTheTableGoes){
         // we can filter either on tissue enrichments, or explicitly selected annotations, or we can accept either
         let uniqueLists = {};
+        const currentTableForm = getSharedTable(whereTheTableGoes)['currentForm'];
         const filterByGregor =  ($('#gregorFilterCheckbox').is(":checked"));
         const filterByExplicitMethod =  ($('#methodFilterCheckbox').is(":checked"));
         const blankRowsAreOkay = ($('#displayBlankRows').is(":checked"));
@@ -4595,9 +4596,9 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         } else if ( (!filterByGregor) &&
                     filterByExplicitMethod ){
             uniqueLists = getMethodsAnnotationsAndTissuesFromExplicitAnnotationSpecification(false)
-        } else {
-
         }
+
+
 
         let uniqueMethods = uniqueLists.uniqueMethods;
         let uniqueAnnotations = uniqueLists.uniqueAnnotations;
@@ -4613,32 +4614,24 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         if ( ( typeof uniqueMethods !== 'undefined') && (uniqueMethods.length>0) &&
             ( typeof uniqueAnnotations !== 'undefined') && (uniqueAnnotations.length>0) &&
             ( typeof uniqueTissues !== 'undefined') &&  (uniqueTissues.length>0)) {
-            // first filter out the rows based on methods
-            // _.forEach($('div.staticMethodLabels'),function(oneDiv){
-            //     const currentMethod = extractClassBasedTrailingString(oneDiv,"methodName_");
-            //     if (_.includes(uniqueMethods,currentMethod)) {
-            //         $(oneDiv).parent().parent().show();
+
+
+            // $('table.expandableDrillDownTable').parent().parent().removeClass('undisplayed');
+            // _.forEach($('table.expandableDrillDownTable'), function (oneTable) {
+            //     const domTable = $(oneTable);
+            //     let somethingToDisplay = false;
+            //     _.forEach(domTable.find('tr.yesDisplay'), function (o) {
+            //         somethingToDisplay = true;
+            //         return false;
+            //     });
+            //     if (!somethingToDisplay) {
+            //         $(domTable).parent().parent().addClass('undisplayed');
+            //         $(domTable).parent().parent().hide();
             //     } else {
-            //         $(oneDiv).parent().parent().hide();
+            //         $(domTable).parent().parent().show();
             //     }
-            // });
-
-            $('table.expandableDrillDownTable').parent().parent().removeClass('undisplayed');
-            _.forEach($('table.expandableDrillDownTable'), function (oneTable) {
-                const domTable = $(oneTable);
-                let somethingToDisplay = false;
-                _.forEach(domTable.find('tr.yesDisplay'), function (o) {
-                    somethingToDisplay = true;
-                    return false;
-                });
-                if (!somethingToDisplay) {
-                    $(domTable).parent().parent().addClass('undisplayed');
-                    $(domTable).parent().parent().hide();
-                } else {
-                    $(domTable).parent().parent().show();
-                }
-
-            })
+            //
+            // })
         }
 
         const gregorAcc = getAccumulatorObject("gregorVariantInfo");
@@ -4647,6 +4640,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             quantileDef =  gregorAcc[0].header['quickLookup']
         }
         // now go through every cell and determine if we want to display it
+
+
         if (filterByGregor){
             _.forEach($('div.epigeneticCellElement'),function(oneTr){
                 const currentAnnotation = extractClassBasedTrailingString(oneTr,"annotationName_");
@@ -4694,34 +4689,37 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             if ((_.includes(uniqueAnnotations,currentAnnotation))||
                 (_.includes(uniqueMethods,currentAnnotation))){
 
+                if (currentTableForm === 'variantTableVariantHeaders') {
+                    if (suppressRowDisplay){
+                        $(oneDiv).parent().parent().addClass('doNotDisplay');
+                        $(oneDiv).parent().parent().hide();
+                    } else {
+                        $(oneDiv).parent().parent().show();
+                        $(oneDiv).parent().parent().removeClass('doNotDisplay');
+                    }
+                } else  if (currentTableForm === 'variantTableAnnotationHeaders') {
+                    if (suppressRowDisplay){
+                        $(oneDiv).parent().addClass('doNotDisplay');
+                        $(oneDiv).parent().hide();
+                    } else {
+                        $(oneDiv).parent().show();
+                        $(oneDiv).parent().removeClass('doNotDisplay');
+                    }
+                }
 
-                if (suppressRowDisplay){
+
+            } else {
+                if (currentTableForm === 'variantTableVariantHeaders') {
                     $(oneDiv).parent().parent().addClass('doNotDisplay');
                     $(oneDiv).parent().parent().hide();
-                } else {
-                    $(oneDiv).parent().parent().show();
-                    $(oneDiv).parent().parent().removeClass('doNotDisplay');
                 }
-            } else {
-                $(oneDiv).parent().parent().addClass('doNotDisplay');
-                $(oneDiv).parent().parent().hide();
+                else  if (currentTableForm === 'variantTableAnnotationHeaders') {
+                    // $(oneDiv).parent().addClass('doNotDisplay');
+                    // $(oneDiv).parent().hide();
+                }
+
             }
 
-
-
-
-
-
-            // else {
-            //      if (suppressRowDisplay){
-            //         $(oneDiv).parent().parent().addClass('doNotDisplay');
-            //          $(oneDiv).parent().parent().hide();
-            //     } else {
-            //          $(oneDiv).parent().parent().show();
-            //          $(oneDiv).parent().parent().removeClass('doNotDisplay');
-            //      }
-            //
-            // }
         });
         // const cellsToCollapse = $('div.varEpigeneticsLabel');
         // _.forEach(cellsToCollapse, function(domElement,index){
@@ -4820,7 +4818,6 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     }
                   break;
                 case 'variantTableVariantHeaders':
-                   // setUpDraggable(whereTheTableGoes);
                     if (headerSpecific) {
                         _.forEach(datatable.DataTable().columns().header(),function(o,columnIndex){ //  make nice headers out of VAR_IDs
                             var domElement = $(o);
@@ -4842,18 +4839,13 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
                         });
                     } else { // adjust the coloration of selected squares
+                        $('td div.variantHeaderShifters').hide();
                         if ( typeof sharedTable.cellColoringScheme === 'undefined'){
                             sharedTable["cellColoringScheme"] = "sortfield";
                         }
                         $('td:has(div.variantAnnotation.emphasisSwitch_true)').addClass('emphasisSwitch_true');
                         $('div.variantAnnotation:last').parent().parent().children('td').css('border-bottom','2px solid black');
 
-                        let currentFormVariation = ( typeof sharedTable['currentFormVariation'] === 'undefined') ? 1 : sharedTable['currentFormVariation'];
-                        // if (currentFormVariation === 1){
-                        //     $('div.variantEpigenetics').parent().parent().hide();
-                        // } else if (currentFormVariation === 2) {
-                        //     $('div.variantEpigenetics').parent().parent().show();
-                        // }
                      }
 
                      // collapse first cell across all 'Annotation' rows
@@ -4885,23 +4877,42 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     //     }
                     // });
 
-
+                    filterEpigeneticTable(whereTheTableGoes);
                     break;
                 case 'variantTableAnnotationHeaders':
                     if (headerSpecific) {
-                        ;
-                    } else { // turn off the visibility of tissue specific
-                        let currentFormVariation = ( typeof sharedTable['currentFormVariation'] === 'undefined') ? 1 : sharedTable['currentFormVariation'];
-                        if (currentFormVariation === 1){
-                            $('div.varAllEpigenetics').parent().hide()
-                        } else if (currentFormVariation === 2) {
-                            $('div.varAllEpigenetics').parent().show();
+
+                    } else {
+                        _.forEach($('table.variantTableHolder div.variantHeaderHolder'),function(o,columnIndex){ //  make nice headers out of VAR_IDs
+                            var domElement = $(o);
+                            var headerName = domElement.text().trim();
+                            if ((headerName.length >  5) &&
+                                (headerName.split('_').length === 4)) {
+                                var partsOfId = headerName.split('_');
+                                domElement.addClass("niceHeadersThatAreLinks");
+                                domElement.addClass("headersWithVarIds");
+                                domElement.attr("defrefa", partsOfId[2]);
+                                domElement.attr("defeffa", partsOfId[3]);
+                                domElement.attr("chrom", partsOfId[0]);
+                                domElement.attr("position", partsOfId[1]);
+                                domElement.attr("varid", partsOfId[0] + ":" + partsOfId[1] + "_" +
+                                    partsOfId[2] + "/" + partsOfId[3]);
+                                domElement.attr("data-toggle", "popover");
+
+                            }
+                        });
+                        $('td div.variantHeaderShifters').hide();
+                        if ( typeof sharedTable.cellColoringScheme === 'undefined'){
+                            sharedTable["cellColoringScheme"] = "sortfield";
                         }
                         $('td:has(div.variantAnnotation.emphasisSwitch_true)').addClass('emphasisSwitch_true');
+                        $('div.variantAnnotation:last').parent().parent().children('td').css('border-bottom','2px solid black');
 
                     }
-                    adjustTableWrapperWidth(dyanamicUiVariables.dynamicTableConfiguration.initializeSharedTableMemory);
-                     break;
+
+                    filterEpigeneticTable(whereTheTableGoes);
+                    adjustTableWrapperWidth("table.variantTableHolder");
+                    break;
                 case 'fegtAnnotationHeaders':
                     if (headerSpecific){
                         var compressedGroups = sharedTable.getAllCompressedGroups();
@@ -5366,55 +5377,56 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
      * @param formVariation
      */
     var reviseDisplayOfVariantTable = function (whereTheTableGoes,formSwitch,originatingObject) {
-        const sharedTable = getSharedTable(whereTheTableGoes);
-
-        if (formSwitch === 1){
-
-            if ( typeof sharedTable['currentFormVariation'] === 'undefined'){
-                sharedTable['currentFormVariation'] = 1;
-            }
-            switch (sharedTable['currentFormVariation']){
-                case 1:
-                    sharedTable['currentFormVariation'] = 2;
-                    $(originatingObject).text("Hide");
-                    filterEpigeneticTable();
-                    break;
-                case 2:
-                    sharedTable['currentFormVariation'] = 1;
-                    $(originatingObject).text("Display");
-                    break;
-                default:
-                    alert(" Unexpected currentFormVariation = "+sharedTable['currentFormVariation']+".");
-                    break;
-            }
-
-            refineTableRecords( whereTheTableGoes,
-                $(whereTheTableGoes).dataTable(),
-                sharedTable['currentForm'],
-                0,
-                false);
-
-            // I don't understand why I have to perform this final revision in the next line
-            $('tr.doNotDisplay').css('display','none');
-        } else if (formSwitch === 2){
-
-            if ( typeof sharedTable['currentFormVariation'] === 'undefined'){
-                sharedTable['currentFormVariation'] = 1;
-            }
-                   filterEpigeneticTable();
-
-            refineTableRecords( whereTheTableGoes,
-                $(whereTheTableGoes).dataTable(),
-                sharedTable['currentForm'],
-                0,
-                false);
-
-            // I don't understand why I have to perform this final revision in the next line
-            $('tr.doNotDisplay').css('display','none');
-        }
-
-
-
+        alert("reviseDisplayOfVariantTable is no longer used");
+        // const sharedTable = getSharedTable(whereTheTableGoes);
+        //
+        // if (formSwitch === 1){
+        //
+        //     if ( typeof sharedTable['currentFormVariation'] === 'undefined'){
+        //         sharedTable['currentFormVariation'] = 1;
+        //     }
+        //     switch (sharedTable['currentFormVariation']){
+        //         case 1:
+        //             sharedTable['currentFormVariation'] = 2;
+        //             $(originatingObject).text("Hide");
+        //             filterEpigeneticTable();
+        //             break;
+        //         case 2:
+        //             sharedTable['currentFormVariation'] = 1;
+        //             $(originatingObject).text("Display");
+        //             break;
+        //         default:
+        //             alert(" Unexpected currentFormVariation = "+sharedTable['currentFormVariation']+".");
+        //             break;
+        //     }
+        //
+        //     refineTableRecords( whereTheTableGoes,
+        //         $(whereTheTableGoes).dataTable(),
+        //         sharedTable['currentForm'],
+        //         0,
+        //         false);
+        //
+        //     // I don't understand why I have to perform this final revision in the next line
+        //     $('tr.doNotDisplay').css('display','none');
+        // } else if (formSwitch === 2){
+        //
+        //     if ( typeof sharedTable['currentFormVariation'] === 'undefined'){
+        //         sharedTable['currentFormVariation'] = 1;
+        //     }
+        //            filterEpigeneticTable();
+        //
+        //     refineTableRecords( whereTheTableGoes,
+        //         $(whereTheTableGoes).dataTable(),
+        //         sharedTable['currentForm'],
+        //         0,
+        //         false);
+        //
+        //     // I don't understand why I have to perform this final revision in the next line
+        //     $('tr.doNotDisplay').css('display','none');
+        // }
+        //
+        //
+        //
     };
 
 

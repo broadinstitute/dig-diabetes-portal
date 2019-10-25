@@ -97,7 +97,8 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal"
-        onclick="mpgSoftware.dynamicUi.reviseDisplayOfVariantTable('{{domTableSpecifier}}',2,'')">Close</button>
+        onclick="mpgSoftware.dynamicUi.filterEpigeneticTable('{{domTableSpecifier}}')">Close</button>
+%{--        onclick="mpgSoftware.dynamicUi.reviseDisplayOfVariantTable('{{domTableSpecifier}}',2,'')">Close</button>--}%
       </div>
     </div>
   </div>
@@ -141,38 +142,11 @@
                                 </div>
                             </div>
                         </div>
-                        %{--<div class="row">--}%
-                            %{--<div class="col-md-9">--}%
-
-                            %{--</div>--}%
-                            %{--<div class="col-md-3 text-right">--}%
-                                %{--<div class="variantTableFilterChoice">--}%
-                                    %{--<label class="form-check-label" for="displayBlankRows">--}%
-                                    %{--Display blank rows&nbsp;&nbsp;--}%
-                                    %{--</label>--}%
-                                    %{--<input class="form-check-input" type="checkbox" value="" id="displayBlankRows">--}%
-                                %{--</div>--}%
-                            %{--</div>--}%
-                        %{--</div>--}%
-
-
-
-
-
                     </div>
                     <div class="col-md-4">
                         <div class="row" >
-                            <div class="col-md-12">
-                              <span class="tool-label" style="z-index: 20">Epigenetic data&nbsp;&nbsp;
-                                    <a style="padding:0; text-decoration:none; color:inherit" class="glyphicon glyphicon-question-sign pop-bottom"
-                                    data-toggle="popover" role="button" data-trigger="focus" tabindex="0" animation="true" data-container="body"
-                                    data-placement="bottom" title="" data-html="true"
-                                    data-content="Click to toggle epigenetic data display." data-original-title="Transpose table"></a>
-                              </span>
-                              <button class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table"
-                                onclick="mpgSoftware.dynamicUi.reviseDisplayOfVariantTable('{{domTableSpecifier}}',1,this)">
-                                Display
-                              </button>
+                            <div class="col-md-6"></div>
+                            <div class="col-md-6">
                               <button  class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table" onclick="mpgSoftware.dynamicUi.transposeThisTable('{{domTableSpecifier}}')">
                                 Transpose
                               </button>

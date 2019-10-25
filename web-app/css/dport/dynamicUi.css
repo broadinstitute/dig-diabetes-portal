@@ -577,30 +577,17 @@ span.phenotypeSpecifier{
     font-family: 'Oswald';
     font-size: 55px;
 }
-/*.variantTableHolder th.niceHeadersThatAreLinks{*/
-    /*background: white;*/
-    /*transform-origin: left;*/
-    /*-webkit-transform: rotate(-60deg);*/
-    /*transform: rotate(-60deg);*/
-    /*max-width: 2px;*/
-    /*font-weight: normal;*/
-    /*text-align: left;*/
-    /*text-decoration: underline;*/
-    /*color: blue;*/
-    /*text-align: left;*/
-    /*cursor: pointer;*/
-/*}*/
-/*.variantTableHolder th.niceHeadersThatAreGeneLinks{*/
-    /*background: white;*/
-    /*transform-origin: left;*/
-    /*-webkit-transform: rotate(-60deg);*/
-    /*transform: rotate(-60deg);*/
-    /*max-width: 2px;*/
-    /*font-weight: normal;*/
-    /*font-size: 20px;*/
-    /*text-align: left;*/
-/*}*/
 .variantTableHolder th.headersWithVarIds {
+    background: white;
+    max-width: 2px;
+    font-weight: normal;
+    text-align: left;
+    text-decoration: underline;
+    color: blue;
+    text-align: left;
+    cursor: pointer;
+}
+.variantTableHolder td.headersWithVarIds {
     background: white;
     max-width: 2px;
     font-weight: normal;
@@ -632,27 +619,31 @@ div.variantHeaderShifters{
     background-position: right top;
 
 }
-div.displayVariantNameHolder{
+th div.displayVariantNameHolder{
     position: relative;
     left:0;
     bottom:0;
     height:120px;
 }
-span.displayVariantName{
-    /*transform-origin: left;*/
-    /*-webkit-transform: rotate(-60deg);*/
-    /*transform: rotate(-60deg);*/
+td div.displayVariantNameHolder{
+    //position: relative;
+    left:0;
+    bottom:0;
+}
+th span.displayVariantName{
     position: absolute;
     bottom: 0;
     left: 0;
-
-    /* Border is the new background */
     background: none;
-
-    /* Rotate from top left corner (not default) */
     transform-origin: 0 0;
     transform: rotate(-60deg);
 }
+td span.displayVariantName{
+   // position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
 table.variantTableHolder, th  {
     border-top: 0;
     table-layout: fixed;
@@ -677,6 +668,11 @@ div.variantHeaderHolder{
 table.variantTableHolder th.headersWithVarIds {
     border-top: 0;
     width: 80px;
+    padding:0;
+    overflow: auto;
+}
+table.variantTableHolder div.headersWithVarIds {
+    border-top: 0;
     padding:0;
     overflow: auto;
 }
@@ -719,4 +715,31 @@ span.boldit{
 }
 #mainVariantDiv div.emphasisSwitch_false span {
     display: none;
+}
+#mainVariantDiv th.VariantSplicing{
+    width: 50px;
+}
+#mainVariantDiv th.VariantCoding {
+    width: 50px;
+}
+#mainVariantDiv th.VariantUtr {
+    width: 50px;
+}
+#mainVariantDiv th.VariantID {
+    width: 100px;
+}
+#mainVariantDiv th.VariantAssociationPValue  {
+    width: 75px;
+}
+#mainVariantDiv th.VariantAssociationPosteriorD {
+    width: 75px;
+}
+#mainVariantDiv th>div.annotationLabel {
+    display:none;
+}
+#mainVariantDiv th>div.associationLabel {
+    display:none;
+}
+#mainVariantDiv th>div.varEpigeneticsLabel {
+    display:none;
 }

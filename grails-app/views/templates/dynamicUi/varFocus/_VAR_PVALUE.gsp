@@ -12,7 +12,7 @@ pValue
 </script>
 
 <script id="variantPValueBody"  type="x-tmpl-mustache">
-    <div  class="initialLinearIndex_{{indexInOneDimensionalArray}}">
+    <div  class="initialLinearIndex_{{indexInOneDimensionalArray}} text-center">
     {{pValueDisplayable}}
     </div>
 </script>

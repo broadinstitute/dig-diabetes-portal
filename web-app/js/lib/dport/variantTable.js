@@ -72,7 +72,7 @@ mpgSoftware.variantTable = (function () {
         if (( typeof preferredPhenotype === 'undefined')||(preferredPhenotype.length===0)){
             preferredPhenotype = 'T2D';
         }
-        $('#mainVariantDivHolder').empty().append(Mustache.render($('#mainVariantTableOrganizer')[0].innerHTML,
+        $(drivingVariables.dynamicTableConfiguration.domSpecificationForAccumulatorStorage).empty().append(Mustache.render($('#mainVariantTableOrganizer')[0].innerHTML,
             {   phenotype:preferredPhenotype,
                 domTableSpecifier: drivingVariables.dynamicTableConfiguration.initializeSharedTableMemory,
                 organizingDiv: drivingVariables.dynamicTableConfiguration.organizingDiv  }
@@ -80,7 +80,7 @@ mpgSoftware.variantTable = (function () {
         fillPhenotypeDropDown('select.phenotypePicker',preferredPhenotype);
         $('#annotationSelectorChoice').multiselect({includeSelectAllOption: true,
             onDropdownHide: function(event) {
-                mpgSoftware.dynamicUi.filterEpigeneticTable();
+                mpgSoftware.dynamicUi.filterEpigeneticTable(drivingVariables.dynamicTableConfiguration.initializeSharedTableMemory);
             },
             onDropdownShow: function(event) {
                 $('#methodFilterCheckbox').prop('checked',true);
@@ -89,13 +89,13 @@ mpgSoftware.variantTable = (function () {
             enableHTML: true
             });
         $('#gregorFilterCheckbox').click(function(){
-            mpgSoftware.dynamicUi.reviseDisplayOfVariantTable('#mainVariantDiv table.variantTableHolder',2,'')
+            mpgSoftware.dynamicUi.filterEpigeneticTable(drivingVariables.dynamicTableConfiguration.initializeSharedTableMemory);
         });
         $('#methodFilterCheckbox').change(function(){
-            mpgSoftware.dynamicUi.filterEpigeneticTable();
+            mpgSoftware.dynamicUi.filterEpigeneticTable(drivingVariables.dynamicTableConfiguration.initializeSharedTableMemory);
         });
         $('#displayBlankRows').click(function(){
-            mpgSoftware.dynamicUi.filterEpigeneticTable();
+            mpgSoftware.dynamicUi.filterEpigeneticTable(drivingVariables.dynamicTableConfiguration.initializeSharedTableMemory);
         });
         mpgSoftware.dynamicUi.modifyScreenFields({phenotype:preferredPhenotype},getVariablesToRemember());
     }
