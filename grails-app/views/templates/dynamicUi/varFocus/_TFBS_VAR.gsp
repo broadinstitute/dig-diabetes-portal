@@ -16,7 +16,7 @@ tfbs&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" 
 </script>
 
 <script id="tfbsVariantTableIndividualAnnotationLabel"  type="x-tmpl-mustache">
-<div class="varAllEpigenetics varTfbsEpigenetics staticMethodLabels annotationName_SPP methodName_SPP initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation">
+<div class="varAllEpigenetics varTfbsEpigenetics staticMethodLabels annotationName_SPP methodName_SPP initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation {{isBlank}}">
 <div style="font-weight: bold">TFBS</div>
 {{annotationName}}</div>
 </script>

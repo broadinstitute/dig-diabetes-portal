@@ -15,7 +15,7 @@ records={{numberRecords}}
 </script>
 
 <script id="chromStateVariantTableIndividualAnnotationLabel"  type="x-tmpl-mustache">
-<div class="varAllEpigenetics varChromHmmEpigenetics variantEpigenetics initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation methodName_ChromHMM staticMethodLabels annotationName_{{annotationName}}">
+<div class="varAllEpigenetics varChromHmmEpigenetics variantEpigenetics initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation methodName_ChromHMM staticMethodLabels annotationName_{{annotationName}} {{isBlank}}">
 <div style="font-weight: bold">ChromHMM</div>
 {{annotationName}}
 </div>
