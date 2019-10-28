@@ -1081,7 +1081,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
             $.each(listOfInterestingPhenotypes, function (phenotypeIndex, phenotype) {
                 //console.log(phenotype);
-                phenotypePullDown += '<option id="'+phenotype.phenotype+'" ds="'+phenotype.ds+'" dsr="'+phenotype.dsr+'" class="strength-'+phenotype.signalStrength+'">'+phenotype.pname+'</option>';
+                phenotypePullDown += '<option id="'+phenotype.phenotype+'" ds="'+phenotype.ds+'" dsr="'+phenotype.dsr+'" class="strength-'+phenotype.signalStrength+' phenotypeStrength2">'+phenotype.pname+'</option>';
             });
 
             $("#phenotypeInput").append(phenotypePullDown).selectpicker('refresh');
@@ -1089,6 +1089,13 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         }
 
         $('.phenotypeStrength').on("click",updateSignalSummaryBasedOnPhenotype);
+        if (overrideClickIndex !== -1){
+            $($('.phenotypeStrength')[overrideClickIndex]).addClass('chosenPhenotype');
+        } else {
+            $('.phenotypeStrength').first().addClass('chosenPhenotype');
+        }
+
+        $('.phenotypeStrength2').on("click",updateSignalSummaryBasedOnPhenotype);
         if (overrideClickIndex !== -1){
             $($('.phenotypeStrength')[overrideClickIndex]).addClass('chosenPhenotype');
         } else {

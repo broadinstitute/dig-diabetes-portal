@@ -1132,9 +1132,10 @@
 
                     <div class="row" style="border: none">
                         <div class="col-sm-12">
-                            <div class="variantCategoryHolder"><g:message code="geneSignalSummary.incredibleSets.tabDescription"></g:message>
-                                <p>&nbsp;</p>
-                                <div class="clearfix credibleSetHeader" style="margin: 5px 0 0 0">
+                            <div class="variantCategoryHolder">
+<p style="font-size: 16px;"><g:message code="geneSignalSummary.incredibleSets.tabDescription"></g:message></p>
+                                <!--<p>&nbsp;</p>-->
+                                <div class="clearfix credibleSetHeader" style="margin: 5px 0 0 0; display: none;">
                                 <div class="col-md-12">
                                     <div class="col-md-2 credSetWindowSummary" align="right"> Set range:&nbsp;<g:helpText title="range.window.help.header" placement="top" body="range.window.credibleSets.help.text"/> </div> 
                                     <div class="col-md-3 credSetWindowSummary">
@@ -1151,7 +1152,7 @@
                                           </button>
                                     </div>
                                 </div>
-                                <div class="col-md-12 clearfix" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #ddd;">
+                                <div class="col-md-12 clearfix" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #ddd; display: none;">
                                     <div class="col-md-2 credSetWindowSummary" style="line-height: 16px;">
                                          Genes in window
                                     </div>
@@ -1161,8 +1162,8 @@
                                 </div>
 
                                 </div>
-                                <p>&nbsp;</p>
-                                <div><p><g:message code="geneSignalSummary.incredibleSetsT2D.help"></g:message></p></div>
+                                <!--<p>&nbsp;</p>-->
+                                <p style="font-size: 16px;"><g:message code="geneSignalSummary.incredibleSetsT2D.help"></g:message></p>
                                 <p>&nbsp;</p>
 
                                 <div class="credibleSetTissueSelectorGoesHere" style="margin: 10px 0 0 0">
