@@ -26,7 +26,14 @@
 
             <li class="data-btn home-drop-down-menu" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="javascript:;"><g:message code="portal.header.nav.about_data"/></a>
                 <ul>
-                    <li class="" style=""><a href="http://www.kp4cd.org/datasets/${g.portalTypeString()}">Datasets</a></li>
+                    <g:if test="${g.portalTypeString()?.equals('v2f')}">
+                        <li class="" style=""><a href="http://www.kp4cd.org/epigenetic_datasets/${g.portalTypeString()}">Epigenetic datasets</a></li>
+                        <li class="" style=""><a href="http://www.kp4cd.org/datasets/${g.portalTypeString()}">Association datasets</a></li>
+                    </g:if>
+                    <g:else>
+                        <li class="" style=""><a href="http://www.kp4cd.org/datasets/${g.portalTypeString()}">Datasets</a></li>
+                    </g:else>
+
                     <li class="" style=""><a href="http://www.kp4cd.org/dataset_downloads/${g.portalTypeString()}">Downloads</a></li>
                     <g:if test="${g.portalTypeString()?.equals('t2d')}">
                         <li class="" style=""><a href="http://www.kp4cd.org/apis/${g.portalTypeString()}">APIs</a></li>
