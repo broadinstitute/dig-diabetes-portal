@@ -1471,17 +1471,17 @@ div.traits-filter-wrapper > .radio-inline {
 /* banner setting for V2F portal */
 
 .front-top-banner-v2f, .front-top-banner-ibd {
-	background-image:url(../../images/v2f/front_V2FKP_banner_bg2.png), linear-gradient(#b998ef, #7640b1);
+	background-image:url(../../images/v2f/front_V2FKP_banner_bg2.png), linear-gradient(#f7835c, #bd516f);
 	margin-top: 0;
 }
 
 .front-top-banner-v2f .front-banner-btn, .front-top-banner-ibd .front-banner-btn {
-	color: #7640b1;
+	color: #f7835c;
 }
 
 #header-bottom-v2f, #header-bottom-ibd {
 	position: relative;
-	background-color: #b998ef
+	background-color: #f7835c;
 }
 
 /* banner setting for T2D portal */
@@ -1620,7 +1620,7 @@ div.traits-filter-wrapper > .radio-inline {
 }
 
 .front-top-banner-ibd .front-banner-ui-tabs > li.active > a, .front-top-banner-v2f .front-banner-ui-tabs > li.active > a {
-	color: #7640b1;
+	color: #f7835c;
 }
 
 .front-top-banner-lung .front-banner-ui-tabs > li.active > a {
