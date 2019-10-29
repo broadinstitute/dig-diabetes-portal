@@ -307,7 +307,6 @@ var mpgSoftware = mpgSoftware || {};
             // }
             var pheWASGraphics = Mustache.render($('#phenotypePerVariantTemplate')[0].innerHTML, drivingVariables);
             $('#variantAssociationSummarySection').append(pheWASGraphics);
-            console.log(pheWASGraphics);
             // $('a[href="#phewasTabHolder"]').click();
         };
 

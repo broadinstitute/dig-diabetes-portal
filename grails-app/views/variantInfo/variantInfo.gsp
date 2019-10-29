@@ -111,6 +111,7 @@
                             {retrieveFunctionalDataAjaxUrl:'${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}'});
                 }
 
+            $("#forestTabHolder").removeClass("active"); // this line is added to hide forest plot on opening the page.
 
         //}).fail(function (jqXHR, textStatus, errorThrown) {
             }).fail(function () {
