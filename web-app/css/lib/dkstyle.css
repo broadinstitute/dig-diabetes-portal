@@ -1471,7 +1471,7 @@ div.traits-filter-wrapper > .radio-inline {
 /* banner setting for V2F portal */
 
 .front-top-banner-v2f, .front-top-banner-ibd {
-	background-image:url(../../images/v2f/front_V2FKP_banner_bg.png), linear-gradient(#b998ef, #7640b1);
+	background-image:url(../../images/v2f/front_V2FKP_banner_bg2.png), linear-gradient(#b998ef, #7640b1);
 	margin-top: 0;
 }
 
@@ -1755,8 +1755,8 @@ div.datatable-control-box {
 
 #variant-info-summary-wrapper { background-color: #fff; overflow: hidden; margin-bottom: 30px; }
 #variant-info-summary-header, #variant-info-summary-content {  }
-#variant-info-summary-header > div { float: left; border-bottom: solid 1px #ddd; border-left: solid 1px #ddd; padding: 2px 5px; }
-#variant-info-summary-content > div { float: left; border-left: solid 1px #ddd; padding: 2px 5px; }
+#variant-info-summary-header > div { float: left; border-bottom: solid 1px #ddd; border-left: solid 1px #ddd; padding: 2px 5px; position: relative; }
+#variant-info-summary-content > div { float: left; border-left: solid 1px #ddd; padding: 2px 5px; position: relative; }
 #variant-info-summary-header > div:first-child, #variant-info-summary-content > div:first-child { clear: both; border-left: none; }
 #variant-info-summary-header > div:last-child, #variant-info-summary-content > div:last-child {  }
 #variant-info-summary-header { font-size: 0.9em; }
@@ -1811,7 +1811,7 @@ a.edit-btn { position: absolute; top:0; right: 0; background-color: #ddd; color:
 	text-align: center;
 }
 
-#regionSearchHolder {
+#regionSearchHolder, #variantSearchHolder {
 	height: 100%;
 	width: 100%;
 	position: absolute;
@@ -1822,9 +1822,9 @@ a.edit-btn { position: absolute; top:0; right: 0; background-color: #ddd; color:
 	background-color: #fff;
 }
 
-#regionSearchHolder .region-search { height: 100%; }
+#regionSearchHolder .region-search, #variantSearchHolder .variant-search { height: 100%; }
 
-#regionSearchHolder .input-wrapper {
+#regionSearchHolder .input-wrapper, #variantSearchHolder .input-wrapper {
 	overflow: hidden;
 	min-height: 100%;
 	position: relative;
@@ -1832,7 +1832,7 @@ a.edit-btn { position: absolute; top:0; right: 0; background-color: #ddd; color:
 	margin: 0;
 }
 
-#regionSearchHolder #generalized-label {
+#regionSearchHolder #generalized-label, #variantSearchHolder #generalized-label {
 	display: block;
 	position: absolute;
 	top: 2px;
@@ -1840,7 +1840,7 @@ a.edit-btn { position: absolute; top:0; right: 0; background-color: #ddd; color:
 
 }
 
-#regionSearchHolder .input-default {
+#regionSearchHolder .input-default, #variantSearchHolder .input-default {
 	height: 100%;
 	width: 100%;
 	border: 0;
@@ -1852,7 +1852,7 @@ a.edit-btn { position: absolute; top:0; right: 0; background-color: #ddd; color:
 	font-size: 20px;
 }
 
-#regionSearchHolder #regionSearchGo {
+#regionSearchHolder #regionSearchGo, #variantSearchHolder #variantSearchGo {
 	position: absolute;
 	padding:0;
 	top: 13px;
@@ -1863,6 +1863,10 @@ a.edit-btn { position: absolute; top:0; right: 0; background-color: #ddd; color:
 	background-color: #b998ef;
 	border: solid 1px #b998ef;
 	text-align: center;
+}
+
+#variantSearchHolder #variantSearchGo {
+	top: 18px;
 }
 
 
@@ -1878,7 +1882,29 @@ a.edit-btn { position: absolute; top:0; right: 0; background-color: #ddd; color:
 	padding: 10px 15px;
 }
 
+#variant-info-summary-content > #variantTitle { height: 79px; }
+#variant-info-summary-content #variantInput {
+	border: solid 1px #ddd;
+	height: 80%;
+	width: 96%;
+	margin-top: 3%;
+	margin-left: 3%;
+}
+
 #phenotypeSearchHolder li:not(.selected) a.strength-3 { background-color: #ccffcc; }
 #phenotypeSearchHolder li:not(.selected) a.strength-2 { background-color: #ffffb3; }
+
+.well-variant-page .accordion-toggle.collapsed:before, .well-variant-page .accordion-toggle:before {
+	/*content: none !important;*/
+	margin-top: 5px;
+    display: inline-block;
+	margin-left: -5px;
+	margin-right: 10px;
+}
+
+.well-variant-page h2 { margin: 0; display: inline-block; }
+.well-variant-page h2 span { display: inline-block;  }
+.well-variant-page .accordion-inner { padding-top: 20px; }
+.well-variant-page .accordion-inner p { font-size: 16px; }
 
 /* changes for V2FKP end */

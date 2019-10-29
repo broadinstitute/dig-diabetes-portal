@@ -111,6 +111,7 @@
                             {retrieveFunctionalDataAjaxUrl:'${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}'});
                 }
 
+            $("#forestTabHolder").removeClass("active"); // this line is added to hide forest plot on opening the page.
 
         //}).fail(function (jqXHR, textStatus, errorThrown) {
             }).fail(function () {
@@ -135,11 +136,22 @@
 
                 <div id="variant-info-summary-wrapper">
                     <div id="variant-info-summary-header">
-                        <div class="variant-name" style="width:25%;">Variant</div>
+                        <div class="variant-name" style="width:25%;">Variant<a class="edit-btn" onclick="showHideElement('#variantSearchHolder')">Edit</a></div>
                         <div class="variant-summary" style="width:75%;">Summary</div>
                     </div>
                     <div id="variant-info-summary-content">
-                        <div class="variant-name" id="variantTitle" style="width:25%; font-size: 42px;"></div>
+                        <div class="variant-name" id="variantTitle" style="width:25%; font-size: 42px;">
+                            <div class="variant-search-holder hide-element" id="variantSearchHolder" style="display: none;">
+                                <div class="variant-search">
+                                    <div class="col-md-10 input-wrapper">
+                                        <input id="variantInput" value="" type="text" class="form-control input-default">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button id="variantSearchGo" class="btn btn-primary" type="button" onclick="mpgSoftware.variantInfo.launchVariantPage($('#variantInput').val());">GO</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="variant-summary" style="width:75%; font-size: 18px; " id="variantSummaryText"><g:message code="variant.summaryText.summary" /></div>
                     </div>
                 </div>
@@ -168,11 +180,7 @@
 
                 <div class="accordion" id="accordionVariant">
 
-
-
-
-
-                    <div class="accordion-group">
+                    <div class="accordion-group well well-variant-page">
                         <div class="accordion-heading">
                             <a class="accordion-toggle" data-toggle="collapse"
                                data-parent="#accordionVariant"
@@ -183,22 +191,22 @@
                         </div>
 
 
-                        <div id="collapseVariantAssociationStatistics" class="accordion-body collapse">
+                        <div id="collapseVariantAssociationStatistics" class="accordion-body collapse in">
                             <div class="accordion-inner">
                                 <g:render template="variantAssociationStatistics"/>
                             </div>
                         </div>
                     </div>
 
-                <div class="separator"></div>
+
 
                 <g:render template="/widgets/associatedStatisticsTraitsPerVariant"
                           model="[variantIdentifier: variantToSearch, locale: locale]"/>
 
-                <div class="separator"></div>
 
 
-                    <g:render template="functionalAnnotation"/>
+
+                <g:render template="functionalAnnotation"/>
 
 
                 <g:if test="${g.portalTypeString()?.equals('stroke')||
@@ -215,7 +223,7 @@
                                                                            'allowPhenotypeChoice' : 1,
                                                                            'allowStratificationChoice': 1,
                                                                            'grsVariantSet':''   ]"/>
-                    <div class="separator"></div>
+
                     </g:if>
 
 
@@ -224,11 +232,11 @@
                     <g:if test="${true}">
                         <g:render template="/widgets/locusZoomPlot"/>
 
-                        <div class="separator"></div>
+
 
                     </g:if>
 
-                    <div class="accordion-group">
+                    <div class="accordion-group well well-variant-page">
                         <div class="accordion-heading">
                             <a class="accordion-toggle  collapsed" data-toggle="collapse"
                                data-parent="#accordionVariant"
@@ -242,18 +250,15 @@
 
                     </div>
 
-                    <div class="separator"></div>
 
 
-                    <div class="accordion-group" style="padding: 7px; border: solid 1px #ddd; margin-top: 15px; background-color: #eee; border-radius: 3px;">
 
-                        <a data-toggle="collapse" data-parent="#accordion2" href="#findOutMoreCompact" style="outline: none; font-size: 16px;"><span class="glyphicon glyphicon-link" aria-hidden="true"></span> External resources</a>
 
-                        <div id="findOutMoreCompact" class="" style="margin-top: 10px;">
-                            <div class="accordion-inner">
-                                <g:render template="findOutMoreCompact"/>
-                            </div>
-                        </div>
+                    <div style="padding: 7px 0 3px 15px; border-radius: 0px; margin-top: 15px; background-color:#fff; ">
+
+                        <span class="glyphicon glyphicon-link" aria-hidden="true"></span> External resources:&nbsp;
+                    <g:render template="findOutMoreCompact"/>
+
                     </div>
 
                 </div>
