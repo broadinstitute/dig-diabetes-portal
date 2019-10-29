@@ -1881,4 +1881,17 @@ a.edit-btn { position: absolute; top:0; right: 0; background-color: #ddd; color:
 #phenotypeSearchHolder li:not(.selected) a.strength-3 { background-color: #ccffcc; }
 #phenotypeSearchHolder li:not(.selected) a.strength-2 { background-color: #ffffb3; }
 
+.well-variant-page .accordion-heading .accordion-toggle.collapsed:before, .well-variant-page .accordion-heading .accordion-toggle:before {
+	/*content: none !important;*/
+	margin-top: 5px;
+	display: block;
+	margin-left: -5px;
+	margin-right: 10px;
+}
+
+.well-variant-page h2 { margin: 0; }
+.well-variant-page h2 span { display: inline-block;  }
+.well-variant-page .accordion-inner { padding-top: 20px; }
+.well-variant-page .accordion-inner p { font-size: 16px; }
+
 /* changes for V2FKP end */

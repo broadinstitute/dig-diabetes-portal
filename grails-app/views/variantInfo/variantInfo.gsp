@@ -168,11 +168,7 @@
 
                 <div class="accordion" id="accordionVariant">
 
-
-
-
-
-                    <div class="accordion-group">
+                    <div class="accordion-group well well-variant-page">
                         <div class="accordion-heading">
                             <a class="accordion-toggle" data-toggle="collapse"
                                data-parent="#accordionVariant"
@@ -183,19 +179,19 @@
                         </div>
 
 
-                        <div id="collapseVariantAssociationStatistics" class="accordion-body collapse">
+                        <div id="collapseVariantAssociationStatistics" class="accordion-body collapse in">
                             <div class="accordion-inner">
                                 <g:render template="variantAssociationStatistics"/>
                             </div>
                         </div>
                     </div>
 
-                <div class="separator"></div>
+
 
                 <g:render template="/widgets/associatedStatisticsTraitsPerVariant"
                           model="[variantIdentifier: variantToSearch, locale: locale]"/>
 
-                <div class="separator"></div>
+
 
 
                     <g:render template="functionalAnnotation"/>
@@ -215,7 +211,7 @@
                                                                            'allowPhenotypeChoice' : 1,
                                                                            'allowStratificationChoice': 1,
                                                                            'grsVariantSet':''   ]"/>
-                    <div class="separator"></div>
+
                     </g:if>
 
 
@@ -224,11 +220,11 @@
                     <g:if test="${true}">
                         <g:render template="/widgets/locusZoomPlot"/>
 
-                        <div class="separator"></div>
+
 
                     </g:if>
 
-                    <div class="accordion-group">
+                    <div class="accordion-group well well-variant-page">
                         <div class="accordion-heading">
                             <a class="accordion-toggle  collapsed" data-toggle="collapse"
                                data-parent="#accordionVariant"
@@ -242,18 +238,15 @@
 
                     </div>
 
-                    <div class="separator"></div>
 
 
-                    <div class="accordion-group" style="padding: 7px; border: solid 1px #ddd; margin-top: 15px; background-color: #eee; border-radius: 3px;">
 
-                        <a data-toggle="collapse" data-parent="#accordion2" href="#findOutMoreCompact" style="outline: none; font-size: 16px;"><span class="glyphicon glyphicon-link" aria-hidden="true"></span> External resources</a>
 
-                        <div id="findOutMoreCompact" class="" style="margin-top: 10px;">
-                            <div class="accordion-inner">
-                                <g:render template="findOutMoreCompact"/>
-                            </div>
-                        </div>
+                    <div style="padding: 7px 0 3px 15px; border-radius: 0px; margin-top: 15px; background-color:#fff; ">
+
+                        <span class="glyphicon glyphicon-link" aria-hidden="true"></span> External resources:&nbsp;
+                    <g:render template="findOutMoreCompact"/>
+
                     </div>
 
                 </div>
