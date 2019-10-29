@@ -70,7 +70,7 @@ button.expandoButton:visited {
 }
 </style>
 
-<div class="accordion-group">
+<div class="accordion-group well well-variant-page">
 <div class="accordion-heading">
     <a class="accordion-toggle  collapsed" data-toggle="collapse" href="#collapseVariantTraitAssociation">
         <h2><strong><g:message code="widgets.variant.trait.associations.title"
@@ -129,6 +129,7 @@ button.expandoButton:visited {
 
 
     </div>
+</div>
 </div>
 
 <script>

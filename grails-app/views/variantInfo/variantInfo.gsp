@@ -136,11 +136,22 @@
 
                 <div id="variant-info-summary-wrapper">
                     <div id="variant-info-summary-header">
-                        <div class="variant-name" style="width:25%;">Variant</div>
+                        <div class="variant-name" style="width:25%;">Variant<a class="edit-btn" onclick="showHideElement('#variantSearchHolder')">Edit</a></div>
                         <div class="variant-summary" style="width:75%;">Summary</div>
                     </div>
                     <div id="variant-info-summary-content">
-                        <div class="variant-name" id="variantTitle" style="width:25%; font-size: 42px;"></div>
+                        <div class="variant-name" id="variantTitle" style="width:25%; font-size: 42px;">
+                            <div class="variant-search-holder hide-element" id="variantSearchHolder" style="display: none;">
+                                <div class="variant-search">
+                                    <div class="col-md-10 input-wrapper">
+                                        <input id="variantInput" value="" type="text" class="form-control input-default">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button id="variantSearchGo" class="btn btn-primary" type="button" onclick="mpgSoftware.variantInfo.launchVariantPage($('#variantInput').val());">GO</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="variant-summary" style="width:75%; font-size: 18px; " id="variantSummaryText"><g:message code="variant.summaryText.summary" /></div>
                     </div>
                 </div>
@@ -195,7 +206,7 @@
 
 
 
-                    <g:render template="functionalAnnotation"/>
+                <g:render template="functionalAnnotation"/>
 
 
                 <g:if test="${g.portalTypeString()?.equals('stroke')||

@@ -1503,6 +1503,10 @@ var mpgSoftware = mpgSoftware || {};
 
         };
 
+        var launchVariantPage = function(VARIANTID) {
+            location.replace("../variantInfo/"+VARIANTID);
+        }
+
 
         return {
             // private routines MADE PUBLIC FOR UNIT TESTING ONLY (find a way to do this in test mode only)
@@ -1525,7 +1529,8 @@ var mpgSoftware = mpgSoftware || {};
             displayFunctionalData:displayFunctionalData,
             displayChosenElements:displayChosenElements,
             buildAnnotationTable:buildAnnotationTable,
-            storeVarInfoData:storeVarInfoData
+            storeVarInfoData:storeVarInfoData,
+            launchVariantPage:launchVariantPage
         }
 
 

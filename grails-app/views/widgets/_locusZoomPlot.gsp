@@ -1,5 +1,5 @@
 
-<div class="accordion-group">
+<div class="accordion-group well well-variant-page">
     <div class="accordion-heading">
         <a class="accordion-toggle  collapsed" data-toggle="collapse" data-parent="#accordion3"
            href="#collapseLZ">
@@ -9,7 +9,7 @@
 
     <div id="collapseLZ" class="accordion-body collapse">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 accordion-inner">
                 <g:if test="${g.portalTypeString()?.equals('t2d')}">
                     <p><g:message code="variant.locusZoom.text1"></g:message></p>
                     <p><g:message code="variant.locusZoom.text2"></g:message>

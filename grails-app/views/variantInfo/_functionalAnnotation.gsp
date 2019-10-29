@@ -7,7 +7,7 @@ div.graphicsDisplay {
 }
 </style>
 <g:if test="${!g.portalTypeString()?.equals('mi')}">
-    <div class="accordion-group">
+    <div class="accordion-group well well-variant-page">
         <div class="accordion-heading">
             <a class="accordion-toggle collapsed" data-toggle="collapse"
                data-parent="#accordionVariant"
@@ -95,5 +95,5 @@ div.graphicsDisplay {
 
         </div>
     </div>
-    <div class="separator"></div>
+
 </g:if>
