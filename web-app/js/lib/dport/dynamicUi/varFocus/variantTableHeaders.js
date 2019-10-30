@@ -228,7 +228,29 @@ mpgSoftware.dynamicUi.variantTableHeaders = (function () {
 
 
     let sortUtility = new mpgSoftware.dynamicUi.SortUtility();
-    const sortRoutine = Object.getPrototypeOf(sortUtility).textComparisonWithEmptiesAtBottom;
+    const sortRoutine = function(a, b, direction, currentSortObject){
+        const defaultSearchField = currentSortObject.desiredSearchTerm;
+        var x = parseInt($(a).attr(defaultSearchField));
+        var y = parseInt($(b).attr(defaultSearchField));
+        if ( (x===0) && (y===0) ) {
+            return 0;
+        }
+        else if (x===0) {
+            if (direction==='asc') {
+                return 1;
+            } else {
+                return -1;
+            }
+        }else if (y===0)
+        {
+            if (direction==='asc') {
+                return -1;
+            } else {
+                return 1;
+            }
+        }
+        return (x < y) ? 1 : (x > y) ? -1 : 0;
+    }
 
 // public routines are declared below
     return {

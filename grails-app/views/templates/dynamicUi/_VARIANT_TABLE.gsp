@@ -40,3 +40,4 @@
 <g:render template="/templates/dynamicUi/varFocus/VAR_POSTERIOR" />
 <g:render template="/templates/dynamicUi/varFocus/CHROMESTATE_VAR" />
 <g:render template="/templates/dynamicUi/varFocus/GREGOR_VAR" />
+<g:render template="/templates/dynamicUi/varFocus/TFMOTIF_VAR" />

@@ -5,7 +5,7 @@ Association
 </script>
 
 <script id="variantPValueSubcategoryLabel"  type="x-tmpl-mustache">
-<div class="staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">
+<div class="staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}" sortField=6>
 pValue
 <g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/>
 </div>

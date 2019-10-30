@@ -518,6 +518,11 @@ mpgSoftware.dynamicUi = (function () {
                 defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.dnaseVariantTable.displayTissueInformationFromDnase;
                 defaultFollowUp.placeToDisplayData = '#mainVariantDiv table.variantTableHolder';
                 break;
+            case "getTfMotifGivenVariantList":
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.tfMotifVariantTable.displayTissueInformationFromTfMotif;
+                defaultFollowUp.placeToDisplayData = '#mainVariantDiv table.variantTableHolder';
+                break;
+
             case "getH3k27acGivenVariantList":
                 defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.h3k27acVariantTable.displayTissueInformationFromH3k27ac;
                 defaultFollowUp.placeToDisplayData = '#mainVariantDiv table.variantTableHolder';
@@ -1261,6 +1266,34 @@ mpgSoftware.dynamicUi = (function () {
                         retrieveRemotedContextInformation(buildRemoteContextArray({
                             name: actionId,
                             retrieveDataUrl: additionalParameters.retrieveVariantAnnotationsUrl,
+                            dataForCall: dataForCall,
+                            processEachRecord: dataAnnotationType.processEachRecord,
+                            displayRefinedContextFunction: dataAnnotationType.displayEverythingFromThisCall,
+                            placeToDisplayData: displayLocation,
+                            actionId: nextActionId,
+                            nameOfAccumulatorField:dataAnnotationType.nameOfAccumulatorField,
+                            code:dataAnnotationType.code,
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                        }));
+                    }
+                };
+                break;
+
+            case "getTfMotifGivenVariantList":
+                functionToLaunchDataRetrieval = function () {
+                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
+                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: actionId});
+                        actionToUndertake();
+                    } else {
+                        var variantsAsJson = "[]";
+                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
+                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
+                            var variantNameArray = _.map(dataVector, function(variantRec){return variantRec.var_id;});
+                            variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";                        }
+                        var dataForCall = {variants: variantsAsJson,method:'TFMOTIF'};
+                        retrieveRemotedContextInformation(buildRemoteContextArray({
+                            name: actionId,
+                            retrieveDataUrl: additionalParameters.retrieveTfMotifUrl,
                             dataForCall: dataForCall,
                             processEachRecord: dataAnnotationType.processEachRecord,
                             displayRefinedContextFunction: dataAnnotationType.displayEverythingFromThisCall,
@@ -2679,7 +2712,7 @@ mpgSoftware.dynamicUi = (function () {
                         break;
                     case "SPP":
                         if (annotationOptions.length>1){
-                            $('#annotationSelectorChoice').append("<optgroup label='TF Binding Sites'></optgroup>");
+                            $('#annotationSelectorChoice').append("<optgroup label='TF Binding Sites'>");
                             _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
                                 $('#annotationSelectorChoice').append(new Option('&nbsp;&nbsp;&nbsp;&nbsp;'+rec.name,rec.value));
                             });
@@ -2693,12 +2726,30 @@ mpgSoftware.dynamicUi = (function () {
                         }
                         break;
                     case "ChromHMM":
-                        $('#annotationSelectorChoice').append("<optgroup label='ChromHMM'></optgroup>");
+                        $('#annotationSelectorChoice').append("<optgroup label='ChromHMM'>");
                         _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
                             $('#annotationSelectorChoice').append(new Option('&nbsp;&nbsp;&nbsp;&nbsp;'+rec.name,rec.value));
                         });
                         $('#annotationSelectorChoice').append("</optgroup>");
                         break;
+                    case "TFMOTIF":
+                        // if (annotationOptions.length === 0){
+                        //     $('#annotationSelectorChoice').append(new Option("<span class='boldit'>TF motif</span>","TFMOTIF_TFMOTIF"));
+                        // } else {
+                        //     _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
+                        //         $('#annotationSelectorChoice').append(new Option("<span class='boldit'>TF motif</span>",rec.value));
+                        //     });
+                        // }
+
+                        // for now we will always display TF motifs, so I don't need to add them to the drop-down box.
+
+                        // $('#annotationSelectorChoice').append("<optgroup label='TF motif'>");
+                        // _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
+                        //     $('#annotationSelectorChoice').append(new Option('&nbsp;&nbsp;&nbsp;&nbsp;'+rec.name,rec.value));
+                        // });
+                        // $('#annotationSelectorChoice').append("</optgroup>");
+                        break;
+
                     default:
                         _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
                             $('#annotationSelectorChoice').append(new Option(rec.name,rec.value));
@@ -3983,37 +4034,14 @@ mpgSoftware.dynamicUi = (function () {
                     var y = parseFloat($(b).attr(defaultSearchField));
                     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
                     break;
+                case 'sortMethodsInVariantTable':
+                    return eval(currentSortObject.dataAnnotationType.packagingString+'.sortRoutine(a, b, direction, currentSortObject)');
+                    break;
                 case 'ldsrValuesInTissueTable':
                 case 'gregorValuesInTissueTable':
                 case 'depictTissueValuesInTissueTable':
                 case 'tissueHeader':
                     return eval(currentSortObject.dataAnnotationType.packagingString+'.sortRoutine(a, b, direction, currentSortObject)');
-                    // var textA = $(a).attr(defaultSearchField);
-                    // var textAEmpty = ((textA.length===0)||(textA==="0"));
-                    // var textB = $(b).attr(defaultSearchField);
-                    // var textBEmpty = ((textB.length===0)||(textB==="0"));
-                    // if ( textAEmpty && textBEmpty ) {
-                    //     return 0;
-                    // }
-                    // else if ( textAEmpty ) {
-                    //     if (direction==='desc') {
-                    //         return -1;
-                    //     } else {
-                    //         return 1;
-                    //     }
-                    // }else if ( textBEmpty )
-                    // {
-                    //     if (direction==='desc') {
-                    //         return 1;
-                    //     } else {
-                    //         return -1;
-                    //     }
-                    // }
-                    // var x = parseFloat(textB);
-                    // var y = parseFloat(textA);
-                    // return ((x > y) ? -1 : ((x < y) ? 1 : 0));
-                    // break;
-                //case 'eQTL':
                 case 'DEPICT':
                 case 'MetaXcan':
                 //case 'ABC':
@@ -4383,6 +4411,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                             sortability.push(true);
                             break;
                         case 'variantTableVariantHeaders':
+                            setAccumulatorObject("currentSortRequest",dyanamicUiVariables.dynamicTableConfiguration.defaultSort);
                             var isdc = new IntermediateStructureDataCell('farLeftCorner',
                                 {initialLinearIndex:"initialLinearIndex_0"},
                                 'VariantId','EMP');
@@ -4632,23 +4661,6 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             ( typeof uniqueAnnotations !== 'undefined') && (uniqueAnnotations.length>0) &&
             ( typeof uniqueTissues !== 'undefined') &&  (uniqueTissues.length>0)) {
 
-
-            // $('table.expandableDrillDownTable').parent().parent().removeClass('undisplayed');
-            // _.forEach($('table.expandableDrillDownTable'), function (oneTable) {
-            //     const domTable = $(oneTable);
-            //     let somethingToDisplay = false;
-            //     _.forEach(domTable.find('tr.yesDisplay'), function (o) {
-            //         somethingToDisplay = true;
-            //         return false;
-            //     });
-            //     if (!somethingToDisplay) {
-            //         $(domTable).parent().parent().addClass('undisplayed');
-            //         $(domTable).parent().parent().hide();
-            //     } else {
-            //         $(domTable).parent().parent().show();
-            //     }
-            //
-            // })
         }
 
         const gregorAcc = getAccumulatorObject("gregorVariantInfo");
@@ -4898,8 +4910,9 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         }
                         $('td:has(div.variantAnnotation.emphasisSwitch_true)').addClass('emphasisSwitch_true');
                         $('div.variantAnnotation:last').parent().parent().children('td').css('border-bottom','2px solid black');
+                        $('div.variantAnnotation:not(:last)').parent().parent().children('td').css('border-bottom','0.5px solid #ccc');
 
-                     }
+                    }
 
                      // collapse first cell across all 'Annotation' rows
                     _.forEach($('div.annotationLabel'), function(domElement,index){

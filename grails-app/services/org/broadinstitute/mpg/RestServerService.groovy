@@ -77,6 +77,7 @@ class RestServerService {
     private String GET_ANNOTATIONS_BY_RANGE_URL= "graph/region/bylocus/object"
     private String GET_VARIANTS_FROM_RANGE_URL= "graph/prioritization/variant/object"
     private String GET_CHROMATIN_STATE_FROM_VARIANTS_URL= "graph/region/variant/object"
+    private String GET_TF_MOTIF_FROM_VARIANTS_URL= "graph/transcriptionfactor/variant/object"
     private String GET_TISSUES_FROM_LDSR_URL = "testcalls/ldscore/tissue/object"
     private String GET_HAIL_DATA_URL = "getHailData"
     private String GET_SAMPLE_DATA_URL = "getSampleData"
@@ -2653,6 +2654,27 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         }
         return jsonObject
     }
+
+
+
+    public JSONObject gatherTfMotifData( List <String> variantList ) {
+        List<String> specifyRequestList = []
+
+        if ((variantList) && (variantList.size() > 0)) {
+            specifyRequestList << "var_id=${variantList.join(",").replace("\"","")}"
+        }
+
+        String rawReturnFromApi =  getRestCall("${GET_TF_MOTIF_FROM_VARIANTS_URL}?${specifyRequestList.join("&")}".toString())
+        JsonSlurper slurper = new JsonSlurper()
+        JSONObject jsonObject
+        try{
+            jsonObject = slurper.parseText(rawReturnFromApi)
+        } catch(Exception e){
+            log.error("ERROR: gatherGregorData. problem parsing the data we received from the KB")
+        }
+        return jsonObject
+    }
+
 
 
     public JSONObject gatherDepictGeneSetData( String gene, String phenotype, float pValueThreshold ) {

@@ -5,7 +5,7 @@ Association
 </script>
 
 <script id="variantPosteriorPValueSubcategoryLabel"  type="x-tmpl-mustache">
-<div class="staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}">
+<div class="staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}" sortField=5>
 posterior prob
 <g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/>
 </div>

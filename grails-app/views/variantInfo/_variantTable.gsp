@@ -41,6 +41,7 @@
                     getVariantsForRangeAjaxUrl:"${createLink(controller:'RegionInfo',action: 'retrieveVariantsInRange')}",
                     retrieveECaviarDataViaCredibleSetsUrl:"${createLink(controller:'RegionInfo',action: 'retrieveECaviarDataViaCredibleSets')}",
                     retrieveVariantAnnotationsUrl:"${createLink(controller:'RegionInfo',action: 'retrieveVariantAnnotations')}",
+                    retrieveTfMotifUrl:"${createLink(controller:'RegionInfo',action: 'retrieveTfMotif')}",
                     dynamicTableType:'variantTable',
                     dataAnnotationTypes: [
                         {
@@ -161,6 +162,28 @@
                         }
                         ,
                         {
+                            code: 'TFMOTIF_VAR',
+                            category: 'TFMOTIF',
+                            displayCategory: 'TF motif',
+                            subcategory: 'VariantTfMotif',
+                            displaySubcategory: 'TfMotif',
+                            headerWriter:'tfMotifVariantTableTissueHeader',
+                            cellBodyWriter:'tfMotifVariantTableBody',
+                            categoryWriter:'tfMotifVariantTableTissueHeaderLabel',
+                            drillDownCategoryWriter:'tfMotifVariantTableTissueHeaderLabel',
+                            subCategoryWriter:'tfMotifVariantTableTissueRowLabel',
+                            drillDownSubCategoryWriter:'tfMotifVariantTableTissueRowLabel',
+                            numberRecordsCellPresentationStringWriter:'tfMotifVariantTableNumberRecordsCellPresentationString',
+                            significanceCellPresentationStringWriter:'tfMotifVariantTableSignificanceCellPresentationString',
+                            sortingSubroutine:'VariantTfMotif',
+                            internalIdentifierString:'getTfMotifGivenVariantList',
+                            processEachRecord:mpgSoftware.dynamicUi.tfMotifVariantTable.processRecordsFromTfMotif,
+                            displayEverythingFromThisCall:mpgSoftware.dynamicUi.tfMotifVariantTable.displayTissueInformationFromTfMotif,
+                            nameOfAccumulatorField:'tfMotifVariantInfo',
+                            nameOfAccumulatorFieldWithIndex:'variantInfoArray'
+                        }
+                        ,
+                        {
                             code: 'DNASE_VAR',
                             category: 'DNASE Tissue',
                             displayCategory: 'DNASE Tissue',
@@ -275,7 +298,15 @@
                         formOfStorage: 'loadFromTable',
                         initializeSharedTableMemory:  '#mainVariantDiv table.variantTableHolder',
                         organizingDiv:  '#mainVariantDiv',
-                        initialOrientation:'variantTableVariantHeaders'
+                        initialOrientation:'variantTableVariantHeaders',
+                        defaultSort:{
+                            columnNumberValue: 1,
+                            currentSort: "sortMethodsInVariantTable",
+                            sortOrder: "asc",
+                            table: "#mainVariantDiv table.variantTableHolder",
+                            dataAnnotationType: {packagingString:'mpgSoftware.dynamicUi.variantTableHeaders'},
+                            desiredSearchTerm: "sortField"
+                        }
                     }
                 };
                 mpgSoftware.variantTable.setVariablesToRemember(drivingVariables);
