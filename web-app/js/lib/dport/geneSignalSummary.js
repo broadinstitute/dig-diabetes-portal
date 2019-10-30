@@ -1075,7 +1075,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             phenotypeDescriptions += '</ul>';
             $('#interestingPhenotypes').append(phenotypeDescriptions);
 
-            /* adding phenotypes pulldown menu to gene page header */
+            /* v2f only: adding phenotypes pulldown menu to gene page header */
 
             var phenotypePullDown = '';
 
