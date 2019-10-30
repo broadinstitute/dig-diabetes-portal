@@ -463,7 +463,7 @@
                     <p><g:message code="about.the.portal.data.text" />
                     <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">80 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">189 traits</span></h1>
 
-                        <span style="display:block; width: 100%;text-align:left;"><a style=" font-size: 20px; padding:10px 40px 10px 0; margin-right: -30px;background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; text-decoration:none; color:#333333; " href="${createLink(controller:'informational', action:'data')}"><g:message code="about.the.portal.data.text2"/></a></span>
+                        <span style="display:block; width: 100%;text-align:left;"><a style=" font-size: 20px; padding:10px 40px 10px 0; margin-right: -30px;background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; text-decoration:none; color:#333333; " href="http://www.kp4cd.org/datasets/t2d"><g:message code="about.the.portal.data.text2"/></a></span>
                     </g:else>
 %{--end of text to be commented out for 52k demo site--}%
  %{--alternative text for 52k demo site                  --}%
@@ -754,7 +754,7 @@
                     <g:elseif test="${g.portalTypeString()?.equals('bone')}">
                         <div style="position:absolute; top: 25px; right:-40px; ">
                             <p style="margin-bottom:3px;">
-                                <a href="mailto:help@kp4cd.org">
+                                <a href="mailto:help@musculoskeletalgenomics.org">
                                     <img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'email_update.svg')}" />
                                 </a>
                             </p>
