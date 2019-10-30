@@ -130,7 +130,12 @@ mpgSoftware.dynamicUi.tfMotifVariantTable = (function () {
                      significanceValue,
                      tissueName ){
                 return {
-                    tissueRecords:tissueRecords,
+                    tissueRecords:_.map(_.orderBy(tissueRecords,['delta'],['asc']),function(o){
+                        o["ref_scorepp"]=o.ref_score.toPrecision(3);
+                        o["alt_scorepp"]=o.alt_score.toPrecision(3);
+                        o["deltapp"]=o.delta.toPrecision(3);
+                        return o;
+                    }),
                     recordsExist:(tissueRecords.length>0)?[1]:[],
                     cellPresentationStringMap:{
                         'Significance':significanceCellPresentationString,

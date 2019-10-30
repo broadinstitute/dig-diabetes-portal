@@ -121,6 +121,7 @@
                             categoryWriter:'variantPValueCategoryLabel',
                             subCategoryWriter:'variantPValueSubcategoryLabel',
                             sortingSubroutine:'VariantAssociationPValue',
+                            packagingString:'mpgSoftware.dynamicUi.variantTableHeaders',
                             internalIdentifierString:'doesNotHaveAnIndependentFunction',
                             nameOfAccumulatorField:'notUsed',
                             nameOfAccumulatorFieldWithIndex:'notUsed'
@@ -136,6 +137,7 @@
                             categoryWriter:'variantPosteriorPValueCategoryLabel',
                             subCategoryWriter:'variantPosteriorPValueSubcategoryLabel',
                             sortingSubroutine:'VariantAssociationPosterior',
+                            packagingString:'mpgSoftware.dynamicUi.variantTableHeaders',
                             internalIdentifierString:'doesNotHaveAnIndependentFunction',
                             nameOfAccumulatorField:'notUsed',
                             nameOfAccumulatorFieldWithIndex:'notUsed'

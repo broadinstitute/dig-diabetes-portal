@@ -21,7 +21,7 @@ TF motif overlap&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placeme
 </script>
 <script id="tfMotifVariantTableBody"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortField="{{significanceValue}}"
-             class="varAllEpigenetics varTfMotifEpigenetics tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
+             class="varAllEpigenetics varTfMotifEpigenetics tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}} text-center">
 
                 <div>
                {{#tissueRecords}}
@@ -29,7 +29,7 @@ TF motif overlap&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placeme
                {{/tissueRecords}}
                </div>
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'TF binding motifs overlapping {{var_id}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
-               data-target="#tf_motif_{{var_id}}" style="color:black">motifs&gt;&gt;
+               data-target="#tf_motif_{{var_id}}" style="color:blue">motifs
                </a>
 
                 <div  class="collapse openEffectorGeneInformationInGeneTable" id="tf_motif_{{var_id}}">
@@ -41,6 +41,7 @@ TF motif overlap&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placeme
                             <th class="text-center otherCols">Position</th>
                             <th class="text-center otherCols">ref score</th>
                             <th class="text-center otherCols">alt score</th>
+                            <th class="text-center otherCols">delta</th>
                           </tr>
                          </thead>
                          <tbody>
@@ -50,8 +51,9 @@ TF motif overlap&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placeme
                           <tr role="row">
                                <td class="leftMostCol"">{{annotation}}</td>
                                <td class="text-center otherCols">{{position}}</td>
-                               <td class="text-center otherCols">{{ref_score}}</td>
-                               <td class="text-center otherCols">{{alt_score}}</td>
+                               <td class="text-center otherCols">{{ref_scorepp}}</td>
+                               <td class="text-center otherCols">{{alt_scorepp}}</td>
+                               <td class="text-center otherCols">{{deltapp}}</td>
                            </tr>
                             </div>
                           {{/tissueRecords}}

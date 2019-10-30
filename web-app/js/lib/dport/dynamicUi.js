@@ -3190,12 +3190,6 @@ mpgSoftware.dynamicUi = (function () {
                     } else if (rowTitle[rowRecordField] ===  oneRecord[rowRecordField]) {
                         var renderData = oneRecord;
                         renderData['prettyPValue']= UTILS.realNumberFormatter(""+oneRecord.p_value);
-                        // var renderData = placeDataIntoRenderForm(   "",
-                        //     oneRecord[rowRecordField],
-                        //     (sharedTable["numberOfColumns"]*(rowIndex+1))+indexOfColumn+2,
-                        //     emphasisSwitch,
-                        //     pValue,
-                        //     posteriorPValue);
                         _.last(intermediateDataStructure.rowsToAdd).columnCells[indexOfColumn] = new IntermediateStructureDataCell([headerRecordField],
                             renderData,'gregorSubTableCell',dataAnnotationTypeCode );
 
@@ -3995,6 +3989,10 @@ mpgSoftware.dynamicUi = (function () {
                     var textB = $(b).attr(defaultSearchField).toUpperCase();
                     return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
                     break;
+                case'VariantAssociationPValue':
+                case'VariantAssociationPosterior':
+                    return eval(currentSortObject.dataAnnotationType.packagingString+'.sortRoutine(a, b, direction, currentSortObject)');
+                    break;
                 case 'geneMethods':
                 case 'H3k27ac':
                 case 'DNase':
@@ -4242,6 +4240,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
 
     });
+    if ($.isEmptyObject(currentSortRequestObject)) return;
     var actualColumnIndex = columnNumberValue;
     currentSortRequestObject['sortOrder'] = (sortOrder === 'asc')?'desc':'asc';
     currentSortRequestObject['columnNumberValue'] = actualColumnIndex;
@@ -4972,7 +4971,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                             sharedTable["cellColoringScheme"] = "sortfield";
                         }
                         $('td:has(div.variantAnnotation.emphasisSwitch_true)').addClass('emphasisSwitch_true');
-                        $('div.variantAnnotation:last').parent().parent().children('td').css('border-bottom','2px solid black');
+                        // $('div.variantAnnotation:last').parent().parent().children('td').css('border-bottom','2px solid black');
                         filterEpigeneticTable(whereTheTableGoes);
                     }
 
@@ -5026,6 +5025,9 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     }
                     break;
 
+                // case "gregorSubTable":
+                //     filterEpigeneticTable("#mainVariantDiv table.variantTableHolder");
+                //     break;
 
                 default:
                     break;
@@ -5209,6 +5211,9 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 }
 
                 $(whereTheTableGoes).dataTable().fnAddData(_.map(revisedRowDescriber,function(o){return getDisplayableCellContent(o)}));
+                // if ('gregorSubTable'===typeOfRecord){
+                //     filterEpigeneticTable("#mainVariantDiv table.variantTableHolder");
+                // }
             }
 
 

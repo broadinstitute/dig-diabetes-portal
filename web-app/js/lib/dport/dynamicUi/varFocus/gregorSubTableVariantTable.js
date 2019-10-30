@@ -186,7 +186,7 @@ const setGregorSubTableByPValue = function(currentValue){
             createSingleDnaseCell
         );
         setGregorSubTableByPValue(defaultGregorPValueUpperValue);
-
+        mpgSoftware.dynamicUi.filterEpigeneticTable("#mainVariantDiv table.variantTableHolder");
     };
 
 

@@ -227,8 +227,9 @@ mpgSoftware.dynamicUi.variantTableHeaders = (function () {
     categorizor.categorizeSignificanceNumbers = Object.getPrototypeOf(categorizor).posteriorProbabilitySignificance;
 
 
-    let sortUtility = new mpgSoftware.dynamicUi.SortUtility();
-    const sortRoutine = function(a, b, direction, currentSortObject){
+
+
+    const sortMethodNamesWithZerosAtTheBottom = function(a, b, direction, currentSortObject){
         const defaultSearchField = currentSortObject.desiredSearchTerm;
         var x = parseInt($(a).attr(defaultSearchField));
         var y = parseInt($(b).attr(defaultSearchField));
@@ -250,6 +251,23 @@ mpgSoftware.dynamicUi.variantTableHeaders = (function () {
             }
         }
         return (x < y) ? 1 : (x > y) ? -1 : 0;
+    };
+
+
+    let sortUtility = new mpgSoftware.dynamicUi.SortUtility();
+    const sortRoutine = function(a, b, direction, currentSortObject){
+        switch(currentSortObject.currentSort){
+            case 'sortMethodsInVariantTable':
+                return sortMethodNamesWithZerosAtTheBottom(a, b, direction, currentSortObject);
+                break;
+            case 'VariantAssociationPValue':
+                return  Object.getPrototypeOf(sortUtility).numericalComparisonWithEmptiesAtBottom(a, b, direction, currentSortObject);
+                break;
+            case 'VariantAssociationPosterior':
+                return  Object.getPrototypeOf(sortUtility).numericalComparisonWithEmptiesAtBottom(a, b, direction, currentSortObject);
+                break;
+            default: return 0;
+        }
     }
 
 // public routines are declared below
