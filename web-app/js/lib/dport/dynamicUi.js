@@ -4413,7 +4413,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                             setAccumulatorObject("currentSortRequest",dyanamicUiVariables.dynamicTableConfiguration.defaultSort);
                             var isdc = new IntermediateStructureDataCell('farLeftCorner',
                                 {initialLinearIndex:"initialLinearIndex_0"},
-                                'VariantId','EMP');
+                                'methodCategories variantIds','EMP');
                             var header = {title:isdc.title, annotation:isdc.annotation};
                             addedColumns.push(new NewColumn(    getDisplayableCellContent(isdc),
                                 header,
@@ -4421,8 +4421,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                                 isdc));
                             var isdc2 = new IntermediateStructureDataCell('b',
                                 {initialLinearIndex:"initialLinearIndex_1"},
-                                'geneMethods','EMP');
-                            var header2 = {title:isdc.title, annotation:isdc.annotation};
+                                'methods','EMP');
+                            var header2 = {title:isdc2.title, annotation:isdc2.annotation};
                             addedColumns.push(new NewColumn(    getDisplayableCellContent(isdc2),
                                 header2,
                                 ['initialLinearIndex_1'],
