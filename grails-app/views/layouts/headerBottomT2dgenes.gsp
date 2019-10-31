@@ -53,7 +53,9 @@
                         </g:if>
                     </g:if>
 
-                    <li class="" style=""><a href="${createLink(controller:'trait', action:'traitSearch')}?trait=${g.defaultPhenotype()}&significance=0.0005"><g:message code="LD.clumping.header"/></a></li>
+                    <g:if test="${g.portalTypeString() != 'v2f'}">
+                        <li class="" style=""><a href="${createLink(controller:'trait', action:'traitSearch')}?trait=${g.defaultPhenotype()}&significance=0.0005"><g:message code="LD.clumping.header"/></a></li>
+                    </g:if>
 
                     <g:if test="${g.portalTypeString()?.equals('t2d')}">
                         <li class="" style=""><a href="${createLink(controller:'gene',action:'effectorGeneTable')}">Predicted T2D Effector Genes</a></li>
@@ -61,7 +63,11 @@
 
                     <li class="" style=""><a href="${createLink(controller:'trait',action:'tissueTable')}">Tissue FOCUS</a></li>
 
-                    <li class="" style=""><a href="${createLink(controller:'variantSearch', action:'variantSearchWF')}"><g:message code="variant.search.header"/></a></li>
+                    <g:if test="${g.portalTypeString() != 'v2f'}">
+                        <li class="" style=""><a href="${createLink(controller:'variantSearch', action:'variantSearchWF')}"><g:message code="variant.search.header"/></a></li>
+                    </g:if>
+
+
 
                 </ul>
             </li>
