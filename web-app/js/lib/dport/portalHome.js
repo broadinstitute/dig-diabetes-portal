@@ -363,7 +363,23 @@ var mpgSoftware = mpgSoftware || {};
             $(homePageVars.generalizedVariantGo).on('click', function () {
                 var somethingSymbol = filterOutIllegalCharacters($(homePageVars.generalizedVariantInput).val());
                 if (somethingSymbol) {
-                    window.location.href = homePageVars.findTheRightDataPageUrl +"/" +somethingSymbol;
+                    //test v2f
+
+                    var variantSymbol = somethingSymbol[0];
+                    $.ajax({
+                        cache: false,
+                        type: "get",
+                        url: ('/dig-diabetes-portal/variantInfo/variantAjax/'+variantSymbol),
+                        async: true
+                    }).done(function (data) {
+
+                        var args = _.flatten([{}, data.variant.variants[0]]);
+                        var variantObject = _.merge.apply(_, args);
+
+                        var searchVariantLocation = "chr"+variantObject.CHROM+":"+(variantObject.POS-100)+"-"+(variantObject.POS+100);
+                        window.location.href = homePageVars.findTheRightDataPageUrl +"/" +searchVariantLocation;
+                    });
+
                 }
             });
             /***

@@ -669,7 +669,7 @@ var mpgSoftware = mpgSoftware || {};
         var launchRegionPage = function (CH,START,END) {
             var startPosition = START.replace(/,/g, "");
             var endPosition = END.replace(/,/g, "");
-            location.replace("../geneInfo/chr"+CH+":"+START+"-"+END+"?startExtent="+startPosition+"&endExtent="+endPosition+"&chromosomeNumber="+CH);
+            location.replace("../findTheRightDataPage/chr"+CH+":"+START+"-"+END);
         }
 
 
