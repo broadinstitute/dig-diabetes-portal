@@ -361,24 +361,45 @@ var mpgSoftware = mpgSoftware || {};
              * respond to end-of-search-line button
              */
             $(homePageVars.generalizedVariantGo).on('click', function () {
-                var somethingSymbol = filterOutIllegalCharacters($(homePageVars.generalizedVariantInput).val());
-                if (somethingSymbol) {
+                console.log($(event.target).text());
+                //var homePageVars = getHomePageVariables();
+                var inputSymbol = filterOutIllegalCharacters($(homePageVars.generalizedVariantInput).val());
+                if (inputSymbol) {
                     //test v2f
 
-                    var variantSymbol = somethingSymbol[0];
-                    $.ajax({
-                        cache: false,
-                        type: "get",
-                        url: ('/dig-diabetes-portal/variantInfo/variantAjax/'+variantSymbol),
-                        async: true
-                    }).done(function (data) {
+                    var variantSymbol = inputSymbol[0].trim().toLowerCase();
 
-                        var args = _.flatten([{}, data.variant.variants[0]]);
-                        var variantObject = _.merge.apply(_, args);
+                    //console.log(variantSymbol);
 
-                        var searchVariantLocation = "chr"+variantObject.CHROM+":"+(variantObject.POS-100)+"-"+(variantObject.POS+100);
-                        window.location.href = homePageVars.findTheRightDataPageUrl +"/" +searchVariantLocation;
-                    });
+                    if(variantSymbol.indexOf("rs") >= 0) {
+
+                        var variantAjaxURL = homePageVars.variantInfoURL+"/"+variantSymbol;
+
+                        //console.log(variantAjaxURL);
+
+                        $.ajax({
+                            cache: false,
+                            type: "get",
+                            url: (variantAjaxURL),
+                            async: true
+                        }).done(function (data) {
+
+                            var args = _.flatten([{}, data.variant.variants[0]]);
+                            var variantObject = _.merge.apply(_, args);
+
+                            var searchVariantLocation = "chr"+variantObject.CHROM+":"+(variantObject.POS-100)+"-"+(variantObject.POS+100);
+                            window.location.href = homePageVars.findTheRightDataPageUrl +"/" +searchVariantLocation;
+                        });
+
+                    } else {
+                        window.location.href = homePageVars.findTheRightDataPageUrl +"/"+variantSymbol;
+                    }
+
+
+
+                    //console.log(variantInfoURL);
+
+
 
                 }
             });

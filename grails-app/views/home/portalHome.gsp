@@ -41,7 +41,8 @@
                 "findTheRightGenePageUrl": "${createLink(controller:'variantSearch',action:'findTheRightGenePage')}",
                 "retrieveGwasSpecificPhenotypesAjaxUrl":"${createLink(controller:'VariantSearch', action:'retrieveGwasSpecificPhenotypesAjax')}",
                 "getGeneLevelResultsUrl":"${createLink(controller:'home', action:'getGeneLevelResults')}",
-                "findEveryVariantForAGeneUrl": "${createLink(controller:'variantSearch', action:'findEveryVariantForAGene')}"
+                "findEveryVariantForAGeneUrl": "${createLink(controller:'variantSearch', action:'findEveryVariantForAGene')}",
+                "variantInfoURL":'${createLink(controller:"variantInfo", action:"variantAjax")}'
             }
         );
 
