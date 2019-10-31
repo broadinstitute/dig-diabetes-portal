@@ -257,7 +257,7 @@
                 </div>
 
                 <div class="gene-page-section-header">
-                    <h2><span style="">Gene in the region</span></h2>
+                    <h2><span style="">Genes in the region</span></h2>
                 </div>
 
                 <div class="matchedGenesGoHere well well-gene-page"></div>

@@ -1059,7 +1059,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "[3]",  // the assays we should search
                                           "ExSeq_13k_mdv23",
                                           "images/v2f/front_V2FKP_logo_2019.svg",
-                                          "portal.header.tagline",
+                                          "portal.header.v2f.tagline",
                                           "portal.header.title.short",
                                           ["English", "Spanish"],
                                           ["SLC30A8"],
@@ -1070,7 +1070,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "images/v2f/header_V2FKP_logo.svg",
                                           "images/menu_bg_2017_5.png",
                                           "true",
-                                          "gene.genePage.warning",
+                                          "",
                                           "",
                                           '5010306206573083521',
                                           'http://raremetal.type2diabeteskb.org/aggregation/covariance',//URL for UMich aggregation tests
