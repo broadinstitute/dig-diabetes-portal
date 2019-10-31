@@ -13,7 +13,7 @@ UTR
 
 <script id="variantIsUtrBody"  type="x-tmpl-mustache">
     <div  class="variantAnnotation emphasisSwitch_{{emphasisSwitch}}  initialLinearIndex_{{indexInOneDimensionalArray}} text-center"
-    sortfield="{{emphasisSwitch}}_UTR">
+    sortfield="emphasisSwitch_{{emphasisSwitch}}">
     <span class="glyphicon glyphicon-ok"></span>
     </div>
 </script>

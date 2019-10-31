@@ -158,32 +158,6 @@ mpgSoftware.dynamicUi.variantTableHeaders = (function () {
         }
         return rawVariantAssociationRecords;
 
-        // rewritten to use the MySQL call
-        // let returnValue = { header: {}, data: []};
-        // if (( typeof data !== 'undefined') &&
-        //     ( data !== null ) &&
-        //     ( typeof data.variants !== 'undefined') &&
-        //     ( typeof data.variants.variants !== 'undefined') ){
-        //         if ( data.variants.variants.length === 0) {
-        //             console.log(' No variants in the specified region')
-        //         } else {
-        //             rawVariantAssociationRecords.splice(0,rawVariantAssociationRecords.length);
-        //             _.forEach(_.uniqBy(data.variants.variants,'VAR_ID'), function (variantRec,index) {
-        //                 var variantRecToExtend  = variantRec;
-        //                 variantRecToExtend["name"] = variantRec.VAR_ID;
-        //                 variantRecToExtend["var_id"] = variantRec.VAR_ID;
-        //                 variantRecToExtend["p_value"] = variantRec.P_VALUE;
-        //                 variantRecToExtend["consequence"] = [variantRec.Consequence];
-        //                 variantRecToExtend["most_del_score"] = variantRec.MOST_DEL_SCORE;
-        //                 returnValue.data.push(variantRecToExtend);
-        //                 if (index>9) { return false;}
-        //             });
-        //             let filteredVariants = calculatePosteriorPValues(returnValue);
-        //             rawVariantAssociationRecords.push(filteredVariants);
-        //         }
-        //     }
-        //     return rawVariantAssociationRecords;
-
     };
 
 
@@ -227,6 +201,12 @@ mpgSoftware.dynamicUi.variantTableHeaders = (function () {
     categorizor.categorizeSignificanceNumbers = Object.getPrototypeOf(categorizor).posteriorProbabilitySignificance;
 
 
+    const sortBinaryEmphasis = function(a, b, direction, currentSortObject){
+        const defaultSearchField = currentSortObject.desiredSearchTerm;
+        var x = $(a).attr(defaultSearchField);
+        var y = $(b).attr(defaultSearchField);
+        return (x < y) ? 1 : (x > y) ? -1 : 0;
+    };
 
 
     const sortMethodNamesWithZerosAtTheBottom = function(a, b, direction, currentSortObject){
@@ -257,6 +237,12 @@ mpgSoftware.dynamicUi.variantTableHeaders = (function () {
     let sortUtility = new mpgSoftware.dynamicUi.SortUtility();
     const sortRoutine = function(a, b, direction, currentSortObject){
         switch(currentSortObject.currentSort){
+            case 'VariantCoding':
+            case 'VariantSplicing':
+            case 'VariantUtr':
+                currentSortObject['desiredSearchTerm'] =  "sortfield";
+                return sortBinaryEmphasis(a, b, direction, currentSortObject);
+                break;
             case 'sortMethodsInVariantTable':
                 return sortMethodNamesWithZerosAtTheBottom(a, b, direction, currentSortObject);
                 break;

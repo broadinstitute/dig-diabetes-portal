@@ -4098,6 +4098,7 @@ mpgSoftware.dynamicUi = (function () {
                     return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
                     break;
                 case 'VariantId':
+                case 'VariantIds':
                 case 'VariantCoding':
                 case 'VariantSplicing':
                 case 'VariantUtr':
@@ -4931,7 +4932,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         }
                     });
                     $('div.associationLabel:last').parent().parent().children('td').css('border-bottom','2px solid black');
-
+                    setUpDraggable(whereTheTableGoes);
                     // collapse first cell across all 'Epigenetics' rows
                     // const cellsToCollapse = $('div.varEpigeneticsLabel');
                     // _.forEach(cellsToCollapse, function(domElement,index){
@@ -6265,7 +6266,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         var initialLinearIndexColumnBeingDragged = extractClassBasedIndex(draggedColumn[0].innerHTML,"initialLinearIndex_");
         var currentIndexTargetColumn = retrieveCurrentIndexOfColumn (whereTheTableGoes,initialLinearIndexTargetColumn);
         var currentIndexColumnBeingDragged = retrieveCurrentIndexOfColumn (whereTheTableGoes,initialLinearIndexColumnBeingDragged);
-        redrawTableOnClick('table.combinedGeneTableHolder',
+        redrawTableOnClick(whereTheTableGoes,
             function(sortedData,numberOfRows,numberOfColumns,arguments){
                 return mpgSoftware.matrixMath.moveColumnsInDataStructure(sortedData,numberOfRows,numberOfColumns,
                     arguments.sourceColumn,arguments.targetColumn);
@@ -6293,7 +6294,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
              axis: "x",
             opacity: 0.8,
             containment: "parent",
-            revert:"invalid"
+            revert:"invalid",
+            stack: ".ui-draggable"
         });
         $( classNameToIdentifyHeader).droppable({
             classes: {

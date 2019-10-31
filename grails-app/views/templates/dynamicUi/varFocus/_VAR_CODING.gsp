@@ -13,7 +13,7 @@ Coding
 
 <script id="variantIsCodingBody"  type="x-tmpl-mustache">
     <div  class="variantAnnotation variantIsCoding emphasisSwitch_{{emphasisSwitch}} initialLinearIndex_{{indexInOneDimensionalArray}} text-center"
-    sortfield="{{emphasisSwitch}}_Coding">
+    sortfield="emphasisSwitch_{{emphasisSwitch}}">
     <span class="glyphicon glyphicon-ok"></span>
     </div>
 </script>
