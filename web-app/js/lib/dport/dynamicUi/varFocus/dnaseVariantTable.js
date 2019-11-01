@@ -129,12 +129,15 @@ mpgSoftware.dynamicUi.dnaseVariantTable = (function () {
     var categorizor = new mpgSoftware.dynamicUi.Categorizor();
     categorizor.categorizeSignificanceNumbers = Object.getPrototypeOf(categorizor).genePValueSignificance;
 
+    let sortUtility = new mpgSoftware.dynamicUi.SortUtility();
+    const sortRoutine =  Object.getPrototypeOf(sortUtility).numericalComparisonWithEmptiesAtBottom;
 
 
 
 // public routines are declared below
     return {
         processRecordsFromDnase: processRecordsFromDnase,
-        displayTissueInformationFromDnase:displayTissueInformationFromDnase
+        displayTissueInformationFromDnase:displayTissueInformationFromDnase,
+        sortRoutine:sortRoutine
     }
 }());

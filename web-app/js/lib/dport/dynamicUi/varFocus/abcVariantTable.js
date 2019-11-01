@@ -139,12 +139,27 @@ mpgSoftware.dynamicUi.abcVariantTable = (function () {
     var categorizor = new mpgSoftware.dynamicUi.Categorizor();
     categorizor.categorizeSignificanceNumbers = Object.getPrototypeOf(categorizor).genePValueSignificance;
 
+    const sortBinaryDisplay = function(a, b, direction, currentSortObject){
+        var initialLinearIndexA = mpgSoftware.dynamicUi.extractClassBasedIndex($(a),"initialLinearIndex_");
+        var initialLinearIndexB = mpgSoftware.dynamicUi.extractClassBasedIndex($(b),"initialLinearIndex_");
+        const displayA = $('div.initialLinearIndex_'+initialLinearIndexA+".yesDisplay");
+        const displayB = $('div.initialLinearIndex_'+initialLinearIndexB+".yesDisplay");
+
+        var x = (displayA.length) ? 1 : 0;
+        var y = (displayB.length) ? 1 : 0;
+        return (x < y) ? 1 : (x > y) ? -1 : 0;
+    };
+
+
+    let sortUtility = new mpgSoftware.dynamicUi.SortUtility();
+    const sortRoutine =  sortBinaryDisplay;
 
 
 
 // public routines are declared below
     return {
         processRecordsFromAbc: processRecordsFromAbc,
-        displayTissueInformationFromAbc:displayTissueInformationFromAbc
+        displayTissueInformationFromAbc:displayTissueInformationFromAbc,
+        sortRoutine:sortRoutine
     }
 }());

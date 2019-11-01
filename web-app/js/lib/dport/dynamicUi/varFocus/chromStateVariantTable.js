@@ -16,40 +16,6 @@ mpgSoftware.dynamicUi.chromStateVariantTable = (function () {
         if (( typeof data !== 'undefined')&&
             ( typeof data.data !== 'undefined')){
             arrayOfRecords.splice(0,arrayOfRecords.length);
-            // first go through and take all of our variants and find their position. Commit this to an array.
-            // const nameList = mpgSoftware.dynamicUi.getAccumulatorObject(callingParameters.nameOfAccumulatorFieldWithIndex)[0].data;
-            // const varIdsAndPositions = _.map(nameList,
-            //                                 function (varId){
-            //                                     const varIdElements =  varId.var_id.split("_");
-            //                                     let varIdPosition = 0;
-            //                                     if (varIdElements.length>2){
-            //                                         varIdPosition = parseInt(varIdElements[1]);
-            //                                     }
-            //                                     return {name:varId.var_id,position:varIdPosition,arrayOfRecords:[]}
-            //                                 });
-            // // Now let's go through each tissue, and figure out the mapping to each variant
-            // var uniqueAnnotations = _.map(_.groupBy(data.data, function (o) { return o.annotation }),
-            //                                         function(value,key) {return key});
-            // var recordsGroupedByTissueId = _.groupBy(data.data, function (o) { return o.tissue_id });
-            // var uniqueTissues =  _.map(recordsGroupedByTissueId,
-            //     function(value,key) {return key});
-            // var recordsGroupedByVarId = _.groupBy(data.data, function (o) { return o.var_id });
-            // _.forEach(varIdsAndPositions, function (varIdsRecord) {
-            //     const uniqueRecords = _.uniqWith(
-            //         recordsGroupedByVarId[varIdsRecord.name],
-            //       (recA, recB) =>
-            //           recA.annotation === recB.annotation &&
-            //           recA.tissue_id === recB.tissue_id
-            //     );
-            //     varIdsRecord.arrayOfRecords = _.map(_.orderBy(uniqueRecords,['tissue_name'],['asc']), function (oneValue){
-            //         oneValue['safeTissueId'] = oneValue.tissue_id.replace(":","_");
-            //         return oneValue;
-            //     });
-            // });
-            // arrayOfRecords.push({header:{   uniqueAnnotations:uniqueAnnotations,
-            //         uniqueTissues:uniqueTissues
-            //     },
-            //     data:varIdsAndPositions});
             let uniqueRecords = _.uniqWith(
                 data.data,
                 (recA, recB) =>
@@ -166,12 +132,27 @@ mpgSoftware.dynamicUi.chromStateVariantTable = (function () {
     var categorizor = new mpgSoftware.dynamicUi.Categorizor();
     categorizor.categorizeSignificanceNumbers = Object.getPrototypeOf(categorizor).genePValueSignificance;
 
+    const sortBinaryDisplay = function(a, b, direction, currentSortObject){
+        var initialLinearIndexA = mpgSoftware.dynamicUi.extractClassBasedIndex($(a),"initialLinearIndex_");
+        var initialLinearIndexB = mpgSoftware.dynamicUi.extractClassBasedIndex($(b),"initialLinearIndex_");
+        const displayA = $('div.initialLinearIndex_'+initialLinearIndexA+".yesDisplay");
+        const displayB = $('div.initialLinearIndex_'+initialLinearIndexB+".yesDisplay");
+
+        var x = (displayA.length) ? 1 : 0;
+        var y = (displayB.length) ? 1 : 0;
+        return (x < y) ? 1 : (x > y) ? -1 : 0;
+    };
+
+
+    let sortUtility = new mpgSoftware.dynamicUi.SortUtility();
+    const sortRoutine =  sortBinaryDisplay;
 
 
 
 // public routines are declared below
     return {
         processRecordsFromChromState: processRecordsFromChromState,
-        displayTissueInformationFromChromState:displayTissueInformationFromChromState
+        displayTissueInformationFromChromState:displayTissueInformationFromChromState,
+        sortRoutine:sortRoutine
     }
 }());

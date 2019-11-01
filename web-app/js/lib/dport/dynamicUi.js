@@ -2623,13 +2623,13 @@ mpgSoftware.dynamicUi = (function () {
                     rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(currentMethod,
                         Mustache.render($('#'+dataAnnotationType.dataAnnotation.drillDownCategoryWriter)[0].innerHTML,
                             {indexInOneDimensionalArray:((numberOfExistingRows+addedRows)*numberOfColumns)}),
-                        "header", 'LIT'));
+                        dataAnnotationType.dataAnnotation.subcategory+" header", 'LIT'));
                     rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(currentMethod,
                         Mustache.render($('#'+dataAnnotationType.dataAnnotation.drillDownSubCategoryWriter)[0].innerHTML,
                             {annotationName:currentMethod,
                                 indexInOneDimensionalArray:(((numberOfExistingRows+addedRows)*numberOfColumns)+1),
                                 isBlank:"isBlank"}),
-                        "header", 'LIT'));
+                        dataAnnotationType.dataAnnotation.subcategory+" header", 'LIT'));
                     _.forEach(dataVector, function (oneRecord) {
                         rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
                             {otherClasses:"methodName_"+currentMethod}, "header", 'EMP'));
@@ -2646,7 +2646,7 @@ mpgSoftware.dynamicUi = (function () {
                         rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(annotation,
                             Mustache.render($('#'+dataAnnotationType.dataAnnotation.drillDownCategoryWriter)[0].innerHTML,
                                 {indexInOneDimensionalArray:((numberOfExistingRows+addedRows)*numberOfColumns)}),
-                            "header", 'LIT'));
+                            dataAnnotationType.dataAnnotation.subcategory+" header", 'LIT'));
                         let alternateAnnotation =annotation;
                         switch(annotation){
                             case "MACS":
@@ -2665,7 +2665,7 @@ mpgSoftware.dynamicUi = (function () {
                                     {annotationName:alternateAnnotation,
                                     indexInOneDimensionalArray:(((numberOfExistingRows+addedRows)*numberOfColumns)+1),
                                     isBlank:isBlank}),
-                            "header", 'LIT'));
+                            dataAnnotationType.dataAnnotation.subcategory, 'LIT'));
                         _.forEach(dataVector, function (oneRecord) {
                             rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
                                 {otherClasses:"methodName_"+currentMethod+" annotationName_"+annotation}, "discoDownAndCheckOutTheShow", 'EMP'));
@@ -4099,9 +4099,12 @@ mpgSoftware.dynamicUi = (function () {
                     break;
                 case 'VariantId':
                 case 'VariantIds':
+                case 'VariantDnase':
+                case 'VariantChromHmm':
                 case 'VariantCoding':
                 case 'VariantSplicing':
                 case 'VariantUtr':
+                case 'VariantAbc':
                     return eval(currentSortObject.dataAnnotationType.packagingString+'.sortRoutine(a, b, direction, currentSortObject)');
                     break;
                 default:
@@ -4388,6 +4391,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 }
                 var addedColumns = [];
                 if (prependColumns){ // we may wish to add in some columns based on metadata about a row.
+                                     //  Definitely we don't if we are transposing, however, since we've already built that material
                                      //  Definitely we don't if we are transposing, however, since we've already built that material
                     var sortability = [];
                     switch(typeOfHeader){
@@ -4679,6 +4683,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     ((currentAnnotation.length===0)||(_.includes(uniqueAnnotations,currentAnnotation)))){
                     $(oneTr).show();
                     $(oneTr).addClass('yesDisplay');
+                    $(oneTr).parent().addClass('yesDisplay');
                     if (!$.isEmptyObject(quantileDef)){
 
                         const quanAss = quantileDef[currentAnnotation+"_"+currentTissue.replace("_",":")];
@@ -4699,6 +4704,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     ((currentAnnotation.length===0)||(_.includes(uniqueAnnotations,currentAnnotation))))){
                     $(oneTr).show();
                     $(oneTr).addClass('yesDisplay');
+                    $(oneTr).parent().addClass('yesDisplay');
 
                 } else {
                     $(oneTr).hide();
@@ -4727,7 +4733,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 if (currentTableForm === 'variantTableVariantHeaders'){ // If the variants are on top then we simply look for elements in the containing row
                     suppressRowDisplay = ($(oneDiv).parent().parent().find('div.epigeneticCellElement.yesDisplay').length === 0);
                 } else { // Otherwise we have to pull out the elements by name
-                    suppressRowDisplay = ($('#mainVariantDiv td div.yesDisplay.annotationName_'+annotationNameToProcess).length === 0);
+                    suppressRowDisplay = ($('#mainVariantDiv td div.epigeneticCellElement.yesDisplay.annotationName_'+annotationNameToProcess).length === 0);
                 }
 
             }
@@ -5212,9 +5218,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 }
 
                 $(whereTheTableGoes).dataTable().fnAddData(_.map(revisedRowDescriber,function(o){return getDisplayableCellContent(o)}));
-                // if ('gregorSubTable'===typeOfRecord){
-                //     filterEpigeneticTable("#mainVariantDiv table.variantTableHolder");
-                // }
+
             }
 
 
@@ -6414,7 +6418,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         displayGregorSubTableForVariantTable:displayGregorSubTableForVariantTable,
         getAccumulatorObject:getAccumulatorObject,
         filterEpigeneticTable:filterEpigeneticTable,
-        adjustAnnotationTable:adjustAnnotationTable
+        adjustAnnotationTable:adjustAnnotationTable,
+        extractClassBasedIndex:extractClassBasedIndex
     }
 }());
 

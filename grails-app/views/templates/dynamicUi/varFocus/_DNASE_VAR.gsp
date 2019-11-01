@@ -20,7 +20,7 @@ ATAC-seq&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bott
 {{significanceValueAsString}}No div!
 </script>
 <script id="dnaseVariantTableBody"  type="x-tmpl-mustache">
-             <div significance_sortField="{{significanceValue}}" sortField="{{significanceValue}}"
+             <div significance_sortField="{{significanceValue}}" sortfield="{{significanceValue}}"
              class="varAllEpigenetics varDnaseEpigenetics tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
 
                     {{#recordsExist}}
