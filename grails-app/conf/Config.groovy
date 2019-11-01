@@ -1048,7 +1048,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "V2F",  // displayable label for this portal type
                                           "mdv300",    // the MDV number for this portal
                                           "T2DKP", // name of KB data we want
-                                          "T2D",      // the default phenotype for this portal
+                                          "",      // the default phenotype for this portal
                                           "ExSeq_19k_mdv28",  // default data set.  Used rarely.
                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
