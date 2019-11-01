@@ -29,10 +29,10 @@ TF motif overlap&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placeme
                {{/tissueRecords}}
                </div>
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'TF binding motifs overlapping {{var_id}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
-               data-target="#tf_motif_{{var_id}}" style="color:blue">motifs
+               data-target="#tf_motif_{{tissueName}}" style="color:blue">motifs
                </a>
 
-                <div  class="collapse openEffectorGeneInformationInGeneTable" id="tf_motif_{{var_id}}">
+                <div  class="collapse openEffectorGeneInformationInGeneTable" id="tf_motif_{{tissueName}}">
                     {{#recordsExist}}
                         <table class="expandableDrillDownTable openEffectorGeneInformationInGeneTable" style="margin: 0 auto">
                          <thead>
