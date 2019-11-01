@@ -361,13 +361,14 @@ var mpgSoftware = mpgSoftware || {};
              * respond to end-of-search-line button
              */
             $(homePageVars.generalizedVariantGo).on('click', function () {
-                console.log($(event.target).text());
-                //var homePageVars = getHomePageVariables();
+
+
                 var inputSymbol = filterOutIllegalCharacters($(homePageVars.generalizedVariantInput).val());
                 if (inputSymbol) {
                     //test v2f
 
                     var variantSymbol = inputSymbol[0].trim().toLowerCase();
+
 
                     //console.log(variantSymbol);
 
@@ -386,20 +387,33 @@ var mpgSoftware = mpgSoftware || {};
 
                             var args = _.flatten([{}, data.variant.variants[0]]);
                             var variantObject = _.merge.apply(_, args);
+                            var regionSet = 50000;
 
-                            var searchVariantLocation = "chr"+variantObject.CHROM+":"+(variantObject.POS-100)+"-"+(variantObject.POS+100);
+                            var searchVariantLocation = "chr"+variantObject.CHROM+":"+(variantObject.POS-regionSet)+"-"+(variantObject.POS+regionSet);
                             window.location.href = homePageVars.findTheRightDataPageUrl +"/" +searchVariantLocation;
                         });
 
                     } else {
-                        window.location.href = homePageVars.findTheRightDataPageUrl +"/"+variantSymbol;
+
+                        if(variantSymbol.indexOf("chr") >= 0) {
+
+                            window.location.href = homePageVars.findTheRightDataPageUrl +"/"+variantSymbol;
+
+                        } else {
+
+                            //8_118184783_C_T
+                            //chr9:21,940,000-22,190,000
+
+                            var variantLoci = variantSymbol.split("_");
+                            var variantLocation = Number(variantLoci[1]);
+                            var regionSet = 50000;
+                            var variantRegion = "chr"+variantLoci[0]+":"+(variantLocation-regionSet)+"-"+(variantLocation+regionSet);
+
+                            //console.log(variantRegion);
+
+                            window.location.href = homePageVars.findTheRightDataPageUrl +"/"+variantRegion;
+                        }
                     }
-
-
-
-                    //console.log(variantInfoURL);
-
-
 
                 }
             });
