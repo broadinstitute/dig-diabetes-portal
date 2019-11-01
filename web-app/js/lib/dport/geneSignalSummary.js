@@ -1088,11 +1088,26 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
             /* v2f only: adding phenotypes pulldown menu to gene page header */
 
-            var phenotypePullDown = '';
+            var phenotypesList = [];
 
             $.each(listOfInterestingPhenotypes, function (phenotypeIndex, phenotype) {
                 //console.log(phenotype);
-                phenotypePullDown += '<option data="'+phenotype.phenotype+'::'+phenotype.ds+'::'+phenotype.dsr+'::'+phenotype.pname+'" class="strength-'+phenotype.signalStrength+'">'+phenotype.pname+'</option>';
+                var tempObject = {};
+                tempObject["name"] = phenotype.pname;
+                tempObject["data"] = phenotype.phenotype+'::'+phenotype.ds+'::'+phenotype.dsr+'::'+phenotype.pname;
+                tempObject["signal"] = phenotype.signalStrength;
+                phenotypesList.push(tempObject);
+            });
+
+            phenotypesList = sortJSON(phenotypesList,'name','asc');
+
+            console.log(phenotypesList);
+
+            var phenotypePullDown = '';
+
+            $.each(phenotypesList, function (phenotypeIndex, phenotype) {
+                //console.log(phenotype);
+                phenotypePullDown += '<option data="'+phenotype.data+'" class="strength-'+phenotype.signal+'">'+phenotype.name+'</option>';
             });
 
             $("#phenotypeInput").html("").append(phenotypePullDown).selectpicker('refresh');
@@ -1114,6 +1129,16 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         }
 
     };
+
+    var sortJSON = function (data, key, way) {
+        return data.sort(function(a, b) {
+
+            var x = a[key].toLowerCase(); var y = b[key].toLowerCase();
+
+            if (way === 'asc' ) { return ((x < y) ? -1 : ((x > y) ? 1 : 0)); }
+            if (way === 'desc') { return ((x > y) ? -1 : ((x < y) ? 1 : 0)); }
+        });
+    }
 
 
 
