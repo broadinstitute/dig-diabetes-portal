@@ -144,7 +144,7 @@
 
                                     <!-- Examples for front top banner search box -->
                                     <div style="font-size: 16px;">
-                                    <!-- Examples for all portals -->
+                                    <!-- Examples for all portals CHR8: 118134783 - 118234783 -->
                                     <g:if test="${portalVersionBean.variantAssociationsExists}">
                                         <span><g:message code="site.shared.phrases.examples" />: </span>
                                         <g:each in="${portalVersionBean.geneExamples}">
@@ -154,7 +154,7 @@
                                                         body="input.searchTerm.geneExample.help.text"/>,
                                         </g:each>
                                         <g:each in="${portalVersionBean.variantExamples}">
-                                            <a class="front-search-example" href='<g:createLink controller="gene" action="findTheRightDataPage" params="[id:it]"/>'>${it}</a>,
+                                            <a class="front-search-example" href='<g:createLink controller="gene" action="findTheRightDataPage" params=""/>/chr8:118134783-118234783'>${it}</a>,
                                             <g:helpText title="input.searchTerm.variantExample.help.header" placement="right"
                                                         body="input.searchTerm.variantExample.help.text" qplacer="0 0 0 2px"/>,
                                         </g:each>
