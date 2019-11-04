@@ -714,6 +714,9 @@
                         <g:elseif test="${g.portalTypeString()?.equals('bone')}">
                             <g:message code="portal.bone.use.citation.itself" />
                         </g:elseif>
+                        <g:elseif test="${g.portalTypeString()?.equals('v2f')}">
+                            <g:message code="portal.v2f.use.citation.itself" />
+                        </g:elseif>
                         <g:else></g:else>
                         </p>
                     </div>
@@ -828,6 +831,9 @@
                             <p><g:message code="sleep.portal.faqs"/></p>
                         </g:elseif>
 
+                    <g:elseif test="${g.portalTypeString()?.equals('v2f')}">
+                        <p><g:message code="about.the.v2f.portal.text"/></p>
+                        </g:elseif>
                         <g:else>
                             <p><g:message code="about.the.portal.text1"/>
                                 <a href="${createLink(controller:'informational', action:'dataSubmission')}"><g:message code="portal.home.collaborate"/></a>
