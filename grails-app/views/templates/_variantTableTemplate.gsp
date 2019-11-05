@@ -6,10 +6,10 @@
                 <h1 class="dk-page-title">Variant FOCUS table for <span class="phenotypeSpecifier">{{phenotype}}</span></h1>
             </div>
         </div>
-        <p><g:message code="variantTable.introduction.1"></g:message>
+        <p><g:message code="variantTable.introduction.1"></g:message><g:message code="variantTable.introduction.2"></g:message>
 <g:helpText title="variantTable.overall.help.header" placement="bottom" body="variantTable.help.text"/>
-<g:message code="variantTable.introduction.2"></g:message></p>
-<p><g:message code="variantTable.introduction.3"></g:message></p>
+
+<g:message code="variantTable.introduction.3"></g:message></p>
         <div class="row" style="margin: 20px">
             <div class="col-sm-2 text-center" style="">
                 <label style="padding-top:35px">Change genomic region or phenotype</label>
