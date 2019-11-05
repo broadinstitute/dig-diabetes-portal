@@ -239,6 +239,8 @@ class PortalConstants {
     public static final String PROPERTY_NAME_POSITION                       = "POS";
     public static final String PROPERTY_NAME_MINOR_ALLELE_COUNT             = "MAC";
     public static final String PROPERTY_NAME_P_FIRTH                        = "P_FIRTH_FE_IV";
+    public static final String PROPERTY_NAME_POSTERIOR_PROBABILITY          = "POSTERIOR_PROBABILITY";
+
 
     // property meaning types
     public static final String PROPERTY_MEANING_P_VALUE_KEY                 = "P_VALUE";

@@ -43,6 +43,8 @@ class RegionInfoController {
         String dataSet = params.dataSet
         String dataType = params.datatype
         String propertyName = params.propertyName
+        String findCredSetByOverlap = params.findCredSetByOverlap
+
 
         float minimumAllowablePosteriorProbability = -1f
         if (params.minimumAllowablePosteriorProbability){
@@ -86,7 +88,15 @@ class RegionInfoController {
                                             propertyName,MetaDataService.METADATA_VARIANT)
                 propertyName = property.name
             }
-            jsonReturn = widgetService.getCredibleOrAlternativeSetInformation(chromosome, startInteger, endInteger, dataSet, phenotype,propertyName,minimumAllowablePosteriorProbability, false);
+            jsonReturn = widgetService.getCredibleOrAlternativeSetInformation(chromosome,
+                    startInteger,
+                    endInteger,
+                    dataSet,
+                    phenotype,
+                    propertyName,
+                    minimumAllowablePosteriorProbability,
+                    false,
+                    findCredSetByOverlap=="1");
             jsonReturn["credibleSetInfoCode"] = g.message(code: restServerService.retrieveBeanForCurrentPortal().getCredibleSetInfoCode(), default: restServerService.retrieveBeanForCurrentPortal().getCredibleSetInfoCode())
         } else {
             jsonReturn = slurper.parse(errorJsonString);
@@ -159,7 +169,15 @@ class RegionInfoController {
                 dataSet = orderedSampleGroupList.first().getSystemId()
             }
 
-            jsonReturn = widgetService.getCredibleOrAlternativeSetInformation(chromosome, startInteger, endInteger, dataSet, phenotype,propertyName,minimumAllowablePosteriorProbability, false);
+            jsonReturn = widgetService.getCredibleOrAlternativeSetInformation(chromosome,
+                    startInteger,
+                    endInteger,
+                    dataSet,
+                    phenotype,
+                    propertyName,
+                    minimumAllowablePosteriorProbability,
+                    false,
+            false);
             jsonReturn["credibleSetInfoCode"] = g.message(code: restServerService.retrieveBeanForCurrentPortal().getCredibleSetInfoCode(), default: restServerService.retrieveBeanForCurrentPortal().getCredibleSetInfoCode())
         } else {
             jsonReturn = slurper.parse(errorJsonString);
@@ -230,7 +248,8 @@ class RegionInfoController {
                                                                                                             phenotype,
                                                                                                             propertyName,
                                                                                                             -1f, // use the default value for minimumAllowablePosteriorProbability
-                                                                                                            true );
+                                                                                                            true,
+                                                                                                            false);
                         //jsonForGene["annotations"] = widgetService.buildTheIncredibleSet((gene.chromosome-"chr") as String, gene.addrStart as int, gene.addrEnd  as int, phenotype, 1000 )
                         supplementedGenes.add(jsonForGene)
                     }
