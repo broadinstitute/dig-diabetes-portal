@@ -71,6 +71,7 @@ class RestServerService {
     private String GET_GENESET_RECORDS_FROM_DEPICT_URL= "testcalls/depict/genepathway/object"
     private String GET_DNASE_RECORDS_URL= "testcalls/region/dnase/object"
     private String GET_H3K27AC_RECORDS_URL= "testcalls/region/h3k27ac/object"
+    private String GET_CREDIBLE_SET_BASED_ON_OVERLAP_URL= "testcalls/variant/credibleset/object"
     private String GET_BOTTOM_LINE_RESULTS_URL= "graph/meta/variant/object"
     private String GET_TISSUES_FROM_GREGOR_URL= "graph/gregor/phenotype/object"
     private String GET_VARIANT_ANNOTATIONS_URL= "graph/region/variant/object"
@@ -2759,6 +2760,40 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return jsonObject
     }
 
+
+
+
+    public JSONObject retrieveCredibleSetViaOverlap( String phenotype,
+                                          int  startPosition, int  endPosition,
+                                          String chromosome, String dataSet ) {
+        List<String> specifyRequestList = []
+
+        if ((phenotype) && (phenotype.length() > 0)) {
+            specifyRequestList << "phenotype=${phenotype}"
+        }
+        if ((chromosome) && (chromosome.length() > 0)) {
+            specifyRequestList << "chrom=${chromosome}"
+        }
+        if (startPosition > -1) {
+            specifyRequestList << "start_pos=${startPosition}"
+        }
+        if (endPosition > -1) {
+            specifyRequestList << "end_pos=${endPosition}"
+        }
+        if ((dataSet) && (dataSet.length() > 0)) {
+            specifyRequestList << "dataset=${dataSet}"
+        }
+
+
+        String rawReturnFromApi = getRestCall("${GET_CREDIBLE_SET_BASED_ON_OVERLAP_URL}?${specifyRequestList.join("&")}".toString())
+        JsonSlurper slurper = new JsonSlurper()
+        JSONObject jSONObject
+
+        jSONObject = slurper.parseText(rawReturnFromApi) as List
+
+        return jSONObject
+
+    }
 
 
 

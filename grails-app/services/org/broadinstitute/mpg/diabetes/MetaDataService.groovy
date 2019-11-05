@@ -468,6 +468,37 @@ class MetaDataService {
 
 
 
+    public String getPreferredSampleGroupNameForPhenotypeAndPropertyMeaning(String phenotypeName,String propertyMeaning){
+        // local variables
+        String returnValue = ""
+        List<SampleGroup> groupList
+
+        // get the sample group list for the phenotype
+        try {
+            groupList = this.getJsonParser().getSampleGroupsForPhenotype(phenotypeName, this.getDataVersion());
+
+            groupList = groupList?.findAll {SampleGroup sampleGroup->
+                            return (sampleGroup.getPhenotypes()?.findAll{ Phenotype phenotype->
+                                return (phenotype.getProperties()?.findAll{ Property property->
+                                    return property.hasMeaning(propertyMeaning)  }?.size() > 0)
+                            })
+                        }
+            // sort the group list
+            groupList = groupList?.sort{SampleGroup a,SampleGroup b->b.subjectsNumber<=>a.subjectsNumber}
+
+            if ((groupList)&&(groupList.size()>0)){
+                returnValue = groupList?.first()?.systemId
+            }
+
+        } catch (PortalException exception) {
+            log.error("Got exception in getPreferredSampleGroupNameForPhenotypeAndProperty with phenotype = " + phenotypeName +
+                    ", propertyMeaning = " +propertyMeaning+" : " +exception.getMessage());
+        }
+
+        return returnValue;
+    }
+
+
 
 
     public String getPreferredSampleGroupNameForPhenotype(String phenotypeName) {

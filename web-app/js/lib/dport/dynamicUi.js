@@ -1115,7 +1115,8 @@ mpgSoftware.dynamicUi = (function () {
                             dataSet:"",
                             dataType:"static",
                             propertyName:"POSTERIOR_PROBABILITY",
-                            limit: "50"
+                            limit: "50",
+                            findCredSetByOverlap: "1"
                         }
 
                     }
@@ -3285,8 +3286,11 @@ mpgSoftware.dynamicUi = (function () {
                                 }
                                 break;
                             case "VAR_POSTERIORPVALUE":
-                                if ( typeof oneRecord.POSTERIOR_PROBABILITY !== 'undefined'){
-                                    posteriorPValue = oneRecord.POSTERIOR_PROBABILITY;
+                                // if ( typeof oneRecord.POSTERIOR_PROBABILITY !== 'undefined'){
+                                //     posteriorPValue = oneRecord.POSTERIOR_PROBABILITY;
+                                // }
+                                if ( typeof oneRecord.posterior !== 'undefined'){
+                                    posteriorPValue = oneRecord.posterior;
                                 }
                                 break;
                             default:
@@ -3792,10 +3796,16 @@ mpgSoftware.dynamicUi = (function () {
                 // setAccumulatorObject("chromosome","8");
                 // setAccumulatorObject("extentBegin","117862462");
                 // setAccumulatorObject("extentEnd","118289003");
+
+                // setAccumulatorObject("phenotype","T2D");
+                // setAccumulatorObject("chromosome","19");
+                // setAccumulatorObject("extentBegin","58838000");
+                // setAccumulatorObject("extentEnd","58875000");
+
                 setAccumulatorObject("phenotype","T2D");
-                setAccumulatorObject("chromosome","19");
-                setAccumulatorObject("extentBegin","58838000");
-                setAccumulatorObject("extentEnd","58875000");
+                setAccumulatorObject("chromosome","1");
+                setAccumulatorObject("extentBegin","3504650");
+                setAccumulatorObject("extentEnd","3614660");
 
                 const chromosomeInput = $('input#chromosomeInput').val();
                 const startExtentInput = $('input#startExtentInput').val();

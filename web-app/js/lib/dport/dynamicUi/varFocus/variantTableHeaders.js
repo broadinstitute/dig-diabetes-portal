@@ -52,6 +52,7 @@ mpgSoftware.dynamicUi.variantTableHeaders = (function () {
             objectWithVariantInfo.data.forEach(function (item, index) {
                 if (credibleSetBoolean[index]) {
                     item["POSTERIOR_PROBABILITY"]=posteriorProbabilities[index];
+                    item["posterior"]=posteriorProbabilities[index];
                 }
                 filteredVariants.push(item);// push this inside of the above conditional and you will only get elements in the credible so
 
@@ -129,6 +130,9 @@ mpgSoftware.dynamicUi.variantTableHeaders = (function () {
                        let filteredVariants;
                        if (!weHavePrecalculatedPosteriors) {
                            filteredVariants = calculatePosteriorPValues(returnValue);
+                       } else {
+                           filteredVariants = returnValue;
+                           filteredVariants["credSetLevel"] = "0.95";
                        }
                        rawVariantAssociationRecords.push(filteredVariants);
                    }
@@ -174,7 +178,7 @@ mpgSoftware.dynamicUi.variantTableHeaders = (function () {
             }
                 let posteriorPValueDisplayable = "";
                 if (posteriorPValue>0){
-                    posteriorPValueDisplayable = UTILS.realNumberFormatter(posteriorPValue,4);
+                    posteriorPValueDisplayable = UTILS.realNumberFormatter(posteriorPValue,3);
                 }
 
                 return {indexInOneDimensionalArray:indexInOneDimensionalArray,
