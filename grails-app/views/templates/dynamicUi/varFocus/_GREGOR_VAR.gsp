@@ -8,13 +8,13 @@ records={{numberRecords}}
 
 <script id="gregorVariantTableRowHeaderLabel"  type="x-tmpl-mustache">
 <div class="gregorContainer">
-<div class="gregorSubTableHeader tissueId_{{safeTissueId}}"  sortValue="{{p_value}}">
+<div class="gregorSubTableHeader tissueId_{{safeTissueId}}"  sortValue="{{p_value}}" sortFEValue="{{fe_value}}">
 <div><input class="gregorSubTableRowHeader" type="checkbox" value="{{safeTissueId}}"></div>{{tissue}}</div>
 </div>
 </script>
 
 <script id="gregorSubTableHeaderHeader"  type="x-tmpl-mustache">
-<div class="gregorSubTableRow annotationName_{{annotation}} methodName_{{method}} text-center" sortValue="{{p_value}}">
+<div class="gregorSubTableRow annotationName_{{annotation}} methodName_{{method}} text-center" sortValue="{{p_value}}" sortFEValue="{{fe_value}}">
 <div class="gregorContainer"><input class="gregorSubTableRowHeader" type="checkbox" value="{{annotation}}_{{method}}"></div>
 {{prettyAnnotation}}</div>
 </script>
@@ -24,5 +24,5 @@ records={{numberRecords}}
 </script>
 
 <script id="gregorVariantTableBody"  type="x-tmpl-mustache">
- <div class="gregorContainer gregorVariantTableBody" sortField='{{p_value}}'>{{prettyPValue}}</div>
+ <div class="gregorContainer gregorVariantTableBody" sortField='{{p_value}}' sortFEField='{{fe_value}}'><div>{{prettyPValue}}</div><div>{{prettyFEValue}}</div></div>
 </script>

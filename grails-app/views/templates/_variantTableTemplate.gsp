@@ -49,7 +49,7 @@
         </div>
 
 <div class="modal fade" id="gregorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document" style="width: 90%">
+  <div class="modal-dialog modal-dialog-scrollable" role="document" style="width: 90%">
     <div class="modal-content">
       <div class="modal-header text-center">
         <h5 class="modal-title" id="exampleModalLabel">GREGOR enrichments</h5>
@@ -91,6 +91,39 @@
                 </div>
                 <div class="col-md-4"></div>
             </div>
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div id="gregorFEValueSlider">
+                                <div id="custom-fe-handle" class="ui-slider-handle"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <div class="gregorPVals minimumGregorFEValue left-text"></div>
+                        </div>
+                        <div class="col-xs-6"></div>
+                        <div class="col-xs-3">
+                            <div class="gregorPVals maximumGregorFEValue right-text"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-4">
+                        </div>
+                        <div class="col-xs-4">
+                            <div>Current value:</div>
+                            <div class="gregorPVals dynamicFEDisplay"></div>
+                        </div>
+                        <div class="col-xs-4">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+
             <table class="gregorSubTable">
             </table>
         </div>

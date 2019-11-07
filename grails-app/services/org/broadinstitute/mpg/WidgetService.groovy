@@ -1278,7 +1278,9 @@ class WidgetService {
     public JSONObject buildTheIncredibleSet( String chromosome, int startPosition, int endPosition,
                                              String phenotype, int maxNumberOfRecords ){
         JSONObject jsonResultString = new JSONObject()
-        String dataSetName = metaDataService.getPreferredSampleGroupNameForPhenotype(phenotype)
+        String dataSetName = metaDataService.getPreferredSampleGroupNameForPhenotypeAndPropertyMeaning(phenotype,
+                "P_VALUE")
+
         Property newlyChosenProperty = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataSetName, "P_VALUE",
                 MetaDataService.METADATA_VARIANT)
         if (newlyChosenProperty!=null){

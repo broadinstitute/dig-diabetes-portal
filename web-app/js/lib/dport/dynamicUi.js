@@ -1173,6 +1173,7 @@ mpgSoftware.dynamicUi = (function () {
                         var variantsAsJson = "[]";
                         if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
                             const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
+                            if (dataVector.length===0){return;}
                             var variantNameArray = _.map(dataVector, function(variantRec){return variantRec.var_id;});
                             variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";
                         }
@@ -1261,6 +1262,7 @@ mpgSoftware.dynamicUi = (function () {
                         var variantsAsJson = "[]";
                         if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
                             const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
+                            if (dataVector.length===0){return;}
                             var variantNameArray = _.map(dataVector, function(variantRec){return variantRec.var_id;});
                             variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";                        }
                         var dataForCall = {variants: variantsAsJson,method:'MACS'};
@@ -1289,6 +1291,7 @@ mpgSoftware.dynamicUi = (function () {
                         var variantsAsJson = "[]";
                         if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
                             const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
+                            if (dataVector.length===0){return;}
                             var variantNameArray = _.map(dataVector, function(variantRec){return variantRec.var_id;});
                             variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";                        }
                         var dataForCall = {variants: variantsAsJson,method:'TFMOTIF'};
@@ -1317,6 +1320,7 @@ mpgSoftware.dynamicUi = (function () {
                         var variantsAsJson = "[]";
                         if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
                             const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
+                            if (dataVector.length===0){return;}
                             var variantNameArray = _.map(dataVector, function(variantRec){return variantRec.var_id;});
                             variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";                        }
                         var dataForCall = {variants: variantsAsJson,method:'SPP'};
@@ -3191,6 +3195,7 @@ mpgSoftware.dynamicUi = (function () {
                     } else if (rowTitle[rowRecordField] ===  oneRecord[rowRecordField]) {
                         var renderData = oneRecord;
                         renderData['prettyPValue']= UTILS.realNumberFormatter(""+oneRecord.p_value);
+                        renderData['prettyFEValue']= UTILS.realNumberFormatter(""+oneRecord.fe_value);
                         _.last(intermediateDataStructure.rowsToAdd).columnCells[indexOfColumn] = new IntermediateStructureDataCell([headerRecordField],
                             renderData,'gregorSubTableCell',dataAnnotationTypeCode );
 
@@ -3239,6 +3244,7 @@ mpgSoftware.dynamicUi = (function () {
             (typeof objectContainingRetrievedRecords[0].data !== 'undefined')){
             // set up the headers, and give us an empty row of column cells
             vectorOfVariantRecords = objectContainingRetrievedRecords[0].data;
+            if (vectorOfVariantRecords.length===0) { return; }
             _.forEach(vectorOfVariantRecords, function (oneRecord,index) {
                 intermediateDataStructure.headerNames.push(oneRecord.var_id);
                 intermediateDataStructure.headerContents.push(Mustache.render($('#'+dataAnnotationType.dataAnnotation.cellBodyWriter)[0].innerHTML, oneRecord));
@@ -3797,15 +3803,15 @@ mpgSoftware.dynamicUi = (function () {
                 // setAccumulatorObject("extentBegin","117862462");
                 // setAccumulatorObject("extentEnd","118289003");
 
-                // setAccumulatorObject("phenotype","T2D");
-                // setAccumulatorObject("chromosome","19");
-                // setAccumulatorObject("extentBegin","58838000");
-                // setAccumulatorObject("extentEnd","58875000");
-
                 setAccumulatorObject("phenotype","T2D");
-                setAccumulatorObject("chromosome","1");
-                setAccumulatorObject("extentBegin","3504650");
-                setAccumulatorObject("extentEnd","3614660");
+                setAccumulatorObject("chromosome","19");
+                setAccumulatorObject("extentBegin","58838000");
+                setAccumulatorObject("extentEnd","58875000");
+
+                // setAccumulatorObject("phenotype","T2D");
+                // setAccumulatorObject("chromosome","1");
+                // setAccumulatorObject("extentBegin","3504650");
+                // setAccumulatorObject("extentEnd","3614660");
 
                 const chromosomeInput = $('input#chromosomeInput').val();
                 const startExtentInput = $('input#startExtentInput').val();
@@ -5258,14 +5264,20 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
         if (( typeof intermediateStructure.rowsToAdd !== 'undefined') &&
             (intermediateStructure.rowsToAdd.length > 0)){
-            datatable =  $(whereTheTableGoes).dataTable();
-            var rememberCategories = addContentToTable( whereTheTableGoes,
-                                                        intermediateStructure.rowsToAdd,
-                                                        storeRecords,
-                                                        typeOfRecord,
-                                                        prependColumns,
-                                                        blankRowsAreAcceptable );
-            refineTableRecords(whereTheTableGoes,datatable,typeOfRecord,rememberCategories, false);
+            try{
+                datatable =  $(whereTheTableGoes).dataTable();
+                var rememberCategories = addContentToTable( whereTheTableGoes,
+                    intermediateStructure.rowsToAdd,
+                    storeRecords,
+                    typeOfRecord,
+                    prependColumns,
+                    blankRowsAreAcceptable );
+                refineTableRecords(whereTheTableGoes,datatable,typeOfRecord,rememberCategories, false);
+            } catch(e){
+
+            }
+
+
         }
 
 

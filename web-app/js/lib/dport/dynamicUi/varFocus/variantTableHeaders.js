@@ -82,7 +82,10 @@ mpgSoftware.dynamicUi.variantTableHeaders = (function () {
             if ( typeof data.variants !== 'undefined') {
                if ( ( typeof data.variants.variants !== 'undefined') ){// getAggData
                     if ( data.variants.variants.length === 0) {
-                        console.log(' No variants in the specified region')
+                        rawVariantAssociationRecords.splice(0,rawVariantAssociationRecords.length);
+                        returnValue.data = [];
+                        rawVariantAssociationRecords.push(returnValue)
+                        console.log(' No variants in the specified region');
                     } else {
                         rawVariantAssociationRecords.splice(0,rawVariantAssociationRecords.length);
                         _.forEach(_.uniqBy(data.variants.variants,'VAR_ID'), function (variantRec,index) {
@@ -100,6 +103,9 @@ mpgSoftware.dynamicUi.variantTableHeaders = (function () {
                     }
                 } else { // getData
                    if ( data.variants.length === 0) {
+                       rawVariantAssociationRecords.splice(0,rawVariantAssociationRecords.length);
+                       returnValue.data = [];
+                       rawVariantAssociationRecords.push(returnValue)
                        console.log(' No variants in the specified region')
                    } else {
                        rawVariantAssociationRecords.splice(0,rawVariantAssociationRecords.length);
@@ -146,7 +152,9 @@ mpgSoftware.dynamicUi.variantTableHeaders = (function () {
                     dataArray = data;
                 }
                 if (dataArray.length === 0) {
-                    //alert(' No variants in the specified region')
+                    rawVariantAssociationRecords.splice(0,rawVariantAssociationRecords.length);
+                    returnValue.data = [];
+                    rawVariantAssociationRecords.push(returnValue)
                 } else {
                     rawVariantAssociationRecords.splice(0,rawVariantAssociationRecords.length);
                     _.forEach(dataArray, function (variantRec) {
