@@ -97,6 +97,9 @@ mpgSoftware.variantTable = (function () {
         $('#displayBlankRows').click(function(){
             mpgSoftware.dynamicUi.filterEpigeneticTable(drivingVariables.dynamicTableConfiguration.initializeSharedTableMemory);
         });
+        $('.modal-content').resizable({
+            alsoResize: ".modal-header, .modal-body, .modal-footer"
+        });
         mpgSoftware.dynamicUi.modifyScreenFields({phenotype:preferredPhenotype},getVariablesToRemember());
     }
 

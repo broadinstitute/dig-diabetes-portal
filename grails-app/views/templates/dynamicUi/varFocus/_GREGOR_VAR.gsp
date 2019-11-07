@@ -8,13 +8,13 @@ records={{numberRecords}}
 
 <script id="gregorVariantTableRowHeaderLabel"  type="x-tmpl-mustache">
 <div class="gregorContainer">
-<div class="gregorSubTableHeader tissueId_{{safeTissueId}}"  sortValue="{{p_value}}" sortFEValue="{{fe_value}}">
+<div class="gregorSubTableHeader tissueId_{{safeTissueId}}"  sortValue="{{p_value}}" sortFEValue="{{tissue_hdr_fe_value}}">
 <div><input class="gregorSubTableRowHeader" type="checkbox" value="{{safeTissueId}}"></div>{{tissue}}</div>
 </div>
 </script>
 
 <script id="gregorSubTableHeaderHeader"  type="x-tmpl-mustache">
-<div class="gregorSubTableRow annotationName_{{annotation}} methodName_{{method}} text-center" sortValue="{{p_value}}" sortFEValue="{{fe_value}}">
+<div class="gregorSubTableRow annotationName_{{annotation}} methodName_{{method}} text-center" sortValue="{{p_value}}" sortFEValue="{{anno_hdr_fe_value}}">
 <div class="gregorContainer"><input class="gregorSubTableRowHeader" type="checkbox" value="{{annotation}}_{{method}}"></div>
 {{prettyAnnotation}}</div>
 </script>

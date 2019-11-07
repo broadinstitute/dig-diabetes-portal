@@ -1,5 +1,108 @@
 
 <script id="mainVariantTableOrganizer"  type="x-tmpl-mustache">
+
+
+<div class="modal fade" id="gregorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document" style="width: 90%">
+    <div class="modal-content" style="height:1000px">
+      <div class="modal-header text-center">
+        <h4 class="modal-title gregorModalLabel">Adjust GREGOR enrichments</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+        onclick="mpgSoftware.dynamicUi.filterEpigeneticTable('{{domTableSpecifier}}')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="gregorSubTableDiv" class="text-center">
+            <div class="row pvFilterController">
+                <div class="col-md-4 text-right">
+                    <label class="form-check-label" for="gregorPValuesCheckbox">
+                    Filter by GREGOR p-values
+                    </label>
+                    <input class="form-check-input" type="radio"  name="preferredQuantityForFiltering" value="" id="gregorPValuesCheckbox"
+                    onchange="mpgSoftware.dynamicUi.gregorSubTableVariantTable.deemphasizeOneFilter('div.pvFilterController',['div.feFilterController'])" checked>
+                </div>
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div id="gregorPValueSlider"
+                    onclick="mpgSoftware.dynamicUi.gregorSubTableVariantTable.deemphasizeOneFilter('div.pvFilterController',['div.feFilterController'])">
+                                <div id="custom-handle" class="ui-slider-handle"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <div class="gregorPVals minimumGregorPValue text-left"></div>
+                        </div>
+                        <div class="col-xs-6"></div>
+                        <div class="col-xs-3">
+                            <div class="gregorPVals maximumGregorPValue text-right"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                   <div class="row">
+                        <div class="col-xs-12 text-left gregorPVals">
+                        Display cells with p-values &lt;
+                            <span class="dynamicDisplay"></span>
+                        </div>
+                        <div class="col-xs-4">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row feFilterController" style="margin-top: 4px; opacity: 0.5">
+                <div class="col-md-4 text-right">
+                    <label class="form-check-label" for="gregorFoldEnrichmentsCheckbox">
+                    Filter by GREGOR fold enrichments
+                    </label>
+                    <input class="form-check-input" type="radio"  name="preferredQuantityForFiltering" value="" id="gregorFoldEnrichmentsCheckbox"
+                    onchange="mpgSoftware.dynamicUi.gregorSubTableVariantTable.deemphasizeOneFilter('div.feFilterController',['div.pvFilterController'])" >
+                </div>
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div id="gregorFEValueSlider"
+                    onclick="mpgSoftware.dynamicUi.gregorSubTableVariantTable.deemphasizeOneFilter('div.feFilterController',['div.pvFilterController'])">
+                                <div id="custom-fe-handle" class="ui-slider-handle"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <div class="gregorPVals minimumGregorFEValue text-left"></div>
+                        </div>
+                        <div class="col-xs-6"></div>
+                        <div class="col-xs-3">
+                            <div class="gregorPVals maximumGregorFEValue text-right"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-xs-12 text-left gregorPVals">
+                            <div>Display cells with fold enrichments &gt; <span class="dynamicFEDisplay"></span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <table class="gregorSubTable table responsive" style="font-size: 11px">
+            </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+        onclick="mpgSoftware.dynamicUi.filterEpigeneticTable('{{domTableSpecifier}}')">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
     <div class="container">
         <div class="row">
             <div class="text-center">
@@ -47,95 +150,6 @@
         </div>
         <div class="row" >
         </div>
-
-<div class="modal fade" id="gregorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable" role="document" style="width: 90%">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h5 class="modal-title" id="exampleModalLabel">GREGOR enrichments</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div id="gregorSubTableDiv" class="text-center">
-            <div class="row">
-                <div class="col-md-4"></div>
-                <div class="col-md-4">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div id="gregorPValueSlider">
-                                <div id="custom-handle" class="ui-slider-handle"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-3">
-                            <div class="gregorPVals minimumGregorPValue left-text"></div>
-                        </div>
-                        <div class="col-xs-6"></div>
-                        <div class="col-xs-3">
-                            <div class="gregorPVals maximumGregorPValue right-text"></div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-4">
-                        </div>
-                        <div class="col-xs-4">
-                            <div>Current value:</div>
-                            <div class="gregorPVals dynamicDisplay"></div>
-                        </div>
-                        <div class="col-xs-4">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4"></div>
-            </div>
-            <div class="row">
-                <div class="col-md-4"></div>
-                <div class="col-md-4">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div id="gregorFEValueSlider">
-                                <div id="custom-fe-handle" class="ui-slider-handle"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-3">
-                            <div class="gregorPVals minimumGregorFEValue left-text"></div>
-                        </div>
-                        <div class="col-xs-6"></div>
-                        <div class="col-xs-3">
-                            <div class="gregorPVals maximumGregorFEValue right-text"></div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-4">
-                        </div>
-                        <div class="col-xs-4">
-                            <div>Current value:</div>
-                            <div class="gregorPVals dynamicFEDisplay"></div>
-                        </div>
-                        <div class="col-xs-4">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4"></div>
-            </div>
-
-            <table class="gregorSubTable">
-            </table>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal"
-        onclick="mpgSoftware.dynamicUi.filterEpigeneticTable('{{domTableSpecifier}}')">Close</button>
-%{--        onclick="mpgSoftware.dynamicUi.reviseDisplayOfVariantTable('{{domTableSpecifier}}',2,'')">Close</button>--}%
-      </div>
-    </div>
-  </div>
-</div>
                 <div class="row">
                     <div class="col-md-8" style="border:0.5px solid #eee">
                         <div class="row" style="border-bottom:0.5px solid #ccc">

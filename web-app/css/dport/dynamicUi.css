@@ -23,12 +23,17 @@ div.k27ac {
 #gregorSubTableDiv .dataTables_length { display: none; }
 #gregorSubTableDiv .dataTables_paginate { display: none; }
 div.gregorPVals {
-    font-size: 10px;
+    font-size: 12px;
 }
-div.gregorPVals.dynamicDisplay {
+span.dynamicDisplay {
     color: blue;
     font-weight: bold;
 }
+span.dynamicFEDisplay {
+    color: blue;
+    font-weight: bold;
+}
+
 div.gregorSubTableRow{
 
 }
@@ -86,7 +91,13 @@ div.variantAnnotationCompress {
     /*overflow-x: hidden;*/
 }
 #gregorPValueSlider{
-    margin-top: 10px;
+    margin-top: 2px;
+}
+#gregorFEValueSlider{
+    margin-top: 2px;
+}
+#gregorSubTableDiv div.dataTables_wrapper{
+    padding: 50px 20px 20px 20px;
 }
 /*td.emphasisSwitch_true {*/
     /*background-color: #0000FF;*/
@@ -742,4 +753,10 @@ span.boldit{
 }
 #mainVariantDiv th>div.varEpigeneticsLabel {
     display:none;
+}
+.modal-content.ui-resizable {
+    overflow: scroll;
+}
+table.gregorSubTable th:first input.gregorSubTableRowHeader {
+    display: none
 }

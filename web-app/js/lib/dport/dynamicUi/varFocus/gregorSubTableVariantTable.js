@@ -86,19 +86,22 @@ const fieldsForPValue = {
 
             let bestAnnos = [];
             _.forEach(_.uniqBy(allRecs,'annotation'),function(oo){
+                let temp = oo;
                 if ((oo.method==='MACS')||(oo.method==='ChromHMM')){
-                    let temp = oo;
-                    temp['prettyAnnotation'] = oo.annotation.match(/[A-Z][a-z]+/g).join(" ");
-                    bestAnnos.push(temp);
+                    temp['prettyAnnotation'] = oo.annotation.match(/([A-Z][a-z]+)|([0-9]+)/g).join(" ");
                 }else{
-                    let temp = oo;
                     temp['prettyAnnotation'] = oo.annotation;
-                    bestAnnos.push(temp);
                 }
+                temp['anno_hdr_fe_value'] = _.first(_.orderBy(_.filter (allRecs,{'annotation':oo.annotation}),['fe_value'],['desc'])).fe_value;
+                bestAnnos.push(temp);
+
             });
             geneRecord.header['bestAnnotations'] = bestAnnos;
             geneRecord.header['bestAncestries'] = _.uniqBy(allRecs,'ancestry');
-            geneRecord.header['bestTissues'] = _.uniqBy(allRecs,'tissue');
+            geneRecord.header['bestTissues'] = _.map(_.uniqBy(allRecs,'tissue'),function(oo){
+                oo['tissue_hdr_fe_value'] = _.first(_.orderBy(_.filter (allRecs,{'tissue':oo.tissue}),['fe_value'],['desc'])).fe_value;
+                return oo;
+            });
             // add an additional tissue name
             let vectorWithAllRecords = [];
             _.forEach(allRecs, function (oneRec) {
@@ -191,10 +194,10 @@ const setUpFilterAndSlider = function (retrievedRecords,valueDisplay ){
             range: "max",
             min: minVal,
             max: maxVal,
-            value: minVal,
+            value: defaultGregorFEValue,
             step:(maxVal-minVal)/100.0,
             create: function() {
-                valueDisplay.text( UTILS.realNumberFormatter(minVal));
+                valueDisplay.text( UTILS.realNumberFormatter(defaultGregorFEValue));
 
             },
             slide: function( event, ui ) {
@@ -216,33 +219,9 @@ const setUpFilterAndSlider = function (retrievedRecords,valueDisplay ){
      */
     var displayGregorSubTable = function (idForTheTargetDiv, objectContainingRetrievedRecords, callingParameters ) {
       //  var handle = $( "#custom-handle" );
-        var valueDisplay = $( "div.dynamicDisplay" );
-        var valueFEDisplay = $( "div.dynamicFEDisplay" );
+        var valueDisplay = $( "span.dynamicDisplay" );
+        var valueFEDisplay = $( "span.dynamicFEDisplay" );
         if (objectContainingRetrievedRecords.length<1) return;
-        // const minVal = (objectContainingRetrievedRecords[0].header.minimumGregorPValue<=1)?
-        //     objectContainingRetrievedRecords[0].header.minimumGregorPValue:1;
-        // const maxVal = (objectContainingRetrievedRecords[0].header.maximumGregorPValue<=1)?
-        //     objectContainingRetrievedRecords[0].header.maximumGregorPValue:1;
-        // const defaultGregorPValueUpperValue = objectContainingRetrievedRecords[0].header.defaultGregorPValueUpperValue;
-        // const logMinVal = 0-Math.log10(minVal);
-        // const logMaxVal = 0-Math.log10(maxVal);
-        // $( "#gregorPValueSlider" ).slider({
-        //     range: "max",
-        //         min: 0,
-        //         max: 100,
-        //         value: ((logMinVal+Math.log10(defaultGregorPValueUpperValue))/(logMinVal-logMaxVal))*100,
-        //     create: function() {
-        //         valueDisplay.text( UTILS.realNumberFormatter(defaultGregorPValueUpperValue));
-        //
-        //     },
-        //     slide: function( event, ui ) {
-        //         const currentValue = Math.pow(10, 0-(logMinVal+(ui.value*(logMaxVal-logMinVal)/100.0)));
-        //         valueDisplay.text( UTILS.realNumberFormatter(currentValue) );
-        //         setGregorSubTableByPValue(currentValue);
-        //     }
-        // });
-        // $('div.minimumGregorPValue').text(UTILS.realNumberFormatter(minVal));
-        // $('div.maximumGregorPValue').text(UTILS.realNumberFormatter(maxVal));
         setUpFilterAndSlider(objectContainingRetrievedRecords[0],valueDisplay);
         setUpFEFilterAndSlider(objectContainingRetrievedRecords[0],valueFEDisplay);
         mpgSoftware.dynamicUi.displayGregorSubTableForVariantTable(idForTheTargetDiv, // which table are we adding to
@@ -276,6 +255,23 @@ const setUpFilterAndSlider = function (retrievedRecords,valueDisplay ){
     };
 
 
+    const deemphasizeOneFilter = function(itemToEmphasize,arrayOfItemsToDeemphasize){
+        const domItemToEmphasize = $(itemToEmphasize);
+        _.forEach(arrayOfItemsToDeemphasize,function (oneItemToDeemphasize){
+            $(oneItemToDeemphasize).css('opacity',0.5)
+        });
+        domItemToEmphasize.css('opacity',1.0);
+        if (domItemToEmphasize.find('span.dynamicDisplay').length>0){
+            const valueToWhichWePayAttention = $( "span.dynamicDisplay" );
+            const valueAsANumber = UTILS.convertStringToNumber(valueToWhichWePayAttention.text());
+            setGregorSubTableByPValue(valueAsANumber);
+        } else if (domItemToEmphasize.find('span.dynamicFEDisplay').length>0){
+            const valueToWhichWePayAttention = $( "span.dynamicFEDisplay" );
+            const valueAsANumber = UTILS.convertStringToNumber(valueToWhichWePayAttention.text());
+            setGregorSubTableByFEValue(valueAsANumber);
+        }
+    }
+
 
     /***
      *  3) set of categorizor routines
@@ -290,6 +286,7 @@ const setUpFilterAndSlider = function (retrievedRecords,valueDisplay ){
 // public routines are declared below
     return {
         processRecordsFromGregor: processRecordsFromGregor,
-        displayGregorSubTable:displayGregorSubTable
+        displayGregorSubTable:displayGregorSubTable,
+        deemphasizeOneFilter:deemphasizeOneFilter
     }
 }());
