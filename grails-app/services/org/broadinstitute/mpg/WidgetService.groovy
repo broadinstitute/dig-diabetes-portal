@@ -1326,17 +1326,23 @@ class WidgetService {
             // If there's more than one pick the one with the biggest sample size.  If there are none then we give up
             //  and undertake the old-fashioned get data call
 
+
+
+            String dataSetName = metaDataService.getPreferredSampleGroupNameForPhenotypeAndPropertyMeaning(phenotype,
+                                                                    PortalConstants.PROPERTY_NAME_POSTERIOR_PROBABILITY)
+            if (dataSetName){
+                JSONObject jsonObject = restServerService.retrieveCredibleSetViaOverlap( phenotype,startPosition, endPosition,
+                        chromosome,  dataSetName)
+                if ( (jsonObject) && (jsonObject.data) ){
+                    return jsonObject
+                }
+
+            }
+
+
+        } else {
             dataset = metaDataService.getPreferredSampleGroupNameForPhenotypeAndPropertyMeaning(phenotype,
                     PortalConstants.PROPERTY_NAME_POSTERIOR_PROBABILITY)
-
-//            String dataSetName = metaDataService.getPreferredSampleGroupNameForPhenotypeAndPropertyMeaning(phenotype,
-//                                                                    PortalConstants.PROPERTY_NAME_POSTERIOR_PROBABILITY)
-//            if (dataSetName){
-//                JSONObject jsonObject = restServerService.retrieveCredibleSetViaOverlap( phenotype,startPosition, endPosition,chromosome,  dataSetName)
-//                if ( (jsonObject) && (jsonObject.data) ){
-//                    return jsonObject
-//                }
-//            }
         }
         if (dataset != ''){
              locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype, propertyName);

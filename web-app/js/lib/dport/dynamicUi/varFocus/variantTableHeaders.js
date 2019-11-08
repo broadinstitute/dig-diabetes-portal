@@ -156,13 +156,26 @@ mpgSoftware.dynamicUi.variantTableHeaders = (function () {
                     returnValue.data = [];
                     rawVariantAssociationRecords.push(returnValue)
                 } else {
+                    let weHavePrecalculatedPosteriors = false;
                     rawVariantAssociationRecords.splice(0,rawVariantAssociationRecords.length);
                     _.forEach(dataArray, function (variantRec) {
                         var variantRecToExtend  = variantRec;
+                        if ( typeof variantRec.posterior_probability !== 'undefined'){
+                            weHavePrecalculatedPosteriors = true;
+                            variantRecToExtend["POSTERIOR_PROBABILITY"]=variantRec.posterior_probability;
+                            variantRecToExtend["posterior"]=variantRec.posterior_probability;
+                        }
                         variantRecToExtend["name"] = variantRec.var_id; // standard field in which to store the index value?
                         returnValue.data.push(variantRecToExtend);
                     });
-                    let filteredVariants = calculatePosteriorPValues(returnValue);
+                    let filteredVariants;
+                    if (!weHavePrecalculatedPosteriors) {
+                        filteredVariants = calculatePosteriorPValues(returnValue);
+                    } else {
+                        returnValue.data = _.filter(returnValue.data,function(o){return o.posterior>0.05})
+                        filteredVariants = returnValue;
+                        filteredVariants["credSetLevel"] = "0.95";
+                    }
                     rawVariantAssociationRecords.push(filteredVariants);
                 }
 

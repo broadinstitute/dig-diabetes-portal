@@ -2789,7 +2789,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         JsonSlurper slurper = new JsonSlurper()
         JSONObject jSONObject
 
-        jSONObject = slurper.parseText(rawReturnFromApi) as List
+        jSONObject = slurper.parseText(rawReturnFromApi)
 
         return jSONObject
 
