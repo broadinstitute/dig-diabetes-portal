@@ -190,7 +190,7 @@
                         <div class="gene-phenotype" style="width:45%;">Phenotype<a class="edit-btn" onclick="showHideElement('#phenotypeSearchHolder')">Edit</a></div>
                     </div>
                     <div id="gene-info-summary-content">
-                        <div class="gene-name" style="width:25%; font-size: 2em; height: 65px; "><%=geneName%>
+                        <div class="gene-name" style="width:25%; font-size: 2em; height: 65px; "><i><%=geneName%></i>
 
                             <div class="gene-search-holder" id="geneSearchHolder" style="display: none;">
                                 <div class="gene-search">
