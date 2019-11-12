@@ -2540,6 +2540,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                                                     int startPosition,
                                                     int endPosition,
                                                     String method,
+                                                    String annotation,
                                                     List <String> variantList,
                                                     List <String> tissueList,
                                                     int limit ) {
@@ -2558,9 +2559,12 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                 log.error("calling error in gatherVariantsAnnotations.  Range provided, but no chromosome.")
             }
         }
-        if ((method) && (method.length() > 0)) {
-            specifyRequestList << "method=${method}"
-        }
+         if ((method) && (method.length() > 0)) {
+             specifyRequestList << "method=${method}"
+         }
+         if ((annotation) && (annotation.length() > 0)) {
+             specifyRequestList << "annotation=${annotation}"
+         }
         if ((variantList) && (variantList.size() > 0)) {
             specifyRequestList << "var_id=${variantList.join(",").replace("\"","")}"
             callByVarId = true

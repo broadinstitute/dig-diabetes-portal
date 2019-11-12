@@ -692,6 +692,7 @@ class RegionInfoController {
         String chromosome = ""
         boolean looksOkay = true
         JSONArray jsonReturn
+        JSONObject jsonObjectReturn
         JSONArray variants
         List <String> variantList = []
         def slurper = new JsonSlurper()
@@ -733,13 +734,22 @@ class RegionInfoController {
         }
 
         if (looksOkay){
-            jsonReturn = restServerService.gatherAbcData( gene, tissue, startPosition, endPosition, chromosome, variantList )
+            //jsonReturn = restServerService.gatherAbcData( gene, tissue, startPosition, endPosition, chromosome, variantList )
+            jsonObjectReturn = restServerService.gatherVariantsAnnotations( chromosome,
+                                                                            startPosition,
+                                                                            endPosition,
+                                                                            "ABC",
+                                                                            "",
+                                                                            variantList,
+                                                                            [],
+                                                                            -1 )
+
         } else {
             String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
-            jsonReturn =  slurper.parseText(proposedJsonString) as JSONArray;
+            jsonObjectReturn =  slurper.parseText(proposedJsonString) as JSONArray;
         }
 
-        render(status: 200, contentType: "application/json") {jsonReturn}
+        render(status: 200, contentType: "application/json") {jsonObjectReturn}
         return
     }
 
@@ -1500,6 +1510,7 @@ class RegionInfoController {
         int limit = -1
         String chromosome = ""
         String method = ""
+        String annotation = ""
         List <String> variantList = []
         List <String> tissueList = []
 
@@ -1509,6 +1520,10 @@ class RegionInfoController {
 
         if (params.method) {
             method = params.method
+        }
+
+        if (params.annotation) {
+            annotation = params.annotation
         }
 
         if ((params.limit!=null)&&(params.limit)) {
@@ -1558,6 +1573,7 @@ class RegionInfoController {
                                                                     startPosition,
                                                                     endPosition,
                                                                     method,
+                                                                    annotation,
                                                                     variantList,
                                                                     tissueList,
                                                                     limit )
