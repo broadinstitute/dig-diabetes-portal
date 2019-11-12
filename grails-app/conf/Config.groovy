@@ -469,6 +469,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/trait/**':            ['ROLE_USER'],
         '/variant/**':          ['ROLE_USER'],
         '/variantInfo/**':      ['ROLE_USER'],
+//        '/variantInfo/**':      ['permitAll'],
         '/grs/**':              ['ROLE_USER'],
         '/gait/**':              ['ROLE_USER'],
         '/variantSearch/retrieveGwasSpecificPhenotypesAjax':    ['permitAll'],
@@ -489,6 +490,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/localization/**':   ['ROLE_ADMIN'],
         '/metadatainfo/**':       ['ROLE_USER'],
         '/regionInfo/**':      ['ROLE_USER']
+//        '/regionInfo/**':      ['permitAll']
 
 ]
 grails.plugin.auth.loginFormUrl='/Security/auth2'
@@ -1104,4 +1106,3 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0  // expose the effector gene table
                                   )
 ]
-

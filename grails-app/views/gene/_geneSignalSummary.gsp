@@ -207,6 +207,7 @@ td.tissueTable.informationIsPresent{
                     exposeRegionAdjustmentOnGenePage:"${portalVersionBean.getExposeRegionAdjustmentOnGenePage()}",
                     exposeGeneTableOnDynamicUi:"${portalVersionBean.getExposeGeneTableOnDynamicUi()}",
                     exposeVariantTableOfDynamicUi:"${portalVersionBean.getExposeVariantTableOfDynamicUi()}",
+                    dynamicTableType:'geneTable',
                     utilizeBiallelicGait:"${portalVersionBean.getUtilizeBiallelicGait()}",
                     dataAnnotationTypes: [
                         {   code: 'GHDR', // manages the header.  Most of the records in this particular category have no match in the code, unlike all of the other categories
@@ -220,6 +221,8 @@ td.tissueTable.informationIsPresent{
                             subCategoryWriter:'no subcategory writer',
                             numberRecordsCellPresentationStringWriter:'no record numbers string writer',
                             significanceCellPresentationStringWriter:'no significance string writer',
+                            sortingSubroutine:'geneHeader',
+                            packagingString:'mpgSoftware.dynamicUi.geneHeaders',
                             internalIdentifierString:'getTissuesFromProximityForLocusContext'
                         },
                         {   code: 'FIR',
@@ -232,6 +235,8 @@ td.tissueTable.informationIsPresent{
                             subCategoryWriter:'geneFirthAssociationTableSubCategory',
                             numberRecordsCellPresentationStringWriter:'geneFirthAssociationTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'geneFirthAssociationTableSignificanceCellPresentationString',
+                            sortingSubroutine:'Firth',
+                            packagingString:'mpgSoftware.dynamicUi.geneBurdenFirth',
                             internalIdentifierString:'getFirthGeneAssociationsForGeneTable'
                         },
                         {   code: 'SKA',
@@ -244,6 +249,8 @@ td.tissueTable.informationIsPresent{
                             subCategoryWriter:'geneSkatAssociationTableSubCategory',
                             numberRecordsCellPresentationStringWriter:'geneSkatAssociationTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'geneSkatAssociationTableSignificanceCellPresentationString',
+                            sortingSubroutine:'SKAT',
+                            packagingString:'mpgSoftware.dynamicUi.geneBurdenSkat',
                             internalIdentifierString:'getSkatGeneAssociationsForGeneTable'
                         },
                         {   code: 'MET',
@@ -256,6 +263,8 @@ td.tissueTable.informationIsPresent{
                             subCategoryWriter:'metaxcanTableSubCategory',
                             numberRecordsCellPresentationStringWriter:'metaxcanTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'metaxcanTableSignificanceCellPresentationString',
+                            sortingSubroutine:'MetaXcan',
+                            packagingString:'mpgSoftware.dynamicUi.metaXcan',
                             internalIdentifierString:'getGeneAssociationsForGenesTable'
                         },
                         {   code: 'DEP_GS',
@@ -268,6 +277,8 @@ td.tissueTable.informationIsPresent{
                             subCategoryWriter:'depictGeneSetSubCategory',
                             numberRecordsCellPresentationStringWriter:'depictGeneSetTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'depictGeneSetTableSignificanceCellPresentationString',
+                            sortingSubroutine:'DEPICT',
+                            packagingString:'mpgSoftware.dynamicUi.depictGeneSets',
                             internalIdentifierString:'getDepictGeneSetForGenesTable'
                         },
                         {   code: 'DEP_GP',
@@ -280,6 +291,8 @@ td.tissueTable.informationIsPresent{
                             subCategoryWriter:'depictGeneTableSubCategory',
                             numberRecordsCellPresentationStringWriter:'depictGenePvalueTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'depictGenePvalueTableSignificanceCellPresentationString',
+                            sortingSubroutine:'DEPICT',
+                            packagingString:'mpgSoftware.dynamicUi.depictGenePvalue',
                             internalIdentifierString:'getInformationFromDepictForGenesTable'
                         },
                         {   code: 'ECA',
@@ -292,6 +305,8 @@ td.tissueTable.informationIsPresent{
                             subCategoryWriter:'eCaviarSubCategory',
                             numberRecordsCellPresentationStringWriter:'eCaviarTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'eCaviarTableSignificanceCellPresentationString',
+                            sortingSubroutine:'eCAVIAR',
+                            packagingString:'mpgSoftware.dynamicUi.eCaviar',
                             internalIdentifierString:'getRecordsFromECaviarForGeneTable'
                         },
                         {   code: 'COL',
@@ -304,18 +319,22 @@ td.tissueTable.informationIsPresent{
                             subCategoryWriter:'colocSubCategory',
                             numberRecordsCellPresentationStringWriter:'colocTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'colocTableSignificanceCellPresentationString',
+                            sortingSubroutine:'COLOC',
+                            packagingString:'mpgSoftware.dynamicUi.coloc',
                             internalIdentifierString:'getRecordsFromColocForGeneTable'
                         },
                         {   code: 'MOD',
                             category: 'Annotation',
                             displayCategory: 'Annotation',
-                            subcategory: 'Mouse knockout phenotype',
+                            subcategory: 'MOD',
                             displaySubcategory: 'Mouse knockout phenotypes',
                             cellBodyWriter:'dynamicGeneTableModBody',
                             categoryWriter:'sharedCategoryWriter',
                             subCategoryWriter:'dynamicGeneTableModSubCategory',
                             numberRecordsCellPresentationStringWriter:'modTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'modTableSignificanceCellPresentationString',
+                            sortingSubroutine:'MOD',
+                            packagingString:'mpgSoftware.dynamicUi.mouseKnockout',
                             internalIdentifierString:'getAnnotationsFromModForGenesTable'
                         },
                         {   code: 'EFF',
@@ -328,7 +347,25 @@ td.tissueTable.informationIsPresent{
                             subCategoryWriter:'dynamicGeneTableEffectorGeneSubCategory',
                             numberRecordsCellPresentationStringWriter:'effectorGeneTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'effectorGeneTableSignificanceCellPresentationString',
+                            sortingSubroutine:'straightAlphabetic',
+                            packagingString:'mpgSoftware.dynamicUi.effectorGene',
                             internalIdentifierString:'getInformationFromEffectorGeneListTable'
+                        }
+                        // additional sorting terms
+                        ,
+                        {
+                            sortingSubroutine:'categoryName',
+                            internalIdentifierString:'doesNotHaveAnIndependentFunction',
+                            packagingString:'mpgSoftware.dynamicUi.geneHeaders',
+                            nameOfAccumulatorField:'notUsed',
+                            nameOfAccumulatorFieldWithIndex:'notUsed'
+                        }
+                        ,
+                        {
+                            sortingSubroutine:'geneMethods',
+                            internalIdentifierString:'doesNotHaveAnIndependentFunction',
+                            nameOfAccumulatorField:'notUsed',
+                            nameOfAccumulatorFieldWithIndex:'notUsed'
                         }
                         // ,{   code: 'EQT',
                         //     category: 'Annotation',
@@ -349,8 +386,13 @@ td.tissueTable.informationIsPresent{
 
                     ],
                     dynamicTableConfiguration: {
+                        emptyBodyRecord:'#emptyBodyRecord',
+                        emptyHeaderRecord:'#emptyHeaderRecord',
                         domSpecificationForAccumulatorStorage:'#configurableUiTabStorage',
-                        formOfStorage: 'loadFromTable'
+                        formOfStorage: 'loadFromTable',
+                        initializeSharedTableMemory:  'table.combinedGeneTableHolder',
+                        organizingDiv:  '#DataTables_Table_0_wrapper',
+                        initialOrientation:'geneTableGeneHeaders'
                     }
                 };
                 mpgSoftware.geneSignalSummaryMethods.setSignalSummarySectionVariables(drivingVariables);

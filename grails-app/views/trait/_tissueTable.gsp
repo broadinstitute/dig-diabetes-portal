@@ -34,6 +34,7 @@
                     getAllPhenotypesAjaxUrl: '${g.createLink(controller: "trait", action: "getAllPhenotypesAndTranslationAjax")}',
                     retrieveLdsrDataUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveLdsrData")}',
                     retrieveDepictTissueDataUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveDepictTissues")}',
+                    dynamicTableType:'tissueTable',
                     dataAnnotationTypes: [
                         {
                             code: 'TITA',
@@ -47,6 +48,8 @@
                             subCategoryWriter:'gregorTissueTableTissueRowLabel',
                             numberRecordsCellPresentationStringWriter:'gregorTissueTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'gregorTissueTableSignificanceCellPresentationString',
+                            sortingSubroutine:'gregorValuesInTissueTable',
+                            packagingString:'mpgSoftware.dynamicUi.gregorTissueTable',
                             internalIdentifierString:'getInformationFromGregorForTissueTable'
                         },
                         {
@@ -61,6 +64,8 @@
                             subCategoryWriter:'ldsrTissueTableTissueRowLabel',
                             numberRecordsCellPresentationStringWriter:'ldsrTissueTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'ldsrTissueTableSignificanceCellPresentationString',
+                            sortingSubroutine:'ldsrValuesInTissueTable',
+                            packagingString:'mpgSoftware.dynamicUi.ldsrTissueTable',
                             internalIdentifierString:'getInformationFromLdsrForTissueTable'
                         }
                         ,
@@ -76,14 +81,26 @@
                             subCategoryWriter:'depictTissuesTissueTableTissueRowLabel',
                             numberRecordsCellPresentationStringWriter:'depictTissuesTissueTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'depictTissuesTissueTableSignificanceCellPresentationString',
+                            sortingSubroutine:'depictTissueValuesInTissueTable',
+                            packagingString:'mpgSoftware.dynamicUi.depictTissues',
                             internalIdentifierString:'getInformationFromDepictForTissueTable'
                         }
-
+                        ,
+                        {
+                            sortingSubroutine:'tissueHeader',
+                            internalIdentifierString:'doesNotHaveAnIndependentFunction',
+                            packagingString:'mpgSoftware.dynamicUi.gregorTissueTable',
+                            nameOfAccumulatorField:'notUsed',
+                            nameOfAccumulatorFieldWithIndex:'notUsed'
+                        }
                     ],
                     dynamicTableConfiguration: {
+                        emptyBodyRecord:'#emptyBodyRecord',
+                        emptyHeaderRecord:'#emptyHeaderRecord',
                         domSpecificationForAccumulatorStorage:'#mainTissueDiv',
                         formOfStorage: 'loadFromTable',
-                        initializeSharedTableMemory:  '#mainTissueDiv table.tissueTableHolder'
+                        initializeSharedTableMemory:  '#mainTissueDiv table.tissueTableHolder',
+                        initialOrientation:'tissueTableTissueHeaders'
                     }
                 };
                 mpgSoftware.tissueTable.setVariablesToRemember(drivingVariables);
@@ -108,11 +125,8 @@
         mpgSoftware.tissueTableInitializer.tissueTableConfiguration();
     });
 </script>
-<g:render template="/templates/dynamicUiTemplate" />
-<g:render template="/templates/tissueTableTemplate" />
-<g:render template="/templates/dynamicUi/TITA" />
-<g:render template="/templates/dynamicUi/LDSR" />
-<g:render template="/templates/dynamicUi/DEP_TI" />
+<g:render template="/templates/dynamicUi/TISSUE_TABLE" />
+
 
 <div id="mainTissueDiv">
 

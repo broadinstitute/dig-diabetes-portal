@@ -153,11 +153,14 @@ mpgSoftware.dynamicUi.ldsrTissueTable = (function () {
     var categorizor = new mpgSoftware.dynamicUi.Categorizor();
     categorizor.categorizeSignificanceNumbers = Object.getPrototypeOf(categorizor).genePValueSignificance;
 
+    let sortUtility = new mpgSoftware.dynamicUi.SortUtility();
+    const sortRoutine = Object.getPrototypeOf(sortUtility).numericalComparisonWithEmptiesAtBottom;
 
 // public routines are declared below
     return {
         processLdsrDataForTissueTable: processLdsrDataForTissueTable,
         displayLdsrDataForTissueTable:displayLdsrDataForTissueTable,
-        createSingleLdsrCell:createSingleLdsrCell
+        createSingleLdsrCell:createSingleLdsrCell,
+        sortRoutine:sortRoutine
     }
 }());

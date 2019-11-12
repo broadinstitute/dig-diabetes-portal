@@ -16,6 +16,43 @@ div.contextHolder{
     padding: 20px 20px 20px 20px;
     border: solid 1px #fff;
 }
+div.k27ac {
+    word-break:break-all;
+}
+#gregorSubTableDiv .dataTables_info { display: none; }
+#gregorSubTableDiv .dataTables_length { display: none; }
+#gregorSubTableDiv .dataTables_paginate { display: none; }
+div.gregorPVals {
+    font-size: 12px;
+}
+span.dynamicDisplay {
+    color: blue;
+    font-weight: bold;
+}
+span.dynamicFEDisplay {
+    color: blue;
+    font-weight: bold;
+}
+
+div.gregorSubTableRow{
+
+}
+/*.dataTables_wrapper.dk-zoom-0, .dataTables_wrapper.dk-zoom-0 .btn { font-size: 14px; }*/
+/*.dataTables_wrapper.dk-zoom-1, .dataTables_wrapper.dk-zoom-1 .btn { font-size: 12px; }*/
+/*.dataTables_wrapper.dk-zoom-2, .dataTables_wrapper.dk-zoom-2 .btn { font-size: 10px; }*/
+/*.dataTables_wrapper.dk-zoom-3, .dataTables_wrapper.dk-zoom-3 .btn { font-size: 8px; }*/
+
+/*.dataTables_wrapper tbody th, .dataTables_wrapper tbody td { padding: 8px 10px; outline: none; border:none; border-top: solid 1px #ccc; border-right: solid 1px #ccc; }*/
+/*.dataTables_wrapper.dk-zoom-0 tbody th, .dataTables_wrapper.dk-zoom-0 tbody td { padding: 8px 10px; outline: none; border-top: solid 1px #ccc; border-right: solid 1px #ccc; }*/
+/*.dataTables_wrapper.dk-zoom-1 tbody th, .dataTables_wrapper.dk-zoom-1 tbody td { padding: 6px 7px; outline: none; border-top: solid 1px #ccc; border-right: solid 1px #ccc;  }*/
+/*.dataTables_wrapper.dk-zoom-2 tbody th, .dataTables_wrapper.dk-zoom-2 tbody td { padding: 4px 5px; outline: none; border-top: solid 1px #ccc; border-right: solid 1px #ccc;  }*/
+/*.dataTables_wrapper.dk-zoom-3 tbody th, .dataTables_wrapper.dk-zoom-3 tbody td { padding: 3px 4px; outline: none; border-top: solid 1px #ccc; border-right: solid 1px #ccc;  }*/
+
+/*.dataTables_wrapper thead th, .dataTables_wrapper thead td { padding: 10px 18px; outline: none; border:none; border-top: solid 1px #ccc; border-right: solid 1px #ccc; }*/
+/*.dataTables_wrapper.dk-zoom-0 thead th, .dataTables_wrapper.dk-zoom-0 thead td { padding: 10px 18px; }*/
+/*.dataTables_wrapper.dk-zoom-1 thead th, .dataTables_wrapper.dk-zoom-1 thead td { padding: 10px 18px; }*/
+/*.dataTables_wrapper.dk-zoom-2 thead th, .dataTables_wrapper.dk-zoom-2 thead td { padding: 10px 18px; }*/
+/*.dataTables_wrapper.dk-zoom-3 thead th, .dataTables_wrapper.dk-zoom-3 thead td { padding: 10px 18px; }*/
 
 
 .dataTables_wrapper.dk-zoom-0, .dataTables_wrapper.dk-zoom-0 .btn { font-size: 18px; }
@@ -44,7 +81,30 @@ div.contextHolder{
 .dataTables_wrapper.dk-zoom-5 thead th, .dataTables_wrapper.dk-zoom-5 thead td { padding: 10px 18px; }
 .dataTables_wrapper.dk-zoom-6 thead th, .dataTables_wrapper.dk-zoom-6 thead td { padding: 10px 18px; }
 
-
+div.variantAnnotationCompress {
+    height: 10px;
+}
+#gregorSubTableDiv{
+    /*height: 500px;*/
+    /*font-size: 12px;*/
+    /*overflow-y: scroll;*/
+    /*overflow-x: hidden;*/
+}
+#gregorPValueSlider{
+    margin-top: 2px;
+}
+#gregorFEValueSlider{
+    margin-top: 2px;
+}
+#gregorSubTableDiv div.dataTables_wrapper{
+    padding: 50px 20px 20px 20px;
+}
+/*td.emphasisSwitch_true {*/
+    /*background-color: #0000FF;*/
+/*}*/
+/*td.emphasisSwitch_false {*/
+    /*background-color: #FFFFFF;*/
+/*}*/
 
 div.openMetaXcanInGeneTable {
     font-size: 10px;
@@ -97,7 +157,24 @@ body::-webkit-scrollbar-thumb {
     overflow:auto;
     font-size: 12px;
 }
-
+/*div.epigeneticCellElement.gregorQuantile_0{*/
+    /*background: #0000FF;*/
+/*}*/
+/*div.epigeneticCellElement.gregorQuantile_0{*/
+    /*background: #4682B4;*/
+/*}*/
+div.epigeneticCellElement.gregorQuantile_0{
+    background: #1E90FF;
+}
+div.epigeneticCellElement.gregorQuantile_1{
+    background: #87CEFA;
+}
+div.epigeneticCellElement.gregorQuantile_2{
+    background: #B0E0E6;
+}
+div.epigeneticCellElement.gregorQuantile_3{
+    background: #E6E6FA;
+}
 #dynamicGeneHolder > div.row { background-color: #fff !important; border: none !important; }
 div.datatable-control-box { float: right; padding: 30px 10px 15px 0px; }
 div.datatable-transpose-control, div.datatable-cell-color-control, div.datatable-zoom-control { float: left; padding-left: 15px; }
@@ -500,6 +577,9 @@ th.tissueNameInTissueTable>div {
 div.staticValuesLabelInTissueTable {
     font-weight: bold;
 }
+div.staticMethodLabels {
+    font-weight: bold;
+}
 select.phenotypePicker {
     padding: 8px;
     margin-bottom: 10px;
@@ -507,4 +587,176 @@ select.phenotypePicker {
 span.phenotypeSpecifier{
     font-family: 'Oswald';
     font-size: 55px;
+}
+.variantTableHolder th.headersWithVarIds {
+    background: white;
+    max-width: 2px;
+    font-weight: normal;
+    text-align: left;
+    text-decoration: underline;
+    color: blue;
+    text-align: left;
+    cursor: pointer;
+}
+.variantTableHolder td.headersWithVarIds {
+    background: white;
+    max-width: 2px;
+    font-weight: normal;
+    text-align: left;
+    text-decoration: underline;
+    color: blue;
+    text-align: left;
+    cursor: pointer;
+}
+div.variantHeaderShifters span.glyphicon-step-forward, div.geneHeaderShifters span.glyphicon-step-forward {
+    color: #ccc;
+}
+
+div.variantHeaderShifters span.glyphicon-step-backward, div.geneHeaderShifters span.glyphicon-step-backward {
+    margin-right: -4px;
+    color: #ccc;
+}
+div.variantHeaderShifters{
+    padding: 0;
+    margin: 0;
+    height: 15px;
+    position: absolute;
+    right: 0;
+    top: 90px;
+    padding-top: 10px;
+    color: #ccc;
+    background-image: url("../images/D_a_D.png");
+    background-repeat: no-repeat;
+    background-position: right top;
+
+}
+th div.displayVariantNameHolder{
+    position: relative;
+    left:0;
+    bottom:0;
+    height:120px;
+}
+td div.displayVariantNameHolder{
+    //position: relative;
+    left:0;
+    bottom:0;
+}
+th span.displayVariantName{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background: none;
+    transform-origin: 0 0;
+    transform: rotate(-60deg);
+}
+td span.displayVariantName{
+   // position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+table.variantTableHolder, th  {
+    border-top: 0;
+    table-layout: fixed;
+    width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+table.variantTableHolder div.epigeneticCellElement   {
+    font-size: 10px;
+    font-weight: bold;
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 1px;
+}
+div.variantHeaderHolder{
+    position: relative;
+    top:0;
+    bottom:0;
+}
+table.variantTableHolder th.headersWithVarIds {
+    border-top: 0;
+    width: 80px;
+    padding:0;
+    overflow: auto;
+}
+table.variantTableHolder div.headersWithVarIds {
+    border-top: 0;
+    padding:0;
+    overflow: auto;
+}
+table.variantTableHolder tr.doNotDisplay{
+    /*display: none;*/
+}
+table.gregorSubTable>thead>tr>th  {
+    border-top: 0;
+    table-layout: fixed;
+    width: 100px;
+    white-space: pre-wrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+td>div.gregorContainer  {
+    width: 100%;
+    height: 100%;
+    overflow:hidden;
+}
+table.gregorSubTable tbody>tr>td {
+    height: 20px;
+    padding: 0px 5px;
+}
+#mainVariantDiv .dataTables_info { display: none; }
+#mainVariantDiv .dataTables_length { display: none; }
+#mainVariantDiv .dataTables_paginate { display: none; }
+label.specifyAnnotationsText{
+    color: #337ab7;
+    font-weight: normal;
+}
+#mainVariantDiv table.dataTable tbody td {
+    padding: 4px 2px;
+}
+div.variantTableFilterChoice{
+    /*overflow-x: scroll;*/
+    white-space: nowrap;
+}
+span.boldit{
+    font-weight: bold;
+}
+#mainVariantDiv div.emphasisSwitch_false span {
+    display: none;
+}
+#mainVariantDiv th.VariantSplicing{
+    width: 50px;
+}
+#mainVariantDiv th.VariantCoding {
+    width: 50px;
+}
+#mainVariantDiv th.VariantUtr {
+    width: 50px;
+}
+#mainVariantDiv th.VariantID {
+    width: 100px;
+}
+#mainVariantDiv th.VariantAssociationPValue  {
+    width: 75px;
+}
+#mainVariantDiv th.VariantAssociationPosteriorD {
+    width: 75px;
+}
+#mainVariantDiv th>div.annotationLabel {
+    display:none;
+}
+#mainVariantDiv th>div.associationLabel {
+    display:none;
+}
+#mainVariantDiv th>div.varEpigeneticsLabel {
+    display:none;
+}
+.modal-content.ui-resizable {
+    overflow: scroll;
+}
+table.gregorSubTable th:first input.gregorSubTableRowHeader {
+    display: none
 }

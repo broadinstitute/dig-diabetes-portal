@@ -553,6 +553,50 @@ class VariantSearchController {
 
 
 
+    def retrieveOnlyTopVariantsAcrossSgs (){
+        String portalType = g.portalTypeString() as String
+        UserQueryContext userQueryContext = widgetService.generateUserQueryContext(params.geneToSummarize)
+        String currentVersion = metaDataService.getDataVersion()
+
+        String phenotypeName = ''
+        int limit = -1 // how many records to pull back.  -1 = no limit
+        if (params.limit) {
+            limit = Integer.parseInt(params.limit)
+        } else {
+            limit = RestServerService.DEFAULT_NUMBER_OF_RESULTS_FROM_TOPVARIANTS
+        }
+        log.debug "variantSearch params.limit = ${params.limit}"
+
+
+        if (params.phenotype) {
+            phenotypeName = params.phenotype
+            log.debug "variantSearch params.phenotype = ${params.phenotype}"
+        }
+
+        JSONObject dataJsonObject
+
+        if (userQueryContext.range){
+            if (restServerService.retrieveBeanForCurrentPortal().highSpeedGetAggregatedDataCall == 0){
+                log.error(" CRITICAL ERROR: We have no way of doing range query with the old-style API. ")
+            }
+
+            dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTablesByRange(  phenotypeName,
+                    userQueryContext.startOriginalExtent,
+                    userQueryContext.endOriginalExtent,
+                    userQueryContext.chromosome,
+                    -1,limit,currentVersion)
+
+        }
+
+
+        JsonSlurper slurper = new JsonSlurper()
+
+        render(status: 200, contentType: "application/json") {
+            [variants: dataJsonObject
+            ]
+        }
+
+    }
 
 
 
