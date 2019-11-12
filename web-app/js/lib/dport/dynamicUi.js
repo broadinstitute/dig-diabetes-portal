@@ -2588,6 +2588,7 @@ mpgSoftware.dynamicUi = (function () {
 
         // do we have any data at all?  If we do, then make a row
         let dataVector;
+        let accumulatorFieldWithIndex;
         if (( typeof arrayOfDataToDisplay !== 'undefined') &&
             ( arrayOfDataToDisplay.length > 0) ) {
             //   if ( arrayOfDataToDisplay[0].data.length > 0) {
@@ -2599,7 +2600,7 @@ mpgSoftware.dynamicUi = (function () {
             if (accumulatorObjectSubFieldEmpty(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex, "data")) {
                 console.log("We should have a list of variants, otherwise we shouldn't be here. We have a problem.");
             } else {
-                const accumulatorFieldWithIndex = getAccumulatorObject(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex);
+                accumulatorFieldWithIndex = getAccumulatorObject(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex);
                 // Here are the two additional accumulators if they don't exist already
                 // one for the variant x tissue display
                 if (typeof accumulatorFieldWithIndex[0].header['tissueDisplay'] === 'undefined') {
@@ -2720,9 +2721,9 @@ mpgSoftware.dynamicUi = (function () {
                             const tissueIntermediateDataStructure = accumulatorFieldWithIndex[0].header['tissueDisplay'];
                             let rowWeAreAddingTo = _.find(tissueIntermediateDataStructure.rowsToAdd, {'rowTag': tissueName});
                             if (typeof rowWeAreAddingTo === 'undefined') {
-                                addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode, intermediateDataStructure, tissueName);
-                                rowWeAreAddingTo = _.last(intermediateDataStructure.rowsToAdd);
-                                rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(annotation,
+                                addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode, tissueIntermediateDataStructure, tissueName);
+                                rowWeAreAddingTo = _.last(tissueIntermediateDataStructure.rowsToAdd);
+                                rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(tissueName,
                                     Mustache.render($('#' + dataAnnotationType.dataAnnotation.drillDownCategoryWriter)[0].innerHTML,
                                         {indexInOneDimensionalArray: ((numberOfExistingRows + addedRows) * numberOfColumns)}),
                                     dataAnnotationType.dataAnnotation.subcategory + " header", 'LIT'));
@@ -2737,7 +2738,7 @@ mpgSoftware.dynamicUi = (function () {
                             rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(tissueName,
                                 Mustache.render($('#' + dataAnnotationType.dataAnnotation.drillDownSubCategoryWriter)[0].innerHTML,
                                     {
-                                        annotationName: alternateAnnotation,
+                                        annotationName: tissueName,
                                         indexInOneDimensionalArray: (((numberOfExistingRows + addedRows) * numberOfColumns) + 1),
                                         isBlank: isBlank
                                     }),
@@ -2747,7 +2748,7 @@ mpgSoftware.dynamicUi = (function () {
                                     {otherClasses: "methodName_" + currentMethod + " annotationName_" + tissueName}, "discoDownAndCheckOutTheShow", 'EMP'));
                             });
                             // fill in all of the column cells
-                            _.forEach(recordsForAnnotation.arrayOfRecords, function (oneRecord) {
+                            _.forEach(recordsForTissue.arrayOfRecords, function (oneRecord) {
                                 var indexOfColumn = _.indexOf(headerNames, oneRecord.name);
                                 if (indexOfColumn === -1) {
                                     console.log("Did not find index of epigenetic var_id===" + oneRecord.name + ".  Shouldn't we?")

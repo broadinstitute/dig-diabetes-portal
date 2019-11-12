@@ -49,8 +49,8 @@ ABC&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" b
                          {{#tissueRecords}}
                           <tr role="row">
                                <td class="leftMostCol"">{{details.GENE}}</td>
-                               <td class="text-center otherCols">{{details.SOURCE}}</td>
-                               <td class="text-center otherCols">{{details.VALUE}}</td>
+                               <td class="text-center otherCols">{{details.tissue_name}}</td>
+                               <td class="text-center otherCols">{{details.score}}</td>
                            </tr>
                           {{/tissueRecords}}
                       {{#recordsExist}}
