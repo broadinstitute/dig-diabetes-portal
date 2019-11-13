@@ -130,7 +130,7 @@
 
 
         <div class="well well-variant-page">
-            <div class="container">
+            <div class="container-fluid">
             <div class="col-md-12" style="padding: 0;" >
                 <h5 style="font-size: 16px; margin-left:15px;">Change genomic region or phenotype</h5>
                 <div class="focus-table-settings-wrapper well well-sm">
@@ -200,7 +200,7 @@
             <div class="row" >
             </div>-->
 
-            <div class="container">
+            <div class="container-fluid">
 
                 <div class="col-md-8">
                     <h5 style="font-size: 16px;">Table filter</h5>
