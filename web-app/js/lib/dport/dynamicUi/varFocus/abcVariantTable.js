@@ -12,17 +12,10 @@ mpgSoftware.dynamicUi.abcVariantTable = (function () {
      * @returns {*}
      */
     var processRecordsFromAbc = function (data, arrayOfRecords) {
-        if ( typeof data !== 'undefined'){
+        if (( typeof data !== 'undefined')&&
+            ( typeof data.data !== 'undefined')){
             arrayOfRecords.splice(0,arrayOfRecords.length);
-            const myData = _.map(data,function(o){return {var_id:o.VAR_ID,annotation:'ABC', tissue_id:o.SOURCE, details:o}})
-            // let arrayOfData = [];
-            // var recordsGroupedByVarId = _.groupBy(data, function (o) { return o.VAR_ID });
-            // _.forEach(recordsGroupedByVarId, function (value,key) {
-            //     var allRecordsForOneVariety = {name:key,arrayOfRecords:value};
-            //     arrayOfData.push(allRecordsForOneVariety);
-            // });
-            // arrayOfRecords.push({header:{ },
-            //     data:arrayOfData});
+            const myData = data.data;
             let uniqueRecords = _.uniqWith(
                 myData,
                 (recA, recB) =>
@@ -49,7 +42,7 @@ mpgSoftware.dynamicUi.abcVariantTable = (function () {
             });
             _.forEach( _.groupBy(uniqueRecords, function (o) { return o.tissue_id }), function (recordsGroupedByTissue,tissue) {
                 let groupedByTissue = {name:tissue, arrayOfRecords:[]};
-                _.forEach( _.groupBy(groupedByTissue, function (o) { return o.var_id }), function (recordsSubGroupedByVarId,varId) {
+                _.forEach( _.groupBy(recordsGroupedByTissue, function (o) { return o.var_id }), function (recordsSubGroupedByVarId,varId) {
                     groupedByTissue.arrayOfRecords.push({name:varId,arrayOfRecords:recordsSubGroupedByVarId});
                 });
                 dataGroupings.groupByTissue.push(groupedByTissue);

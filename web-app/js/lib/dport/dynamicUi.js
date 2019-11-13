@@ -1508,7 +1508,7 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
-    var addRowHolderToIntermediateDataStructure = function (dataAnnotationTypeCode,intermediateDataStructure){
+    var addRowHolderToIntermediateDataStructure = function (dataAnnotationTypeCode,intermediateDataStructure,rowTag){
         var displayDetails = getDatatypeInformation(dataAnnotationTypeCode );
         intermediateDataStructure.rowsToAdd.push({
             code: displayDetails.dataAnnotation.code,
@@ -1516,7 +1516,8 @@ mpgSoftware.dynamicUi = (function () {
             displayCategory: displayDetails.dataAnnotation.displayCategory,
             subcategory: displayDetails.dataAnnotation.subcategory,
             displaySubcategory: displayDetails.dataAnnotation.displaySubcategory,
-            columnCells: []
+            columnCells: [],
+            rowTag:rowTag
         });
     }
 
@@ -2554,11 +2555,22 @@ mpgSoftware.dynamicUi = (function () {
     };
 
 
-
-
-
-
-
+    /***
+     *  Create and display one or more rows for the variant table.  'Methods' with multiple 'annotations'
+     *  will lead to multiple rows, that can then be displayed directly in a variant x annotation grid.
+     *  Additionally, build a variant x tissue data structure ( in an IntermediateDataStructure ), and
+     *  we can display it later if someone wants to see it.  Even though we will have only one
+     *  IntermediateDataStructure to hold all the tissues, store it in an array.  Meanwhile, we
+     *  will also store the multiple IntermediateDataStructure's to hold each of the 'method', so that
+     *  we can re-create
+     *
+     * @param idForTheTargetDiv
+     * @param dataAnnotationTypeCode
+     * @param nameOfAccumulatorField
+     * @param nameOfAccumulatorFieldWithIndex
+     * @param mapSortAndFilterFunction
+     * @param placeDataIntoRenderForm
+     */
     var displayForVariantTable = function (idForTheTargetDiv, // which table are we adding to
                                         dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
                                         nameOfAccumulatorField, // name of the persistent field where the data we received is stored
@@ -2566,127 +2578,92 @@ mpgSoftware.dynamicUi = (function () {
                                         mapSortAndFilterFunction,
                                         placeDataIntoRenderForm ) { // sort and filter the records we will use.  Resulting array must have fields tissue, value, and numericalValue
         var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode);
-        //var returnObject = createNewDisplayReturnObject();
         var intermediateDataStructure = new IntermediateDataStructure();
         var sharedTable = getSharedTable(idForTheTargetDiv);
-
-        // for each gene collect up the data we want to display
         var arrayOfDataToDisplay = getAccumulatorObject(nameOfAccumulatorField);
         let prepend = true;
+
+
+
+
         // do we have any data at all?  If we do, then make a row
+        let dataVector;
+        let accumulatorFieldWithIndex;
         if (( typeof arrayOfDataToDisplay !== 'undefined') &&
-            ( arrayOfDataToDisplay.length > 0) ){
-            if ( arrayOfDataToDisplay[0].data.length > 0) {
-                addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode, intermediateDataStructure);
+            ( arrayOfDataToDisplay.length > 0) ) {
+            //   if ( arrayOfDataToDisplay[0].data.length > 0) {
 
-                // set up the headers, even though we know we won't use them. Is this step necessary?
-                var headerNames = [];
-                if (accumulatorObjectSubFieldEmpty(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex, "data")) {
-                    console.log("We should have a list of variants, otherwise we shouldn't be here. We have a problem.");
-                } else {
-                    const dataVector = getAccumulatorObject(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex)[0].data;
-                    headerNames = _.map(dataVector, 'name');
-                    _.forEach(dataVector, function (oneRecord) {
-                        intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
-                            {}, "header", 'EMC'));
-                    });
+            //addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode, intermediateDataStructure);
+
+            // set up the headers, even though we know we won't use them. Is this step necessary?
+            var headerNames = [];
+            if (accumulatorObjectSubFieldEmpty(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex, "data")) {
+                console.log("We should have a list of variants, otherwise we shouldn't be here. We have a problem.");
+            } else {
+                accumulatorFieldWithIndex = getAccumulatorObject(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex);
+                // Here are the two additional accumulators if they don't exist already
+                // one for the variant x tissue display
+                if (typeof accumulatorFieldWithIndex[0].header['tissueDisplay'] === 'undefined') {
+                    accumulatorFieldWithIndex[0].header['tissueDisplay'] = new IntermediateDataStructure();
                 }
-            }
-            // set up the headers, and give us an empty row of column cells
+                // and one for the variant x annotation display
+                if (typeof accumulatorFieldWithIndex[0].header['annotationDisplay'] === 'undefined') {
+                    accumulatorFieldWithIndex[0].header['annotationDisplay'] = new IntermediateDataStructure();
+                }
+                dataVector = accumulatorFieldWithIndex[0].data;
+                headerNames = _.map(dataVector, 'name');
 
+            }
+            //}
 
             // fill in all of the column cells
-            var numberOfExistingRows = $(idForTheTargetDiv).dataTable().DataTable().rows()[0].length+1;
-            var numberOfColumns  = sharedTable.numberOfColumns;
-            if ($.isArray(arrayOfDataToDisplay[0].data)){
-                _.forEach(arrayOfDataToDisplay[0].data, function (oneRecord) {
-                    var indexOfColumn = _.indexOf(headerNames, oneRecord.name);
-                    if (indexOfColumn === -1) {
-                        console.log("Did not find index of var_id.  Shouldn't we?")
-                    } else {
-                        if ((oneRecord.arrayOfRecords.length === 0)) {
-                            //alert('should not happen, right?');
-                            intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(oneRecord.name,
-                                {}, "tissue specific",'EMC');
-                        } else {
-                            //var tissueTranslations = recordsPerGene["TISSUE_TRANSLATIONS"]; // if no translations are provided, it is fine to leave this value as undefined
-                            var tissueTranslations = undefined;
-                            var tissueRecords = mapSortAndFilterFunction (oneRecord.arrayOfRecords,tissueTranslations);
-
-                            var recordsCellPresentationString = Mustache.render($('#'+dataAnnotationType.dataAnnotation.numberRecordsCellPresentationStringWriter)[0].innerHTML, {
-                                numberRecords:tissueRecords.length
-                            });
-                            var significanceCellPresentationString = "0";
-                            var significanceValue = 0;
-                            if (( typeof tissueRecords !== 'undefined')&&
-                                (tissueRecords.length>0)){
-                                var mostSignificantRecord;
-                                if (( typeof preferredSummaryKey !== 'undefined') && (preferredSummaryKey.length>0)){ // we have a key telling us which record to pick
-                                    mostSignificantRecord=_.find(tissueRecords,function(t){return t.tissue.includes(preferredSummaryKey)});
-                                }else{// no specific key, but we have sorted the keys in ascending order by value, so we can just pick the first one
-                                    mostSignificantRecord=tissueRecords[0];
-                                }
-                                significanceValue = mostSignificantRecord.value;
-                                significanceCellPresentationString = Mustache.render($('#'+dataAnnotationType.dataAnnotation.significanceCellPresentationStringWriter)[0].innerHTML,
-                                    {significanceValue:significanceValue,
-                                        significanceValueAsString:UTILS.realNumberFormatter(""+significanceValue),
-                                        recordDescription:translateATissueName(tissueTranslations,mostSignificantRecord.tissue),
-                                        numberRecords:tissueRecords.length});
-
-                            }
-                            //  this is the information we carry around each cell and that we will later use to display it
-                            var renderData = placeDataIntoRenderForm(   tissueRecords,
-                                recordsCellPresentationString,
-                                significanceCellPresentationString,
-                                dataAnnotationTypeCode,
-                                significanceValue,
-                                oneRecord.name );
-                            oneRecord["numberOfRecords"] = oneRecord.arrayOfRecords.length;//not sure if this is used
-                            intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(oneRecord.name,
-                                renderData,"tissue specific",dataAnnotationTypeCode );
-                        }
-
-                    }
-                });
-            } else if ( typeof arrayOfDataToDisplay[0].data.groupByAnnotation !== 'undefined'){
+            var numberOfExistingRows = $(idForTheTargetDiv).dataTable().DataTable().rows()[0].length + 1;
+            var numberOfColumns = sharedTable.numberOfColumns;
+            if (typeof arrayOfDataToDisplay[0].data.groupByAnnotation !== 'undefined') {
                 prepend = false;
                 const currentMethod = arrayOfDataToDisplay[0].data.currentMethod;
                 let annotationOptions = [];
+                let tissueOptions = [];
                 let addedRows = 0;
                 // create a row for each epigenetic annotation even if it's empty
-                if (arrayOfDataToDisplay[0].data.groupByAnnotation.length===0){
-                    addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
-                    const dataVector = getAccumulatorObject(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex)[0].data;
+                if (arrayOfDataToDisplay[0].data.groupByAnnotation.length === 0) {
+                    addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode, intermediateDataStructure);
+                    //const dataVector = getAccumulatorObject(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex)[0].data;
                     let rowWeAreAddingTo = _.last(intermediateDataStructure.rowsToAdd);
                     rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(currentMethod,
-                        Mustache.render($('#'+dataAnnotationType.dataAnnotation.drillDownCategoryWriter)[0].innerHTML,
-                            {indexInOneDimensionalArray:((numberOfExistingRows+addedRows)*numberOfColumns)}),
-                        dataAnnotationType.dataAnnotation.subcategory+" header", 'LIT'));
+                        Mustache.render($('#' + dataAnnotationType.dataAnnotation.drillDownCategoryWriter)[0].innerHTML,
+                            {indexInOneDimensionalArray: ((numberOfExistingRows + addedRows) * numberOfColumns)}),
+                        dataAnnotationType.dataAnnotation.subcategory + " header", 'LIT'));
                     rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(currentMethod,
-                        Mustache.render($('#'+dataAnnotationType.dataAnnotation.drillDownSubCategoryWriter)[0].innerHTML,
-                            {annotationName:currentMethod,
-                                indexInOneDimensionalArray:(((numberOfExistingRows+addedRows)*numberOfColumns)+1),
-                                isBlank:"isBlank"}),
-                        dataAnnotationType.dataAnnotation.subcategory+" header", 'LIT'));
+                        Mustache.render($('#' + dataAnnotationType.dataAnnotation.drillDownSubCategoryWriter)[0].innerHTML,
+                            {
+                                annotationName: currentMethod,
+                                indexInOneDimensionalArray: (((numberOfExistingRows + addedRows) * numberOfColumns) + 1),
+                                isBlank: "isBlank"
+                            }),
+                        dataAnnotationType.dataAnnotation.subcategory + " header", 'LIT'));
                     _.forEach(dataVector, function (oneRecord) {
                         rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
-                            {otherClasses:"methodName_"+currentMethod}, "header", 'EMP'));
+                            {otherClasses: "methodName_" + currentMethod}, "header", 'EMP'));
                     });
 
                 } else { // we have real data
-                    _.forEach(arrayOfDataToDisplay[0].data.groupByAnnotation, function (recordsForAnnotation ) {
-                        annotationOptions.push({name:recordsForAnnotation.name, value: recordsForAnnotation.name+"_"+currentMethod});
+                    _.forEach(arrayOfDataToDisplay[0].data.groupByAnnotation, function (recordsForAnnotation) {
+                        annotationOptions.push({
+                            name: recordsForAnnotation.name,
+                            value: recordsForAnnotation.name + "_" + currentMethod
+                        });
                         const annotation = recordsForAnnotation.name;
-                        addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
-                        const dataVector = getAccumulatorObject(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex)[0].data;
+                        addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode, intermediateDataStructure);
+                        //const dataVector = getAccumulatorObject(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex)[0].data;
                         headerNames = _.map(dataVector, 'name');
                         let rowWeAreAddingTo = _.last(intermediateDataStructure.rowsToAdd);
                         rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(annotation,
-                            Mustache.render($('#'+dataAnnotationType.dataAnnotation.drillDownCategoryWriter)[0].innerHTML,
-                                {indexInOneDimensionalArray:((numberOfExistingRows+addedRows)*numberOfColumns)}),
-                            dataAnnotationType.dataAnnotation.subcategory+" header", 'LIT'));
-                        let alternateAnnotation =annotation;
-                        switch(annotation){
+                            Mustache.render($('#' + dataAnnotationType.dataAnnotation.drillDownCategoryWriter)[0].innerHTML,
+                                {indexInOneDimensionalArray: ((numberOfExistingRows + addedRows) * numberOfColumns)}),
+                            dataAnnotationType.dataAnnotation.subcategory + " header", 'LIT'));
+                        let alternateAnnotation = annotation;
+                        switch (annotation) {
                             case "MACS":
                                 alternateAnnotation = "AccessibleChromatin"
                                 break;
@@ -2694,33 +2671,35 @@ mpgSoftware.dynamicUi = (function () {
                                 break;
                         }
                         let isBlank = "";
-                        if (( typeof recordsForAnnotation.arrayOfRecords === 'undefined') ||
+                        if ((typeof recordsForAnnotation.arrayOfRecords === 'undefined') ||
                             (recordsForAnnotation.arrayOfRecords.length === 0)) {
                             isBlank = "isBlank";
                         }
                         rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(annotation,
-                            Mustache.render($('#'+dataAnnotationType.dataAnnotation.drillDownSubCategoryWriter)[0].innerHTML,
-                                    {annotationName:alternateAnnotation,
-                                    indexInOneDimensionalArray:(((numberOfExistingRows+addedRows)*numberOfColumns)+1),
-                                    isBlank:isBlank}),
+                            Mustache.render($('#' + dataAnnotationType.dataAnnotation.drillDownSubCategoryWriter)[0].innerHTML,
+                                {
+                                    annotationName: alternateAnnotation,
+                                    indexInOneDimensionalArray: (((numberOfExistingRows + addedRows) * numberOfColumns) + 1),
+                                    isBlank: isBlank
+                                }),
                             dataAnnotationType.dataAnnotation.subcategory, 'LIT'));
                         _.forEach(dataVector, function (oneRecord) {
                             rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
-                                {otherClasses:"methodName_"+currentMethod+" annotationName_"+annotation}, "discoDownAndCheckOutTheShow", 'EMP'));
+                                {otherClasses: "methodName_" + currentMethod + " annotationName_" + annotation}, "discoDownAndCheckOutTheShow", 'EMP'));
                         });
                         // fill in all of the column cells
                         _.forEach(recordsForAnnotation.arrayOfRecords, function (oneRecord) {
                             var indexOfColumn = _.indexOf(headerNames, oneRecord.name);
                             if (indexOfColumn === -1) {
-                                console.log("Did not find index of ABC var_id.  Shouldn't we?")
+                                console.log("Did not find index of epigenetic var_id==" + oneRecord.name + ".  Shouldn't we?")
                             } else {
-                                var renderData = placeDataIntoRenderForm(   oneRecord.arrayOfRecords,
-                                    "","",
+                                var renderData = placeDataIntoRenderForm(oneRecord.arrayOfRecords,
+                                    "", "",
                                     dataAnnotationTypeCode,
                                     0.5,
                                     oneRecord.name);
-                                _.last(intermediateDataStructure.rowsToAdd).columnCells[indexOfColumn+2] = new IntermediateStructureDataCell(oneRecord.name,
-                                    renderData,"tissue specific",dataAnnotationTypeCode );
+                                _.last(intermediateDataStructure.rowsToAdd).columnCells[indexOfColumn + 2] = new IntermediateStructureDataCell(oneRecord.name,
+                                    renderData, "tissue specific", dataAnnotationTypeCode);
 
                             }
                         });
@@ -2728,77 +2707,130 @@ mpgSoftware.dynamicUi = (function () {
                     });
                 }
 
-                switch(currentMethod){
-                    case "MACS":
-                        if (annotationOptions.length === 0){
-                            $('#annotationSelectorChoice').append(new Option("<span class='boldit'>ATAC-Seq</span>","MACS_MACS"));
-                        } else {
-                            _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
-                                $('#annotationSelectorChoice').append(new Option("<span class='boldit'>ATAC-Seq</span>",rec.value));
-                            });
-                        }
 
-                        break;
-                    case "ABC":
-                        if (annotationOptions.length === 0){
-                            $('#annotationSelectorChoice').append(new Option("<span class='boldit'>ABC</span>","ABC_ABC"));
-                        } else {
-                            _.forEach(_.sortBy(annotationOptions, 'name'), function (rec) {
-                                $('#annotationSelectorChoice').append(new Option("<span class='boldit'>ABC</span>", rec.value));
+                if (arrayOfDataToDisplay[0].data.groupByTissue.length > 0) {
+                    { // we have real data
+                        _.forEach(arrayOfDataToDisplay[0].data.groupByTissue, function (recordsForTissue) {
+                            tissueOptions.push({
+                                name: recordsForTissue.name,
+                                value: recordsForTissue.name + "_" + currentMethod
                             });
-                        }
-                        break;
-                    case "SPP":
-                        if (annotationOptions.length>1){
-                            $('#annotationSelectorChoice').append("<optgroup label='TF Binding Sites'>");
-                            _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
-                                $('#annotationSelectorChoice').append(new Option('&nbsp;&nbsp;&nbsp;&nbsp;'+rec.name,rec.value));
+                            const tissueName = recordsForTissue.name;
+
+                            // Either retrieve an existing row for this tissue, or else create a new one
+                            const tissueIntermediateDataStructure = accumulatorFieldWithIndex[0].header['tissueDisplay'];
+                            let rowWeAreAddingTo = _.find(tissueIntermediateDataStructure.rowsToAdd, {'rowTag': tissueName});
+                            if (typeof rowWeAreAddingTo === 'undefined') {
+                                addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode, tissueIntermediateDataStructure, tissueName);
+                                rowWeAreAddingTo = _.last(tissueIntermediateDataStructure.rowsToAdd);
+                                rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(tissueName,
+                                    Mustache.render($('#' + dataAnnotationType.dataAnnotation.drillDownCategoryWriter)[0].innerHTML,
+                                        {indexInOneDimensionalArray: ((numberOfExistingRows + addedRows) * numberOfColumns)}),
+                                    dataAnnotationType.dataAnnotation.subcategory + " header", 'LIT'));
+                            }
+                            headerNames = _.map(dataVector, 'name');
+
+                            let isBlank = "";
+                            if ((typeof recordsForTissue.arrayOfRecords === 'undefined') ||
+                                (recordsForTissue.arrayOfRecords.length === 0)) {
+                                isBlank = "isBlank";
+                            }
+                            rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(tissueName,
+                                Mustache.render($('#' + dataAnnotationType.dataAnnotation.drillDownSubCategoryWriter)[0].innerHTML,
+                                    {
+                                        annotationName: tissueName,
+                                        indexInOneDimensionalArray: (((numberOfExistingRows + addedRows) * numberOfColumns) + 1),
+                                        isBlank: isBlank
+                                    }),
+                                dataAnnotationType.dataAnnotation.subcategory, 'LIT'));
+                            _.forEach(dataVector, function (oneRecord) {
+                                rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
+                                    {otherClasses: "methodName_" + currentMethod + " annotationName_" + tissueName}, "discoDownAndCheckOutTheShow", 'EMP'));
                             });
-                            $('#annotationSelectorChoice').append("</optgroup>");
-                        } else if (annotationOptions.length === 1) {
-                            _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
-                                $('#annotationSelectorChoice').append(new Option("<span class='boldit'>TF Binding Site</span>",rec.value));
+                            // fill in all of the column cells
+                            _.forEach(recordsForTissue.arrayOfRecords, function (oneRecord) {
+                                var indexOfColumn = _.indexOf(headerNames, oneRecord.name);
+                                if (indexOfColumn === -1) {
+                                    console.log("Did not find index of epigenetic var_id===" + oneRecord.name + ".  Shouldn't we?")
+                                } else {
+                                    const existingCell = rowWeAreAddingTo.columnCells[indexOfColumn + 2];
+                                    let arrayOfRecords = [];
+                                    if (existingCell.dataAnnotationTypeCode !== 'EMP') {
+                                        arrayOfRecords = existingCell.arrayOfRecords;
+                                    }
+                                    arrayOfRecords = _.concat(arrayOfRecords, oneRecord.arrayOfRecords)
+                                    var renderData = placeDataIntoRenderForm(arrayOfRecords,
+                                        "", "",
+                                        dataAnnotationTypeCode,
+                                        0.5,
+                                        oneRecord.name);
+                                    rowWeAreAddingTo.columnCells[indexOfColumn + 2] = new IntermediateStructureDataCell(oneRecord.name,
+                                        renderData, "tissue specific", dataAnnotationTypeCode);
+
+                                }
                             });
-                        } else if (annotationOptions.length === 0) {
-                                $('#annotationSelectorChoice').append(new Option("<span class='boldit'>TF Binding Site</span>",'SPP_SPP'));
-                        }
-                        break;
-                    case "ChromHMM":
-                        $('#annotationSelectorChoice').append("<optgroup label='ChromHMM'>");
-                        _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
-                            $('#annotationSelectorChoice').append(new Option('&nbsp;&nbsp;&nbsp;&nbsp;'+rec.name,rec.value));
+                            addedRows++;
                         });
-                        $('#annotationSelectorChoice').append("</optgroup>");
-                        break;
-                    case "TFMOTIF":
-                        // if (annotationOptions.length === 0){
-                        //     $('#annotationSelectorChoice').append(new Option("<span class='boldit'>TF motif</span>","TFMOTIF_TFMOTIF"));
-                        // } else {
-                        //     _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
-                        //         $('#annotationSelectorChoice').append(new Option("<span class='boldit'>TF motif</span>",rec.value));
-                        //     });
-                        // }
+                    }
 
-                        // for now we will always display TF motifs, so I don't need to add them to the drop-down box.
 
-                        // $('#annotationSelectorChoice').append("<optgroup label='TF motif'>");
-                        // _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
-                        //     $('#annotationSelectorChoice').append(new Option('&nbsp;&nbsp;&nbsp;&nbsp;'+rec.name,rec.value));
-                        // });
-                        // $('#annotationSelectorChoice').append("</optgroup>");
-                        break;
-
-                    default:
-                        _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
-                            $('#annotationSelectorChoice').append(new Option(rec.name,rec.value));
-                        });
+                    mpgSoftware.variantTable.updateAnnotationDropDownBox(currentMethod, annotationOptions);
+                    // switch(currentMethod){
+                    //     case "MACS":
+                    //         if (annotationOptions.length === 0){
+                    //             $('#annotationSelectorChoice').append(new Option("<span class='boldit'>ATAC-Seq</span>","MACS_MACS"));
+                    //         } else {
+                    //             _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
+                    //                 $('#annotationSelectorChoice').append(new Option("<span class='boldit'>ATAC-Seq</span>",rec.value));
+                    //             });
+                    //         }
+                    //
+                    //         break;
+                    //     case "ABC":
+                    //         if (annotationOptions.length === 0){
+                    //             $('#annotationSelectorChoice').append(new Option("<span class='boldit'>ABC</span>","ABC_ABC"));
+                    //         } else {
+                    //             _.forEach(_.sortBy(annotationOptions, 'name'), function (rec) {
+                    //                 $('#annotationSelectorChoice').append(new Option("<span class='boldit'>ABC</span>", rec.value));
+                    //             });
+                    //         }
+                    //         break;
+                    //     case "SPP":
+                    //         if (annotationOptions.length>1){
+                    //             $('#annotationSelectorChoice').append("<optgroup label='TF Binding Sites'>");
+                    //             _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
+                    //                 $('#annotationSelectorChoice').append(new Option('&nbsp;&nbsp;&nbsp;&nbsp;'+rec.name,rec.value));
+                    //             });
+                    //             $('#annotationSelectorChoice').append("</optgroup>");
+                    //         } else if (annotationOptions.length === 1) {
+                    //             _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
+                    //                 $('#annotationSelectorChoice').append(new Option("<span class='boldit'>TF Binding Site</span>",rec.value));
+                    //             });
+                    //         } else if (annotationOptions.length === 0) {
+                    //                 $('#annotationSelectorChoice').append(new Option("<span class='boldit'>TF Binding Site</span>",'SPP_SPP'));
+                    //         }
+                    //         break;
+                    //     case "ChromHMM":
+                    //         $('#annotationSelectorChoice').append("<optgroup label='ChromHMM'>");
+                    //         _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
+                    //             $('#annotationSelectorChoice').append(new Option('&nbsp;&nbsp;&nbsp;&nbsp;'+rec.name,rec.value));
+                    //         });
+                    //         $('#annotationSelectorChoice').append("</optgroup>");
+                    //         break;
+                    //     case "TFMOTIF":
+                    //         break;
+                    //
+                    //     default:
+                    //         _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
+                    //             $('#annotationSelectorChoice').append(new Option(rec.name,rec.value));
+                    //         });
+                    // }
+                    // $('#annotationSelectorChoice').multiselect('rebuild');
                 }
-                $('#annotationSelectorChoice').multiselect('rebuild');
+
+                intermediateDataStructure.tableToUpdate = idForTheTargetDiv;
             }
-
-            intermediateDataStructure.tableToUpdate = idForTheTargetDiv;
         }
-
 
         prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
             '#dynamicAbcGeneTable',
@@ -3174,8 +3206,8 @@ mpgSoftware.dynamicUi = (function () {
                                                  nameOfAccumulatorField, // name of the persistent field where the data we received is stored
                                                  placeDataIntoRenderForm )
     { // sort and filter the records we will use.  Resulting array must have fields tissue, value, and numericalValue
-        const chosenHeaderField = 'bestAnnotations';
-        const headerRecordField = 'annotation';
+        const chosenHeaderField = 'bestAnnotationAndMethods';
+        const headerRecordField = 'annotationAndMethod';
         const chosenRowField = 'bestTissues';
         const rowRecordField = 'tissue';
         var selectorForIidForTheTargetDiv = idForTheTargetDiv;
@@ -3877,6 +3909,7 @@ mpgSoftware.dynamicUi = (function () {
                 destroySharedTable(additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory);
                 var sharedTable = new SharedTableObject('variantTableVariantHeaders',0,0);
                 setAccumulatorObject("sharedTable_" + additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory,sharedTable);
+                setAccumulatorObject('variantInfoArray',undefined);
 
                 break;
             default:

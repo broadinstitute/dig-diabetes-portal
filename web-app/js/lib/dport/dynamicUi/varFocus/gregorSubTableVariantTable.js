@@ -77,7 +77,11 @@ const fieldsForPValue = {
                 oneRec['safeTissueId'] = oneRec.tissue_id.replace(":","_");
             });
             // const recordsOrderedByP = _.orderBy(allRecs,['p_value'],['asc']);
-            geneRecord.header['annotations'] = _.map(_.uniqBy(allRecs,'annotation'),function(o){return o.annotation});
+            //geneRecord.header['annotations'] = _.map(_.uniqBy(allRecs,'annotation'),function(o){return o.annotation});
+            // we need to be unique by both annotation and method
+            const uniqueByAnnotationAndMethod = _.uniqBy(allRecs,(elem)=>[elem.annotation,elem.method].join());
+            geneRecord.header['annotationAndMethod'] = _.map(uniqueByAnnotationAndMethod,function(o){return o.annotation+"_"+o.method});
+            geneRecord.header['annotations'] = _.map(uniqueByAnnotationAndMethod,function(o){return o.annotation});
             geneRecord.header['ancestries'] = _.map(_.uniqBy(allRecs,'ancestry'),function(o){return o.ancestry});
             geneRecord.header['tissues'] = _.map(_.uniqBy(allRecs,'tissue'),function(o){return o.tissue.replace('\'','').toLowerCase()});
             createFilteringRanges(allRecs,geneRecord,fieldsForPValue);
@@ -85,18 +89,35 @@ const fieldsForPValue = {
 
 
             let bestAnnos = [];
-            _.forEach(_.uniqBy(allRecs,'annotation'),function(oo){
+            _.forEach(uniqueByAnnotationAndMethod,function(oo){
                 let temp = oo;
-                if ((oo.method==='MACS')||(oo.method==='ChromHMM')){
-                    temp['prettyAnnotation'] = oo.annotation.match(/([A-Z][a-z]+)|([0-9]+)/g).join(" ");
-                }else{
-                    temp['prettyAnnotation'] = oo.annotation;
+                switch (oo.method){
+                    case 'MACS':
+                    case 'ChromHMM':
+                        temp['prettyAnnotation'] = oo.annotation.match(/([A-Z][a-z]+)|([0-9]+)/g).join(" ");
+                        break;
+                    case 'NA':
+                        temp['prettyAnnotation'] = oo.annotation;
+                        break;
+                    case 'ABC':
+                    case 'cicero':
+                    case 'CHiCAGO':
+                        temp['prettyAnnotation'] = oo.method;
+                        break;
+                    default:
+                        temp['prettyAnnotation']= oo.annotation;
+                        break;
                 }
+                // if ((oo.method==='MACS')||(oo.method==='ChromHMM')){
+                //     temp['prettyAnnotation'] = oo.annotation.match(/([A-Z][a-z]+)|([0-9]+)/g).join(" ");
+                // }else{
+                //     temp['prettyAnnotation'] = oo.annotation;
+                // }
                 temp['anno_hdr_fe_value'] = _.first(_.orderBy(_.filter (allRecs,{'annotation':oo.annotation}),['fe_value'],['desc'])).fe_value;
                 bestAnnos.push(temp);
 
             });
-            geneRecord.header['bestAnnotations'] = bestAnnos;
+            geneRecord.header['bestAnnotationAndMethods'] = bestAnnos;
             geneRecord.header['bestAncestries'] = _.uniqBy(allRecs,'ancestry');
             geneRecord.header['bestTissues'] = _.map(_.uniqBy(allRecs,'tissue'),function(oo){
                 oo['tissue_hdr_fe_value'] = _.first(_.orderBy(_.filter (allRecs,{'tissue':oo.tissue}),['fe_value'],['desc'])).fe_value;
@@ -107,6 +128,7 @@ const fieldsForPValue = {
             _.forEach(allRecs, function (oneRec) {
                 let holder = oneRec;
                 holder['safeTissueId'] = oneRec.tissue_id.replace(":","_");
+                holder['annotationAndMethod'] = oneRec.annotation+"_"+oneRec.method;
                 vectorWithAllRecords.push(holder)
             });
 
@@ -228,25 +250,8 @@ const setUpFilterAndSlider = function (retrievedRecords,valueDisplay ){
             callingParameters.code, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
             callingParameters.nameOfAccumulatorField, // name of the persistent field where the data we received is stored
             // take all the records for each row and insert them into the intermediateDataStructure
-            function(tissueRecords,
-                     recordsCellPresentationString,
-                     significanceCellPresentationString,
-                     dataAnnotationTypeCode,
-                     significanceValue,
-                     tissueName ){
-                return {
-                    tissueRecords:tissueRecords,
-                    recordsExist:(tissueRecords.length>0)?[1]:[],
-                    cellPresentationStringMap:{
-                        'Significance':significanceCellPresentationString,
-                        'Records':recordsCellPresentationString
-                    },
-                    dataAnnotationTypeCode:dataAnnotationTypeCode,
-                    significanceValue:significanceValue,
-                    tissueNameKey:( typeof tissueName !== 'undefined')?tissueName.replace(/ /g,"_"):'var_name_missing',
-                    tissueName:tissueName,
-                    tissuesFilteredByAnnotation:tissueRecords};
-
+            function( rawGregorRecord ){
+                return rawGregorRecord;
             },
             createSingleDnaseCell
         );

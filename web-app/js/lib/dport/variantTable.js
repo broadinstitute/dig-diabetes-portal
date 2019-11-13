@@ -60,14 +60,69 @@ mpgSoftware.variantTable = (function () {
         var phenotypeName = domElement.find(':selected').text();
         $('span.phenotypeSpecifier').text(phenotypeName);
         mpgSoftware.dynamicUi.modifyScreenFields({phenotype:phenotypeString},getVariablesToRemember());
-    }
+    };
 
-    var refreshTableForAnnotations = function(x){
+    const refreshTableForAnnotations = function(x){
         mpgSoftware.dynamicUi.redrawVariantTable();
-    }
+    };
 
 
-    var initialPageSetUp = function(preferredPhenotype){
+    const updateAnnotationDropDownBox = function(currentMethod,annotationOptions){
+        switch(currentMethod){
+            case "MACS":
+                if (annotationOptions.length === 0){
+                    $('#annotationSelectorChoice').append(new Option("<span class='boldit'>ATAC-Seq</span>","MACS_MACS"));
+                } else {
+                    _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
+                        $('#annotationSelectorChoice').append(new Option("<span class='boldit'>ATAC-Seq</span>",rec.value));
+                    });
+                }
+
+                break;
+            case "ABC":
+                if (annotationOptions.length === 0){
+                    $('#annotationSelectorChoice').append(new Option("<span class='boldit'>ABC</span>","ABC_ABC"));
+                } else {
+                    _.forEach(_.sortBy(annotationOptions, 'name'), function (rec) {
+                        $('#annotationSelectorChoice').append(new Option("<span class='boldit'>ABC</span>", rec.value));
+                    });
+                }
+                break;
+            case "SPP":
+                if (annotationOptions.length>1){
+                    $('#annotationSelectorChoice').append("<optgroup label='TF Binding Sites'>");
+                    _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
+                        $('#annotationSelectorChoice').append(new Option('&nbsp;&nbsp;&nbsp;&nbsp;'+rec.name,rec.value));
+                    });
+                    $('#annotationSelectorChoice').append("</optgroup>");
+                } else if (annotationOptions.length === 1) {
+                    _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
+                        $('#annotationSelectorChoice').append(new Option("<span class='boldit'>TF Binding Site</span>",rec.value));
+                    });
+                } else if (annotationOptions.length === 0) {
+                    $('#annotationSelectorChoice').append(new Option("<span class='boldit'>TF Binding Site</span>",'SPP_SPP'));
+                }
+                break;
+            case "ChromHMM":
+                $('#annotationSelectorChoice').append("<optgroup label='ChromHMM'>");
+                _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
+                    $('#annotationSelectorChoice').append(new Option('&nbsp;&nbsp;&nbsp;&nbsp;'+rec.name,rec.value));
+                });
+                $('#annotationSelectorChoice').append("</optgroup>");
+                break;
+            case "TFMOTIF":
+                break;
+
+            default:
+                _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
+                    $('#annotationSelectorChoice').append(new Option(rec.name,rec.value));
+                });
+        }
+        $('#annotationSelectorChoice').multiselect('rebuild');
+    };
+
+
+    const initialPageSetUp = function(preferredPhenotype){
         var drivingVariables = getVariablesToRemember();
         if (( typeof preferredPhenotype === 'undefined')||(preferredPhenotype.length===0)){
             preferredPhenotype = 'T2D';
@@ -107,6 +162,7 @@ mpgSoftware.variantTable = (function () {
         setVariablesToRemember:setVariablesToRemember,
         initialPageSetUp:initialPageSetUp,
         refreshTableForPhenotype:refreshTableForPhenotype,
-        refreshTableForAnnotations:refreshTableForAnnotations
+        refreshTableForAnnotations:refreshTableForAnnotations,
+        updateAnnotationDropDownBox:updateAnnotationDropDownBox
     }
 }());

@@ -7,7 +7,7 @@ records={{numberRecords}}
 </script>
 
 <script id="abcVariantTableTissueRowLabel"  type="x-tmpl-mustache">
-<div class="varAllEpigenetics varAbcEpigenetics staticMethodLabels annotationName_ABC methodName_ABC  {{isBlank}} initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation"
+<div class="varAllEpigenetics varAbcEpigenetics staticMethodLabels annotationName_GenePrediction methodName_ABC  {{isBlank}} initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation"
  sortField=0>
 ABC&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/></div>
 </script>
@@ -24,14 +24,16 @@ ABC&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" b
 
 <script id="abcVariantTableBody"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortField="{{significanceValue}}"
-             class="epigeneticCellElement tissueId_none annotationName_ABC varAllEpigenetics varAbcEpigenetics tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
+             class="varAllEpigenetics varAbcEpigenetics tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                 <div>
                {{#tissueRecords}}
-                  <div class="text-center">{{details.SOURCE}}</div>
+                  <div class="epigeneticCellElement tissueId_{{safeTissueId}} annotationName_{{annotation}}">
+                    {{tissue_name}}
+                  </div>
                {{/tissueRecords}}
                </div>
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'ABC predictions for {{tissueName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
-               data-target="#depict_abc_{{tissueNameKey}}" style="color:black">expand&gt;&gt;
+               data-target="#depict_abc_{{tissueNameKey}}" style="color:black">all tissues&gt;&gt;
                </a>
 
                <div  class="collapse openEffectorGeneInformationInGeneTable" id="depict_abc_{{tissueNameKey}}">
@@ -48,9 +50,9 @@ ABC&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" b
                      {{/recordsExist}}
                          {{#tissueRecords}}
                           <tr role="row">
-                               <td class="leftMostCol"">{{details.GENE}}</td>
-                               <td class="text-center otherCols">{{details.SOURCE}}</td>
-                               <td class="text-center otherCols">{{details.VALUE}}</td>
+                               <td class="leftMostCol"">{{GENE}}</td>
+                               <td class="text-center otherCols">{{tissue_name}}</td>
+                               <td class="text-center otherCols">{{score}}</td>
                            </tr>
                           {{/tissueRecords}}
                       {{#recordsExist}}
