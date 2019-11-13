@@ -3206,8 +3206,8 @@ mpgSoftware.dynamicUi = (function () {
                                                  nameOfAccumulatorField, // name of the persistent field where the data we received is stored
                                                  placeDataIntoRenderForm )
     { // sort and filter the records we will use.  Resulting array must have fields tissue, value, and numericalValue
-        const chosenHeaderField = 'bestAnnotations';
-        const headerRecordField = 'annotation';
+        const chosenHeaderField = 'bestAnnotationAndMethods';
+        const headerRecordField = 'annotationAndMethod';
         const chosenRowField = 'bestTissues';
         const rowRecordField = 'tissue';
         var selectorForIidForTheTargetDiv = idForTheTargetDiv;
@@ -3909,6 +3909,7 @@ mpgSoftware.dynamicUi = (function () {
                 destroySharedTable(additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory);
                 var sharedTable = new SharedTableObject('variantTableVariantHeaders',0,0);
                 setAccumulatorObject("sharedTable_" + additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory,sharedTable);
+                setAccumulatorObject('variantInfoArray',undefined);
 
                 break;
             default:
