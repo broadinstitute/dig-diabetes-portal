@@ -339,6 +339,6 @@
 <g:render template="/templates/dynamicUi/VARIANT_TABLE" />
 
 
-<div id="mainVariantDivHolder">
+<div id="mainVariantDivHolder" style="background-color: #eaeaea; margin-bottom: -50px;">
 
 </div>

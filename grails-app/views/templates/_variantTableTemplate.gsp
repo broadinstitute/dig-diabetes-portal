@@ -103,56 +103,109 @@
 
 
 
-    <div class="container">
-        <div class="row">
-            <div class="text-center">
-                <h1 class="dk-page-title">Variant FOCUS table for <span class="phenotypeSpecifier">{{phenotype}}</span></h1>
-            </div>
-        </div>
-        <p><g:message code="variantTable.introduction.1"></g:message><g:message code="variantTable.introduction.2"></g:message>
-<g:helpText title="variantTable.overall.help.header" placement="bottom" body="variantTable.help.text"/>
+    <div class="container-fluid" style="padding: 0 2.5%;">
 
-<g:message code="variantTable.introduction.3"></g:message></p>
-        <div class="row" style="margin: 20px">
-            <div class="col-sm-2 text-center" style="">
-                <label style="padding-top:35px">Change genomic region or phenotype</label>
-            </div>
-            <div class="col-sm-8" style="border: 1px solid black">
-                <div class="row">
-                    <div class="col-sm-1 text-center"></div>
-                    <div class="col-sm-2 text-center">
-                        <label for="chromosomeInput" placeholder="Choose chromosome">chromosome</label>
-                        <input id="chromosomeInput" type="text" size="8">
-                    </div>
-                    <div class="col-sm-1 text-center"></div>
-                    <div class="col-sm-4 text-center">
-                        <label for="startExtentInput" placeholder="Choose chromosome">start extent</label>
-                        <input id="startExtentInput" type="text">
-                    </div>
-                    <div class="col-sm-4 text-center">
-                        <label for="endExtentInput" placeholder="Choose chromosome">end extent</label>
-                        <input id="endExtentInput" type="text">
-                    </div>
+        <div>
+            <div class="focus-page-header-wrapper">
+                <div class="focus-page-header-header">
+                    <div style="width:55%;">Title</div>
+                    <div style="width:45%;">Phenotype</div>
                 </div>
-                <div class="row" style="margin-top: 15px">
-                    <div class="col-md-10">
-                        <label for="variantTablePhenotypePicker">Phenotype</label>
-                        <select id="varishiftantTablePhenotypePicker" class="phenotypePicker" onchange="mpgSoftware.variantTable.refreshTableForPhenotype(this)"></select>
+                <div class="focus-page-header-content">
+                    <div class="focus-page-title" style="width:55%;">
+                        Variant FOCUS table
                     </div>
-                    <div class="col-md-2">
-                        <button class="btn btn-secondary btn-default transpose" type="button" title="click to update table"
-                        onclick="mpgSoftware.variantTable.refreshTableForPhenotype('#variantTablePhenotypePicker')">
-                        Update</button>
-                    </div>
+                    <div class="focus-page-title" style="width:45%;"><span class="phenotypeSpecifier">{{phenotype}}</span></div>
                 </div>
             </div>
-            <div class="col-sm-2"></div>
         </div>
-        <div class="row" >
+
+        <div class="well well-variant-page focus-table-introduction">
+            <g:message code="variantTable.introduction.1"></g:message><g:message code="variantTable.introduction.2"></g:message>
+                <g:helpText title="variantTable.overall.help.header" placement="bottom" body="variantTable.help.text"/>
+
+                <g:message code="variantTable.introduction.3"></g:message>
+
         </div>
-                <div class="row">
-                    <div class="col-md-8" style="border:0.5px solid #eee">
-                        <div class="row" style="border-bottom:0.5px solid #ccc">
+
+
+        <div class="well well-variant-page">
+            <div class="container">
+            <div class="col-md-12" style="padding: 0;" >
+                <h5 style="font-size: 16px; margin-left:15px;">Change genomic region or phenotype</h5>
+                <div class="focus-table-settings-wrapper well well-sm">
+
+                    <div class="focus-table-settings-header">
+                        <div style="width:10%;">Chromosome</div>
+                        <div style="width:25%;">Start extent</div>
+                        <div style="width:25%;">End extent</div>
+                        <div style="width:30%;">Phenotype</div>
+                        <div style="width:10%;">&nbsp;</div>
+                    </div>
+                    <div class="focus-table-settings-content">
+                        <div class="" style="width:10%;">
+                            <input id="chromosomeInput" type="text" style="width: 90%">
+                        </div>
+                        <div class="" style="width:25%;">
+                            <input id="startExtentInput" type="text" style="width: 95%">
+                        </div>
+                        <div class="" style="width:25%;">
+                            <input id="endExtentInput" type="text" style="width: 95%">
+                        </div>
+                        <div class="" style="width:30%;">
+                            <select id="varishiftantTablePhenotypePicker" class="phenotypePicker form-control input-sm"  onchange="mpgSoftware.variantTable.refreshTableForPhenotype(this)" style="width: 95%"></select>
+                        </div>
+                        <div style="width:10%;"><button class="btn btn-secondary btn-default transpose focus-search-go" type="button" title="click to update table"
+                                onclick="mpgSoftware.variantTable.refreshTableForPhenotype('#variantTablePhenotypePicker')">
+                                Update</button></div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <!--<div class="" style="margin: 20px">
+                <div class="col-sm-2 text-center" style="">
+                    <label style="padding-top:35px">Change genomic region or phenotype</label>
+                </div>
+                <div class="col-sm-8" style="border: 1px solid black">
+                    <div class="row">
+                        <div class="col-sm-1 text-center"></div>
+                        <div class="col-sm-2 text-center">
+                            <label for="chromosomeInput" placeholder="Choose chromosome">chromosome</label>
+                            <input id="chromosomeInput" type="text" size="8">
+                        </div>
+                        <div class="col-sm-1 text-center"></div>
+                        <div class="col-sm-4 text-center">
+                            <label for="startExtentInput" placeholder="Choose chromosome">start extent</label>
+                            <input id="startExtentInput" type="text">
+                        </div>
+                        <div class="col-sm-4 text-center">
+                            <label for="endExtentInput" placeholder="Choose chromosome">end extent</label>
+                            <input id="endExtentInput" type="text">
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 15px">
+                        <div class="col-md-10">
+                            <label for="variantTablePhenotypePicker">Phenotype</label>
+                            <select id="varishiftantTablePhenotypePicker" class="phenotypePicker" onchange="mpgSoftware.variantTable.refreshTableForPhenotype(this)"></select>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-secondary btn-default transpose" type="button" title="click to update table"
+                            onclick="mpgSoftware.variantTable.refreshTableForPhenotype('#variantTablePhenotypePicker')">
+                            Update</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2"></div>
+            </div>
+            <div class="row" >
+            </div>-->
+
+            <div class="container">
+
+                <div class="col-md-8">
+                    <h5 style="font-size: 16px;">Table filter</h5>
+                    <div class="well well-sm row">
+                        <div class="col-md-12" style="border-bottom:0.5px solid #ccc">
                             <div class="col-md-4">
                                  <div class="variantTableFilterChoice">
                                     <input class="form-check-input" type="radio"  name="preferredAnnotationFiltering" value="" id="gregorFilterCheckbox" checked>
@@ -169,7 +222,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="col-md-12">
                             <div class="col-md-4">
                                 <div class="variantTableFilterChoice">
                                     <input class="form-check-input" type="radio" name="preferredAnnotationFiltering" value="" id="methodFilterCheckbox">
@@ -190,58 +243,53 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="row" >
-                            <div class="col-md-6"></div>
-                            <div class="col-md-6">
-                              <button  class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table" onclick="mpgSoftware.dynamicUi.transposeThisTable('{{domTableSpecifier}}')">
-                                Transpose
-                              </button>
-                            </div>
-                        </div>
-                        <div class="row" >
-                            <div class="col-md-offset-6 col-md-6">
-                                <div class="datatable-zoom-control">
-                                    <div class="tool-label">Zoom</div>
-                                    <button type="button" class="btn btn-default btn-secondary" aria-label="Zoom out" title="click to zoom out" onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('{{organizingDiv}}',false,event)">
-                                        <span class="glyphicon glyphicon-minus" aria-hidden="true" onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#mainVariantDiv',false,event)"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default btn-secondary" aria-label="Zoom in" title="click to zoom in" onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('{{organizingDiv}}',true,event)">
-                                        <span class="glyphicon glyphicon-plus" aria-hidden="true" onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#mainVariantDiv',true,event)"></span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
-        <div class="row" >
-            <div class="col-md-8">
-                <div class="row">
-                    <div class="col-md-9">
+                <div class="col-md-4">
+                    <h5 style="font-size: 16px; margin-left:15px;">Table view control</h5>
+                    <div class="well well-sm row" style="margin-left: 2px; height: 88.5px;">
+                        <div class="datatable-zoom-control">
+                            <div class="tool-label">Direction</div>
+                            <button  class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table" onclick="mpgSoftware.dynamicUi.transposeThisTable('{{domTableSpecifier}}')">
+                            Transpose
+                          </button>
+                        </div>
 
-                    </div>
-                    <div class="col-md-3 text-right">
-                        <div class="variantTableFilterChoice">
+                        <div class="datatable-zoom-control">
+                            <div class="tool-label">Zoom</div>
+                            <button type="button" class="btn btn-default btn-secondary" aria-label="Zoom out" title="click to zoom out" onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('{{organizingDiv}}',false,event)">
+                                <span class="glyphicon glyphicon-minus" aria-hidden="true" onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#mainVariantDiv',false,event)"></span>
+                            </button>
+                            <button type="button" class="btn btn-default btn-secondary" aria-label="Zoom in" title="click to zoom in" onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('{{organizingDiv}}',true,event)">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true" onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#mainVariantDiv',true,event)"></span>
+                            </button>
+                        </div>
+                        <div class="datatable-zoom-control">
+                            <div class="tool-label">Display</div>
                             <label class="form-check-label" for="displayBlankRows">
-                            Display blank rows&nbsp;&nbsp;
+                            Blank rows &nbsp;
                             </label>
                             <input class="form-check-input" type="checkbox" value="" id="displayBlankRows" checked>
                         </div>
                     </div>
                 </div>
-
             </div>
-            <div class="col-md-4">
 
-            </div>
-        </div>
-        <div class="row" >
-            <div class="col-md-12" style="margin-top:60px">
+            <!--<div class="container text-right" >
+                <div class="variantTableFilterChoice">
+                    <label class="form-check-label" for="displayBlankRows">
+                    Display blank rows&nbsp;&nbsp;
+                    </label>
+                    <input class="form-check-input" type="checkbox" value="" id="displayBlankRows" checked>
+                </div>
+            </div>-->
+            <div class="row" >
+                <div class="col-md-12" style="margin-top:60px">
 
-                <div id="mainVariantDiv">
-                    <table class="variantTableHolder">
-                    </table>
+                    <div id="mainVariantDiv">
+                        <table class="variantTableHolder">
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

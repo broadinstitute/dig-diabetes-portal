@@ -1908,3 +1908,27 @@ a.edit-btn { position: absolute; top:0; right: 0; background-color: #ddd; color:
 .well-variant-page .accordion-inner p { font-size: 16px; }
 
 /* changes for V2FKP end */
+
+/* changes on focus table pages */
+span.phenotypeSpecifier { font-family: "Lato", Arial, sans-serif !important; font-size: 42px !important; }
+
+.focus-page-header-wrapper { background-color: #fff; overflow: hidden; margin-bottom: 20px; margin-top: 20px; }
+.focus-page-header-header > div { float: left; border-bottom: solid 1px #ddd; border-left: solid 1px #ddd; padding: 2px 5px; position: relative; }
+.focus-page-header-content > div { float: left; border-left: solid 1px #ddd; padding: 2px 5px; position: relative; }
+.focus-page-header-header > div:first-child, .focus-page-header-content > div:first-child { clear: both; border-left: none; }
+.focus-page-header-header { font-size: 0.9em; }
+.focus-page-header-content { font-size: 42px; }
+
+.focus-table-introduction { font-size: 16px; }
+
+.focus-table-settings-wrapper { overflow: hidden; margin-bottom: 20px; }
+.focus-table-settings-header > div { float: left; padding: 2px 5px; position: relative; }
+.focus-table-settings-content > div { float: left; padding: 2px 2px; position: relative; }
+.focus-table-settings-header > div:first-child, .focus-table-settings-content > div:first-child { clear: both; border-left: none; }
+.focus-table-settings-header { font-size: 0.9em; }
+.focus-table-settings-content { font-size: 18px; }
+.focus-table-settings-content input, .focus-table-settings-content select { margin: 0 !important; height: 34px; }
+
+.focus-search-go {
+	width: 100%;
+}
