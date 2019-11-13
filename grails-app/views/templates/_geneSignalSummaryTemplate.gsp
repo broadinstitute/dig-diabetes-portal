@@ -392,7 +392,7 @@
         <!-- <div role="tabpanel" class="tab-pane highImpacVariantChooser" id="highImpactVariantTabHolder"></div> -->
 
         <div class="gene-page-section-header">
-            <h2><span style="">Calculated credible set</span></h2>
+            <h2><span style="">Credible sets</span></h2>
         </div>
         <div class="credibleSetChooser well well-gene-page" id="credibleSetTabHolder"></div>
 
