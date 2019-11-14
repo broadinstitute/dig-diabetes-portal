@@ -6,10 +6,21 @@ records={{numberRecords}}
 <div class="varEpigeneticsLabel varAllEpigenetics varAbcEpigenetics variantEpigenetics initialLinearIndex_{{indexInOneDimensionalArray}}">Epigenetics</div>
 </script>
 
-<script id="abcVariantTableTissueRowLabel"  type="x-tmpl-mustache">
+ <script id="abcVariantTableTissueRowLabel"  type="x-tmpl-mustache">
 <div class="varAllEpigenetics varAbcEpigenetics staticMethodLabels annotationName_GenePrediction methodName_ABC  {{isBlank}} initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation"
  sortField=0>
 ABC&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/></div>
+</script>
+
+ <script id="abcVariantTableTissueSpecificHeaderLabel"  type="x-tmpl-mustache">
+<div class="varEpigeneticsLabel varTissueEpigenetics varAllEpigenetics varAbcEpigenetics variantEpigenetics initialLinearIndex_{{indexInOneDimensionalArray}}">Tissues (ABC)</div>
+</script>
+
+
+ <script id="abcVariantTableTissueSpecificRowLabel"  type="x-tmpl-mustache">
+<div class="varAllEpigenetics varAbcEpigenetics staticMethodLabels annotationName_GenePrediction methodName_ABC  {{isBlank}} initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation"
+ sortField=0>
+{{tissueName}}</div>
 </script>
 
 <script id="abcVariantTableTissueHeader"  type="x-tmpl-mustache">

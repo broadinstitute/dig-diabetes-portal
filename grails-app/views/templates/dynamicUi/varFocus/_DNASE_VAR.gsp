@@ -16,6 +16,19 @@ ATAC-seq&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bott
 <div class="varAllEpigenetics varDnaseEpigenetics  initialLinearIndex_{{initialLinearIndex}}">{{tissueName}}</div>
 </script>
 
+
+<script id="dnaseVariantTableTissueSpecificHeaderLabel"  type="x-tmpl-mustache">
+<div class="varEpigeneticsLabel varTissueEpigenetics varAllEpigenetics varAbcEpigenetics variantEpigenetics initialLinearIndex_{{indexInOneDimensionalArray}}">Tissues (DNase)</div>
+</script>
+
+
+<script id="dnaseVariantTableTissueSpecificRowLabel"  type="x-tmpl-mustache">
+<div class="varAllEpigenetics varAbcEpigenetics staticMethodLabels annotationName_GenePrediction methodName_ABC  {{isBlank}} initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation"
+ sortField=0>
+{{tissueName}}</div>
+</script>
+
+
 <script id="dnaseVariantTableSignificanceCellPresentationString"  type="x-tmpl-mustache">
 {{significanceValueAsString}}No div!
 </script>

@@ -2707,7 +2707,9 @@ mpgSoftware.dynamicUi = (function () {
                     });
                 }
 
-
+                const tissueIntermediateDataStructure = accumulatorFieldWithIndex[0].header['tissueDisplay'];
+                numberOfExistingRows = tissueIntermediateDataStructure.rowsToAdd.length+5;
+                addedRows = 0;
                 if (arrayOfDataToDisplay[0].data.groupByTissue.length > 0) {
                     { // we have real data
                         _.forEach(arrayOfDataToDisplay[0].data.groupByTissue, function (recordsForTissue) {
@@ -2718,36 +2720,40 @@ mpgSoftware.dynamicUi = (function () {
                             const tissueName = recordsForTissue.name;
 
                             // Either retrieve an existing row for this tissue, or else create a new one
-                            const tissueIntermediateDataStructure = accumulatorFieldWithIndex[0].header['tissueDisplay'];
+
                             let rowWeAreAddingTo = _.find(tissueIntermediateDataStructure.rowsToAdd, {'rowTag': tissueName});
                             if (typeof rowWeAreAddingTo === 'undefined') {
                                 addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode, tissueIntermediateDataStructure, tissueName);
                                 rowWeAreAddingTo = _.last(tissueIntermediateDataStructure.rowsToAdd);
                                 rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(tissueName,
-                                    Mustache.render($('#' + dataAnnotationType.dataAnnotation.drillDownCategoryWriter)[0].innerHTML,
+                                    Mustache.render($('#' + dataAnnotationType.dataAnnotation.tissueCategoryWriter)[0].innerHTML,
                                         {indexInOneDimensionalArray: ((numberOfExistingRows + addedRows) * numberOfColumns)}),
                                     dataAnnotationType.dataAnnotation.subcategory + " header", 'LIT'));
-                            }
-                            headerNames = _.map(dataVector, 'name');
 
-                            let isBlank = "";
-                            if ((typeof recordsForTissue.arrayOfRecords === 'undefined') ||
-                                (recordsForTissue.arrayOfRecords.length === 0)) {
-                                isBlank = "isBlank";
+                                headerNames = _.map(dataVector, 'name');
+
+                                let isBlank = "";
+                                if ((typeof recordsForTissue.arrayOfRecords === 'undefined') ||
+                                    (recordsForTissue.arrayOfRecords.length === 0)) {
+                                    isBlank = "isBlank";
+                                }
+                                rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(tissueName,
+                                    Mustache.render($('#' + dataAnnotationType.dataAnnotation.tissueSubCategoryWriter)[0].innerHTML,
+                                        {
+                                            tissueName: tissueName,
+                                            indexInOneDimensionalArray: (((numberOfExistingRows + addedRows) * numberOfColumns) + 1),
+                                            isBlank: isBlank
+                                        }),
+                                    dataAnnotationType.dataAnnotation.subcategory, 'LIT'));
+                                _.forEach(dataVector, function (oneRecord) {
+                                    rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
+                                        {otherClasses: "methodName_" + currentMethod + " annotationName_" + tissueName}, "discoDownAndCheckOutTheShow", 'EMP'));
+                                });
                             }
-                            rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(tissueName,
-                                Mustache.render($('#' + dataAnnotationType.dataAnnotation.drillDownSubCategoryWriter)[0].innerHTML,
-                                    {
-                                        annotationName: tissueName,
-                                        indexInOneDimensionalArray: (((numberOfExistingRows + addedRows) * numberOfColumns) + 1),
-                                        isBlank: isBlank
-                                    }),
-                                dataAnnotationType.dataAnnotation.subcategory, 'LIT'));
-                            _.forEach(dataVector, function (oneRecord) {
-                                rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
-                                    {otherClasses: "methodName_" + currentMethod + " annotationName_" + tissueName}, "discoDownAndCheckOutTheShow", 'EMP'));
-                            });
                             // fill in all of the column cells
+                            if (recordsForTissue.arrayOfRecords.length>dataVector.length+2){
+                                console.log("recordsForTissue.arrayOfRecords.length="+recordsForTissue.arrayOfRecords.length+".")
+                            }
                             _.forEach(recordsForTissue.arrayOfRecords, function (oneRecord) {
                                 var indexOfColumn = _.indexOf(headerNames, oneRecord.name);
                                 if (indexOfColumn === -1) {
@@ -2755,10 +2761,14 @@ mpgSoftware.dynamicUi = (function () {
                                 } else {
                                     const existingCell = rowWeAreAddingTo.columnCells[indexOfColumn + 2];
                                     let arrayOfRecords = [];
-                                    if (existingCell.dataAnnotationTypeCode !== 'EMP') {
-                                        arrayOfRecords = existingCell.renderData.tissueRecords;
+                                    if ( typeof existingCell === 'undefined'){
+                                        console.log('wtf');
+                                    } else {
+                                        if (existingCell.dataAnnotationTypeCode !== 'EMP') {
+                                            arrayOfRecords = existingCell.renderData.tissueRecords;
+                                        }
+                                        arrayOfRecords = _.concat(arrayOfRecords, oneRecord.arrayOfRecords)
                                     }
-                                    arrayOfRecords = _.concat(arrayOfRecords, oneRecord.arrayOfRecords)
                                     var renderData = placeDataIntoRenderForm(arrayOfRecords,
                                         "", "",
                                         dataAnnotationTypeCode,
@@ -2768,64 +2778,17 @@ mpgSoftware.dynamicUi = (function () {
                                         renderData, "tissue specific", dataAnnotationTypeCode);
 
                                 }
+                                if (rowWeAreAddingTo.columnCells.length>dataVector.length+2){
+                                    console.log("rowWeAreAddingTo.columnCells.length="+rowWeAreAddingTo.columnCells.length+".")
+                                }
                             });
+
                             addedRows++;
                         });
                     }
 
-
                     mpgSoftware.variantTable.updateAnnotationDropDownBox(currentMethod, annotationOptions);
-                    // switch(currentMethod){
-                    //     case "MACS":
-                    //         if (annotationOptions.length === 0){
-                    //             $('#annotationSelectorChoice').append(new Option("<span class='boldit'>ATAC-Seq</span>","MACS_MACS"));
-                    //         } else {
-                    //             _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
-                    //                 $('#annotationSelectorChoice').append(new Option("<span class='boldit'>ATAC-Seq</span>",rec.value));
-                    //             });
-                    //         }
-                    //
-                    //         break;
-                    //     case "ABC":
-                    //         if (annotationOptions.length === 0){
-                    //             $('#annotationSelectorChoice').append(new Option("<span class='boldit'>ABC</span>","ABC_ABC"));
-                    //         } else {
-                    //             _.forEach(_.sortBy(annotationOptions, 'name'), function (rec) {
-                    //                 $('#annotationSelectorChoice').append(new Option("<span class='boldit'>ABC</span>", rec.value));
-                    //             });
-                    //         }
-                    //         break;
-                    //     case "SPP":
-                    //         if (annotationOptions.length>1){
-                    //             $('#annotationSelectorChoice').append("<optgroup label='TF Binding Sites'>");
-                    //             _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
-                    //                 $('#annotationSelectorChoice').append(new Option('&nbsp;&nbsp;&nbsp;&nbsp;'+rec.name,rec.value));
-                    //             });
-                    //             $('#annotationSelectorChoice').append("</optgroup>");
-                    //         } else if (annotationOptions.length === 1) {
-                    //             _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
-                    //                 $('#annotationSelectorChoice').append(new Option("<span class='boldit'>TF Binding Site</span>",rec.value));
-                    //             });
-                    //         } else if (annotationOptions.length === 0) {
-                    //                 $('#annotationSelectorChoice').append(new Option("<span class='boldit'>TF Binding Site</span>",'SPP_SPP'));
-                    //         }
-                    //         break;
-                    //     case "ChromHMM":
-                    //         $('#annotationSelectorChoice').append("<optgroup label='ChromHMM'>");
-                    //         _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
-                    //             $('#annotationSelectorChoice').append(new Option('&nbsp;&nbsp;&nbsp;&nbsp;'+rec.name,rec.value));
-                    //         });
-                    //         $('#annotationSelectorChoice').append("</optgroup>");
-                    //         break;
-                    //     case "TFMOTIF":
-                    //         break;
-                    //
-                    //     default:
-                    //         _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
-                    //             $('#annotationSelectorChoice').append(new Option(rec.name,rec.value));
-                    //         });
-                    // }
-                    // $('#annotationSelectorChoice').multiselect('rebuild');
+
                 }
 
                 intermediateDataStructure.tableToUpdate = idForTheTargetDiv;
@@ -3881,20 +3844,20 @@ mpgSoftware.dynamicUi = (function () {
                 setAccumulatorObject("sharedTable_" + additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory,sharedTable);
                 break;
             case 'variantTable':
-                // setAccumulatorObject("phenotype","T2D");
-                // setAccumulatorObject("chromosome","8");
-                // setAccumulatorObject("extentBegin","117862462");
-                // setAccumulatorObject("extentEnd","118289003");
+                setAccumulatorObject("phenotype","T2D");
+                setAccumulatorObject("chromosome","8");
+                setAccumulatorObject("extentBegin","117862462");
+                setAccumulatorObject("extentEnd","118289003");
 
                 // setAccumulatorObject("phenotype","T2D");
                 // setAccumulatorObject("chromosome","19");
                 // setAccumulatorObject("extentBegin","58838000");
                 // setAccumulatorObject("extentEnd","58875000");
 
-                setAccumulatorObject("phenotype","T2D");
-                setAccumulatorObject("chromosome","1");
-                setAccumulatorObject("extentBegin","3504650");
-                setAccumulatorObject("extentEnd","3614660");
+                // setAccumulatorObject("phenotype","T2D");
+                // setAccumulatorObject("chromosome","1");
+                // setAccumulatorObject("extentBegin","3504650");
+                // setAccumulatorObject("extentEnd","3614660");
 
                 const chromosomeInput = $('input#chromosomeInput').val();
                 const startExtentInput = $('input#startExtentInput').val();
@@ -4733,7 +4696,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
     };
 
 
-    const filterEpigeneticTable = function(whereTheTableGoes){
+    const filterEpigeneticTable = function(whereTheTableGoes, useTissueMode){
         // we can filter either on tissue enrichments, or explicitly selected annotations, or we can accept either
         let uniqueLists = {};
         const currentTableForm = getSharedTable(whereTheTableGoes)['currentForm'];
@@ -4746,6 +4709,10 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         } else if ( (!filterByGregor) &&
                     filterByExplicitMethod ){
             uniqueLists = getMethodsAnnotationsAndTissuesFromExplicitAnnotationSpecification(false)
+        }
+        let weAreInTissueMode = false;
+        if (( typeof useTissueMode !== 'undefined') && (useTissueMode)){
+            weAreInTissueMode = true;
         }
 
 
@@ -4824,7 +4791,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             if (currentTableForm === 'variantTableAnnotationHeaders'){
                 methodNameToProcess = extractClassBasedTrailingString(oneDiv,"methodName_");
                 annotationNameToProcess = extractClassBasedTrailingString(oneDiv,"annotationName_");
-                isBlank = extractClassBasedTrailingString(oneDiv,"isBlan");
+                isBlank = extractClassBasedTrailingString(oneDiv,"isBlank");
                 // if the line is completely blank then we must hide it based on method name.  Otherwise we use annotation name
             }
 
@@ -4892,14 +4859,10 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             }
 
         });
-        // const cellsToCollapse = $('div.varEpigeneticsLabel');
-        // _.forEach(cellsToCollapse, function(domElement,index){
-        //     if (index===0){
-        //         $(domElement).parent().prop('rowspan',cellsToCollapse.length);
-        //     } else {
-        //         $(domElement).parent().hide();
-        //     }
-        // });
+
+
+        // testing...
+       // _.forEach($('div.varTissueEpigenetics'),function(o){$(o).parent().parent().show()});
 
 
 
@@ -6481,7 +6444,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         const intermediateDataStructureHdr = getAccumulatorObject("topPortionDisplay");
         const clearBeforeStarting = false;
         const idForTheTargetDiv = whereTheTableGoes;
-        const storeRecords = false;
+        const storeRecords = true;
 
         prepareToPresentToTheScreen(idForTheTargetDiv,
             '#notUsed',
@@ -6507,7 +6470,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             false,
             true );
 
-        filterEpigeneticTable(idForTheTargetDiv);
+        filterEpigeneticTable(idForTheTargetDiv,true);
     }
 
 

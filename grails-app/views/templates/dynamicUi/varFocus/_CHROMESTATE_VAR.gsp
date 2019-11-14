@@ -22,6 +22,16 @@ records={{numberRecords}}
 </div>
 </script>
 
+<script id="chromStateVariantTableTissueSpecificHeaderLabel"  type="x-tmpl-mustache">
+<div class="varEpigeneticsLabel varTissueEpigenetics varAllEpigenetics varAbcEpigenetics variantEpigenetics initialLinearIndex_{{indexInOneDimensionalArray}}">Tissues (ChromHMM)</div>
+</script>
+
+
+<script id="chromStateVariantTableTissueSpecificRowLabel"  type="x-tmpl-mustache">
+<div class="varAllEpigenetics varAbcEpigenetics staticMethodLabels annotationName_GenePrediction methodName_ABC  {{isBlank}} initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation"
+ sortField=0>
+{{tissueName}}</div>
+</script>
 
 
 <script id="chromStateVariantTableSignificanceCellPresentationString"  type="x-tmpl-mustache">

@@ -26,6 +26,19 @@ tfbs&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" 
 {{significanceValueAsString}}No div!
 </script>
 
+
+<script id="tfbsVariantTableTissueSpecificHeaderLabel"  type="x-tmpl-mustache">
+<div class="varEpigeneticsLabel varTissueEpigenetics varAllEpigenetics varAbcEpigenetics variantEpigenetics initialLinearIndex_{{indexInOneDimensionalArray}}">Tissues (TFBS)</div>
+</script>
+
+
+<script id="tfbsVariantTableTissueSpecificRowLabel"  type="x-tmpl-mustache">
+<div class="varAllEpigenetics varAbcEpigenetics staticMethodLabels annotationName_GenePrediction methodName_ABC  {{isBlank}} initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation"
+ sortField=0>
+{{tissueName}}</div>
+</script>
+
+
 <script id="tfbsVariantTableBody"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortField="{{significanceValue}}"
              class="varAllEpigenetics varTfbsEpigenetics tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
