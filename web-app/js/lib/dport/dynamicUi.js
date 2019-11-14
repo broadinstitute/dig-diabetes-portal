@@ -2756,7 +2756,7 @@ mpgSoftware.dynamicUi = (function () {
                                     const existingCell = rowWeAreAddingTo.columnCells[indexOfColumn + 2];
                                     let arrayOfRecords = [];
                                     if (existingCell.dataAnnotationTypeCode !== 'EMP') {
-                                        arrayOfRecords = existingCell.arrayOfRecords;
+                                        arrayOfRecords = existingCell.renderData.tissueRecords;
                                     }
                                     arrayOfRecords = _.concat(arrayOfRecords, oneRecord.arrayOfRecords)
                                     var renderData = placeDataIntoRenderForm(arrayOfRecords,
@@ -3398,11 +3398,13 @@ mpgSoftware.dynamicUi = (function () {
             });
 
         }
+        setAccumulatorObject('topPortionDisplay',intermediateDataStructure);
 
 
         prepareToPresentToTheScreen(idForTheTargetDiv,
             '#notUsed',
-            vectorOfVariantRecords,
+            //vectorOfVariantRecords,
+            {},
             clearBeforeStarting,
             intermediateDataStructure,
             true,
@@ -6469,6 +6471,43 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         },{});
         refineTableRecords(whereTheTableGoes,$(whereTheTableGoes).dataTable(),sharedTable.currentForm,[],false);
 
+    };
+    const displayVariantTablePerTissue  = function (whereTheTableGoes) {
+        var sharedTable = getSharedTable(whereTheTableGoes);
+        destroySharedTable(whereTheTableGoes);
+
+        // Make the variant headers, the strictly genetic annotations, and the genetic association rows
+        const indexAccumulator = getAccumulatorObject("variantInfoArray");
+        const intermediateDataStructureHdr = getAccumulatorObject("topPortionDisplay");
+        const clearBeforeStarting = false;
+        const idForTheTargetDiv = whereTheTableGoes;
+        const storeRecords = false;
+
+        prepareToPresentToTheScreen(idForTheTargetDiv,
+            '#notUsed',
+            {},
+            clearBeforeStarting,
+            intermediateDataStructureHdr,
+            storeRecords,
+            'variantTableVariantHeaders',
+            true,
+            true ); // we want to display blank rows in this case, since they are informative
+
+
+        const intermediateDataStructureBody = indexAccumulator[0].header['tissueDisplay'];
+        intermediateDataStructureBody['tableToUpdate'] = idForTheTargetDiv;
+
+        prepareToPresentToTheScreen(idForTheTargetDiv,
+            '#notUsed',
+            {}, // unused
+            clearBeforeStarting,
+            intermediateDataStructureBody,
+            storeRecords,
+            'variantTableVariantHeaders',
+            false,
+            true );
+
+        filterEpigeneticTable(idForTheTargetDiv);
     }
 
 
@@ -6514,7 +6553,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         getAccumulatorObject:getAccumulatorObject,
         filterEpigeneticTable:filterEpigeneticTable,
         adjustAnnotationTable:adjustAnnotationTable,
-        extractClassBasedIndex:extractClassBasedIndex
+        extractClassBasedIndex:extractClassBasedIndex,
+        displayVariantTablePerTissue:displayVariantTablePerTissue
     }
 }());
 

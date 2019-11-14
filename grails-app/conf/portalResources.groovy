@@ -156,6 +156,9 @@ modules = {
         resource url: 'js/lib/dport/geneSignalSummary.js'
         resource url: 'css/dport/geneSignalSummary.css'
 
+        resource url: 'js/lib/dport/multiTrack.js'
+        resource url: 'css/dport/multiTrack.css'
+
         resource url: 'js/lib/dport/matrixMath.js'
     }
     variantInfo {

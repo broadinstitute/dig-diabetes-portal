@@ -42,7 +42,7 @@ mpgSoftware.dynamicUi.chromStateVariantTable = (function () {
             });
             _.forEach( _.groupBy(uniqueRecords, function (o) { return o.tissue_id }), function (recordsGroupedByTissue,tissue) {
                 let groupedByTissue = {name:tissue, arrayOfRecords:[]};
-                _.forEach( _.groupBy(groupedByTissue, function (o) { return o.var_id }), function (recordsSubGroupedByVarId,varId) {
+                _.forEach( _.groupBy(recordsGroupedByTissue, function (o) { return o.var_id }), function (recordsSubGroupedByVarId,varId) {
                     groupedByTissue.arrayOfRecords.push({name:varId,arrayOfRecords:recordsSubGroupedByVarId});
                 });
                 dataGroupings.groupByTissue.push(groupedByTissue);

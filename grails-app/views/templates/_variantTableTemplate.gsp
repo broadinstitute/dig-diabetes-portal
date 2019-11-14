@@ -218,8 +218,13 @@
         <div class="row" >
             <div class="col-md-8">
                 <div class="row">
-                    <div class="col-md-9">
+                    <div class="col-md-6">
 
+                    </div>
+                    <div class="col-md-3">
+                            <button  class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table" onclick="mpgSoftware.dynamicUi.displayVariantTablePerTissue('{{domTableSpecifier}}')">
+                                Order by tissue
+                              </button>
                     </div>
                     <div class="col-md-3 text-right">
                         <div class="variantTableFilterChoice">

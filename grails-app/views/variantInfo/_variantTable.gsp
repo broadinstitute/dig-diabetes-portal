@@ -272,6 +272,10 @@
                         //     nameOfAccumulatorFieldWithIndex:'variantInfoArray'
                         // }
                         // ,
+
+
+
+
                         {
                             code: 'CHROMESTATE_VAR',
                             category: 'ChromState',
