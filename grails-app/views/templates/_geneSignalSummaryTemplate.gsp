@@ -394,6 +394,11 @@
         <div class="gene-page-section-header">
             <h2><span style="">Credible sets</span></h2>
         </div>
+
+        <div id="mainVariantDivHolder" style="background-color: #eaeaea; margin-bottom: -50px;">
+
+        </div>
+
         <div class="credibleSetChooser well well-gene-page" id="credibleSetTabHolder"></div>
 
 
@@ -1010,6 +1015,7 @@
 </script>
 <script id="organizeSignalSummaryCredibleSet"  type="x-tmpl-mustache">
     {{#credibleSetTab}}
+
 
                     <div class="row" style="border: none">
                         <div class="col-sm-12">

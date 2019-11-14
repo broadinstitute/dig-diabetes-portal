@@ -10,6 +10,8 @@ mpgSoftware.variantTable = (function () {
         drivingVariablesToRemember = drivingVariables;
     };
     var getVariablesToRemember = function(){
+        //console.log("drivingVariablesToRemember");
+        //console.log(drivingVariablesToRemember);
         return drivingVariablesToRemember;
     };
 
@@ -55,12 +57,55 @@ mpgSoftware.variantTable = (function () {
 
 
     var refreshTableForPhenotype = function(preferredPhenotype){
+
         var domElement = $(preferredPhenotype);
         var phenotypeString = domElement.val();
+        console.log(phenotypeString);
         var phenotypeName = domElement.find(':selected').text();
         $('span.phenotypeSpecifier').text(phenotypeName);
         mpgSoftware.dynamicUi.modifyScreenFields({phenotype:phenotypeString},getVariablesToRemember());
     };
+
+    /* dk adding this function for V2F integration */
+    var refreshVariantFocusForPhenotype = function(PHENOTYPEANNOTATION){
+        var phenotypeString = PHENOTYPEANNOTATION[0];
+
+        var pageURL_string = window.location.href;
+        var url = new URL(pageURL_string);
+
+        if (url.searchParams.get("chromosomeNumber")){
+
+            var chromosomeInput = url.searchParams.get("chromosomeNumber");
+            var startExtentInput = url.searchParams.get("startExtent");
+            var endExtentInput = url.searchParams.get("endExtent");
+
+            mpgSoftware.dynamicUi.modifyScreenFields({phenotype:phenotypeString, chromosome:chromosomeInput, startPosition:startExtentInput, endPosition:endExtentInput},getVariablesToRemember());
+
+        } else {
+            var urlPath = window.location.pathname.split("/");
+            var geneName = urlPath[urlPath.length - 1];
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: '/dig-diabetes-portal/gene/geneInfoAjax',
+                data: {geneName: geneName},
+                async: true
+            }).done(function (geneInfoData) {
+
+                var genePageExtent = 100000;
+
+                var chromosomeInput = geneInfoData.geneInfo.CHROM;
+                var startExtentInput = geneInfoData.geneInfo.BEG - genePageExtent;
+                var endExtentInput = geneInfoData.geneInfo.END + genePageExtent;
+
+                mpgSoftware.dynamicUi.modifyScreenFields({phenotype:phenotypeString, chromosome:chromosomeInput, startPosition:startExtentInput, endPosition:endExtentInput},getVariablesToRemember());
+            });
+        }
+
+        //mpgSoftware.dynamicUi.modifyScreenFields({phenotype:phenotypeString},getVariablesToRemember());
+    };
+
+    /* dk adding this function for V2F integration end */
 
     const refreshTableForAnnotations = function(x){
         mpgSoftware.dynamicUi.redrawVariantTable();
@@ -155,7 +200,48 @@ mpgSoftware.variantTable = (function () {
         $('.modal-content').resizable({
             alsoResize: ".modal-header, .modal-body, .modal-footer"
         });
-        mpgSoftware.dynamicUi.modifyScreenFields({phenotype:preferredPhenotype},getVariablesToRemember());
+        //mpgSoftware.dynamicUi.modifyScreenFields({phenotype:preferredPhenotype},getVariablesToRemember());
+
+        var pageURL_string = window.location.href;
+        var url = new URL(pageURL_string);
+
+        if (url.searchParams.get("chromosomeNumber")){
+
+            console.log("region view");
+            var chromosomeInput = url.searchParams.get("chromosomeNumber");
+            var startExtentInput = url.searchParams.get("startExtent");
+            var endExtentInput = url.searchParams.get("endExtent");
+
+            console.log(preferredPhenotype+" : "+chromosomeInput+" : "+startExtentInput+" : "+endExtentInput);
+
+            mpgSoftware.dynamicUi.modifyScreenFields({phenotype:preferredPhenotype, chromosome:chromosomeInput, startPosition:startExtentInput, endPosition:endExtentInput},getVariablesToRemember());
+
+        } else {
+
+            console.log("gene id view");
+            var urlPath = window.location.pathname.split("/");
+            var geneName = urlPath[urlPath.length - 1];
+
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: '/dig-diabetes-portal/gene/geneInfoAjax',
+                data: {geneName: geneName},
+                async: true
+            }).done(function (geneInfoData) {
+                //console.log(data);
+                var genePageExtent = 100000;
+
+                var chromosomeInput = geneInfoData.geneInfo.CHROM;
+                var startExtentInput = geneInfoData.geneInfo.BEG - genePageExtent;
+                var endExtentInput = geneInfoData.geneInfo.END + genePageExtent;
+
+                console.log(preferredPhenotype+" : "+chromosomeInput+" : "+startExtentInput+" : "+endExtentInput);
+
+                mpgSoftware.dynamicUi.modifyScreenFields({phenotype:preferredPhenotype, chromosome:chromosomeInput, startPosition:startExtentInput, endPosition:endExtentInput},getVariablesToRemember());
+            });
+
+        }
     }
 
     return {
@@ -163,6 +249,7 @@ mpgSoftware.variantTable = (function () {
         initialPageSetUp:initialPageSetUp,
         refreshTableForPhenotype:refreshTableForPhenotype,
         refreshTableForAnnotations:refreshTableForAnnotations,
-        updateAnnotationDropDownBox:updateAnnotationDropDownBox
+        updateAnnotationDropDownBox:updateAnnotationDropDownBox,
+        refreshVariantFocusForPhenotype:refreshVariantFocusForPhenotype
     }
 }());

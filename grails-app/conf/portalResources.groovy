@@ -163,6 +163,22 @@ modules = {
         resource url: 'css/dport/geneSignalSummary.css'
 
         resource url: 'js/lib/dport/matrixMath.js'
+
+        resource url: 'js/lib/dport/variantTable.js'
+
+        resource url: 'js/lib/dport/dynamicUi/varFocus/variantTableHeaders.js'
+        resource url: 'js/lib/dport/dynamicUi/varFocus/dnaseVariantTable.js'
+        resource url: 'js/lib/dport/dynamicUi/varFocus/tfbsVariantTable.js'
+        resource url: 'js/lib/dport/dynamicUi/varFocus/h3k27acVariantTable.js'
+        resource url: 'js/lib/dport/dynamicUi/varFocus/abcVariantTable.js'
+        resource url: 'js/lib/dport/dynamicUi/varFocus/chromStateVariantTable.js'
+        resource url: 'js/lib/dport/dynamicUi/varFocus/gregorSubTableVariantTable.js'
+        resource url: 'js/lib/dport/dynamicUi/varFocus/tfMotifTable.js'
+        resource url: 'js/lib/dport/matrixMath.js'
+        resource url: 'js/lib/gwas-credible-sets.js'
+
+        resource url: 'js/lib/bootstrap-multiselect.js'
+        resource url: 'css/lib/bootstrap-multiselect.css'
     }
     variantInfo {
 

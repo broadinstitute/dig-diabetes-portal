@@ -2,8 +2,10 @@
 <html>
 <head>
     <meta name="layout" content="t2dGenesCore"/>
+
     <r:require modules="geneInfo"/>
     <r:require module="locusZoom"/>
+    %{--<r:require module="variantTable"/>--}%
     %{--<r:require modules="higlass"/>--}%
 
     %{--Need to call directly or else the images don't come out right--}%
@@ -120,6 +122,7 @@
                 data: {geneName: '${geneName}'},
                 async: true
             }).done(function (data) {
+
                 mpgSoftware.geneInfo.fillTheGeneFields(data); // fills the uniprot summary
                 $('[data-toggle="popover"]').popover({
                     animation: true,
@@ -279,9 +282,6 @@
                     </g:elseif>
 
 
-
-
-
 <!--
                 <div class="col-md-12" style="padding-top: 30px;">
 
@@ -292,11 +292,21 @@
 
 
 
+
                 <g:render template="../templates/dynamicUi/GENE_TABLE"/>
                 <g:render template="../templates/geneSignalSummaryTemplate"/>
                 <g:render template="../templates/variantSearchResultsTemplate" />
                 <g:render template="geneSignalSummary"  model="[signalLevel:1,geneToSummarize:geneName]"/>
                 <g:render template="../templates/variantSearchResultsTemplate" />
+
+                <g:render template="/templates/dynamicUi/VARIANT_TABLE" />
+
+
+
+
+
+
+
 
 
                 <div class="accordion" id="accordion2">
@@ -317,6 +327,9 @@
                         </div>
                     </div>
                 </g:if>
+
+
+
                 <g:if test="${portalVersionBean.exposeIgvDisplay}">
 
                     <div class="separator"></div>
@@ -405,6 +418,8 @@
 
 </div>
 <g:render template="/templates/burdenTestSharedTemplate" />
+<g:render template="/variantInfo/variantTable" />
+
 </body>
 </html>
 

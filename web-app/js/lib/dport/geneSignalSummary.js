@@ -1044,7 +1044,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var dsr = PHENOTYPEDATA[2];
         var phenoName = PHENOTYPEDATA[3];
 
-        console.log(phenocode+" : "+ds+" : "+dsr+" : "+phenoName);
+        //console.log(phenocode+" : "+ds+" : "+dsr+" : "+phenoName);
         launchUpdateSignalSummaryBasedOnPhenotype(phenocode,ds,phenoName,dsr);
     };
 
@@ -1101,7 +1101,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
             phenotypesList = sortJSON(phenotypesList,'name','asc');
 
-            console.log(phenotypesList);
+            //console.log(phenotypesList);
 
             var phenotypePullDown = '';
 
@@ -1116,6 +1116,10 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 var selected = $('.selectpicker option:selected').attr("data").split("::");
                 //console.log(selected);
                 updateSignalSummaryBasedOnPhenotype2(selected);
+
+                //update variant FOCUS table
+                mpgSoftware.variantTable.refreshVariantFocusForPhenotype(selected);
+
                 showHideElement('#phenotypeSearchHolder');
             });
 
