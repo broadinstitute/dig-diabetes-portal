@@ -8,7 +8,7 @@
 
         mpgSoftware.variantTableInitializer = (function () {
 
-            var variantTableConfiguration = function(INITIALPHENOTYPE){
+            var variantTableConfiguration = function(INITIALPHENOTYPE, AJAXURL){
                 var drivingVariables = {
                     getGRSListOfVariantsAjaxUrl:"${createLink(controller:'grs',action: 'getGRSListOfVariantsAjax')}",
                     getLocusZoomFilledPlotUrl: '${createLink(controller:"gene", action:"getLocusZoomFilledPlot")}',
@@ -317,9 +317,10 @@
                 mpgSoftware.variantTable.setVariablesToRemember(drivingVariables);
                 //mpgSoftware.variantTable.initialPageSetUp("${phenotype}");
 
-                mpgSoftware.variantTable.initialPageSetUp(INITIALPHENOTYPE);
+                mpgSoftware.variantTable.initialPageSetUp(INITIALPHENOTYPE,AJAXURL);
 
-                console.log("v table phenotype: "+INITIALPHENOTYPE);
+
+                //console.log("v table phenotype: "+INITIALPHENOTYPE);
             };
 
 
@@ -337,8 +338,11 @@
 
 
     $( document ).ready(function() {
-        //Now it's moved to geneSignalSummary.js
-        mpgSoftware.variantTableInitializer.variantTableConfiguration("T2D");
+
+        //var vFTablejaxURL = '<g:createLink controller="gene" action="geneInfoAjax"/>'
+
+        //mpgSoftware.variantTableInitializer.variantTableConfiguration("T2D",vFTablejaxURL);
+
     });
 </script>
 

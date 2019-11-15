@@ -542,6 +542,7 @@ mpgSoftware.dynamicUi = (function () {
             default:
                 break;
         }
+
         return defaultFollowUp;
     }
 
@@ -3863,6 +3864,8 @@ mpgSoftware.dynamicUi = (function () {
 
         }
 
+
+
         switch (additionalParameters.dynamicTableType) {
             case 'geneTable':
                 break;
@@ -3952,9 +3955,10 @@ mpgSoftware.dynamicUi = (function () {
 
         destroySharedTable('table.combinedGeneTableHolder');
 
-        _.forEach(additionalParameters.dataAnnotationTypes, function (oneAnnotationType){
+        _.forEach(additionalParameters.dataAnnotationTypes, function (oneAnnotationType, mindex){
             arrayOfRoutinesToUndertake.push( actionContainer(oneAnnotationType.internalIdentifierString,
                 actionDefaultFollowUp(oneAnnotationType.internalIdentifierString)));
+
         });
 
         _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});

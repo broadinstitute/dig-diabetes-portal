@@ -1044,7 +1044,6 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var dsr = PHENOTYPEDATA[2];
         var phenoName = PHENOTYPEDATA[3];
 
-        //console.log(phenocode+" : "+ds+" : "+dsr+" : "+phenoName);
         launchUpdateSignalSummaryBasedOnPhenotype(phenocode,ds,phenoName,dsr);
     };
 
@@ -1117,8 +1116,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 //console.log(selected);
                 updateSignalSummaryBasedOnPhenotype2(selected);
 
-                //update variant FOCUS table
-                mpgSoftware.variantTable.refreshVariantFocusForPhenotype(selected);
+
 
                 showHideElement('#phenotypeSearchHolder');
             });
@@ -1773,6 +1771,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
     var refreshTopVariantsDirectlyByPhenotype = function (phenotypeName, callBack, parameter) {
         loading.show();
+
         var rememberCallBack = callBack;
         var rememberParameter = parameter;
         var coreVariables = getSignalSummarySectionVariables();
@@ -1793,24 +1792,97 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         if (parameter.useMinimalCall){
             callingUrl = coreVariables.retrieveTopVariantsAcrossSgsMinUrl;
         }
-        $.ajax({
-            cache: false,
-            type: "post",
-            url: callingUrl,
-            data: callingObj,
-            async: true,
-            success: function (data) {
-                if (typeof data.experimentAssays !== 'undefined'){
-                    var signalSummarySectionVariables = getSignalSummarySectionVariables();
-                    signalSummarySectionVariables["experimentAssays"] = data.experimentAssays;
-                }
-                rememberCallBack(data, rememberParameter);
-            },
-            error: function (jqXHR, exception) {
-                core.errorReporter(jqXHR, exception);
-            }
-        });
 
+        if ($("#gene-info-summary-content").find(".pname").text() == "") {
+            console.log("only called 1st time");
+
+            if(phenotypeName != "") {
+                $.ajax({
+                    cache: false,
+                    type: "post",
+                    url: callingUrl,
+                    data: callingObj,
+                    async: true,
+                    success: function (data) {
+                        if (typeof data.experimentAssays !== 'undefined'){
+                            var signalSummarySectionVariables = getSignalSummarySectionVariables();
+                            signalSummarySectionVariables["experimentAssays"] = data.experimentAssays;
+                        }
+                        rememberCallBack(data, rememberParameter);
+
+                    },
+                    error: function (jqXHR, exception) {
+                        core.errorReporter(jqXHR, exception);
+                    }
+                });
+
+            } else {
+
+                var ajaxURL = $('#phenotypeInput').attr("ajaxurl");
+
+                $.ajax({
+                    url:mpgSoftware.variantTableInitializer.variantTableConfiguration(phenotypeName,ajaxURL),
+                    success:function(){
+
+                        setTimeout(function(){
+                            $.ajax({
+                                cache: false,
+                                type: "post",
+                                url: callingUrl,
+                                data: callingObj,
+                                async: true,
+                                success: function (data) {
+                                    if (typeof data.experimentAssays !== 'undefined'){
+                                        var signalSummarySectionVariables = getSignalSummarySectionVariables();
+                                        signalSummarySectionVariables["experimentAssays"] = data.experimentAssays;
+                                    }
+                                    rememberCallBack(data, rememberParameter);
+
+                                },
+                                error: function (jqXHR, exception) {
+                                    core.errorReporter(jqXHR, exception);
+                                }
+                            });
+                        },5000);
+
+                    }});
+
+            }
+
+
+        } else {
+
+            console.log("called from 2nd time");
+            //update variant FOCUS table
+            var ajaxURL = $('#phenotypeInput').attr("ajaxurl");
+
+            $.ajax({
+                url:mpgSoftware.variantTable.refreshVariantFocusForPhenotype(phenotypeName,ajaxURL),
+                success:function(){
+
+                    setTimeout(function(){
+                        $.ajax({
+                            cache: false,
+                            type: "post",
+                            url: callingUrl,
+                            data: callingObj,
+                            async: true,
+                            success: function (data) {
+                                if (typeof data.experimentAssays !== 'undefined'){
+                                    var signalSummarySectionVariables = getSignalSummarySectionVariables();
+                                    signalSummarySectionVariables["experimentAssays"] = data.experimentAssays;
+                                }
+                                rememberCallBack(data, rememberParameter);
+
+                            },
+                            error: function (jqXHR, exception) {
+                                core.errorReporter(jqXHR, exception);
+                            }
+                        });
+                    },5000);
+
+                }});
+        }
     };
     var initialPageSetUp = function (drivingVariables) {
         // let us also initialized the region info metadata at this point
@@ -2048,9 +2120,6 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
         // Adding initial phenotype name to page header
         $("#gene-info-summary-content").find(".gene-phenotype").find(".pname").text(pName);
-
-        // initializing variant FOCUS table
-        //mpgSoftware.variantTableInitializer.variantTableConfiguration(additionalParameters.phenotype);
 
 
         if ((typeof datasetName === 'undefined') ||
