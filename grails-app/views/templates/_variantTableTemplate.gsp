@@ -105,7 +105,7 @@
 
     <div class="container-fluid" style="padding: 0 2.5%;">
 
-        <div>
+        <div style="display:none;">
             <div class="focus-page-header-wrapper">
                 <div class="focus-page-header-header">
                     <div style="width:55%;">Title</div>
@@ -120,7 +120,8 @@
             </div>
         </div>
 
-        <div class="well well-variant-page focus-table-introduction">
+        <!--<div class="well well-variant-page focus-table-introduction">-->
+        <div class="focus-table-introduction">
             <g:message code="variantTable.introduction.1"></g:message><g:message code="variantTable.introduction.2"></g:message>
                 <g:helpText title="variantTable.overall.help.header" placement="bottom" body="variantTable.help.text"/>
 
@@ -129,9 +130,10 @@
         </div>
 
 
-        <div class="well well-variant-page">
+        <!--<div class="well well-variant-page">-->
+        <div>
             <div class="container-fluid">
-            <div class="col-md-12" style="padding: 0;" >
+            <div class="col-md-12" style="padding: 0; display: none;" >
                 <h5 style="font-size: 16px; margin-left:15px;">Change genomic region or phenotype</h5>
                 <div class="focus-table-settings-wrapper well well-sm">
 

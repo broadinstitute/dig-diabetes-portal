@@ -2049,6 +2049,9 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         // Adding initial phenotype name to page header
         $("#gene-info-summary-content").find(".gene-phenotype").find(".pname").text(pName);
 
+        // initializing variant FOCUS table
+        //mpgSoftware.variantTableInitializer.variantTableConfiguration(additionalParameters.phenotype);
+
 
         if ((typeof datasetName === 'undefined') ||
             (datasetName === null))   {
@@ -2206,7 +2209,10 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         });
 
         mpgSoftware.dynamicUi.installDirectorButtonsOnTabs(additionalParameters);
-        mpgSoftware.dynamicUi.modifyScreenFields({},additionalParameters);
+
+        //testing for v2f
+        //mpgSoftware.dynamicUi.modifyScreenFields({},additionalParameters);
+        mpgSoftware.dynamicUi.modifyScreenFields({phenotype:additionalParameters.phenotype, chromosome:additionalParameters.geneChromosomeMinusChr, startPosition:additionalParameters.geneExtentBegin, endPosition:additionalParameters.geneExtentEnd},additionalParameters);
 
         $('div.credibleSetHeader input.credSetStartPos').val(""+additionalParameters.geneExtentBegin);
         $('div.credibleSetHeader input.credSetEndPos').val(""+additionalParameters.geneExtentEnd);

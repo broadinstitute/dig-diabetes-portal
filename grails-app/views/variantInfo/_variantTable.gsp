@@ -8,7 +8,7 @@
 
         mpgSoftware.variantTableInitializer = (function () {
 
-            var variantTableConfiguration = function(){
+            var variantTableConfiguration = function(INITIALPHENOTYPE){
                 var drivingVariables = {
                     getGRSListOfVariantsAjaxUrl:"${createLink(controller:'grs',action: 'getGRSListOfVariantsAjax')}",
                     getLocusZoomFilledPlotUrl: '${createLink(controller:"gene", action:"getLocusZoomFilledPlot")}',
@@ -315,7 +315,11 @@
                     }
                 };
                 mpgSoftware.variantTable.setVariablesToRemember(drivingVariables);
-                mpgSoftware.variantTable.initialPageSetUp("${phenotype}");
+                //mpgSoftware.variantTable.initialPageSetUp("${phenotype}");
+
+                mpgSoftware.variantTable.initialPageSetUp(INITIALPHENOTYPE);
+
+                console.log("v table phenotype: "+INITIALPHENOTYPE);
             };
 
 
@@ -333,7 +337,8 @@
 
 
     $( document ).ready(function() {
-        mpgSoftware.variantTableInitializer.variantTableConfiguration();
+        //Now it's moved to geneSignalSummary.js
+        mpgSoftware.variantTableInitializer.variantTableConfiguration("T2D");
     });
 </script>
 

@@ -3907,11 +3907,6 @@ mpgSoftware.dynamicUi = (function () {
                 setAccumulatorObject("extentEnd",endExtentInputVal);
 
 
-                //setAccumulatorObject("phenotype","T2D");
-                //setAccumulatorObject("chromosome","1");
-                //setAccumulatorObject("extentBegin","3504650");
-                //setAccumulatorObject("extentEnd","3614660");
-
                 /* modifying consts for v2f integration */
 
                 const chromosomeInput = $('input#chromosomeInput').val();

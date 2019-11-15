@@ -1932,3 +1932,7 @@ span.phenotypeSpecifier { font-family: "Lato", Arial, sans-serif !important; fon
 .focus-search-go {
 	width: 100%;
 }
+
+div.geneWindowDescriptionHolder {
+	margin: 0 !important;
+}
