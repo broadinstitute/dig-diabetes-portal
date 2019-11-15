@@ -71,7 +71,7 @@ mpgSoftware.variantTable = (function () {
         switch(currentMethod){
             case "MACS":
                 if (annotationOptions.length === 0){
-                    $('#annotationSelectorChoice').append(new Option("<span class='boldit'>ATAC-Seq</span>","MACS_MACS"));
+                    $('#annotationSelectorChoice').append(new Option("<span class='boldit'>ATAC-Seq</span>","AccessibleChromatin_MACS"));
                 } else {
                     _.forEach(_.sortBy(annotationOptions,'name'), function (rec ) {
                         $('#annotationSelectorChoice').append(new Option("<span class='boldit'>ATAC-Seq</span>",rec.value));
@@ -81,7 +81,7 @@ mpgSoftware.variantTable = (function () {
                 break;
             case "ABC":
                 if (annotationOptions.length === 0){
-                    $('#annotationSelectorChoice').append(new Option("<span class='boldit'>ABC</span>","ABC_ABC"));
+                    $('#annotationSelectorChoice').append(new Option("<span class='boldit'>ABC</span>","GenePrediction_ABC"));
                 } else {
                     _.forEach(_.sortBy(annotationOptions, 'name'), function (rec) {
                         $('#annotationSelectorChoice').append(new Option("<span class='boldit'>ABC</span>", rec.value));
@@ -100,7 +100,7 @@ mpgSoftware.variantTable = (function () {
                         $('#annotationSelectorChoice').append(new Option("<span class='boldit'>TF Binding Site</span>",rec.value));
                     });
                 } else if (annotationOptions.length === 0) {
-                    $('#annotationSelectorChoice').append(new Option("<span class='boldit'>TF Binding Site</span>",'SPP_SPP'));
+                    $('#annotationSelectorChoice').append(new Option("<span class='boldit'>TF Binding Site</span>",'NKX6.1_SPP'));
                 }
                 break;
             case "ChromHMM":

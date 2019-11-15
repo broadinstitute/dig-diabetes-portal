@@ -72,7 +72,14 @@ mpgSoftware.dynamicUi.tfMotifVariantTable = (function () {
                     });
                     dataGroupings.groupByTissue.push(groupedByTissue);
                 });
-            }
+            } else {
+                 // In this case there are no tissues, but we still need these data to be available in the group by tissue area
+                 let groupedByTissue = {name:'none', arrayOfRecords:[]};
+                 _.forEach( _.groupBy(uniqueRecords, function (o) { return o.var_id }), function (recordsSubGroupedByVarId,varId) {
+                     groupedByTissue.arrayOfRecords.push({name:varId,arrayOfRecords:recordsSubGroupedByVarId});
+                 });
+                 dataGroupings.groupByTissue.push(groupedByTissue);
+             }
 
             arrayOfRecords.push({header:{ },
                 data:dataGroupings});

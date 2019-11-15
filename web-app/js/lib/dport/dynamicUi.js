@@ -2582,6 +2582,7 @@ mpgSoftware.dynamicUi = (function () {
         var sharedTable = getSharedTable(idForTheTargetDiv);
         var arrayOfDataToDisplay = getAccumulatorObject(nameOfAccumulatorField);
         let prepend = true;
+        console.log("displayForVariantTable:dataAnnotationTypeCode="+dataAnnotationTypeCode+".");
 
 
 
@@ -2611,7 +2612,10 @@ mpgSoftware.dynamicUi = (function () {
                     accumulatorFieldWithIndex[0].header['annotationDisplay'] = new IntermediateDataStructure();
                 }
                 dataVector = accumulatorFieldWithIndex[0].data;
-                headerNames = _.map(dataVector, 'name');
+                ////headerNames = _.map(dataVector, 'name');
+                headerNames = _.map(dataVector, function(o){
+                    return o['name'].split(",")[0];
+                });
 
             }
             //}
@@ -2656,7 +2660,7 @@ mpgSoftware.dynamicUi = (function () {
                         const annotation = recordsForAnnotation.name;
                         addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode, intermediateDataStructure);
                         //const dataVector = getAccumulatorObject(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex)[0].data;
-                        headerNames = _.map(dataVector, 'name');
+                        //headerNames = _.map(dataVector, 'name');
                         let rowWeAreAddingTo = _.last(intermediateDataStructure.rowsToAdd);
                         rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(annotation,
                             Mustache.render($('#' + dataAnnotationType.dataAnnotation.drillDownCategoryWriter)[0].innerHTML,
@@ -2708,7 +2712,7 @@ mpgSoftware.dynamicUi = (function () {
                 }
 
                 const tissueIntermediateDataStructure = accumulatorFieldWithIndex[0].header['tissueDisplay'];
-                numberOfExistingRows = tissueIntermediateDataStructure.rowsToAdd.length+5;
+                numberOfExistingRows = tissueIntermediateDataStructure.rowsToAdd.length+6;
                 addedRows = 0;
                 if (arrayOfDataToDisplay[0].data.groupByTissue.length > 0) {
                     { // we have real data
@@ -2730,7 +2734,7 @@ mpgSoftware.dynamicUi = (function () {
                                         {indexInOneDimensionalArray: ((numberOfExistingRows + addedRows) * numberOfColumns)}),
                                     dataAnnotationType.dataAnnotation.subcategory + " header", 'LIT'));
 
-                                headerNames = _.map(dataVector, 'name');
+                                //headerNames = _.map(dataVector, 'name');
 
                                 let isBlank = "";
                                 if ((typeof recordsForTissue.arrayOfRecords === 'undefined') ||
@@ -2757,7 +2761,7 @@ mpgSoftware.dynamicUi = (function () {
                             _.forEach(recordsForTissue.arrayOfRecords, function (oneRecord) {
                                 var indexOfColumn = _.indexOf(headerNames, oneRecord.name);
                                 if (indexOfColumn === -1) {
-                                    console.log("Did not find index of epigenetic var_id===" + oneRecord.name + ".  Shouldn't we?")
+                                    console.log("Did not find index of tissue epigenetic var_id===" + oneRecord.name + ".  Shouldn't we?")
                                 } else {
                                     const existingCell = rowWeAreAddingTo.columnCells[indexOfColumn + 2];
                                     let arrayOfRecords = [];
@@ -3263,7 +3267,7 @@ mpgSoftware.dynamicUi = (function () {
         $(selectorForIidForTheTargetDiv).empty();
         var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode);
         var objectContainingRetrievedRecords = getAccumulatorObject(nameOfAccumulatorField);
-
+        console.log("displayHeaderForVariantTable:"+dataAnnotationTypeCode+".");
         var intermediateDataStructure = new IntermediateDataStructure();
         let vectorOfVariantRecords = [];
 
@@ -3875,6 +3879,7 @@ mpgSoftware.dynamicUi = (function () {
                 var sharedTable = new SharedTableObject('variantTableVariantHeaders',0,0);
                 setAccumulatorObject("sharedTable_" + additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory,sharedTable);
                 setAccumulatorObject('variantInfoArray',undefined);
+                setAccumulatorObject("variantTableOrientation","annotationDominant");
 
                 break;
             default:
@@ -4711,7 +4716,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             uniqueLists = getMethodsAnnotationsAndTissuesFromExplicitAnnotationSpecification(false)
         }
         let weAreInTissueMode = false;
-        if (( typeof useTissueMode !== 'undefined') && (useTissueMode)){
+        const variantTableOrientation = getAccumulatorObject("variantTableOrientation");
+        if (( typeof variantTableOrientation !== 'undefined') && (variantTableOrientation==="tissueDominant")){
             weAreInTissueMode = true;
         }
 
@@ -4804,9 +4810,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 }
 
             }
-            if ((_.includes(uniqueAnnotations,currentAnnotation))||
-                (_.includes(uniqueMethods,currentAnnotation))){
-
+            if (weAreInTissueMode){
                 if (currentTableForm === 'variantTableVariantHeaders') {
                     if (suppressRowDisplay){
                         $(oneDiv).parent().parent().addClass('doNotDisplay');
@@ -4838,25 +4842,62 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
                     }
                 }
-
-
             } else {
-                if (currentTableForm === 'variantTableVariantHeaders') {
-                    $(oneDiv).parent().parent().addClass('doNotDisplay');
-                    $(oneDiv).parent().parent().hide();
-                }
-                else  if (currentTableForm === 'variantTableAnnotationHeaders') {
-                    if (isBlank.length>0){
-                        //we have a header with one annotation but no table cells. This must mean that we had no data, this is a blank row, and we have to work strictly with the method
-                        $('#mainVariantDiv div.methodName_'+methodNameToProcess).parent('.varAllEpigenetics').parent().hide();
-                        $('#mainVariantDiv div.methodName_'+methodNameToProcess).parent('.header').hide();
-                    } else {
-                        $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.varAllEpigenetics').parent().hide();
-                        $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.header').hide();
-                    }
-                 }
+                if ((_.includes(uniqueAnnotations,currentAnnotation))||
+                    (_.includes(uniqueMethods,currentAnnotation))){
 
+                    if (currentTableForm === 'variantTableVariantHeaders') {
+                        if (suppressRowDisplay){
+                            $(oneDiv).parent().parent().addClass('doNotDisplay');
+                            $(oneDiv).parent().parent().hide();
+                        } else {
+                            $(oneDiv).parent().parent().show();
+                            $(oneDiv).parent().parent().removeClass('doNotDisplay');
+                        }
+                    } else  if (currentTableForm === 'variantTableAnnotationHeaders') {
+                        if (suppressRowDisplay){
+                            if (isBlank.length>0){
+                                $('#mainVariantDiv div.methodName_'+methodNameToProcess).parent('.varAllEpigenetics').parent().hide();
+                                $('#mainVariantDiv div.methodName_'+methodNameToProcess).parent('.header').hide();
+                            } else {
+                                $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.varAllEpigenetics').parent().hide();
+                                $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.header').hide();
+                            }
+
+                        } else {
+
+                            if (isBlank.length>0){
+                                $('#mainVariantDiv div.methodName_'+methodNameToProcess).parent('.varAllEpigenetics').parent().show();
+                                $('#mainVariantDiv div.methodName_'+methodNameToProcess).parent('.header').show();
+                            } else {
+                                $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.varAllEpigenetics').parent().show();
+                                $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.header').show();
+                            }
+
+
+                        }
+                    }
+
+
+                } else {
+                    if (currentTableForm === 'variantTableVariantHeaders') {
+                        $(oneDiv).parent().parent().addClass('doNotDisplay');
+                        $(oneDiv).parent().parent().hide();
+                    }
+                    else  if (currentTableForm === 'variantTableAnnotationHeaders') {
+                        if (isBlank.length>0){
+                            //we have a header with one annotation but no table cells. This must mean that we had no data, this is a blank row, and we have to work strictly with the method
+                            $('#mainVariantDiv div.methodName_'+methodNameToProcess).parent('.varAllEpigenetics').parent().hide();
+                            $('#mainVariantDiv div.methodName_'+methodNameToProcess).parent('.header').hide();
+                        } else {
+                            $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.varAllEpigenetics').parent().hide();
+                            $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.header').hide();
+                        }
+                    }
+
+                }
             }
+
 
         });
 
@@ -5410,6 +5451,9 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 _.forEach(fullDataVector,function(oneCell){
                     var initialLinearIndex = extractClassBasedIndex(oneCell,"initialLinearIndex_");
                     var associatedData = _.find(sharedTable.dataCells,{ascensionNumber:initialLinearIndex})
+                    if ( typeof  associatedData === 'undefined'){
+                        console.log("Could not find data cell="+initialLinearIndex+".")
+                    }
                     returnValue.push(associatedData);
                 });
             }
@@ -6442,6 +6486,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         // Make the variant headers, the strictly genetic annotations, and the genetic association rows
         const indexAccumulator = getAccumulatorObject("variantInfoArray");
         const intermediateDataStructureHdr = getAccumulatorObject("topPortionDisplay");
+        setAccumulatorObject("variantTableOrientation","tissueDominant");
         const clearBeforeStarting = false;
         const idForTheTargetDiv = whereTheTableGoes;
         const storeRecords = true;
