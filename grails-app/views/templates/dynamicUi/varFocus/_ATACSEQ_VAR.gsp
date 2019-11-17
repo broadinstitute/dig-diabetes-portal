@@ -23,7 +23,7 @@ ATAC-seq&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bott
 
 
 <script id="atacSeqVariantTableTissueSpecificRowLabel"  type="x-tmpl-mustache">
-<div class="varAllEpigenetics varAbcEpigenetics staticMethodLabels annotationName_GenePrediction methodName_ABC  {{isBlank}} initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation"
+<div class="varAllEpigenetics varAbcEpigenetics staticMethodLabels annotationName_GenePrediction methodName_MACS  {{isBlank}} initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation"
  sortField=0>
 {{tissue_name}}</div>
 </script>

@@ -110,6 +110,14 @@ mpgSoftware.variantTable = (function () {
                 });
                 $('#annotationSelectorChoice').append("</optgroup>");
                 break;
+            case "cicero":
+                if (annotationOptions.length === 0){
+                    $('#annotationSelectorChoice').append(new Option("<span class='boldit'>Coaccessibility</span>","GenePrediction_cicero"));
+                } else {
+                    _.forEach(_.sortBy(annotationOptions, 'name'), function (rec) {
+                        $('#annotationSelectorChoice').append(new Option("<span class='boldit'>Coaccessibility</span>", rec.value));
+                    });
+                }                break;
             case "TFMOTIF":
                 break;
 

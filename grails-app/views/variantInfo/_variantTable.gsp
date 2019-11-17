@@ -22,6 +22,7 @@
                     retrieveEqtlDataWithVariantsUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveEqtlDataWithVariants")}',
                     retrieveModDataUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveModData")}',
                     retrieveAbcDataUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveAbcData")}',
+                    retrieveAnyTypeRegionData: '${g.createLink(controller: "RegionInfo", action: "retrieveAnyTypeRegionData")}',
                     retrieveECaviarDataUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveECaviarData")}',
                     retrieveColocDataUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveColocData")}',
                     retrieveDepictDataUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveDepictData")}',
@@ -163,6 +164,29 @@
                             sortingSubroutine:'VariantAbc',
                             internalIdentifierString:'getABCGivenVariantList',
                             nameOfAccumulatorField:'abcVariantInfo',
+                            nameOfAccumulatorFieldWithIndex:'variantInfoArray'
+                        }
+                        ,
+                        {
+                            code: 'COACCESS_VAR',
+                            category: 'coaccessibility Tissue',
+                            displayCategory: 'coaccessibility Tissue',
+                            subcategory: 'VariantCoaccessibility',
+                            displaySubcategory: 'Coaccessibility list',
+                            headerWriter:'coaccessibilityVariantTableTissueHeader',
+                            cellBodyWriter:'coaccessibilityVariantTableBody',
+                            categoryWriter:'coaccessibilityVariantTableTissueHeaderLabel',
+                            drillDownCategoryWriter:'coaccessibilityVariantTableTissueHeaderLabel',
+                            subCategoryWriter:'coaccessibilityVariantTableTissueRowLabel',
+                            drillDownSubCategoryWriter:'coaccessibilityVariantTableTissueRowLabel',
+                            tissueCategoryWriter:'coaccessibilityVariantTableTissueSpecificHeaderLabel',
+                            tissueSubCategoryWriter:'coaccessibilityVariantTableTissueSpecificRowLabel',
+                            numberRecordsCellPresentationStringWriter:'coaccessibilityVariantTableNumberRecordsCellPresentationString',
+                            significanceCellPresentationStringWriter:'coaccessibilityVariantTableSignificanceCellPresentationString',
+                            packagingString:'mpgSoftware.dynamicUi.dnaseVariantTable',
+                            sortingSubroutine:'VariantCoaccessibility',
+                            internalIdentifierString:'getCoaccessibilityGivenVariantList',
+                            nameOfAccumulatorField:'coaccessibilityVariantInfo',
                             nameOfAccumulatorFieldWithIndex:'variantInfoArray'
                         }
                         ,

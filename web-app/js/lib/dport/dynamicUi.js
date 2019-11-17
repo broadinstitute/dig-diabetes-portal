@@ -168,6 +168,7 @@ mpgSoftware.dynamicUi = (function () {
     var nameOfDomToStoreAccumulatorInformation;
     var dyanamicUiVariables;
     var clearBeforeStarting = false;
+    var deferredObject;
 
     var CELL_COLORING_BLUISH_TOP = '#1240FE';
     var CELL_COLORING_BLUISH_TOP_MINUS1 = '#3D63FF';
@@ -511,6 +512,10 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getABCGivenVariantList":
                 defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.abcVariantTable.displayTissueInformationFromAbc;
+                defaultFollowUp.placeToDisplayData = '#mainVariantDiv table.variantTableHolder';
+                break;
+            case "getCoaccessibilityGivenVariantList":
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.coaccessibilityVariantTable.displayTissueInformationFromCoaccess;
                 defaultFollowUp.placeToDisplayData = '#mainVariantDiv table.variantTableHolder';
                 break;
 
@@ -1201,6 +1206,35 @@ mpgSoftware.dynamicUi = (function () {
                             retrieveDataUrl: additionalParameters.retrieveAbcDataUrl,
                             dataForCall: dataForCall,
                             processEachRecord: mpgSoftware.dynamicUi.abcVariantTable.processRecordsFromAbc,
+                            displayRefinedContextFunction: displayFunction,
+                            placeToDisplayData: displayLocation,
+                            actionId: nextActionId,
+                            nameOfAccumulatorField:dataAnnotationType.nameOfAccumulatorField,
+                            code:dataAnnotationType.code,
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                        }));
+                    }
+                };
+                break;
+            case "getCoaccessibilityGivenVariantList":
+                functionToLaunchDataRetrieval = function () {
+                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
+                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: actionId});
+                        actionToUndertake();
+                    } else {
+                        var variantsAsJson = "[]";
+                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
+                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
+                            if (dataVector.length===0){return;}
+                            var variantNameArray = _.map(dataVector, function(variantRec){return variantRec.var_id;});
+                            variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";
+                        }
+                        var dataForCall = {variants: variantsAsJson, methodToRetrieve:'cicero'};
+                        retrieveRemotedContextInformation(buildRemoteContextArray({
+                            name: actionId,
+                            retrieveDataUrl: additionalParameters.retrieveAnyTypeRegionData,
+                            dataForCall: dataForCall,
+                            processEachRecord: mpgSoftware.dynamicUi.coaccessibilityVariantTable.processRecordsFromCoaccess,
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
                             actionId: nextActionId,
@@ -3267,6 +3301,7 @@ mpgSoftware.dynamicUi = (function () {
                                                  nameOfAccumulatorField, // name of the persistent field where the data we received is stored
                                                  placeDataIntoRenderForm )
     { // sort and filter the records we will use.  Resulting array must have fields tissue, value, and numericalValue
+        deferredObject.resolve();
         var selectorForIidForTheTargetDiv = idForTheTargetDiv;
         $(selectorForIidForTheTargetDiv).empty();
         var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode);
@@ -3923,18 +3958,59 @@ mpgSoftware.dynamicUi = (function () {
 
         destroySharedTable('table.combinedGeneTableHolder');
 
-        _.forEach(dataAnnotationTypes, function (oneAnnotationType){
-            arrayOfRoutinesToUndertake.push( actionContainer(oneAnnotationType.internalIdentifierString,
-                actionDefaultFollowUp(oneAnnotationType.internalIdentifierString)));
-        });
-        _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
-        arrayOfRoutinesToUndertake = [];
-        _.forEach(dataAnnotationTypesFollowUp, function (oneAnnotationType){
-            arrayOfRoutinesToUndertake.push( actionContainer(oneAnnotationType.internalIdentifierString,
-                actionDefaultFollowUp(oneAnnotationType.internalIdentifierString)));
-        });
-        _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
-    };
+
+        if (additionalParameters.dynamicTableType!=='variantTable'){
+            _.forEach(dataAnnotationTypes, function (oneAnnotationType){
+                arrayOfRoutinesToUndertake.push( actionContainer(oneAnnotationType.internalIdentifierString,
+                    actionDefaultFollowUp(oneAnnotationType.internalIdentifierString)));
+            });
+            _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
+        } else {
+            _.forEach(dataAnnotationTypes, function (oneAnnotationType){
+                arrayOfRoutinesToUndertake.push( actionContainer(oneAnnotationType.internalIdentifierString,
+                    actionDefaultFollowUp(oneAnnotationType.internalIdentifierString)));
+            });
+            _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
+            deferredObject = $.Deferred();
+            deferredObject.done(function () {
+                console.log("about to execute the other callbacks");
+                arrayOfRoutinesToUndertake = [];
+                _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
+                if (dataAnnotationTypesFollowUp.length>0){
+                    arrayOfRoutinesToUndertake = [];
+                    _.forEach(dataAnnotationTypesFollowUp, function (oneAnnotationType){
+                        arrayOfRoutinesToUndertake.push( actionContainer(oneAnnotationType.internalIdentifierString,
+                            actionDefaultFollowUp(oneAnnotationType.internalIdentifierString)));
+                    });
+                    _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
+
+                }
+                console.log("the other callbacks are all queued up");
+            });
+
+            deferredObject.fail(function () {
+                console.log("Executed if the async work fails");
+            });
+
+            // console.log('a');
+            // $.when.apply(null, arrayOfRoutinesToUndertake).done(function() {
+            //     console.log('b');
+            // });
+            // console.log('c');
+            // _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
+            // if (dataAnnotationTypesFollowUp.length>0){
+            //     arrayOfRoutinesToUndertake = [];
+            //     _.forEach(dataAnnotationTypesFollowUp, function (oneAnnotationType){
+            //         arrayOfRoutinesToUndertake.push( actionContainer(oneAnnotationType.internalIdentifierString,
+            //             actionDefaultFollowUp(oneAnnotationType.internalIdentifierString)));
+            //     });
+            //     _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
+            //
+            // }
+            // deferredObject.resolve();
+
+        }
+     };
 
 
 
