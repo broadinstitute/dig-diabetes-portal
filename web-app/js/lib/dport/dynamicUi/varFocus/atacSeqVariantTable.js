@@ -1,7 +1,7 @@
 var mpgSoftware = mpgSoftware || {};  // encapsulating variable
 mpgSoftware.dynamicUi = mpgSoftware.dynamicUi || {};   // second level encapsulating variable
 
-mpgSoftware.dynamicUi.dnaseVariantTable = (function () {
+mpgSoftware.dynamicUi.atacSeqVariantTable = (function () {
     "use strict";
 
 

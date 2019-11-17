@@ -206,11 +206,11 @@
                             tissueSubCategoryWriter:'atacSeqVariantTableTissueSpecificRowLabel',
                             numberRecordsCellPresentationStringWriter:'atacSeqVariantTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'atacSeqVariantTableSignificanceCellPresentationString',
-                            packagingString:'mpgSoftware.dynamicUi.dnaseVariantTable',
+                            packagingString:'mpgSoftware.dynamicUi.atacSeqVariantTable',
                             sortingSubroutine:'VariantAtacSeq',
                             internalIdentifierString:'getDnaseGivenVariantList',
-                            processEachRecord:mpgSoftware.dynamicUi.dnaseVariantTable.processRecordsFromDnase,
-                            displayEverythingFromThisCall:mpgSoftware.dynamicUi.dnaseVariantTable.displayTissueInformationFromDnase,
+                            processEachRecord:mpgSoftware.dynamicUi.atacSeqVariantTable.processRecordsFromDnase,
+                            displayEverythingFromThisCall:mpgSoftware.dynamicUi.atacSeqVariantTable.displayTissueInformationFromDnase,
                             nameOfAccumulatorField:'dnaseVariantInfo',
                             nameOfAccumulatorFieldWithIndex:'variantInfoArray'
                         }

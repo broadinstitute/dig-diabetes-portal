@@ -263,7 +263,7 @@ modules = {
         resource url: 'css/dport/dynamicUi.css'
 
         resource url: 'js/lib/dport/dynamicUi/varFocus/variantTableHeaders.js'
-        resource url: 'js/lib/dport/dynamicUi/varFocus/dnaseVariantTable.js'
+        resource url: 'js/lib/dport/dynamicUi/varFocus/atacSeqVariantTable.js'
         resource url: 'js/lib/dport/dynamicUi/varFocus/tfbsVariantTable.js'
         resource url: 'js/lib/dport/dynamicUi/varFocus/h3k27acVariantTable.js'
         resource url: 'js/lib/dport/dynamicUi/varFocus/abcVariantTable.js'

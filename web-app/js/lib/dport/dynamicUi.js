@@ -515,7 +515,7 @@ mpgSoftware.dynamicUi = (function () {
                 break;
 
             case "getDnaseGivenVariantList":
-                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.dnaseVariantTable.displayTissueInformationFromDnase;
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.atacSeqVariantTable.displayTissueInformationFromDnase;
                 defaultFollowUp.placeToDisplayData = '#mainVariantDiv table.variantTableHolder';
                 break;
             case "getTfMotifGivenVariantList":
@@ -6504,6 +6504,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
     const displayVariantTablePerTissue  = function (whereTheTableGoes, tissueDominant) {
         var sharedTable = getSharedTable(whereTheTableGoes);
         destroySharedTable(whereTheTableGoes);
+        sharedTable['dataCells'] = [];
 
         // Make the variant headers, the strictly genetic annotations, and the genetic association rows
         const indexAccumulator = getAccumulatorObject("variantInfoArray");
@@ -6558,7 +6559,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
         }
 
-
+        sharedTable['matrix'] = new mpgSoftware.matrixMath.Matrix(sharedTable['dataCells'],sharedTable['numberOfRows'],sharedTable['numberOfColumns'])
         filterEpigeneticTable(idForTheTargetDiv,true);
     }
 
