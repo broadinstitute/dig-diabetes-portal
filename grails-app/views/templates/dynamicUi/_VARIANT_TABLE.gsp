@@ -30,7 +30,7 @@
 <g:render template="/templates/variantTableTemplate" />
 <g:render template="/templates/dynamicUi/varFocus/VHDR" />
 <g:render template="/templates/dynamicUi/varFocus/ABC_VAR" />
-<g:render template="/templates/dynamicUi/varFocus/DNASE_VAR" />
+<g:render template="/templates/dynamicUi/varFocus/ATACSEQ_VAR" />
 <g:render template="/templates/dynamicUi/varFocus/K27AC_VAR" />
 <g:render template="/templates/dynamicUi/varFocus/TFBS_VAR" />
 <g:render template="/templates/dynamicUi/varFocus/VAR_CODING" />

@@ -218,11 +218,16 @@
         <div class="row" >
             <div class="col-md-8">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-3">
 
                     </div>
                     <div class="col-md-3">
-                            <button  class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table" onclick="mpgSoftware.dynamicUi.displayVariantTablePerTissue('{{domTableSpecifier}}')">
+                            <button  class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table" onclick="mpgSoftware.dynamicUi.displayVariantTablePerTissue('{{domTableSpecifier}}', false)">
+                                Order by variant
+                              </button>
+                    </div>
+                    <div class="col-md-3">
+                            <button  class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table" onclick="mpgSoftware.dynamicUi.displayVariantTablePerTissue('{{domTableSpecifier}}', true)">
                                 Order by tissue
                               </button>
                     </div>

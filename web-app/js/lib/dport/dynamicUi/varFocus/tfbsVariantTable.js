@@ -57,7 +57,7 @@ mpgSoftware.dynamicUi.tfbsVariantTable = (function () {
                 dataGroupings.groupByAnnotation.push(groupedByAnnotation);
             });
             _.forEach( _.groupBy(uniqueRecords, function (o) { return o.tissue_id }), function (recordsGroupedByTissue,tissue) {
-                let groupedByTissue = {name:tissue, arrayOfRecords:[]};
+                let groupedByTissue = {name:tissue,  tissue_name:recordsGroupedByTissue[0].tissue_name, arrayOfRecords:[]};
                 _.forEach( _.groupBy(recordsGroupedByTissue, function (o) { return o.var_id }), function (recordsSubGroupedByVarId,varId) {
                     groupedByTissue.arrayOfRecords.push({name:varId,arrayOfRecords:recordsSubGroupedByVarId});
                 });

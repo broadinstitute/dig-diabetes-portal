@@ -2722,6 +2722,7 @@ mpgSoftware.dynamicUi = (function () {
                                 value: recordsForTissue.name + "_" + currentMethod
                             });
                             const tissueName = recordsForTissue.name;
+                            const tissue_name = recordsForTissue.tissue_name;
 
                             // Either retrieve an existing row for this tissue, or else create a new one
 
@@ -2746,7 +2747,8 @@ mpgSoftware.dynamicUi = (function () {
                                         {
                                             tissueName: tissueName,
                                             indexInOneDimensionalArray: (((numberOfExistingRows + addedRows) * numberOfColumns) + 1),
-                                            isBlank: isBlank
+                                            isBlank: isBlank,
+                                            tissue_name: tissue_name
                                         }),
                                     dataAnnotationType.dataAnnotation.subcategory, 'LIT'));
                                 _.forEach(dataVector, function (oneRecord) {
@@ -2799,6 +2801,8 @@ mpgSoftware.dynamicUi = (function () {
             }
         }
 
+        const annotationDisplayArray = getAccumulatorObject("annotationDisplayArray");
+        annotationDisplayArray.push(intermediateDataStructure);
         prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
             '#dynamicAbcGeneTable',
             undefined, // unused
@@ -3832,6 +3836,10 @@ mpgSoftware.dynamicUi = (function () {
 
         }
 
+
+        let dataAnnotationTypes = [];
+        let dataAnnotationTypesFollowUp = [];
+
         switch (additionalParameters.dynamicTableType) {
             case 'geneTable':
                 break;
@@ -3839,6 +3847,7 @@ mpgSoftware.dynamicUi = (function () {
                 var sharedTable = new SharedTableObject( 'fegtAnnotationHeaders',0,0);
                 // sharedTable.currentForm = additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory;
                 setAccumulatorObject("sharedTable_"+additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory,sharedTable);
+                dataAnnotationTypes = additionalParameters.dataAnnotationTypes;
                 break;
             case 'tissueTable':
                 resetAccumulatorObject('gregorTissueArray');
@@ -3846,6 +3855,7 @@ mpgSoftware.dynamicUi = (function () {
                 destroySharedTable(additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory);
                 var sharedTable = new SharedTableObject('tissueTableTissueHeaders',0,0);
                 setAccumulatorObject("sharedTable_" + additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory,sharedTable);
+                dataAnnotationTypes = additionalParameters.dataAnnotationTypes;
                 break;
             case 'variantTable':
                 setAccumulatorObject("phenotype","T2D");
@@ -3880,6 +3890,14 @@ mpgSoftware.dynamicUi = (function () {
                 setAccumulatorObject("sharedTable_" + additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory,sharedTable);
                 setAccumulatorObject('variantInfoArray',undefined);
                 setAccumulatorObject("variantTableOrientation","annotationDominant");
+                setAccumulatorObject("annotationDisplayArray", []);
+
+                dataAnnotationTypes = _.filter(additionalParameters.dataAnnotationTypes,function(o){
+                    return o.code === 'VHDR';
+                });
+                dataAnnotationTypesFollowUp = _.filter(additionalParameters.dataAnnotationTypes,function(o){
+                    return o.code !== 'VHDR';
+                });
 
                 break;
             default:
@@ -3905,13 +3923,17 @@ mpgSoftware.dynamicUi = (function () {
 
         destroySharedTable('table.combinedGeneTableHolder');
 
-        _.forEach(additionalParameters.dataAnnotationTypes, function (oneAnnotationType){
+        _.forEach(dataAnnotationTypes, function (oneAnnotationType){
             arrayOfRoutinesToUndertake.push( actionContainer(oneAnnotationType.internalIdentifierString,
                 actionDefaultFollowUp(oneAnnotationType.internalIdentifierString)));
         });
-
         _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
-
+        arrayOfRoutinesToUndertake = [];
+        _.forEach(dataAnnotationTypesFollowUp, function (oneAnnotationType){
+            arrayOfRoutinesToUndertake.push( actionContainer(oneAnnotationType.internalIdentifierString,
+                actionDefaultFollowUp(oneAnnotationType.internalIdentifierString)));
+        });
+        _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
     };
 
 
@@ -4167,7 +4189,7 @@ mpgSoftware.dynamicUi = (function () {
                     break;
                 case 'VariantId':
                 case 'VariantIds':
-                case 'VariantDnase':
+                case 'VariantAtacSeq':
                 case 'VariantChromHmm':
                 case 'VariantCoding':
                 case 'VariantSplicing':
@@ -6479,14 +6501,19 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         refineTableRecords(whereTheTableGoes,$(whereTheTableGoes).dataTable(),sharedTable.currentForm,[],false);
 
     };
-    const displayVariantTablePerTissue  = function (whereTheTableGoes) {
+    const displayVariantTablePerTissue  = function (whereTheTableGoes, tissueDominant) {
         var sharedTable = getSharedTable(whereTheTableGoes);
         destroySharedTable(whereTheTableGoes);
 
         // Make the variant headers, the strictly genetic annotations, and the genetic association rows
         const indexAccumulator = getAccumulatorObject("variantInfoArray");
         const intermediateDataStructureHdr = getAccumulatorObject("topPortionDisplay");
-        setAccumulatorObject("variantTableOrientation","tissueDominant");
+        if (tissueDominant) {
+            setAccumulatorObject("variantTableOrientation","tissueDominant");
+        } else {
+            setAccumulatorObject("variantTableOrientation","annotationDominant");
+        }
+
         const clearBeforeStarting = false;
         const idForTheTargetDiv = whereTheTableGoes;
         const storeRecords = true;
@@ -6501,19 +6528,36 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             true,
             true ); // we want to display blank rows in this case, since they are informative
 
+        if (tissueDominant){
+            const intermediateDataStructureBody = indexAccumulator[0].header['tissueDisplay'];
+            intermediateDataStructureBody['tableToUpdate'] = idForTheTargetDiv;
 
-        const intermediateDataStructureBody = indexAccumulator[0].header['tissueDisplay'];
-        intermediateDataStructureBody['tableToUpdate'] = idForTheTargetDiv;
+            prepareToPresentToTheScreen(idForTheTargetDiv,
+                '#notUsed',
+                {}, // unused
+                clearBeforeStarting,
+                intermediateDataStructureBody,
+                storeRecords,
+                'variantTableVariantHeaders',
+                false,
+                true );
+        } else {
+            const intermediateDataStructureBodyArray = getAccumulatorObject('annotationDisplayArray');
+            _.forEach(intermediateDataStructureBodyArray,function(intermediateDataStructureBody){
+                intermediateDataStructureBody['tableToUpdate'] = idForTheTargetDiv;
+                prepareToPresentToTheScreen(idForTheTargetDiv,
+                    '#notUsed',
+                    {}, // unused
+                    clearBeforeStarting,
+                    intermediateDataStructureBody,
+                    storeRecords,
+                    'variantTableVariantHeaders',
+                    false,
+                    true );
+            });
 
-        prepareToPresentToTheScreen(idForTheTargetDiv,
-            '#notUsed',
-            {}, // unused
-            clearBeforeStarting,
-            intermediateDataStructureBody,
-            storeRecords,
-            'variantTableVariantHeaders',
-            false,
-            true );
+        }
+
 
         filterEpigeneticTable(idForTheTargetDiv,true);
     }

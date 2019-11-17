@@ -21,8 +21,10 @@ mpgSoftware.dynamicUi.abcVariantTable = (function () {
                 (recA, recB) =>
                     recA.annotation === recB.annotation &&
                     recA.var_id === recB.var_id &&
-                    recA.tissue_id === recB.tissue_id
+                    recA.tissue_id === recB.tissue_id &&
+                    recA.gene_id === recB.gene_id
             );
+            uniqueRecords = _.filter(uniqueRecords,function(rec){return rec.gene_id!==null});
             _.forEach(uniqueRecords,function (oneValue){oneValue['safeTissueId'] = oneValue.tissue_id.replace(":","_");});
             let dataGroupings = {groupByVarId:[],
                 groupByAnnotation:[],
@@ -41,7 +43,7 @@ mpgSoftware.dynamicUi.abcVariantTable = (function () {
                 dataGroupings.groupByAnnotation.push(groupedByAnnotation);
             });
             _.forEach( _.groupBy(uniqueRecords, function (o) { return o.tissue_id }), function (recordsGroupedByTissue,tissue) {
-                let groupedByTissue = {name:tissue, arrayOfRecords:[]};
+                let groupedByTissue = {name:tissue,  tissue_name:recordsGroupedByTissue[0].tissue_name, arrayOfRecords:[]};
                 _.forEach( _.groupBy(recordsGroupedByTissue, function (o) { return o.var_id }), function (recordsSubGroupedByVarId,varId) {
                     groupedByTissue.arrayOfRecords.push({name:varId,arrayOfRecords:recordsSubGroupedByVarId});
                 });

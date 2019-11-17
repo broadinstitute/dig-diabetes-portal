@@ -13,14 +13,14 @@ ABC&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" b
 </script>
 
  <script id="abcVariantTableTissueSpecificHeaderLabel"  type="x-tmpl-mustache">
-<div class="varEpigeneticsLabel varTissueEpigenetics varAllEpigenetics varAbcEpigenetics variantEpigenetics initialLinearIndex_{{indexInOneDimensionalArray}}">Tissues (ABC)</div>
+<div class="varEpigeneticsLabel varTissueEpigenetics varAllEpigenetics varAbcEpigenetics variantEpigenetics initialLinearIndex_{{indexInOneDimensionalArray}}">ABC</div>
 </script>
 
 
  <script id="abcVariantTableTissueSpecificRowLabel"  type="x-tmpl-mustache">
 <div class="varAllEpigenetics varAbcEpigenetics staticMethodLabels annotationName_GenePrediction methodName_ABC  {{isBlank}} initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation"
  sortField=0>
-{{tissueName}}</div>
+{{tissue_name}}</div>
 </script>
 
 <script id="abcVariantTableTissueHeader"  type="x-tmpl-mustache">
@@ -61,7 +61,7 @@ ABC&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" b
                      {{/recordsExist}}
                          {{#tissueRecords}}
                           <tr role="row">
-                               <td class="leftMostCol"">{{GENE}}</td>
+                               <td class="leftMostCol"">{{gene_id}}</td>
                                <td class="text-center otherCols">{{tissue_name}}</td>
                                <td class="text-center otherCols">{{score}}</td>
                            </tr>
