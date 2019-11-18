@@ -6628,17 +6628,19 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
     };
     const displayVariantTablePerTissue  = function (whereTheTableGoes, tissueDominant) {
         var sharedTable = getSharedTable(whereTheTableGoes);
+        // the switch to tissue dominant wants to have the the variance across the top
+        if ((tissueDominant) &&(sharedTable.currentForm === 'variantTableAnnotationHeaders')){
+            transposeThisTable('#mainVariantDiv table.variantTableHolder');
+        }
+
         destroySharedTable(whereTheTableGoes);
         sharedTable['dataCells'] = [];
 
         // Make the variant headers, the strictly genetic annotations, and the genetic association rows
         const indexAccumulator = getAccumulatorObject("variantInfoArray");
         const intermediateDataStructureHdr = getAccumulatorObject("topPortionDisplay");
-        if (tissueDominant) {;
+        if (tissueDominant) {
             $('button.actualTransposeButton').attr("disabled", true);
-            if (sharedTable.currentForm === 'variantTableAnnotationHeaders'){
-                transposeThisTable('#mainVariantDiv table.variantTableHolder');
-            }
             setAccumulatorObject("variantTableOrientation","tissueDominant");
         } else {
             $('button.actualTransposeButton').attr("disabled", false);
