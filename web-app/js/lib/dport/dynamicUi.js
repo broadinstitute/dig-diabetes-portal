@@ -2807,7 +2807,8 @@ mpgSoftware.dynamicUi = (function () {
                                         if (existingCell.dataAnnotationTypeCode !== 'EMP') {
                                             arrayOfRecords = existingCell.renderData.tissueRecords;
                                         }
-                                        arrayOfRecords = _.concat(arrayOfRecords, oneRecord.arrayOfRecords)
+                                        arrayOfRecords = _.concat(arrayOfRecords, oneRecord.arrayOfRecords);
+                                        arrayOfRecords = _.uniq(arrayOfRecords);
                                     }
                                     var renderData = placeDataIntoRenderForm(arrayOfRecords,
                                         "", "",
@@ -2827,7 +2828,8 @@ mpgSoftware.dynamicUi = (function () {
                         });
                     }
 
-                    mpgSoftware.variantTable.updateAnnotationDropDownBox(currentMethod, annotationOptions);
+                    mpgSoftware.variantTable.fillAnnotationDropDownBox("#annotationSelectorChoice");
+                    //mpgSoftware.variantTable.updateAnnotationDropDownBox(currentMethod, annotationOptions);
 
                 }
 

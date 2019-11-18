@@ -37,14 +37,14 @@ ABC&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" b
              <div significance_sortField="{{significanceValue}}" sortField="{{significanceValue}}"
              class="varAllEpigenetics varAbcEpigenetics tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                 <div>
-               {{#tissueRecords}}
+               {{#uniqueTissueRecords}}
                   <div class="epigeneticCellElement tissueId_{{safeTissueId}} annotationName_{{annotation}}">
                     {{tissue_name}}
                   </div>
-               {{/tissueRecords}}
+               {{/uniqueTissueRecords}}
                </div>
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'ABC predictions for {{tissueName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
-               data-target="#depict_abc_{{tissueNameKey}}" style="color:black">all tissues&gt;&gt;
+               data-target="#depict_abc_{{tissueNameKey}}" style="color:black">all records&gt;&gt;
                </a>
 
                <div  class="collapse openEffectorGeneInformationInGeneTable" id="depict_abc_{{tissueNameKey}}">

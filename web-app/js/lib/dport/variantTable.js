@@ -66,6 +66,37 @@ mpgSoftware.variantTable = (function () {
         mpgSoftware.dynamicUi.redrawVariantTable();
     };
 
+    const fillAnnotationDropDownBox = function(annotationSelectorChoice){ //#annotationSelectorChoice
+        const domElement = $(annotationSelectorChoice);
+        if ((domElement).children().length===0){
+            (domElement).append(new Option("<span class='boldit'>ATAC-Seq</span>","AccessibleChromatin_MACS"));
+            (domElement).append(new Option("<span class='boldit'>ABC</span>","GenePrediction_ABC"));
+            (domElement).append(new Option("<span class='boldit'>Cicero</span>","GenePrediction_cicero"));//GenePrediction_cicero
+            (domElement).append(new Option("<span class='boldit'>TF Binding Site</span>","FOXA2_SPP"));
+            (domElement).append("<optgroup label='ChromHMM'>");
+            (domElement).append(new Option("<span class='holdit'>Enhancer</span>","Enhancer_ChromHMM"));
+            (domElement).append(new Option("<span class='holdit'>Enhancer Active 1</span>","EnhancerActive1_ChromHMM"));
+            (domElement).append(new Option("<span class='holdit'>Enhancer Active 2</span>","EnhancerActive2_ChromHMM"));
+            (domElement).append(new Option("<span class='holdit'>Enhancer Bivalent</span>","EnhancerBivalent_ChromHMM"));
+            (domElement).append(new Option("<span class='holdit'>Enhancer Genic</span>","EnhancerGenic_ChromHMM"));
+            (domElement).append(new Option("<span class='holdit'>Enhancer Genic 2</span>","EnhancerGenic_ChromHMM"));
+            (domElement).append(new Option("<span class='holdit'>Enhancer Weak</span>","EnhancerWeak_ChromHMM"));
+            (domElement).append(new Option("<span class='holdit'>Heterochromatin</span>","Heterochromatin_ChromHMM"));
+            (domElement).append(new Option("<span class='holdit'>Promoter Active</span>","PromoterActive_ChromHMM"));
+            (domElement).append(new Option("<span class='holdit'>Promoter Flanking</span>","PromoterFlanking_ChromHMM"));
+            (domElement).append(new Option("<span class='holdit'>Promoter Weak</span>","PromoterWeak_ChromHMM"));
+            (domElement).append(new Option("<span class='holdit'>Quiescent Low</span>","QuiescentLow_ChromHMM"));
+            (domElement).append(new Option("<span class='holdit'>Repressed Polycomb</span>","RepressedPolycomb_ChromHMM"));
+            (domElement).append(new Option("<span class='holdit'>Repressed Polycomb Weak</span>","RepressedPolycombWeak_ChromHMM"));
+            (domElement).append(new Option("<span class='holdit'>Transcription</span>","Transcription_ChromHMM"));
+            (domElement).append(new Option("<span class='holdit'>Transcription Weak</span>","TranscriptionWeak_ChromHMM"));
+            (domElement).append(new Option("<span class='holdit'>ZNF Repeat</span>","ZNFRepeat_ChromHMM"));
+            (domElement).append("</optgroup>");
+            (domElement).multiselect('rebuild');
+        }
+
+    }
+
 
     const updateAnnotationDropDownBox = function(currentMethod,annotationOptions){
         switch(currentMethod){
@@ -171,6 +202,7 @@ mpgSoftware.variantTable = (function () {
         initialPageSetUp:initialPageSetUp,
         refreshTableForPhenotype:refreshTableForPhenotype,
         refreshTableForAnnotations:refreshTableForAnnotations,
-        updateAnnotationDropDownBox:updateAnnotationDropDownBox
+        updateAnnotationDropDownBox:updateAnnotationDropDownBox,
+        fillAnnotationDropDownBox:fillAnnotationDropDownBox
     }
 }());

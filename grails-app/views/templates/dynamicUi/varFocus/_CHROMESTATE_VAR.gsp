@@ -28,7 +28,7 @@ records={{numberRecords}}
 
 
 <script id="chromStateVariantTableTissueSpecificRowLabel"  type="x-tmpl-mustache">
-<div class="varAllEpigenetics varAbcEpigenetics staticMethodLabels annotationName_GenePrediction methodName_ABC  {{isBlank}} initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation"
+<div class="varAllEpigenetics varAbcEpigenetics staticMethodLabels annotationName_GenePrediction methodName_ChromHMM {{isBlank}} initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation"
  sortField=0>
 {{tissue_name}}</div>
 </script>

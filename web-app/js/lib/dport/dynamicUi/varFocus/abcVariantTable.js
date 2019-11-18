@@ -108,6 +108,7 @@ mpgSoftware.dynamicUi.abcVariantTable = (function () {
                      tissueName ){
                 return {
                     tissueRecords:tissueRecords,
+                    uniqueTissueRecords:_.uniqBy(tissueRecords,'tissue_id'),
                     recordsExist:(tissueRecords.length>0)?[1]:[],
                     cellPresentationStringMap:{
                         'Significance':significanceCellPresentationString,

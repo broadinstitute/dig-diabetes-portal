@@ -33,7 +33,7 @@ tfbs&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" 
 
 
 <script id="tfbsVariantTableTissueSpecificRowLabel"  type="x-tmpl-mustache">
-<div class="varAllEpigenetics varAbcEpigenetics staticMethodLabels annotationName_GenePrediction methodName_ABC  {{isBlank}} initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation"
+<div class="varAllEpigenetics varAbcEpigenetics staticMethodLabels annotationName_GenePrediction methodName_SPP  {{isBlank}} initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation"
  sortField=0>
 {{tissue_name}}</div>
 </script>

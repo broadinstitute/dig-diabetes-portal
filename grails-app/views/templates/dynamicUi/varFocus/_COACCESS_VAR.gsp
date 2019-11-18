@@ -37,14 +37,14 @@ coaccessibility&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placemen
              <div significance_sortField="{{significanceValue}}" sortField="{{significanceValue}}"
              class="varAllEpigenetics varCoaccessibilityEpigenetics tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                 <div>
-               {{#tissueRecords}}
+               {{#uniqueTissueRecords}}
                   <div class="epigeneticCellElement tissueId_{{safeTissueId}} annotationName_{{annotation}}">
                     {{tissue_name}}
                   </div>
-               {{/tissueRecords}}
+               {{/uniqueTissueRecords}}
                </div>
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'coaccessibility predictions for {{tissueName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
-               data-target="#depict_coaccessibility_{{tissueNameKey}}" style="color:black">all tissues&gt;&gt;
+               data-target="#depict_coaccessibility_{{tissueNameKey}}" style="color:black">all records&gt;&gt;
                </a>
 
                <div  class="collapse openEffectorGeneInformationInGeneTable" id="depict_coaccessibility_{{tissueNameKey}}">
@@ -54,7 +54,6 @@ coaccessibility&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placemen
                           <tr role="row">
                             <th class="text-center leftMostCol">Gene</th>
                             <th class="text-center otherCols">Tissue</th>
-                            <th class="text-center otherCols">Value</th>
                           </tr>
                          </thead>
                          <tbody>
@@ -63,7 +62,6 @@ coaccessibility&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placemen
                           <tr role="row">
                                <td class="leftMostCol"">{{gene_id}}</td>
                                <td class="text-center otherCols">{{tissue_name}}</td>
-                               <td class="text-center otherCols">{{score}}</td>
                            </tr>
                           {{/tissueRecords}}
                       {{#recordsExist}}
