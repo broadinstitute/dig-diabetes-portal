@@ -309,6 +309,31 @@
                         }
                         ,
 
+                        {
+                            code: 'K27AC_VAR',
+                            category: 'H3K27ac',
+                            displayCategory: 'H3K27ac',
+                            subcategory: 'VariantK27ac',
+                            displaySubcategory: 'H3K27ac list',
+                            headerWriter:'h3k27acVariantTableTissueHeader',
+                            cellBodyWriter:'h3k27acVariantTableBody',
+                            categoryWriter:'h3k27acVariantTableTissueHeaderLabel',
+                            drillDownCategoryWriter:'h3k27acVariantTableTissueHeaderLabel',
+                            subCategoryWriter:'h3k27acVariantTableTissueRowLabel',
+                            drillDownSubCategoryWriter:'h3k27acVariantTableTissueRowLabel',
+                            tissueCategoryWriter:'h3k27acVariantTableTissueSpecificHeaderLabel',
+                            tissueSubCategoryWriter:'h3k27acVariantTableTissueSpecificRowLabel',
+                            numberRecordsCellPresentationStringWriter:'h3k27acVariantTableNumberRecordsCellPresentationString',
+                            significanceCellPresentationStringWriter:'h3k27acVariantTableSignificanceCellPresentationString',
+                            packagingString:'mpgSoftware.dynamicUi.h3k27acVariantTable',
+                            sortingSubroutine:'VariantK27ac',
+                            internalIdentifierString:'getH3k27acGivenVariantList',
+                            processEachRecord:mpgSoftware.dynamicUi.h3k27acVariantTable.processRecordsFromH3k27ac,
+                            displayEverythingFromThisCall:mpgSoftware.dynamicUi.h3k27acVariantTable.displayTissueInformationFromH3k27ac,
+                            nameOfAccumulatorField:'h3k27acVariantInfo',
+                            nameOfAccumulatorFieldWithIndex:'variantInfoArray'
+                        }
+                        ,
 
 
                         // {

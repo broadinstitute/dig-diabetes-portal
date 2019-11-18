@@ -73,6 +73,7 @@ mpgSoftware.variantTable = (function () {
             (domElement).append(new Option("<span class='boldit'>ABC</span>","GenePrediction_ABC"));
             (domElement).append(new Option("<span class='boldit'>Cicero</span>","GenePrediction_cicero"));//GenePrediction_cicero
             (domElement).append(new Option("<span class='boldit'>DNase</span>","DNASE_NA"));
+            (domElement).append(new Option("<span class='boldit'>H3K27ac</span>","H3K27AC_NA"));
             (domElement).append(new Option("<span class='boldit'>TF Binding Site</span>","FOXA2_SPP"));
             (domElement).append("<optgroup label='ChromHMM'>");
             (domElement).append(new Option("<span class='holdit'>Enhancer</span>","Enhancer_ChromHMM"));
