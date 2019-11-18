@@ -1481,24 +1481,61 @@ mpgSoftware.dynamicUi = (function () {
                         var variantsAsJson = "[]";
                         if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
                             const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
-                            var variantNameArray = _.map(dataVector, function(variantRec){return variantRec.var_id;});
+                            if (dataVector.length === 0) {
+                                return;
+                            }
+                            var variantNameArray = _.map(dataVector, function (variantRec) {
+                                return variantRec.var_id;
+                            });
                             variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";
+
+                            var dataForCall = {variants: variantsAsJson, annotationToRetrieve: 'H3K27AC'};
+                            retrieveRemotedContextInformation(buildRemoteContextArray({
+                                name: actionId,
+                                retrieveDataUrl: additionalParameters.retrieveAnyTypeRegionData,
+                                dataForCall: dataForCall,
+                                processEachRecord: dataAnnotationType.processEachRecord,
+                                displayRefinedContextFunction: dataAnnotationType.displayEverythingFromThisCall,
+                                placeToDisplayData: displayLocation,
+                                actionId: nextActionId,
+                                nameOfAccumulatorField: dataAnnotationType.nameOfAccumulatorField,
+                                code: dataAnnotationType.code,
+                                nameOfAccumulatorFieldWithIndex: dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                            }));
                         }
-                        var dataForCall = {variants: variantsAsJson};
-                        retrieveRemotedContextInformation(buildRemoteContextArray({
-                            name: actionId,
-                            retrieveDataUrl: additionalParameters.retrieveH3k27acDataUrl,
-                            dataForCall: dataForCall,
-                            processEachRecord: mpgSoftware.dynamicUi.h3k27acVariantTable.processRecordsFromH3k27ac,
-                            displayRefinedContextFunction: displayFunction,
-                            placeToDisplayData: displayLocation,
-                            actionId: nextActionId,
-                            nameOfAccumulatorField:dataAnnotationType.nameOfAccumulatorField,
-                            code:dataAnnotationType.code,
-                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
-                        }));
                     }
                 };
+
+
+
+                //
+                //
+                // functionToLaunchDataRetrieval = function () {
+                //     if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
+                //         var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: actionId});
+                //         actionToUndertake();
+                //     } else {
+                //         var variantsAsJson = "[]";
+                //         if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
+                //             const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
+                //             var variantNameArray = _.map(dataVector, function(variantRec){return variantRec.var_id;});
+                //             variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";
+                //         }
+                //         var dataForCall = {variants: variantsAsJson};
+                //         retrieveRemotedContextInformation(buildRemoteContextArray({
+                //             name: actionId,
+                //             retrieveDataUrl: additionalParameters.retrieveH3k27acDataUrl,
+                //             dataForCall: dataForCall,
+                //             processEachRecord: mpgSoftware.dynamicUi.h3k27acVariantTable.processRecordsFromH3k27ac,
+                //             displayRefinedContextFunction: displayFunction,
+                //             placeToDisplayData: displayLocation,
+                //             actionId: nextActionId,
+                //             nameOfAccumulatorField:dataAnnotationType.nameOfAccumulatorField,
+                //             code:dataAnnotationType.code,
+                //             nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                //         }));
+                //     }
+                // };
 
                 break;
 

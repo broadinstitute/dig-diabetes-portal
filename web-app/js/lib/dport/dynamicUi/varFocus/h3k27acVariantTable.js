@@ -12,23 +12,50 @@ mpgSoftware.dynamicUi.h3k27acVariantTable = (function () {
      * @returns {*}
      */
     var processRecordsFromH3k27ac = function (data, arrayOfRecords) {
-        if ( typeof data !== 'undefined'){
+        if (( typeof data !== 'undefined')&&
+            ( typeof data.data !== 'undefined')){
             arrayOfRecords.splice(0,arrayOfRecords.length);
-            let arrayOfData = [];
-            var recordsGroupedByVarId = _.groupBy(data, function (o) { return o.VAR_ID });
-            _.forEach(recordsGroupedByVarId, function (value,key) {
-                var allRecordsForOneVariety = {name:key,arrayOfRecords:value};
-                arrayOfData.push(allRecordsForOneVariety);
+            let uniqueRecords = _.uniqWith(
+                data.data,
+                (recA, recB) =>
+                    recA.annotation === recB.annotation &&
+                    recA.var_id === recB.var_id &&
+                    recA.tissue_id === recB.tissue_id
+            );
+            _.forEach(uniqueRecords,function (oneValue){oneValue['safeTissueId'] = oneValue.tissue_id.replace(":","_");});
+            let dataGroupings = {groupByVarId:[],
+                groupByAnnotation:[],
+                groupByTissue:[],
+                groupByTissueAnnotation:[],
+                currentMethod:'NA'
+            };
+            _.forEach(_.groupBy(uniqueRecords, function (o) { return o.var_id }), function (value,key) {
+                dataGroupings.groupByVarId.push({name:key,arrayOfRecords:value});
+            });
+            _.forEach( _.groupBy(uniqueRecords, function (o) { return o.annotation }), function (recordsGroupedByAnnotation,annotation) {
+                let groupedByAnnotation = {name:annotation, arrayOfRecords:[]};
+                _.forEach( _.groupBy(recordsGroupedByAnnotation, function (o) { return o.var_id }), function (recordsSubGroupedByVarId,varId) {
+                    groupedByAnnotation.arrayOfRecords.push({name:varId,arrayOfRecords:recordsSubGroupedByVarId});
+                });
+                dataGroupings.groupByAnnotation.push(groupedByAnnotation);
+            });
+            _.forEach( _.groupBy(uniqueRecords, function (o) { return o.tissue_id }), function (recordsGroupedByTissue,tissue) {
+                let groupedByTissue = {name:tissue,  tissue_name:recordsGroupedByTissue[0].tissue_name, arrayOfRecords:[]};
+                _.forEach( _.groupBy(recordsGroupedByTissue, function (o) { return o.var_id }), function (recordsSubGroupedByVarId,varId) {
+                    groupedByTissue.arrayOfRecords.push({name:varId,arrayOfRecords:recordsSubGroupedByVarId});
+                });
+                dataGroupings.groupByTissue.push(groupedByTissue);
             });
             arrayOfRecords.push({header:{ },
-                data:arrayOfData});
+                data:dataGroupings});
         }
         return arrayOfRecords;
     };
 
 
 
-    var createSingleH3k27acCell = function (recordsPerTissue,dataAnnotationType) {
+
+    var createSingleDnaseCell = function (recordsPerTissue,dataAnnotationType) {
         var significanceValue = 0;
         var returnValue = {};
         if (( typeof recordsPerTissue !== 'undefined')&&
@@ -86,8 +113,9 @@ mpgSoftware.dynamicUi.h3k27acVariantTable = (function () {
                     tissueNameKey:( typeof tissueName !== 'undefined')?tissueName.replace(/ /g,"_"):'var_name_missing',
                     tissueName:tissueName,
                     tissuesFilteredByAnnotation:tissueRecords};
+
             },
-            createSingleH3k27acCell
+            createSingleDnaseCell
         )
 
     };
@@ -101,12 +129,16 @@ mpgSoftware.dynamicUi.h3k27acVariantTable = (function () {
     var categorizor = new mpgSoftware.dynamicUi.Categorizor();
     categorizor.categorizeSignificanceNumbers = Object.getPrototypeOf(categorizor).genePValueSignificance;
 
+    let sortUtility = new mpgSoftware.dynamicUi.SortUtility();
+    const sortRoutine =  Object.getPrototypeOf(sortUtility).numericalComparisonWithEmptiesAtBottom;
 
 
 
 // public routines are declared below
     return {
         processRecordsFromH3k27ac: processRecordsFromH3k27ac,
-        displayTissueInformationFromH3k27ac:displayTissueInformationFromH3k27ac
+        displayTissueInformationFromH3k27ac:displayTissueInformationFromH3k27ac,
+        sortRoutine:sortRoutine
     }
 }());
+
