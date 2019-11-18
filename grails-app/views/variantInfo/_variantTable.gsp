@@ -8,7 +8,7 @@
 
         mpgSoftware.variantTableInitializer = (function () {
 
-            var variantTableConfiguration = function(){
+            var variantTableConfiguration = function(INITIALPHENOTYPE, AJAXURL){
                 var drivingVariables = {
                     getGRSListOfVariantsAjaxUrl:"${createLink(controller:'grs',action: 'getGRSListOfVariantsAjax')}",
                     getLocusZoomFilledPlotUrl: '${createLink(controller:"gene", action:"getLocusZoomFilledPlot")}',
@@ -403,7 +403,8 @@
                     }
                 };
                 mpgSoftware.variantTable.setVariablesToRemember(drivingVariables);
-                mpgSoftware.variantTable.initialPageSetUp("${phenotype}");
+                //mpgSoftware.variantTable.initialPageSetUp("${phenotype}");
+                mpgSoftware.variantTable.initialPageSetUp(INITIALPHENOTYPE,AJAXURL);
             };
 
 
@@ -421,7 +422,7 @@
 
 
     $( document ).ready(function() {
-        mpgSoftware.variantTableInitializer.variantTableConfiguration();
+        //mpgSoftware.variantTableInitializer.variantTableConfiguration();
     });
 </script>
 <g:render template="/templates/dynamicUi/VARIANT_TABLE" />

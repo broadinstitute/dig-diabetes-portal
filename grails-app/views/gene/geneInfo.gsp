@@ -177,7 +177,7 @@
 
 </script>
 
-<div id="main">
+<div id="main" geneinfoajaxurl='<g:createLink controller="gene" action="geneInfoAjax"/>'>
 
     <div class="container-fluid" style="padding: 0 2.5%;">
 

@@ -1108,8 +1108,8 @@ mpgSoftware.dynamicUi = (function () {
 
                     var phenotype = getAccumulatorObject("phenotype");
                     var chromosome = getAccumulatorObject("chromosome");
-                    var startExtent = getAccumulatorObject("extentBegin").replace(/,/g,"");
-                    var endExtent = getAccumulatorObject("extentEnd").replace(/,/g,"");
+                    var startExtent = getAccumulatorObject("extentBegin");//.replace(/,/g,""); // killing replace part to have it work with v2f
+                    var endExtent = getAccumulatorObject("extentEnd");//.replace(/,/g,""); // killing replace part to have it work with v2f
                     var sharedTable = getSharedTable(displayLocation);
                     sharedTable['currentFormVariation'] = 2;
 
@@ -3979,10 +3979,15 @@ mpgSoftware.dynamicUi = (function () {
                 dataAnnotationTypes = additionalParameters.dataAnnotationTypes;
                 break;
             case 'variantTable':
-                setAccumulatorObject("phenotype","T2D");
-                setAccumulatorObject("chromosome","8");
-                setAccumulatorObject("extentBegin","117862462");
-                setAccumulatorObject("extentEnd","118289003");
+                //setAccumulatorObject("phenotype","T2D");
+                //setAccumulatorObject("chromosome","8");
+                //setAccumulatorObject("extentBegin","117862462");
+                //setAccumulatorObject("extentEnd","118289003");
+
+                setAccumulatorObject("phenotype",data.phenotype);
+                setAccumulatorObject("chromosome",data.chromosome);
+                setAccumulatorObject("extentBegin",data.startPosition);
+                setAccumulatorObject("extentEnd",data.endPosition);
 
                 // setAccumulatorObject("phenotype","T2D");
                 // setAccumulatorObject("chromosome","19");
@@ -3993,11 +3998,13 @@ mpgSoftware.dynamicUi = (function () {
                 // setAccumulatorObject("chromosome","1");
                 // setAccumulatorObject("extentBegin","3504650");
                 // setAccumulatorObject("extentEnd","3614660");
+                //mpgSoftware.dynamicUi.modifyScreenFields({phenotype:preferredPhenotype, chromosome:chromosomeInput, startPosition:startExtentInput, endPosition:endExtentInput},getVariablesToRemember());
 
                 const chromosomeInput = $('input#chromosomeInput').val();
                 const startExtentInput = $('input#startExtentInput').val();
                 const endExtentInput = $('input#endExtentInput').val();
-                const chosenPhenotype = $('select.phenotypePicker').children("option:selected"). val();
+                //const chosenPhenotype = $('select.phenotypePicker').children("option:selected"). val();
+                var chosenPhenotype = data.phenotype;
 
                 if (chromosomeInput.length>0){setAccumulatorObject("chromosome",chromosomeInput);}
                 if (startExtentInput.length>0){setAccumulatorObject("extentBegin",startExtentInput);}

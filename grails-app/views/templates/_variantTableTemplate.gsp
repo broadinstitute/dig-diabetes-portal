@@ -103,17 +103,19 @@
 
 
 
-    <div class="container">
-        <div class="row">
+    <div class="container-fluid">
+        <div class="row" style="display:none;">
             <div class="text-center">
                 <h1 class="dk-page-title">Variant FOCUS table for <span class="phenotypeSpecifier">{{phenotype}}</span></h1>
             </div>
         </div>
-        <p><g:message code="variantTable.introduction.1"></g:message><g:message code="variantTable.introduction.2"></g:message>
+        <p style="font-size: 16px;"><g:message code="variantTable.introduction.1"></g:message><g:message code="variantTable.introduction.2"></g:message>
 <g:helpText title="variantTable.overall.help.header" placement="bottom" body="variantTable.help.text"/>
 
 <g:message code="variantTable.introduction.3"></g:message></p>
-        <div class="row" style="margin: 20px">
+
+
+        <div class="row" style="margin: 20px; display: none;">
             <div class="col-sm-2 text-center" style="">
                 <label style="padding-top:35px">Change genomic region or phenotype</label>
             </div>
@@ -150,67 +152,101 @@
         </div>
         <div class="row" >
         </div>
-                <div class="row">
-                    <div class="col-md-8" style="border:0.5px solid #eee">
-                        <div class="row" style="border-bottom:0.5px solid #ccc">
-                            <div class="col-md-4">
-                                 <div class="variantTableFilterChoice">
-                                    <input class="form-check-input" type="radio"  name="preferredAnnotationFiltering" value="" id="gregorFilterCheckbox" checked>
-                                    <label class="form-check-label" for="gregorFilterCheckbox">
-                                    GREGOR filter
-                                    </label>
+                <div class="container-fluid">
+                    <div class="col-md-6">
+                        <h5 style="font-size: 16px;">Table filter</h5>
+                        <div class="well well-sm row" style="border-top-right-radius: 0; border-bottom-right-radius: 0; border-right: none;">
+                            <div class="col-md-12" style="border-bottom:0.5px solid #ccc">
+                                <div class="col-md-4">
+                                     <div class="variantTableFilterChoice">
+                                        <input class="form-check-input" type="radio"  name="preferredAnnotationFiltering" value="" id="gregorFilterCheckbox" checked>
+                                        <label class="form-check-label" for="gregorFilterCheckbox">
+                                        GREGOR filter
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="variantTableFilterChoice">
+                                        <button id="adjustFilterTableButton"  class="btn  btn-link" type="button"  data-toggle="modal" data-target="#gregorModal" onclick="$('#gregorFilterCheckbox').prop('checked',true)">
+                                        Adjust filters from GREGOR enrichment
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-8">
-                                <div class="variantTableFilterChoice">
-                                    <button id="adjustFilterTableButton"  class="btn  btn-link" type="button"  data-toggle="modal" data-target="#gregorModal" onclick="$('#gregorFilterCheckbox').prop('checked',true)">
-                                    Adjust filters from GREGOR enrichment
-                                    </button>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="variantTableFilterChoice">
+                                        <input class="form-check-input" type="radio" name="preferredAnnotationFiltering" value="" id="methodFilterCheckbox">
+                                        <label class="form-check-label" for="methodFilterCheckbox">
+                                        Choose desired methods
+                                        </label>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="variantTableFilterChoice">
-                                    <input class="form-check-input" type="radio" name="preferredAnnotationFiltering" value="" id="methodFilterCheckbox">
-                                    <label class="form-check-label" for="methodFilterCheckbox">
-                                    Choose desired methods
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="variantTableFilterChoice">
-                                     <span style="display: inline-block; float: none; vertical-align: middle; width: 100%">
-                                        <label class="specifyAnnotationsText" for="annotationSelectorChoice">Specify annotations explicitly:</label>
-                                        <g:helpText title="tissue.selection.help.header" placement="top" body="tissue.selection.help.text"/>
-                                         <select id="annotationSelectorChoice" multiple="multiple">
-                                        </select>
-                                     </span>
+                                <div class="col-md-8">
+                                    <div class="variantTableFilterChoice">
+                                         <span style="display: inline-block; float: none; vertical-align: middle; width: 100%">
+                                            <label class="specifyAnnotationsText" for="annotationSelectorChoice">Specify annotations explicitly:</label>
+                                            <g:helpText title="tissue.selection.help.header" placement="top" body="tissue.selection.help.text"/>
+                                             <select id="annotationSelectorChoice" multiple="multiple">
+                                            </select>
+                                         </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="row" >
-                            <div class="col-md-6"></div>
-                            <div class="col-md-6">
-                              <button  class="btn btn-secondary btn-default transpose actualTransposeButton" type="button" title="click to transpose table" onclick="mpgSoftware.dynamicUi.transposeThisTable('{{domTableSpecifier}}')">
+
+                    <div class="col-md-3">
+                        <h5 style="font-size: 16px; margin-left:15px;"></h5>
+                        <div class="well well-sm row" style="margin-top: 37px; height: 88.5px; border-top-left-radius: 0; border-bottom-left-radius: 0; border-left: none;">
+
+                            <div class="datatable-zoom-control">
+                                <div class="tool-label">Order by</div>
+
+                                <button  class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table" onclick="mpgSoftware.dynamicUi.displayVariantTablePerTissue('{{domTableSpecifier}}', false)">
+                                        Annotation
+                                      </button>
+
+                                <button  class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table" onclick="mpgSoftware.dynamicUi.displayVariantTablePerTissue('{{domTableSpecifier}}', true)">
+                                    Tissue
+                                  </button>
+
+
+                            </div>
+
+                            <div class="datatable-zoom-control">
+                                <div class="variantTableFilterChoice">
+                                    <div class="tool-label">Display</div>
+                                    <label class="form-check-label" for="displayBlankRows">
+                                    Blank rows&nbsp;&nbsp;
+                                    </label>
+                                    <input class="form-check-input" type="checkbox" value="" id="displayBlankRows" checked>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <h5 style="font-size: 16px; margin-left:15px;">Table view control</h5>
+                        <div class="well well-sm row" style="margin-left: 2px; height: 88.5px;">
+                            <div class="datatable-zoom-control">
+                                <div class="tool-label">Direction</div>
+                                <button  class="btn btn-secondary btn-default transpose actualTransposeButton" type="button" title="click to transpose table" onclick="mpgSoftware.dynamicUi.transposeThisTable('{{domTableSpecifier}}')">
                                 Transpose
                               </button>
                             </div>
-                        </div>
-                        <div class="row" >
-                            <div class="col-md-offset-6 col-md-6">
-                                <div class="datatable-zoom-control">
-                                    <div class="tool-label">Zoom</div>
-                                    <button type="button" class="btn btn-default btn-secondary" aria-label="Zoom out" title="click to zoom out" onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('{{organizingDiv}}',false,event)">
-                                        <span class="glyphicon glyphicon-minus" aria-hidden="true" onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#mainVariantDiv',false,event)"></span>
-                                    </button>
-                                    <button type="button" class="btn btn-default btn-secondary" aria-label="Zoom in" title="click to zoom in" onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('{{organizingDiv}}',true,event)">
-                                        <span class="glyphicon glyphicon-plus" aria-hidden="true" onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#mainVariantDiv',true,event)"></span>
-                                    </button>
-                                </div>
+
+                            <div class="datatable-zoom-control">
+                                <div class="tool-label">Zoom</div>
+                                <button type="button" class="btn btn-default btn-secondary" aria-label="Zoom out" title="click to zoom out" onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('{{organizingDiv}}',false,event)">
+                                    <span class="glyphicon glyphicon-minus" aria-hidden="true" onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#mainVariantDiv',false,event)"></span>
+                                </button>
+                                <button type="button" class="btn btn-default btn-secondary" aria-label="Zoom in" title="click to zoom in" onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('{{organizingDiv}}',true,event)">
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true" onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#mainVariantDiv',true,event)"></span>
+                                </button>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -221,23 +257,9 @@
                     <div class="col-md-3">
 
                     </div>
-                    <div class="col-md-3">
-                            <button  class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table" onclick="mpgSoftware.dynamicUi.displayVariantTablePerTissue('{{domTableSpecifier}}', false)">
-                                Order by annotation
-                              </button>
-                    </div>
-                    <div class="col-md-3">
-                            <button  class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table" onclick="mpgSoftware.dynamicUi.displayVariantTablePerTissue('{{domTableSpecifier}}', true)">
-                                Order by tissue
-                              </button>
-                    </div>
+
                     <div class="col-md-3 text-right">
-                        <div class="variantTableFilterChoice">
-                            <label class="form-check-label" for="displayBlankRows">
-                            Display blank rows&nbsp;&nbsp;
-                            </label>
-                            <input class="form-check-input" type="checkbox" value="" id="displayBlankRows" checked>
-                        </div>
+
                     </div>
                 </div>
 
