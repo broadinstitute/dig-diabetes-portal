@@ -131,22 +131,60 @@
                         <label for="startExtentInput" placeholder="Choose chromosome">start extent</label>
                         <input id="startExtentInput" type="text">
                     </div>
-                    <div class="col-sm-4 text-center">
-                        <label for="endExtentInput" placeholder="Choose chromosome">end extent</label>
-                        <input id="endExtentInput" type="text">
+                    <div class="focus-table-settings-content">
+                        <div class="" style="width:10%;">
+                            <input id="chromosomeInput" type="text" style="width: 90%">
+                        </div>
+                        <div class="" style="width:25%;">
+                            <input id="startExtentInput" type="text" style="width: 95%">
+                        </div>
+                        <div class="" style="width:25%;">
+                            <input id="endExtentInput" type="text" style="width: 95%">
+                        </div>
+                        <div class="" style="width:30%;">
+                            <select id="varishiftantTablePhenotypePicker" class="phenotypePicker form-control input-sm"  onchange="mpgSoftware.variantTable.refreshTableForPhenotype(this)" style="width: 95%"></select>
+                        </div>
+                        <div style="width:10%;"><button class="btn btn-secondary btn-default transpose focus-search-go" type="button" title="click to update table"
+                                onclick="mpgSoftware.variantTable.refreshTableForPhenotype('#variantTablePhenotypePicker')">
+                                Update</button></div>
                     </div>
                 </div>
-                <div class="row" style="margin-top: 15px">
-                    <div class="col-md-10">
-                        <label for="variantTablePhenotypePicker">Phenotype</label>
-                        <select id="varishiftantTablePhenotypePicker" class="phenotypePicker" onchange="mpgSoftware.variantTable.refreshTableForPhenotype(this)"></select>
+                </div>
+            </div>
+            <!--<div class="" style="margin: 20px">
+                <div class="col-sm-2 text-center" style="">
+                    <label style="padding-top:35px">Change genomic region or phenotype</label>
+                </div>
+                <div class="col-sm-8" style="border: 1px solid black">
+                    <div class="row">
+                        <div class="col-sm-1 text-center"></div>
+                        <div class="col-sm-2 text-center">
+                            <label for="chromosomeInput" placeholder="Choose chromosome">chromosome</label>
+                            <input id="chromosomeInput" type="text" size="8">
+                        </div>
+                        <div class="col-sm-1 text-center"></div>
+                        <div class="col-sm-4 text-center">
+                            <label for="startExtentInput" placeholder="Choose chromosome">start extent</label>
+                            <input id="startExtentInput" type="text">
+                        </div>
+                        <div class="col-sm-4 text-center">
+                            <label for="endExtentInput" placeholder="Choose chromosome">end extent</label>
+                            <input id="endExtentInput" type="text">
+                        </div>
                     </div>
-                    <div class="col-md-2">
-                        <button class="btn btn-secondary btn-default transpose" type="button" title="click to update table"
-                        onclick="mpgSoftware.variantTable.refreshTableForPhenotype('#variantTablePhenotypePicker')">
-                        Update</button>
+                    <div class="row" style="margin-top: 15px">
+                        <div class="col-md-10">
+                            <label for="variantTablePhenotypePicker">Phenotype</label>
+                            <select id="varishiftantTablePhenotypePicker" class="phenotypePicker" onchange="mpgSoftware.variantTable.refreshTableForPhenotype(this)"></select>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-secondary btn-default transpose" type="button" title="click to update table"
+                            onclick="mpgSoftware.variantTable.refreshTableForPhenotype('#variantTablePhenotypePicker')">
+                            Update</button>
+                        </div>
                     </div>
                 </div>
+                <div class="col-sm-2"></div>
             </div>
             <div class="col-sm-2"></div>
         </div>
@@ -262,18 +300,23 @@
 
                     </div>
                 </div>
-
             </div>
-            <div class="col-md-4">
 
-            </div>
-        </div>
-        <div class="row" >
-            <div class="col-md-12" style="margin-top:60px">
+            <!--<div class="container text-right" >
+                <div class="variantTableFilterChoice">
+                    <label class="form-check-label" for="displayBlankRows">
+                    Display blank rows&nbsp;&nbsp;
+                    </label>
+                    <input class="form-check-input" type="checkbox" value="" id="displayBlankRows" checked>
+                </div>
+            </div>-->
+            <div class="row" >
+                <div class="col-md-12" style="margin-top:60px">
 
-                <div id="mainVariantDiv">
-                    <table class="variantTableHolder">
-                    </table>
+                    <div id="mainVariantDiv">
+                        <table class="variantTableHolder">
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

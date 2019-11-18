@@ -1044,7 +1044,6 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var dsr = PHENOTYPEDATA[2];
         var phenoName = PHENOTYPEDATA[3];
 
-        console.log(phenocode+" : "+ds+" : "+dsr+" : "+phenoName);
         launchUpdateSignalSummaryBasedOnPhenotype(phenocode,ds,phenoName,dsr);
     };
 
@@ -1101,7 +1100,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
             phenotypesList = sortJSON(phenotypesList,'name','asc');
 
-            console.log(phenotypesList);
+            //console.log(phenotypesList);
 
             var phenotypePullDown = '';
 
@@ -1116,6 +1115,9 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 var selected = $('.selectpicker option:selected').attr("data").split("::");
                 //console.log(selected);
                 updateSignalSummaryBasedOnPhenotype2(selected);
+
+
+
                 showHideElement('#phenotypeSearchHolder');
             });
 
@@ -1769,6 +1771,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
     var refreshTopVariantsDirectlyByPhenotype = function (phenotypeName, callBack, parameter) {
         loading.show();
+
         var rememberCallBack = callBack;
         var rememberParameter = parameter;
         var coreVariables = getSignalSummarySectionVariables();
@@ -1900,6 +1903,40 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         * */
 
 
+
+        } else {
+
+            console.log("called from 2nd time");
+            //update variant FOCUS table
+            var ajaxURL = $('#phenotypeInput').attr("ajaxurl");
+
+            $.ajax({
+                url:mpgSoftware.variantTable.refreshVariantFocusForPhenotype(phenotypeName,ajaxURL),
+                success:function(){
+
+                    setTimeout(function(){
+                        $.ajax({
+                            cache: false,
+                            type: "post",
+                            url: callingUrl,
+                            data: callingObj,
+                            async: true,
+                            success: function (data) {
+                                if (typeof data.experimentAssays !== 'undefined'){
+                                    var signalSummarySectionVariables = getSignalSummarySectionVariables();
+                                    signalSummarySectionVariables["experimentAssays"] = data.experimentAssays;
+                                }
+                                rememberCallBack(data, rememberParameter);
+
+                            },
+                            error: function (jqXHR, exception) {
+                                core.errorReporter(jqXHR, exception);
+                            }
+                        });
+                    },5000);
+
+                }});
+        }
     };
     var initialPageSetUp = function (drivingVariables) {
         // let us also initialized the region info metadata at this point
@@ -2295,7 +2332,10 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         });
 
         mpgSoftware.dynamicUi.installDirectorButtonsOnTabs(additionalParameters);
-        mpgSoftware.dynamicUi.modifyScreenFields({},additionalParameters);
+
+        //testing for v2f
+        //mpgSoftware.dynamicUi.modifyScreenFields({},additionalParameters);
+        mpgSoftware.dynamicUi.modifyScreenFields({phenotype:additionalParameters.phenotype, chromosome:additionalParameters.geneChromosomeMinusChr, startPosition:additionalParameters.geneExtentBegin, endPosition:additionalParameters.geneExtentEnd},additionalParameters);
 
         $('div.credibleSetHeader input.credSetStartPos').val(""+additionalParameters.geneExtentBegin);
         $('div.credibleSetHeader input.credSetEndPos').val(""+additionalParameters.geneExtentEnd);
@@ -2594,4 +2634,3 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
     }
 
 }());
-

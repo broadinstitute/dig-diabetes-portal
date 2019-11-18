@@ -2,8 +2,10 @@
 <html>
 <head>
     <meta name="layout" content="t2dGenesCore"/>
+
     <r:require modules="geneInfo"/>
     <r:require module="locusZoom"/>
+    %{--<r:require module="variantTable"/>--}%
     %{--<r:require modules="higlass"/>--}%
 
     %{--Need to call directly or else the images don't come out right--}%
@@ -120,6 +122,7 @@
                 data: {geneName: '${geneName}'},
                 async: true
             }).done(function (data) {
+
                 mpgSoftware.geneInfo.fillTheGeneFields(data); // fills the uniprot summary
                 $('[data-toggle="popover"]').popover({
                     animation: true,
@@ -220,7 +223,7 @@
                         <div class="gene-phenotype" style="width:45%; height: 65px; font-size: 1.25em; padding-top: 12px;">
                             <div class="phenotype-search-holder hide-element" id="phenotypeSearchHolder" style="display: none;">
                                 <div class="phenotype-search">
-                                    <select id="phenotypeInput" class="form-control input-sm trait-input selectpicker" data-live-search="true">
+                                    <select id="phenotypeInput" ajaxurl="<g:createLink controller="gene" action="geneInfoAjax"/>" class="form-control input-sm trait-input selectpicker" data-live-search="true">
                                     </select>
                                 </div>
                             </div>
@@ -279,9 +282,6 @@
                     </g:elseif>
 
 
-
-
-
 <!--
                 <div class="col-md-12" style="padding-top: 30px;">
 
@@ -292,11 +292,21 @@
 
 
 
+
                 <g:render template="../templates/dynamicUi/GENE_TABLE"/>
                 <g:render template="../templates/geneSignalSummaryTemplate"/>
                 <g:render template="../templates/variantSearchResultsTemplate" />
                 <g:render template="geneSignalSummary"  model="[signalLevel:1,geneToSummarize:geneName]"/>
                 <g:render template="../templates/variantSearchResultsTemplate" />
+
+                <g:render template="/templates/dynamicUi/VARIANT_TABLE" />
+
+
+
+
+
+
+
 
 
                 <div class="accordion" id="accordion2">
@@ -317,6 +327,9 @@
                         </div>
                     </div>
                 </g:if>
+
+
+
                 <g:if test="${portalVersionBean.exposeIgvDisplay}">
 
                     <div class="separator"></div>
@@ -410,4 +423,3 @@
 
 </body>
 </html>
-

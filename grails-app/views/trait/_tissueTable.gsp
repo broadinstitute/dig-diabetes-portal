@@ -128,7 +128,8 @@
 <g:render template="/templates/dynamicUi/TISSUE_TABLE" />
 
 
-<div id="mainTissueDiv">
+<div id="mainTissueDiv" style="background-color: #eaeaea; margin-bottom: -50px;">
+
 
 </div>
 

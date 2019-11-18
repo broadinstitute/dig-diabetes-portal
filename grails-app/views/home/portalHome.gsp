@@ -154,7 +154,7 @@
                                                         body="input.searchTerm.geneExample.help.text"/>,
                                         </g:each>
                                         <g:each in="${portalVersionBean.variantExamples}">
-                                            <a class="front-search-example" href='<g:createLink controller="gene" action="findTheRightDataPage" params=""/>/chr8:118134783-118234783'>${it}</a>,
+                                            <a class="front-search-example" href='<g:createLink controller="gene" action="findTheRightDataPage" params=""/>/chr8:118134783-118234783'>${it}</a>
                                             <g:helpText title="input.searchTerm.variantExample.help.header" placement="right"
                                                         body="input.searchTerm.variantExample.help.text" qplacer="0 0 0 2px"/>,
                                         </g:each>
@@ -184,7 +184,7 @@
                                                         body="input.searchTerm.geneExample.help.text"/>,
                                         </g:each>
                                         <g:each in="${portalVersionBean.variantExamples}">
-                                            <a class="front-search-example" href='<g:createLink controller="variantInfo" action="variantInfo" params="[id:it]"/>'>${it}</a>,
+                                            <a class="front-search-example" href='<g:createLink controller="variantInfo" action="variantInfo" params="[id:it]"/>'>${it}</a>
                                             <g:helpText title="input.searchTerm.variantExample.help.header" placement="right"
                                                         body="input.searchTerm.variantExample.help.text" qplacer="0 0 0 2px"/>,
                                         </g:each>

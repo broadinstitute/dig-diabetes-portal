@@ -132,6 +132,14 @@ class HomeController {
         render(controller: 'home', view: 'signAContract')
     }
 
+    /***
+     * The very first time you use the portal you have to sign something.  This should happen to everyone EXCEPT those
+     * with built-in login accounts (i.e. system users) who will never see this message.
+     */
+    def sorryRedirect = {
+        render(controller: 'home', view: 'sorryRedirect')
+    }
+
 
     def retrieveOnePortalAjax = {
         def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')

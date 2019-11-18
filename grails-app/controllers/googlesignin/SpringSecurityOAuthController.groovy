@@ -71,8 +71,10 @@ class SpringSecurityOAuthController {
         String accessKey = oauthService.findSessionKeyForAccessToken(authProvider)
         session[accessKey] = new org.scribe.model.Token(accessToken, grailsApplication.config.oauth.providers.google.secret, jsonObject.toString())
 
-        Boolean weHaveSeenYouBefore = springManipService.forceLogin(jsonObject, session)
-        if (weHaveSeenYouBefore) {
+        //Boolean weHaveSeenYouBefore = springManipService.forceLogin(jsonObject, session)
+        JSONObject weHaveSeenYouBefore = springManipService.forceLogin(jsonObject, session)
+
+        if (weHaveSeenYouBefore.weHaveSeenYouBefore && weHaveSeenYouBefore.aBroadie) {
             // check to see if the user was trying to access a specific page--if so, redirect them there
             if(session["SPRING_SECURITY_SAVED_REQUEST"]) {
                 redirect url: session["SPRING_SECURITY_SAVED_REQUEST"].getRedirectUrl()
@@ -81,7 +83,12 @@ class SpringSecurityOAuthController {
                 redirect(controller: 'home', action: 'portalHome')
             }
         } else {
-            redirect(controller: 'home', action: 'signAContract')
+            if(weHaveSeenYouBefore.aBroadie) {
+                redirect(controller: 'home', action: 'signAContract')
+            } else {
+                redirect(controller: 'home', action: 'sorryRedirect')
+            }
+
         }
 
 

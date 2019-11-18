@@ -10,6 +10,8 @@ mpgSoftware.variantTable = (function () {
         drivingVariablesToRemember = drivingVariables;
     };
     var getVariablesToRemember = function(){
+        //console.log("drivingVariablesToRemember");
+        //console.log(drivingVariablesToRemember);
         return drivingVariablesToRemember;
     };
 
@@ -55,8 +57,10 @@ mpgSoftware.variantTable = (function () {
 
 
     var refreshTableForPhenotype = function(preferredPhenotype){
+
         var domElement = $(preferredPhenotype);
         var phenotypeString = domElement.val();
+        //console.log(phenotypeString);
         var phenotypeName = domElement.find(':selected').text();
         $('span.phenotypeSpecifier').text(phenotypeName);
         mpgSoftware.dynamicUi.modifyScreenFields({phenotype:phenotypeString},getVariablesToRemember());

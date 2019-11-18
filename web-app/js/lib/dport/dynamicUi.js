@@ -551,6 +551,7 @@ mpgSoftware.dynamicUi = (function () {
             default:
                 break;
         }
+
         return defaultFollowUp;
     }
 
@@ -6786,5 +6787,3 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         displayVariantTablePerTissue:displayVariantTablePerTissue
     }
 }());
-
-
