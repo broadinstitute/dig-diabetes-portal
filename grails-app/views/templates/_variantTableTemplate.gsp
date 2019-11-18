@@ -223,7 +223,7 @@
                     </div>
                     <div class="col-md-3">
                             <button  class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table" onclick="mpgSoftware.dynamicUi.displayVariantTablePerTissue('{{domTableSpecifier}}', false)">
-                                Order by variant
+                                Order by annotation
                               </button>
                     </div>
                     <div class="col-md-3">
