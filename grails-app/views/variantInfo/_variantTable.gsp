@@ -426,7 +426,8 @@
 </script>
 <g:render template="/templates/dynamicUi/VARIANT_TABLE" />
 
-
+<!--
 <div id="mainVariantDivHolder">
 
 </div>
+-->

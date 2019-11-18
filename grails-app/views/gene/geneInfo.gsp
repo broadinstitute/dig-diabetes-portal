@@ -405,6 +405,9 @@
 
 </div>
 <g:render template="/templates/burdenTestSharedTemplate" />
+<g:render template="/variantInfo/variantTable" />
+
+
 </body>
 </html>
 
