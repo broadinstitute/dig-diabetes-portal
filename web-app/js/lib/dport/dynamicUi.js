@@ -1368,7 +1368,7 @@ mpgSoftware.dynamicUi = (function () {
                             var dataForCall = {variants: variantsAsJson, annotationToRetrieve: 'DNASE'};
                             retrieveRemotedContextInformation(buildRemoteContextArray({
                                 name: actionId,
-                                retrieveDataUrl: additionalParameters.retrieveVariantAnnotationsUrl,
+                                retrieveDataUrl: additionalParameters.retrieveAnyTypeRegionData,
                                 dataForCall: dataForCall,
                                 processEachRecord: dataAnnotationType.processEachRecord,
                                 displayRefinedContextFunction: dataAnnotationType.displayEverythingFromThisCall,
@@ -2833,6 +2833,8 @@ mpgSoftware.dynamicUi = (function () {
                                     rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
                                         {otherClasses: "methodName_" + currentMethod + " annotationName_" + tissueName}, "discoDownAndCheckOutTheShow", 'EMP'));
                                 });
+                            } else {
+                                console.log("We recognize this row")
                             }
                             // fill in all of the column cells
                             if (recordsForTissue.arrayOfRecords.length>dataVector.length+2){
@@ -3923,6 +3925,7 @@ mpgSoftware.dynamicUi = (function () {
 
         switch (additionalParameters.dynamicTableType) {
             case 'geneTable':
+                dataAnnotationTypes = additionalParameters.dataAnnotationTypes;
                 break;
             case 'effectorGeneTable':
                 var sharedTable = new SharedTableObject( 'fegtAnnotationHeaders',0,0);
@@ -6625,6 +6628,11 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
     };
     const displayVariantTablePerTissue  = function (whereTheTableGoes, tissueDominant) {
         var sharedTable = getSharedTable(whereTheTableGoes);
+        // the switch to tissue dominant wants to have the the variance across the top
+        if ((tissueDominant) &&(sharedTable.currentForm === 'variantTableAnnotationHeaders')){
+            transposeThisTable('#mainVariantDiv table.variantTableHolder');
+        }
+
         destroySharedTable(whereTheTableGoes);
         sharedTable['dataCells'] = [];
 
@@ -6632,8 +6640,10 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         const indexAccumulator = getAccumulatorObject("variantInfoArray");
         const intermediateDataStructureHdr = getAccumulatorObject("topPortionDisplay");
         if (tissueDominant) {
+            $('button.actualTransposeButton').attr("disabled", true);
             setAccumulatorObject("variantTableOrientation","tissueDominant");
         } else {
+            $('button.actualTransposeButton').attr("disabled", false);
             setAccumulatorObject("variantTableOrientation","annotationDominant");
         }
 

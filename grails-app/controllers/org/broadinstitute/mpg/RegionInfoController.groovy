@@ -761,6 +761,7 @@ class RegionInfoController {
         String gene = ""
         String tissue = ""
         String methodToRetrieve = ""
+        String annotationToRetrieve = ""
         int startPosition = -1
         int endPosition = -1
         String chromosome = ""
@@ -773,6 +774,10 @@ class RegionInfoController {
 
         if (params.methodToRetrieve) {
             methodToRetrieve = params.methodToRetrieve
+        }
+
+        if (params.annotationToRetrieve) {
+            annotationToRetrieve = params.annotationToRetrieve
         }
         if (params.gene) {
             gene = params.gene
@@ -815,7 +820,7 @@ class RegionInfoController {
                     startPosition,
                     endPosition,
                     methodToRetrieve,
-                    "",
+                    annotationToRetrieve,
                     variantList,
                     [],
                     -1 )
