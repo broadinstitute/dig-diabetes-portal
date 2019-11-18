@@ -3985,11 +3985,6 @@ mpgSoftware.dynamicUi = (function () {
                 //setAccumulatorObject("extentBegin","117862462");
                 //setAccumulatorObject("extentEnd","118289003");
 
-                setAccumulatorObject("phenotype",data.phenotype);
-                setAccumulatorObject("chromosome",data.chromosome);
-                setAccumulatorObject("extentBegin",data.startPosition);
-                setAccumulatorObject("extentEnd",data.endPosition);
-
                 // setAccumulatorObject("phenotype","T2D");
                 // setAccumulatorObject("chromosome","19");
                 // setAccumulatorObject("extentBegin","58838000");
@@ -3999,7 +3994,11 @@ mpgSoftware.dynamicUi = (function () {
                 // setAccumulatorObject("chromosome","1");
                 // setAccumulatorObject("extentBegin","3504650");
                 // setAccumulatorObject("extentEnd","3614660");
-                //mpgSoftware.dynamicUi.modifyScreenFields({phenotype:preferredPhenotype, chromosome:chromosomeInput, startPosition:startExtentInput, endPosition:endExtentInput},getVariablesToRemember());
+
+                setAccumulatorObject("phenotype",data.phenotype);
+                setAccumulatorObject("chromosome",data.chromosome);
+                setAccumulatorObject("extentBegin",data.startPosition);
+                setAccumulatorObject("extentEnd",data.endPosition);
 
                 const chromosomeInput = $('input#chromosomeInput').val();
                 const startExtentInput = $('input#startExtentInput').val();

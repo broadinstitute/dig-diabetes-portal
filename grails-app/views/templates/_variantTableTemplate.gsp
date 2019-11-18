@@ -109,10 +109,12 @@
                 <h1 class="dk-page-title">Variant FOCUS table for <span class="phenotypeSpecifier">{{phenotype}}</span></h1>
             </div>
         </div>
-        <p style="font-size: 16px;"><g:message code="variantTable.introduction.1"></g:message><g:message code="variantTable.introduction.2"></g:message>
-<g:helpText title="variantTable.overall.help.header" placement="bottom" body="variantTable.help.text"/>
+        <div  style="font-size: 16px;">
+            <p><g:message code="variantTable.introduction.1"></g:message><g:message code="variantTable.introduction.2"></g:message>
+                <g:helpText title="variantTable.overall.help.header" placement="bottom" body="variantTable.help.text"/>
 
-<g:message code="variantTable.introduction.3"></g:message></p>
+                <g:message code="variantTable.introduction.3"></g:message></p>
+        </div>
 
 
         <div class="row" style="margin: 20px; display: none;">
@@ -149,47 +151,9 @@
                                 Update</button></div>
                     </div>
                 </div>
-                </div>
             </div>
-            <!--<div class="" style="margin: 20px">
-                <div class="col-sm-2 text-center" style="">
-                    <label style="padding-top:35px">Change genomic region or phenotype</label>
-                </div>
-                <div class="col-sm-8" style="border: 1px solid black">
-                    <div class="row">
-                        <div class="col-sm-1 text-center"></div>
-                        <div class="col-sm-2 text-center">
-                            <label for="chromosomeInput" placeholder="Choose chromosome">chromosome</label>
-                            <input id="chromosomeInput" type="text" size="8">
-                        </div>
-                        <div class="col-sm-1 text-center"></div>
-                        <div class="col-sm-4 text-center">
-                            <label for="startExtentInput" placeholder="Choose chromosome">start extent</label>
-                            <input id="startExtentInput" type="text">
-                        </div>
-                        <div class="col-sm-4 text-center">
-                            <label for="endExtentInput" placeholder="Choose chromosome">end extent</label>
-                            <input id="endExtentInput" type="text">
-                        </div>
-                    </div>
-                    <div class="row" style="margin-top: 15px">
-                        <div class="col-md-10">
-                            <label for="variantTablePhenotypePicker">Phenotype</label>
-                            <select id="varishiftantTablePhenotypePicker" class="phenotypePicker" onchange="mpgSoftware.variantTable.refreshTableForPhenotype(this)"></select>
-                        </div>
-                        <div class="col-md-2">
-                            <button class="btn btn-secondary btn-default transpose" type="button" title="click to update table"
-                            onclick="mpgSoftware.variantTable.refreshTableForPhenotype('#variantTablePhenotypePicker')">
-                            Update</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-2"></div>
-            </div>
-            <div class="col-sm-2"></div>
         </div>
-        <div class="row" >
-        </div>
+
                 <div class="container-fluid">
                     <div class="col-md-6">
                         <h5 style="font-size: 16px;">Table filter</h5>
@@ -302,14 +266,6 @@
                 </div>
             </div>
 
-            <!--<div class="container text-right" >
-                <div class="variantTableFilterChoice">
-                    <label class="form-check-label" for="displayBlankRows">
-                    Display blank rows&nbsp;&nbsp;
-                    </label>
-                    <input class="form-check-input" type="checkbox" value="" id="displayBlankRows" checked>
-                </div>
-            </div>-->
             <div class="row" >
                 <div class="col-md-12" style="margin-top:60px">
 

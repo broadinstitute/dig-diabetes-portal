@@ -1878,64 +1878,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                     },5000);
 
                 }});
-        }
 
 
-        /*
-        *
-        * $.ajax({
-            cache: false,
-            type: "post",
-            url: callingUrl,
-            data: callingObj,
-            async: true,
-            success: function (data) {
-                if (typeof data.experimentAssays !== 'undefined'){
-                    var signalSummarySectionVariables = getSignalSummarySectionVariables();
-                    signalSummarySectionVariables["experimentAssays"] = data.experimentAssays;
-                }
-                rememberCallBack(data, rememberParameter);
-            },
-            error: function (jqXHR, exception) {
-                core.errorReporter(jqXHR, exception);
-            }
-        });
-        * */
-
-
-
-        } else {
-
-            console.log("called from 2nd time");
-            //update variant FOCUS table
-            var ajaxURL = $('#phenotypeInput').attr("ajaxurl");
-
-            $.ajax({
-                url:mpgSoftware.variantTable.refreshVariantFocusForPhenotype(phenotypeName,ajaxURL),
-                success:function(){
-
-                    setTimeout(function(){
-                        $.ajax({
-                            cache: false,
-                            type: "post",
-                            url: callingUrl,
-                            data: callingObj,
-                            async: true,
-                            success: function (data) {
-                                if (typeof data.experimentAssays !== 'undefined'){
-                                    var signalSummarySectionVariables = getSignalSummarySectionVariables();
-                                    signalSummarySectionVariables["experimentAssays"] = data.experimentAssays;
-                                }
-                                rememberCallBack(data, rememberParameter);
-
-                            },
-                            error: function (jqXHR, exception) {
-                                core.errorReporter(jqXHR, exception);
-                            }
-                        });
-                    },5000);
-
-                }});
         }
     };
     var initialPageSetUp = function (drivingVariables) {
