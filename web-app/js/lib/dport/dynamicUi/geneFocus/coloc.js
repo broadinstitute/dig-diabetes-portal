@@ -1,5 +1,5 @@
 /***
- * the eCAVIAR version of colocalization
+ * the COLOC version of colocalization
  *
  * The following externally visible functions are required:
  *         1) a function to process records
@@ -12,10 +12,11 @@
  * @type {*|{}}
  */
 
+
 var mpgSoftware = mpgSoftware || {};  // encapsulating variable
 mpgSoftware.dynamicUi = mpgSoftware.dynamicUi || {};   // second level encapsulating variable
 
-mpgSoftware.dynamicUi.eCaviar = (function () {
+mpgSoftware.dynamicUi.coloc = (function () {
     "use strict";
 
     /***
@@ -24,9 +25,7 @@ mpgSoftware.dynamicUi.eCaviar = (function () {
      * @param rawGeneAssociationRecords
      * @returns {*}
      */
-    var processRecordsFromECaviar = function (data, rawGeneAssociationRecords) {
-
-
+    var processRecordsFromColoc = function (data, rawGeneAssociationRecords) {
         var dataArrayToProcess = [];
         if ( typeof data !== 'undefined'){
             var geneName = '';
@@ -39,11 +38,8 @@ mpgSoftware.dynamicUi.eCaviar = (function () {
             dataArrayToProcess ['gene'] = geneName;
         }
         rawGeneAssociationRecords.push(dataArrayToProcess);
-
-
         return rawGeneAssociationRecords;
     };
-
 
 
     /***
@@ -51,21 +47,20 @@ mpgSoftware.dynamicUi.eCaviar = (function () {
      * @param idForTheTargetDiv
      * @param objectContainingRetrievedRecords
      */
-    var displayGenesFromECaviar = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+    var displayGenesFromColoc = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
         mpgSoftware.dynamicUi.displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
-            'ECA', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            'rawColocalizationInfo', // name of the persistent field where the data we received is stored
+            'COL', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+            'rawColoInfo', // name of the persistent field where the data we received is stored
             '', // we may wish to pull out one record for summary purposes
             function(records,tissueTranslations){
-                return _.map(_.orderBy( records,["clpp"],["desc"]),function(tissueRecord){
+                return _.map(_.orderBy(records,["prob_exists_coloc"],["desc"]),function(tissueRecord){
                     return {  tissue: tissueRecord.tissue_trans,
-                        clpp: UTILS.realNumberFormatter(""+tissueRecord.clpp),
-                        prob_in_causal_set: UTILS.realNumberFormatter(""+tissueRecord.prob_in_causal_set),
-                        gwas_z_score: UTILS.realNumberFormatter(""+tissueRecord.gwas_z_score),
-                        eqtl_z_score: UTILS.realNumberFormatter(""+tissueRecord.eqtl_z_score),
-                        var_id:tissueRecord.var_id,
-                        value:tissueRecord.clpp,
-                        numericalValue: tissueRecord.clpp
+                        conditional_prob_snp_coloc: UTILS.realNumberFormatter(""+tissueRecord.conditional_prob_snp_coloc),
+                        unconditional_prob_snp_coloc: UTILS.realNumberFormatter(""+tissueRecord.unconditional_prob_snp_coloc),
+                        prob_exists_coloc: UTILS.realNumberFormatter(""+tissueRecord.prob_exists_coloc),
+                        var_id: tissueRecord.var_id,
+                        value:tissueRecord.prob_exists_coloc,
+                        numericalValue: tissueRecord.prob_exists_coloc
                     }});
             },
             function(records, // all records
@@ -79,15 +74,15 @@ mpgSoftware.dynamicUi.eCaviar = (function () {
                         Significance:significanceCellPresentationString },
                     numberOfRecords:records.length,
                     tissueCategoryNumber:categorizor.categorizeTissueNumbers( records.length ),
-                    significanceCategoryNumber:categorizor.categorizeSignificanceNumbers( records[0].clpp, "ECA" ),
+                    significanceCategoryNumber:categorizor.categorizeSignificanceNumbers( records[0].prob_exists_coloc, "COL" ),
                     recordsExist:(records.length)?[1]:[],
                     gene:gene,
                     significanceValue:significanceValue,
                     records:records
                 }
             } );
-
     };
+
 
     /***
      *  3) set of categorizor routines
@@ -96,11 +91,13 @@ mpgSoftware.dynamicUi.eCaviar = (function () {
     var categorizor = new mpgSoftware.dynamicUi.Categorizor();
     categorizor.categorizeSignificanceNumbers = Object.getPrototypeOf(categorizor).posteriorProbabilitySignificance;
 
-
+    let sortUtility = new mpgSoftware.dynamicUi.SortUtility();
+    const sortRoutine = Object.getPrototypeOf(sortUtility).numericalComparisonWithEmptiesAtBottom;
 
 // public routines are declared below
     return {
-        processRecordsFromECaviar: processRecordsFromECaviar,
-        displayGenesFromECaviar:displayGenesFromECaviar
+        processRecordsFromColoc: processRecordsFromColoc,
+        displayGenesFromColoc:displayGenesFromColoc,
+        sortRoutine:sortRoutine
     }
 }());

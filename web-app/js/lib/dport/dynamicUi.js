@@ -168,6 +168,7 @@ mpgSoftware.dynamicUi = (function () {
     var nameOfDomToStoreAccumulatorInformation;
     var dyanamicUiVariables;
     var clearBeforeStarting = false;
+    var deferredObject;
 
     var CELL_COLORING_BLUISH_TOP = '#1240FE';
     var CELL_COLORING_BLUISH_TOP_MINUS1 = '#3D63FF';
@@ -334,10 +335,10 @@ mpgSoftware.dynamicUi = (function () {
      */
     var IntermediateStructureDataCell = function (name,renderData, annotation, dataAnnotationTypeCode){
         return {
-            dataAnnotationTypeCode:dataAnnotationTypeCode,
-            renderData:renderData,
             title: name,
-            annotation:  annotation
+            renderData:renderData,
+            annotation:  annotation,
+            dataAnnotationTypeCode:dataAnnotationTypeCode
         };
     };
 
@@ -403,8 +404,9 @@ mpgSoftware.dynamicUi = (function () {
                 break;
 
             case "getVariantsFromQtlForContextDescription":
-                defaultFollowUp.displayRefinedContextFunction = displayVariantRecordsFromVariantQtlSearch;
-                defaultFollowUp.placeToDisplayData = '#dynamicVariantHolder div.dynamicUiHolder';
+                // the URL referenced here is nonfunctional, so this case is surely used nowhere
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.variantTableHeaders.displayRefinedVariantsInARange;
+                defaultFollowUp.placeToDisplayData = '#mainVariantDiv div.dynamicUiHolder';
                 break;
 
             case "getPhenotypesFromQtlForPhenotypeTable":
@@ -499,8 +501,8 @@ mpgSoftware.dynamicUi = (function () {
                 break;
 
             case "getVariantsWeWillUseToBuildTheVariantTable":
-                defaultFollowUp.displayRefinedContextFunction = displayVariantsForAPhenotype;
-                defaultFollowUp.placeToDisplayData = '#dynamicVariantHolder div.dynamicUiHolder';
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.variantTableHeaders.displayRefinedVariantsInARange;
+                defaultFollowUp.placeToDisplayData = '#mainVariantDiv table.variantTableHolder';
                 break;
 
             case "getEqtlsGivenVariantList":
@@ -509,19 +511,43 @@ mpgSoftware.dynamicUi = (function () {
                 break;
 
             case "getABCGivenVariantList":
-                defaultFollowUp.displayRefinedContextFunction = displayAbcGivenVariantList;
-                defaultFollowUp.placeToDisplayData = '#dynamicVariantHolder div.dynamicUiHolder';
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.abcVariantTable.displayTissueInformationFromAbc;
+                defaultFollowUp.placeToDisplayData = '#mainVariantDiv table.variantTableHolder';
+                break;
+            case "getCoaccessibilityGivenVariantList":
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.coaccessibilityVariantTable.displayTissueInformationFromCoaccess;
+                defaultFollowUp.placeToDisplayData = '#mainVariantDiv table.variantTableHolder';
                 break;
 
+            case "getAtacseqGivenVariantList":
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.atacSeqVariantTable.displayTissueInformationFromDnase;
+                defaultFollowUp.placeToDisplayData = '#mainVariantDiv table.variantTableHolder';
+                break;
             case "getDnaseGivenVariantList":
-                defaultFollowUp.displayRefinedContextFunction = displayDnaseGivenVariantList;
-                defaultFollowUp.placeToDisplayData = '#dynamicVariantHolder div.dynamicUiHolder';
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.dnaseVariantTable.displayTissueInformationFromDnase;
+                defaultFollowUp.placeToDisplayData = '#mainVariantDiv table.variantTableHolder';
                 break;
-            case "getH3k27acGivenVariantList":
-                defaultFollowUp.displayRefinedContextFunction = displayH3k27acGivenVariantList;
-                defaultFollowUp.placeToDisplayData = '#dynamicVariantHolder div.dynamicUiHolder';
+            case "getTfMotifGivenVariantList":
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.tfMotifVariantTable.displayTissueInformationFromTfMotif;
+                defaultFollowUp.placeToDisplayData = '#mainVariantDiv table.variantTableHolder';
                 break;
 
+            case "getH3k27acGivenVariantList":
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.h3k27acVariantTable.displayTissueInformationFromH3k27ac;
+                defaultFollowUp.placeToDisplayData = '#mainVariantDiv table.variantTableHolder';
+                break;
+            case "getChromStateGivenVariantList":
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.chromStateVariantTable.displayTissueInformationFromChromState;
+                defaultFollowUp.placeToDisplayData = '#mainVariantDiv table.variantTableHolder';
+                break;
+            case "getTfbsGivenVariantList":
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.tfbsVariantTable.displayTissueInformationFromTfbs;
+                defaultFollowUp.placeToDisplayData = '#mainVariantDiv table.variantTableHolder';
+                break;
+            case "gregorSubTable":
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.gregorSubTableVariantTable.displayGregorSubTable;
+                defaultFollowUp.placeToDisplayData = '#gregorSubTableDiv table.gregorSubTable';
+                break;
             default:
                 break;
         }
@@ -529,8 +555,27 @@ mpgSoftware.dynamicUi = (function () {
     }
 
 
+
+    const eitherRetrieveIndexOrProceedWithTask =  function(){
+        if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
+            var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: actionId});
+            actionToUndertake();
+        } else {
+            var variantsAsJson = "[]";
+            if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
+                const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
+                if (dataVector.length===0){return;}
+                var variantNameArray = _.map(dataVector, function(variantRec){return variantRec.var_id;});
+                variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";                        }
+            var dataForCall = {variants: variantsAsJson,method:'TFMOTIF'};
+    }
+}
+
+
+
     var actionContainer = function (actionId, followUp) {
         var additionalParameters = getDyanamicUiVariables();
+        var dataAnnotationType =_.find(additionalParameters.dataAnnotationTypes,{internalIdentifierString:actionId});
         var displayFunction = ( typeof followUp.displayRefinedContextFunction !== 'undefined') ? followUp.displayRefinedContextFunction : undefined;
         var displayLocation = ( typeof followUp.placeToDisplayData !== 'undefined') ? followUp.placeToDisplayData : undefined;
         var nextActionId = ( typeof followUp.actionId !== 'undefined') ? followUp.actionId : undefined;
@@ -539,11 +584,15 @@ mpgSoftware.dynamicUi = (function () {
 
         switch (actionId) {
 
+            case "doesNotHaveAnIndependentFunction":
+                functionToLaunchDataRetrieval = function () {}
+                break;
+
             case "getInformationFromDepictForTissueTable":
                 functionToLaunchDataRetrieval = function () {
                     var phenotype = getAccumulatorObject("preferredPhenotype");
                     retrieveRemotedContextInformation(buildRemoteContextArray({
-                        name: "getInformationFromDepictForTissueTable",
+                        name: actionId,
                         retrieveDataUrl: additionalParameters.retrieveDepictTissueDataUrl,
                         dataForCall: {
                             phenotype: phenotype
@@ -552,7 +601,9 @@ mpgSoftware.dynamicUi = (function () {
                         displayRefinedContextFunction: displayFunction,
                         placeToDisplayData: displayLocation,
                         actionId: nextActionId,
-                        nameOfAccumulatorField:'depictTissueArray'
+                        nameOfAccumulatorField:'depictTissueArray',
+                        code:dataAnnotationType.code,
+                        nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                     }));
                 };
                 break;
@@ -563,7 +614,7 @@ mpgSoftware.dynamicUi = (function () {
                 functionToLaunchDataRetrieval = function () {
                     var phenotype = getAccumulatorObject("preferredPhenotype");
                     retrieveRemotedContextInformation(buildRemoteContextArray({
-                        name: "getInformationFromGregorForTissueTable",
+                        name: actionId,
                         retrieveDataUrl: additionalParameters.retrieveGregorDataUrl,
                         dataForCall: {
                             phenotype: phenotype
@@ -572,7 +623,9 @@ mpgSoftware.dynamicUi = (function () {
                         displayRefinedContextFunction: displayFunction,
                         placeToDisplayData: displayLocation,
                         actionId: nextActionId,
-                        nameOfAccumulatorField:'gregorTissueArray'
+                        nameOfAccumulatorField:'gregorTissueArray',
+                        code:dataAnnotationType.code,
+                        nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                     }));
                 };
                 break;
@@ -581,7 +634,7 @@ mpgSoftware.dynamicUi = (function () {
                 functionToLaunchDataRetrieval = function () {
                     var phenotype = getAccumulatorObject("preferredPhenotype");
                     retrieveRemotedContextInformation(buildRemoteContextArray({
-                        name: "getInformationFromLdsrForTissueTable",
+                        name: actionId,
                         retrieveDataUrl: additionalParameters.retrieveLdsrDataUrl,
                         dataForCall: {
                             phenotype: phenotype
@@ -590,7 +643,9 @@ mpgSoftware.dynamicUi = (function () {
                         displayRefinedContextFunction: displayFunction,
                         placeToDisplayData: displayLocation,
                         actionId: nextActionId,
-                        nameOfAccumulatorField:'ldsrTissueArray'
+                        nameOfAccumulatorField:'ldsrTissueArray',
+                        code:dataAnnotationType.code,
+                        nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                     }));
                 };
                 break;
@@ -612,7 +667,9 @@ mpgSoftware.dynamicUi = (function () {
                         displayRefinedContextFunction: displayFunction,
                         placeToDisplayData: displayLocation,
                         actionId: nextActionId,
-                        nameOfAccumulatorField:'geneInfoArray'
+                        nameOfAccumulatorField:'geneInfoArray',
+                        code:dataAnnotationType.code,
+                        nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                     }));
                 };
                 break;
@@ -620,14 +677,16 @@ mpgSoftware.dynamicUi = (function () {
             case "getFullFromEffectorGeneListTable":
                 functionToLaunchDataRetrieval = function () {
                     retrieveRemotedContextInformation(buildRemoteContextArray({
-                        name: "getFullFromEffectorGeneListTable",
+                        name: actionId,
                         retrieveDataUrl: additionalParameters.retrieveEffectorGeneInformationUrl,
                         dataForCall: {},
                         processEachRecord: mpgSoftware.dynamicUi.fullEffectorGeneTable.processRecordsFromFullEffectorGeneTable,
                         displayRefinedContextFunction: displayFunction,
                         placeToDisplayData: displayLocation,
                         actionId: nextActionId,
-                        nameOfAccumulatorField:'fullEffectorGeneTable'
+                        nameOfAccumulatorField:'fullEffectorGeneTable',
+                        code:dataAnnotationType.code,
+                        nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                     }));
                 };
                 break;
@@ -684,7 +743,7 @@ mpgSoftware.dynamicUi = (function () {
             case "getGeneAssociationsForGenesTable":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty("geneInfoArray")) {
-                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getGeneAssociationsForGenesTable"});
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId:actionId});
                         actionToUndertake();
                     } else {
                         var phenotype = $('li.chosenPhenotype').attr('id');
@@ -696,14 +755,16 @@ mpgSoftware.dynamicUi = (function () {
                             }
                         });
                         retrieveRemotedContextInformation(buildRemoteContextArray({
-                            name: "getGeneAssociationsForGenesTable",
+                            name: actionId,
                             retrieveDataUrl: additionalParameters.retrieveGeneLevelAssociationsUrl,
                             dataForCall: dataForCall,
                             processEachRecord: mpgSoftware.dynamicUi.metaXcan.processMetaXcanRecords,
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
                             actionId: nextActionId,
-                            nameOfAccumulatorField:'rawGeneAssociationRecords'
+                            nameOfAccumulatorField:'rawGeneAssociationRecords',
+                            code:dataAnnotationType.code,
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                         }));
                     }
                 };
@@ -712,7 +773,7 @@ mpgSoftware.dynamicUi = (function () {
             case "getSkatGeneAssociationsForGeneTable":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty("geneInfoArray")) {
-                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getSkatGeneAssociationsForGeneTable"});
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: actionId});
                         actionToUndertake();
                     } else {
                         var phenotype = $('li.chosenPhenotype').attr('id');
@@ -725,14 +786,16 @@ mpgSoftware.dynamicUi = (function () {
                             }
                         });
                         retrieveRemotedContextInformation(buildRemoteContextArray({
-                            name: "getSkatGeneAssociationsForGeneTable",
+                            name: actionId,
                             retrieveDataUrl: additionalParameters.retrieveGeneLevelAssociationsUrl,
                             dataForCall: dataForCall,
                             processEachRecord: mpgSoftware.dynamicUi.geneBurdenSkat.processGeneSkatAssociationRecords,
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
                             actionId: nextActionId,
-                            nameOfAccumulatorField:'rawGeneSkatRecords'
+                            nameOfAccumulatorField:'rawGeneSkatRecords',
+                            code:dataAnnotationType.code,
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                         }));
                     }
                 };
@@ -742,7 +805,7 @@ mpgSoftware.dynamicUi = (function () {
             case "getFirthGeneAssociationsForGeneTable":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty("geneInfoArray")) {
-                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getFirthGeneAssociationsForGeneTable"});
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: actionId});
                         actionToUndertake();
                     } else {
                         var phenotype = $('li.chosenPhenotype').attr('id');
@@ -755,14 +818,16 @@ mpgSoftware.dynamicUi = (function () {
                             }
                         });
                         retrieveRemotedContextInformation(buildRemoteContextArray({
-                            name: "getFirthGeneAssociationsForGeneTable",
+                            name: actionId,
                             retrieveDataUrl: additionalParameters.retrieveGeneLevelAssociationsUrl,
                             dataForCall: dataForCall,
                             processEachRecord: mpgSoftware.dynamicUi.geneBurdenFirth.processGeneFirthAssociationRecords,
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
                             actionId: nextActionId,
-                            nameOfAccumulatorField:'rawGeneFirthRecords'
+                            nameOfAccumulatorField:'rawGeneFirthRecords',
+                            code:dataAnnotationType.code,
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                         }));
                     }
                 };
@@ -772,7 +837,7 @@ mpgSoftware.dynamicUi = (function () {
             case "getInformationFromEffectorGeneListTable":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty("geneInfoArray")) {
-                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getInformationFromEffectorGeneListTable"});
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: actionId});
                         actionToUndertake();
                     } else {
                         var phenotype = $('li.chosenPhenotype').attr('id');
@@ -784,14 +849,16 @@ mpgSoftware.dynamicUi = (function () {
                             }
                         });
                         retrieveRemotedContextInformation(buildRemoteContextArray({
-                            name: "getInformationFromEffectorGeneListTable",
+                            name: actionId,
                             retrieveDataUrl: additionalParameters.retrieveEffectorGeneInformationUrl,
                             dataForCall: dataForCall,
                             processEachRecord: mpgSoftware.dynamicUi.effectorGene.processRecordsFromEffectorGene,
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
                             actionId: nextActionId,
-                            nameOfAccumulatorField:'rawEffectorGeneRecords'
+                            nameOfAccumulatorField:'rawEffectorGeneRecords',
+                            code:dataAnnotationType.code,
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                         }));
                     }
                 };
@@ -818,7 +885,10 @@ mpgSoftware.dynamicUi = (function () {
                         processEachRecord: processRecordsFromVariantQtlSearch,
                         displayRefinedContextFunction: displayFunction,
                         placeToDisplayData: displayLocation,
-                        actionId: nextActionId
+                        actionId: nextActionId,
+                        nameOfAccumulatorField:'rawVariantRecords',
+                        code:dataAnnotationType.code,
+                        nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                     }));
                 };
                 break;
@@ -893,7 +963,7 @@ mpgSoftware.dynamicUi = (function () {
             case "getRecordsFromECaviarForGeneTable":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty("geneInfoArray")) {
-                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getRecordsFromECaviarForGeneTable"});
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: actionId});
                         actionToUndertake();
                     } else {
                         var phenotype = $('li.chosenPhenotype').attr('id');
@@ -902,14 +972,16 @@ mpgSoftware.dynamicUi = (function () {
                                 phenotype:phenotype}
                         });
                         retrieveRemotedContextInformation(buildRemoteContextArray({
-                            name: "getRecordsFromECaviarForGeneTable",
+                            name: actionId,
                             retrieveDataUrl: additionalParameters.retrieveECaviarDataUrl,
                             dataForCall: geneNameArray,
                             processEachRecord: mpgSoftware.dynamicUi.eCaviar.processRecordsFromECaviar,
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
                             actionId: nextActionId,
-                            nameOfAccumulatorField:'rawColocalizationInfo'
+                            nameOfAccumulatorField:'rawColocalizationInfo',
+                            code:dataAnnotationType.code,
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                         }));
                     }
                 };
@@ -918,7 +990,7 @@ mpgSoftware.dynamicUi = (function () {
             case "getRecordsFromColocForGeneTable":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty("geneInfoArray")) {
-                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getRecordsFromColocForGeneTable"});
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: actionId});
                         actionToUndertake();
                     } else {
                         var phenotype = $('li.chosenPhenotype').attr('id');
@@ -927,14 +999,16 @@ mpgSoftware.dynamicUi = (function () {
                                 phenotype:phenotype}
                         });
                         retrieveRemotedContextInformation(buildRemoteContextArray({
-                            name: "getRecordsFromColocForGeneTable",
+                            name: actionId,
                             retrieveDataUrl: additionalParameters.retrieveColocDataUrl,
                             dataForCall: geneNameArray,
                             processEachRecord: mpgSoftware.dynamicUi.coloc.processRecordsFromColoc,
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
                             actionId: nextActionId,
-                            nameOfAccumulatorField:'rawColoInfo'
+                            nameOfAccumulatorField:'rawColoInfo',
+                            code:dataAnnotationType.code,
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                         }));
                     }
                 };
@@ -945,21 +1019,23 @@ mpgSoftware.dynamicUi = (function () {
                 functionToLaunchDataRetrieval = function () {
 
                     if (accumulatorObjectFieldEmpty("geneInfoArray")) {
-                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getAnnotationsFromModForGenesTable"});
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: actionId});
                         actionToUndertake();
                     } else {
                         var geneNameArray = _.map(getAccumulatorObject("geneInfoArray"), function (o) {
                             return {gene: o.name}
                         });
                         retrieveRemotedContextInformation(buildRemoteContextArray({
-                            name: "getAnnotationsFromModForGenesTable",
+                            name: actionId,
                             retrieveDataUrl: additionalParameters.retrieveModDataUrl,
                             dataForCall: geneNameArray,
                             processEachRecord: mpgSoftware.dynamicUi.mouseKnockout.processRecordsFromMod,
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
                             actionId: nextActionId,
-                            nameOfAccumulatorField:'modNameArray'
+                            nameOfAccumulatorField:'modNameArray',
+                            code:dataAnnotationType.code,
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                         }));
                     }
                 };
@@ -1030,10 +1106,23 @@ mpgSoftware.dynamicUi = (function () {
             case "getVariantsWeWillUseToBuildTheVariantTable":
                 functionToLaunchDataRetrieval = function () {
 
-                    var phenotype = $('li.chosenPhenotype').attr('id');
-                    var chromosome = $('span.dynamicUiChromosome').text();
-                    var startExtent = $('span.dynamicUiGeneExtentBegin').text();
-                    var endExtent = $('span.dynamicUiGeneExtentEnd').text();
+                    var phenotype = getAccumulatorObject("phenotype");
+                    var chromosome = getAccumulatorObject("chromosome");
+                    var startExtent = getAccumulatorObject("extentBegin").replace(/,/g,"");
+                    var endExtent = getAccumulatorObject("extentEnd").replace(/,/g,"");
+                    var sharedTable = getSharedTable(displayLocation);
+                    sharedTable['currentFormVariation'] = 2;
+
+                    if (chromosome.startsWith("chr")){
+                        chromosome =  chromosome.substring(3)
+                    }
+                    $('input#chromosomeInput').val(chromosome);
+                    $('input#startExtentInput').val(startExtent);
+                    $('input#endExtentInput').val(endExtent);
+                    $('select.phenotypePicker').val(phenotype);
+                    $('#annotationSelectorChoice').empty().multiselect('refresh');
+                    $('#annotationSelectorChoice').multiselect('rebuild');
+
                     var dataNecessaryToRetrieveVariantsPerPhenotype;
                     if (( typeof phenotype === 'undefined') ||
                         (typeof chromosome === 'undefined') ||
@@ -1043,20 +1132,37 @@ mpgSoftware.dynamicUi = (function () {
                     } else {
                         dataNecessaryToRetrieveVariantsPerPhenotype = {
                             phenotype: phenotype,
-                            geneToSummarize: "chr" + chromosome + ":" + startExtent + "-" + endExtent
+                            geneToSummarize: "chr" + chromosome + ":" + startExtent + "-" + endExtent,
+                            chromosome: chromosome,
+                            startPos: startExtent,
+                            start: startExtent,
+                            endPos: endExtent,
+                            end: endExtent,
+                            gene:"",
+                            dataSet:"",
+                            dataType:"static",
+                            propertyName:"POSTERIOR_PROBABILITY",
+                            limit: "50",
+                            findCredSetByOverlap: "1"
                         }
 
                     }
 
 
                     retrieveRemotedContextInformation(buildRemoteContextArray({
-                        name: "getVariantsWeWillUseToBuildTheVariantTable",
-                        retrieveDataUrl: additionalParameters.retrieveTopVariantsAcrossSgsUrl,
+                        name: actionId,
+                        //retrieveDataUrl: additionalParameters.getVariantsForRangeAjaxUrl,
+                        //retrieveDataUrl: additionalParameters.retrieveTopVariantsAcrossSgsUrl,
+                        //retrieveDataUrl: additionalParameters.retrieveOnlyTopVariantsAcrossSgsUrl,
+                        retrieveDataUrl: additionalParameters.fillCredibleSetTableUrl,
                         dataForCall: dataNecessaryToRetrieveVariantsPerPhenotype,
-                        processEachRecord: processRecordsFromQtl,
+                        processEachRecord: mpgSoftware.dynamicUi.variantTableHeaders.processRecordsFromProximitySearch,
                         displayRefinedContextFunction: displayFunction,
                         placeToDisplayData: displayLocation,
-                        actionId: nextActionId
+                        actionId: nextActionId,
+                        nameOfAccumulatorField:dataAnnotationType.nameOfAccumulatorField,
+                        code:dataAnnotationType.code,
+                        nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                     }));
 
                 };
@@ -1087,31 +1193,71 @@ mpgSoftware.dynamicUi = (function () {
                 break;
             case "getABCGivenVariantList":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("variantNameArray")) {
-                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: "getABCGivenVariantList"});
+                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
+                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: actionId});
                         actionToUndertake();
                     } else {
                         var variantsAsJson = "[]";
-                        if (getAccumulatorObject("variantNameArray").length > 0) {
-                            variantsAsJson = "[\"" + getAccumulatorObject("variantNameArray").join("\",\"") + "\"]";
+                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
+                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
+                            if (dataVector.length===0){return;}
+                            var variantNameArray = _.map(dataVector, function(variantRec){return variantRec.var_id;});
+                            variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";
                         }
                         var dataForCall = {variants: variantsAsJson};
                         retrieveRemotedContextInformation(buildRemoteContextArray({
-                            name: "getABCGivenVariantList",
+                            name: actionId,
                             retrieveDataUrl: additionalParameters.retrieveAbcDataUrl,
                             dataForCall: dataForCall,
-                            processEachRecord: processAbcRecordsFromVariantBasedRequest,
+                            processEachRecord: mpgSoftware.dynamicUi.abcVariantTable.processRecordsFromAbc,
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
-                            actionId: nextActionId
+                            actionId: nextActionId,
+                            nameOfAccumulatorField:dataAnnotationType.nameOfAccumulatorField,
+                            code:dataAnnotationType.code,
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                         }));
+                    }
+                };
+                break;
+            case "getCoaccessibilityGivenVariantList":
+                functionToLaunchDataRetrieval = function () {
+                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
+                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: actionId});
+                        actionToUndertake();
+                    } else {
+                        var variantsAsJson = "[]";
+                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
+                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
+                            if (dataVector.length === 0) {
+                                return;
+                            }
+                            var variantNameArray = _.map(dataVector, function (variantRec) {
+                                return variantRec.var_id;
+                            });
+                            variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";
+
+                            var dataForCall = {variants: variantsAsJson, methodToRetrieve: 'cicero'};
+                            retrieveRemotedContextInformation(buildRemoteContextArray({
+                                name: actionId,
+                                retrieveDataUrl: additionalParameters.retrieveAnyTypeRegionData,
+                                dataForCall: dataForCall,
+                                processEachRecord: mpgSoftware.dynamicUi.coaccessibilityVariantTable.processRecordsFromCoaccess,
+                                displayRefinedContextFunction: displayFunction,
+                                placeToDisplayData: displayLocation,
+                                actionId: nextActionId,
+                                nameOfAccumulatorField: dataAnnotationType.nameOfAccumulatorField,
+                                code: dataAnnotationType.code,
+                                nameOfAccumulatorFieldWithIndex: dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                            }));
+                        }
                     }
                 };
                 break;
             case "getInformationFromDepictForGenesTable":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty("geneInfoArray")) {
-                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getInformationFromDepictForGenesTable"});
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: actionId});
                         actionToUndertake();
                     } else {
                         var phenotype = $('li.chosenPhenotype').attr('id');
@@ -1123,14 +1269,16 @@ mpgSoftware.dynamicUi = (function () {
                         });
 
                         retrieveRemotedContextInformation(buildRemoteContextArray({
-                            name: "getInformationFromDepictForGenesTable",
+                            name: actionId,
                             retrieveDataUrl: additionalParameters.retrieveDepictDataUrl,
                             dataForCall: dataForCall,
                             processEachRecord: mpgSoftware.dynamicUi.depictGenePvalue.processRecordsFromDepictGenePvalue,
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
                             actionId: nextActionId,
-                            nameOfAccumulatorField:'rawDepictInfo'
+                            nameOfAccumulatorField:'rawDepictInfo',
+                            code:dataAnnotationType.code,
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                         }));
                     }
                 };
@@ -1139,7 +1287,7 @@ mpgSoftware.dynamicUi = (function () {
             case "getDepictGeneSetForGenesTable":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty("geneInfoArray")) {
-                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getDepictGeneSetForGenesTable"});
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: actionId});
                         actionToUndertake();
                     } else {
                         var phenotype = $('li.chosenPhenotype').attr('id');
@@ -1151,64 +1299,237 @@ mpgSoftware.dynamicUi = (function () {
                         });
 
                         retrieveRemotedContextInformation(buildRemoteContextArray({
-                            name: "getDepictGeneSetForGenesTable",
+                            name: actionId,
                             retrieveDataUrl: additionalParameters.retrieveDepictGeneSetUrl,
                             dataForCall: dataForCall,
                             processEachRecord: mpgSoftware.dynamicUi.depictGeneSets.processRecordsFromDepictGeneSet,
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
                             actionId: nextActionId,
-                            nameOfAccumulatorField:'depictGeneSetInfo'
+                            nameOfAccumulatorField:'depictGeneSetInfo',
+                            code:dataAnnotationType.code,
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                         }));
+                    }
+                };
+                break;
+
+            case "getAtacseqGivenVariantList":
+                functionToLaunchDataRetrieval = function () {
+                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
+                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: actionId});
+                        actionToUndertake();
+                    } else {
+                        var variantsAsJson = "[]";
+                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
+                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
+                            if (dataVector.length === 0) {
+                                return;
+                            }
+                            var variantNameArray = _.map(dataVector, function (variantRec) {
+                                return variantRec.var_id;
+                            });
+                            variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";
+                            var dataForCall = {variants: variantsAsJson, method: 'MACS'};
+                            retrieveRemotedContextInformation(buildRemoteContextArray({
+                                name: actionId,
+                                retrieveDataUrl: additionalParameters.retrieveVariantAnnotationsUrl,
+                                dataForCall: dataForCall,
+                                processEachRecord: dataAnnotationType.processEachRecord,
+                                displayRefinedContextFunction: dataAnnotationType.displayEverythingFromThisCall,
+                                placeToDisplayData: displayLocation,
+                                actionId: nextActionId,
+                                nameOfAccumulatorField: dataAnnotationType.nameOfAccumulatorField,
+                                code: dataAnnotationType.code,
+                                nameOfAccumulatorFieldWithIndex: dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                            }));
+                        }
                     }
                 };
                 break;
 
             case "getDnaseGivenVariantList":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("variantNameArray")) {
-                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: "getDnaseGivenVariantList"});
+                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
+                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: actionId});
                         actionToUndertake();
                     } else {
                         var variantsAsJson = "[]";
-                        if (getAccumulatorObject("variantNameArray").length > 0) {
-                            variantsAsJson = "[\"" + getAccumulatorObject("variantNameArray").join("\",\"") + "\"]";
+                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
+                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
+                            if (dataVector.length === 0) {
+                                return;
+                            }
+                            var variantNameArray = _.map(dataVector, function (variantRec) {
+                                return variantRec.var_id;
+                            });
+                            variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";
+
+                            var dataForCall = {variants: variantsAsJson, annotationToRetrieve: 'DNASE'};
+                            retrieveRemotedContextInformation(buildRemoteContextArray({
+                                name: actionId,
+                                retrieveDataUrl: additionalParameters.retrieveVariantAnnotationsUrl,
+                                dataForCall: dataForCall,
+                                processEachRecord: dataAnnotationType.processEachRecord,
+                                displayRefinedContextFunction: dataAnnotationType.displayEverythingFromThisCall,
+                                placeToDisplayData: displayLocation,
+                                actionId: nextActionId,
+                                nameOfAccumulatorField: dataAnnotationType.nameOfAccumulatorField,
+                                code: dataAnnotationType.code,
+                                nameOfAccumulatorFieldWithIndex: dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                            }));
                         }
-                        var dataForCall = {variants: variantsAsJson};
-                        retrieveRemotedContextInformation(buildRemoteContextArray({
-                            name: "getDnaseGivenVariantList",
-                            retrieveDataUrl: additionalParameters.retrieveDnaseDataUrl,
-                            dataForCall: dataForCall,
-                            processEachRecord: processDnaseRecordsFromVariantBasedRequest,
-                            displayRefinedContextFunction: displayFunction,
-                            placeToDisplayData: displayLocation,
-                            actionId: nextActionId
-                        }));
                     }
                 };
                 break;
-            case "getH3k27acGivenVariantList":
+
+            case "getTfMotifGivenVariantList":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("variantNameArray")) {
-                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: "getH3k27acGivenVariantList"});
+                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
+                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: actionId});
                         actionToUndertake();
                     } else {
                         var variantsAsJson = "[]";
-                        if (getAccumulatorObject("variantNameArray").length > 0) {
-                            variantsAsJson = "[\"" + getAccumulatorObject("variantNameArray").join("\",\"") + "\"]";
+                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
+                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
+                            if (dataVector.length === 0) {
+                                return;
+                            }
+                            var variantNameArray = _.map(dataVector, function (variantRec) {
+                                return variantRec.var_id;
+                            });
+                            variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";
+                            var dataForCall = {variants: variantsAsJson, method: 'TFMOTIF'};
+                            retrieveRemotedContextInformation(buildRemoteContextArray({
+                                name: actionId,
+                                retrieveDataUrl: additionalParameters.retrieveTfMotifUrl,
+                                dataForCall: dataForCall,
+                                processEachRecord: dataAnnotationType.processEachRecord,
+                                displayRefinedContextFunction: dataAnnotationType.displayEverythingFromThisCall,
+                                placeToDisplayData: displayLocation,
+                                actionId: nextActionId,
+                                nameOfAccumulatorField: dataAnnotationType.nameOfAccumulatorField,
+                                code: dataAnnotationType.code,
+                                nameOfAccumulatorFieldWithIndex: dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                            }));
+                        }
+                    }
+                };
+                break;
+
+            case "getTfbsGivenVariantList":
+                functionToLaunchDataRetrieval = function () {
+                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
+                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: actionId});
+                        actionToUndertake();
+                    } else {
+                        var variantsAsJson = "[]";
+                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
+                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
+                            if (dataVector.length === 0) {
+                                return;
+                            }
+                            var variantNameArray = _.map(dataVector, function (variantRec) {
+                                return variantRec.var_id;
+                            });
+                            variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";
+                            var dataForCall = {variants: variantsAsJson, method: 'SPP'};
+                            retrieveRemotedContextInformation(buildRemoteContextArray({
+                                name: actionId,
+                                retrieveDataUrl: additionalParameters.retrieveVariantAnnotationsUrl,
+                                dataForCall: dataForCall,
+                                processEachRecord: dataAnnotationType.processEachRecord,
+                                displayRefinedContextFunction: dataAnnotationType.displayEverythingFromThisCall,
+                                placeToDisplayData: displayLocation,
+                                actionId: nextActionId,
+                                nameOfAccumulatorField: dataAnnotationType.nameOfAccumulatorField,
+                                code: dataAnnotationType.code,
+                                nameOfAccumulatorFieldWithIndex: dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                            }));
+                        }
+                    }
+                };
+                break;
+
+            case "gregorSubTable":
+                functionToLaunchDataRetrieval = function () {
+                    var phenotype = getAccumulatorObject("phenotype");
+                    destroySharedTable(displayLocation);
+                    retrieveRemotedContextInformation(buildRemoteContextArray({
+                        name: actionId,
+                        retrieveDataUrl: additionalParameters.retrieveGregorDataUrl,
+                        dataForCall: {
+                            phenotype: phenotype
+                        },
+                        processEachRecord: dataAnnotationType.processEachRecord,
+                        displayRefinedContextFunction: dataAnnotationType.displayEverythingFromThisCall,
+                        placeToDisplayData: displayLocation,
+                        actionId: nextActionId,
+                        nameOfAccumulatorField:dataAnnotationType.nameOfAccumulatorField,
+                        code:dataAnnotationType.code,
+                        nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                    }));
+                };
+                break;
+
+            case "getH3k27acGivenVariantList":
+                functionToLaunchDataRetrieval = function () {
+                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
+                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: actionId});
+                        actionToUndertake();
+                    } else {
+                        var variantsAsJson = "[]";
+                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
+                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
+                            var variantNameArray = _.map(dataVector, function(variantRec){return variantRec.var_id;});
+                            variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";
                         }
                         var dataForCall = {variants: variantsAsJson};
                         retrieveRemotedContextInformation(buildRemoteContextArray({
-                            name: "getH3k27acGivenVariantList",
+                            name: actionId,
                             retrieveDataUrl: additionalParameters.retrieveH3k27acDataUrl,
                             dataForCall: dataForCall,
-                            processEachRecord: processH3k27acRecordsFromVariantBasedRequest,
+                            processEachRecord: mpgSoftware.dynamicUi.h3k27acVariantTable.processRecordsFromH3k27ac,
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
-                            actionId: nextActionId
+                            actionId: nextActionId,
+                            nameOfAccumulatorField:dataAnnotationType.nameOfAccumulatorField,
+                            code:dataAnnotationType.code,
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
                         }));
                     }
                 };
+
+                break;
+
+            case "getChromStateGivenVariantList":
+                functionToLaunchDataRetrieval = function () {
+                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
+                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: actionId});
+                        actionToUndertake();
+                    } else {
+                        var variantsAsJson = "[]";
+                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
+                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
+                            var variantNameArray = _.map(dataVector, function(variantRec){return variantRec.var_id;});
+                            variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";
+                        }
+                        var dataForCall = {variants: variantsAsJson, method:'ChromHMM', limit:2000};
+                        retrieveRemotedContextInformation(buildRemoteContextArray({
+                            name: actionId,
+                            retrieveDataUrl: additionalParameters.retrieveVariantAnnotationsUrl,
+                            dataForCall: dataForCall,
+                            processEachRecord: dataAnnotationType.processEachRecord,
+                            displayRefinedContextFunction: dataAnnotationType.displayEverythingFromThisCall,
+                            placeToDisplayData: displayLocation,
+                            actionId: nextActionId,
+                            nameOfAccumulatorField:dataAnnotationType.nameOfAccumulatorField,
+                            code:dataAnnotationType.code,
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                        }));
+                    }
+                };
+
                 break;
 
 
@@ -1265,7 +1586,7 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
-    var addRowHolderToIntermediateDataStructure = function (dataAnnotationTypeCode,intermediateDataStructure){
+    var addRowHolderToIntermediateDataStructure = function (dataAnnotationTypeCode,intermediateDataStructure,rowTag){
         var displayDetails = getDatatypeInformation(dataAnnotationTypeCode );
         intermediateDataStructure.rowsToAdd.push({
             code: displayDetails.dataAnnotation.code,
@@ -1273,64 +1594,12 @@ mpgSoftware.dynamicUi = (function () {
             displayCategory: displayDetails.dataAnnotation.displayCategory,
             subcategory: displayDetails.dataAnnotation.subcategory,
             displaySubcategory: displayDetails.dataAnnotation.displaySubcategory,
-            columnCells: []
+            columnCells: [],
+            rowTag:rowTag
         });
     }
 
 
-
-    /***
-     * Mod annotation search
-     * @param idForTheTargetDiv
-     * @param objectContainingRetrievedRecords
-     */
-    var processRecordsFromMod = function (data) {
-        var returnObject = {
-            uniqueGenes: [],
-            uniqueGeneDescription: [],
-            uniqueMods: []
-        };
-        var originalGene = data.gene;
-        if ( (data.records.length === 0) ||
-            (data.is_error )) {
-            // no mods.  add an empty record for this gene to the global structure
-            var modNameArray = getAccumulatorObject("modNameArray");
-            modNameArray.push({geneName: originalGene, mods: []});
-            setAccumulatorObject("modNameArray", modNameArray);
-            if (!returnObject.uniqueGenes.includes(originalGene)) {
-                returnObject.uniqueGenes.push(originalGene);
-            }
-            ;
-        } else {
-            // we have mods for this gene. First let's save them
-            _.forEach(data.records, function (oneRec) {
-                if (!returnObject.uniqueGenes.includes(oneRec.Human_gene)) {
-                    returnObject.uniqueGenes.push(oneRec.Human_gene);
-                }
-
-                if (!returnObject.uniqueMods.includes(oneRec.Term)) {
-                    returnObject.uniqueMods.push(oneRec.Term);
-                }
-
-                if (!returnObject.uniqueGeneDescription.includes(oneRec.Name)) {
-                    returnObject.uniqueGeneDescription.push(oneRec.Name);
-                }
-
-                //returnObject.rawData.push(oneRec);
-            });
-            // now let's add them to our global structure.  First, find any record for this gene that we might already have
-            var geneIndex = _.findIndex(getAccumulatorObject("modNameArray"), {geneName: originalGene});
-            if (geneIndex < 0) { // this is the only path we ever take, right
-                var modNameArray = getAccumulatorObject("modNameArray");
-                modNameArray.push({
-                    geneName: originalGene,
-                    mods: returnObject
-                });
-                setAccumulatorObject("modNameArray", modNameArray);
-            }
-        }
-        return returnObject;
-    };
 
 
     /***
@@ -1490,6 +1759,34 @@ mpgSoftware.dynamicUi = (function () {
         }
         return returnValue;
     };
+    var accumulatorObjectSubFieldEmpty = function (specificField,subField) {
+        var returnValue = true;
+        var accumulatorObjectField = getAccumulatorObject(specificField);
+        if ( typeof subField === 'undefined'){
+            alert("subfield record should not be empty. Data problem?")
+        } else {
+
+            if ((Array.isArray(accumulatorObjectField)) &&
+                (accumulatorObjectField.length>0)){
+                const singleElement = accumulatorObjectField[0];
+                if (Array.isArray(singleElement[subField])) {
+                    if (singleElement[subField].length > 0) {
+                        returnValue = false;
+                    }
+                }
+
+            }
+        }
+         return returnValue;
+    };
+
+
+    // convenience function for a very common retrieval
+    const getSharedTable = function (idForTheTargetDiv) {
+        return getAccumulatorObject("sharedTable_"+idForTheTargetDiv);
+    };
+
+
 
 
 
@@ -1515,7 +1812,8 @@ mpgSoftware.dynamicUi = (function () {
                                                 intermediateDataStructure,
                                                 storeRecords,
                                                 typeOfRecord,
-                                                prependRecords) {
+                                                prependRecords,
+                                                blankRowsAreAcceptable ) {
         if (clearBeforeStarting) {
             $(idForTheTargetDiv).empty();
         }
@@ -1525,7 +1823,9 @@ mpgSoftware.dynamicUi = (function () {
             buildOrExtendDynamicTable(intermediateDataStructure.tableToUpdate,
                 intermediateDataStructure,
                 storeRecords,
-                typeOfRecord,prependRecords);
+                typeOfRecord,
+                prependRecords,
+                blankRowsAreAcceptable);
 
         } else {
 
@@ -1563,36 +1863,6 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
-    var processRecordsFromQtl = function (data) {
-        // build up an object to describe this
-        var returnObject = {
-            rawData: []
-        };
-
-        var rawQtlInfo = getAccumulatorObject('rawQtlInfo');
-        var sampleGroupWithCredibleSetNames = (data.sampleGroupsWithCredibleSetNames.length > 0) ? data.sampleGroupsWithCredibleSetNames[0] : "";
-        var  uniqueVariants = [];
-        if (sampleGroupWithCredibleSetNames.length > 0) {
-            rawQtlInfo["credSetDataset"] = sampleGroupWithCredibleSetNames;
-            rawQtlInfo["variants"] = _.filter(data.variants.variants, function (o) {
-                return o.dataset === sampleGroupWithCredibleSetNames;
-               // return o.dataset === "GWAS_IBDGenetics_eu_CrdSet_mdv80"
-            });
-        } else {
-            rawQtlInfo["credSetDataset"] = sampleGroupWithCredibleSetNames;
-            rawQtlInfo["variants"] = _.filter(data.variants.variants, function (o, cnt) {
-                var skipIt = true;
-                if (!uniqueVariants.includes(o.VAR_ID)){
-                    uniqueVariants.push(o.VAR_ID);
-                    skipIt = false;
-                }
-                return ((uniqueVariants.length < 11)&&(!skipIt));
-            });
-        }
-
-
-        return rawQtlInfo;
-    };
 
 
     var retrieveExtents = function (geneName, defaultStart, defaultEnd) {
@@ -1731,7 +2001,9 @@ mpgSoftware.dynamicUi = (function () {
             clearBeforeStarting,
             intermediateDataStructure,
             true,
-            'geneTableGeneHeaders', true);
+            'geneTableGeneHeaders',
+            true,
+            false );
 
 
         _.forEach(returnObject.genesByAbc, function (value) {
@@ -1896,14 +2168,27 @@ mpgSoftware.dynamicUi = (function () {
             clearBeforeStarting,
             intermediateDataStructure,
             true,
-            'geneTableGeneHeaders', true);
+            'geneTableGeneHeaders',
+            true,
+            false );
     };
 
 
-
-
-
-
+    /***
+     * This display function is trickier than the others for two reasons:
+     *   1) we don't know the list of tissues we are seeking to display upfront.  Instead, we are
+     *   adding new tissues each time we run a computational technique, and expanding the display to include them.
+     *   2) we have this funky trick in which we update the list in response to changes made by
+     *   the user interactively selecting which annotations we are going to use for Gregor data.
+     *
+     * @param idForTheTargetDiv
+     * @param dataAnnotationTypeCode
+     * @param nameOfAccumulatorField
+     * @param insertAnyHeaderRecords
+     * @param mapSortAndFilterFunction
+     * @param placeDataIntoRenderForm
+     * @param createSingleGregorCell
+     */
     var displayTissueTable = function (idForTheTargetDiv, // which table are we adding to
                                                     dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
                                                     nameOfAccumulatorField, // name of the persistent field where the data we received is stored
@@ -2164,7 +2449,9 @@ mpgSoftware.dynamicUi = (function () {
             clearBeforeStarting,
             intermediateDataStructure,
             true,
-            'tissueTableTissueHeaders', true);
+            'tissueTableTissueHeaders',
+            true,
+            false );
 
         transposeThisTable(idForTheTargetDiv);
 
@@ -2184,7 +2471,7 @@ mpgSoftware.dynamicUi = (function () {
 
         var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode);
         var intermediateDataStructure = new IntermediateDataStructure();
-
+        var additionalParameters = getDyanamicUiVariables();
         // for each gene collect up the data we want to display
         var incomingData = getAccumulatorObject(nameOfAccumulatorField);
         var returnObject={headers:[], content:{}};
@@ -2197,13 +2484,17 @@ mpgSoftware.dynamicUi = (function () {
 
         if (returnObject.headers.length > 0){
             placeContentRowsIntoIntermediateObject(returnObject,dataAnnotationType,intermediateDataStructure,initialLinearIndex);
-            intermediateDataStructure.tableToUpdate = idForTheTargetDiv;
+            intermediateDataStructure.tableToUpdate = additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory;
         }
 
         // Set the default exclusions.  We need to do this because we have to find every column in the table, but we don't want
         // to display every column.  Instead we exclude some of them unless a user specifically requests that a column be expanded.
-         var sharedTable = new SharedTableObject( 'fegtAnnotationHeaders',sortedHeaderObjects.length,0);
-        setAccumulatorObject("sharedTable_"+idForTheTargetDiv,sharedTable);
+
+        // var sharedTable = new SharedTableObject( 'fegtAnnotationHeaders',sortedHeaderObjects.length,0);
+        //setAccumulatorObject("sharedTable_"+additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory,sharedTable);
+        //var sharedTable = getSharedTable(idForTheTargetDiv);
+        var sharedTable = getSharedTable(additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory);
+        sharedTable.numberOfColumns = sortedHeaderObjects.length;
         var deleter = {};
         _.forEach(sortedHeaderObjects, function (o,index){
             if (o.withinGroupNum === 0){
@@ -2221,13 +2512,15 @@ mpgSoftware.dynamicUi = (function () {
             sharedTable.addColumnExclusionGroup(deleter.groupNumber,deleter.groupName,deleter.columnIndexes);
         }
 
-        prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
+        prepareToPresentToTheScreen(additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory,
             '#dynamicAbcGeneTable',
             returnObject,
             clearBeforeStarting,
             intermediateDataStructure,
             true,
-            'fegtAnnotationHeaders', false);
+            'fegtAnnotationHeaders',
+            false,
+            false );
 
 
 
@@ -2331,13 +2624,277 @@ mpgSoftware.dynamicUi = (function () {
             clearBeforeStarting,
             intermediateDataStructure,
             true,
-            'geneTableGeneHeaders', true);
+            'geneTableGeneHeaders',
+            true,
+            false );
 
 
 
     };
 
 
+    /***
+     *  Create and display one or more rows for the variant table.  'Methods' with multiple 'annotations'
+     *  will lead to multiple rows, that can then be displayed directly in a variant x annotation grid.
+     *  Additionally, build a variant x tissue data structure ( in an IntermediateDataStructure ), and
+     *  we can display it later if someone wants to see it.  Even though we will have only one
+     *  IntermediateDataStructure to hold all the tissues, store it in an array.  Meanwhile, we
+     *  will also store the multiple IntermediateDataStructure's to hold each of the 'method', so that
+     *  we can re-create
+     *
+     * @param idForTheTargetDiv
+     * @param dataAnnotationTypeCode
+     * @param nameOfAccumulatorField
+     * @param nameOfAccumulatorFieldWithIndex
+     * @param mapSortAndFilterFunction
+     * @param placeDataIntoRenderForm
+     */
+    var displayForVariantTable = function (idForTheTargetDiv, // which table are we adding to
+                                        dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+                                        nameOfAccumulatorField, // name of the persistent field where the data we received is stored
+                                        nameOfAccumulatorFieldWithIndex, // we may wish to pull out one record for summary purposes
+                                        mapSortAndFilterFunction,
+                                        placeDataIntoRenderForm ) { // sort and filter the records we will use.  Resulting array must have fields tissue, value, and numericalValue
+        var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode);
+        var intermediateDataStructure = new IntermediateDataStructure();
+        var sharedTable = getSharedTable(idForTheTargetDiv);
+        var arrayOfDataToDisplay = getAccumulatorObject(nameOfAccumulatorField);
+        let prepend = true;
+        console.log("displayForVariantTable:dataAnnotationTypeCode="+dataAnnotationTypeCode+".");
+
+
+
+
+        // do we have any data at all?  If we do, then make a row
+        let dataVector;
+        let accumulatorFieldWithIndex;
+        if (( typeof arrayOfDataToDisplay !== 'undefined') &&
+            ( arrayOfDataToDisplay.length > 0) ) {
+            //   if ( arrayOfDataToDisplay[0].data.length > 0) {
+
+            //addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode, intermediateDataStructure);
+
+            // set up the headers, even though we know we won't use them. Is this step necessary?
+            var headerNames = [];
+            if (accumulatorObjectSubFieldEmpty(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex, "data")) {
+                console.log("We should have a list of variants, otherwise we shouldn't be here. We have a problem.");
+            } else {
+                accumulatorFieldWithIndex = getAccumulatorObject(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex);
+                // Here are the two additional accumulators if they don't exist already
+                // one for the variant x tissue display
+                if (typeof accumulatorFieldWithIndex[0].header['tissueDisplay'] === 'undefined') {
+                    accumulatorFieldWithIndex[0].header['tissueDisplay'] = new IntermediateDataStructure();
+                }
+                // and one for the variant x annotation display
+                if (typeof accumulatorFieldWithIndex[0].header['annotationDisplay'] === 'undefined') {
+                    accumulatorFieldWithIndex[0].header['annotationDisplay'] = new IntermediateDataStructure();
+                }
+                dataVector = accumulatorFieldWithIndex[0].data;
+                ////headerNames = _.map(dataVector, 'name');
+                headerNames = _.map(dataVector, function(o){
+                    return o['name'].split(",")[0];
+                });
+
+            }
+            //}
+
+            // fill in all of the column cells
+            var numberOfExistingRows = $(idForTheTargetDiv).dataTable().DataTable().rows()[0].length + 1;
+            var numberOfColumns = sharedTable.numberOfColumns;
+            if (typeof arrayOfDataToDisplay[0].data.groupByAnnotation !== 'undefined') {
+                prepend = false;
+                const currentMethod = arrayOfDataToDisplay[0].data.currentMethod;
+                let annotationOptions = [];
+                let tissueOptions = [];
+                let addedRows = 0;
+                // create a row for each epigenetic annotation even if it's empty
+                if (arrayOfDataToDisplay[0].data.groupByAnnotation.length === 0) {
+                    addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode, intermediateDataStructure);
+                    //const dataVector = getAccumulatorObject(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex)[0].data;
+                    let rowWeAreAddingTo = _.last(intermediateDataStructure.rowsToAdd);
+                    rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(currentMethod,
+                        Mustache.render($('#' + dataAnnotationType.dataAnnotation.drillDownCategoryWriter)[0].innerHTML,
+                            {indexInOneDimensionalArray: ((numberOfExistingRows + addedRows) * numberOfColumns)}),
+                        dataAnnotationType.dataAnnotation.subcategory + " header", 'LIT'));
+                    rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(currentMethod,
+                        Mustache.render($('#' + dataAnnotationType.dataAnnotation.drillDownSubCategoryWriter)[0].innerHTML,
+                            {
+                                annotationName: currentMethod,
+                                indexInOneDimensionalArray: (((numberOfExistingRows + addedRows) * numberOfColumns) + 1),
+                                isBlank: "isBlank"
+                            }),
+                        dataAnnotationType.dataAnnotation.subcategory + " header", 'LIT'));
+                    _.forEach(dataVector, function (oneRecord) {
+                        rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
+                            {otherClasses: "methodName_" + currentMethod}, "header", 'EMP'));
+                    });
+
+                } else { // we have real data
+                    _.forEach(arrayOfDataToDisplay[0].data.groupByAnnotation, function (recordsForAnnotation) {
+                        annotationOptions.push({
+                            name: recordsForAnnotation.name,
+                            value: recordsForAnnotation.name + "_" + currentMethod
+                        });
+                        const annotation = recordsForAnnotation.name;
+                        addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode, intermediateDataStructure);
+                        //const dataVector = getAccumulatorObject(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex)[0].data;
+                        //headerNames = _.map(dataVector, 'name');
+                        let rowWeAreAddingTo = _.last(intermediateDataStructure.rowsToAdd);
+                        rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(annotation,
+                            Mustache.render($('#' + dataAnnotationType.dataAnnotation.drillDownCategoryWriter)[0].innerHTML,
+                                {indexInOneDimensionalArray: ((numberOfExistingRows + addedRows) * numberOfColumns)}),
+                            dataAnnotationType.dataAnnotation.subcategory + " header", 'LIT'));
+                        let alternateAnnotation = annotation;
+                        switch (annotation) {
+                            case "MACS":
+                                alternateAnnotation = "AccessibleChromatin"
+                                break;
+                            default:
+                                break;
+                        }
+                        let isBlank = "";
+                        if ((typeof recordsForAnnotation.arrayOfRecords === 'undefined') ||
+                            (recordsForAnnotation.arrayOfRecords.length === 0)) {
+                            isBlank = "isBlank";
+                        }
+                        rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(annotation,
+                            Mustache.render($('#' + dataAnnotationType.dataAnnotation.drillDownSubCategoryWriter)[0].innerHTML,
+                                {
+                                    annotationName: alternateAnnotation,
+                                    indexInOneDimensionalArray: (((numberOfExistingRows + addedRows) * numberOfColumns) + 1),
+                                    isBlank: isBlank
+                                }),
+                            dataAnnotationType.dataAnnotation.subcategory, 'LIT'));
+                        _.forEach(dataVector, function (oneRecord) {
+                            rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
+                                {otherClasses: "methodName_" + currentMethod + " annotationName_" + annotation}, "discoDownAndCheckOutTheShow", 'EMP'));
+                        });
+                        // fill in all of the column cells
+                        _.forEach(recordsForAnnotation.arrayOfRecords, function (oneRecord) {
+                            var indexOfColumn = _.indexOf(headerNames, oneRecord.name);
+                            if (indexOfColumn === -1) {
+                                console.log("Did not find index of epigenetic var_id==" + oneRecord.name + ".  Shouldn't we?")
+                            } else {
+                                var renderData = placeDataIntoRenderForm(oneRecord.arrayOfRecords,
+                                    "", "",
+                                    dataAnnotationTypeCode,
+                                    0.5,
+                                    oneRecord.name);
+                                _.last(intermediateDataStructure.rowsToAdd).columnCells[indexOfColumn + 2] = new IntermediateStructureDataCell(oneRecord.name,
+                                    renderData, "tissue specific", dataAnnotationTypeCode);
+
+                            }
+                        });
+                        addedRows++;
+                    });
+                }
+
+                const tissueIntermediateDataStructure = accumulatorFieldWithIndex[0].header['tissueDisplay'];
+                numberOfExistingRows = tissueIntermediateDataStructure.rowsToAdd.length+6;
+                addedRows = 0;
+                if (arrayOfDataToDisplay[0].data.groupByTissue.length > 0) {
+                    { // we have real data
+                        _.forEach(arrayOfDataToDisplay[0].data.groupByTissue, function (recordsForTissue) {
+                            tissueOptions.push({
+                                name: recordsForTissue.name,
+                                value: recordsForTissue.name + "_" + currentMethod
+                            });
+                            const tissueName = recordsForTissue.name;
+                            const tissue_name = recordsForTissue.tissue_name;
+
+                            // Either retrieve an existing row for this tissue, or else create a new one
+
+                            let rowWeAreAddingTo = _.find(tissueIntermediateDataStructure.rowsToAdd, {'rowTag': tissueName});
+                            if (typeof rowWeAreAddingTo === 'undefined') {
+                                addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode, tissueIntermediateDataStructure, tissueName);
+                                rowWeAreAddingTo = _.last(tissueIntermediateDataStructure.rowsToAdd);
+                                rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(tissueName,
+                                    Mustache.render($('#' + dataAnnotationType.dataAnnotation.tissueCategoryWriter)[0].innerHTML,
+                                        {indexInOneDimensionalArray: ((numberOfExistingRows + addedRows) * numberOfColumns)}),
+                                    dataAnnotationType.dataAnnotation.subcategory + " header", 'LIT'));
+
+                                //headerNames = _.map(dataVector, 'name');
+
+                                let isBlank = "";
+                                if ((typeof recordsForTissue.arrayOfRecords === 'undefined') ||
+                                    (recordsForTissue.arrayOfRecords.length === 0)) {
+                                    isBlank = "isBlank";
+                                }
+                                rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(tissueName,
+                                    Mustache.render($('#' + dataAnnotationType.dataAnnotation.tissueSubCategoryWriter)[0].innerHTML,
+                                        {
+                                            tissueName: tissueName,
+                                            indexInOneDimensionalArray: (((numberOfExistingRows + addedRows) * numberOfColumns) + 1),
+                                            isBlank: isBlank,
+                                            tissue_name: tissue_name
+                                        }),
+                                    dataAnnotationType.dataAnnotation.subcategory, 'LIT'));
+                                _.forEach(dataVector, function (oneRecord) {
+                                    rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
+                                        {otherClasses: "methodName_" + currentMethod + " annotationName_" + tissueName}, "discoDownAndCheckOutTheShow", 'EMP'));
+                                });
+                            }
+                            // fill in all of the column cells
+                            if (recordsForTissue.arrayOfRecords.length>dataVector.length+2){
+                                console.log("recordsForTissue.arrayOfRecords.length="+recordsForTissue.arrayOfRecords.length+".")
+                            }
+                            _.forEach(recordsForTissue.arrayOfRecords, function (oneRecord) {
+                                var indexOfColumn = _.indexOf(headerNames, oneRecord.name);
+                                if (indexOfColumn === -1) {
+                                    console.log("Did not find index of tissue epigenetic var_id===" + oneRecord.name + ".  Shouldn't we?")
+                                } else {
+                                    const existingCell = rowWeAreAddingTo.columnCells[indexOfColumn + 2];
+                                    let arrayOfRecords = [];
+                                    if ( typeof existingCell === 'undefined'){
+                                        console.log('wtf');
+                                    } else {
+                                        if (existingCell.dataAnnotationTypeCode !== 'EMP') {
+                                            arrayOfRecords = existingCell.renderData.tissueRecords;
+                                        }
+                                        arrayOfRecords = _.concat(arrayOfRecords, oneRecord.arrayOfRecords);
+                                        arrayOfRecords = _.uniq(arrayOfRecords);
+                                    }
+                                    var renderData = placeDataIntoRenderForm(arrayOfRecords,
+                                        "", "",
+                                        dataAnnotationTypeCode,
+                                        0.5,
+                                        oneRecord.name);
+                                    rowWeAreAddingTo.columnCells[indexOfColumn + 2] = new IntermediateStructureDataCell(oneRecord.name,
+                                        renderData, "tissue specific", dataAnnotationTypeCode);
+
+                                }
+                                if (rowWeAreAddingTo.columnCells.length>dataVector.length+2){
+                                    console.log("rowWeAreAddingTo.columnCells.length="+rowWeAreAddingTo.columnCells.length+".")
+                                }
+                            });
+
+                            addedRows++;
+                        });
+                    }
+
+                    mpgSoftware.variantTable.fillAnnotationDropDownBox("#annotationSelectorChoice");
+                    //mpgSoftware.variantTable.updateAnnotationDropDownBox(currentMethod, annotationOptions);
+
+                }
+
+                intermediateDataStructure.tableToUpdate = idForTheTargetDiv;
+            }
+        }
+
+        const annotationDisplayArray = getAccumulatorObject("annotationDisplayArray");
+        annotationDisplayArray.push(intermediateDataStructure);
+        prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
+            '#dynamicAbcGeneTable',
+            undefined, // unused
+            clearBeforeStarting,
+            intermediateDataStructure,
+            true,
+            'variantTableVariantHeaders',
+            prepend,
+            true );
+
+
+    };
 
 
 
@@ -2348,94 +2905,6 @@ mpgSoftware.dynamicUi = (function () {
 
     var displayTissuesFromAbc = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
     };
-
-
-    var displayPhenotypesFromColocalization = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-        var returnObject = createNewDisplayReturnObject();
-
-        _.forEach(_.groupBy(getAccumulatorObject("rawColocalizationInfo"), 'phenotype'), function (value, phenotypeName) {
-            var phenotypeObject = {phenotypeName: phenotypeName};
-            phenotypeObject['tissues'] = _.map(_.uniqBy(value, 'tissue'), function (o) {
-                return o.tissue
-            }).sort();
-            phenotypeObject['genes'] = _.map(_.uniqBy(value, 'gene'), function (o) {
-                return o.gene
-            }).sort();
-            phenotypeObject['varId'] = _.map(_.uniqBy(value, 'var_id'), function (o) {
-                return o.var_id
-            }).sort();
-            returnObject.phenotypesByColocalization.push(phenotypeObject);
-            returnObject.uniquePhenotypes.push({phenotypeName: phenotypeName});
-        });
-
-        returnObject['phenotypeColocsExist'] = function () {
-            return (this.phenotypesByColocalization.length > 0) ? [1] : [];
-        };
-        returnObject['numberOfTissues'] = function () {
-            return (this.tissues.length);
-        };
-        returnObject['numberOfGenes'] = function () {
-            return (this.genes.length);
-        };
-        returnObject['numberOfVariants'] = function () {
-            return (this.varId.length);
-        };
-
-
-        addAdditionalResultsObject({phenotypesFromColocalizatio: returnObject});
-        prepareToPresentToTheScreen(idForTheTargetDiv, '#dynamicColocalizationPhenotypeTable', returnObject, clearBeforeStarting, true);
-
-
-
-    };
-
-
-    var displayTissuesFromColocalization = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-        var returnObject = createNewDisplayReturnObject();
-
-        _.forEach(_.groupBy(getAccumulatorObject("rawColocalizationInfo"), 'tissue'), function (value, tissueName) {
-            var tissueObject = {tissueName: tissueName};
-            tissueObject['phenotypes'] = _.map(_.uniqBy(value, 'phenotype'), function (o) {
-                return o.phenotype
-            }).sort();
-            tissueObject['genes'] = _.map(_.uniqBy(value, 'gene'), function (o) {
-                return o.gene
-            }).sort();
-            tissueObject['varId'] = _.map(_.uniqBy(value, 'var_id'), function (o) {
-                return o.var_id
-            }).sort();
-            returnObject.phenotypesByColocalization.push(tissueObject);
-            returnObject.uniqueTissues.push({tissueName: tissueName});
-        });
-        returnObject['colocsTissuesExist'] = function () {
-            return (this.phenotypesByColocalization.length > 0) ? [1] : [];
-        };
-
-        returnObject['phenotypeColocsExist'] = function () {
-            return (this.phenotypesByColocalization.length > 0) ? [1] : [];
-        };
-        returnObject['numberOfTissues'] = function () {
-            return (this.tissues.length);
-        };
-        returnObject['numberOfPhenotypes'] = function () {
-            return (this.phenotypes.length);
-        };
-        returnObject['numberOfGenes'] = function () {
-            return (this.genes.length);
-        };
-        returnObject['numberOfVariants'] = function () {
-            return (this.varId.length);
-        };
-
-        addAdditionalResultsObject({tissuesFromColocalization: returnObject});
-        prepareToPresentToTheScreen("#dynamicTissueHolder div.dynamicUiHolder", '#dynamicColocalizationTissueTable', returnObject, clearBeforeStarting, true);
-        // $("#dynamicTissueHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicColocalizationTissueTable')[0].innerHTML,
-        //     returnObject
-        // ));
-
-
-    };
-
 
 
 
@@ -2501,158 +2970,6 @@ mpgSoftware.dynamicUi = (function () {
         setAccumulatorObject("eqtlsAggregatedPerVariant", tempHolder);
         return {};
     };
-
-
-    var processAbcRecordsFromVariantBasedRequest = function (data) {
-
-        var tempHolder = []
-        // basic data aggregation
-        _.forEach(data, function (oneRec) {
-            var existingRecord = _.find(tempHolder, {variant: oneRec.VAR_ID});
-            if (typeof existingRecord === 'undefined') {
-                tempHolder.push({
-                    variant: oneRec.VAR_ID,
-                    genes: [],
-                    uniqueGeneNames: [],
-                    tissues: [],
-                    uniqueTissueNames: []
-                });
-                existingRecord = _.find(tempHolder, {variant: oneRec.VAR_ID});
-            }
-            var existingGeneRecord = _.find(existingRecord.genes, {geneName: oneRec.GENE, tissueName: oneRec.SOURCE});
-            if (typeof existingGeneRecord === 'undefined') {
-                existingRecord.genes.push({
-                    geneName: oneRec.GENE,
-                    value: oneRec.VALUE,
-                    tissueName: oneRec.SOURCE
-                });
-                ;
-            } else {
-                console.log('should I be worried? EQTL record matches gene (' + oneRec.GENE + ') tissue (' + oneRec.SOURCE + ') for variant=' + oneRec.var_id + '.');
-            }
-            var existingTissueRecord = _.find(existingRecord.tissues, {
-                geneName: oneRec.GENE,
-                tissueName: oneRec.SOURCE
-            });
-            if (typeof existingTissueRecord === 'undefined') {
-                existingRecord.tissues.push({
-                    geneName: oneRec.GENE,
-                    value: oneRec.VALUE,
-                    tissueName: oneRec.SOURCE
-                });
-                ;
-            } else {
-                console.log('should I be worried? ABC record matches gene (' + oneRec.GENE + ') tissue (' + oneRec.SOURCE + ') for variant=' + oneRec.var_id + '.');
-            }
-
-        });
-        // extract a few summaries
-        var uniqueVariants = _.map(tempHolder, function (o) {
-            return o.variant
-        });
-        var existingRecord;
-        _.forEach(uniqueVariants, function (varId) {
-            existingRecord = _.find(tempHolder, {variant: varId});
-            existingRecord.uniqueGeneNames = _.uniq(_.map(existingRecord.genes, function (o) {
-                return o.geneName
-            }));
-            existingRecord.uniqueTissueNames = _.uniq(_.map(existingRecord.tissues, function (o) {
-                return o.tissueName
-            }));
-        });
-        setAccumulatorObject("abcAggregatedPerVariant", tempHolder);
-        return {};
-    };
-
-
-    var processDnaseRecordsFromVariantBasedRequest = function (data) {
-
-        var tempHolder = [];
-        var quantileArray = mpgSoftware.regionInfo.createQuantilesArray(1);
-        // basic data aggregation
-        _.forEach(data, function (oneRec) {
-            var existingRecord = _.find(tempHolder, {variant: oneRec.VAR_ID});
-            if (typeof existingRecord === 'undefined') {
-                tempHolder.push({
-                    variant: oneRec.VAR_ID,
-                    tissues: [],
-                    uniqueTissueNames: [],
-                    maximumValue: undefined
-                });
-                existingRecord = _.find(tempHolder, {variant: oneRec.VAR_ID});
-            }
-            var existingTissueRecord = _.find(existingRecord.tissues, {tissueName: oneRec.SOURCE});
-            if (typeof existingTissueRecord === 'undefined') {
-                existingRecord.tissues.push({
-                    value: UTILS.realNumberFormatter("" + oneRec.VALUE),
-                    tissueName: oneRec.SOURCE,
-                    quantileIndicator: 'matchingRegion2_' + mpgSoftware.regionInfo.determineColorIndex(oneRec.VALUE, quantileArray)
-                });
-            } else {
-                console.log('should I be worried? Dnase record matches tissue (' + oneRec.SOURCE + ') for variant=' + oneRec.VAR_ID + '.');
-            }
-
-        });
-        // extract a few summaries
-        var uniqueVariants = _.map(tempHolder, function (o) {
-            return o.variant
-        });
-        var existingRecord;
-        _.forEach(uniqueVariants, function (varId) {
-            existingRecord = _.find(tempHolder, {variant: varId});
-            existingRecord.uniqueTissueNames = _.uniq(_.map(existingRecord.tissues, function (o) {
-                return o.tissueName
-            }));
-        });
-        setAccumulatorObject("dnaseAggregatedPerVariant", tempHolder);
-        return {};
-    };
-
-
-    var processH3k27acRecordsFromVariantBasedRequest = function (data) {
-
-        var tempHolder = [];
-        var quantileArray = mpgSoftware.regionInfo.createQuantilesArray(2);
-        // basic data aggregation
-        _.forEach(data, function (oneRec) {
-            var existingRecord = _.find(tempHolder, {variant: oneRec.VAR_ID});
-            if (typeof existingRecord === 'undefined') {
-                tempHolder.push({
-                    variant: oneRec.VAR_ID,
-                    tissues: [],
-                    uniqueTissueNames: [],
-                    maximumValue: undefined
-                });
-                existingRecord = _.find(tempHolder, {variant: oneRec.VAR_ID});
-            }
-            var existingTissueRecord = _.find(existingRecord.tissues, {tissueName: oneRec.SOURCE});
-            if (typeof existingTissueRecord === 'undefined') {
-                existingRecord.tissues.push({
-                    value: UTILS.realNumberFormatter("" + oneRec.VALUE),
-                    tissueName: oneRec.SOURCE,
-                    quantileIndicator: 'matchingRegion1_' + mpgSoftware.regionInfo.determineColorIndex(oneRec.VALUE, quantileArray)
-                });
-                ;
-            } else {
-                console.log('should I be worried? H3k27ac record matches tissue (' + oneRec.SOURCE + ') for variant=' + oneRec.VAR_ID + '.');
-            }
-
-        });
-        // extract a few summaries
-        var uniqueVariants = _.map(tempHolder, function (o) {
-            return o.variant
-        });
-        var existingRecord;
-        _.forEach(uniqueVariants, function (varId) {
-            existingRecord = _.find(tempHolder, {variant: varId});
-            existingRecord.uniqueTissueNames = _.uniq(_.map(existingRecord.tissues, function (o) {
-                return o.tissueName
-            }));
-        });
-        setAccumulatorObject("h3k27acAggregatedPerVariant", tempHolder);
-        return {};
-    };
-
 
 
 
@@ -2820,8 +3137,13 @@ mpgSoftware.dynamicUi = (function () {
             clearBeforeStarting,
             intermediateDataStructure,
             true,
-            'geneTableGeneHeaders', true);
+            'geneTableGeneHeaders',
+            true,
+            false );
     };
+
+
+
     var displayGenesPerTissueFromEqtl = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
 
         var returnObject = createNewDisplayReturnObject();
@@ -2843,7 +3165,9 @@ mpgSoftware.dynamicUi = (function () {
             returnObject,
             clearBeforeStarting, null,
             true,
-            'geneTableGeneHeaders', true);
+            'geneTableGeneHeaders',
+            true,
+            false );
 
     };
 
@@ -2922,64 +3246,225 @@ mpgSoftware.dynamicUi = (function () {
         returnObject.uniqueVarIds = returnObject.uniqueVarIds.sort();
         return returnObject;
     };
-    var displayVariantRecordsFromVariantQtlSearch = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-        $(idForTheTargetDiv).empty();
 
 
-        var returnObject = createNewDisplayReturnObject();
+
+
+
+
+    var displayGregorSubTableForVariantTable = function (idForTheTargetDiv, // which table are we adding to
+                                                 dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+                                                 nameOfAccumulatorField, // name of the persistent field where the data we received is stored
+                                                 placeDataIntoRenderForm )
+    { // sort and filter the records we will use.  Resulting array must have fields tissue, value, and numericalValue
+        const chosenHeaderField = 'bestAnnotationAndMethods';
+        const headerRecordField = 'annotationAndMethod';
+        const chosenRowField = 'bestTissues';
+        const rowRecordField = 'tissue';
         var selectorForIidForTheTargetDiv = idForTheTargetDiv;
         $(selectorForIidForTheTargetDiv).empty();
-        _.forEach(_.sortBy(getAccumulatorObject("phenotypesForEveryVariant"), ['position']), function (variantWithPhenotypes) {
-            returnObject.uniqueVariants.push({variantName: variantWithPhenotypes.variantName});
+        var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode);
+        var objectContainingRetrievedRecords = getAccumulatorObject(nameOfAccumulatorField);
 
-            var recordToDisplay = {phenotypes: []};
-            _.forEach(variantWithPhenotypes.phenotypes, function (eachPhenotype) {
-                recordToDisplay.phenotypes.push({phenotypeName: eachPhenotype})
+        var intermediateDataStructure = new IntermediateDataStructure();
+        let vectorOfHeadersToUse = [];
+
+        if ((typeof objectContainingRetrievedRecords !== 'undefined')||
+            ( objectContainingRetrievedRecords.length > 0)
+            (typeof objectContainingRetrievedRecords[0].header !== 'undefined')){
+
+            // start with a blank, since the first column will label tissues
+            intermediateDataStructure.headerNames.push('');
+            intermediateDataStructure.headers.push(new IntermediateStructureDataCell('blank',
+                Mustache.render($('#'+dataAnnotationType.dataAnnotation.headerWriter)[0].innerHTML, {}),"asc ",'LIT'));
+            // set up the headers, and give us an empty row of column cells
+            vectorOfHeadersToUse = objectContainingRetrievedRecords[0].header[chosenHeaderField];
+            _.forEach(vectorOfHeadersToUse, function (oneRecord,index) {
+                intermediateDataStructure.headerNames.push(oneRecord[headerRecordField]);
+               // intermediateDataStructure.headerContents.push(Mustache.render($('#'+dataAnnotationType.dataAnnotation.cellBodyWriter)[0].innerHTML, oneRecord));
+                intermediateDataStructure.headers.push(new IntermediateStructureDataCell(oneRecord[headerRecordField],
+                    Mustache.render($('#'+dataAnnotationType.dataAnnotation.headerWriter)[0].innerHTML, oneRecord),"asc ",'LIT'));
             });
-            returnObject.variantPhenotypeQtl.push(recordToDisplay);
 
-        });
-        addAdditionalResultsObject({variantRecordsFromVariantQtlSearch: returnObject});
+            intermediateDataStructure.tableToUpdate = idForTheTargetDiv;
+            let numberOfColumns = vectorOfHeadersToUse.length+1;
+
+            let vectorOfRowsToUse = objectContainingRetrievedRecords[0].header[chosenRowField];
+            _.forEach(vectorOfRowsToUse, function (rowTitle,index) {
+
+                addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure)
+                _.last(intermediateDataStructure.rowsToAdd).columnCells = _.map(_.range(0,numberOfColumns),function( index)
+                                                                                    {
+                                                                                        if (index === 0){
+                                                                                            return new IntermediateStructureDataCell(rowTitle[rowRecordField],
+                                                                                                Mustache.render($('#'+dataAnnotationType.dataAnnotation.categoryWriter)[0].innerHTML, rowTitle),"asc ",'LIT')
+                                                                                        }else{
+                                                                                            return new IntermediateStructureDataCell('farLeftCorner',{},'emptyGregorSubTableCell','EMP')
+                                                                                        }
+
+                                                                                    });
+                // fill in all of the column cells
+                _.forEach(objectContainingRetrievedRecords[0].data[rowTitle.tissue], function (oneRecord) {
+                    var indexOfColumn = _.indexOf(intermediateDataStructure.headerNames, oneRecord[headerRecordField]);
+                    if (indexOfColumn === -1) {
+                        console.log("Did not find index of header.  Shouldn't we?")
+                    } else if (rowTitle[rowRecordField] ===  oneRecord[rowRecordField]) {
+                        var renderData = oneRecord;
+                        renderData['prettyPValue']= UTILS.realNumberFormatter(""+oneRecord.p_value);
+                        renderData['prettyFEValue']= UTILS.realNumberFormatter(""+oneRecord.fe_value);
+                        _.last(intermediateDataStructure.rowsToAdd).columnCells[indexOfColumn] = new IntermediateStructureDataCell([headerRecordField],
+                            renderData,'gregorSubTableCell',dataAnnotationTypeCode );
+
+                    }
+                });
+            });
+
+        }
 
 
         prepareToPresentToTheScreen(idForTheTargetDiv,
-            '#dynamicPhenotypeTable',
-            returnObject,
-            clearBeforeStarting, null,
+            '#notUsed',
+            {},
             true,
-            'variantTableVariantHeaders', true);
-
-
+            intermediateDataStructure,
+            false,
+            'gregorSubTable',
+            false,
+            true ); // we want to display blank rows in this case, since they are informative
     };
-    var displayPhenotypeRecordsFromVariantQtlSearch = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-        $(idForTheTargetDiv).empty();
 
-        var returnObject = createNewDisplayReturnObject();
+
+
+
+
+
+
+
+
+
+    var displayHeaderForVariantTable = function (idForTheTargetDiv, // which table are we adding to
+                                                 dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+                                                 nameOfAccumulatorField, // name of the persistent field where the data we received is stored
+                                                 placeDataIntoRenderForm )
+    { // sort and filter the records we will use.  Resulting array must have fields tissue, value, and numericalValue
+        deferredObject.resolve();
         var selectorForIidForTheTargetDiv = idForTheTargetDiv;
         $(selectorForIidForTheTargetDiv).empty();
-        _.forEach(_.sortBy(getAccumulatorObject("variantsForEveryPhenotype"), ['phenotypeName']), function (phenotypesWithVariants) {
-            returnObject.uniquePhenotypes.push({phenotypeName: phenotypesWithVariants.phenotypeName});
+        var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode);
+        var objectContainingRetrievedRecords = getAccumulatorObject(nameOfAccumulatorField);
+        console.log("displayHeaderForVariantTable:"+dataAnnotationTypeCode+".");
+        var intermediateDataStructure = new IntermediateDataStructure();
+        let vectorOfVariantRecords = [];
 
-            var recordToDisplay = {variants: []};
-            _.forEach(phenotypesWithVariants.variants, function (eachVariant) {
-                recordToDisplay.variants.push({variantName: eachVariant})
+        if ((typeof objectContainingRetrievedRecords !== 'undefined')||
+            ( objectContainingRetrievedRecords.length > 0)
+            (typeof objectContainingRetrievedRecords[0].data !== 'undefined')){
+            // set up the headers, and give us an empty row of column cells
+            vectorOfVariantRecords = objectContainingRetrievedRecords[0].data;
+            if (vectorOfVariantRecords.length===0) { return; }
+            _.forEach(vectorOfVariantRecords, function (oneRecord,index) {
+                intermediateDataStructure.headerNames.push(oneRecord.var_id);
+                intermediateDataStructure.headerContents.push(Mustache.render($('#'+dataAnnotationType.dataAnnotation.cellBodyWriter)[0].innerHTML, oneRecord));
+                intermediateDataStructure.headers.push(new IntermediateStructureDataCell(oneRecord.name,
+                    Mustache.render($('#'+dataAnnotationType.dataAnnotation.cellBodyWriter)[0].innerHTML, oneRecord),"asc ",'LIT'));
             });
-            returnObject.phenotypeVariantQtl.push(recordToDisplay);
 
-        });
-        addAdditionalResultsObject({phenotypeRecordsFromVariantQtlSearch: returnObject});
-        prepareToPresentToTheScreen(idForTheTargetDiv, '#dynamicPhenotypeTable', returnObject, clearBeforeStarting, true);
+            intermediateDataStructure.tableToUpdate = idForTheTargetDiv;
+            var sharedTable = getSharedTable(idForTheTargetDiv);
+            sharedTable["numberOfColumns"] = vectorOfVariantRecords.length+2;
 
 
+            const rowTypesToAdd = ["VAR_CODING","VAR_SPLICE","VAR_UTR","VAR_PVALUE","VAR_POSTERIORPVALUE"];
+            _.forEach(rowTypesToAdd, function (rowTypeToAdd, rowIndex) {
+                addRowHolderToIntermediateDataStructure(rowTypeToAdd,intermediateDataStructure)
+                // fill in all of the column cells
+                _.forEach(vectorOfVariantRecords, function (oneRecord) {
+                    var indexOfColumn = _.indexOf(intermediateDataStructure.headerNames, oneRecord.name);
+                    if (indexOfColumn === -1) {
+                        console.log("Did not find index of ABC var_id.  Shouldn't we?")
+                    } else {
+                        let emphasisSwitch = "false";
+                        let pValue = 0.0;
+                        let posteriorPValue = 0.0;
+                        switch(rowTypeToAdd){
+                            case "VAR_CODING":
+                                if ((oneRecord.most_del_score>0)&&
+                                    (oneRecord.most_del_score<4)){
+                                    emphasisSwitch = "true";
+                                }
+                                break;
+                            case "VAR_SPLICE":
+                                if ( typeof oneRecord.consequence !== 'undefined'){
+                                    if (($.isArray(oneRecord.consequence) &&
+                                        (oneRecord.consequence.join(",").indexOf('splice')>-1))){
+                                        emphasisSwitch = "true";
+                                    } else  if (oneRecord.consequence.indexOf('splice')>-1){
+                                        emphasisSwitch = "true";
+                                    }
+                                }
+                                // if (( typeof oneRecord.consequence !== 'undefined')&&(oneRecord.consequence.join(",").indexOf('splice')>-1)){
+                                //     emphasisSwitch = "true";
+                                // }
+                                break;
+                            case "VAR_UTR":
+                                if ( typeof oneRecord.consequence !== 'undefined'){
+                                    if (($.isArray(oneRecord.consequence) &&
+                                        (oneRecord.consequence.join(",").indexOf('UTR')>-1))){
+                                        emphasisSwitch = "true";
+                                    } else  if (oneRecord.consequence.indexOf('UTR')>-1){
+                                        emphasisSwitch = "true";
+                                    }
+                                }
+                                // if (( typeof oneRecord.consequence !== 'undefined')&&(oneRecord.consequence.join(",").indexOf('UTR')>-1)){
+                                //     emphasisSwitch = "true";
+                                // }
+                                break;
+                            case "VAR_PVALUE":
+                                if ( typeof oneRecord.p_value !== 'undefined'){
+                                    pValue = oneRecord.p_value;
+                                }
+                                break;
+                            case "VAR_POSTERIORPVALUE":
+                                // if ( typeof oneRecord.POSTERIOR_PROBABILITY !== 'undefined'){
+                                //     posteriorPValue = oneRecord.POSTERIOR_PROBABILITY;
+                                // }
+                                if ( typeof oneRecord.posterior !== 'undefined'){
+                                    posteriorPValue = oneRecord.posterior;
+                                }
+                                break;
+                            default:
+                                alert(" unexpected rowTypeToAdd="+rowTypeToAdd+".");
+                                break;
+                        }
+                        var renderData = placeDataIntoRenderForm(   "",
+                            oneRecord.name,
+                            (sharedTable["numberOfColumns"]*(rowIndex+1))+indexOfColumn+2,
+                            emphasisSwitch,
+                            pValue,
+                            posteriorPValue);
+                        _.last(intermediateDataStructure.rowsToAdd).columnCells[indexOfColumn] = new IntermediateStructureDataCell(oneRecord.name,
+                            renderData,rowTypeToAdd,dataAnnotationTypeCode );
+
+                    }
+                });
+            });
+
+        }
+        setAccumulatorObject('topPortionDisplay',intermediateDataStructure);
+
+
+        prepareToPresentToTheScreen(idForTheTargetDiv,
+            '#notUsed',
+            //vectorOfVariantRecords,
+            {},
+            clearBeforeStarting,
+            intermediateDataStructure,
+            true,
+            'variantTableVariantHeaders',
+            true,
+            true ); // we want to display blank rows in this case, since they are informative
     };
 
-    var displayContext = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-        var contextDescr = objectContainingRetrievedRecords;
-        // Do we actually use this routine?
-        $(idForTheTargetDiv).empty().append(Mustache.render($('#contextDescriptionSection')[0].innerHTML,
-            contextDescr
-        ));
-    };
 
 
     /***
@@ -3016,37 +3501,6 @@ mpgSoftware.dynamicUi = (function () {
 
 
     };
-
-    var displayAbcGivenVariantList = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-
-        displayVariantDataWithHiddenTissuesAndSummaryLines(idForTheTargetDiv,"abcAggregatedPerVariant",'ABC','ABC',
-            "noRecordTemplate","undefinedTissueRecord","#dynamicEqtlVariantTableBody",
-            "#dynamicEqtlVariantTableBodySummaryRecord", "table.combinedVariantTableHolder",'variantTableVariantHeaders',
-            undefined, undefined,
-        true, true);
-
-    }
-
-
-    var displayDnaseGivenVariantList = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-
-        displayVariantDataWithHiddenTissuesAndSummaryLines(idForTheTargetDiv,"dnaseAggregatedPerVariant",'DNase','DNase',
-            "noRecordTemplate","undefinedTissueRecord","#dynamicDnaseVariantTableBody",
-            "#dynamicDnaseVariantTableBodySummaryRecord", "table.combinedVariantTableHolder",'variantTableVariantHeaders',
-            undefined, undefined,
-        false, true);
-    };
-
-
-    var displayH3k27acGivenVariantList = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-
-        displayVariantDataWithHiddenTissuesAndSummaryLines(idForTheTargetDiv,"h3k27acAggregatedPerVariant",'H3k27ac','H3k27ac',
-            "noRecordTemplate","undefinedTissueRecord","#dynamicH3k27acVariantTableBody",
-            "#dynamicH3k27acVariantTableBodySummaryRecord", "table.combinedVariantTableHolder",'variantTableVariantHeaders',
-            undefined, undefined,
-        false, true);
-    };
-
 
     /***
      * This complicated routine serves as a general-purpose display IF:
@@ -3199,134 +3653,9 @@ mpgSoftware.dynamicUi = (function () {
             clearBeforeStarting,
             intermediateDataStructure,
             true,
-            typeOfTable, true);
-    }
-
-
-
-    var displayVariantsForAPhenotype = function  (idForTheTargetDiv,objectContainingRetrievedRecords) {
-
-        var variantAnnotationAppearance = function(annotationName,recordsPerVariant,indexOfColumn,intermediateDataStructure,numberOfVariants,
-                                                   testToRun,category){
-            alert('needs to be fixed 3');
-            var row = _.find(intermediateDataStructure.rowsToAdd,{'subcategory':annotationName});
-            if ( typeof row === 'undefined'){
-                var colCells = [];
-                for (var i=0;i<numberOfVariants;i++){
-                    colCells.push(new IntermediateStructureDataCell(annotationName,
-                        Mustache.render($("#dynamicVariantCellAssociations")[0].innerHTML,{"variantAnnotationIsPresent":false}),category));
-                }
-                intermediateDataStructure.rowsToAdd.push ({ category: category,
-                    displayCategory:category,
-                    subcategory: annotationName,
-                    displaySubcategory: annotationName,
-                    columnCells:  colCells});
-                row = _.find(intermediateDataStructure.rowsToAdd,{'subcategory':annotationName});
-            }
-            if (category ==='annotation'){
-                var present = testToRun(recordsPerVariant)?[1]:[];
-                row.columnCells[indexOfColumn] = new IntermediateStructureDataCell(annotationName,
-                    Mustache.render($("#dynamicVariantCellAssociations")[0].innerHTML,{"variantAnnotationIsPresent":present}),category);
-            }else if (category ==='association'){
-                var valueToDisplay = testToRun(recordsPerVariant);
-                row.columnCells[indexOfColumn] = new IntermediateStructureDataCell(annotationName,
-                        Mustache.render($("#dynamicVariantCellAssociations")[0].innerHTML,{"valueToDisplay":valueToDisplay}),category);
-            } else {
-                alert('foo!');
-            }
-
-        };
-
-        $(idForTheTargetDiv).empty();
-
-        var returnObject = createNewDisplayReturnObject();
-        returnObject.variantsToAnnotate = objectContainingRetrievedRecords;
-
-        addAdditionalResultsObject({variantRecordsForOnePhenotypeQtlSearch:returnObject});
-
-
-
-
-
-
-
-        var intermediateDataStructure = new IntermediateDataStructure();
-        // variants that we will want to annotate in the variant table
-        if (( typeof returnObject.variantsToAnnotate !== 'undefined') && (!$.isEmptyObject(returnObject.variantsToAnnotate))){
-            // set up the headers, and give us an empty row of column cells
-            _.forEach(returnObject.variantsToAnnotate.variants, function (oneRecord, index){
-                if( typeof oneRecord !== 'undefined'){
-                    intermediateDataStructure.headers.push(new IntermediateStructureDataCell(oneRecord.VAR_ID,
-                        Mustache.render($("#dynamicVariantHeader")[0].innerHTML,{variantName:oneRecord.VAR_ID, index: index+2}),"variantHeader") );
-                    //  intermediateDataStructure.columnCells.push ("");
-                }
-            });
-            setAccumulatorObject("variantNameArray", _.map(intermediateDataStructure.headers, function (headerRec){return headerRec.title}));
-            intermediateDataStructure.rowsToAdd = [];
-            var numberOfVariants = returnObject.variantsToAnnotate.variants.length;
-            // fill in all of the column cells covering each of our annotations
-            if ( typeof returnObject.variantsToAnnotate.variants !== 'undefined'){
-                _.forEach(returnObject.variantsToAnnotate.variants, function (recordsPerVariant){
-                    var headerNames = _.map(intermediateDataStructure.headers, function (headerRecord){
-                        return headerRecord.title
-                    });
-                    var indexOfColumn = _.indexOf(headerNames,recordsPerVariant.VAR_ID);
-                    if (indexOfColumn===-1){
-                        console.log("Did not find index of recordsPerVariant.VAR_ID.  Shouldn't we?")
-                    }else {
-                        _.forEach([ 'Coding',
-                            'Splice site',
-                            'UTR',
-                            'Promoter',
-                            'P-value'], function (eachAnnotation){
-                            switch (eachAnnotation){
-                                case 'Coding':
-                                    variantAnnotationAppearance('Coding',recordsPerVariant,indexOfColumn,intermediateDataStructure,numberOfVariants,
-                                        function(v){return ((v.MOST_DEL_SCORE > 0)&&(v.MOST_DEL_SCORE < 4))},'annotation');
-                                    break;
-                                case 'Splice site':
-                                    variantAnnotationAppearance('Splice_site',recordsPerVariant,indexOfColumn,intermediateDataStructure,numberOfVariants,
-                                        function(v){return (v.Consequence.indexOf('splice')>-1)},'annotation');
-                                    break;
-                                case 'UTR':
-                                    variantAnnotationAppearance('UTR',recordsPerVariant,indexOfColumn,intermediateDataStructure,numberOfVariants,
-                                        function(v){return (v.Consequence.indexOf('UTR')>-1)},'annotation');
-                                    break;
-                                case 'Promoter':
-                                    variantAnnotationAppearance('Promoter',recordsPerVariant,indexOfColumn,intermediateDataStructure,numberOfVariants,
-                                        function(v){return (v.Consequence.indexOf('promoter')>-1)},'annotation');
-                                    break;
-                                case 'P-value':
-                                    variantAnnotationAppearance('P-value',recordsPerVariant,indexOfColumn,intermediateDataStructure,numberOfVariants,
-                                        function(v){return UTILS.realNumberFormatter(""+v.P_VALUE)},'association');
-                                    break;
-                                default: break;
-                            }
-                        });
-                    }
-                });
-
-            }
-            intermediateDataStructure.tableToUpdate = "table.combinedVariantTableHolder";
-
-        }
-
-
-
-
-
-
-
-
-
-        prepareToPresentToTheScreen(idForTheTargetDiv,
-            '#dynamicVariantTable',
-            returnObject,
-            clearBeforeStarting,
-            intermediateDataStructure,
+            typeOfTable,
             true,
-            'variantTableVariantHeaders', true);
-
+            false );
     };
 
 
@@ -3353,9 +3682,11 @@ mpgSoftware.dynamicUi = (function () {
 
                     var accumulatorObject;
                     if ( typeof collectionOfRemoteCallingParameters.nameOfAccumulatorField  !== 'undefined'){
-                        accumulatorObject =  getAccumulatorObject(collectionOfRemoteCallingParameters.nameOfAccumulatorField);
+                        accumulatorObject =  getAccumulatorObject(collectionOfRemoteCallingParameters.nameOfAccumulatorField, );
                     }
-                    objectContainingRetrievedRecords = eachRemoteCallingParameter.processEachRecord( data, accumulatorObject);
+                    objectContainingRetrievedRecords = eachRemoteCallingParameter.processEachRecord(    data,
+                                                                                                        accumulatorObject,
+                                                                                                        collectionOfRemoteCallingParameters );
 
                 }).fail(function (jqXHR, textStatus, errorThrown) {
                     loading.hide();
@@ -3371,8 +3702,13 @@ mpgSoftware.dynamicUi = (function () {
             if (( typeof collectionOfRemoteCallingParameters.displayRefinedContextFunction !== 'undefined') &&
                 ( collectionOfRemoteCallingParameters.displayRefinedContextFunction !== null ) ) {
 
-                collectionOfRemoteCallingParameters.displayRefinedContextFunction(   collectionOfRemoteCallingParameters.placeToDisplayData,
-                    objectContainingRetrievedRecords );
+                if ( typeof collectionOfRemoteCallingParameters.displayEverythingFromThisCall === 'undefined'){
+
+                }
+
+                collectionOfRemoteCallingParameters.displayRefinedContextFunction(  collectionOfRemoteCallingParameters.placeToDisplayData,
+                                                                                    objectContainingRetrievedRecords,
+                                                                                    collectionOfRemoteCallingParameters );
 
             } else if  ( typeof collectionOfRemoteCallingParameters.actionId !== 'undefined')  {
 
@@ -3420,6 +3756,8 @@ mpgSoftware.dynamicUi = (function () {
                 returnValue["placeToDisplayData"] = startingMaterials.placeToDisplayData;
                 returnValue["actionId"] = startingMaterials.actionId;
                 returnValue["nameOfAccumulatorField"] = startingMaterials.nameOfAccumulatorField;
+                returnValue["code"] = startingMaterials.code;
+                returnValue["nameOfAccumulatorFieldWithIndex"] = startingMaterials.nameOfAccumulatorFieldWithIndex;
         } else {
                 console.log("Serious error: incorrect fields in startingMaterials = "+startingMaterials.name+".")
             };
@@ -3572,12 +3910,82 @@ mpgSoftware.dynamicUi = (function () {
                 ( typeof  additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory !== 'undefined') ){
             resetAccumulatorObject('gregorTissueArray');
             resetAccumulatorObject('tissueTableChosenAnnotations');
-            destroySharedTable(additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory);
-            var sharedTable = new SharedTableObject('tissueTableTissueHeaders',0,0);
-            setAccumulatorObject("sharedTable_" + additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory,sharedTable);
+            // destroySharedTable(additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory);
+            // var sharedTable = new SharedTableObject('tissueTableTissueHeaders',0,0);
+            // setAccumulatorObject("sharedTable_" + additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory,sharedTable);
 
 
         }
+
+
+        let dataAnnotationTypes = [];
+        let dataAnnotationTypesFollowUp = [];
+
+        switch (additionalParameters.dynamicTableType) {
+            case 'geneTable':
+                break;
+            case 'effectorGeneTable':
+                var sharedTable = new SharedTableObject( 'fegtAnnotationHeaders',0,0);
+                // sharedTable.currentForm = additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory;
+                setAccumulatorObject("sharedTable_"+additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory,sharedTable);
+                dataAnnotationTypes = additionalParameters.dataAnnotationTypes;
+                break;
+            case 'tissueTable':
+                resetAccumulatorObject('gregorTissueArray');
+                resetAccumulatorObject('tissueTableChosenAnnotations');
+                destroySharedTable(additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory);
+                var sharedTable = new SharedTableObject('tissueTableTissueHeaders',0,0);
+                setAccumulatorObject("sharedTable_" + additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory,sharedTable);
+                dataAnnotationTypes = additionalParameters.dataAnnotationTypes;
+                break;
+            case 'variantTable':
+                setAccumulatorObject("phenotype","T2D");
+                setAccumulatorObject("chromosome","8");
+                setAccumulatorObject("extentBegin","117862462");
+                setAccumulatorObject("extentEnd","118289003");
+
+                // setAccumulatorObject("phenotype","T2D");
+                // setAccumulatorObject("chromosome","19");
+                // setAccumulatorObject("extentBegin","58838000");
+                // setAccumulatorObject("extentEnd","58875000");
+
+                // setAccumulatorObject("phenotype","T2D");
+                // setAccumulatorObject("chromosome","1");
+                // setAccumulatorObject("extentBegin","3504650");
+                // setAccumulatorObject("extentEnd","3614660");
+
+                const chromosomeInput = $('input#chromosomeInput').val();
+                const startExtentInput = $('input#startExtentInput').val();
+                const endExtentInput = $('input#endExtentInput').val();
+                const chosenPhenotype = $('select.phenotypePicker').children("option:selected"). val();
+
+                if (chromosomeInput.length>0){setAccumulatorObject("chromosome",chromosomeInput);}
+                if (startExtentInput.length>0){setAccumulatorObject("extentBegin",startExtentInput);}
+                if (endExtentInput.length>0){setAccumulatorObject("extentEnd",endExtentInput);}
+                if (( typeof chosenPhenotype !== 'undefined')&&(chosenPhenotype.length>0)){
+                    setAccumulatorObject("phenotype",chosenPhenotype);
+                }
+
+                destroySharedTable(additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory);
+                var sharedTable = new SharedTableObject('variantTableVariantHeaders',0,0);
+                setAccumulatorObject("sharedTable_" + additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory,sharedTable);
+                setAccumulatorObject('variantInfoArray',undefined);
+                setAccumulatorObject("variantTableOrientation","annotationDominant");
+                setAccumulatorObject("annotationDisplayArray", []);
+
+                dataAnnotationTypes = _.filter(additionalParameters.dataAnnotationTypes,function(o){
+                    return o.code === 'VHDR';
+                });
+                dataAnnotationTypesFollowUp = _.filter(additionalParameters.dataAnnotationTypes,function(o){
+                    return o.code !== 'VHDR';
+                });
+
+                break;
+            default:
+                alert (' unexpected dynamicTableType === '+ additionalParameters.dynamicTableType +'.');
+                break;
+        }
+
 
 
 
@@ -3596,57 +4004,59 @@ mpgSoftware.dynamicUi = (function () {
 
         destroySharedTable('table.combinedGeneTableHolder');
 
-        _.forEach(additionalParameters.dataAnnotationTypes, function (oneAnnotationType){
-            arrayOfRoutinesToUndertake.push( actionContainer(oneAnnotationType.internalIdentifierString,
-                actionDefaultFollowUp(oneAnnotationType.internalIdentifierString)));
-        });
 
-        _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
-
-
-
-
-        // Everything that happens on the variant table
-        $('#getVariantsFromQtlAndThenRetrieveEpigeneticData').on('click', function () {
-
-            resetAccumulatorObject("sharedTable_table.combinedVariantTableHolder");
-            destroySharedTable('table.combinedVariantTableHolder');
-            var arrayOfRoutinesToUndertake = [];
-
-            arrayOfRoutinesToUndertake.push( actionContainer('getVariantsWeWillUseToBuildTheVariantTable',
-                actionDefaultFollowUp("getVariantsWeWillUseToBuildTheVariantTable")));
-
-            arrayOfRoutinesToUndertake.push( actionContainer('getEqtlsGivenVariantList',
-                actionDefaultFollowUp("getEqtlsGivenVariantList")));
-
-
-            arrayOfRoutinesToUndertake.push( actionContainer('getABCGivenVariantList',
-                actionDefaultFollowUp("getABCGivenVariantList")));
-
-            arrayOfRoutinesToUndertake.push( actionContainer('getDnaseGivenVariantList',
-                actionDefaultFollowUp("getDnaseGivenVariantList")));
-
-            arrayOfRoutinesToUndertake.push( actionContainer('getH3k27acGivenVariantList',
-                actionDefaultFollowUp("getH3k27acGivenVariantList")));
-
-
+        if (additionalParameters.dynamicTableType!=='variantTable'){
+            _.forEach(dataAnnotationTypes, function (oneAnnotationType){
+                arrayOfRoutinesToUndertake.push( actionContainer(oneAnnotationType.internalIdentifierString,
+                    actionDefaultFollowUp(oneAnnotationType.internalIdentifierString)));
+            });
             _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
+        } else {
+            _.forEach(dataAnnotationTypes, function (oneAnnotationType){
+                arrayOfRoutinesToUndertake.push( actionContainer(oneAnnotationType.internalIdentifierString,
+                    actionDefaultFollowUp(oneAnnotationType.internalIdentifierString)));
+            });
+            _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
+            deferredObject = $.Deferred();
+            deferredObject.done(function () {
+                console.log("about to execute the other callbacks");
+                arrayOfRoutinesToUndertake = [];
+                _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
+                if (dataAnnotationTypesFollowUp.length>0){
+                    arrayOfRoutinesToUndertake = [];
+                    _.forEach(dataAnnotationTypesFollowUp, function (oneAnnotationType){
+                        arrayOfRoutinesToUndertake.push( actionContainer(oneAnnotationType.internalIdentifierString,
+                            actionDefaultFollowUp(oneAnnotationType.internalIdentifierString)));
+                    });
+                    _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
 
+                }
+                console.log("the other callbacks are all queued up");
+            });
 
-        });
+            deferredObject.fail(function () {
+                console.log("Executed if the async work fails");
+            });
 
+            // console.log('a');
+            // $.when.apply(null, arrayOfRoutinesToUndertake).done(function() {
+            //     console.log('b');
+            // });
+            // console.log('c');
+            // _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
+            // if (dataAnnotationTypesFollowUp.length>0){
+            //     arrayOfRoutinesToUndertake = [];
+            //     _.forEach(dataAnnotationTypesFollowUp, function (oneAnnotationType){
+            //         arrayOfRoutinesToUndertake.push( actionContainer(oneAnnotationType.internalIdentifierString,
+            //             actionDefaultFollowUp(oneAnnotationType.internalIdentifierString)));
+            //     });
+            //     _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
+            //
+            // }
+            // deferredObject.resolve();
 
-
-
-
-
-
-        // if (additionalParameters.exposeDynamicUi === "1"){
-        //    $('#retrieveMultipleRecordsTest').click();
-        //}
-
-
-    };
+        }
+     };
 
 
 
@@ -3756,20 +4166,44 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
-        var generalPurposeSort  = function(a, b, direction, currentSort, sortTermOverride ){
+
+    const emptyFieldHandler = function (textAEmpty,textBEmpty,direction){
+        let returnValue =  0;
+        if ( textAEmpty && textBEmpty ) {
+            returnValue = 0;
+        }
+        else if ( textAEmpty ) {
+            if (direction==='desc') {
+                returnValue = -1;
+            } else {
+                returnValue = 1;
+            }
+        }else if ( textBEmpty )
+        {
+            if (direction==='desc') {
+                returnValue = 1;
+            } else {
+                returnValue = -1;
+            }
+        }
+        return returnValue;
+    }
+
+
+        var generalPurposeSort  = function(a, b, direction, currentSortObject  ){
 
             var defaultSearchField = 'sortField';
-            switch (currentSort){
-                // case 'geneMethods':
-                //     var textA = $(a).attr(defaultSearchField).toUpperCase();
-                //     var textB = $(b).attr(defaultSearchField).toUpperCase();
-                //     return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-                //     break;
+            const sortTermOverride = currentSortObject.desiredSearchTerm;
+            switch (currentSortObject.currentSort){
                 case 'variantAnnotationCategory':
                 case 'methods':
                     var textA = $(a).attr(defaultSearchField).toUpperCase();
                     var textB = $(b).attr(defaultSearchField).toUpperCase();
                     return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+                    break;
+                case'VariantAssociationPValue':
+                case'VariantAssociationPosterior':
+                    return eval(currentSortObject.dataAnnotationType.packagingString+'.sortRoutine(a, b, direction, currentSortObject)');
                     break;
                 case 'geneMethods':
                 case 'H3k27ac':
@@ -3810,87 +4244,25 @@ mpgSoftware.dynamicUi = (function () {
                     var y = parseFloat($(b).attr(defaultSearchField));
                     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
                     break;
+                case 'sortMethodsInVariantTable':
+                    return eval(currentSortObject.dataAnnotationType.packagingString+'.sortRoutine(a, b, direction, currentSortObject)');
+                    break;
                 case 'ldsrValuesInTissueTable':
                 case 'gregorValuesInTissueTable':
                 case 'depictTissueValuesInTissueTable':
-                    var textA = $(a).attr(defaultSearchField);
-                    var textAEmpty = ((textA.length===0)||(textA==="0"));
-                    var textB = $(b).attr(defaultSearchField);
-                    var textBEmpty = ((textB.length===0)||(textB==="0"));
-                    if ( textAEmpty && textBEmpty ) {
-                        return 0;
-                    }
-                    else if ( textAEmpty ) {
-                        if (direction==='desc') {
-                            return -1;
-                        } else {
-                            return 1;
-                        }
-                    }else if ( textBEmpty )
-                    {
-                        if (direction==='desc') {
-                            return 1;
-                        } else {
-                            return -1;
-                        }
-                    }
-                    var x = parseFloat(textB);
-                    var y = parseFloat(textA);
-                    return ((x > y) ? -1 : ((x < y) ? 1 : 0));
-                    break;
-                case 'eQTL':
+                case 'tissueHeader':
+                    return eval(currentSortObject.dataAnnotationType.packagingString+'.sortRoutine(a, b, direction, currentSortObject)');
                 case 'DEPICT':
                 case 'MetaXcan':
-                case 'ABC':
+                //case 'ABC':
                 case 'MOD':
                 case 'eCAVIAR':
                 case 'COLOC':
                 case 'Firth':
                 case 'SKAT':
-                    defaultSearchField = sortTermOverride;
-                    var x = parseFloat($(a).attr(defaultSearchField));
-                    if (isNaN(x)){
-                        x = parseInt($(a).attr('subSortField'));
-                    }
-                    var y = parseFloat($(b).attr(defaultSearchField));
-                    if (isNaN(y)){
-                        y = parseInt($(b).attr('subSortField'));
-                    }
-                    if ( (-1===x) && (-1===y) ) {
-                        return 0;
-                    }
-                    else if (-1===x) {
-                        if (direction==='asc') {
-                            return -1;
-                        } else {
-                            return 1;
-                        }
-                    }else if (-1===y)
-                    {
-                        if (direction==='asc') {
-                            return 1;
-                        } else {
-                            return -1;
-                        }
-                    }
-                    return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-                    break;
                 case 'geneHeader':
-                    defaultSearchField = sortTermOverride;
-                    var x = parseFloat($(a).attr(defaultSearchField));
-                    if (isNaN(x)){
-                        x = parseInt($(a).attr('subSortField'));
-                    }
-                    var y = parseFloat($(b).attr(defaultSearchField));
-                    if (isNaN(y)){
-                        y = parseInt($(b).attr('subSortField'));
-                    }
-                    return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-                    break;
                 case  'categoryName':
-                    var textA = a.trim().toUpperCase();
-                    var textB = b.trim().toUpperCase();
-                    return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+                    return eval(currentSortObject.dataAnnotationType.packagingString+'.sortRoutine(a, b, direction, currentSortObject)');
                     break;
                 case 'straightAlphabetic':
                     var textA = a.trim().toUpperCase();
@@ -3898,81 +4270,18 @@ mpgSoftware.dynamicUi = (function () {
                     return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
                     break;
                 case 'fegtHeader':
-                    var textA = $(a).attr(defaultSearchField).toUpperCase();
-                    var textAEmpty = (textA.length===0);
-                    var textB = $(b).attr(defaultSearchField).toUpperCase();
-                    var textBEmpty = (textB.length===0);
-                    if ( textAEmpty && textBEmpty ) {
-                        return 0;
-                    }
-                    else if ( textAEmpty ) {
-                        if (direction==='desc') {
-                            return -1;
-                        } else {
-                            return 1;
-                        }
-                    }else if ( textBEmpty )
-                    {
-                        if (direction==='desc') {
-                            return 1;
-                        } else {
-                            return -1;
-                        }
-                    }
-                    return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-                    break;
-
                 case 'Combined_category':
-                    var x = parseInt($(a).attr("sortnumber"));
-                    var keepAAtTheBottom = (x===0);
-                    var y = parseInt($(b).attr("sortnumber"));
-                    var keepBAtTheBottom = (y===0);
-                    if ( keepAAtTheBottom && keepBAtTheBottom ) {
-                        return 0;
-                    }
-                    else if ( keepAAtTheBottom ) {
-                        if (direction==='asc') {
-                            return 1;
-                        } else {
-                            return -1;
-                        }
-                    }else if ( keepBAtTheBottom )
-                    {
-                        if (direction==='asc') {
-                            return -1;
-                        } else {
-                            return 1;
-                        }
-                    }
-
-                    return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-                    break;
                 case 'tissueNameInTissueTable':
                 case 'Genetic_combined':
                 case 'Genomic_combined':
+                case 'Gene_name':
+                case 'Locus_name':
                 case 'Perturbation_combined':
-                     var textA = $(a).text().trim().toUpperCase();
-                     var textAEmpty = (textA.length===0);
-                     var textB = $(b).text().trim().toUpperCase();
-                     var textBEmpty = (textB.length===0);
-                     if ( textAEmpty && textBEmpty ) {
-                         return 0;
-                     }
-                     else if ( textAEmpty ) {
-                         if (direction==='asc') {
-                             return 1;
-                         } else {
-                             return -1;
-                         }
-                     }else if ( textBEmpty )
-                     {
-                         if (direction==='asc') {
-                             return -1;
-                         } else {
-                             return 1;
-                         }
-                     }
-                     return (textA < textB) ? 1 : (textA > textB) ? -1 : 0;
+                case 'GWAS_coding_causal':
+                case 'Exome_array_coding_causal':
+                case 'Exome_sequence_burden':
+                case 'Monogenic':
+                    return eval(currentSortObject.dataAnnotationType.packagingString+'.sortRoutine(a, b, direction, currentSortObject)');
                      break;
                 case 'external_evidence':
                 case 'homologous_gene':
@@ -4000,10 +4309,19 @@ mpgSoftware.dynamicUi = (function () {
                     }
                     return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
                     break;
+                case 'VariantId':
+                case 'VariantIds':
+                case 'VariantAtacSeq':
+                case 'VariantChromHmm':
+                case 'VariantCoding':
+                case 'VariantSplicing':
+                case 'VariantUtr':
+                case 'VariantAbc':
+                    return eval(currentSortObject.dataAnnotationType.packagingString+'.sortRoutine(a, b, direction, currentSortObject)');
+                    break;
                 default:
                     break;
             }
-//            alert('currentSort='+currentSort+'.');
             var x = UTILS.extractAnchorTextAsInteger(a);
             var y = UTILS.extractAnchorTextAsInteger(b);
             return ((x < y) ? -1 : ((x > y) ? 1 : 0));
@@ -4023,11 +4341,29 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
-    var findDesiredSearchTerm=function(){
+    var findDesiredSearchTerm=function(whereTheTableGoes,requestedSort){
             var favoredSortField = 'sortField';
-            var cellColoringScheme = findCellColoringChoice('table.combinedGeneTableHolder');
-            if ( cellColoringScheme === 'Significance'){
-                favoredSortField = 'significance_sortfield'
+            const sharedTable = getSharedTable(whereTheTableGoes);
+            const currentTableForm = sharedTable.currentForm;
+            var cellColoringScheme = findCellColoringChoice(whereTheTableGoes);
+            if ((currentTableForm==='geneTableGeneHeaders') || (currentTableForm==='geneTableAnnotationHeaders')) { // gene table
+                if ( cellColoringScheme === 'Significance'){
+                    favoredSortField = 'significance_sortfield'
+                } else if ( cellColoringScheme === 'Records'){
+                    favoredSortField = 'sortfield'
+                }
+                // the upper left corner gets special treatment, ince it may be sorted differently depending on table orientation
+                 if ( requestedSort==='categoryName'){
+                    if (currentTableForm==='geneTableGeneHeaders') {
+                        favoredSortField = 'sortfield';
+                    } else if (currentTableForm==='geneTableAnnotationHeaders') {
+                        favoredSortField = 'geneName';
+                    }
+                 }
+            } else if ((currentTableForm==='fegtAnnotationHeaders') || (currentTableForm==='fegtGeneNameHeaders')) { //
+                favoredSortField = 'sortfield';
+            } else {
+                favoredSortField = 'sortfield';
             }
             return favoredSortField;
         }
@@ -4037,15 +4373,16 @@ mpgSoftware.dynamicUi = (function () {
         jQuery.fn.dataTableExt.oSort['generalSort-asc'] = function (a, b ) {
             var currentSortRequest = getAccumulatorObject("currentSortRequest");
 
-            return generalPurposeSort(a,b,'asc',currentSortRequest.currentSort,findDesiredSearchTerm());
+            return generalPurposeSort(  a,b,'asc',
+                                        currentSortRequest );
         };
 
         jQuery.fn.dataTableExt.oSort['generalSort-desc'] = function (a, b) {
             var currentSortRequest = getAccumulatorObject("currentSortRequest");
             if (currentSortRequest.currentSort === "variantAnnotationCategory"){
-                return generalPurposeSort(a,b,'desc',currentSortRequest.currentSort,findDesiredSearchTerm());
+                return generalPurposeSort(a,b,'desc',currentSortRequest);
             } else {
-                return generalPurposeSort(b,a,'desc',currentSortRequest.currentSort,findDesiredSearchTerm());
+                return generalPurposeSort(b,a,'desc',currentSortRequest);
             }
         };
 
@@ -4071,247 +4408,55 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             }
         });
     }
-    var sortOrder =  'asc';
     var currentSortRequestObject = {};
+    const dyanamicUiVariables = getDyanamicUiVariables();
+    console.log("table to sort "+dyanamicUiVariables.dynamicTableConfiguration.initializeSharedTableMemory+".");
+    let sortOrder = extractClassBasedTrailingString(callingObject,"sorting_");
     _.forEach(classList, function (oneClass){
-        var sortOrderDesignation = "sorting_";
-        if ( oneClass.substr(0,sortOrderDesignation.length) === sortOrderDesignation ){
-            sortOrder =   oneClass.substr(sortOrderDesignation.length);
+
+        if (dyanamicUiVariables.columnDefinitions === 'static'){
+            // with static columns we can keep the sorting descriptions might be held at multiple possible levels
+            let dataAnnotationTypeIndex = _.findIndex(dyanamicUiVariables.dataAnnotationTypes,['sortingSubroutine',oneClass]);
+            if ((dyanamicUiVariables.dataAnnotationTypes.length > 0) &&
+                ( typeof dyanamicUiVariables.dataAnnotationTypes[0].customColumnOrdering !== 'undefined')){
+                if (dataAnnotationTypeIndex === -1){
+                    dataAnnotationTypeIndex = _.findIndex(dyanamicUiVariables.dataAnnotationTypes[0].customColumnOrdering.topLevelColumns,['sortingSubroutine',oneClass]);
+                }
+                if (dataAnnotationTypeIndex === -1){
+                    dataAnnotationTypeIndex = _.findIndex(dyanamicUiVariables.dataAnnotationTypes[0].customColumnOrdering.constituentColumns,['sortingSubroutine',oneClass]);
+                }
+                if (dataAnnotationTypeIndex>-1){
+                    currentSortRequestObject = {
+                        'currentSort':oneClass,
+                        'dataAnnotationType':dyanamicUiVariables.dataAnnotationTypes[0],
+                        'desiredSearchTerm':findDesiredSearchTerm(  dyanamicUiVariables.dynamicTableConfiguration.initializeSharedTableMemory,
+                                                                    oneClass ),
+                        'table':dyanamicUiVariables.dynamicTableConfiguration.initializeSharedTableMemory
+                    };
+                    return false;
+                }
+                if (sortOrder.length===0){
+                    sortOrder = 'asc';
+                }
+            }
+
+        } else {
+            let dataAnnotationTypeIndex = _.findIndex(dyanamicUiVariables.dataAnnotationTypes,['sortingSubroutine',oneClass]);
+            if (dataAnnotationTypeIndex>-1){
+                currentSortRequestObject = {
+                    'currentSort':oneClass,
+                    'dataAnnotationType': dyanamicUiVariables.dataAnnotationTypes[dataAnnotationTypeIndex],
+                    'desiredSearchTerm':findDesiredSearchTerm(dyanamicUiVariables.dynamicTableConfiguration.initializeSharedTableMemory,
+                        oneClass ),
+                    'table':dyanamicUiVariables.dynamicTableConfiguration.initializeSharedTableMemory
+                };
+                return false;
+            }
         }
-        switch (oneClass){
-            case 'Firth':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.combinedGeneTableHolder'
-                };
-                break;
-            case 'SKAT':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.combinedGeneTableHolder'
-                };
-                break;
-            case 'eQTL':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.combinedGeneTableHolder'
-                };
-                break;
-            case 'DEPICT':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.combinedGeneTableHolder'
-                };
-                break;
-            case 'MOD':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.combinedGeneTableHolder'
-                };
-                break;
-            case 'Mouse':
-                currentSortRequestObject = {
-                    'currentSort':'MOD',
-                    'table':'table.combinedGeneTableHolder'
-                };
-                break;
-            case 'MetaXcan':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.combinedGeneTableHolder'
-                };
-                break;
-            case 'ABC':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.combinedGeneTableHolder'
-                };
-                break;
-            case 'geneHeader':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.combinedGeneTableHolder'
-                };
-                break;
-            case 'categoryName':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.combinedGeneTableHolder'
-                };
-                //currentSortRequestObject = {
-                //    'currentSort':'straightAlphabeticWithSpacesOnTop',
-                //    'table':'table.combinedGeneTableHolder'
-                //};
-                break;
-            case 'geneMethods':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.combinedGeneTableHolder'
-                };
-                break;
-            case 'methods':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.combinedVariantTableHolder'
-                };
-                break;
 
-            case 'variantTableVarHeader':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.combinedVariantTableHolder'
-                };
-                break;
-            case 'variantHeader':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.combinedVariantTableHolder'
-                };
-                break;
-            case 'variantAnnotationCategory':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.combinedVariantTableHolder'
-                };
-                break;
-            case 'Coding':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.combinedVariantTableHolder'
-                };
-                break;
-            case 'Splice_site':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.combinedVariantTableHolder'
-                };
-                break;
-            case 'UTR':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.combinedVariantTableHolder'
-                };
-                break;
-            case 'Promoter':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.combinedVariantTableHolder'
-                };
-                break;
-            case 'P-value':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.combinedVariantTableHolder'
-                };
-                break;
-            case 'H3k27ac':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.combinedVariantTableHolder'
-                };
-                break;
-            case 'DNase':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.combinedVariantTableHolder'
-                };
-                break;
-            case 'ABC':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.combinedVariantTableHolder'
-                };
-                break;
-            case 'eQTL':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.combinedVariantTableHolder'
-                };
-                break;
-            case 'eCAVIAR':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.combinedGeneTableHolder'
-                };
-                break;
-            case 'gregorValuesInTissueTable':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.tissueTableHolder'
-                };
-                break;
-            case 'ldsrValuesInTissueTable':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.tissueTableHolder'
-                };
-                break;
-            case 'depictTissueValuesInTissueTable':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.tissueTableHolder'
-                };
-                break;
-            case 'tissueNameInTissueTable':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.tissueTableHolder'
-                };
-                break;
 
-            case 'COLOC':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.combinedGeneTableHolder'
-                };
-                break;
-            case 'Combined_category':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.combinedGeneTableHolder'
-                };
-                break;
-            case 'Genetic_combined':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.combinedGeneTableHolder'
-                };
-                break;
-            case 'Genomic_combined':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.combinedGeneTableHolder'
-                };
-                break;
-            case 'Perturbation_combined':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.combinedGeneTableHolder'
-                };
-                break;
-            case 'external_evidence':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.combinedGeneTableHolder'
-                };
-                break;
-            case 'homologous_gene':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.combinedGeneTableHolder'
-                };
-                break;
-            case 'fegtHeader':
-                currentSortRequestObject = {
-                    'currentSort':oneClass,
-                    'table':'table.fullEffectorGeneTableHolder'
-                };
-                break;
-
-            default:
-                break;
-        }
     });
+    if ($.isEmptyObject(currentSortRequestObject)) return;
     var actualColumnIndex = columnNumberValue;
     currentSortRequestObject['sortOrder'] = (sortOrder === 'asc')?'desc':'asc';
     currentSortRequestObject['columnNumberValue'] = actualColumnIndex;
@@ -4328,6 +4473,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
        // setOfColumnsToSort.push([0,'desc']);
     }
     setOfColumnsToSort.push([ currentSortRequestObject.columnNumberValue, currentSortRequestObject.sortOrder ]);
+
     setAccumulatorObject("currentSortRequest", currentSortRequestObject );
 
     dataTable
@@ -4339,15 +4485,16 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
     var getDisplayableCellContent  = function (intermediateStructureDataCell,indexInOneDimensionalArray){
         var returnValue = "";
         //var displayDetails = getDatatypeInformation( intermediateStructureDataCell.dataAnnotationTypeCode );
+        var additionalParameters = getDyanamicUiVariables();
         switch (intermediateStructureDataCell.dataAnnotationTypeCode){
             case 'LIT': // a literal. Used when we recall the headers straight from the table
                 returnValue = intermediateStructureDataCell.renderData;
                 break;
             case 'EMC':  // an empty cell
-                returnValue = Mustache.render($('#dynamicGeneTableEmptyRecord')[0].innerHTML,intermediateStructureDataCell.renderData);
+                returnValue = Mustache.render($(additionalParameters.dynamicTableConfiguration.emptyHeaderRecord)[0].innerHTML,intermediateStructureDataCell.renderData);
                 break;
             case 'EMP':  // the first two columns are always empty, but contains some information in render data
-                returnValue = Mustache.render($('#emptyRecord')[0].innerHTML,intermediateStructureDataCell.renderData);
+                returnValue = Mustache.render($(additionalParameters.dynamicTableConfiguration.emptyBodyRecord)[0].innerHTML,intermediateStructureDataCell.renderData);
                 break;
             case 'GHD':  // the first two columns are always empty, but contains some information in render data
                 returnValue = Mustache.render($('#dynamicGeneTableHeaderV2')[0].innerHTML,intermediateStructureDataCell.renderData);
@@ -4362,17 +4509,43 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 intermediateStructureDataCell.renderData["tissueRecords"]=revisedValues.tissuesFilteredByAnnotation;
                 returnValue = Mustache.render($('#'+dataAnnotationType.dataAnnotation.cellBodyWriter)[0].innerHTML,intermediateStructureDataCell.renderData);
                 break;
+            case "ABC_VAR":
+                var displayDetails = getDatatypeInformation(intermediateStructureDataCell.dataAnnotationTypeCode);
+                returnValue = Mustache.render($('#'+displayDetails.dataAnnotation.cellBodyWriter)[0].innerHTML,intermediateStructureDataCell.renderData);
+                break;
+            case "ABC list":
+                returnValue = "ABC list";
+                break;
+            case "VHDR":
+                var displayDetails = getDatatypeInformation(intermediateStructureDataCell.annotation);
+                returnValue = Mustache.render($('#'+displayDetails.dataAnnotation.cellBodyWriter)[0].innerHTML,intermediateStructureDataCell.renderData);
+                break;
+            case "GREGOR_FOR_VAR":
+                var displayDetails = getDatatypeInformation(intermediateStructureDataCell.dataAnnotationTypeCode);
+                returnValue = Mustache.render($('#'+displayDetails.dataAnnotation.cellBodyWriter)[0].innerHTML,intermediateStructureDataCell.renderData);
+                break;
+
+            case undefined:
+                returnValue = "wtf";
+                break;
 
             default:  //  the standard case, where a cell renders its own data using its chosen mustache template
                 var cellColoringScheme ="records";
+
                 intermediateStructureDataCell.renderData["cellPresentationString"] =
                     intermediateStructureDataCell.renderData.cellPresentationStringMap[findCellColoringChoice('table.combinedGeneTableHolder')];
+
                 var displayDetails = getDatatypeInformation(intermediateStructureDataCell.dataAnnotationTypeCode);
                 returnValue = Mustache.render($('#'+displayDetails.dataAnnotation.cellBodyWriter)[0].innerHTML,intermediateStructureDataCell.renderData);
                 break;
 
         }
-        return returnValue.trim();
+        if (typeof returnValue === "string"){
+            return returnValue.trim();
+        } else {
+            return "object";
+        }
+
     };
 
     /***
@@ -4408,7 +4581,6 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 var sharedTable = getAccumulatorObject("sharedTable_"+whereTheTableGoes);
                 var dyanamicUiVariables = getDyanamicUiVariables();
                 var headerDescriber = {
-                   // "aaSorting": [[ 1, "asc" ]],
                     "dom": '<"top">rt<"bottom"iplB>',
                     "buttons": [
                         {extend: "copy", text: "Copy all to clipboard"},
@@ -4432,12 +4604,13 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 var addedColumns = [];
                 if (prependColumns){ // we may wish to add in some columns based on metadata about a row.
                                      //  Definitely we don't if we are transposing, however, since we've already built that material
+                                     //  Definitely we don't if we are transposing, however, since we've already built that material
                     var sortability = [];
                     switch(typeOfHeader){
                         case 'geneTableGeneHeaders':
                             var isdc = new IntermediateStructureDataCell('farLeftCorner',
                                 {initialLinearIndex:"initialLinearIndex_0"},
-                                'categoryNam','EMP');
+                                'categoryName','EMP');
                             var header = {title:isdc.title, annotation:isdc.annotation};
                             addedColumns.push(new NewColumn(    getDisplayableCellContent(isdc),
                                                                 header,
@@ -4446,7 +4619,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                             var isdc2 = new IntermediateStructureDataCell('b',
                                 {initialLinearIndex:"initialLinearIndex_1"},
                                 'geneMethods','EMP');
-                            var header2 = {title:isdc.title, annotation:isdc.annotation};
+                            var header2 = {title:isdc2.title, annotation:isdc2.annotation};
                             addedColumns.push(new NewColumn(    getDisplayableCellContent(isdc2),
                                 header2,
                                 ['initialLinearIndex_1'],
@@ -4454,14 +4627,23 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                             sortability.push(true);
                             break;
                         case 'variantTableVariantHeaders':
-                            alert('needs to be fixed');
-                            addedColumns.push(new IntermediateStructureDataCell('farLeftCorner',
+                            setAccumulatorObject("currentSortRequest",dyanamicUiVariables.dynamicTableConfiguration.defaultSort);
+                            var isdc = new IntermediateStructureDataCell('farLeftCorner',
                                 {initialLinearIndex:"initialLinearIndex_0"},
-                                'variantAnnotationCategory','EMP'));
-                            sortability.push(true);
-                            addedColumns.push(new IntermediateStructureDataCell('b',
+                                'methodCategories variantIds','EMP');
+                            var header = {title:isdc.title, annotation:isdc.annotation};
+                            addedColumns.push(new NewColumn(    getDisplayableCellContent(isdc),
+                                header,
+                                ['initialLinearIndex_0'],
+                                isdc));
+                            var isdc2 = new IntermediateStructureDataCell('b',
                                 {initialLinearIndex:"initialLinearIndex_1"},
-                                'methods','EMP'));
+                                'methods','EMP');
+                            var header2 = {title:isdc2.title, annotation:isdc2.annotation};
+                            addedColumns.push(new NewColumn(    getDisplayableCellContent(isdc2),
+                                header2,
+                                ['initialLinearIndex_1'],
+                                isdc2));
                             sortability.push(true);
                             break;
                         case 'tissueTableTissueHeaders':
@@ -4596,9 +4778,278 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
             }
             // update our notion of the header contents
-            sharedTable.mostRecentHeaders  =headerContents;
+            if( typeof sharedTable !== 'undefined'){
+                sharedTable.mostRecentHeaders  =headerContents;// sometimes I update other tables, which may not
+                // reference the shared table memory structure
+            }
+
         }
         return $(whereTheTableGoes).dataTable();
+
+    };
+
+    const adjustAnnotationTable = function(callingObject,cssSelector){
+        $('#gregorSubTableDiv').find('div.dataTables_wrapper').css('height','100%');
+        const domToAdjust = $(cssSelector);
+        const domCallingObject = $(callingObject);
+        if (domToAdjust.css('display')==='none'){
+            domToAdjust.show();
+            domCallingObject.text('Hide filters from GREGOR enrichment');
+        } else {
+            domToAdjust.hide();
+            domCallingObject.text('Adjust filters from GREGOR enrichment');
+        }
+    }
+
+    const getMethodsAnnotationsAndTissuesFromGregorTable = function(getEverything){
+        let getEverythingString = (!getEverything)?":checked":"";
+        const arrayForMethodsAndAnnotations = $('div.gregorSubTableRow').find('input.gregorSubTableRowHeader'+getEverythingString);
+        let  allMethods = [];
+        let allAnnotations = [];
+        let allTissues = []
+        let returnValue = {
+            uniqueMethods:[],
+            uniqueAnnotations:[],
+            uniqueTissues:[]
+        };
+        _.forEach(arrayForMethodsAndAnnotations,function(annotationMethodInput){
+            const annotationMethod = $(annotationMethodInput).attr('value');
+            if (annotationMethod.length>2){
+                const annotationMethodArray = annotationMethod.split("_");
+                allAnnotations.push(annotationMethodArray[0]);
+                allMethods.push(annotationMethodArray[1]);
+            }
+        });
+        _.forEach($('div.gregorSubTableHeader').find('input.gregorSubTableRowHeader'+getEverythingString),function(tissueInput){
+            allTissues.push($(tissueInput).attr('value'));
+        });
+        returnValue.uniqueMethods = _.uniq(allMethods);
+        returnValue.uniqueAnnotations = _.uniq(allAnnotations);
+        returnValue.uniqueTissues = _.uniq(allTissues);
+    return returnValue;
+    };
+
+
+    const getMethodsAnnotationsAndTissuesFromExplicitAnnotationSpecification= function(getEverything){
+        var selectedElements = $('#annotationSelectorChoice option:selected');
+        var selectedValuesAndText = [];
+        _.forEach(selectedElements,function(oe){
+            const annotationAndMethod = $(oe).val().split("_");
+            selectedValuesAndText.push({name:annotationAndMethod[0],
+                             method:annotationAndMethod[1],
+                             text:$(oe).text()});
+        });
+        return {uniqueMethods:_.uniq(_.map(selectedValuesAndText,function(o){return o.method})),
+            uniqueTissues:[1],
+            uniqueAnnotations:_.map(selectedValuesAndText,function(o){return o.name})};
+    };
+
+
+    const filterEpigeneticTable = function(whereTheTableGoes, useTissueMode){
+        // we can filter either on tissue enrichments, or explicitly selected annotations, or we can accept either
+        let uniqueLists = {};
+        const currentTableForm = getSharedTable(whereTheTableGoes)['currentForm'];
+        const filterByGregor =  ($('#gregorFilterCheckbox').is(":checked"));
+        const filterByExplicitMethod =  ($('#methodFilterCheckbox').is(":checked"));
+        const blankRowsAreOkay = ($('#displayBlankRows').is(":checked"));
+        if ( filterByGregor &&
+             (!filterByExplicitMethod) ){
+            uniqueLists = getMethodsAnnotationsAndTissuesFromGregorTable(false);
+        } else if ( (!filterByGregor) &&
+                    filterByExplicitMethod ){
+            uniqueLists = getMethodsAnnotationsAndTissuesFromExplicitAnnotationSpecification(false)
+        }
+        let weAreInTissueMode = false;
+        const variantTableOrientation = getAccumulatorObject("variantTableOrientation");
+        if (( typeof variantTableOrientation !== 'undefined') && (variantTableOrientation==="tissueDominant")){
+            weAreInTissueMode = true;
+        }
+
+
+
+        let uniqueMethods = uniqueLists.uniqueMethods;
+        let uniqueAnnotations = uniqueLists.uniqueAnnotations;
+        let uniqueTissues = uniqueLists.uniqueTissues;
+        $('div.epigeneticCellElement').removeClass('yesDisplay');
+        $('div.epigeneticCellElement').removeClass('gregorQuantile_0');
+        $('div.epigeneticCellElement').removeClass('gregorQuantile_1');
+        $('div.epigeneticCellElement').removeClass('gregorQuantile_2');
+        $('div.epigeneticCellElement').removeClass('gregorQuantile_3');
+        $('div.epigeneticCellElement').removeClass('gregorQuantile_4');
+        $('div.epigeneticCellElement').removeClass('gregorQuantile_5');
+        $('div.epigeneticCellElement').removeClass('skipDisplay');
+        if ( ( typeof uniqueMethods !== 'undefined') && (uniqueMethods.length>0) &&
+            ( typeof uniqueAnnotations !== 'undefined') && (uniqueAnnotations.length>0) &&
+            ( typeof uniqueTissues !== 'undefined') &&  (uniqueTissues.length>0)) {
+
+        }
+
+        const gregorAcc = getAccumulatorObject("gregorVariantInfo");
+        let quantileDef = {};
+        if (gregorAcc.length>0){
+            quantileDef =  gregorAcc[0].header['quickLookup']
+        }
+        // now go through every cell and determine if we want to display it
+
+
+        if (filterByGregor){
+            _.forEach($('div.epigeneticCellElement'),function(oneTr){
+                const currentAnnotation = extractClassBasedTrailingString(oneTr,"annotationName_");
+                const currentTissue = extractClassBasedTrailingString(oneTr,"tissueId_");
+                if (_.includes(uniqueTissues,currentTissue)&&
+                    ((currentAnnotation.length===0)||(_.includes(uniqueAnnotations,currentAnnotation)))){
+                    $(oneTr).show();
+                    $(oneTr).addClass('yesDisplay');
+                    $(oneTr).parent().addClass('yesDisplay');
+                    if (!$.isEmptyObject(quantileDef)){
+
+                        const quanAss = quantileDef[currentAnnotation+"_"+currentTissue.replace("_",":")];
+                        if ( typeof quanAss !== 'undefined'){
+                            $(oneTr).addClass('gregorQuantile_'+quanAss.quantile);
+                        }
+                    }
+                } else {
+                    $(oneTr).hide();
+                    $(oneTr).addClass('skipDisplay');
+                }
+            });
+        } else if (filterByExplicitMethod){
+            _.forEach($('div.epigeneticCellElement'),function(oneTr){
+                const currentAnnotation = extractClassBasedTrailingString(oneTr,"annotationName_");
+
+                if ((_.includes(uniqueMethods,currentAnnotation)||
+                    ((currentAnnotation.length===0)||(_.includes(uniqueAnnotations,currentAnnotation))))){
+                    $(oneTr).show();
+                    $(oneTr).addClass('yesDisplay');
+                    $(oneTr).parent().addClass('yesDisplay');
+
+                } else {
+                    $(oneTr).hide();
+                    $(oneTr).addClass('skipDisplay');
+                }
+            });
+        }
+
+        // there are two reasons we might want to NOT display a row.
+        //   1) it is not one of our 'uniqueAnnotations' that the user has asked about
+        //   2) it has no values that make the significance cut off
+        _.forEach($('div.varAnnotation'),function(oneDiv){
+            const currentAnnotation = extractClassBasedTrailingString(oneDiv,"annotationName_");
+            let methodNameToProcess;
+            let annotationNameToProcess;
+            let isBlank;
+            if (currentTableForm === 'variantTableAnnotationHeaders'){
+                methodNameToProcess = extractClassBasedTrailingString(oneDiv,"methodName_");
+                annotationNameToProcess = extractClassBasedTrailingString(oneDiv,"annotationName_");
+                isBlank = extractClassBasedTrailingString(oneDiv,"isBlank");
+                // if the line is completely blank then we must hide it based on method name.  Otherwise we use annotation name
+            }
+
+            let suppressRowDisplay = false;
+            if (!blankRowsAreOkay){
+                if (currentTableForm === 'variantTableVariantHeaders'){ // If the variants are on top then we simply look for elements in the containing row
+                    suppressRowDisplay = ($(oneDiv).parent().parent().find('div.epigeneticCellElement.yesDisplay').length === 0);
+                } else { // Otherwise we have to pull out the elements by name
+                    suppressRowDisplay = ($('#mainVariantDiv td div.epigeneticCellElement.yesDisplay.annotationName_'+annotationNameToProcess).length === 0);
+                }
+
+            }
+            if (weAreInTissueMode){
+                if (currentTableForm === 'variantTableVariantHeaders') {
+                    if (suppressRowDisplay){
+                        $(oneDiv).parent().parent().addClass('doNotDisplay');
+                        $(oneDiv).parent().parent().hide();
+                    } else {
+                        $(oneDiv).parent().parent().show();
+                        $(oneDiv).parent().parent().removeClass('doNotDisplay');
+                    }
+                } else  if (currentTableForm === 'variantTableAnnotationHeaders') {
+                    if (suppressRowDisplay){
+                        if (isBlank.length>0){
+                            $('#mainVariantDiv div.methodName_'+methodNameToProcess).parent('.varAllEpigenetics').parent().hide();
+                            $('#mainVariantDiv div.methodName_'+methodNameToProcess).parent('.header').hide();
+                        } else {
+                            $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.varAllEpigenetics').parent().hide();
+                            $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.header').hide();
+                        }
+
+                    } else {
+
+                        if (isBlank.length>0){
+                            $('#mainVariantDiv div.methodName_'+methodNameToProcess).parent('.varAllEpigenetics').parent().show();
+                            $('#mainVariantDiv div.methodName_'+methodNameToProcess).parent('.header').show();
+                        } else {
+                            $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.varAllEpigenetics').parent().show();
+                            $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.header').show();
+                        }
+
+
+                    }
+                }
+            } else {
+                if ((_.includes(uniqueAnnotations,currentAnnotation))||
+                    (_.includes(uniqueMethods,currentAnnotation))){
+
+                    if (currentTableForm === 'variantTableVariantHeaders') {
+                        if (suppressRowDisplay){
+                            $(oneDiv).parent().parent().addClass('doNotDisplay');
+                            $(oneDiv).parent().parent().hide();
+                        } else {
+                            $(oneDiv).parent().parent().show();
+                            $(oneDiv).parent().parent().removeClass('doNotDisplay');
+                        }
+                    } else  if (currentTableForm === 'variantTableAnnotationHeaders') {
+                        if (suppressRowDisplay){
+                            if (isBlank.length>0){
+                                $('#mainVariantDiv div.methodName_'+methodNameToProcess).parent('.varAllEpigenetics').parent().hide();
+                                $('#mainVariantDiv div.methodName_'+methodNameToProcess).parent('.header').hide();
+                            } else {
+                                $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.varAllEpigenetics').parent().hide();
+                                $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.header').hide();
+                            }
+
+                        } else {
+
+                            if (isBlank.length>0){
+                                $('#mainVariantDiv div.methodName_'+methodNameToProcess).parent('.varAllEpigenetics').parent().show();
+                                $('#mainVariantDiv div.methodName_'+methodNameToProcess).parent('.header').show();
+                            } else {
+                                $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.varAllEpigenetics').parent().show();
+                                $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.header').show();
+                            }
+
+
+                        }
+                    }
+
+
+                } else {
+                    if (currentTableForm === 'variantTableVariantHeaders') {
+                        $(oneDiv).parent().parent().addClass('doNotDisplay');
+                        $(oneDiv).parent().parent().hide();
+                    }
+                    else  if (currentTableForm === 'variantTableAnnotationHeaders') {
+                        if (isBlank.length>0){
+                            //we have a header with one annotation but no table cells. This must mean that we had no data, this is a blank row, and we have to work strictly with the method
+                            $('#mainVariantDiv div.methodName_'+methodNameToProcess).parent('.varAllEpigenetics').parent().hide();
+                            $('#mainVariantDiv div.methodName_'+methodNameToProcess).parent('.header').hide();
+                        } else {
+                            $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.varAllEpigenetics').parent().hide();
+                            $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.header').hide();
+                        }
+                    }
+
+                }
+            }
+
+
+        });
+
+
+        // testing...
+       // _.forEach($('div.varTissueEpigenetics'),function(o){$(o).parent().parent().show()});
+
+
 
     };
 
@@ -4611,9 +5062,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             ( typeof datatable.DataTable().columns().header() === 'undefined') ) {
             console.log(" ERROR: invalid parameter in refineTableRecords");
         } else {
-            //var whereTheTableGoes = 'table.combinedGeneTableHolder';
-            var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
-
+            var sharedTable = getSharedTable(whereTheTableGoes);
+            const dyanamicUiVariables = getDyanamicUiVariables();
             switch(headerType){
                 case 'geneTableGeneHeaders':
                     if (headerSpecific){
@@ -4708,54 +5158,72 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
                         });
                     } else { // adjust the coloration of selected squares
-                        if (( typeof adjustVisibilityCategories !== 'undefined') &&
-                            (adjustVisibilityCategories.length > 0)){
-                            if (adjustVisibilityCategories[0] === "H3k27ac"){
-                                for( var i = 0 ; i < 5 ; i++ ){
-                                    $('td:has(div.tissueTable.matchingRegion1_'+i+')').addClass('tissueTable matchingRegion1_'+i);
-                                }
-                            } else if (adjustVisibilityCategories[0] === "DNase"){
-                                for( var i = 0 ; i < 5 ; i++ ){
-                                    $('td:has(div.tissueTable.matchingRegion2_'+i+')').addClass('tissueTable matchingRegion2_'+i);
-                                }
-                            }
-                            _.forEach(adjustVisibilityCategories,function(adjustVisibilityCategory){
-                                if (($.isArray(adjustVisibilityCategory))&&(adjustVisibilityCategory.length>0)){
-                                    var elementsToHide = $('div.noDataHere.'+adjustVisibilityCategory);
-                                    if (elementsToHide.length>0){
-                                        elementsToHide.parent().parent().hide();
-                                    }
-                                    elementsToHide = $('div.variantRecordExists.'+adjustVisibilityCategory);
-                                    if (elementsToHide.length>0){
-                                        elementsToHide.parent().parent().hide();
-                                    }
-                                }
-
-                            });
-                            _.forEach($('div.tissueRecord'),function(oneRecord){
-                                $(oneRecord).parent().parent().hide();
-                            });
-
+                        $('td div.variantHeaderShifters').hide();
+                        if ( typeof sharedTable.cellColoringScheme === 'undefined'){
+                            sharedTable["cellColoringScheme"] = "sortfield";
                         }
+                        $('td:has(div.variantAnnotation.emphasisSwitch_true)').addClass('emphasisSwitch_true');
+                        // $('div.variantAnnotation:last').parent().parent().children('td').css('border-bottom','2px solid black');
+                        // $('div.variantAnnotation:not(:last)').parent().parent().children('td').css('border-bottom','0.5px solid #ccc');
+                        $('div.phenotypeRelatedData').parent().css('background','#eee');
 
-                    }
-                    break;
-                case 'variantTableAnnotationHeaders':
-                    if (headerSpecific) {
-                        ;
-                    } else { // turn off the visibility of tissue specific
-                        var tissueColumnsToHide = $('th.tissueRecord');
-                        _.forEach(tissueColumnsToHide,function(oneColumn){
-                            var classListForColumn = $(oneColumn).attr("class").split(/\s+/);
-                            if (_.includes(classListForColumn,'tissueRecord')){
-                                var buildSelector = 'th.'+classListForColumn.join('.');
-                                datatable.DataTable().column(buildSelector).visible(false);
+                         // collapse first cell across all 'Annotation' rows
+                        _.forEach($('div.annotationLabel'), function(domElement,index){
+                            if (index===0){
+                                $(domElement).parent().prop('rowspan',$('div.annotationLabel').length);
+                            } else {
+                                $(domElement).parent().hide();
                             }
+                        });
 
+                        // collapse first cell across all 'Association' rows
+                        _.forEach($('div.associationLabel'), function(domElement,index){
+                            if (index===0){
+                                $(domElement).parent().prop('rowspan',$('div.associationLabel').length);
+                            } else {
+                                $(domElement).parent().hide();
+                            }
                         });
                     }
 
-                     break;
+                    setUpDraggable(whereTheTableGoes);
+                    filterEpigeneticTable(whereTheTableGoes);
+                    break;
+                case 'variantTableAnnotationHeaders':
+                    if (headerSpecific) {
+
+                    } else {
+                        _.forEach($('table.variantTableHolder div.variantHeaderHolder'),function(o,columnIndex){ //  make nice headers out of VAR_IDs
+                            var domElement = $(o);
+                            var headerName = domElement.text().trim();
+                            if ((headerName.length >  5) &&
+                                (headerName.split('_').length === 4)) {
+                                var partsOfId = headerName.split('_');
+                                domElement.addClass("niceHeadersThatAreLinks");
+                                domElement.addClass("headersWithVarIds");
+                                domElement.attr("defrefa", partsOfId[2]);
+                                domElement.attr("defeffa", partsOfId[3]);
+                                domElement.attr("chrom", partsOfId[0]);
+                                domElement.attr("position", partsOfId[1]);
+                                domElement.attr("varid", partsOfId[0] + ":" + partsOfId[1] + "_" +
+                                    partsOfId[2] + "/" + partsOfId[3]);
+                                domElement.attr("data-toggle", "popover");
+
+                            }
+                        });
+                        $('div.phenotypeRelatedData').parent().css('background','#eee');
+                        $('td div.variantHeaderShifters').hide();
+                        if ( typeof sharedTable.cellColoringScheme === 'undefined'){
+                            sharedTable["cellColoringScheme"] = "sortfield";
+                        }
+                        $('td:has(div.variantAnnotation.emphasisSwitch_true)').addClass('emphasisSwitch_true');
+                        // $('div.variantAnnotation:last').parent().parent().children('td').css('border-bottom','2px solid black');
+                        filterEpigeneticTable(whereTheTableGoes);
+                    }
+
+;
+                    adjustTableWrapperWidth("table.variantTableHolder");
+                    break;
                 case 'fegtAnnotationHeaders':
                     if (headerSpecific){
                         var compressedGroups = sharedTable.getAllCompressedGroups();
@@ -4803,6 +5271,9 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     }
                     break;
 
+                // case "gregorSubTable":
+                //     filterEpigeneticTable("#mainVariantDiv table.variantTableHolder");
+                //     break;
 
                 default:
                     break;
@@ -4810,22 +5281,43 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         }
     };
 
-
-
-
-    var extractClassBasedIndex = function (domString,classNameToExtract) {
-        var numberToExtract = -1;
-        var classes = $(domString).attr("class");
+    /***
+     * find the last part of a class name if we know the prefix
+     *
+     * @param domString
+     * @param classNameToExtract
+     * @returns {string}
+     */
+    var extractClassBasedTrailingString = function (domString,classNameToExtract) {
+        let stringToExtract = "";
+        const classes = $(domString).attr("class");
         if ( typeof classes !== 'undefined'){
-            var classList = classes.split(/\s+/);
+            const classList = classes.split(/\s+/);
             _.forEach(classList, function (oneClass) {
                 if (oneClass.substr(0, classNameToExtract.length) === classNameToExtract) {
-                    numberToExtract = parseInt(oneClass.substr(classNameToExtract.length));
+                    stringToExtract = oneClass.substr(classNameToExtract.length);
                 }
             });
         }
+        return stringToExtract;
+    };
+
+    /***
+     * find the last part of a class name if we know the prefix, aand if we know that the last part is an integer
+     * @param domString
+     * @param classNameToExtract
+     * @returns {number}
+     */
+    var extractClassBasedIndex = function (domString,classNameToExtract) {
+        let numberToExtract = -1;
+        const stringExtracted = extractClassBasedTrailingString(domString,classNameToExtract);
+        if (stringExtracted.length > 0){
+            numberToExtract = parseInt(stringExtracted);
+        }
         return numberToExtract;
-    }
+    };
+
+
 
     var displayCategoryHtml = function (dataAnnotationCode,indexInOneDimensionalArray){
         var displayDetails = getDatatypeInformation( dataAnnotationCode );
@@ -4846,7 +5338,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                                         rowsToAdd,
                                         storeRecordsInDataStructure,
                                         typeOfRecord,
-                                        prependColumns){
+                                        prependColumns,
+                                        blankRowsAreAcceptable ){
         var rememberCategories = [];
         _.forEach(rowsToAdd, function (row,newRowCount) {
             if ( !_.includes (rememberCategories,row.category)) {
@@ -4878,13 +5371,12 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         indexInOneDimensionalArray = (numberOfExistingRows*numberOfColumns);
                         var primarySortField =  ( typeof row.sortField === 'undefined') ? row.category : row.sortField;
                         rowDescriber.push( new IntermediateStructureDataCell(row.category,
-                            getDisplayableCellContent(new IntermediateStructureDataCell (row.category,{},row.category,'CAT')),
-                                                 row.displayCategory+"</div>" ,
-                                                row.subcategory)) ;
+                            displayCategoryHtml(row.code,indexInOneDimensionalArray),
+                            row.subcategory,"LIT"));
                         indexInOneDimensionalArray++;
                         rowDescriber.push( new IntermediateStructureDataCell(row.subcategory,
-                             getDisplayableCellContent(new IntermediateStructureDataCell (row.subcategory,{},row.subcategory,'SUB')),
-                                                "insertedColumn2"));
+                            displaySubcategoryHtml(row.code,indexInOneDimensionalArray),
+                            "insertedColumn2","LIT"));
                         numberOfColumnsAdded += rowDescriber.length;
                         break;
                      case 'tissueTableTissueHeaders':
@@ -4940,20 +5432,21 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     }
                     rowDescriber.push(val);
                 var domContent = $(valContent);
-                if (domContent.text().trim().length>0){weHaveDataWorthDisplaying = true;}
-                    if (storeRecordsInDataStructure){
-                        storeCellInMemoryRepresentationOfSharedTable(whereTheTableGoes,
-                            val,
-                            'content',
-                            numberOfExistingRows,
-                            index + numberOfColumnsAdded,
-                            numberOfColumns);
-                    }
-
-                // }
+                if ((!weHaveDataWorthDisplaying)&&
+                    (domContent.text().trim().length>0)){
+                    weHaveDataWorthDisplaying = true;
+                }
+                if (storeRecordsInDataStructure){
+                    storeCellInMemoryRepresentationOfSharedTable(whereTheTableGoes,
+                        val,
+                        'content',
+                        numberOfExistingRows,
+                        index + numberOfColumnsAdded,
+                        numberOfColumns);
+                }
             });
             // push the data into the table if we have at least one cell that contains text
-            if (weHaveDataWorthDisplaying){
+            if ((blankRowsAreAcceptable)||(weHaveDataWorthDisplaying)){
                 var revisedRowDescriber = rowDescriber;
                 if (dyanamicUiVariables.dynamicTableConfiguration.formOfStorage ==='loadOnce') {
                     // what we display and what we store may be different in the static case
@@ -4964,6 +5457,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 }
 
                 $(whereTheTableGoes).dataTable().fnAddData(_.map(revisedRowDescriber,function(o){return getDisplayableCellContent(o)}));
+
             }
 
 
@@ -4974,8 +5468,12 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
 
 
-    var buildOrExtendDynamicTable = function (whereTheTableGoes,intermediateStructure,
-                                              storeRecords,typeOfRecord, prependColumns) {
+    var buildOrExtendDynamicTable = function (whereTheTableGoes, // DOM specification for the table
+                                              intermediateStructure, // everything we need to display one or more rows/headers
+                                              storeRecords, // the store records for later recall
+                                              typeOfRecord, // describes particular table and orientation
+                                              prependColumns, // add some label columns?
+                                              blankRowsAreAcceptable ) { // allow a row with nothing in it, or suppress it?
         var datatable;
 
         if (( typeof intermediateStructure !== 'undefined') &&
@@ -4989,10 +5487,20 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
         if (( typeof intermediateStructure.rowsToAdd !== 'undefined') &&
             (intermediateStructure.rowsToAdd.length > 0)){
-            datatable =  $(whereTheTableGoes).dataTable();
-            var rememberCategories = addContentToTable(whereTheTableGoes,intermediateStructure.rowsToAdd,
-                                                    storeRecords,typeOfRecord, prependColumns);
-            refineTableRecords(whereTheTableGoes,datatable,typeOfRecord,rememberCategories, false);
+            try{
+                datatable =  $(whereTheTableGoes).dataTable();
+                var rememberCategories = addContentToTable( whereTheTableGoes,
+                    intermediateStructure.rowsToAdd,
+                    storeRecords,
+                    typeOfRecord,
+                    prependColumns,
+                    blankRowsAreAcceptable );
+                refineTableRecords(whereTheTableGoes,datatable,typeOfRecord,rememberCategories, false);
+            } catch(e){
+
+            }
+
+
         }
 
 
@@ -5087,6 +5595,9 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 _.forEach(fullDataVector,function(oneCell){
                     var initialLinearIndex = extractClassBasedIndex(oneCell,"initialLinearIndex_");
                     var associatedData = _.find(sharedTable.dataCells,{ascensionNumber:initialLinearIndex})
+                    if ( typeof  associatedData === 'undefined'){
+                        console.log("Could not find data cell="+initialLinearIndex+".")
+                    }
                     returnValue.push(associatedData);
                 });
             }
@@ -5167,7 +5678,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
      * @param whereTheTableGoes
      */
     var transposeThisTable = function (whereTheTableGoes) {
-        var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
+        var sharedTable = getSharedTable(whereTheTableGoes);
 
         sharedTable['matrix'] = retrieveTransposedDataForThisTable(whereTheTableGoes);
         sharedTable['currentForm'] = formConversionOfATranspose(sharedTable.currentForm);
@@ -5176,6 +5687,70 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
         rebuildTableOnPageFromMatrix(sharedTable['matrix'],sharedTable.currentForm,whereTheTableGoes);
 
+    };
+
+    /***
+     * The variant table needs to have a variety of different forms. Can make a way to swap between them:
+     *    formSwitch=1 : toggle between displaying epigenetic data
+     *
+     *    sharedTable['currentFormVariation'] :
+     *       1 = epigenetic data is hidden
+     *       2 = epigenetic data is displayed
+     *
+     * @param whereTheTableGoes
+     * @param formVariation
+     */
+    var reviseDisplayOfVariantTable = function (whereTheTableGoes,formSwitch,originatingObject) {
+        alert("reviseDisplayOfVariantTable is no longer used");
+        // const sharedTable = getSharedTable(whereTheTableGoes);
+        //
+        // if (formSwitch === 1){
+        //
+        //     if ( typeof sharedTable['currentFormVariation'] === 'undefined'){
+        //         sharedTable['currentFormVariation'] = 1;
+        //     }
+        //     switch (sharedTable['currentFormVariation']){
+        //         case 1:
+        //             sharedTable['currentFormVariation'] = 2;
+        //             $(originatingObject).text("Hide");
+        //             filterEpigeneticTable();
+        //             break;
+        //         case 2:
+        //             sharedTable['currentFormVariation'] = 1;
+        //             $(originatingObject).text("Display");
+        //             break;
+        //         default:
+        //             alert(" Unexpected currentFormVariation = "+sharedTable['currentFormVariation']+".");
+        //             break;
+        //     }
+        //
+        //     refineTableRecords( whereTheTableGoes,
+        //         $(whereTheTableGoes).dataTable(),
+        //         sharedTable['currentForm'],
+        //         0,
+        //         false);
+        //
+        //     // I don't understand why I have to perform this final revision in the next line
+        //     $('tr.doNotDisplay').css('display','none');
+        // } else if (formSwitch === 2){
+        //
+        //     if ( typeof sharedTable['currentFormVariation'] === 'undefined'){
+        //         sharedTable['currentFormVariation'] = 1;
+        //     }
+        //            filterEpigeneticTable();
+        //
+        //     refineTableRecords( whereTheTableGoes,
+        //         $(whereTheTableGoes).dataTable(),
+        //         sharedTable['currentForm'],
+        //         0,
+        //         false);
+        //
+        //     // I don't understand why I have to perform this final revision in the next line
+        //     $('tr.doNotDisplay').css('display','none');
+        // }
+        //
+        //
+        //
     };
 
 
@@ -5243,7 +5818,6 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             }
         }
         $(zoomWrapper).data("zoomParmHolder",currentSize);
-        console.log("currentsize="+currentSize+".")
 
         $(zoomWrapper).find(".dataTables_wrapper").removeClass("dk-zoom-0 dk-zoom-1 dk-zoom-2 dk-zoom-3 dk-zoom-4 dk-zoom-5 dk-zoom-6").addClass("dk-zoom-"+currentSize);
 
@@ -5509,7 +6083,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             $(".dk-new-ui-data-wrapper.wrapper-"+dataTarget).css({"top":divTop,"left":divLeft});
 
             $(".dk-new-ui-data-wrapper").draggable({ handle:".closer-wrapper"});
-            $(".dk-new-ui-data-wrapper").resizable();
+            $(".dk-new-ui-data-wrapper").resizable({});
         }
 
 
@@ -5705,6 +6279,87 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
     Categorizor.prototype.categorizeSignificanceNumbers = categorizeSignificanceNumbers;
 
 
+    var SortUtility = function(){
+
+    };
+    SortUtility.prototype.simpleIntegerComparison = function(a, b, direction, currentSortObject){
+        const defaultSearchField = currentSortObject.desiredSearchTerm;
+        var x = parseInt($(a).attr(defaultSearchField));
+        var y = parseInt($(b).attr(defaultSearchField));
+        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+    };
+    SortUtility.prototype.textComparisonWithEmptiesAtBottom = function(a, b, direction, currentSortObject){
+        const defaultSearchField = currentSortObject.desiredSearchTerm;
+        const textA = $(a).attr(defaultSearchField).toUpperCase();
+        const textAEmpty = (textA.length===0);
+        const textB = $(b).attr(defaultSearchField).toUpperCase();
+        const textBEmpty = (textB.length===0);
+        if ( textAEmpty && textBEmpty ) {
+            return 0;
+        }
+        else if ( textAEmpty ) {
+            if (direction==='asc') {
+                return -1;
+            } else {
+                return 1;
+            }
+        }else if ( textBEmpty )
+        {
+            if (direction==='asc') {
+                return 1;
+            } else {
+                return -1;
+            }
+        }
+        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    }
+    SortUtility.prototype.textComparisonWithEmptiesAtBottom = function(a, b, direction, currentSortObject){
+        const defaultSearchField = currentSortObject.desiredSearchTerm;
+        const textA = $(a).attr(defaultSearchField).toUpperCase();
+        const textAEmpty = (textA.length===0);
+        const textB = $(b).attr(defaultSearchField).toUpperCase();
+        const textBEmpty = (textB.length===0);
+        if ( textAEmpty && textBEmpty ) {
+            return 0;
+        }
+        else if ( textAEmpty ) {
+            if (direction==='asc') {
+                return -1;
+            } else {
+                return 1;
+            }
+        }else if ( textBEmpty )
+        {
+            if (direction==='asc') {
+                return 1;
+            } else {
+                return -1;
+            }
+        }
+        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+    };
+    SortUtility.prototype.numericalComparisonWithEmptiesAtBottom = function(a, b, direction, currentSortObject){
+        const defaultSearchField = currentSortObject.desiredSearchTerm;
+        var x = parseFloat($(a).attr(defaultSearchField));
+        if (isNaN(x)){
+            x = parseInt($(a).attr('subSortField'));
+        }
+        var y = parseFloat($(b).attr(defaultSearchField));
+        if (isNaN(y)){
+            y = parseInt($(b).attr('subSortField'));
+        }
+        if (isNaN(x) || isNaN(y)){
+            return emptyFieldHandler(isNaN(x),isNaN(y), direction);
+        }else {
+            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+        }
+    };
+    SortUtility.prototype.notSortable = function(a, b, direction, currentSortObject){
+        return 0;
+    }
+
+
+
 
     var getNumberOfHeaders =function(whereTheTableGoes) {
         var dataTable = $(whereTheTableGoes).dataTable().DataTable();
@@ -5745,6 +6400,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         var initialLinearIndex = extractClassBasedIndex(identifyingNode[0].innerHTML,"initialLinearIndex_");
         var numberOfHeaders = getNumberOfHeaders (whereTheTableGoes);
         var indexOfClickedColumn =retrieveCurrentIndexOfColumn (whereTheTableGoes,initialLinearIndex);
+        var additionalParameters = getDyanamicUiVariables();
         var leftBackstop;
         if ((sharedTable.currentForm === 'geneTableGeneHeaders') || (sharedTable.currentForm === 'variantTableVariantHeaders')){
             leftBackstop = 1;
@@ -5753,7 +6409,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         }
         if (direction==="forward"){
             if ((indexOfClickedColumn>leftBackstop) &&(indexOfClickedColumn<(numberOfHeaders-1))){
-                redrawTableOnClick('table.combinedGeneTableHolder',
+                redrawTableOnClick(additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory,
+                //redrawTableOnClick('table.combinedGeneTableHolder',
                     function(sortedData,numberOfRows,numberOfColumns,arguments){
                         return mpgSoftware.matrixMath.moveColumnsInDataStructure(sortedData,numberOfRows,numberOfColumns,
                             arguments.sourceColumn,arguments.targetColumn);
@@ -5762,7 +6419,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             }
         }else if (direction==="backward") {
             if ((indexOfClickedColumn>(leftBackstop+1)) &&(indexOfClickedColumn<(numberOfHeaders))){
-                redrawTableOnClick('table.combinedGeneTableHolder',
+                redrawTableOnClick(additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory,
+                //redrawTableOnClick('table.combinedGeneTableHolder',
                     function(sortedData,numberOfRows,numberOfColumns,arguments){
                         return mpgSoftware.matrixMath.moveColumnsInDataStructure(sortedData,numberOfRows,numberOfColumns,
                             arguments.sourceColumn,arguments.targetColumn);
@@ -5809,6 +6467,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
     var contractColumns = function ( event, offeredThis, direction, whereTheTableGoes) {
         event.stopPropagation();
+        var additionalParameters = getDyanamicUiVariables();
+        whereTheTableGoes = additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory;
         var identifyingNode = $(offeredThis).parent().parent().parent();
         var dataAnnotationType= getDatatypeInformation('FEGT');
         var expectedColumns = dataAnnotationType.dataAnnotation.customColumnOrdering.constituentColumns;
@@ -5817,7 +6477,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         var columnsToDelete = _.filter(expectedColumns,function (o){return ((o.pos===groupNumber) && (o.subPos!==0))});
         var columnsNamesToDelete = _.map(columnsToDelete,function(o){return o.key});
         var indexesOfColumnsToDelete =retrieveIndexesOfColumnsWithMatchingNames (whereTheTableGoes,columnsNamesToDelete);
-        var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
+        //var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
+        var sharedTable = getSharedTable(additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory);
         sharedTable.addColumnExclusionGroup(groupNumber,grouping.key,indexesOfColumnsToDelete);
         redrawTableOnClick(whereTheTableGoes,
             function(sortedData,numberOfRows,numberOfColumns,arguments){
@@ -5828,9 +6489,12 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
     var expandColumns = function ( event, offeredThis, direction, whereTheTableGoes) {
         event.stopPropagation();
+        var additionalParameters = getDyanamicUiVariables();
+        whereTheTableGoes = additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory;
         var identifyingNode = $(offeredThis).parent().parent().parent();
         var groupNumber = extractClassBasedIndex(identifyingNode[0].innerHTML,"groupNum");
-        var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
+        var sharedTable = getSharedTable(additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory);
+        // var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
         sharedTable.removeColumnExclusionGroup(groupNumber);
 
 
@@ -5854,7 +6518,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         var initialLinearIndexColumnBeingDragged = extractClassBasedIndex(draggedColumn[0].innerHTML,"initialLinearIndex_");
         var currentIndexTargetColumn = retrieveCurrentIndexOfColumn (whereTheTableGoes,initialLinearIndexTargetColumn);
         var currentIndexColumnBeingDragged = retrieveCurrentIndexOfColumn (whereTheTableGoes,initialLinearIndexColumnBeingDragged);
-        redrawTableOnClick('table.combinedGeneTableHolder',
+        redrawTableOnClick(whereTheTableGoes,
             function(sortedData,numberOfRows,numberOfColumns,arguments){
                 return mpgSoftware.matrixMath.moveColumnsInDataStructure(sortedData,numberOfRows,numberOfColumns,
                     arguments.sourceColumn,arguments.targetColumn);
@@ -5868,19 +6532,22 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
     var setUpDraggable = function(whereTheTableGoes) {
         var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
         var classNameToIdentifyHeader;
-        if ((sharedTable.currentForm === 'geneTableGeneHeaders') || (sharedTable.currentForm === 'variantTableVariantHeaders')){
+        if ((sharedTable.currentForm === 'geneTableGeneHeaders')){
             classNameToIdentifyHeader =  "th.geneHeader";
-        } else if ((sharedTable.currentForm === 'geneTableAnnotationHeaders') || (sharedTable.currentForm === 'variantTableAnnotationHeaders')){
+        } else if ((sharedTable.currentForm === 'geneTableAnnotationHeaders')){
             classNameToIdentifyHeader =  "th.categoryNameToUse";
         } else if ((sharedTable.currentForm === 'tissueTableMethodHeaders') ){
             classNameToIdentifyHeader =  "th.tissueTableHeader";
+        } else if ((sharedTable.currentForm === 'variantTableVariantHeaders') ){
+            classNameToIdentifyHeader =  "th.headersWithVarIds";
         }
 
         $( classNameToIdentifyHeader ).draggable({
              axis: "x",
             opacity: 0.8,
             containment: "parent",
-            revert:"invalid"
+            revert:"invalid",
+            stack: ".ui-draggable"
         });
         $( classNameToIdentifyHeader).droppable({
             classes: {
@@ -5955,6 +6622,67 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         },{});
         refineTableRecords(whereTheTableGoes,$(whereTheTableGoes).dataTable(),sharedTable.currentForm,[],false);
 
+    };
+    const displayVariantTablePerTissue  = function (whereTheTableGoes, tissueDominant) {
+        var sharedTable = getSharedTable(whereTheTableGoes);
+        destroySharedTable(whereTheTableGoes);
+        sharedTable['dataCells'] = [];
+
+        // Make the variant headers, the strictly genetic annotations, and the genetic association rows
+        const indexAccumulator = getAccumulatorObject("variantInfoArray");
+        const intermediateDataStructureHdr = getAccumulatorObject("topPortionDisplay");
+        if (tissueDominant) {
+            setAccumulatorObject("variantTableOrientation","tissueDominant");
+        } else {
+            setAccumulatorObject("variantTableOrientation","annotationDominant");
+        }
+
+        const clearBeforeStarting = false;
+        const idForTheTargetDiv = whereTheTableGoes;
+        const storeRecords = true;
+
+        prepareToPresentToTheScreen(idForTheTargetDiv,
+            '#notUsed',
+            {},
+            clearBeforeStarting,
+            intermediateDataStructureHdr,
+            storeRecords,
+            'variantTableVariantHeaders',
+            true,
+            true ); // we want to display blank rows in this case, since they are informative
+
+        if (tissueDominant){
+            const intermediateDataStructureBody = indexAccumulator[0].header['tissueDisplay'];
+            intermediateDataStructureBody['tableToUpdate'] = idForTheTargetDiv;
+
+            prepareToPresentToTheScreen(idForTheTargetDiv,
+                '#notUsed',
+                {}, // unused
+                clearBeforeStarting,
+                intermediateDataStructureBody,
+                storeRecords,
+                'variantTableVariantHeaders',
+                false,
+                true );
+        } else {
+            const intermediateDataStructureBodyArray = getAccumulatorObject('annotationDisplayArray');
+            _.forEach(intermediateDataStructureBodyArray,function(intermediateDataStructureBody){
+                intermediateDataStructureBody['tableToUpdate'] = idForTheTargetDiv;
+                prepareToPresentToTheScreen(idForTheTargetDiv,
+                    '#notUsed',
+                    {}, // unused
+                    clearBeforeStarting,
+                    intermediateDataStructureBody,
+                    storeRecords,
+                    'variantTableVariantHeaders',
+                    false,
+                    true );
+            });
+
+        }
+
+        sharedTable['matrix'] = new mpgSoftware.matrixMath.Matrix(sharedTable['dataCells'],sharedTable['numberOfRows'],sharedTable['numberOfColumns'])
+        filterEpigeneticTable(idForTheTargetDiv,true);
     }
 
 
@@ -5975,6 +6703,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         removeWrapper:removeWrapper,
         createOutOfRegionGraphic:createOutOfRegionGraphic,
         transposeThisTable:transposeThisTable,
+        reviseDisplayOfVariantTable:reviseDisplayOfVariantTable,
         dataTableZoomSet:dataTableZoomSet,
         dataTableZoomDynaSet:dataTableZoomDynaSet,
         displayTissuesForAnnotation:displayTissuesForAnnotation,
@@ -5984,6 +6713,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         adjustLowerExtent: adjustLowerExtent,
         adjustUpperExtent: adjustUpperExtent,
         Categorizor:Categorizor,
+        SortUtility:SortUtility,
         translateATissueName:translateATissueName,
         removeColumn:removeColumn,
         contractColumns:contractColumns,
@@ -5991,7 +6721,15 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         openFilter:openFilter,
         closeFilterModal:closeFilterModal,
         retrieveDataFromServer:retrieveDataFromServer,
-        retrieveGwasCodingCredibleSetFromServer: retrieveGwasCodingCredibleSetFromServer
+        retrieveGwasCodingCredibleSetFromServer: retrieveGwasCodingCredibleSetFromServer,
+        displayHeaderForVariantTable:displayHeaderForVariantTable,
+        displayForVariantTable:displayForVariantTable,
+        displayGregorSubTableForVariantTable:displayGregorSubTableForVariantTable,
+        getAccumulatorObject:getAccumulatorObject,
+        filterEpigeneticTable:filterEpigeneticTable,
+        adjustAnnotationTable:adjustAnnotationTable,
+        extractClassBasedIndex:extractClassBasedIndex,
+        displayVariantTablePerTissue:displayVariantTablePerTissue
     }
 }());
 

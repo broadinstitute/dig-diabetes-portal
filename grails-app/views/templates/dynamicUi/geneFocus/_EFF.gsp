@@ -18,7 +18,7 @@ records={{numberRecords}}
 
 
 <script id="dynamicGeneTableEffectorGeneBody"  type="x-tmpl-mustache">
-             <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
+             <div significance_sortField="{{significanceValue}}" sortField=''
              class="tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'effector gene records {{gene}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
                data-target="#effector_gene_{{gene}}" style="color:black">

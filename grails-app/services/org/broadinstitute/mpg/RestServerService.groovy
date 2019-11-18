@@ -71,8 +71,14 @@ class RestServerService {
     private String GET_GENESET_RECORDS_FROM_DEPICT_URL= "testcalls/depict/genepathway/object"
     private String GET_DNASE_RECORDS_URL= "testcalls/region/dnase/object"
     private String GET_H3K27AC_RECORDS_URL= "testcalls/region/h3k27ac/object"
+    private String GET_CREDIBLE_SET_BASED_ON_OVERLAP_URL= "testcalls/variant/credibleset/object"
     private String GET_BOTTOM_LINE_RESULTS_URL= "graph/meta/variant/object"
     private String GET_TISSUES_FROM_GREGOR_URL= "graph/gregor/phenotype/object"
+    private String GET_VARIANT_ANNOTATIONS_URL= "graph/region/variant/object"
+    private String GET_ANNOTATIONS_BY_RANGE_URL= "graph/region/bylocus/object"
+    private String GET_VARIANTS_FROM_RANGE_URL= "graph/prioritization/variant/object"
+    private String GET_CHROMATIN_STATE_FROM_VARIANTS_URL= "graph/region/variant/object"
+    private String GET_TF_MOTIF_FROM_VARIANTS_URL= "graph/transcriptionfactor/variant/object"
     private String GET_TISSUES_FROM_LDSR_URL = "testcalls/ldscore/tissue/object"
     private String GET_HAIL_DATA_URL = "getHailData"
     private String GET_SAMPLE_DATA_URL = "getSampleData"
@@ -2493,6 +2499,111 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
+    public JSONObject gatherVariantsInRange(  String phenotype,
+                                              String chromosome,
+                                              int startPosition,
+                                              int endPosition,
+                                              int limit ) {
+        List<String> specifyRequestList = []
+
+        if ((phenotype) && (phenotype.length() > 0)) {
+            specifyRequestList << "phenotype=${phenotype}"
+        }
+
+        if ((chromosome) && (chromosome.length() > 0)) {
+            specifyRequestList << "chrom=${chromosome}"
+        }
+        if (startPosition > -1) {
+            specifyRequestList << "start_pos=${startPosition}"
+        }
+        if (endPosition > -1) {
+            specifyRequestList << "end_pos=${endPosition}"
+        }
+        if (limit > -1) {
+            specifyRequestList << "limit=${limit}"
+        }
+
+        String rawReturnFromApi =  getRestCall("${GET_VARIANTS_FROM_RANGE_URL}?${specifyRequestList.join("&")}".toString())
+        JsonSlurper slurper = new JsonSlurper()
+        JSONObject jsonObject
+        try{
+            jsonObject = slurper.parseText(rawReturnFromApi)
+        } catch(Exception e){
+            log.error("ERROR: gatherVariantsInRange. problem parsing the data we received from the KB")
+        }
+        return jsonObject
+    }
+
+
+
+
+
+     public JSONObject gatherVariantsAnnotations(    String chromosome,
+                                                    int startPosition,
+                                                    int endPosition,
+                                                    String method,
+                                                    String annotation,
+                                                    List <String> variantList,
+                                                    List <String> tissueList,
+                                                    int limit ) {
+        List<String> specifyRequestList = []
+        boolean callByRange = false
+        boolean callByVarId = false
+
+
+        if ((chromosome) && (chromosome.length() > 0)) {
+            specifyRequestList << "chrom=${chromosome}"
+            callByRange = true
+        }
+        if ((startPosition > -1) && (endPosition > -1)) {
+            specifyRequestList << "pos=${startPosition},${endPosition}"
+            if (!callByRange){
+                log.error("calling error in gatherVariantsAnnotations.  Range provided, but no chromosome.")
+            }
+        }
+         if ((method) && (method.length() > 0)) {
+             specifyRequestList << "method=${method}"
+         }
+         if ((annotation) && (annotation.length() > 0)) {
+             specifyRequestList << "annotation=${annotation}"
+         }
+        if ((variantList) && (variantList.size() > 0)) {
+            specifyRequestList << "var_id=${variantList.join(",").replace("\"","")}"
+            callByVarId = true
+        }
+        if ((tissueList) && (tissueList.size() > 0)) {
+            specifyRequestList << "tissue=${tissueList.join(",").replace("\"","")}"
+        }
+
+        if (limit > -1) {
+            specifyRequestList << "limit=${limit}"
+        }
+         String rawReturnFromApi
+         if (callByRange){
+             rawReturnFromApi =  getRestCall("${GET_ANNOTATIONS_BY_RANGE_URL}?${specifyRequestList.join("&")}".toString())
+         } else if (callByVarId){
+             rawReturnFromApi =  getRestCall("${GET_VARIANT_ANNOTATIONS_URL}?${specifyRequestList.join("&")}".toString())
+         } else {
+             log.error("calling error in gatherVariantsAnnotations. Neither range nor var IDs provided")
+         }
+
+         JsonSlurper slurper = new JsonSlurper()
+         JSONObject jsonObject
+
+        try{
+            jsonObject = slurper.parseText(rawReturnFromApi)
+        } catch(Exception e){
+            log.error("ERROR: gatherVariantsInRange. problem parsing the data we received from the KB")
+        }
+        return jsonObject
+    }
+
+
+
+
+
+
+
     public JSONObject gatherGregorData(  String phenotype ) {
         List<String> specifyRequestList = []
         if ((phenotype) && (phenotype.length() > 0)) {
@@ -2528,6 +2639,48 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return jsonObject
     }
 
+
+
+    public JSONObject gatherChromatinStateData(  String tissue, List <String> variantList ) {
+        List<String> specifyRequestList = []
+
+        if ((tissue) && (tissue.length() > 0)) { // tissue specification is not currently supported by the API
+            specifyRequestList << "tissue=${tissue}"
+        }
+        if ((variantList) && (variantList.size() > 0)) {
+            specifyRequestList << "var_id=${variantList.join(",").replace("\"","")}"
+        }
+
+        String rawReturnFromApi =  getRestCall("${GET_CHROMATIN_STATE_FROM_VARIANTS_URL}?${specifyRequestList.join("&")}".toString())
+        JsonSlurper slurper = new JsonSlurper()
+        JSONObject jsonObject
+        try{
+            jsonObject = slurper.parseText(rawReturnFromApi)
+        } catch(Exception e){
+            log.error("ERROR: gatherGregorData. problem parsing the data we received from the KB")
+        }
+        return jsonObject
+    }
+
+
+
+    public JSONObject gatherTfMotifData( List <String> variantList ) {
+        List<String> specifyRequestList = []
+
+        if ((variantList) && (variantList.size() > 0)) {
+            specifyRequestList << "var_id=${variantList.join(",").replace("\"","")}"
+        }
+
+        String rawReturnFromApi =  getRestCall("${GET_TF_MOTIF_FROM_VARIANTS_URL}?${specifyRequestList.join("&")}".toString())
+        JsonSlurper slurper = new JsonSlurper()
+        JSONObject jsonObject
+        try{
+            jsonObject = slurper.parseText(rawReturnFromApi)
+        } catch(Exception e){
+            log.error("ERROR: gatherGregorData. problem parsing the data we received from the KB")
+        }
+        return jsonObject
+    }
 
 
 
@@ -2616,10 +2769,44 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
+    public JSONObject retrieveCredibleSetViaOverlap( String phenotype,
+                                          int  startPosition, int  endPosition,
+                                          String chromosome, String dataSet ) {
+        List<String> specifyRequestList = []
+
+        if ((phenotype) && (phenotype.length() > 0)) {
+            specifyRequestList << "phenotype=${phenotype}"
+        }
+        if ((chromosome) && (chromosome.length() > 0)) {
+            specifyRequestList << "chrom=${chromosome}"
+        }
+        if (startPosition > -1) {
+            specifyRequestList << "start_pos=${startPosition}"
+        }
+        if (endPosition > -1) {
+            specifyRequestList << "end_pos=${endPosition}"
+        }
+        if ((dataSet) && (dataSet.length() > 0)) {
+            specifyRequestList << "dataset=${dataSet}"
+        }
+
+
+        String rawReturnFromApi = getRestCall("${GET_CREDIBLE_SET_BASED_ON_OVERLAP_URL}?${specifyRequestList.join("&")}".toString())
+        JsonSlurper slurper = new JsonSlurper()
+        JSONObject jSONObject
+
+        jSONObject = slurper.parseText(rawReturnFromApi)
+
+        return jSONObject
+
+    }
+
+
+
     public JSONArray gatherECaviarData( String gene, String tissue,
                                          String variant, String phenotype,
                                          int  startPosition, int  endPosition,
-                                        String chromosome) {
+                                         String chromosome, List <String> credibleSetIdList ) {
         List<String> specifyRequestList = []
         if ((gene) && (gene.length() > 0)) {
             specifyRequestList << "gene=${gene}"
@@ -2643,6 +2830,10 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         if (endPosition > -1) {
             specifyRequestList << "end_pos=${endPosition}"
         }
+        if ((credibleSetIdList) && (credibleSetIdList.size() > 0)) {
+            specifyRequestList << "credible_set=${credibleSetIdList.join(",").replace("\"","")}"
+        }
+
 
         String rawReturnFromApi =  getRestCall("${GET_VARIANT_ECAVIAR_COLOCALIZATION_FROM_URL}?${specifyRequestList.join("&")}".toString())
         JsonSlurper slurper = new JsonSlurper()

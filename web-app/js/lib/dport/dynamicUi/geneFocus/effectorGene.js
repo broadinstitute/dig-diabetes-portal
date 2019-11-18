@@ -1,5 +1,5 @@
 /***
- * the DEPICT data pertaining to gene sets
+ * the effector gene table information for some limited number of genes
  *
  * The following externally visible functions are required:
  *         1) a function to process records
@@ -14,7 +14,7 @@
 var mpgSoftware = mpgSoftware || {};  // encapsulating variable
 mpgSoftware.dynamicUi = mpgSoftware.dynamicUi || {};   // second level encapsulating variable
 
-mpgSoftware.dynamicUi.depictGeneSets = (function () {
+mpgSoftware.dynamicUi.effectorGene = (function () {
     "use strict";
 
 
@@ -24,24 +24,23 @@ mpgSoftware.dynamicUi.depictGeneSets = (function () {
      * @param rawGeneAssociationRecords
      * @returns {*}
      */
-    var processRecordsFromDepictGeneSet = function (data, rawGeneAssociationRecords) {
+    var processRecordsFromEffectorGene = function (data, rawGeneAssociationRecords) {
         var dataArrayToProcess = [];
         if ( typeof data !== 'undefined'){
-            dataArrayToProcess = {  gene:data.gene,
-                                    tissues:_.map(data.data,function(oneRec){
-                                        return {
-                                            gene:oneRec.gene,
-                                            gene_list:oneRec.gene_list,
-                                            pathway_description:oneRec.pathway_description,
-                                            pathway_id:oneRec.pathway_id,
-                                            tissue:oneRec.pathway_id,
-                                            value:oneRec.pvalue
-                                        };
-                                    })
-            };
+            _.forEach(data.data,function(oneRec){
+                dataArrayToProcess = {
+                    gene: oneRec.Gene_name,
+                    tissues: [{
+                        gene: oneRec.Gene_name,
+                        Combined_category: oneRec.Combined_category,
+                        Perturbation_combined: oneRec.Perturbation_combined,
+                        Genomic_combined: oneRec.Genomic_combined,
+                        Genetic_combined: oneRec.Genetic_combined
+                    }]
+                };
+            });
         }
         rawGeneAssociationRecords.push(dataArrayToProcess);
-        return rawGeneAssociationRecords;
     };
 
 
@@ -50,21 +49,19 @@ mpgSoftware.dynamicUi.depictGeneSets = (function () {
      * @param idForTheTargetDiv
      * @param objectContainingRetrievedRecords
      */
-    var displayGeneSetFromDepict = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+    var displayGenesFromEffectorGene = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
 
         mpgSoftware.dynamicUi.displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
-            'DEP_GS', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            'depictGeneSetInfo', // name of the persistent field where the data we received is stored
+            'EFF', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+            'rawEffectorGeneRecords', // name of the persistent field where the data we received is stored
             '', // we may wish to pull out one record for summary purposes
             function(records,tissueTranslations){
-                return _.map(_.sortBy(records,['pvalue']),function(oneRecord){
-                    return {    pathway_description:  oneRecord.pathway_description,
-                        gene_list: oneRecord.gene_list,
-                        pathway_id: oneRecord.pathway_id.includes(":")?
-                            oneRecord.pathway_id.split(":")[1]:oneRecord.pathway_id,
-                        value: UTILS.realNumberFormatter(""+oneRecord.value),
-                        tissue: oneRecord.tissue,
-                        numericalValue: oneRecord.value };
+                return _.map(records,function(oneRecord){
+                    return {    gene:oneRecord.gene,
+                                value:oneRecord};
+                    // return {    value:UTILS.realNumberFormatter(''+tissueRecord.value),
+                    //     numericalValue:tissueRecord.value,
+                    //     dataset: tissueRecord.dataset };
                 });
 
             },
@@ -95,17 +92,18 @@ mpgSoftware.dynamicUi.depictGeneSets = (function () {
      * @type {Categorizor}
      */
     var categorizor = new mpgSoftware.dynamicUi.Categorizor();
-    categorizor.categorizeSignificanceNumbers = Object.getPrototypeOf(categorizor).genePValueSignificance;
+    categorizor.categorizeSignificanceNumbers = function ( significance, datatype, overrideValue ){
+        // significance is not a meaningful concept for the effector gene data, so return a 6, which means make the background white
+        return 6;
+    }
 
-
-
+    let sortUtility = new mpgSoftware.dynamicUi.SortUtility();
+    const sortRoutine = Object.getPrototypeOf(sortUtility).notSortable;
 
 // public routines are declared below
     return {
-        processRecordsFromDepictGeneSet: processRecordsFromDepictGeneSet,
-        displayGeneSetFromDepict:displayGeneSetFromDepict
+        processRecordsFromEffectorGene: processRecordsFromEffectorGene,
+        displayGenesFromEffectorGene:displayGenesFromEffectorGene,
+        sortRoutine:sortRoutine
     }
 }());
-
-
-

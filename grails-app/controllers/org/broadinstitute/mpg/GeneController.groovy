@@ -73,6 +73,9 @@ class GeneController {
     }
 
 
+
+
+
     /***
      * display all information about a gene. This call displays only the core of the page -- the data all come back
      * with the Json
@@ -91,31 +94,15 @@ class GeneController {
         String newDatasetName
         String phenotype = metaDataService.getDefaultPhenotype()
         String portalType = g.portalTypeString() as String
-        String igvIntro = ""
-        List <String> defaultTissues = []
-        switch (portalType){
-            case 't2d':
-                igvIntro = g.message(code: "gene.igv.intro1", default: "Use the IGV browser")
-                break
-            case 'mi':
-                igvIntro = g.message(code: "gene.mi.igv.intro1", default: "Use the IGV browser")
-                break
-            case 'stroke':
-                igvIntro = g.message(code: "gene.stroke.igv.intro1", default: "Use the IGV browser")
-                break
-            case 'ibd':
-                igvIntro = g.message(code: "gene.ibd.igv.intro1", default: "Use the IGV browser")
-                break
-            default:
-                break
-        }
+        String igvIntro = "Use the IGV browser"
+
         try {
             startExtent = Long.parseLong(params.startExtent)
             endExtent = Long.parseLong(params.endExtent)
         } catch(e){
           //  e.printStackTrace()
         }
-        defaultTissues = restServerService.retrieveBeanForPortalType(portalType)?.getTissues()
+        List<String> defaultTissues = restServerService.retrieveBeanForPortalType(portalType)?.getTissues()
 
         if (params.phenotypeChooser){
             phenotype = params.phenotypeChooser

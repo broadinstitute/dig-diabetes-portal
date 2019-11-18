@@ -13,6 +13,7 @@ import org.broadinstitute.mpg.diabetes.metadata.query.Covariate
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryJsonBuilder
 import org.broadinstitute.mpg.diabetes.metadata.result.KnowledgeBaseFlatSearchTranslator
 import org.broadinstitute.mpg.diabetes.metadata.result.KnowledgeBaseResultParser
+import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.broadinstitute.mpg.diabetes.util.PortalException
 import org.broadinstitute.mpg.locuszoom.PhenotypeBean
 import org.broadinstitute.mpg.meta.UserQueryContext
@@ -1277,7 +1278,9 @@ class WidgetService {
     public JSONObject buildTheIncredibleSet( String chromosome, int startPosition, int endPosition,
                                              String phenotype, int maxNumberOfRecords ){
         JSONObject jsonResultString = new JSONObject()
-        String dataSetName = metaDataService.getPreferredSampleGroupNameForPhenotype(phenotype)
+        String dataSetName = metaDataService.getPreferredSampleGroupNameForPhenotypeAndPropertyMeaning(phenotype,
+                "P_VALUE")
+
         Property newlyChosenProperty = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataSetName, "P_VALUE",
                 MetaDataService.METADATA_VARIANT)
         if (newlyChosenProperty!=null){
@@ -1309,7 +1312,7 @@ class WidgetService {
      */
     public JSONObject getCredibleOrAlternativeSetInformation( String chromosome, int startPosition, int endPosition,
                                                               String dataset, String phenotype, String propertyName,float minimumAllowablePosteriorProbability,
-                                                              Boolean calledInGeneQuery ) {
+                                                              Boolean calledInGeneQuery, Boolean  retrieveAlternateFormCredibleSet ) {
         LocusZoomJsonBuilder locusZoomJsonBuilder
         String jsonGetDataString
         JSONObject jsonResultString
@@ -1317,6 +1320,29 @@ class WidgetService {
         if (minimumAllowablePosteriorProbability < 0){  // a probability has to always be greater than or equal to zero. If we find something else
                                                         // then let's provide a default value
             minimumAllowablePosteriorProbability = DEFAULT_MINIMUM_POSTERIOR_PROBABILITY
+        }
+        if (retrieveAlternateFormCredibleSet){ // pick the best data set for posteriors
+            // let's pick the data set (if any) that has posteriors for this phenotype.
+            // If there's more than one pick the one with the biggest sample size.  If there are none then we give up
+            //  and undertake the old-fashioned get data call
+
+
+
+            String dataSetName = metaDataService.getPreferredSampleGroupNameForPhenotypeAndPropertyMeaning(phenotype,
+                                                                    PortalConstants.PROPERTY_NAME_POSTERIOR_PROBABILITY)
+            if (dataSetName){
+                JSONObject jsonObject = restServerService.retrieveCredibleSetViaOverlap( phenotype,startPosition, endPosition,
+                        chromosome,  dataSetName)
+                if ( (jsonObject) && (jsonObject.data) ){
+                    return jsonObject
+                }
+
+            }
+
+
+        } else {
+            dataset = metaDataService.getPreferredSampleGroupNameForPhenotypeAndPropertyMeaning(phenotype,
+                    PortalConstants.PROPERTY_NAME_POSTERIOR_PROBABILITY)
         }
         if (dataset != ''){
              locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype, propertyName);

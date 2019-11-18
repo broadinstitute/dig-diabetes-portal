@@ -75,11 +75,15 @@ mpgSoftware.dynamicUi.mouseKnockout = (function () {
         return 6;
     }
 
+    let sortUtility = new mpgSoftware.dynamicUi.SortUtility();
+    const sortRoutine = Object.getPrototypeOf(sortUtility).numericalComparisonWithEmptiesAtBottom;
+
 
 
 // public routines are declared below
     return {
         displayRefinedModContext:displayRefinedModContext,
-        processRecordsFromMod: processRecordsFromMod
+        processRecordsFromMod: processRecordsFromMod,
+        sortRoutine:sortRoutine
     }
 }());

@@ -1,5 +1,5 @@
 /***
- * the effector gene table information for some limited number of genes
+ * the DEPICT data pertaining to gene sets
  *
  * The following externally visible functions are required:
  *         1) a function to process records
@@ -14,7 +14,7 @@
 var mpgSoftware = mpgSoftware || {};  // encapsulating variable
 mpgSoftware.dynamicUi = mpgSoftware.dynamicUi || {};   // second level encapsulating variable
 
-mpgSoftware.dynamicUi.effectorGene = (function () {
+mpgSoftware.dynamicUi.depictGenePvalue = (function () {
     "use strict";
 
 
@@ -24,18 +24,15 @@ mpgSoftware.dynamicUi.effectorGene = (function () {
      * @param rawGeneAssociationRecords
      * @returns {*}
      */
-    var processRecordsFromEffectorGene = function (data, rawGeneAssociationRecords) {
+    var processRecordsFromDepictGenePvalue = function (data, rawGeneAssociationRecords) {
         var dataArrayToProcess = [];
         if ( typeof data !== 'undefined'){
-            _.forEach(data.data,function(oneRec){
+            _.forEach(data,function(oneRec){
                 dataArrayToProcess = {
-                    gene: oneRec.Gene_name,
+                    gene: oneRec.gene,
                     tissues: [{
-                        gene: oneRec.Gene_name,
-                        Combined_category: oneRec.Combined_category,
-                        Perturbation_combined: oneRec.Perturbation_combined,
-                        Genomic_combined: oneRec.Genomic_combined,
-                        Genetic_combined: oneRec.Genetic_combined
+                        gene: oneRec.gene,
+                        value: oneRec.pvalue
                     }]
                 };
             });
@@ -49,19 +46,17 @@ mpgSoftware.dynamicUi.effectorGene = (function () {
      * @param idForTheTargetDiv
      * @param objectContainingRetrievedRecords
      */
-    var displayGenesFromEffectorGene = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+    var displayGenesFromDepict = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
 
         mpgSoftware.dynamicUi.displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
-            'EFF', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            'rawEffectorGeneRecords', // name of the persistent field where the data we received is stored
+            'DEP_GP', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+            'rawDepictInfo', // name of the persistent field where the data we received is stored
             '', // we may wish to pull out one record for summary purposes
             function(records,tissueTranslations){
-                return _.map(records,function(oneRecord){
-                    return {    gene:oneRecord.gene,
-                                value:oneRecord};
-                    // return {    value:UTILS.realNumberFormatter(''+tissueRecord.value),
-                    //     numericalValue:tissueRecord.value,
-                    //     dataset: tissueRecord.dataset };
+                return _.map(_.sortBy(records,['value']),function(tissueRecord){
+                    return {    value:UTILS.realNumberFormatter(''+tissueRecord.value),
+                        numericalValue:tissueRecord.value,
+                        dataset: tissueRecord.dataset };
                 });
 
             },
@@ -94,11 +89,17 @@ mpgSoftware.dynamicUi.effectorGene = (function () {
     var categorizor = new mpgSoftware.dynamicUi.Categorizor();
     categorizor.categorizeSignificanceNumbers = Object.getPrototypeOf(categorizor).genePValueSignificance;
 
+    let sortUtility = new mpgSoftware.dynamicUi.SortUtility();
+    const sortRoutine = Object.getPrototypeOf(sortUtility).numericalComparisonWithEmptiesAtBottom;
 
 
 // public routines are declared below
     return {
-        processRecordsFromEffectorGene: processRecordsFromEffectorGene,
-        displayGenesFromEffectorGene:displayGenesFromEffectorGene
+        processRecordsFromDepictGenePvalue: processRecordsFromDepictGenePvalue,
+        displayGenesFromDepict:displayGenesFromDepict,
+        sortRoutine:sortRoutine
     }
 }());
+
+
+

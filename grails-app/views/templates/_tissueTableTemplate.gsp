@@ -1,4 +1,4 @@
-<g:render template="/templates/dynamicUi/EFF" />
+<g:render template="/templates/dynamicUi/geneFocus/EFF" />
 
 <script id="mainTissueTableOrganizer"  type="x-tmpl-mustache">
     <div class="container">
