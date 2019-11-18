@@ -46,12 +46,19 @@ class SpringManipService {
      * @param identityInformation
      * @param session
      */
-    public Boolean forceLogin(JSONObject identityInformation,javax.servlet.http.HttpSession session) {
+    public JSONObject forceLogin(JSONObject identityInformation,javax.servlet.http.HttpSession session) {
         if ((!identityInformation) ||
             (!identityInformation.email) ||
             (identityInformation.email.size()<1) ) {
             return  // no email.  This is the one identifier we cannot do without
         }
+
+        Boolean aBroadie = false
+
+        if (identityInformation.email.indexOf("broadinstitute.org") > 0) {
+            aBroadie = true
+        }
+
         Boolean weHaveSeenYouBefore = false
         String email = identityInformation.email
         String username = email
@@ -114,7 +121,13 @@ class SpringManipService {
             }
             signIn(email,'bloodglucose')
         }
-        return weHaveSeenYouBefore
+
+        JSONObject obj = new JSONObject()
+
+        obj.put("weHaveSeenYouBefore", weHaveSeenYouBefore)
+        obj.put("aBroadie", aBroadie)
+
+        return obj
 
     }
 
