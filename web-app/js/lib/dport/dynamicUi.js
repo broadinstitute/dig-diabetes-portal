@@ -1368,7 +1368,7 @@ mpgSoftware.dynamicUi = (function () {
                             var dataForCall = {variants: variantsAsJson, annotationToRetrieve: 'DNASE'};
                             retrieveRemotedContextInformation(buildRemoteContextArray({
                                 name: actionId,
-                                retrieveDataUrl: additionalParameters.retrieveVariantAnnotationsUrl,
+                                retrieveDataUrl: additionalParameters.retrieveAnyTypeRegionData,
                                 dataForCall: dataForCall,
                                 processEachRecord: dataAnnotationType.processEachRecord,
                                 displayRefinedContextFunction: dataAnnotationType.displayEverythingFromThisCall,
@@ -2833,6 +2833,8 @@ mpgSoftware.dynamicUi = (function () {
                                     rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
                                         {otherClasses: "methodName_" + currentMethod + " annotationName_" + tissueName}, "discoDownAndCheckOutTheShow", 'EMP'));
                                 });
+                            } else {
+                                console.log("We recognize this row")
                             }
                             // fill in all of the column cells
                             if (recordsForTissue.arrayOfRecords.length>dataVector.length+2){
@@ -3923,6 +3925,7 @@ mpgSoftware.dynamicUi = (function () {
 
         switch (additionalParameters.dynamicTableType) {
             case 'geneTable':
+                dataAnnotationTypes = additionalParameters.dataAnnotationTypes;
                 break;
             case 'effectorGeneTable':
                 var sharedTable = new SharedTableObject( 'fegtAnnotationHeaders',0,0);
@@ -6631,9 +6634,14 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         // Make the variant headers, the strictly genetic annotations, and the genetic association rows
         const indexAccumulator = getAccumulatorObject("variantInfoArray");
         const intermediateDataStructureHdr = getAccumulatorObject("topPortionDisplay");
-        if (tissueDominant) {
+        if (tissueDominant) {;
+            $('button.actualTransposeButton').attr("disabled", true);
+            if (sharedTable.currentForm === 'variantTableAnnotationHeaders'){
+                transposeThisTable('#mainVariantDiv table.variantTableHolder');
+            }
             setAccumulatorObject("variantTableOrientation","tissueDominant");
         } else {
+            $('button.actualTransposeButton').attr("disabled", false);
             setAccumulatorObject("variantTableOrientation","annotationDominant");
         }
 

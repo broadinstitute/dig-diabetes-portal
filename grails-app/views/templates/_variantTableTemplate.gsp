@@ -194,7 +194,7 @@
                         <div class="row" >
                             <div class="col-md-6"></div>
                             <div class="col-md-6">
-                              <button  class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table" onclick="mpgSoftware.dynamicUi.transposeThisTable('{{domTableSpecifier}}')">
+                              <button  class="btn btn-secondary btn-default transpose actualTransposeButton" type="button" title="click to transpose table" onclick="mpgSoftware.dynamicUi.transposeThisTable('{{domTableSpecifier}}')">
                                 Transpose
                               </button>
                             </div>
