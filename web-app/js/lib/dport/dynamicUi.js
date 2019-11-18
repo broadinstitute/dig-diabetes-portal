@@ -519,8 +519,12 @@ mpgSoftware.dynamicUi = (function () {
                 defaultFollowUp.placeToDisplayData = '#mainVariantDiv table.variantTableHolder';
                 break;
 
-            case "getDnaseGivenVariantList":
+            case "getAtacseqGivenVariantList":
                 defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.atacSeqVariantTable.displayTissueInformationFromDnase;
+                defaultFollowUp.placeToDisplayData = '#mainVariantDiv table.variantTableHolder';
+                break;
+            case "getDnaseGivenVariantList":
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.dnaseVariantTable.displayTissueInformationFromDnase;
                 defaultFollowUp.placeToDisplayData = '#mainVariantDiv table.variantTableHolder';
                 break;
             case "getTfMotifGivenVariantList":
@@ -1225,23 +1229,28 @@ mpgSoftware.dynamicUi = (function () {
                         var variantsAsJson = "[]";
                         if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
                             const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
-                            if (dataVector.length===0){return;}
-                            var variantNameArray = _.map(dataVector, function(variantRec){return variantRec.var_id;});
+                            if (dataVector.length === 0) {
+                                return;
+                            }
+                            var variantNameArray = _.map(dataVector, function (variantRec) {
+                                return variantRec.var_id;
+                            });
                             variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";
+
+                            var dataForCall = {variants: variantsAsJson, methodToRetrieve: 'cicero'};
+                            retrieveRemotedContextInformation(buildRemoteContextArray({
+                                name: actionId,
+                                retrieveDataUrl: additionalParameters.retrieveAnyTypeRegionData,
+                                dataForCall: dataForCall,
+                                processEachRecord: mpgSoftware.dynamicUi.coaccessibilityVariantTable.processRecordsFromCoaccess,
+                                displayRefinedContextFunction: displayFunction,
+                                placeToDisplayData: displayLocation,
+                                actionId: nextActionId,
+                                nameOfAccumulatorField: dataAnnotationType.nameOfAccumulatorField,
+                                code: dataAnnotationType.code,
+                                nameOfAccumulatorFieldWithIndex: dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                            }));
                         }
-                        var dataForCall = {variants: variantsAsJson, methodToRetrieve:'cicero'};
-                        retrieveRemotedContextInformation(buildRemoteContextArray({
-                            name: actionId,
-                            retrieveDataUrl: additionalParameters.retrieveAnyTypeRegionData,
-                            dataForCall: dataForCall,
-                            processEachRecord: mpgSoftware.dynamicUi.coaccessibilityVariantTable.processRecordsFromCoaccess,
-                            displayRefinedContextFunction: displayFunction,
-                            placeToDisplayData: displayLocation,
-                            actionId: nextActionId,
-                            nameOfAccumulatorField:dataAnnotationType.nameOfAccumulatorField,
-                            code:dataAnnotationType.code,
-                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
-                        }));
                     }
                 };
                 break;
@@ -1305,7 +1314,7 @@ mpgSoftware.dynamicUi = (function () {
                 };
                 break;
 
-            case "getDnaseGivenVariantList":
+            case "getAtacseqGivenVariantList":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
                         var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: actionId});
@@ -1322,6 +1331,41 @@ mpgSoftware.dynamicUi = (function () {
                             });
                             variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";
                             var dataForCall = {variants: variantsAsJson, method: 'MACS'};
+                            retrieveRemotedContextInformation(buildRemoteContextArray({
+                                name: actionId,
+                                retrieveDataUrl: additionalParameters.retrieveVariantAnnotationsUrl,
+                                dataForCall: dataForCall,
+                                processEachRecord: dataAnnotationType.processEachRecord,
+                                displayRefinedContextFunction: dataAnnotationType.displayEverythingFromThisCall,
+                                placeToDisplayData: displayLocation,
+                                actionId: nextActionId,
+                                nameOfAccumulatorField: dataAnnotationType.nameOfAccumulatorField,
+                                code: dataAnnotationType.code,
+                                nameOfAccumulatorFieldWithIndex: dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                            }));
+                        }
+                    }
+                };
+                break;
+
+            case "getDnaseGivenVariantList":
+                functionToLaunchDataRetrieval = function () {
+                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
+                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: actionId});
+                        actionToUndertake();
+                    } else {
+                        var variantsAsJson = "[]";
+                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
+                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
+                            if (dataVector.length === 0) {
+                                return;
+                            }
+                            var variantNameArray = _.map(dataVector, function (variantRec) {
+                                return variantRec.var_id;
+                            });
+                            variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";
+
+                            var dataForCall = {variants: variantsAsJson, annotationToRetrieve: 'DNASE'};
                             retrieveRemotedContextInformation(buildRemoteContextArray({
                                 name: actionId,
                                 retrieveDataUrl: additionalParameters.retrieveVariantAnnotationsUrl,

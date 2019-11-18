@@ -232,10 +232,10 @@
                             significanceCellPresentationStringWriter:'atacSeqVariantTableSignificanceCellPresentationString',
                             packagingString:'mpgSoftware.dynamicUi.atacSeqVariantTable',
                             sortingSubroutine:'VariantAtacSeq',
-                            internalIdentifierString:'getDnaseGivenVariantList',
+                            internalIdentifierString:'getAtacseqGivenVariantList',
                             processEachRecord:mpgSoftware.dynamicUi.atacSeqVariantTable.processRecordsFromDnase,
                             displayEverythingFromThisCall:mpgSoftware.dynamicUi.atacSeqVariantTable.displayTissueInformationFromDnase,
-                            nameOfAccumulatorField:'dnaseVariantInfo',
+                            nameOfAccumulatorField:'atacSeqVariantInfo',
                             nameOfAccumulatorFieldWithIndex:'variantInfoArray'
                         }
                         ,
@@ -281,6 +281,31 @@
                             displayEverythingFromThisCall:mpgSoftware.dynamicUi.gregorSubTableVariantTable.displayGregorSubTable,
                             nameOfAccumulatorField:'gregorVariantInfo',
                             nameOfAccumulatorFieldWithIndex:'none'
+                        }
+                        ,
+                        {
+                            code: 'DNASE_VAR',
+                            category: 'dnase',
+                            displayCategory: 'DNase',
+                            subcategory: 'VariantDNase',
+                            displaySubcategory: 'DNase list',
+                            headerWriter:'dnaseVariantTableTissueHeader',
+                            cellBodyWriter:'dnaseVariantTableBody',
+                            categoryWriter:'dnaseVariantTableTissueHeaderLabel',
+                            drillDownCategoryWriter:'dnaseVariantTableTissueHeaderLabel',
+                            subCategoryWriter:'dnaseVariantTableTissueRowLabel',
+                            drillDownSubCategoryWriter:'dnaseVariantTableTissueRowLabel',
+                            tissueCategoryWriter:'dnaseVariantTableTissueSpecificHeaderLabel',
+                            tissueSubCategoryWriter:'dnaseVariantTableTissueSpecificRowLabel',
+                            numberRecordsCellPresentationStringWriter:'dnaseVariantTableNumberRecordsCellPresentationString',
+                            significanceCellPresentationStringWriter:'dnaseVariantTableSignificanceCellPresentationString',
+                            packagingString:'mpgSoftware.dynamicUi.dnaseVariantTable',
+                            sortingSubroutine:'VariantDNase',
+                            internalIdentifierString:'getDnaseGivenVariantList',
+                            processEachRecord:mpgSoftware.dynamicUi.dnaseVariantTable.processRecordsFromDnase,
+                            displayEverythingFromThisCall:mpgSoftware.dynamicUi.dnaseVariantTable.displayTissueInformationFromDnase,
+                            nameOfAccumulatorField:'dnaseVariantInfo',
+                            nameOfAccumulatorFieldWithIndex:'variantInfoArray'
                         }
                         ,
 
