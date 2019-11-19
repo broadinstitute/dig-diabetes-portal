@@ -557,24 +557,24 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
-    const eitherRetrieveIndexOrProceedWithTask =  function(){
-        if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
-            var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: actionId});
-            actionToUndertake();
-        } else {
-            var variantsAsJson = "[]";
-            if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
-                const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
-                if (dataVector.length===0){return;}
-                var variantNameArray = _.map(dataVector, function(variantRec){return variantRec.var_id;});
-                variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";                        }
-            var dataForCall = {variants: variantsAsJson,method:'TFMOTIF'};
-    }
-}
+//     const eitherRetrieveIndexOrProceedWithTask =  function(){
+//         if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
+//             var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: actionId});
+//             actionToUndertake();
+//         } else {
+//             var variantsAsJson = "[]";
+//             if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
+//                 const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
+//                 if (dataVector.length===0){return;}
+//                 var variantNameArray = _.map(dataVector, function(variantRec){return variantRec.var_id;});
+//                 variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";                        }
+//             var dataForCall = {variants: variantsAsJson,method:'TFMOTIF'};
+//     }
+// }
 
 
 
-    var actionContainer = function (actionId, followUp) {
+    var actionContainer = function (actionId, followUp, baseDomElement) {
         var additionalParameters = getDyanamicUiVariables();
         var dataAnnotationType =_.find(additionalParameters.dataAnnotationTypes,{internalIdentifierString:actionId});
         var displayFunction = ( typeof followUp.displayRefinedContextFunction !== 'undefined') ? followUp.displayRefinedContextFunction : undefined;
@@ -591,7 +591,7 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getInformationFromDepictForTissueTable":
                 functionToLaunchDataRetrieval = function () {
-                    var phenotype = getAccumulatorObject("preferredPhenotype");
+                    var phenotype = getAccumulatorObject("preferredPhenotype", baseDomElement);
                     retrieveRemotedContextInformation(buildRemoteContextArray({
                         name: actionId,
                         retrieveDataUrl: additionalParameters.retrieveDepictTissueDataUrl,
@@ -604,7 +604,8 @@ mpgSoftware.dynamicUi = (function () {
                         actionId: nextActionId,
                         nameOfAccumulatorField:'depictTissueArray',
                         code:dataAnnotationType.code,
-                        nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                        nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex,
+                        baseDomElement:baseDomElement
                     }));
                 };
                 break;
@@ -613,7 +614,7 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getInformationFromGregorForTissueTable":
                 functionToLaunchDataRetrieval = function () {
-                    var phenotype = getAccumulatorObject("preferredPhenotype");
+                    var phenotype = getAccumulatorObject("preferredPhenotype", baseDomElement);
                     retrieveRemotedContextInformation(buildRemoteContextArray({
                         name: actionId,
                         retrieveDataUrl: additionalParameters.retrieveGregorDataUrl,
@@ -626,14 +627,15 @@ mpgSoftware.dynamicUi = (function () {
                         actionId: nextActionId,
                         nameOfAccumulatorField:'gregorTissueArray',
                         code:dataAnnotationType.code,
-                        nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                        nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex,
+                        baseDomElement:baseDomElement
                     }));
                 };
                 break;
 
             case "getInformationFromLdsrForTissueTable":
                 functionToLaunchDataRetrieval = function () {
-                    var phenotype = getAccumulatorObject("preferredPhenotype");
+                    var phenotype = getAccumulatorObject("preferredPhenotype", baseDomElement);
                     retrieveRemotedContextInformation(buildRemoteContextArray({
                         name: actionId,
                         retrieveDataUrl: additionalParameters.retrieveLdsrDataUrl,
@@ -646,16 +648,17 @@ mpgSoftware.dynamicUi = (function () {
                         actionId: nextActionId,
                         nameOfAccumulatorField:'ldsrTissueArray',
                         code:dataAnnotationType.code,
-                        nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                        nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex,
+                        baseDomElement:baseDomElement
                     }));
                 };
                 break;
 
             case "getTissuesFromProximityForLocusContext":
                 functionToLaunchDataRetrieval = function () {
-                    var chromosome = getAccumulatorObject("chromosome");
-                    var startPos = getAccumulatorObject("extentBegin");
-                    var endPos = getAccumulatorObject("extentEnd");
+                    var chromosome = getAccumulatorObject("chromosome, baseDomElement");
+                    var startPos = getAccumulatorObject("extentBegin", baseDomElement);
+                    var endPos = getAccumulatorObject("extentEnd", baseDomElement);
                     retrieveRemotedContextInformation(buildRemoteContextArray({
                         name: "getTissuesFromProximityForLocusContext",
                         retrieveDataUrl: additionalParameters.retrieveListOfGenesInARangeUrl,
@@ -670,7 +673,8 @@ mpgSoftware.dynamicUi = (function () {
                         actionId: nextActionId,
                         nameOfAccumulatorField:'geneInfoArray',
                         code:dataAnnotationType.code,
-                        nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                        nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex,
+                        baseDomElement:baseDomElement
                     }));
                 };
                 break;
@@ -687,20 +691,22 @@ mpgSoftware.dynamicUi = (function () {
                         actionId: nextActionId,
                         nameOfAccumulatorField:'fullEffectorGeneTable',
                         code:dataAnnotationType.code,
-                        nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                        nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex,
+                        baseDomElement:baseDomElement
                     }));
                 };
                 break;
             case "getTissuesFromEqtlsForTissuesTable":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty("geneInfoArray")) {
-                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getTissuesFromEqtlsForTissuesTable"});
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
+                            {actionId: "getTissuesFromEqtlsForTissuesTable"}, baseDomElement);
                         actionToUndertake();
                     } else {
                         resetAccumulatorObject("tissueNameArray");
                         resetAccumulatorObject("tissuesForEveryGene");
                         resetAccumulatorObject("genesForEveryTissue");
-                        var geneNameArray = _.map(getAccumulatorObject("geneInfoArray"), function (o) {
+                        var geneNameArray = _.map(getAccumulatorObject("geneInfoArray", baseDomElement), function (o) {
                             return {gene: o.name}
                         });
                         retrieveRemotedContextInformation(buildRemoteContextArray({
@@ -710,7 +716,8 @@ mpgSoftware.dynamicUi = (function () {
                             processEachRecord: processRecordsFromEqtls,
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
-                            actionId: nextActionId
+                            actionId: nextActionId,
+                            baseDomElement:baseDomElement
                         }));
                     }
                 }
@@ -719,13 +726,14 @@ mpgSoftware.dynamicUi = (function () {
             case "getTissuesFromEqtlsForGenesTable":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty("geneInfoArray")) {
-                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getTissuesFromEqtlsForGenesTable"});
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
+                            {actionId: "getTissuesFromEqtlsForGenesTable"}, baseDomElement);
                         actionToUndertake();
                     } else {
                         resetAccumulatorObject("tissueNameArray");
                         resetAccumulatorObject("genesForEveryTissue");
                         resetAccumulatorObject("tissuesForEveryGene");
-                        var geneNameArray = _.map(getAccumulatorObject("geneInfoArray"), function (o) {
+                        var geneNameArray = _.map(getAccumulatorObject("geneInfoArray", baseDomElement), function (o) {
                             return {gene: o.name}
                         });
                         retrieveRemotedContextInformation(buildRemoteContextArray({
@@ -735,7 +743,8 @@ mpgSoftware.dynamicUi = (function () {
                             processEachRecord: processRecordsFromEqtls,
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
-                            actionId: nextActionId
+                            actionId: nextActionId,
+                            baseDomElement:baseDomElement
                         }));
                     }
                 };
@@ -744,11 +753,12 @@ mpgSoftware.dynamicUi = (function () {
             case "getGeneAssociationsForGenesTable":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty("geneInfoArray")) {
-                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId:actionId});
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
+                            {actionId:actionId}, baseDomElement);
                         actionToUndertake();
                     } else {
                         var phenotype = $('li.chosenPhenotype').attr('id');
-                        var dataForCall = _.map(getAccumulatorObject("geneInfoArray"), function (o) {
+                        var dataForCall = _.map(getAccumulatorObject("geneInfoArray", baseDomElement), function (o) {
                             return {
                                 gene: o.name,
                                 phenotype: phenotype,
@@ -765,7 +775,8 @@ mpgSoftware.dynamicUi = (function () {
                             actionId: nextActionId,
                             nameOfAccumulatorField:'rawGeneAssociationRecords',
                             code:dataAnnotationType.code,
-                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex,
+                            baseDomElement:baseDomElement
                         }));
                     }
                 };
@@ -774,11 +785,12 @@ mpgSoftware.dynamicUi = (function () {
             case "getSkatGeneAssociationsForGeneTable":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty("geneInfoArray")) {
-                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: actionId});
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
+                            {actionId: actionId}, baseDomElement);
                         actionToUndertake();
                     } else {
                         var phenotype = $('li.chosenPhenotype').attr('id');
-                        var dataForCall = _.map(getAccumulatorObject("geneInfoArray"), function (o) {
+                        var dataForCall = _.map(getAccumulatorObject("geneInfoArray", baseDomElement), function (o) {
                             return {
                                 gene: o.name,
                                 phenotype: phenotype,
@@ -796,7 +808,8 @@ mpgSoftware.dynamicUi = (function () {
                             actionId: nextActionId,
                             nameOfAccumulatorField:'rawGeneSkatRecords',
                             code:dataAnnotationType.code,
-                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex,
+                            baseDomElement:baseDomElement
                         }));
                     }
                 };
@@ -810,7 +823,7 @@ mpgSoftware.dynamicUi = (function () {
                         actionToUndertake();
                     } else {
                         var phenotype = $('li.chosenPhenotype').attr('id');
-                        var dataForCall = _.map(getAccumulatorObject("geneInfoArray"), function (o) {
+                        var dataForCall = _.map(getAccumulatorObject("geneInfoArray", baseDomElement), function (o) {
                             return {
                                 gene: o.name,
                                 phenotype: phenotype,
@@ -828,7 +841,8 @@ mpgSoftware.dynamicUi = (function () {
                             actionId: nextActionId,
                             nameOfAccumulatorField:'rawGeneFirthRecords',
                             code:dataAnnotationType.code,
-                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex,
+                            baseDomElement:baseDomElement
                         }));
                     }
                 };
@@ -838,11 +852,12 @@ mpgSoftware.dynamicUi = (function () {
             case "getInformationFromEffectorGeneListTable":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty("geneInfoArray")) {
-                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: actionId});
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
+                            {actionId: actionId}, baseDomElement);
                         actionToUndertake();
                     } else {
                         var phenotype = $('li.chosenPhenotype').attr('id');
-                        var dataForCall = _.map(getAccumulatorObject("geneInfoArray"), function (o) {
+                        var dataForCall = _.map(getAccumulatorObject("geneInfoArray", baseDomElement), function (o) {
                             return {
                                 geneList: "[\""+o.name+"\"]",
                                 phenotype: phenotype,
@@ -859,7 +874,8 @@ mpgSoftware.dynamicUi = (function () {
                             actionId: nextActionId,
                             nameOfAccumulatorField:'rawEffectorGeneRecords',
                             code:dataAnnotationType.code,
-                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex,
+                            baseDomElement:baseDomElement
                         }));
                     }
                 };
@@ -870,9 +886,9 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getVariantsFromQtlForContextDescription":
                 functionToLaunchDataRetrieval = function () {
-                    var chromosome = getAccumulatorObject("chromosome");
-                    var startPos = getAccumulatorObject("extentBegin");
-                    var endPos = getAccumulatorObject("extentEnd");
+                    var chromosome = getAccumulatorObject("chromosome", baseDomElement);
+                    var startPos = getAccumulatorObject("extentBegin", baseDomElement);
+                    var endPos = getAccumulatorObject("extentEnd", baseDomElement);
                     resetAccumulatorObject("phenotypesForEveryVariant");
                     resetAccumulatorObject("variantsForEveryPhenotype");
                     retrieveRemotedContextInformation(buildRemoteContextArray({
@@ -889,16 +905,17 @@ mpgSoftware.dynamicUi = (function () {
                         actionId: nextActionId,
                         nameOfAccumulatorField:'rawVariantRecords',
                         code:dataAnnotationType.code,
-                        nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                        nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex,
+                        baseDomElement:baseDomElement
                     }));
                 };
                 break;
 
             case "getPhenotypesFromQtlForPhenotypeTable":
                 functionToLaunchDataRetrieval = function () {
-                    var chromosome = getAccumulatorObject("chromosome");
-                    var startPos = getAccumulatorObject("extentBegin");
-                    var endPos = getAccumulatorObject("extentEnd");
+                    var chromosome = getAccumulatorObject("chromosome", baseDomElement);
+                    var startPos = getAccumulatorObject("extentBegin", baseDomElement);
+                    var endPos = getAccumulatorObject("extentEnd", baseDomElement);
                     resetAccumulatorObject("phenotypesForEveryVariant");
                     resetAccumulatorObject("variantsForEveryPhenotype");
                     retrieveRemotedContextInformation(buildRemoteContextArray({
@@ -912,7 +929,8 @@ mpgSoftware.dynamicUi = (function () {
                         processEachRecord: processRecordsFromVariantQtlSearch,
                         displayRefinedContextFunction: displayFunction,
                         placeToDisplayData: displayLocation,
-                        actionId: nextActionId
+                        actionId: nextActionId,
+                        baseDomElement:baseDomElement
                     }));
                 };
                 break;
@@ -920,10 +938,10 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getPhenotypesFromECaviarForPhenotypeTable":
                 functionToLaunchDataRetrieval = function () {
-                    var chromosome = getAccumulatorObject("chromosome");
-                    var startPos = getAccumulatorObject("extentBegin");
-                    var endPos = getAccumulatorObject("extentEnd");
-                    var geneNameArray = _.map(getAccumulatorObject("geneInfoArray"), function (o) {
+                    var chromosome = getAccumulatorObject("chromosome", baseDomElement);
+                    var startPos = getAccumulatorObject("extentBegin", baseDomElement);
+                    var endPos = getAccumulatorObject("extentEnd", baseDomElement);
+                    var geneNameArray = _.map(getAccumulatorObject("geneInfoArray", baseDomElement), function (o) {
                         return {gene: o.name}
                     });
                     retrieveRemotedContextInformation(buildRemoteContextArray({
@@ -933,7 +951,8 @@ mpgSoftware.dynamicUi = (function () {
                         processEachRecord: processRecordsFromECaviar,//TODO
                         displayRefinedContextFunction: displayFunction,
                         placeToDisplayData: displayLocation,
-                        actionId: nextActionId
+                        actionId: nextActionId,
+                        baseDomElement:baseDomElement
                     }));
                 };
                 break;
@@ -944,7 +963,7 @@ mpgSoftware.dynamicUi = (function () {
                         var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getPhenotypesFromECaviarForTissueTable"});
                         actionToUndertake();
                     } else {
-                        var geneNameArray = _.map(getAccumulatorObject("geneInfoArray"), function (o) {
+                        var geneNameArray = _.map(getAccumulatorObject("geneInfoArray", baseDomElement), function (o) {
                             return {gene: o.name}
                         });
                         retrieveRemotedContextInformation(buildRemoteContextArray({
@@ -954,7 +973,8 @@ mpgSoftware.dynamicUi = (function () {
                             processEachRecord: processRecordsFromECaviar,
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
-                            actionId: nextActionId
+                            actionId: nextActionId,
+                            baseDomElement:baseDomElement
                         }));
 
                     }
@@ -964,11 +984,12 @@ mpgSoftware.dynamicUi = (function () {
             case "getRecordsFromECaviarForGeneTable":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty("geneInfoArray")) {
-                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: actionId});
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
+                            {actionId: actionId}, baseDomElement);
                         actionToUndertake();
                     } else {
                         var phenotype = $('li.chosenPhenotype').attr('id');
-                        var geneNameArray = _.map(getAccumulatorObject("geneInfoArray"), function (o) {
+                        var geneNameArray = _.map(getAccumulatorObject("geneInfoArray", baseDomElement), function (o) {
                             return {gene: o.name,
                                 phenotype:phenotype}
                         });
@@ -982,7 +1003,8 @@ mpgSoftware.dynamicUi = (function () {
                             actionId: nextActionId,
                             nameOfAccumulatorField:'rawColocalizationInfo',
                             code:dataAnnotationType.code,
-                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex,
+                            baseDomElement:baseDomElement
                         }));
                     }
                 };
@@ -991,11 +1013,12 @@ mpgSoftware.dynamicUi = (function () {
             case "getRecordsFromColocForGeneTable":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty("geneInfoArray")) {
-                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: actionId});
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
+                            {actionId: actionId}, baseDomElement);
                         actionToUndertake();
                     } else {
                         var phenotype = $('li.chosenPhenotype').attr('id');
-                        var geneNameArray = _.map(getAccumulatorObject("geneInfoArray"), function (o) {
+                        var geneNameArray = _.map(getAccumulatorObject("geneInfoArray", baseDomElement), function (o) {
                             return {gene: o.name,
                                 phenotype:phenotype}
                         });
@@ -1009,7 +1032,8 @@ mpgSoftware.dynamicUi = (function () {
                             actionId: nextActionId,
                             nameOfAccumulatorField:'rawColoInfo',
                             code:dataAnnotationType.code,
-                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex,
+                            baseDomElement:baseDomElement
                         }));
                     }
                 };
@@ -1020,10 +1044,11 @@ mpgSoftware.dynamicUi = (function () {
                 functionToLaunchDataRetrieval = function () {
 
                     if (accumulatorObjectFieldEmpty("geneInfoArray")) {
-                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: actionId});
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
+                            {actionId: actionId}, baseDomElement);
                         actionToUndertake();
                     } else {
-                        var geneNameArray = _.map(getAccumulatorObject("geneInfoArray"), function (o) {
+                        var geneNameArray = _.map(getAccumulatorObject("geneInfoArray", baseDomElement), function (o) {
                             return {gene: o.name}
                         });
                         retrieveRemotedContextInformation(buildRemoteContextArray({
@@ -1036,7 +1061,8 @@ mpgSoftware.dynamicUi = (function () {
                             actionId: nextActionId,
                             nameOfAccumulatorField:'modNameArray',
                             code:dataAnnotationType.code,
-                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex,
+                            baseDomElement:baseDomElement
                         }));
                     }
                 };
@@ -1055,7 +1081,8 @@ mpgSoftware.dynamicUi = (function () {
                         processEachRecord: processRecordsUpdateContext,
                         displayRefinedContextFunction: displayFunction,
                         placeToDisplayData: displayLocation,
-                        actionId: nextActionId
+                        actionId: nextActionId,
+                        baseDomElement:baseDomElement
                     }));
                 };
                 break;
@@ -1063,10 +1090,11 @@ mpgSoftware.dynamicUi = (function () {
             case "getTissuesFromAbcForGenesTable":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty("geneInfoArray")) {
-                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getTissuesFromAbcForGenesTable"});
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
+                            {actionId: "getTissuesFromAbcForGenesTable"}, baseDomElement);
                         actionToUndertake();
                     } else {
-                        var geneNameArray = _.map(getAccumulatorObject("geneInfoArray"), function (o) {
+                        var geneNameArray = _.map(getAccumulatorObject("geneInfoArray", baseDomElement), function (o) {
                             return {gene: o.name}
                         });
                         retrieveRemotedContextInformation(buildRemoteContextArray({
@@ -1076,7 +1104,8 @@ mpgSoftware.dynamicUi = (function () {
                             processEachRecord: processRecordsFromAbc,
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
-                            actionId: nextActionId
+                            actionId: nextActionId,
+                            baseDomElement:baseDomElement
                         }));
                     }
                 };
@@ -1085,10 +1114,11 @@ mpgSoftware.dynamicUi = (function () {
             case "getRecordsFromAbcForTissueTable":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty("geneInfoArray")) {
-                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getRecordsFromAbcForTissueTable"});
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
+                            {actionId: "getRecordsFromAbcForTissueTable"}, baseDomElement);
                         actionToUndertake();
                     } else {
-                        var geneNameArray = _.map(getAccumulatorObject("geneInfoArray"), function (o) {
+                        var geneNameArray = _.map(getAccumulatorObject("geneInfoArray", baseDomElement), function (o) {
                             return {gene: o.name}
                         });
                         retrieveRemotedContextInformation(buildRemoteContextArray({
@@ -1098,7 +1128,8 @@ mpgSoftware.dynamicUi = (function () {
                             processEachRecord: processRecordsFromAbc,
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
-                            actionId: nextActionId
+                            actionId: nextActionId,
+                            baseDomElement:baseDomElement
                         }));
                     }
                 };
@@ -1107,10 +1138,10 @@ mpgSoftware.dynamicUi = (function () {
             case "getVariantsWeWillUseToBuildTheVariantTable":
                 functionToLaunchDataRetrieval = function () {
 
-                    var phenotype = getAccumulatorObject("phenotype");
-                    var chromosome = getAccumulatorObject("chromosome");
-                    var startExtent = getAccumulatorObject("extentBegin");//.replace(/,/g,""); // killing replace part to have it work with v2f
-                    var endExtent = getAccumulatorObject("extentEnd");//.replace(/,/g,""); // killing replace part to have it work with v2f
+                    var phenotype = getAccumulatorObject("phenotype", baseDomElement);
+                    var chromosome = getAccumulatorObject("chromosome", baseDomElement);
+                    var startExtent = getAccumulatorObject("extentBegin", baseDomElement);//.replace(/,/g,""); // killing replace part to have it work with v2f
+                    var endExtent = getAccumulatorObject("extentEnd", baseDomElement);//.replace(/,/g,""); // killing replace part to have it work with v2f
                     var sharedTable = getSharedTable(displayLocation);
                     sharedTable['currentFormVariation'] = 2;
 
@@ -1163,7 +1194,8 @@ mpgSoftware.dynamicUi = (function () {
                         actionId: nextActionId,
                         nameOfAccumulatorField:dataAnnotationType.nameOfAccumulatorField,
                         code:dataAnnotationType.code,
-                        nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                        nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex,
+                        baseDomElement:baseDomElement
                     }));
 
                 };
@@ -1172,12 +1204,13 @@ mpgSoftware.dynamicUi = (function () {
             case "getEqtlsGivenVariantList":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty("variantNameArray")) {
-                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: "getEqtlsGivenVariantList"});
+                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable",
+                            {actionId: "getEqtlsGivenVariantList"}, baseDomElement);
                         actionToUndertake();
                     } else {
                         var variantsAsJson = "[]";
-                        if (getAccumulatorObject("variantNameArray").length > 0) {
-                            variantsAsJson = "[\"" + getAccumulatorObject("variantNameArray").join("\",\"") + "\"]";
+                        if (getAccumulatorObject("variantNameArray", baseDomElement).length > 0) {
+                            variantsAsJson = "[\"" + getAccumulatorObject("variantNameArray", baseDomElement).join("\",\"") + "\"]";
                         }
                         var dataForCall = {variants: variantsAsJson};
                         retrieveRemotedContextInformation(buildRemoteContextArray({
@@ -1187,7 +1220,8 @@ mpgSoftware.dynamicUi = (function () {
                             processEachRecord: processEqtlRecordsFromVariantBasedRequest,
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
-                            actionId: nextActionId
+                            actionId: nextActionId,
+                            baseDomElement:baseDomElement
                         }));
                     }
                 };
@@ -1195,12 +1229,13 @@ mpgSoftware.dynamicUi = (function () {
             case "getABCGivenVariantList":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
-                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: actionId});
+                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable",
+                            {actionId: actionId}, baseDomElement);
                         actionToUndertake();
                     } else {
                         var variantsAsJson = "[]";
-                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
-                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
+                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement).length > 0) {
+                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement)[0].data;
                             if (dataVector.length===0){return;}
                             var variantNameArray = _.map(dataVector, function(variantRec){return variantRec.var_id;});
                             variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";
@@ -1216,7 +1251,8 @@ mpgSoftware.dynamicUi = (function () {
                             actionId: nextActionId,
                             nameOfAccumulatorField:dataAnnotationType.nameOfAccumulatorField,
                             code:dataAnnotationType.code,
-                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex,
+                            baseDomElement:baseDomElement
                         }));
                     }
                 };
@@ -1224,12 +1260,13 @@ mpgSoftware.dynamicUi = (function () {
             case "getCoaccessibilityGivenVariantList":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
-                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: actionId});
+                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable",
+                            {actionId: actionId}, baseDomElement);
                         actionToUndertake();
                     } else {
                         var variantsAsJson = "[]";
-                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
-                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
+                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement).length > 0) {
+                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement)[0].data;
                             if (dataVector.length === 0) {
                                 return;
                             }
@@ -1249,7 +1286,8 @@ mpgSoftware.dynamicUi = (function () {
                                 actionId: nextActionId,
                                 nameOfAccumulatorField: dataAnnotationType.nameOfAccumulatorField,
                                 code: dataAnnotationType.code,
-                                nameOfAccumulatorFieldWithIndex: dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                                nameOfAccumulatorFieldWithIndex: dataAnnotationType.nameOfAccumulatorFieldWithIndex,
+                                baseDomElement:baseDomElement
                             }));
                         }
                     }
@@ -1258,11 +1296,12 @@ mpgSoftware.dynamicUi = (function () {
             case "getInformationFromDepictForGenesTable":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty("geneInfoArray")) {
-                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: actionId});
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
+                            {actionId: actionId}, baseDomElement);
                         actionToUndertake();
                     } else {
                         var phenotype = $('li.chosenPhenotype').attr('id');
-                        var dataForCall = _.map(getAccumulatorObject("geneInfoArray"), function (o) {
+                        var dataForCall = _.map(getAccumulatorObject("geneInfoArray", baseDomElement), function (o) {
                             return {
                                 gene: o.name,
                                 phenotype: phenotype
@@ -1279,7 +1318,8 @@ mpgSoftware.dynamicUi = (function () {
                             actionId: nextActionId,
                             nameOfAccumulatorField:'rawDepictInfo',
                             code:dataAnnotationType.code,
-                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex,
+                            baseDomElement:baseDomElement
                         }));
                     }
                 };
@@ -1288,11 +1328,12 @@ mpgSoftware.dynamicUi = (function () {
             case "getDepictGeneSetForGenesTable":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty("geneInfoArray")) {
-                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: actionId});
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
+                            {actionId: actionId}, baseDomElement);
                         actionToUndertake();
                     } else {
                         var phenotype = $('li.chosenPhenotype').attr('id');
-                        var dataForCall = _.map(getAccumulatorObject("geneInfoArray"), function (o) {
+                        var dataForCall = _.map(getAccumulatorObject("geneInfoArray", baseDomElement), function (o) {
                             return {
                                 gene: o.name,
                                 phenotype: phenotype
@@ -1309,7 +1350,8 @@ mpgSoftware.dynamicUi = (function () {
                             actionId: nextActionId,
                             nameOfAccumulatorField:'depictGeneSetInfo',
                             code:dataAnnotationType.code,
-                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex,
+                            baseDomElement:baseDomElement
                         }));
                     }
                 };
@@ -1318,12 +1360,13 @@ mpgSoftware.dynamicUi = (function () {
             case "getAtacseqGivenVariantList":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
-                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: actionId});
+                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable",
+                            {actionId: actionId}, baseDomElement);
                         actionToUndertake();
                     } else {
                         var variantsAsJson = "[]";
-                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
-                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
+                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement).length > 0) {
+                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement)[0].data;
                             if (dataVector.length === 0) {
                                 return;
                             }
@@ -1342,7 +1385,8 @@ mpgSoftware.dynamicUi = (function () {
                                 actionId: nextActionId,
                                 nameOfAccumulatorField: dataAnnotationType.nameOfAccumulatorField,
                                 code: dataAnnotationType.code,
-                                nameOfAccumulatorFieldWithIndex: dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                                nameOfAccumulatorFieldWithIndex: dataAnnotationType.nameOfAccumulatorFieldWithIndex,
+                                baseDomElement:baseDomElement
                             }));
                         }
                     }
@@ -1352,12 +1396,13 @@ mpgSoftware.dynamicUi = (function () {
             case "getDnaseGivenVariantList":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
-                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: actionId});
+                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable",
+                            {actionId: actionId}, baseDomElement);
                         actionToUndertake();
                     } else {
                         var variantsAsJson = "[]";
-                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
-                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
+                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement).length > 0) {
+                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement)[0].data;
                             if (dataVector.length === 0) {
                                 return;
                             }
@@ -1377,7 +1422,8 @@ mpgSoftware.dynamicUi = (function () {
                                 actionId: nextActionId,
                                 nameOfAccumulatorField: dataAnnotationType.nameOfAccumulatorField,
                                 code: dataAnnotationType.code,
-                                nameOfAccumulatorFieldWithIndex: dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                                nameOfAccumulatorFieldWithIndex: dataAnnotationType.nameOfAccumulatorFieldWithIndex,
+                                baseDomElement:baseDomElement
                             }));
                         }
                     }
@@ -1387,12 +1433,13 @@ mpgSoftware.dynamicUi = (function () {
             case "getTfMotifGivenVariantList":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
-                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: actionId});
+                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable",
+                            {actionId: actionId}, baseDomElement);
                         actionToUndertake();
                     } else {
                         var variantsAsJson = "[]";
-                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
-                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
+                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement).length > 0) {
+                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement)[0].data;
                             if (dataVector.length === 0) {
                                 return;
                             }
@@ -1411,7 +1458,8 @@ mpgSoftware.dynamicUi = (function () {
                                 actionId: nextActionId,
                                 nameOfAccumulatorField: dataAnnotationType.nameOfAccumulatorField,
                                 code: dataAnnotationType.code,
-                                nameOfAccumulatorFieldWithIndex: dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                                nameOfAccumulatorFieldWithIndex: dataAnnotationType.nameOfAccumulatorFieldWithIndex,
+                                baseDomElement:baseDomElement
                             }));
                         }
                     }
@@ -1421,12 +1469,13 @@ mpgSoftware.dynamicUi = (function () {
             case "getTfbsGivenVariantList":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
-                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: actionId});
+                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable",
+                            {actionId: actionId}, baseDomElement);
                         actionToUndertake();
                     } else {
                         var variantsAsJson = "[]";
-                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
-                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
+                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement).length > 0) {
+                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement)[0].data;
                             if (dataVector.length === 0) {
                                 return;
                             }
@@ -1445,7 +1494,8 @@ mpgSoftware.dynamicUi = (function () {
                                 actionId: nextActionId,
                                 nameOfAccumulatorField: dataAnnotationType.nameOfAccumulatorField,
                                 code: dataAnnotationType.code,
-                                nameOfAccumulatorFieldWithIndex: dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                                nameOfAccumulatorFieldWithIndex: dataAnnotationType.nameOfAccumulatorFieldWithIndex,
+                                baseDomElement:baseDomElement
                             }));
                         }
                     }
@@ -1454,7 +1504,7 @@ mpgSoftware.dynamicUi = (function () {
 
             case "gregorSubTable":
                 functionToLaunchDataRetrieval = function () {
-                    var phenotype = getAccumulatorObject("phenotype");
+                    var phenotype = getAccumulatorObject("phenotype", baseDomElement);
                     destroySharedTable(displayLocation);
                     retrieveRemotedContextInformation(buildRemoteContextArray({
                         name: actionId,
@@ -1468,7 +1518,8 @@ mpgSoftware.dynamicUi = (function () {
                         actionId: nextActionId,
                         nameOfAccumulatorField:dataAnnotationType.nameOfAccumulatorField,
                         code:dataAnnotationType.code,
-                        nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                        nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex,
+                        baseDomElement:baseDomElement
                     }));
                 };
                 break;
@@ -1476,12 +1527,13 @@ mpgSoftware.dynamicUi = (function () {
             case "getH3k27acGivenVariantList":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
-                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: actionId});
+                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable",
+                            {actionId: actionId}, baseDomElement);
                         actionToUndertake();
                     } else {
                         var variantsAsJson = "[]";
-                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
-                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
+                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement).length > 0) {
+                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement)[0].data;
                             if (dataVector.length === 0) {
                                 return;
                             }
@@ -1501,7 +1553,8 @@ mpgSoftware.dynamicUi = (function () {
                                 actionId: nextActionId,
                                 nameOfAccumulatorField: dataAnnotationType.nameOfAccumulatorField,
                                 code: dataAnnotationType.code,
-                                nameOfAccumulatorFieldWithIndex: dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                                nameOfAccumulatorFieldWithIndex: dataAnnotationType.nameOfAccumulatorFieldWithIndex,
+                                baseDomElement:baseDomElement
                             }));
                         }
                     }
@@ -1543,12 +1596,13 @@ mpgSoftware.dynamicUi = (function () {
             case "getChromStateGivenVariantList":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
-                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId: actionId});
+                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable",
+                            {actionId: actionId}, baseDomElement);
                         actionToUndertake();
                     } else {
                         var variantsAsJson = "[]";
-                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex).length > 0) {
-                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex)[0].data;
+                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement).length > 0) {
+                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement)[0].data;
                             var variantNameArray = _.map(dataVector, function(variantRec){return variantRec.var_id;});
                             variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";
                         }
@@ -1563,7 +1617,8 @@ mpgSoftware.dynamicUi = (function () {
                             actionId: nextActionId,
                             nameOfAccumulatorField:dataAnnotationType.nameOfAccumulatorField,
                             code:dataAnnotationType.code,
-                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex,
+                            baseDomElement:baseDomElement
                         }));
                     }
                 };
@@ -1704,8 +1759,12 @@ mpgSoftware.dynamicUi = (function () {
      * @param chosenField
      * @returns {jQuery}
      */
-    var getAccumulatorObject = function (chosenField) {
-        var accumulatorObject = $(nameOfDomToStoreAccumulatorInformation).data("dataHolder");
+    var getAccumulatorObject = function (chosenField,nameOfBase) {
+        let nameOfOurBaseDomObject = nameOfDomToStoreAccumulatorInformation;
+        if ( typeof nameOfBase !== 'undefined'){
+            nameOfOurBaseDomObject = nameOfBase;
+        }
+        var accumulatorObject = $(nameOfOurBaseDomObject).data("dataHolder");
         var returnValue;
         if (typeof accumulatorObject === 'undefined') {
             alert('Fatal error.  Malfunction is imminent. Missing accumulator object.');
@@ -1744,14 +1803,14 @@ mpgSoftware.dynamicUi = (function () {
      * @param accumulatorObject
      * @returns {*}
      */
-    var setAccumulatorObject = function (specificField, value) {
+    var setAccumulatorObject = function (specificField, value, baseDomElement) {
         if (typeof specificField === 'undefined') {
             alert("Serious error.  Attempted assignment of unspecified field.");
             return;
         }
-        var accumulatorObject = getAccumulatorObject();
+        var accumulatorObject = getAccumulatorObject(undefined,baseDomElement);
         accumulatorObject[specificField] = value;
-        return getAccumulatorObject(specificField);
+        return getAccumulatorObject(specificField,baseDomElement);
     };
 
     /***
@@ -3722,7 +3781,8 @@ mpgSoftware.dynamicUi = (function () {
 
                     var accumulatorObject;
                     if ( typeof collectionOfRemoteCallingParameters.nameOfAccumulatorField  !== 'undefined'){
-                        accumulatorObject =  getAccumulatorObject(collectionOfRemoteCallingParameters.nameOfAccumulatorField, );
+                        accumulatorObject =  getAccumulatorObject(collectionOfRemoteCallingParameters.nameOfAccumulatorField,
+                            collectionOfRemoteCallingParameters.baseDomElement);
                     }
                     objectContainingRetrievedRecords = eachRemoteCallingParameter.processEachRecord(    data,
                                                                                                         accumulatorObject,
@@ -3752,7 +3812,9 @@ mpgSoftware.dynamicUi = (function () {
 
             } else if  ( typeof collectionOfRemoteCallingParameters.actionId !== 'undefined')  {
 
-                var actionToUndertake = actionContainer( collectionOfRemoteCallingParameters.actionId, actionDefaultFollowUp(collectionOfRemoteCallingParameters.actionId) );
+                var actionToUndertake = actionContainer( collectionOfRemoteCallingParameters.actionId,
+                    actionDefaultFollowUp(collectionOfRemoteCallingParameters.actionId),
+                    collectionOfRemoteCallingParameters.baseDomElement);
                 actionToUndertake();
 
             } else {
@@ -3798,6 +3860,7 @@ mpgSoftware.dynamicUi = (function () {
                 returnValue["nameOfAccumulatorField"] = startingMaterials.nameOfAccumulatorField;
                 returnValue["code"] = startingMaterials.code;
                 returnValue["nameOfAccumulatorFieldWithIndex"] = startingMaterials.nameOfAccumulatorFieldWithIndex;
+                returnValue["baseDomElement"] = startingMaterials.baseDomElement;
         } else {
                 console.log("Serious error: incorrect fields in startingMaterials = "+startingMaterials.name+".")
             };
@@ -4055,13 +4118,15 @@ mpgSoftware.dynamicUi = (function () {
         if (additionalParameters.dynamicTableType!=='variantTable'){
             _.forEach(dataAnnotationTypes, function (oneAnnotationType){
                 arrayOfRoutinesToUndertake.push( actionContainer(oneAnnotationType.internalIdentifierString,
-                    actionDefaultFollowUp(oneAnnotationType.internalIdentifierString)));
+                    actionDefaultFollowUp(oneAnnotationType.internalIdentifierString),
+                    additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage));
             });
             _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
         } else {
             _.forEach(dataAnnotationTypes, function (oneAnnotationType){
                 arrayOfRoutinesToUndertake.push( actionContainer(oneAnnotationType.internalIdentifierString,
-                    actionDefaultFollowUp(oneAnnotationType.internalIdentifierString)));
+                    actionDefaultFollowUp(oneAnnotationType.internalIdentifierString),
+                    additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage));
             });
             _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
             deferredObject = $.Deferred();
@@ -4073,7 +4138,8 @@ mpgSoftware.dynamicUi = (function () {
                     arrayOfRoutinesToUndertake = [];
                     _.forEach(dataAnnotationTypesFollowUp, function (oneAnnotationType){
                         arrayOfRoutinesToUndertake.push( actionContainer(oneAnnotationType.internalIdentifierString,
-                            actionDefaultFollowUp(oneAnnotationType.internalIdentifierString)));
+                            actionDefaultFollowUp(oneAnnotationType.internalIdentifierString),
+                            additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage));
                     });
                     _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
 
@@ -4084,23 +4150,6 @@ mpgSoftware.dynamicUi = (function () {
             deferredObject.fail(function () {
                 console.log("Executed if the async work fails");
             });
-
-            // console.log('a');
-            // $.when.apply(null, arrayOfRoutinesToUndertake).done(function() {
-            //     console.log('b');
-            // });
-            // console.log('c');
-            // _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
-            // if (dataAnnotationTypesFollowUp.length>0){
-            //     arrayOfRoutinesToUndertake = [];
-            //     _.forEach(dataAnnotationTypesFollowUp, function (oneAnnotationType){
-            //         arrayOfRoutinesToUndertake.push( actionContainer(oneAnnotationType.internalIdentifierString,
-            //             actionDefaultFollowUp(oneAnnotationType.internalIdentifierString)));
-            //     });
-            //     _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
-            //
-            // }
-            // deferredObject.resolve();
 
         }
      };
