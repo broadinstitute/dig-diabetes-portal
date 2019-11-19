@@ -770,11 +770,21 @@
                             </div>
 
                         </g:elseif>
-
                     <g:elseif test="${g.portalTypeString()?.equals('bone')}">
                         <div style="position:absolute; top: 25px; right:-40px; ">
                             <p style="margin-bottom:3px;">
                                 <a href="mailto:help@musculoskeletalgenomics.org">
+                                    <img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'email_update.svg')}" />
+                                </a>
+                            </p>
+                            <p style="margin-bottom:3px;"><a href="https://twitter.com/KPortalNetwork" target="_blank"><img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'twitter_icn.svg')}" /></a></p>
+                        </div>
+
+                    </g:elseif>
+                    <g:elseif test="${g.portalTypeString()?.equals('v2f')}">
+                        <div style="position:absolute; top: 25px; right:-40px; ">
+                            <p style="margin-bottom:3px;">
+                                <a href="mailto:help@variant2function.org">
                                     <img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'email_update.svg')}" />
                                 </a>
                             </p>
