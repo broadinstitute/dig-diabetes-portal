@@ -1793,94 +1793,23 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             callingUrl = coreVariables.retrieveTopVariantsAcrossSgsMinUrl;
         }
 
-        if ($("#gene-info-summary-content").find(".pname").text() == "") {
-            console.log("only called 1st time");
-            if(phenotypeName != "") {
-                $.ajax({
-                    cache: false,
-                    type: "post",
-                    url: callingUrl,
-                    data: callingObj,
-                    async: true,
-                    success: function (data) {
-                        if (typeof data.experimentAssays !== 'undefined'){
-                            var signalSummarySectionVariables = getSignalSummarySectionVariables();
-                            signalSummarySectionVariables["experimentAssays"] = data.experimentAssays;
-                        }
-                        rememberCallBack(data, rememberParameter);
-
-                    },
-                    error: function (jqXHR, exception) {
-                        core.errorReporter(jqXHR, exception);
-                    }
-                });
-
-            } else {
-                var ajaxURL = $('#main').attr("geneinfoajaxurl");
-
-                $.ajax({
-                    url:mpgSoftware.variantTableInitializer.variantTableConfiguration(phenotypeName,ajaxURL),
-                    success:function(){
-
-                        setTimeout(function(){
-                            $.ajax({
-                                cache: false,
-                                type: "post",
-                                url: callingUrl,
-                                data: callingObj,
-                                async: true,
-                                success: function (data) {
-                                    if (typeof data.experimentAssays !== 'undefined'){
-                                        var signalSummarySectionVariables = getSignalSummarySectionVariables();
-                                        signalSummarySectionVariables["experimentAssays"] = data.experimentAssays;
-                                    }
-                                    rememberCallBack(data, rememberParameter);
-
-                                },
-                                error: function (jqXHR, exception) {
-                                    core.errorReporter(jqXHR, exception);
-                                }
-                            });
-                        },5000);
-
-                    }});
-
+        $.ajax({
+            cache: false,
+            type: "post",
+            url: callingUrl,
+            data: callingObj,
+            async: true,
+            success: function (data) {
+                if (typeof data.experimentAssays !== 'undefined'){
+                    var signalSummarySectionVariables = getSignalSummarySectionVariables();
+                    signalSummarySectionVariables["experimentAssays"] = data.experimentAssays;
+                }
+                rememberCallBack(data, rememberParameter);
+            },
+            error: function (jqXHR, exception) {
+                core.errorReporter(jqXHR, exception);
             }
-
-        } else {
-            console.log("called 2nd time");
-            //update variant FOCUS table
-            var ajaxURL = $('#main').attr("geneinfoajaxurl");
-
-            $.ajax({
-                url:mpgSoftware.variantTable.refreshVariantFocusForPhenotype(phenotypeName,ajaxURL),
-                success:function(){
-
-                    setTimeout(function(){
-                        $.ajax({
-                            cache: false,
-                            type: "post",
-                            url: callingUrl,
-                            data: callingObj,
-                            async: true,
-                            success: function (data) {
-                                if (typeof data.experimentAssays !== 'undefined'){
-                                    var signalSummarySectionVariables = getSignalSummarySectionVariables();
-                                    signalSummarySectionVariables["experimentAssays"] = data.experimentAssays;
-                                }
-                                rememberCallBack(data, rememberParameter);
-
-                            },
-                            error: function (jqXHR, exception) {
-                                core.errorReporter(jqXHR, exception);
-                            }
-                        });
-                    },5000);
-
-                }});
-
-
-        }
+        });
     };
     var initialPageSetUp = function (drivingVariables) {
         // let us also initialized the region info metadata at this point

@@ -3980,10 +3980,10 @@ mpgSoftware.dynamicUi = (function () {
                 dataAnnotationTypes = additionalParameters.dataAnnotationTypes;
                 break;
             case 'variantTable':
-                //setAccumulatorObject("phenotype","T2D");
-                //setAccumulatorObject("chromosome","8");
-                //setAccumulatorObject("extentBegin","117862462");
-                //setAccumulatorObject("extentEnd","118289003");
+                setAccumulatorObject("phenotype","T2D");
+                setAccumulatorObject("chromosome","8");
+                setAccumulatorObject("extentBegin","117862462");
+                setAccumulatorObject("extentEnd","118289003");
 
                 // setAccumulatorObject("phenotype","T2D");
                 // setAccumulatorObject("chromosome","19");
@@ -3995,16 +3995,16 @@ mpgSoftware.dynamicUi = (function () {
                 // setAccumulatorObject("extentBegin","3504650");
                 // setAccumulatorObject("extentEnd","3614660");
 
-                setAccumulatorObject("phenotype",data.phenotype);
-                setAccumulatorObject("chromosome",data.chromosome);
-                setAccumulatorObject("extentBegin",data.startPosition);
-                setAccumulatorObject("extentEnd",data.endPosition);
+                //setAccumulatorObject("phenotype",data.phenotype);
+                //setAccumulatorObject("chromosome",data.chromosome);
+                //setAccumulatorObject("extentBegin",data.startPosition);
+                //setAccumulatorObject("extentEnd",data.endPosition);
 
                 const chromosomeInput = $('input#chromosomeInput').val();
                 const startExtentInput = $('input#startExtentInput').val();
                 const endExtentInput = $('input#endExtentInput').val();
-                //const chosenPhenotype = $('select.phenotypePicker').children("option:selected"). val();
-                var chosenPhenotype = data.phenotype;
+                const chosenPhenotype = $('select.phenotypePicker').children("option:selected"). val();
+                //var chosenPhenotype = data.phenotype;
 
                 if (chromosomeInput.length>0){setAccumulatorObject("chromosome",chromosomeInput);}
                 if (startExtentInput.length>0){setAccumulatorObject("extentBegin",startExtentInput);}

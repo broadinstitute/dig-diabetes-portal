@@ -395,11 +395,11 @@
             <h2><span style="">Credible sets</span></h2>
         </div>
 
-        <div id="mainVariantDivHolder" class="well well-gene-page">
+        <!--<div id="mainVariantDivHolder" class="well well-gene-page">
 
-        </div>
+        </div>-->
 
-        <div class="credibleSetChooser well well-gene-page" id="credibleSetTabHolder" style="display: none;"></div>
+        <div class="credibleSetChooser well well-gene-page" id="credibleSetTabHolder" style=""></div>
 
 
         <div class="genePrioritizationChooser" id="genePrioritizationTabHolder">
@@ -1020,7 +1020,7 @@
                     <div class="row" style="border: none">
                         <div class="col-sm-12">
                             <div class="variantCategoryHolder">
-                                <div style="display:none;" note="mute for V2F portal">
+                                <div style="" note="mute for V2F portal">
                                     <!-- hiding the following section only on V2F portal -->
                                     <p style="font-size:16px;">Credible sets are collections of variants in which posterior probabilities are calculated to indicate the likelihood that each variant is causal for association with the selected phenotype.</p>
                                     <!-- muting the following section only on V2F portal -->
@@ -1143,7 +1143,7 @@
                     <div class="row" style="border: none">
                         <div class="col-sm-12">
                             <div class="variantCategoryHolder">
-                                <div style="display:none;" note="mute for V2F portal">
+                                <div style="" note="mute for V2F portal">
                                     <p style="font-size: 16px;"><g:message code="geneSignalSummary.incredibleSets.tabDescription"></g:message></p>
                                     <!--<p>&nbsp;</p>-->
                                     <div class="clearfix credibleSetHeader" style="margin: 5px 0 0 0; display: none;">

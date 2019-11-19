@@ -207,7 +207,7 @@ mpgSoftware.variantTable = (function () {
     };
 
 
-    const initialPageSetUp = function(preferredPhenotype, GENEINFOAJAXURL){
+    const initialPageSetUp = function(preferredPhenotype){
         var drivingVariables = getVariablesToRemember();
         if (( typeof preferredPhenotype === 'undefined')||(preferredPhenotype.length===0)){
             preferredPhenotype = 'T2D';
@@ -240,8 +240,8 @@ mpgSoftware.variantTable = (function () {
         $('.modal-content').resizable({
             alsoResize: ".modal-header, .modal-body, .modal-footer"
         });
-        //mpgSoftware.dynamicUi.modifyScreenFields({phenotype:preferredPhenotype},getVariablesToRemember());
-
+        mpgSoftware.dynamicUi.modifyScreenFields({phenotype:preferredPhenotype},getVariablesToRemember());
+/*
         var pageURL_string = window.location.href;
         var url = new URL(pageURL_string);
 
@@ -281,7 +281,7 @@ mpgSoftware.variantTable = (function () {
                 mpgSoftware.dynamicUi.modifyScreenFields({phenotype:preferredPhenotype, chromosome:chromosomeInput, startPosition:startExtentInput, endPosition:endExtentInput},getVariablesToRemember());
             });
 
-        }
+        }*/
 
     }
 

@@ -104,7 +104,7 @@
 
 
     <div class="container-fluid">
-        <div class="row" style="display:none;">
+        <div class="row" style="">
             <div class="text-center">
                 <h1 class="dk-page-title">Variant FOCUS table for <span class="phenotypeSpecifier">{{phenotype}}</span></h1>
             </div>
@@ -117,7 +117,7 @@
         </div>
 
 
-        <div class="row" style="margin: 20px; display: none;">
+        <div class="row" style="margin: 20px;">
             <div class="col-sm-2 text-center" style="">
                 <label style="padding-top:35px">Change genomic region or phenotype</label>
             </div>
