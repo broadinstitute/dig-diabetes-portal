@@ -377,6 +377,15 @@
             </script>
         </g:elseif>
 
+        <g:elseif test="${g.portalTypeString()?.equals('v2f')}">
+            <script type="text/javascript">
+                /* Example to add 'new' or 'updated' feature buttons;
+                 mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]);
+                 */
+                mpgSoftware.homePage.newFeatures([{"name":"Variant FOCUS table","link":"${createLink(controller:'variantInfo', action:'variantTable')}","class":"feature","type":"new"}])
+            </script>
+        </g:elseif>
+
     <!-- New features buttons end -->
     </div>
 </div>
