@@ -3980,10 +3980,10 @@ mpgSoftware.dynamicUi = (function () {
                 dataAnnotationTypes = additionalParameters.dataAnnotationTypes;
                 break;
             case 'variantTable':
-                setAccumulatorObject("phenotype","T2D");
-                setAccumulatorObject("chromosome","8");
-                setAccumulatorObject("extentBegin","117862462");
-                setAccumulatorObject("extentEnd","118289003");
+                //setAccumulatorObject("phenotype","T2D");
+                //setAccumulatorObject("chromosome","8");
+                //setAccumulatorObject("extentBegin","117862462");
+                //setAccumulatorObject("extentEnd","118289003");
 
                 // setAccumulatorObject("phenotype","T2D");
                 // setAccumulatorObject("chromosome","19");
@@ -3999,6 +3999,11 @@ mpgSoftware.dynamicUi = (function () {
                 //setAccumulatorObject("chromosome",data.chromosome);
                 //setAccumulatorObject("extentBegin",data.startPosition);
                 //setAccumulatorObject("extentEnd",data.endPosition);
+
+                setAccumulatorObject("phenotype",data.phenotype);
+                setAccumulatorObject("chromosome",data.chromosome);
+                setAccumulatorObject("extentBegin",data.startposition);
+                setAccumulatorObject("extentEnd",data.endposition);
 
                 const chromosomeInput = $('input#chromosomeInput').val();
                 const startExtentInput = $('input#startExtentInput').val();

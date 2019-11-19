@@ -464,6 +464,18 @@
 
             adjustTableWrapperWidth(".combinedGeneTableHolder");
 
+            function openVariantFocusPage() {
+                var chromosome = $(".gene-chromosome").find(".chromosome").text();
+                var startPosition = $(".gene-chromosome").find(".start-position").text();
+                var endPosition = $(".gene-chromosome").find(".end-position").text();
+                var phenotype = $(".gene-phenotype").find(".pname").attr("pid");
+
+                var linkToVFOCUS = "${createLink(controller:'variantInfo', action:'variantTable')}?startExtent="+startPosition+"&endExtent="+endPosition+"&chromosomeNumber="+chromosome+"&phenotype="+phenotype;
+
+                window.location.href = linkToVFOCUS;
+
+            }
+
         </script>
 
     </head>

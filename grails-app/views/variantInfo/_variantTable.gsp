@@ -403,12 +403,27 @@
                     }
                 };
                 mpgSoftware.variantTable.setVariablesToRemember(drivingVariables);
-                mpgSoftware.variantTable.initialPageSetUp("${phenotype}");
-                //mpgSoftware.variantTable.initialPageSetUp(INITIALPHENOTYPE,AJAXURL);
+                //mpgSoftware.variantTable.initialPageSetUp("${phenotype}");
+
+                var pageURL_string = window.location.href;
+                var url = new URL(pageURL_string);
+
+                if (url.searchParams.get("chromosomeNumber")){
+
+                    var chromosomeInput = url.searchParams.get("chromosomeNumber");
+                    var startExtentInput = url.searchParams.get("startExtent");
+                    var endExtentInput = url.searchParams.get("endExtent");
+                    var initialPhenotype = url.searchParams.get("phenotype");
+
+                    //console.log(initialPhenotype+" : "+chromosomeInput+" : "+startExtentInput+" : "+endExtentInput);
+
+                    mpgSoftware.variantTable.initialPageSetUp(initialPhenotype, chromosomeInput, startExtentInput, endExtentInput);
+
+                } else {
+                    mpgSoftware.variantTable.initialPageSetUp("T2D","8","117862462","118289003");
+
+                }
             };
-
-
-
 
             return {
                 variantTableConfiguration:variantTableConfiguration

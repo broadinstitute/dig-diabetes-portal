@@ -392,8 +392,9 @@
         <!-- <div role="tabpanel" class="tab-pane highImpacVariantChooser" id="highImpactVariantTabHolder"></div> -->
 
         <div class="gene-page-section-header">
-            <h2><span style="">Credible sets</span></h2>
+            <h2><span style="">Credible sets</span> <small><a href="javascript:;" onclick="openVariantFocusPage();">View credible sets on variant FOCUS table</a></small></h2>
         </div>
+
 
         <!--<div id="mainVariantDivHolder" class="well well-gene-page">
 

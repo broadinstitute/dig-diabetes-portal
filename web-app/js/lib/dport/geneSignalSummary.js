@@ -2046,7 +2046,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var pName = additionalParameters.pname;
 
         // Adding initial phenotype name to page header
-        $("#gene-info-summary-content").find(".gene-phenotype").find(".pname").text(pName);
+        $("#gene-info-summary-content").find(".gene-phenotype").find(".pname").text(pName).attr("pid",phenotypeName);
+
 
 
         if ((typeof datasetName === 'undefined') ||

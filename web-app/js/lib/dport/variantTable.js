@@ -207,7 +207,7 @@ mpgSoftware.variantTable = (function () {
     };
 
 
-    const initialPageSetUp = function(preferredPhenotype){
+    const initialPageSetUp = function(preferredPhenotype,chromosome,startPosition,endPosition){
         var drivingVariables = getVariablesToRemember();
         if (( typeof preferredPhenotype === 'undefined')||(preferredPhenotype.length===0)){
             preferredPhenotype = 'T2D';
@@ -240,48 +240,7 @@ mpgSoftware.variantTable = (function () {
         $('.modal-content').resizable({
             alsoResize: ".modal-header, .modal-body, .modal-footer"
         });
-        mpgSoftware.dynamicUi.modifyScreenFields({phenotype:preferredPhenotype},getVariablesToRemember());
-/*
-        var pageURL_string = window.location.href;
-        var url = new URL(pageURL_string);
-
-        if (url.searchParams.get("chromosomeNumber")){
-
-            //console.log("region view");
-            var chromosomeInput = url.searchParams.get("chromosomeNumber");
-            var startExtentInput = url.searchParams.get("startExtent");
-            var endExtentInput = url.searchParams.get("endExtent");
-
-            //console.log(preferredPhenotype+" : "+chromosomeInput+" : "+startExtentInput+" : "+endExtentInput);
-
-            mpgSoftware.dynamicUi.modifyScreenFields({phenotype:preferredPhenotype, chromosome:chromosomeInput, startPosition:startExtentInput, endPosition:endExtentInput},getVariablesToRemember());
-
-        } else {
-
-            //console.log("gene id view");
-            var urlPath = window.location.pathname.split("/");
-            var geneName = urlPath[urlPath.length - 1];
-
-            $.ajax({
-                cache: false,
-                type: "post",
-                url: GENEINFOAJAXURL,
-                data: {geneName: geneName},
-                async: true
-            }).done(function (geneInfoData) {
-                //console.log(data);
-                var genePageExtent = 100000;
-
-                var chromosomeInput = geneInfoData.geneInfo.CHROM;
-                var startExtentInput = geneInfoData.geneInfo.BEG - genePageExtent;
-                var endExtentInput = geneInfoData.geneInfo.END + genePageExtent;
-
-                //console.log(preferredPhenotype+" : "+chromosomeInput+" : "+startExtentInput+" : "+endExtentInput);
-
-                mpgSoftware.dynamicUi.modifyScreenFields({phenotype:preferredPhenotype, chromosome:chromosomeInput, startPosition:startExtentInput, endPosition:endExtentInput},getVariablesToRemember());
-            });
-
-        }*/
+        mpgSoftware.dynamicUi.modifyScreenFields({phenotype:preferredPhenotype,chromosome:chromosome,startposition:startPosition,endposition:endPosition},getVariablesToRemember());
 
     }
 
