@@ -247,8 +247,9 @@ const setUpFilterAndSlider = function (retrievedRecords,valueDisplay ){
         setUpFilterAndSlider(objectContainingRetrievedRecords[0],valueDisplay);
         setUpFEFilterAndSlider(objectContainingRetrievedRecords[0],valueFEDisplay);
         mpgSoftware.dynamicUi.displayGregorSubTableForVariantTable(idForTheTargetDiv, // which table are we adding to
-            callingParameters.code, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            callingParameters.nameOfAccumulatorField, // name of the persistent field where the data we received is stored
+            // callingParameters.code, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+            // callingParameters.nameOfAccumulatorField, // name of the persistent field where the data we received is stored
+            callingParameters,
             // take all the records for each row and insert them into the intermediateDataStructure
             function( rawGregorRecord ){
                 return rawGregorRecord;

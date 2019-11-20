@@ -88,9 +88,11 @@ mpgSoftware.dynamicUi.chromStateVariantTable = (function () {
     var displayTissueInformationFromChromState = function (idForTheTargetDiv, objectContainingRetrievedRecords, callingParameters ) {
 
         mpgSoftware.dynamicUi.displayForVariantTable(idForTheTargetDiv, // which table are we adding to
-            callingParameters.code, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            callingParameters.nameOfAccumulatorField, // name of the persistent field where the data we received is stored
-            callingParameters.nameOfAccumulatorFieldWithIndex,
+            // callingParameters.code, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+            // callingParameters.nameOfAccumulatorField, // name of the persistent field where the data we received is stored
+            // callingParameters.nameOfAccumulatorFieldWithIndex,
+            callingParameters,
+
             // insert header records as necessary into the intermediate structure, and return header names that we can match on for the columns
             function(records,tissueTranslations){
                 let recs =  _.orderBy(records,['SOURCE'],['asc']);

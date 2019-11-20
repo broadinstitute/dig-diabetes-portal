@@ -85,9 +85,10 @@ mpgSoftware.dynamicUi.dnaseVariantTable = (function () {
     var displayTissueInformationFromDnase = function (idForTheTargetDiv, objectContainingRetrievedRecords, callingParameters ) {
 
         mpgSoftware.dynamicUi.displayForVariantTable(idForTheTargetDiv, // which table are we adding to
-            callingParameters.code, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            callingParameters.nameOfAccumulatorField, // name of the persistent field where the data we received is stored
-            callingParameters.nameOfAccumulatorFieldWithIndex,
+            // callingParameters.code, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+            // callingParameters.nameOfAccumulatorField, // name of the persistent field where the data we received is stored
+            // callingParameters.nameOfAccumulatorFieldWithIndex,
+            callingParameters,
             // insert header records as necessary into the intermediate structure, and return header names that we can match on for the columns
             function(records,tissueTranslations){
                 //return _.orderBy(_.filter(records,function(o){return (o.p_value<0.05)}),['p_value'],['asc']);

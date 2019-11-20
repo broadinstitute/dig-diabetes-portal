@@ -188,8 +188,9 @@ mpgSoftware.dynamicUi.variantTableHeaders = (function () {
 
     var displayRefinedVariantsInARange = function (idForTheTargetDiv, objectContainingRetrievedRecords, callingParameters) {
         mpgSoftware.dynamicUi.displayHeaderForVariantTable(idForTheTargetDiv, // which table are we adding to
-            callingParameters.code, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            callingParameters.nameOfAccumulatorField,
+            // callingParameters.code, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+            // callingParameters.nameOfAccumulatorField,
+            callingParameters,
             function(
                 presentationString, variantId, indexInOneDimensionalArray,emphasisSwitch,pValue,posteriorPValue
             ){

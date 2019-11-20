@@ -698,7 +698,7 @@ mpgSoftware.dynamicUi = (function () {
                 break;
             case "getTissuesFromEqtlsForTissuesTable":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("geneInfoArray")) {
+                    if (accumulatorObjectFieldEmpty("geneInfoArray", baseDomElement)) {
                         var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
                             {actionId: "getTissuesFromEqtlsForTissuesTable"}, baseDomElement);
                         actionToUndertake();
@@ -725,7 +725,7 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getTissuesFromEqtlsForGenesTable":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("geneInfoArray")) {
+                    if (accumulatorObjectFieldEmpty("geneInfoArray", baseDomElement)) {
                         var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
                             {actionId: "getTissuesFromEqtlsForGenesTable"}, baseDomElement);
                         actionToUndertake();
@@ -752,7 +752,7 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getGeneAssociationsForGenesTable":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("geneInfoArray")) {
+                    if (accumulatorObjectFieldEmpty("geneInfoArray", baseDomElement)) {
                         var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
                             {actionId:actionId}, baseDomElement);
                         actionToUndertake();
@@ -784,7 +784,7 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getSkatGeneAssociationsForGeneTable":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("geneInfoArray")) {
+                    if (accumulatorObjectFieldEmpty("geneInfoArray", baseDomElement)) {
                         var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
                             {actionId: actionId}, baseDomElement);
                         actionToUndertake();
@@ -818,7 +818,7 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getFirthGeneAssociationsForGeneTable":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("geneInfoArray")) {
+                    if (accumulatorObjectFieldEmpty("geneInfoArray", baseDomElement)) {
                         var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: actionId});
                         actionToUndertake();
                     } else {
@@ -851,7 +851,7 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getInformationFromEffectorGeneListTable":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("geneInfoArray")) {
+                    if (accumulatorObjectFieldEmpty("geneInfoArray", baseDomElement)) {
                         var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
                             {actionId: actionId}, baseDomElement);
                         actionToUndertake();
@@ -959,7 +959,7 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getPhenotypesFromECaviarForTissueTable":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("geneInfoArray")) {
+                    if (accumulatorObjectFieldEmpty("geneInfoArray", baseDomElement)) {
                         var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getPhenotypesFromECaviarForTissueTable"});
                         actionToUndertake();
                     } else {
@@ -983,7 +983,7 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getRecordsFromECaviarForGeneTable":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("geneInfoArray")) {
+                    if (accumulatorObjectFieldEmpty("geneInfoArray", baseDomElement)) {
                         var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
                             {actionId: actionId}, baseDomElement);
                         actionToUndertake();
@@ -1012,7 +1012,7 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getRecordsFromColocForGeneTable":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("geneInfoArray")) {
+                    if (accumulatorObjectFieldEmpty("geneInfoArray", baseDomElement)) {
                         var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
                             {actionId: actionId}, baseDomElement);
                         actionToUndertake();
@@ -1043,7 +1043,7 @@ mpgSoftware.dynamicUi = (function () {
             case "getAnnotationsFromModForGenesTable":
                 functionToLaunchDataRetrieval = function () {
 
-                    if (accumulatorObjectFieldEmpty("geneInfoArray")) {
+                    if (accumulatorObjectFieldEmpty("geneInfoArray", baseDomElement)) {
                         var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
                             {actionId: actionId}, baseDomElement);
                         actionToUndertake();
@@ -1089,7 +1089,7 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getTissuesFromAbcForGenesTable":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("geneInfoArray")) {
+                    if (accumulatorObjectFieldEmpty("geneInfoArray", baseDomElement)) {
                         var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
                             {actionId: "getTissuesFromAbcForGenesTable"}, baseDomElement);
                         actionToUndertake();
@@ -1113,7 +1113,7 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getRecordsFromAbcForTissueTable":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("geneInfoArray")) {
+                    if (accumulatorObjectFieldEmpty("geneInfoArray", baseDomElement)) {
                         var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
                             {actionId: "getRecordsFromAbcForTissueTable"}, baseDomElement);
                         actionToUndertake();
@@ -1203,7 +1203,7 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getEqtlsGivenVariantList":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("variantNameArray")) {
+                    if (accumulatorObjectFieldEmpty("variantNameArray", baseDomElement)) {
                         var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable",
                             {actionId: "getEqtlsGivenVariantList"}, baseDomElement);
                         actionToUndertake();
@@ -1228,7 +1228,7 @@ mpgSoftware.dynamicUi = (function () {
                 break;
             case "getABCGivenVariantList":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
+                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement)) {
                         var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable",
                             {actionId: actionId}, baseDomElement);
                         actionToUndertake();
@@ -1259,7 +1259,7 @@ mpgSoftware.dynamicUi = (function () {
                 break;
             case "getCoaccessibilityGivenVariantList":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
+                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement)) {
                         var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable",
                             {actionId: actionId}, baseDomElement);
                         actionToUndertake();
@@ -1295,7 +1295,7 @@ mpgSoftware.dynamicUi = (function () {
                 break;
             case "getInformationFromDepictForGenesTable":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("geneInfoArray")) {
+                    if (accumulatorObjectFieldEmpty("geneInfoArray", baseDomElement)) {
                         var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
                             {actionId: actionId}, baseDomElement);
                         actionToUndertake();
@@ -1327,7 +1327,7 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getDepictGeneSetForGenesTable":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("geneInfoArray")) {
+                    if (accumulatorObjectFieldEmpty("geneInfoArray", baseDomElement)) {
                         var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
                             {actionId: actionId}, baseDomElement);
                         actionToUndertake();
@@ -1359,7 +1359,7 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getAtacseqGivenVariantList":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
+                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement)) {
                         var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable",
                             {actionId: actionId}, baseDomElement);
                         actionToUndertake();
@@ -1395,7 +1395,7 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getDnaseGivenVariantList":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
+                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement)) {
                         var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable",
                             {actionId: actionId}, baseDomElement);
                         actionToUndertake();
@@ -1432,7 +1432,7 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getTfMotifGivenVariantList":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
+                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement)) {
                         var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable",
                             {actionId: actionId}, baseDomElement);
                         actionToUndertake();
@@ -1468,7 +1468,7 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getTfbsGivenVariantList":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
+                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement)) {
                         var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable",
                             {actionId: actionId}, baseDomElement);
                         actionToUndertake();
@@ -1526,7 +1526,7 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getH3k27acGivenVariantList":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
+                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement)) {
                         var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable",
                             {actionId: actionId}, baseDomElement);
                         actionToUndertake();
@@ -1595,7 +1595,7 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getChromStateGivenVariantList":
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex)) {
+                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement)) {
                         var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable",
                             {actionId: actionId}, baseDomElement);
                         actionToUndertake();
@@ -1817,38 +1817,43 @@ mpgSoftware.dynamicUi = (function () {
      * Reset the chosen field in the accumulator object to its default value. If no field is specified then reset the entire
      * accumulator object to its default.
      */
-    var resetAccumulatorObject = function (specificField) {
+    var resetAccumulatorObject = function (specificField, baseDomElement) {
         var additionalParameters = getDyanamicUiVariables();
         var filledOutSharedAccumulatorObject = new AccumulatorObject(additionalParameters);
         if (typeof specificField !== 'undefined') {
             if (typeof filledOutSharedAccumulatorObject === 'undefined') {
                 alert(" Unexpected absence of field '" + specificField + "' in shared accumulator object");
             }
-            setAccumulatorObject(specificField, []);
+            setAccumulatorObject(specificField, [], baseDomElement);
         } else {
             if ( typeof nameOfDomToStoreAccumulatorInformation === 'undefined'){
-                alert(' initialization failure: the variable nameOfDomToStoreAccumulatorInformation needs to have a value')
+                alert(' initialization failure: the variable nameOfDomToStoreAccumulatorInformation needs to have a value');
             } else {
-                $(nameOfDomToStoreAccumulatorInformation).data("dataHolder", filledOutSharedAccumulatorObject);
+                if ( typeof baseDomElement === 'undefined') {
+                    alert('initialization failure: null value of baseDomElement')
+                } else {
+                    $(baseDomElement).data("dataHolder", filledOutSharedAccumulatorObject);
+                }
+
             }
 
         }
     };
 
 
-    var addAdditionalResultsObject = function (returnObject) {
-        var resultsArray = getAccumulatorObject("resultsArray");
+    var addAdditionalResultsObject = function (returnObject, baseDomElement) {
+        var resultsArray = getAccumulatorObject("resultsArray", baseDomElement);
         if (typeof resultsArray === 'undefined') {
             setAccumulatorObject("resultsArray", []);
-            resultsArray = getAccumulatorObject("resultsArray");
+            resultsArray = getAccumulatorObject("resultsArray", baseDomElement);
         }
         resultsArray.push(returnObject);
     };
 
 
-    var accumulatorObjectFieldEmpty = function (specificField) {
+    var accumulatorObjectFieldEmpty = function (specificField, baseDomElement) {
         var returnValue = true;
-        var accumulatorObjectField = getAccumulatorObject(specificField);
+        var accumulatorObjectField = getAccumulatorObject(specificField, baseDomElement);
         if (Array.isArray(accumulatorObjectField)) {
             if (accumulatorObjectField.length > 0) {
                 returnValue = false;
@@ -1856,9 +1861,9 @@ mpgSoftware.dynamicUi = (function () {
         }
         return returnValue;
     };
-    var accumulatorObjectSubFieldEmpty = function (specificField,subField) {
+    var accumulatorObjectSubFieldEmpty = function (specificField,subField, baseDomElement) {
         var returnValue = true;
-        var accumulatorObjectField = getAccumulatorObject(specificField);
+        var accumulatorObjectField = getAccumulatorObject(specificField, baseDomElement);
         if ( typeof subField === 'undefined'){
             alert("subfield record should not be empty. Data problem?")
         } else {
@@ -1879,8 +1884,8 @@ mpgSoftware.dynamicUi = (function () {
 
 
     // convenience function for a very common retrieval
-    const getSharedTable = function (idForTheTargetDiv) {
-        return getAccumulatorObject("sharedTable_"+idForTheTargetDiv);
+    const getSharedTable = function (idForTheTargetDiv, baseDomElement) {
+        return getAccumulatorObject("sharedTable_"+idForTheTargetDiv, baseDomElement);
     };
 
 
@@ -1904,7 +1909,7 @@ mpgSoftware.dynamicUi = (function () {
      */
     var prepareToPresentToTheScreen = function (idForTheTargetDiv,
                                                 templateInfo,
-                                                returnObject,
+                                                baseDomElement,
                                                 clearBeforeStarting,
                                                 intermediateDataStructure,
                                                 storeRecords,
@@ -1922,13 +1927,15 @@ mpgSoftware.dynamicUi = (function () {
                 storeRecords,
                 typeOfRecord,
                 prependRecords,
-                blankRowsAreAcceptable);
+                blankRowsAreAcceptable,
+                baseDomElement);
 
         } else {
 
-            $(idForTheTargetDiv).append(Mustache.render($(templateInfo)[0].innerHTML,
-                returnObject
-            ));
+            alert('we never take this path anymore, right?');
+            // $(idForTheTargetDiv).append(Mustache.render($(templateInfo)[0].innerHTML,
+            //     returnObject
+            // ));
 
         }
 
@@ -2747,15 +2754,20 @@ mpgSoftware.dynamicUi = (function () {
      * @param placeDataIntoRenderForm
      */
     var displayForVariantTable = function (idForTheTargetDiv, // which table are we adding to
-                                        dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-                                        nameOfAccumulatorField, // name of the persistent field where the data we received is stored
-                                        nameOfAccumulatorFieldWithIndex, // we may wish to pull out one record for summary purposes
+                                           callingParameters,
+                                        // dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+                                        // nameOfAccumulatorField, // name of the persistent field where the data we received is stored
+                                        // nameOfAccumulatorFieldWithIndex, // we may wish to pull out one record for summary purposes
                                         mapSortAndFilterFunction,
                                         placeDataIntoRenderForm ) { // sort and filter the records we will use.  Resulting array must have fields tissue, value, and numericalValue
+        let dataAnnotationTypeCode = callingParameters.code;
+        let nameOfAccumulatorField = callingParameters.nameOfAccumulatorField;
+        let nameOfAccumulatorFieldWithIndex = callingParameters.nameOfAccumulatorFieldWithIndex;
+        let baseDomElement = callingParameters.baseDomElement;
         var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode);
         var intermediateDataStructure = new IntermediateDataStructure();
-        var sharedTable = getSharedTable(idForTheTargetDiv);
-        var arrayOfDataToDisplay = getAccumulatorObject(nameOfAccumulatorField);
+        var sharedTable = getSharedTable(idForTheTargetDiv,baseDomElement);
+        var arrayOfDataToDisplay = getAccumulatorObject(nameOfAccumulatorField,baseDomElement);
         let prepend = true;
         console.log("displayForVariantTable:dataAnnotationTypeCode="+dataAnnotationTypeCode+".");
 
@@ -2773,10 +2785,13 @@ mpgSoftware.dynamicUi = (function () {
 
             // set up the headers, even though we know we won't use them. Is this step necessary?
             var headerNames = [];
-            if (accumulatorObjectSubFieldEmpty(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex, "data")) {
+            if (accumulatorObjectSubFieldEmpty(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex,
+                "data",
+                baseDomElement)) {
                 console.log("We should have a list of variants, otherwise we shouldn't be here. We have a problem.");
             } else {
-                accumulatorFieldWithIndex = getAccumulatorObject(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex);
+                accumulatorFieldWithIndex = getAccumulatorObject(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex,
+                    baseDomElement);
                 // Here are the two additional accumulators if they don't exist already
                 // one for the variant x tissue display
                 if (typeof accumulatorFieldWithIndex[0].header['tissueDisplay'] === 'undefined') {
@@ -2980,11 +2995,11 @@ mpgSoftware.dynamicUi = (function () {
             }
         }
 
-        const annotationDisplayArray = getAccumulatorObject("annotationDisplayArray");
+        const annotationDisplayArray = getAccumulatorObject("annotationDisplayArray",baseDomElement);
         annotationDisplayArray.push(intermediateDataStructure);
         prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
             '#dynamicAbcGeneTable',
-            undefined, // unused
+            baseDomElement, // unused
             clearBeforeStarting,
             intermediateDataStructure,
             true,
@@ -3352,10 +3367,14 @@ mpgSoftware.dynamicUi = (function () {
 
 
     var displayGregorSubTableForVariantTable = function (idForTheTargetDiv, // which table are we adding to
-                                                 dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-                                                 nameOfAccumulatorField, // name of the persistent field where the data we received is stored
+                                                 // dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+                                                 // nameOfAccumulatorField, // name of the persistent field where the data we received is stored
+                                                 callingParameters,
                                                  placeDataIntoRenderForm )
     { // sort and filter the records we will use.  Resulting array must have fields tissue, value, and numericalValue
+        let dataAnnotationTypeCode = callingParameters.code; // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+        let nameOfAccumulatorField = callingParameters.nameOfAccumulatorField;
+        let baseDomElement = callingParameters.baseDomElement;
         const chosenHeaderField = 'bestAnnotationAndMethods';
         const headerRecordField = 'annotationAndMethod';
         const chosenRowField = 'bestTissues';
@@ -3423,7 +3442,7 @@ mpgSoftware.dynamicUi = (function () {
 
         prepareToPresentToTheScreen(idForTheTargetDiv,
             '#notUsed',
-            {},
+            baseDomElement,
             true,
             intermediateDataStructure,
             false,
@@ -3442,11 +3461,16 @@ mpgSoftware.dynamicUi = (function () {
 
 
     var displayHeaderForVariantTable = function (idForTheTargetDiv, // which table are we adding to
-                                                 dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-                                                 nameOfAccumulatorField, // name of the persistent field where the data we received is stored
+                                                 callingParameters,
+                                                 // dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+                                                 // nameOfAccumulatorField, // name of the persistent field where the data we received is stored
                                                  placeDataIntoRenderForm )
     { // sort and filter the records we will use.  Resulting array must have fields tissue, value, and numericalValue
         deferredObject.resolve();
+        let dataAnnotationTypeCode = callingParameters.code; // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+        let nameOfAccumulatorField = callingParameters.nameOfAccumulatorField;
+        let baseDomElement = callingParameters.baseDomElement;
+
         var selectorForIidForTheTargetDiv = idForTheTargetDiv;
         $(selectorForIidForTheTargetDiv).empty();
         var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode);
@@ -3554,8 +3578,7 @@ mpgSoftware.dynamicUi = (function () {
 
         prepareToPresentToTheScreen(idForTheTargetDiv,
             '#notUsed',
-            //vectorOfVariantRecords,
-            {},
+            baseDomElement,
             clearBeforeStarting,
             intermediateDataStructure,
             true,
@@ -3987,7 +4010,7 @@ mpgSoftware.dynamicUi = (function () {
     var modifyScreenFields = function (data, additionalParameters) {
 
         setDyanamicUiVariables(additionalParameters);
-        resetAccumulatorObject();
+        resetAccumulatorObject(undefined,additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage);
 
         $('#inputBoxForDynamicContextId').typeahead({
             source: function (query, process) {
@@ -4005,14 +4028,17 @@ mpgSoftware.dynamicUi = (function () {
         });
 
         if ( typeof data.phenotype !== 'undefined'){
-            setAccumulatorObject("preferredPhenotype", data.phenotype );
+            setAccumulatorObject("preferredPhenotype", data.phenotype,
+                additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage);
         }
 
         // Every table depends on some in memory storage.  Create that here if requested.
         if (    ( typeof  additionalParameters.dynamicTableConfiguration !== 'undefined') &&
                 ( typeof  additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory !== 'undefined') ){
-            resetAccumulatorObject('gregorTissueArray');
-            resetAccumulatorObject('tissueTableChosenAnnotations');
+            resetAccumulatorObject('gregorTissueArray',
+                additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage);
+            resetAccumulatorObject('tissueTableChosenAnnotations',
+                additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage);
             // destroySharedTable(additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory);
             // var sharedTable = new SharedTableObject('tissueTableTissueHeaders',0,0);
             // setAccumulatorObject("sharedTable_" + additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory,sharedTable);
@@ -4031,7 +4057,9 @@ mpgSoftware.dynamicUi = (function () {
             case 'effectorGeneTable':
                 var sharedTable = new SharedTableObject( 'fegtAnnotationHeaders',0,0);
                 // sharedTable.currentForm = additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory;
-                setAccumulatorObject("sharedTable_"+additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory,sharedTable);
+                setAccumulatorObject("sharedTable_"+additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory,
+                    sharedTable,
+                    additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage);
                 dataAnnotationTypes = additionalParameters.dataAnnotationTypes;
                 break;
             case 'tissueTable':
@@ -4058,10 +4086,14 @@ mpgSoftware.dynamicUi = (function () {
                 // setAccumulatorObject("extentBegin","3504650");
                 // setAccumulatorObject("extentEnd","3614660");
 
-                setAccumulatorObject("phenotype",data.phenotype);
-                setAccumulatorObject("chromosome",data.chromosome);
-                setAccumulatorObject("extentBegin",data.startPosition);
-                setAccumulatorObject("extentEnd",data.endPosition);
+                setAccumulatorObject("phenotype",data.phenotype,
+                    additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage);
+                setAccumulatorObject("chromosome",data.chromosome,
+                    additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage);
+                setAccumulatorObject("extentBegin",data.startPosition,
+                    additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage);
+                setAccumulatorObject("extentEnd",data.endPosition,
+                    additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage);
 
                 const chromosomeInput = $('input#chromosomeInput').val();
                 const startExtentInput = $('input#startExtentInput').val();
@@ -4069,11 +4101,15 @@ mpgSoftware.dynamicUi = (function () {
                 //const chosenPhenotype = $('select.phenotypePicker').children("option:selected"). val();
                 var chosenPhenotype = data.phenotype;
 
-                if (chromosomeInput.length>0){setAccumulatorObject("chromosome",chromosomeInput);}
-                if (startExtentInput.length>0){setAccumulatorObject("extentBegin",startExtentInput);}
-                if (endExtentInput.length>0){setAccumulatorObject("extentEnd",endExtentInput);}
+                if (chromosomeInput.length>0){setAccumulatorObject("chromosome",chromosomeInput,
+                    additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage);}
+                if (startExtentInput.length>0){setAccumulatorObject("extentBegin",startExtentInput,
+                    additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage);}
+                if (endExtentInput.length>0){setAccumulatorObject("extentEnd",endExtentInput,
+                    additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage);}
                 if (( typeof chosenPhenotype !== 'undefined')&&(chosenPhenotype.length>0)){
-                    setAccumulatorObject("phenotype",chosenPhenotype);
+                    setAccumulatorObject("phenotype",chosenPhenotype,
+                        additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage);
                 }
 
                 destroySharedTable(additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory);
@@ -4103,13 +4139,20 @@ mpgSoftware.dynamicUi = (function () {
         var arrayOfRoutinesToUndertake = [];
 
         //  If we ever want to update this page without reloading it then were going to need to get rid of the information in the accumulators
-        resetAccumulatorObject("geneInfoArray");
-        resetAccumulatorObject("tissuesForEveryGene");
-        resetAccumulatorObject("genesForEveryTissue");
-        resetAccumulatorObject("rawDepictInfo");
-        resetAccumulatorObject("abcAggregatedPerVariant");
-        resetAccumulatorObject("sharedTable_table.combinedGeneTableHolder");
-        resetAccumulatorObject("modNameArray");
+        resetAccumulatorObject("geneInfoArray",
+            additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage);
+        resetAccumulatorObject("tissuesForEveryGene",
+            additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage);
+        resetAccumulatorObject("genesForEveryTissue",
+            additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage);
+        resetAccumulatorObject("rawDepictInfo",
+            additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage);
+        resetAccumulatorObject("abcAggregatedPerVariant",
+            additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage);
+        resetAccumulatorObject("sharedTable_table.combinedGeneTableHolder",
+            additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage);
+        resetAccumulatorObject("modNameArray",
+            additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage);
 
 
         destroySharedTable('table.combinedGeneTableHolder');
@@ -4661,7 +4704,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                                             storeHeadersInDataStructure,
                                             typeOfHeader,
                                             prependColumns,
-                                            additionalDetailsForHeaders ){
+                                            additionalDetailsForHeaders,
+                                            baseDomElement ){
 
         var NewColumn = function(contentOfHeader,header,classesToPromote,intermediateStructureDataCell){
             return {contentOfHeader:contentOfHeader,
@@ -4674,7 +4718,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             (headers.length > 0)){
             var datatable;
             if ( ! $.fn.DataTable.isDataTable( whereTheTableGoes ) ) {
-                var sharedTable = getAccumulatorObject("sharedTable_"+whereTheTableGoes);
+                var sharedTable = getAccumulatorObject("sharedTable_"+whereTheTableGoes, baseDomElement);
                 var dyanamicUiVariables = getDyanamicUiVariables();
                 var headerDescriber = {
                     "dom": '<"top">rt<"bottom"iplB>',
@@ -4723,7 +4767,9 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                             sortability.push(true);
                             break;
                         case 'variantTableVariantHeaders':
-                            setAccumulatorObject("currentSortRequest",dyanamicUiVariables.dynamicTableConfiguration.defaultSort);
+                            setAccumulatorObject( "currentSortRequest",
+                                dyanamicUiVariables.dynamicTableConfiguration.defaultSort,
+                                baseDomElement );
                             var isdc = new IntermediateStructureDataCell('farLeftCorner',
                                 {initialLinearIndex:"initialLinearIndex_0"},
                                 'methodCategories variantIds','EMP');
@@ -5435,7 +5481,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                                         storeRecordsInDataStructure,
                                         typeOfRecord,
                                         prependColumns,
-                                        blankRowsAreAcceptable ){
+                                        blankRowsAreAcceptable,
+                                        baseDomElement){
         var rememberCategories = [];
         _.forEach(rowsToAdd, function (row,newRowCount) {
             if ( !_.includes (rememberCategories,row.category)) {
@@ -5445,7 +5492,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             }
 
             var numberOfExistingRows = $(whereTheTableGoes).dataTable().DataTable().rows()[0].length+1;
-            var sharedTable = getAccumulatorObject("sharedTable_"+whereTheTableGoes);
+            var sharedTable = getAccumulatorObject("sharedTable_"+whereTheTableGoes,baseDomElement);
             var numberOfColumns  = sharedTable.numberOfColumns;
             var rowDescriber = [];
             var numberOfColumnsAdded = 0;
@@ -5569,15 +5616,18 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                                               storeRecords, // the store records for later recall
                                               typeOfRecord, // describes particular table and orientation
                                               prependColumns, // add some label columns?
-                                              blankRowsAreAcceptable ) { // allow a row with nothing in it, or suppress it?
+                                              blankRowsAreAcceptable,
+                                              baseDomElement ) { // allow a row with nothing in it, or suppress it?
         var datatable;
 
         if (( typeof intermediateStructure !== 'undefined') &&
             ( typeof intermediateStructure.headers !== 'undefined') &&
             (intermediateStructure.headers.length > 0)){
                 datatable = buildHeadersForTable(whereTheTableGoes,intermediateStructure.headers,
-                    storeRecords,typeOfRecord, prependColumns, []);
-                refineTableRecords(whereTheTableGoes,datatable,typeOfRecord,[], true);
+                    storeRecords,typeOfRecord, prependColumns, [],
+                    baseDomElement);
+                refineTableRecords(whereTheTableGoes,datatable,typeOfRecord,[], true,
+                    baseDomElement);
         }
 
 
@@ -5590,8 +5640,10 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     storeRecords,
                     typeOfRecord,
                     prependColumns,
-                    blankRowsAreAcceptable );
-                refineTableRecords(whereTheTableGoes,datatable,typeOfRecord,rememberCategories, false);
+                    blankRowsAreAcceptable,
+                    baseDomElement );
+                refineTableRecords(whereTheTableGoes,datatable,typeOfRecord,rememberCategories, false,
+                    baseDomElement);
             } catch(e){
 
             }
@@ -5687,7 +5739,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         fullDataVector.push(cell);
                     });
                 });
-                var sharedTable = getAccumulatorObject("sharedTable_"+whereTheTableGoes);
+                var sharedTable = getAccumulatorObject("sharedTable_"+whereTheTableGoes,baseDomElement);
                 _.forEach(fullDataVector,function(oneCell){
                     var initialLinearIndex = extractClassBasedIndex(oneCell,"initialLinearIndex_");
                     var associatedData = _.find(sharedTable.dataCells,{ascensionNumber:initialLinearIndex})
@@ -6720,7 +6772,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
     };
     const displayVariantTablePerTissue  = function (whereTheTableGoes, tissueDominant) {
-        var sharedTable = getSharedTable(whereTheTableGoes);
+        var sharedTable = getSharedTable(whereTheTableGoes,'#mainVariantDivHolder');
         // the switch to tissue dominant wants to have the the variance across the top
         if ((tissueDominant) &&(sharedTable.currentForm === 'variantTableAnnotationHeaders')){
             transposeThisTable('#mainVariantDiv table.variantTableHolder');
@@ -6730,14 +6782,14 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         sharedTable['dataCells'] = [];
 
         // Make the variant headers, the strictly genetic annotations, and the genetic association rows
-        const indexAccumulator = getAccumulatorObject("variantInfoArray");
-        const intermediateDataStructureHdr = getAccumulatorObject("topPortionDisplay");
+        const indexAccumulator = getAccumulatorObject("variantInfoArray",'#mainVariantDivHolder');
+        const intermediateDataStructureHdr = getAccumulatorObject("topPortionDisplay",'#mainVariantDivHolder');
         if (tissueDominant) {
             $('button.actualTransposeButton').attr("disabled", true);
-            setAccumulatorObject("variantTableOrientation","tissueDominant");
+            setAccumulatorObject("variantTableOrientation","tissueDominant",'#mainVariantDivHolder');
         } else {
             $('button.actualTransposeButton').attr("disabled", false);
-            setAccumulatorObject("variantTableOrientation","annotationDominant");
+            setAccumulatorObject("variantTableOrientation","annotationDominant",'#mainVariantDivHolder');
         }
 
         const clearBeforeStarting = false;
@@ -6746,7 +6798,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
         prepareToPresentToTheScreen(idForTheTargetDiv,
             '#notUsed',
-            {},
+            '#mainVariantDivHolder',
             clearBeforeStarting,
             intermediateDataStructureHdr,
             storeRecords,
@@ -6760,7 +6812,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
             prepareToPresentToTheScreen(idForTheTargetDiv,
                 '#notUsed',
-                {}, // unused
+                '#mainVariantDivHolder',
                 clearBeforeStarting,
                 intermediateDataStructureBody,
                 storeRecords,
@@ -6773,7 +6825,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                 intermediateDataStructureBody['tableToUpdate'] = idForTheTargetDiv;
                 prepareToPresentToTheScreen(idForTheTargetDiv,
                     '#notUsed',
-                    {}, // unused
+                    '#mainVariantDivHolder',
                     clearBeforeStarting,
                     intermediateDataStructureBody,
                     storeRecords,
