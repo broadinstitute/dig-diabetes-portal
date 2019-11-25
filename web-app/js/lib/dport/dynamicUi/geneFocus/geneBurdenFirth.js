@@ -64,11 +64,12 @@ mpgSoftware.dynamicUi.geneBurdenFirth = (function () {
      * @param idForTheTargetDiv
      * @param objectContainingRetrievedRecords
      */
-    var displayGeneFirthAssociationsForGeneTable = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+    var displayGeneFirthAssociationsForGeneTable = function (idForTheTargetDiv, objectContainingRetrievedRecords, callingParameters) {
 
         mpgSoftware.dynamicUi.displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
-            'FIR', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            'rawGeneFirthRecords', // name of the persistent field where the data we received is stored
+            callingParameters,
+            // 'FIR', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+            // 'rawGeneFirthRecords', // name of the persistent field where the data we received is stored
             'P_MIN_P_FIRTH_NS_STRICT_NS_1PCT', // we may wish to pull out one record for summary purposes
             function(records,tissueTranslations){
                 return _.map(_.sortBy(_.filter(records,function(t){return t.tissue.includes("FIRTH")}),['value']),function(tissueRecord){

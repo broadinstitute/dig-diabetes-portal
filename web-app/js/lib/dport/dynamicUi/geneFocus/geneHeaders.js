@@ -57,10 +57,12 @@ mpgSoftware.dynamicUi.geneHeaders = (function () {
     };
 
 
-    var displayRefinedGenesInARange = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+    var displayRefinedGenesInARange = function (idForTheTargetDiv, objectContainingRetrievedRecords,callingParameters) {
         mpgSoftware.dynamicUi.displayHeaderForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
-            'GHDR', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            'geneInfoArray');
+            callingParameters
+            // 'GHDR', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+            // 'geneInfoArray'
+        );
 
 
     };

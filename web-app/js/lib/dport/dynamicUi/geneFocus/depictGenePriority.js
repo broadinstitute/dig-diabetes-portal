@@ -46,11 +46,12 @@ mpgSoftware.dynamicUi.depictGenePvalue = (function () {
      * @param idForTheTargetDiv
      * @param objectContainingRetrievedRecords
      */
-    var displayGenesFromDepict = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+    var displayGenesFromDepict = function (idForTheTargetDiv, objectContainingRetrievedRecords, callingParameters) {
 
         mpgSoftware.dynamicUi.displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
-            'DEP_GP', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            'rawDepictInfo', // name of the persistent field where the data we received is stored
+            callingParameters,
+            // 'DEP_GP', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+            // 'rawDepictInfo', // name of the persistent field where the data we received is stored
             '', // we may wish to pull out one record for summary purposes
             function(records,tissueTranslations){
                 return _.map(_.sortBy(records,['value']),function(tissueRecord){

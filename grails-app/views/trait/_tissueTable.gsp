@@ -50,7 +50,9 @@
                             significanceCellPresentationStringWriter:'gregorTissueTableSignificanceCellPresentationString',
                             sortingSubroutine:'gregorValuesInTissueTable',
                             packagingString:'mpgSoftware.dynamicUi.gregorTissueTable',
-                            internalIdentifierString:'getInformationFromGregorForTissueTable'
+                            internalIdentifierString:'getInformationFromGregorForTissueTable',
+                            nameOfAccumulatorField:'gregorTissueArray',
+                            nameOfAccumulatorFieldWithIndex:'notUsed'
                         },
                         {
                             code: 'LDSR',
@@ -66,7 +68,9 @@
                             significanceCellPresentationStringWriter:'ldsrTissueTableSignificanceCellPresentationString',
                             sortingSubroutine:'ldsrValuesInTissueTable',
                             packagingString:'mpgSoftware.dynamicUi.ldsrTissueTable',
-                            internalIdentifierString:'getInformationFromLdsrForTissueTable'
+                            internalIdentifierString:'getInformationFromLdsrForTissueTable',
+                            nameOfAccumulatorField:'ldsrTissueArray',
+                            nameOfAccumulatorFieldWithIndex:'notUsed'
                         }
                         ,
                         {
@@ -83,7 +87,9 @@
                             significanceCellPresentationStringWriter:'depictTissuesTissueTableSignificanceCellPresentationString',
                             sortingSubroutine:'depictTissueValuesInTissueTable',
                             packagingString:'mpgSoftware.dynamicUi.depictTissues',
-                            internalIdentifierString:'getInformationFromDepictForTissueTable'
+                            internalIdentifierString:'getInformationFromDepictForTissueTable',
+                            nameOfAccumulatorField:'depictTissueArray',
+                            nameOfAccumulatorFieldWithIndex:'notUsed'
                         }
                         ,
                         {

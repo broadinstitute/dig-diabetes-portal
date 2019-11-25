@@ -49,11 +49,12 @@ mpgSoftware.dynamicUi.effectorGene = (function () {
      * @param idForTheTargetDiv
      * @param objectContainingRetrievedRecords
      */
-    var displayGenesFromEffectorGene = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+    var displayGenesFromEffectorGene = function (idForTheTargetDiv, objectContainingRetrievedRecords, callingParameters) {
 
         mpgSoftware.dynamicUi.displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
-            'EFF', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            'rawEffectorGeneRecords', // name of the persistent field where the data we received is stored
+            callingParameters,
+            // 'EFF', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+            // 'rawEffectorGeneRecords', // name of the persistent field where the data we received is stored
             '', // we may wish to pull out one record for summary purposes
             function(records,tissueTranslations){
                 return _.map(records,function(oneRecord){

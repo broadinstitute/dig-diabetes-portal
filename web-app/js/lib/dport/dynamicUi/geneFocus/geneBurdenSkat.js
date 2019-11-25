@@ -67,11 +67,12 @@ mpgSoftware.dynamicUi.geneBurdenSkat = (function () {
      * @param idForTheTargetDiv
      * @param objectContainingRetrievedRecords
      */
-    var displayGeneSkatAssociationsForGeneTable = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+    var displayGeneSkatAssociationsForGeneTable = function (idForTheTargetDiv, objectContainingRetrievedRecords, callingParameters) {
 
         mpgSoftware.dynamicUi.displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
-            'SKA', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            'rawGeneSkatRecords', // name of the persistent field where the data we received is stored
+            callingParameters,
+            // 'SKA', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+            // 'rawGeneSkatRecords', // name of the persistent field where the data we received is stored
             'P_MIN_P_SKAT_NS_STRICT_NS_1PCT', // we may wish to pull out one record for summary purposes
             function(records,tissueTranslations){
                 return _.map(_.sortBy(_.filter(records,function(t){return t.tissue.includes("SKAT")}),['value']),function(tissueRecord){

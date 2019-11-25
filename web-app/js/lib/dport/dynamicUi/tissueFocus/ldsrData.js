@@ -70,13 +70,14 @@ mpgSoftware.dynamicUi.ldsrTissueTable = (function () {
      * @param idForTheTargetDiv
      * @param objectContainingRetrievedRecords
      */
-    var displayLdsrDataForTissueTable = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+    var displayLdsrDataForTissueTable = function (idForTheTargetDiv, objectContainingRetrievedRecords, callingParameters) {
 
         var dataAnnotationTypeCode = "LDSR";
 
         mpgSoftware.dynamicUi.displayTissueTable(idForTheTargetDiv, // which table are we adding to
-            dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            'ldsrTissueArray', // name of the persistent field where the data we received is stored
+            callingParameters,
+            // dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+            // 'ldsrTissueArray', // name of the persistent field where the data we received is stored
 
             // insert header records as necessary into the intermediate structure, and return header names that we can match on for the columns
             function(incomingData,tissuesAlreadyInTheTable,dataAnnotationType,intermediateDataStructure,returnObject){

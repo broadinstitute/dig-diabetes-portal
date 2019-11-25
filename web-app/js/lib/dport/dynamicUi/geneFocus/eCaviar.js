@@ -51,10 +51,11 @@ mpgSoftware.dynamicUi.eCaviar = (function () {
      * @param idForTheTargetDiv
      * @param objectContainingRetrievedRecords
      */
-    var displayGenesFromECaviar = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+    var displayGenesFromECaviar = function (idForTheTargetDiv, objectContainingRetrievedRecords, callingParameters) {
         mpgSoftware.dynamicUi.displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
-            'ECA', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            'rawColocalizationInfo', // name of the persistent field where the data we received is stored
+            callingParameters,
+            // 'ECA', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+            // 'rawColocalizationInfo', // name of the persistent field where the data we received is stored
             '', // we may wish to pull out one record for summary purposes
             function(records,tissueTranslations){
                 return _.map(_.orderBy( records,["clpp"],["desc"]),function(tissueRecord){

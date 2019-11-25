@@ -49,13 +49,12 @@ mpgSoftware.dynamicUi.fullEffectorGeneTable = (function () {
      * @param idForTheTargetDiv
      * @param objectContainingRetrievedRecords
      */
-    var displayFullEffectorGeneTable = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-
-        var dataAnnotationTypeCode = "FEGT";
+    var displayFullEffectorGeneTable = function (idForTheTargetDiv, objectContainingRetrievedRecords, callingParameters) {
 
         mpgSoftware.dynamicUi.displayForFullEffectorGeneTable(idForTheTargetDiv, // which table are we adding to
-            dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            'fullEffectorGeneTable', // name of the persistent field where the data we received is stored
+            callingParameters,
+            // dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+            // 'fullEffectorGeneTable', // name of the persistent field where the data we received is stored
 
             // insert header records as necessary into the intermediate structure, and return header names that we can match on for the columns
             function(incomingData,dataAnnotationType,intermediateDataStructure,returnObject){

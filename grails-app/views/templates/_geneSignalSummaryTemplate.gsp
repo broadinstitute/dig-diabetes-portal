@@ -598,7 +598,7 @@
                                         <div class="datatable-transpose-control">
                                             <div class="tool-label">Transpose table&nbsp;&nbsp;<g:helpText title="table.transpose.help.header" placement="bottom" body="table.transpose.help.text"/></div>
                                             <button class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table"
-                                            onclick = "mpgSoftware.dynamicUi.transposeThisTable('table.combinedGeneTableHolder')">
+                                            onclick = "mpgSoftware.dynamicUi.transposeThisTable('table.combinedGeneTableHolder',''#configurableUiTabStorage'')">
                                                 Transpose
                                             </button>
                                         </div>
@@ -607,11 +607,11 @@
 
 
                                             <button type="button" class="btn btn-secondary first-btn significance active" aria-label="click to organize by greatest significance"
-                                            title="click to organize by greatest significance" onclick="mpgSoftware.dynamicUi.setColorButtonActive(event,['tissues'],'table.combinedGeneTableHolder');">Significance
+                                            title="click to organize by greatest significance" onclick="mpgSoftware.dynamicUi.setColorButtonActive(event,['tissues'],'table.combinedGeneTableHolder','#configurableUiTabStorage');">Significance
                                             </button>
 
                                             <button type="button" class="btn btn-secondary last-btn tissues" aria-label="click to organized by number of associated tissues"
-                                            title="click to organized by number of associated tissues" onclick="mpgSoftware.dynamicUi.setColorButtonActive(event,['significance'],'table.combinedGeneTableHolder');">Records
+                                            title="click to organized by number of associated tissues" onclick="mpgSoftware.dynamicUi.setColorButtonActive(event,['significance'],'table.combinedGeneTableHolder','#configurableUiTabStorage');">Records
 
                                             </button>
                                         </div>
@@ -657,35 +657,7 @@
                                         %{--<h3> Results </h3>--}%
                                     %{--</div>--}%
                                     <div class="col-sm-12">
-                                        %{--<div class="refinementTable dynamicUiHolder">--}%
 
-                                        %{--</div>--}%
-                                        <!--<div class="row">
-                                            <div class="col-sm-1">
-                                                <button type="button" class="btn btn-link transpose" title="click to transpose table"
-                                                style="font-size: 32pt"
-                                                onclick = "mpgSoftware.dynamicUi.transposeThisTable('table.combinedVariantTableHolder')">
-                                                    T
-                                                </button>
-                                            </div>
-                                            <div class="col-sm-9">
-
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <div class="datatable-zoom-control btn-vert-block">
-                                                    <button type="button" class="btn btn-default" aria-label="Zoom in"  title="click to zoom in"
-                                                        onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicVariantHolder',true)">
-                                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"
-                                                        onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicVariantHolder',true)"></span>
-                                                    </button>
-                                                    <button type="button" class="btn btn-default" aria-label="Zoom out"  title="click to zoom out"
-                                                        onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicVariantHolder',false)">
-                                                        <span class="glyphicon glyphicon-minus" aria-hidden="true"
-                                                        onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicVariantHolder',false)"></span>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>-->
                                         <table class="combinedVariantTableHolder" style="border:0">
                                         </table>
                                     </div>

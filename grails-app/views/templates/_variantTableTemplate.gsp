@@ -205,11 +205,11 @@
                             <div class="datatable-zoom-control">
                                 <div class="tool-label">Order by</div>
 
-                                <button  class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table" onclick="mpgSoftware.dynamicUi.displayVariantTablePerTissue('{{domTableSpecifier}}', false)">
+                                <button  class="btn btn-secondary btn-default transpose" type="button" title="click to order by method" onclick="mpgSoftware.dynamicUi.displayVariantTablePerTissue('{{domTableSpecifier}}', false)">
                                         Annotation
                                       </button>
 
-                                <button  class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table" onclick="mpgSoftware.dynamicUi.displayVariantTablePerTissue('{{domTableSpecifier}}', true)">
+                                <button  class="btn btn-secondary btn-default transpose" type="button" title="click to order by tissue" onclick="mpgSoftware.dynamicUi.displayVariantTablePerTissue('{{domTableSpecifier}}', true)">
                                     Tissue
                                   </button>
 
@@ -234,7 +234,7 @@
                         <div class="well well-sm row" style="margin-left: 2px; height: 88.5px;">
                             <div class="datatable-zoom-control">
                                 <div class="tool-label">Direction</div>
-                                <button  class="btn btn-secondary btn-default transpose actualTransposeButton" type="button" title="click to transpose table" onclick="mpgSoftware.dynamicUi.transposeThisTable('{{domTableSpecifier}}')">
+                                <button  class="btn btn-secondary btn-default transpose actualTransposeButton" type="button" title="click to transpose table" onclick="mpgSoftware.dynamicUi.transposeThisTable('{{domTableSpecifier}}','#mainTissueDiv')">
                                 Transpose
                               </button>
                             </div>

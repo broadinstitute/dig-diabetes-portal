@@ -64,10 +64,11 @@ mpgSoftware.dynamicUi.metaXcan = (function () {
      * @param idForTheTargetDiv
      * @param objectContainingRetrievedRecords
      */
-    var displayGenePhenotypeAssociations = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+    var displayGenePhenotypeAssociations = function (idForTheTargetDiv, objectContainingRetrievedRecords, callingParameters) {
         mpgSoftware.dynamicUi.displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
-            'MET', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            'rawGeneAssociationRecords', // name of the persistent field where the data we received is stored
+            callingParameters,
+            // 'MET', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
+            // 'rawGeneAssociationRecords', // name of the persistent field where the data we received is stored
             '', // we may wish to pull out one record for summary purposes
             function(records,tissueTranslations){
                 return _.map(_.sortBy(records,['value']),function(tissueRecord){
