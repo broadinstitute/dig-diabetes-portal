@@ -598,7 +598,7 @@
                                         <div class="datatable-transpose-control">
                                             <div class="tool-label">Transpose table&nbsp;&nbsp;<g:helpText title="table.transpose.help.header" placement="bottom" body="table.transpose.help.text"/></div>
                                             <button class="btn btn-secondary btn-default transpose" type="button" title="click to transpose table"
-                                            onclick = "mpgSoftware.dynamicUi.transposeThisTable('table.combinedGeneTableHolder',''#configurableUiTabStorage'')">
+                                            onclick = "mpgSoftware.dynamicUi.transposeThisTable('table.combinedGeneTableHolder','#configurableUiTabStorage')">
                                                 Transpose
                                             </button>
                                         </div>

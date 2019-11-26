@@ -167,6 +167,7 @@ mpgSoftware.dynamicUi = (function () {
     var loading = $('#rSpinner');
     var nameOfDomToStoreAccumulatorInformation;
     var dyanamicUiVariables;
+    let currentSortRequest = "";
     var clearBeforeStarting = false;
     var deferredObject;
 
@@ -185,6 +186,10 @@ mpgSoftware.dynamicUi = (function () {
     var CELL_COLORING_REDDISH_BOTTOM = '#eeeeee';
 
     var CELL_COLORING_UNUSED = '#FFFFFF';
+
+
+
+
 
 
     /***
@@ -361,18 +366,13 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
-    // var setDyanamicUiVariables = function (incomingDyanamicUiVariables) {
-    //     dyanamicUiVariables = incomingDyanamicUiVariables;
-    //     if (( typeof dyanamicUiVariables === 'undefined') || (typeof dyanamicUiVariables.dynamicTableConfiguration === 'undefined')){
-    //         alert(dyanamicUiVariables.dynamicTableConfiguration);
-    //     } else {
-    //         nameOfDomToStoreAccumulatorInformation = dyanamicUiVariables.dynamicTableConfiguration.domSpecificationForAccumulatorStorage;
-    //     }
-    // };
-    //
-    // var getDyanamicUiVariables = function () {
-    //     return dyanamicUiVariables;
-    // };
+    var setCurrentSortRequest = function (incomingCurrentSortRequest) {
+        currentSortRequest = incomingCurrentSortRequest;
+    };
+
+    var getCurrentSortRequest = function () {
+        return currentSortRequest;
+    };
 
 
     var actionDefaultFollowUp = function (actionId) {
@@ -559,7 +559,6 @@ mpgSoftware.dynamicUi = (function () {
 
 
     var actionContainer = function (actionId, followUp, baseDomElement) {
-        //var additionalParameters = getDyanamicUiVariables();
         var additionalParameters = getAccumulatorObject(undefined,baseDomElement);
         var dataAnnotationType =_.find(additionalParameters.dataAnnotationTypes,{internalIdentifierString:actionId});
         var displayFunction = ( typeof followUp.displayRefinedContextFunction !== 'undefined') ? followUp.displayRefinedContextFunction : undefined;
@@ -688,9 +687,9 @@ mpgSoftware.dynamicUi = (function () {
                             {actionId: "getTissuesFromEqtlsForTissuesTable"}, baseDomElement);
                         actionToUndertake();
                     } else {
-                        resetAccumulatorObject("tissueNameArray");
-                        resetAccumulatorObject("tissuesForEveryGene");
-                        resetAccumulatorObject("genesForEveryTissue");
+                        resetAccumulatorObject("tissueNameArray", baseDomElement);
+                        resetAccumulatorObject("tissuesForEveryGene", baseDomElement);
+                        resetAccumulatorObject("genesForEveryTissue", baseDomElement);
                         var geneNameArray = _.map(getAccumulatorObject("geneInfoArray", baseDomElement), function (o) {
                             return {gene: o.name}
                         });
@@ -715,9 +714,9 @@ mpgSoftware.dynamicUi = (function () {
                             {actionId: "getTissuesFromEqtlsForGenesTable"}, baseDomElement);
                         actionToUndertake();
                     } else {
-                        resetAccumulatorObject("tissueNameArray");
-                        resetAccumulatorObject("genesForEveryTissue");
-                        resetAccumulatorObject("tissuesForEveryGene");
+                        resetAccumulatorObject("tissueNameArray", baseDomElement);
+                        resetAccumulatorObject("genesForEveryTissue", baseDomElement);
+                        resetAccumulatorObject("tissuesForEveryGene", baseDomElement);
                         var geneNameArray = _.map(getAccumulatorObject("geneInfoArray", baseDomElement), function (o) {
                             return {gene: o.name}
                         });
@@ -804,7 +803,9 @@ mpgSoftware.dynamicUi = (function () {
             case "getFirthGeneAssociationsForGeneTable":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty("geneInfoArray", baseDomElement)) {
-                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: actionId});
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
+                            {actionId: actionId},
+                            baseDomElement);
                         actionToUndertake();
                     } else {
                         var phenotype = $('li.chosenPhenotype').attr('id');
@@ -874,8 +875,8 @@ mpgSoftware.dynamicUi = (function () {
                     var chromosome = getAccumulatorObject("chromosome", baseDomElement);
                     var startPos = getAccumulatorObject("extentBegin", baseDomElement);
                     var endPos = getAccumulatorObject("extentEnd", baseDomElement);
-                    resetAccumulatorObject("phenotypesForEveryVariant");
-                    resetAccumulatorObject("variantsForEveryPhenotype");
+                    resetAccumulatorObject("phenotypesForEveryVariant", baseDomElement);
+                    resetAccumulatorObject("variantsForEveryPhenotype", baseDomElement);
                     retrieveRemotedContextInformation(buildRemoteContextArray({
                         name: "getVariantsFromQtlForContextDescription",
                         retrieveDataUrl: additionalParameters.retrieveVariantsWithQtlRelationshipsUrl,
@@ -901,8 +902,8 @@ mpgSoftware.dynamicUi = (function () {
                     var chromosome = getAccumulatorObject("chromosome", baseDomElement);
                     var startPos = getAccumulatorObject("extentBegin", baseDomElement);
                     var endPos = getAccumulatorObject("extentEnd", baseDomElement);
-                    resetAccumulatorObject("phenotypesForEveryVariant");
-                    resetAccumulatorObject("variantsForEveryPhenotype");
+                    resetAccumulatorObject("phenotypesForEveryVariant", baseDomElement);
+                    resetAccumulatorObject("variantsForEveryPhenotype", baseDomElement);
                     retrieveRemotedContextInformation(buildRemoteContextArray({
                         name: "getPhenotypesFromQtlForPhenotypeTable",
                         retrieveDataUrl: additionalParameters.retrieveVariantsWithQtlRelationshipsUrl,
@@ -945,7 +946,8 @@ mpgSoftware.dynamicUi = (function () {
             case "getPhenotypesFromECaviarForTissueTable":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty("geneInfoArray", baseDomElement)) {
-                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getPhenotypesFromECaviarForTissueTable"});
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
+                            {actionId: "getPhenotypesFromECaviarForTissueTable"}, baseDomElement);
                         actionToUndertake();
                     } else {
                         var geneNameArray = _.map(getAccumulatorObject("geneInfoArray", baseDomElement), function (o) {
@@ -1058,7 +1060,7 @@ mpgSoftware.dynamicUi = (function () {
                     alert(" the function replaced gene context has been deactivated");
                     var somethingSymbol = $('#inputBoxForDynamicContextId').val();
                     somethingSymbol = somethingSymbol.replace(/\//g, "_");
-                    setAccumulatorObject("geneNameArray", [{name: somethingSymbol}]);
+                    setAccumulatorObject("geneNameArray", [{name: somethingSymbol}], baseDomElement);
                     retrieveRemotedContextInformation(buildRemoteContextArray({
                         name: "replaceGeneContext",
                         retrieveDataUrl: additionalParameters.geneInfoAjaxUrl,
@@ -1127,7 +1129,7 @@ mpgSoftware.dynamicUi = (function () {
                     var chromosome = getAccumulatorObject("chromosome", baseDomElement);
                     var startExtent = getAccumulatorObject("extentBegin", baseDomElement);//.replace(/,/g,""); // killing replace part to have it work with v2f
                     var endExtent = getAccumulatorObject("extentEnd", baseDomElement);//.replace(/,/g,""); // killing replace part to have it work with v2f
-                    var sharedTable = getSharedTable(displayLocation);
+                    var sharedTable = getSharedTable(displayLocation, baseDomElement);
                     sharedTable['currentFormVariation'] = 2;
 
                     if (chromosome.startsWith("chr")){
@@ -1610,13 +1612,14 @@ mpgSoftware.dynamicUi = (function () {
         return returnObject;
     };
     var displayRangeContext = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+        alert('displayRangeContext is no longer used');
         $(idForTheTargetDiv).empty().append(Mustache.render($('#contextDescriptionSection')[0].innerHTML,
             objectContainingRetrievedRecords
         ));
-        setAccumulatorObject("extentBegin", objectContainingRetrievedRecords.extentBegin);
-        setAccumulatorObject("extentEnd", objectContainingRetrievedRecords.extentEnd);
-        setAccumulatorObject("chromosome", objectContainingRetrievedRecords.chromosome);
-        setAccumulatorObject("originalGeneName", objectContainingRetrievedRecords.geneName);
+        setAccumulatorObject("extentBegin", objectContainingRetrievedRecords.extentBegin, baseDomElement);
+        setAccumulatorObject("extentEnd", objectContainingRetrievedRecords.extentEnd, baseDomElement);
+        setAccumulatorObject("chromosome", objectContainingRetrievedRecords.chromosome, baseDomElement);
+        setAccumulatorObject("originalGeneName", objectContainingRetrievedRecords.geneName, baseDomElement);
 
         addAdditionalResultsObject({
             rangeContext: {
@@ -2148,7 +2151,7 @@ mpgSoftware.dynamicUi = (function () {
                     return retVal;
                 }
             );
-        var geneInfoArray = getAccumulatorObject("geneInfoArray");
+        var geneInfoArray = getAccumulatorObject("geneInfoArray",'#configurableUiTabStorage');
         var geneInfoIndex = _.findIndex(geneInfoArray, {name: $(divWithData).data("geneName")});
         var additionalParameters;
         if (geneInfoIndex < 0) {
@@ -2219,7 +2222,7 @@ mpgSoftware.dynamicUi = (function () {
         var selectorForIidForTheTargetDiv = idForTheTargetDiv;
         $(selectorForIidForTheTargetDiv).empty();
         var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode,callingParameters.baseDomElement);
-        var objectContainingRetrievedRecords = getAccumulatorObject(nameOfAccumulatorField);
+        var objectContainingRetrievedRecords = getAccumulatorObject(nameOfAccumulatorField,callingParameters.baseDomElement);
 
         var intermediateDataStructure = new IntermediateDataStructure();
 
@@ -2238,7 +2241,7 @@ mpgSoftware.dynamicUi = (function () {
 
         prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
             '#dynamicGeneTable',
-            objectContainingRetrievedRecords,
+            callingParameters.baseDomElement,
             clearBeforeStarting,
             intermediateDataStructure,
             true,
@@ -2305,7 +2308,7 @@ mpgSoftware.dynamicUi = (function () {
                     });
                 }
                 var annotationArray = _.map(_.filter(annotationsToActivate,['selected',true]),function(o){return o.value});
-                setAccumulatorObject('tissueTableChosenAnnotations', annotationArray);  //save this for easy recall later
+                setAccumulatorObject('tissueTableChosenAnnotations', annotationArray, callingParameters.baseDomElement);  //save this for easy recall later
 
                 // now for the UI work.  Wipe out anything in the multi-select, and fill it back up again
                 $(annotationPickerString).empty();
@@ -2333,11 +2336,11 @@ mpgSoftware.dynamicUi = (function () {
         var intermediateDataStructure = new IntermediateDataStructure();
 
         // for each gene collect up the data we want to display
-        var incomingData = getAccumulatorObject(nameOfAccumulatorField);
+        var incomingData = getAccumulatorObject(nameOfAccumulatorField,callingParameters.baseDomElement);
 
         // get the tissues that are already in place.  I'm planning to transpose this table before
         //  I display it
-        var tissuesAlreadyInTheTable = getArrayOfRowHeaders(idForTheTargetDiv);
+        var tissuesAlreadyInTheTable = getArrayOfRowHeaders(idForTheTargetDiv,callingParameters.baseDomElement);
 
         var returnObject={headers:[], content:[]};
         if (( typeof incomingData !== 'undefined') &&
@@ -2364,7 +2367,7 @@ mpgSoftware.dynamicUi = (function () {
         }
 
 
-        var sharedTable = getAccumulatorObject("sharedTable_"+idForTheTargetDiv);
+        var sharedTable = getAccumulatorObject("sharedTable_"+idForTheTargetDiv,callingParameters.baseDomElement);
         var rowsToInsert = [];
         var combinedSortedHeaders = [];
         if (sharedTable.numberOfColumns === 0) {
@@ -2375,7 +2378,7 @@ mpgSoftware.dynamicUi = (function () {
             sortedHeaderObjects = insertAnyHeaderRecords(returnObject,tissuesAlreadyInTheTable,dataAnnotationType,intermediateDataStructure,returnObject);
             intermediateDataStructure["headerNames"] = sortedHeaderObjects;
             sharedTable["numberOfColumns"] = sortedHeaderObjects.length+1;
-            setAccumulatorObject("rememberHeadersInTissueTable", sortedHeaderObjects);
+            setAccumulatorObject("rememberHeadersInTissueTable", sortedHeaderObjects, callingParameters.baseDomElement);
 
         } else {
             if (returnObject.contents.length===0){
@@ -2387,13 +2390,13 @@ mpgSoftware.dynamicUi = (function () {
                 sortedHeaderObjects = returnObject.header.tissues.sort();
             }
 
-            combinedSortedHeaders = _.union(getAccumulatorObject("rememberHeadersInTissueTable"),sortedHeaderObjects).sort();
+            combinedSortedHeaders = _.union(getAccumulatorObject("rememberHeadersInTissueTable",callingParameters.baseDomElement),sortedHeaderObjects).sort();
             // let's retrieve all of the old data from the table.
             var cellData;
             if (sharedTable.currentForm === 'tissueTableTissueHeaders'){
-                cellData = retrieveSortedDataForTable(idForTheTargetDiv);
+                cellData = retrieveSortedDataForTable(idForTheTargetDiv,callingParameters.baseDomElement);
             } else { // must be tissueTableMethodHeaders
-                cellData = retrieveTransposedDataForThisTable(idForTheTargetDiv);
+                cellData = retrieveTransposedDataForThisTable(idForTheTargetDiv,callingParameters.baseDomElement);
             }
             var existingData =cellData;
             var numberOfRows = existingData.dataArray.length / existingData.numberOfColumns;
@@ -2404,13 +2407,16 @@ mpgSoftware.dynamicUi = (function () {
                     (currentLocationInArray+existingData.numberOfColumns)));
                 currentLocationInArray += existingData.numberOfColumns;
                 if (index===1){
-                    mpgSoftware.dynamicUi.addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode, intermediateDataStructure,callingParameters.baseDomElement);
+                    mpgSoftware.dynamicUi.addRowHolderToIntermediateDataStructure(  dataAnnotationTypeCode,
+                                                                                    intermediateDataStructure,
+                                                                                    'noRowTag',
+                                                                                    callingParameters.baseDomElement);
                 }
             });
             // now we create a new headers, and then place them in the intermediate structure
             var initialLinearIndex = 1; // we are remaking the table, so start the count just past the row label
             intermediateDataStructure["headerNames"] = combinedSortedHeaders;
-            setAccumulatorObject("rememberHeadersInTissueTable", combinedSortedHeaders);
+            setAccumulatorObject("rememberHeadersInTissueTable", combinedSortedHeaders, callingParameters.baseDomElement);
                 returnObject.headers = _.map(intermediateDataStructure.headerNames, function(tissue){
                 return Mustache.render($('#'+dataAnnotationType.dataAnnotation.headerWriter)[0].innerHTML,
                     {   tissueName: tissue,
@@ -2449,7 +2455,8 @@ mpgSoftware.dynamicUi = (function () {
                         var recordsCellPresentationString = Mustache.render($('#'+dataAnnotationType.dataAnnotation.numberRecordsCellPresentationStringWriter)[0].innerHTML, {
                             numberRecords:tissueRecords.length
                         });
-                        var valuesForDisplay = createSingleGregorCell(recordsPerTissue,dataAnnotationType,getAccumulatorObject('tissueTableChosenAnnotations'));
+                        var valuesForDisplay = createSingleGregorCell(recordsPerTissue,dataAnnotationType,
+                            getAccumulatorObject('tissueTableChosenAnnotations',callingParameters.baseDomElement));
                         var renderData = placeDataIntoRenderForm(  valuesForDisplay.tissuesFilteredByAnnotation,
                             tissueRecords,
                             recordsCellPresentationString,
@@ -2471,7 +2478,7 @@ mpgSoftware.dynamicUi = (function () {
         //  add additional rows in this context we must delete the old table.
         if (rowsToInsert.length>0){
             destroySharedTable(idForTheTargetDiv);
-            resetAccumulatorObject("sharedTable_"+idForTheTargetDiv);
+            resetAccumulatorObject("sharedTable_"+idForTheTargetDiv,callingParameters.baseDomElement);
         }
         _.forEach(rowsToInsert,function(oneRow){
 
@@ -2480,7 +2487,10 @@ mpgSoftware.dynamicUi = (function () {
             if (rowsWithData.length>0){
                 dataAnnotationTypeCode = rowsWithData[0].renderData.dataAnnotationTypeCode;
             }
-            addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode, intermediateDataStructure,callingParameters.baseDomElement);
+            addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,
+                                                    intermediateDataStructure,
+                                                    'noRowTag',
+                                                    callingParameters.baseDomElement);
 
             // first initialize the row with blank cells
             var currentRow = intermediateDataStructure.rowsToAdd.length-1;
@@ -2521,7 +2531,7 @@ mpgSoftware.dynamicUi = (function () {
 
         prepareToPresentToTheScreen(idForTheTargetDiv,
             '#not used',
-            returnObject,
+            callingParameters.baseDomElement,
             clearBeforeStarting,
             intermediateDataStructure,
             true,
@@ -2538,6 +2548,7 @@ mpgSoftware.dynamicUi = (function () {
 
 
     var displayForFullEffectorGeneTable = function (idForTheTargetDiv, // which table are we adding to
+                                        callingParameters,
                                         // dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
                                         // nameOfAccumulatorField, // name of the persistent field where the data we received is stored
                                         insertAnyHeaderRecords, // we may wish to pull out one record for summary purposes
@@ -2547,9 +2558,9 @@ mpgSoftware.dynamicUi = (function () {
         const dataAnnotationTypeCode = callingParameters.code;
         var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode,callingParameters.baseDomElement);
         var intermediateDataStructure = new IntermediateDataStructure();
-        var additionalParameters = getDyanamicUiVariables();
+        var additionalParameters = getAccumulatorObject(undefined, callingParameters.baseDomElement);
         // for each gene collect up the data we want to display
-        var incomingData = getAccumulatorObject(nameOfAccumulatorField);
+        var incomingData = getAccumulatorObject(nameOfAccumulatorField, callingParameters.baseDomElement);
         var returnObject={headers:[], content:{}};
         if (( typeof incomingData !== 'undefined') &&
             ( incomingData.length > 0)) {
@@ -2569,7 +2580,8 @@ mpgSoftware.dynamicUi = (function () {
         // var sharedTable = new SharedTableObject( 'fegtAnnotationHeaders',sortedHeaderObjects.length,0);
         //setAccumulatorObject("sharedTable_"+additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory,sharedTable);
         //var sharedTable = getSharedTable(idForTheTargetDiv);
-        var sharedTable = getSharedTable(additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory);
+        var sharedTable = getSharedTable(additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory,
+            callingParameters.baseDomElement);
         sharedTable.numberOfColumns = sortedHeaderObjects.length;
         var deleter = {};
         _.forEach(sortedHeaderObjects, function (o,index){
@@ -2590,7 +2602,7 @@ mpgSoftware.dynamicUi = (function () {
 
         prepareToPresentToTheScreen(additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory,
             '#dynamicAbcGeneTable',
-            returnObject,
+            callingParameters.baseDomElement,
             clearBeforeStarting,
             intermediateDataStructure,
             true,
@@ -2622,19 +2634,22 @@ mpgSoftware.dynamicUi = (function () {
         var intermediateDataStructure = new IntermediateDataStructure();
 
         // for each gene collect up the data we want to display
-        returnObject.geneAssociations = getAccumulatorObject(nameOfAccumulatorField);
+        returnObject.geneAssociations = getAccumulatorObject(nameOfAccumulatorField, callingParameters.baseDomElement);
 
         // do we have any data at all?  If we do, then make a row
         if (( typeof returnObject.geneAssociations !== 'undefined') && ( returnObject.geneAssociations.length > 0)) {
-            addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure,callingParameters.baseDomElement);
+            addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,
+                                                    intermediateDataStructure,
+                                                    'noRowTag',
+                                                    callingParameters.baseDomElement);
 
             // set up the headers, even though we know we won't use them. Is this step necessary?
             var headerNames = [];
-            if (accumulatorObjectFieldEmpty("geneInfoArray")) {
+            if (accumulatorObjectFieldEmpty("geneInfoArray",callingParameters.baseDomElement)) {
                 console.log("We always have to have a record of the current gene names in depict display. We have a problem.");
             } else {
-                headerNames  = _.map(getAccumulatorObject("geneInfoArray"),'name');
-                _.forEach(getAccumulatorObject("geneInfoArray"), function (oneRecord) {
+                headerNames  = _.map(getAccumulatorObject("geneInfoArray", callingParameters.baseDomElement),'name');
+                _.forEach(getAccumulatorObject("geneInfoArray", callingParameters.baseDomElement), function (oneRecord) {
                     intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
                         {},"header",'EMC'));
                 });
@@ -2698,7 +2713,7 @@ mpgSoftware.dynamicUi = (function () {
 
         prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
             '#dynamicAbcGeneTable',
-            returnObject,
+            callingParameters.baseDomElement,
             clearBeforeStarting,
             intermediateDataStructure,
             true,
@@ -2753,10 +2768,6 @@ mpgSoftware.dynamicUi = (function () {
         let accumulatorFieldWithIndex;
         if (( typeof arrayOfDataToDisplay !== 'undefined') &&
             ( arrayOfDataToDisplay.length > 0) ) {
-            //   if ( arrayOfDataToDisplay[0].data.length > 0) {
-
-            //addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode, intermediateDataStructure);
-
             // set up the headers, even though we know we won't use them. Is this step necessary?
             var headerNames = [];
             if (accumulatorObjectSubFieldEmpty(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex,
@@ -2795,7 +2806,10 @@ mpgSoftware.dynamicUi = (function () {
                 let addedRows = 0;
                 // create a row for each epigenetic annotation even if it's empty
                 if (arrayOfDataToDisplay[0].data.groupByAnnotation.length === 0) {
-                    addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode, intermediateDataStructure);
+                    addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,
+                                                            intermediateDataStructure,
+                                                            'noRowTag',
+                                                            callingParameters.baseDomElement );
                     //const dataVector = getAccumulatorObject(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex)[0].data;
                     let rowWeAreAddingTo = _.last(intermediateDataStructure.rowsToAdd);
                     rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(currentMethod,
@@ -2822,9 +2836,10 @@ mpgSoftware.dynamicUi = (function () {
                             value: recordsForAnnotation.name + "_" + currentMethod
                         });
                         const annotation = recordsForAnnotation.name;
-                        addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode, intermediateDataStructure);
-                        //const dataVector = getAccumulatorObject(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex)[0].data;
-                        //headerNames = _.map(dataVector, 'name');
+                        addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,
+                                                                intermediateDataStructure,
+                                                                'noRowTag',
+                                                                callingParameters.baseDomElement );
                         let rowWeAreAddingTo = _.last(intermediateDataStructure.rowsToAdd);
                         rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(annotation,
                             Mustache.render($('#' + dataAnnotationType.dataAnnotation.drillDownCategoryWriter)[0].innerHTML,
@@ -2892,7 +2907,10 @@ mpgSoftware.dynamicUi = (function () {
 
                             let rowWeAreAddingTo = _.find(tissueIntermediateDataStructure.rowsToAdd, {'rowTag': tissueName});
                             if (typeof rowWeAreAddingTo === 'undefined') {
-                                addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode, tissueIntermediateDataStructure, tissueName);
+                                addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,
+                                                                        tissueIntermediateDataStructure,
+                                                                        tissueName,
+                                                                        callingParameters.baseDomElement );
                                 rowWeAreAddingTo = _.last(tissueIntermediateDataStructure.rowsToAdd);
                                 rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(tissueName,
                                     Mustache.render($('#' + dataAnnotationType.dataAnnotation.tissueCategoryWriter)[0].innerHTML,
@@ -2999,7 +3017,7 @@ mpgSoftware.dynamicUi = (function () {
 
 
     var processEqtlRecordsFromVariantBasedRequest = function (data) {
-
+alert('processEqtlRecordsFromVariantBasedRequest is not used anymore ');
         var tempHolder = []
         // basic data aggregation
         _.forEach(data, function (oneRec) {
@@ -3068,6 +3086,7 @@ mpgSoftware.dynamicUi = (function () {
      */
     var processRecordsFromEqtls = function (data) {
         // build up an object to describe this
+        alert('processRecordsFromEqtls is not used anymore');
         var returnObject = {
             rawData: [],
             uniqueGenes: [],
@@ -3139,6 +3158,7 @@ mpgSoftware.dynamicUi = (function () {
 
 
     var displayTissuesPerGeneFromEqtl = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+        alert('displayTissuesPerGeneFromEqtl is not used anymore');
         var dataAnnotationTypeCode = 'EQT';
         var returnObject = createNewDisplayReturnObject();
         _.forEach(getAccumulatorObject("tissuesForEveryGene"), function (eachGene) {
@@ -3233,7 +3253,7 @@ mpgSoftware.dynamicUi = (function () {
 
 
     var displayGenesPerTissueFromEqtl = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-
+alert('displayGenesPerTissueFromEqtl is not used anymore')
         var returnObject = createNewDisplayReturnObject();
         _.forEach(getAccumulatorObject("genesForEveryTissue"), function (eachTissue) {
             returnObject.uniqueTissues.push({name: eachTissue.tissueName});
@@ -3262,6 +3282,7 @@ mpgSoftware.dynamicUi = (function () {
 
 
     var processRecordsFromVariantQtlSearch = function (data) {
+        alert('processRecordsFromVariantQtlSearch is not used anymore');
         var returnObject = {
             rawData: [],
             uniqueGenes: [],
@@ -3356,7 +3377,7 @@ mpgSoftware.dynamicUi = (function () {
         var selectorForIidForTheTargetDiv = idForTheTargetDiv;
         $(selectorForIidForTheTargetDiv).empty();
         var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode,callingParameters.baseDomElement);
-        var objectContainingRetrievedRecords = getAccumulatorObject(nameOfAccumulatorField);
+        var objectContainingRetrievedRecords = getAccumulatorObject(nameOfAccumulatorField,callingParameters.baseDomElement);
 
         var intermediateDataStructure = new IntermediateDataStructure();
         let vectorOfHeadersToUse = [];
@@ -3384,7 +3405,10 @@ mpgSoftware.dynamicUi = (function () {
             let vectorOfRowsToUse = objectContainingRetrievedRecords[0].header[chosenRowField];
             _.forEach(vectorOfRowsToUse, function (rowTitle,index) {
 
-                addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure)
+                addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,
+                    intermediateDataStructure,
+                    'noRowTag',
+                    callingParameters.baseDomElement );
                 _.last(intermediateDataStructure.rowsToAdd).columnCells = _.map(_.range(0,numberOfColumns),function( index)
                                                                                     {
                                                                                         if (index === 0){
@@ -3448,7 +3472,7 @@ mpgSoftware.dynamicUi = (function () {
         var selectorForIidForTheTargetDiv = idForTheTargetDiv;
         $(selectorForIidForTheTargetDiv).empty();
         var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode,callingParameters.baseDomElement);
-        var objectContainingRetrievedRecords = getAccumulatorObject(nameOfAccumulatorField);
+        var objectContainingRetrievedRecords = getAccumulatorObject(nameOfAccumulatorField,callingParameters.baseDomElement);
         console.log("displayHeaderForVariantTable:"+dataAnnotationTypeCode+".");
         var intermediateDataStructure = new IntermediateDataStructure();
         let vectorOfVariantRecords = [];
@@ -3467,13 +3491,16 @@ mpgSoftware.dynamicUi = (function () {
             });
 
             intermediateDataStructure.tableToUpdate = idForTheTargetDiv;
-            var sharedTable = getSharedTable(idForTheTargetDiv);
+            var sharedTable = getSharedTable(idForTheTargetDiv,callingParameters.baseDomElement);
             sharedTable["numberOfColumns"] = vectorOfVariantRecords.length+2;
 
 
             const rowTypesToAdd = ["VAR_CODING","VAR_SPLICE","VAR_UTR","VAR_PVALUE","VAR_POSTERIORPVALUE"];
             _.forEach(rowTypesToAdd, function (rowTypeToAdd, rowIndex) {
-                addRowHolderToIntermediateDataStructure(rowTypeToAdd,intermediateDataStructure)
+                addRowHolderToIntermediateDataStructure(rowTypeToAdd,
+                                                        intermediateDataStructure,
+                                                        'noRowTag',
+                                                        callingParameters.baseDomElement );
                 // fill in all of the column cells
                 _.forEach(vectorOfVariantRecords, function (oneRecord) {
                     var indexOfColumn = _.indexOf(intermediateDataStructure.headerNames, oneRecord.name);
@@ -3547,7 +3574,7 @@ mpgSoftware.dynamicUi = (function () {
             });
 
         }
-        setAccumulatorObject('topPortionDisplay',intermediateDataStructure);
+        setAccumulatorObject('topPortionDisplay',intermediateDataStructure, callingParameters.baseDomElement);
 
 
         prepareToPresentToTheScreen(idForTheTargetDiv,
@@ -3627,6 +3654,7 @@ mpgSoftware.dynamicUi = (function () {
                                                                         cellBodySummaryRecord,tableToUpdate, typeOfTable,
                                                                         minimumValue,maximumValue,
                                                                         matchOnGene,matchOnTissue){
+        alert('displayVariantDataWithHiddenTissuesAndSummaryLines is not used anymore');
         var returnObject = createNewDisplayReturnObject();
 
         var intermediateDataStructure = new IntermediateDataStructure();
@@ -4182,7 +4210,7 @@ mpgSoftware.dynamicUi = (function () {
 
 
     var adjustExtentHolders = function(storageField,spanClass,basesToShift){
-        alert('adjustExtentHolders is no longer called, right? Will')
+        alert('adjustExtentHolders is no longer called, right?');
         var extentBegin = parseInt( getAccumulatorObject(storageField) );
         if ((extentBegin+basesToShift)>0){
             extentBegin += basesToShift;
@@ -4197,6 +4225,7 @@ mpgSoftware.dynamicUi = (function () {
     };
 
     var adjustLowerExtent = function(basesToShift){
+        alert('adjustLowerExtent is no longer called, right?');
         if (basesToShift>0){
             if ( ( parseInt(getAccumulatorObject("extentBegin") )+basesToShift ) > //
                  ( parseInt(getAccumulatorObject("extentEnd") ) ) ){
@@ -4207,6 +4236,7 @@ mpgSoftware.dynamicUi = (function () {
     };
 
     var adjustUpperExtent = function(basesToShift){
+        alert('adjustUpperExtent is no longer called, right?');
         if (basesToShift<0){
             if ( ( parseInt(getAccumulatorObject("extentEnd") )+basesToShift ) < //
                  ( parseInt(getAccumulatorObject("extentBegin") ) ) ){
@@ -4259,7 +4289,7 @@ mpgSoftware.dynamicUi = (function () {
                                                                     numberOfColumns,
                                                                     baseDomElement ){
         var indexInOneDimensionalArray = (rowIndex*numberOfColumns)+columnIndex;
-        var sharedTable = getAccumulatorObject("sharedTable_"+whichTable);
+        var sharedTable = getAccumulatorObject("sharedTable_"+whichTable,baseDomElement);
         if (($.isArray(sharedTable)) && (sharedTable.length === 0)){
             // data structure is empty.  Let us give it the correct form, and then store it
             sharedTable = new SharedTableObject(annotation,numberOfColumns,rowIndex);
@@ -4452,8 +4482,8 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
-        var findCellColoringChoice=function(whereTheTableGoes){
-            var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
+        var findCellColoringChoice=function(whereTheTableGoes,baseDomElement){
+            var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes,baseDomElement);
             if ( typeof sharedTable.cellColoringScheme === 'undefined'){
                 sharedTable["cellColoringScheme"] = "Significance";
             }
@@ -4464,11 +4494,11 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
-    var findDesiredSearchTerm=function(whereTheTableGoes,requestedSort){
+    var findDesiredSearchTerm=function(whereTheTableGoes,requestedSort,baseDomElement){
             var favoredSortField = 'sortField';
-            const sharedTable = getSharedTable(whereTheTableGoes);
+            const sharedTable = getSharedTable(whereTheTableGoes,baseDomElement);
             const currentTableForm = sharedTable.currentForm;
-            var cellColoringScheme = findCellColoringChoice(whereTheTableGoes);
+            var cellColoringScheme = findCellColoringChoice(whereTheTableGoes,baseDomElement);
             if ((currentTableForm==='geneTableGeneHeaders') || (currentTableForm==='geneTableAnnotationHeaders')) { // gene table
                 if ( cellColoringScheme === 'Significance'){
                     favoredSortField = 'significance_sortfield'
@@ -4494,14 +4524,15 @@ mpgSoftware.dynamicUi = (function () {
 
 
         jQuery.fn.dataTableExt.oSort['generalSort-asc'] = function (a, b ) {
-            var currentSortRequest = getAccumulatorObject("currentSortRequest");
+            //var currentSortRequest = getAccumulatorObject("currentSortRequest",baseDomElement);
+            var currentSortRequest = getCurrentSortRequest ();
 
             return generalPurposeSort(  a,b,'asc',
                                         currentSortRequest );
         };
 
         jQuery.fn.dataTableExt.oSort['generalSort-desc'] = function (a, b) {
-            var currentSortRequest = getAccumulatorObject("currentSortRequest");
+            var currentSortRequest = getAccumulatorObject("currentSortRequest",baseDomElement);
             if (currentSortRequest.currentSort === "variantAnnotationCategory"){
                 return generalPurposeSort(a,b,'desc',currentSortRequest);
             } else {
@@ -4532,7 +4563,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
         });
     }
     var currentSortRequestObject = {};
-    const dyanamicUiVariables = getDyanamicUiVariables();
+    const dyanamicUiVariables = getAccumulatorObject(undefined, baseDomElement);
     console.log("table to sort "+dyanamicUiVariables.dynamicTableConfiguration.initializeSharedTableMemory+".");
     let sortOrder = extractClassBasedTrailingString(callingObject,"sorting_");
     _.forEach(classList, function (oneClass){
@@ -4607,7 +4638,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
 
     var getDisplayableCellContent  = function (intermediateStructureDataCell,baseDomElement){
         var returnValue = "";
-        var additionalParameters = getDyanamicUiVariables();
+        var additionalParameters = getAccumulatorObject(undefined, baseDomElement);
         switch (intermediateStructureDataCell.dataAnnotationTypeCode){
             case 'LIT': // a literal. Used when we recall the headers straight from the table
                 returnValue = intermediateStructureDataCell.renderData;
@@ -4625,9 +4656,9 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
                 var dataAnnotationType= getDatatypeInformation(intermediateStructureDataCell.dataAnnotationTypeCode,baseDomElement);
                 var revisedValues = mpgSoftware.dynamicUi.gregorTissueTable.createSingleGregorCell(intermediateStructureDataCell.renderData.allTissueRecords,
                     dataAnnotationType,
-                    getAccumulatorObject('tissueTableChosenAnnotations'));
+                    getAccumulatorObject('tissueTableChosenAnnotations',baseDomElement));
                 intermediateStructureDataCell.renderData["cellPresentationString"] = revisedValues.significanceCellPresentationString;
-                    intermediateStructureDataCell.renderData.cellPresentationStringMap[findCellColoringChoice('#mainTissueDiv table.tissueTableHolder')];
+                    intermediateStructureDataCell.renderData.cellPresentationStringMap[findCellColoringChoice('#mainTissueDiv table.tissueTableHolder', baseDomElement)];
                 intermediateStructureDataCell.renderData["tissueRecords"]=revisedValues.tissuesFilteredByAnnotation;
                 returnValue = Mustache.render($('#'+dataAnnotationType.dataAnnotation.cellBodyWriter)[0].innerHTML,intermediateStructureDataCell.renderData);
                 break;
@@ -4655,7 +4686,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
                 var cellColoringScheme ="records";
 
                 intermediateStructureDataCell.renderData["cellPresentationString"] =
-                    intermediateStructureDataCell.renderData.cellPresentationStringMap[findCellColoringChoice('table.combinedGeneTableHolder')];
+                    intermediateStructureDataCell.renderData.cellPresentationStringMap[findCellColoringChoice('table.combinedGeneTableHolder', baseDomElement)];
 
                 var displayDetails = getDatatypeInformation(intermediateStructureDataCell.dataAnnotationTypeCode,baseDomElement);
                 returnValue = Mustache.render($('#'+displayDetails.dataAnnotation.cellBodyWriter)[0].innerHTML,intermediateStructureDataCell.renderData);
@@ -4702,7 +4733,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
             var datatable;
             if ( ! $.fn.DataTable.isDataTable( whereTheTableGoes ) ) {
                 var sharedTable = getAccumulatorObject("sharedTable_"+whereTheTableGoes, baseDomElement);
-                var dyanamicUiVariables = getDyanamicUiVariables();
+                var dyanamicUiVariables = getAccumulatorObject(undefined, baseDomElement);
                 var headerDescriber = {
                     "dom": '<"top">rt<"bottom"iplB>',
                     "buttons": [
@@ -4971,10 +5002,10 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
     };
 
 
-    const filterEpigeneticTable = function(whereTheTableGoes, useTissueMode){
+    const filterEpigeneticTable = function(whereTheTableGoes, useTissueMode, baseDomElement){
         // we can filter either on tissue enrichments, or explicitly selected annotations, or we can accept either
         let uniqueLists = {};
-        const currentTableForm = getSharedTable(whereTheTableGoes)['currentForm'];
+        const currentTableForm = getSharedTable(whereTheTableGoes, baseDomElement)['currentForm'];
         const filterByGregor =  ($('#gregorFilterCheckbox').is(":checked"));
         const filterByExplicitMethod =  ($('#methodFilterCheckbox').is(":checked"));
         const blankRowsAreOkay = ($('#displayBlankRows').is(":checked"));
@@ -4986,7 +5017,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
             uniqueLists = getMethodsAnnotationsAndTissuesFromExplicitAnnotationSpecification(false)
         }
         let weAreInTissueMode = false;
-        const variantTableOrientation = getAccumulatorObject("variantTableOrientation");
+        const variantTableOrientation = getAccumulatorObject("variantTableOrientation",baseDomElement);
         if (( typeof variantTableOrientation !== 'undefined') && (variantTableOrientation==="tissueDominant")){
             weAreInTissueMode = true;
         }
@@ -5010,7 +5041,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
 
         }
 
-        const gregorAcc = getAccumulatorObject("gregorVariantInfo");
+        const gregorAcc = getAccumulatorObject("gregorVariantInfo",baseDomElement);
         let quantileDef = {};
         if (gregorAcc.length>0){
             quantileDef =  gregorAcc[0].header['quickLookup']
@@ -5192,7 +5223,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
             switch(headerType){
                 case 'geneTableGeneHeaders':
                     if (headerSpecific){
-                        setUpDraggable(whereTheTableGoes);
+                        setUpDraggable(whereTheTableGoes,baseDomElement);
                         $('div.geneName span.glyphicon-remove').show();
                     } else{
                         $('div.geneAnnotationShifters').hide ();
@@ -5229,7 +5260,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
                     break;
                 case 'geneTableAnnotationHeaders':
                     if (headerSpecific){
-                        setUpDraggable(whereTheTableGoes);
+                        setUpDraggable(whereTheTableGoes,baseDomElement);
                     }
                     else{
                         $('div.geneAnnotationShifters').show ();
@@ -5311,8 +5342,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
                         });
                     }
 
-                    setUpDraggable(whereTheTableGoes);
-                    filterEpigeneticTable(whereTheTableGoes);
+                    setUpDraggable(whereTheTableGoes,baseDomElement);
+                    filterEpigeneticTable(whereTheTableGoes,false,baseDomElement);
                     break;
                 case 'variantTableAnnotationHeaders':
                     if (headerSpecific) {
@@ -5343,7 +5374,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
                         }
                         $('td:has(div.variantAnnotation.emphasisSwitch_true)').addClass('emphasisSwitch_true');
                         // $('div.variantAnnotation:last').parent().parent().children('td').css('border-bottom','2px solid black');
-                        filterEpigeneticTable(whereTheTableGoes);
+                        filterEpigeneticTable(whereTheTableGoes,false,baseDomElement);
                     }
 
 ;
@@ -5392,13 +5423,10 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
                         template: '<div class="popover" role="tooltip"><div class="arrow"></div><h5 class="popover-title"></h5><div class="popover-content"></div></div>'
                     });
                     if (headerSpecific){
-                    //    setUpDraggable(whereTheTableGoes);
+                    //    setUpDraggable(whereTheTableGoes,baseDomElement);
                     }
                     break;
 
-                // case "gregorSubTable":
-                //     filterEpigeneticTable("#mainVariantDiv table.variantTableHolder");
-                //     break;
 
                 default:
                     break;
@@ -5473,7 +5501,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
             } else if ( !_.includes (rememberCategories,row.subcategory)) {
                 rememberCategories.push(row.subcategory);
             }
-
+            var dyanamicUiVariables = getAccumulatorObject(undefined, baseDomElement);
             var numberOfExistingRows = $(whereTheTableGoes).dataTable().DataTable().rows()[0].length+1;
             var sharedTable = getAccumulatorObject("sharedTable_"+whereTheTableGoes,baseDomElement);
             var numberOfColumns  = sharedTable.numberOfColumns;
@@ -5583,6 +5611,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
                     revisedRowDescriber = mpgSoftware.matrixMath.deleteColumnsInDataStructure(rowDescriber,1,rowDescriber.length,
                         sharedTable.getAllColumnsToExclude()).dataArray;
                 }
+                // adding data starts a sort, and we have to pass in the sort parameter is a global variable
+                setCurrentSortRequest(getAccumulatorObject("currentSortRequest",baseDomElement));
 
                 $(whereTheTableGoes).dataTable().fnAddData(_.map(revisedRowDescriber,function(o){return getDisplayableCellContent(o,baseDomElement)}));
 
@@ -5608,9 +5638,13 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
         if (( typeof intermediateStructure !== 'undefined') &&
             ( typeof intermediateStructure.headers !== 'undefined') &&
             (intermediateStructure.headers.length > 0)){
-                datatable = buildHeadersForTable(whereTheTableGoes,intermediateStructure.headers,
-                    storeRecords,typeOfRecord, prependColumns, [],
-                    baseDomElement);
+                datatable = buildHeadersForTable(   whereTheTableGoes,
+                                                    intermediateStructure.headers,
+                                                    storeRecords,
+                                                    typeOfRecord,
+                                                    prependColumns,
+                                                    [],
+                                                    baseDomElement);
                 refineTableRecords(whereTheTableGoes,datatable,typeOfRecord,[], true,
                     baseDomElement);
         }
@@ -5687,7 +5721,11 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
      * @param whereTheTableGoes
      * @returns {Array}
      */
-    var extractSortedDataFromTable = function (whereTheTableGoes,numberOfRows,numberOfColumns,tableAndOrientation) {
+    var extractSortedDataFromTable = function (whereTheTableGoes,
+                                               numberOfRows,
+                                               numberOfColumns,
+                                               tableAndOrientation,
+                                               baseDomElement) {
         var returnValue = [];
         if  ($.fn.DataTable.isDataTable( whereTheTableGoes )){
             var dataTable = $(whereTheTableGoes).dataTable().DataTable();
@@ -5740,10 +5778,10 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
     };
 
 
-    var retrieveSortedDataForTable = function (whereTheTableGoes) {
+    var retrieveSortedDataForTable = function (whereTheTableGoes,baseDomElement) {
         var returnValue;
-        var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
-        var dyanamicUiVariables = getDyanamicUiVariables();
+        var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes,baseDomElement);
+        const dyanamicUiVariables = getAccumulatorObject(undefined, baseDomElement);
         var sortedData;
         if (dyanamicUiVariables.dynamicTableConfiguration.formOfStorage ==='loadOnce') { // get the table straight from memory
             sortedData =sharedTable.dataCells;
@@ -5751,7 +5789,11 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
                                                                 sharedTable.numberOfRows,
                                                                 sharedTable.numberOfColumns);
         }else{ // collect the table cells dynamically from the on-screen presentation of the table
-            sortedData = extractSortedDataFromTable(whereTheTableGoes, sharedTable.matrix.numberOfRows, sharedTable.matrix.numberOfColumns, sharedTable.currentForm);
+            sortedData = extractSortedDataFromTable(whereTheTableGoes,
+                                                    sharedTable.matrix.numberOfRows,
+                                                    sharedTable.matrix.numberOfColumns,
+                                                    sharedTable.currentForm,
+                                                    baseDomElement );
             returnValue = new mpgSoftware.matrixMath.Matrix( sortedData,
                                                                 sharedTable.matrix.numberOfRows,
                                                                 sharedTable.matrix.numberOfColumns);
@@ -5763,13 +5805,13 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
 
 
 
-    var getArrayOfRowHeaders = function (whereTheTableGoes) {
-        return mpgSoftware.matrixMath.getRowHeaders(retrieveSortedDataForTable(whereTheTableGoes));
+    var getArrayOfRowHeaders = function (whereTheTableGoes,baseDomElement) {
+        return mpgSoftware.matrixMath.getRowHeaders(retrieveSortedDataForTable(whereTheTableGoes,baseDomElement));
     };
 
 
-    var getArrayOfColumnHeaders = function (whereTheTableGoes) {
-        return mpgSoftware.matrixMath.getColumnHeaders(retrieveSortedDataForTable(whereTheTableGoes));
+    var getArrayOfColumnHeaders = function (whereTheTableGoes,baseDomElement) {
+        return mpgSoftware.matrixMath.getColumnHeaders(retrieveSortedDataForTable(whereTheTableGoes,baseDomElement));
     };
 
 
@@ -5788,9 +5830,9 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
     };
 
 
-    var retrieveTransposedDataForThisTable =  function (whereTheTableGoes) {
-        var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
-        var sortedData = retrieveSortedDataForTable(whereTheTableGoes);
+    var retrieveTransposedDataForThisTable =  function (whereTheTableGoes, baseDomElement) {
+        var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes, baseDomElement);
+        var sortedData = retrieveSortedDataForTable(whereTheTableGoes, baseDomElement);
         return new mpgSoftware.matrixMath.Matrix(
             linearDataTransposor(sortedData.dataArray, sharedTable.matrix.numberOfRows, sharedTable.matrix.numberOfColumns, function (x, y, rows, cols) {
                 return (x * cols) + y
@@ -5811,9 +5853,9 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
      * @param whereTheTableGoes
      */
     var transposeThisTable = function (whereTheTableGoes,baseDomElement) {
-        var sharedTable = getSharedTable(whereTheTableGoes);
+        var sharedTable = getSharedTable(whereTheTableGoes,baseDomElement);
 
-        sharedTable['matrix'] = retrieveTransposedDataForThisTable(whereTheTableGoes);
+        sharedTable['matrix'] = retrieveTransposedDataForThisTable(whereTheTableGoes, baseDomElement);
         sharedTable['currentForm'] = formConversionOfATranspose(sharedTable.currentForm);
 
         destroySharedTable(whereTheTableGoes,baseDomElement);
@@ -5847,19 +5889,26 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
         var additionalDetailsForHeaders = [];
         var currentLocationInArray = 0;
         var headers = _.slice(matrix.dataArray, currentLocationInArray, matrix.numberOfColumns);
+        let blankRowsAreOkay = true;
         currentLocationInArray += matrix.numberOfColumns;
         if (currentForm === 'variantTableAnnotationHeaders') { // collapse the first row into the header
             additionalDetailsForHeaders = _.slice(matrix.dataArray, currentLocationInArray,
                 (currentLocationInArray + matrix.numberOfColumns));
             currentLocationInArray += matrix.numberOfColumns;
+            blankRowsAreOkay = ($('#displayBlankRows').is(":checked"));
         }
         if (currentForm === 'geneTableAnnotationHeaders') { // collapse the first row into the header
             additionalDetailsForHeaders = _.slice(matrix.dataArray, currentLocationInArray,
                 (currentLocationInArray + matrix.numberOfColumns));
             currentLocationInArray += matrix.numberOfColumns;
         }
-        var datatable = buildHeadersForTable(whereTheTableGoes, headers, false,
-            currentForm, false, additionalDetailsForHeaders);
+        var datatable = buildHeadersForTable(   whereTheTableGoes,
+                                                headers,
+                                                false,
+                                                currentForm,
+                                                false,
+                                                additionalDetailsForHeaders,
+                                                baseDomElement );
         refineTableRecords(whereTheTableGoes,datatable, currentForm, [], true,baseDomElement);
 
         // build the body
@@ -5875,7 +5924,13 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
             return lastRow.columnCells.push(datacell);
         });
         datatable = $(whereTheTableGoes).dataTable();
-        var rememberCategories = addContentToTable(whereTheTableGoes, rowsToAdd, false, currentForm, false);
+        var rememberCategories = addContentToTable( whereTheTableGoes,
+                                                    rowsToAdd,
+                                                    false,
+                                                    currentForm,
+                                                    false,
+                                                    blankRowsAreOkay,
+                                                    baseDomElement );
         refineTableRecords(whereTheTableGoes,datatable, currentForm, rememberCategories, false,baseDomElement);
     }
 
@@ -5924,6 +5979,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
 
 
     var displayTissuesForAnnotation = function (annotationId,nameOfAccumulatorObject,tableToUpdate){
+        alert('displayTissuesForAnnotation is not used anymore?');
         var recordsAggregatedPerVariant = getAccumulatorObject("sharedTable_"+tableToUpdate);
         if (recordsAggregatedPerVariant.currentForm==="variantTableVariantHeaders"){
             $('div.noDataHere.'+annotationId).parent().parent().show();
@@ -5946,6 +6002,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
 
     };
     var hideTissuesForAnnotation = function (annotationId,nameOfAccumulatorObject,tableToUpdate){
+        alert('hideTissuesForAnnotation is not used anymore?');
         var recordsAggregatedPerVariant = getAccumulatorObject("sharedTable_"+tableToUpdate);
         if (recordsAggregatedPerVariant.currentForm==="variantTableVariantHeaders") {
             $('div.noDataHere.' + annotationId).parent().parent().hide();
@@ -5977,7 +6034,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
         if (dataTarget.indexOf("gwasCoding_")>=0){
             var geneName = dataTarget.substring("gwasCoding_".length);
             var uniqueId  = dataTarget+'_uniquifier';
-            var additionalParameters = getDyanamicUiVariables();
+            var additionalParameters = getAccumulatorObject(undefined, '#mainTissueDiv');
             var dataSaver = [];
             $.ajax({
                 cache: false,
@@ -6048,7 +6105,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
         if (dataTarget.indexOf("geneBurdenTest_")>=0){
             var geneName = dataTarget.substring("geneBurdenTest_".length);
             var uniqueId  = dataTarget+'_uniquifier';
-            var additionalParameters = getDyanamicUiVariables();
+            var additionalParameters = getAccumulatorObject(undefined, '#mainTissueDiv');
             var dataSaver = [];
             $.ajax({
                 cache: false,
@@ -6180,7 +6237,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
 
 
     var setColorButtonActive = function(event,DEACTIVATE,whereTheTableGoes,baseDomElement) {
-        var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
+        var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes,baseDomElement);
         sharedTable["cellColoringScheme"] = event.target.textContent.trim();
         if ($(event.target).hasClass("active")) {
             $(event.target).removeClass("active");
@@ -6207,7 +6264,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
     var redrawTableOnClick = function (whereTheTableGoes, manipulationFunction, manipulationFunctionArgs,baseDomElement ) {
         var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes,baseDomElement);
         var dyanamicUiVariables = getAccumulatorObject(undefined, baseDomElement);
-        var sortedData = retrieveSortedDataForTable(whereTheTableGoes);
+        var sortedData = retrieveSortedDataForTable(whereTheTableGoes,baseDomElement);
         if (dyanamicUiVariables.dynamicTableConfiguration.formOfStorage ==='loadOnce') {
             sharedTable["matrix"]= manipulationFunction(sortedData.dataArray,sortedData.numberOfRows,sortedData.numberOfColumns,manipulationFunctionArgs);
         } else{
@@ -6470,6 +6527,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
 
 
     var getCurrentTableFormat =function(whereTheTableGoes) {
+        alert('getCurrentTableFormat is not used');
         var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
         return sharedTable.currentForm;
     }
@@ -6531,9 +6589,9 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
     };
 
 
-    var retrieveIndexesOfColumnsWithMatchingNames  = function(whereTheTableGoes,arrayOfMatchingNames){
+    var retrieveIndexesOfColumnsWithMatchingNames  = function(whereTheTableGoes,arrayOfMatchingNames,baseDomElement){
         var indexesOfIdentifiedColumns = [];
-        var staticDataForTable = retrieveSortedDataForTable(whereTheTableGoes);
+        var staticDataForTable = retrieveSortedDataForTable(whereTheTableGoes,baseDomElement);
         _.each(_.range(0,staticDataForTable.numberOfColumns),function(index) {
             var cellContent = staticDataForTable.dataArray[index];
             if (_.includes(arrayOfMatchingNames,$(cellContent.renderData).find('span.displayMethodName').attr('methodKey'))){
@@ -6548,7 +6606,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
 
     var contractColumns = function ( event, offeredThis, direction, whereTheTableGoes, baseDomElement) {
         event.stopPropagation();
-        var additionalParameters = getDyanamicUiVariables();
+        const dyanamicUiVariables = getAccumulatorObject(undefined, baseDomElement);
         whereTheTableGoes = additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory;
         var identifyingNode = $(offeredThis).parent().parent().parent();
         var dataAnnotationType= getDatatypeInformation('FEGT',baseDomElement);
@@ -6557,8 +6615,9 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
         var grouping = dataAnnotationType.dataAnnotation.customColumnOrdering.topLevelColumns[groupNumber];
         var columnsToDelete = _.filter(expectedColumns,function (o){return ((o.pos===groupNumber) && (o.subPos!==0))});
         var columnsNamesToDelete = _.map(columnsToDelete,function(o){return o.key});
-        var indexesOfColumnsToDelete =retrieveIndexesOfColumnsWithMatchingNames (whereTheTableGoes,columnsNamesToDelete);
-        var sharedTable = getSharedTable(additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory);
+        var indexesOfColumnsToDelete =retrieveIndexesOfColumnsWithMatchingNames (whereTheTableGoes,columnsNamesToDelete,baseDomElement);
+        var sharedTable = getSharedTable(additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory,
+                                        baseDomElement);
         sharedTable.addColumnExclusionGroup(groupNumber,grouping.key,indexesOfColumnsToDelete);
         redrawTableOnClick(whereTheTableGoes,
             function(sortedData,numberOfRows,numberOfColumns,arguments){
@@ -6573,7 +6632,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
         whereTheTableGoes = additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory;
         var identifyingNode = $(offeredThis).parent().parent().parent();
         var groupNumber = extractClassBasedIndex(identifyingNode[0].innerHTML,"groupNum");
-        var sharedTable = getSharedTable(additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory, baseDomElement);
+        var sharedTable = getSharedTable(additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory,
+                                        baseDomElement);
         sharedTable.removeColumnExclusionGroup(groupNumber, baseDomElement);
 
 
@@ -6751,7 +6811,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
                 false,
                 true );
         } else {
-            const intermediateDataStructureBodyArray = getAccumulatorObject('annotationDisplayArray');
+            const intermediateDataStructureBodyArray = getAccumulatorObject('annotationDisplayArray','#mainVariantDivHolder');
             _.forEach(intermediateDataStructureBodyArray,function(intermediateDataStructureBody){
                 intermediateDataStructureBody['tableToUpdate'] = idForTheTargetDiv;
                 prepareToPresentToTheScreen(idForTheTargetDiv,
@@ -6768,7 +6828,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
         }
 
         sharedTable['matrix'] = new mpgSoftware.matrixMath.Matrix(sharedTable['dataCells'],sharedTable['numberOfRows'],sharedTable['numberOfColumns'])
-        filterEpigeneticTable(idForTheTargetDiv,true);
+        filterEpigeneticTable(idForTheTargetDiv,true,'#mainVariantDivHolder');
     }
 
 

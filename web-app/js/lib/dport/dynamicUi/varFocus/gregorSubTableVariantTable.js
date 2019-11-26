@@ -257,7 +257,9 @@ const setUpFilterAndSlider = function (retrievedRecords,valueDisplay ){
             createSingleDnaseCell
         );
          setGregorSubTableByPValue(objectContainingRetrievedRecords[0].header.defaultGregorPValueUpperValue);
-        mpgSoftware.dynamicUi.filterEpigeneticTable("#mainVariantDiv table.variantTableHolder");
+        mpgSoftware.dynamicUi.filterEpigeneticTable("#mainVariantDiv table.variantTableHolder",
+                                                    false,
+                                                    callingParameters.baseDomElement );
     };
 
 

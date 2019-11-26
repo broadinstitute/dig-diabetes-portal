@@ -89,7 +89,9 @@ mpgSoftware.dynamicUi.gregorTissueTable = (function () {
                     var initialLinearIndex = 1;
                     if ( typeof incomingData !== 'undefined') {
 
-                        mpgSoftware.dynamicUi.addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode, intermediateDataStructure);
+                        mpgSoftware.dynamicUi.addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,
+                            intermediateDataStructure,'noRowTag',
+                            callingParameters.baseDomElement);
 
                         var tissuesAsHeaders = [];
                         if (( typeof incomingData.header !== 'undefined' ) &&
