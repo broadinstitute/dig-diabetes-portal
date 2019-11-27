@@ -62,6 +62,8 @@
                     </g:if>
 
                     <li class="" style=""><a href="${createLink(controller:'trait',action:'tissueTable')}">Tissue FOCUS</a></li>
+                    <li class="" style=""><a href="${createLink(controller:'variantInfo',action:'variantTable')}">Variant FOCUS</a></li>
+                    <li class="" style=""><a href="${createLink(controller:'gene',action:'effectorGeneTable')}">Effector gene</a></li>
 
                     <g:if test="${g.portalTypeString() != 'v2f'}">
                         <li class="" style=""><a href="${createLink(controller:'variantSearch', action:'variantSearchWF')}"><g:message code="variant.search.header"/></a></li>

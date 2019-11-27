@@ -207,10 +207,26 @@ mpgSoftware.variantTable = (function () {
     };
 
 
-    const initialPageSetUp = function(preferredPhenotype){
+    const initialPageSetUp = function(parametersToOverride){
         var drivingVariables = getVariablesToRemember();
-        if (( typeof preferredPhenotype === 'undefined')||(preferredPhenotype.length===0)){
-            preferredPhenotype = 'T2D';
+        let preferredPhenotype = 'T2D';
+        let chromosome = '8';
+        let startPosition = 117862462;
+        let endPosition = 118289003;
+        if ( typeof parametersToOverride !== 'undefined'){
+            if (( typeof parametersToOverride.phenotype !== 'undefined') && (parametersToOverride.phenotype.length>0)){
+                preferredPhenotype = parametersToOverride.phenotype;
+            }
+            if (( typeof parametersToOverride.chromosome !== 'undefined') && (parametersToOverride.chromosome.length>0)){
+                drivingVariables["defaultChromosome"] = parametersToOverride.chromosome;
+            }
+            if (( typeof parametersToOverride.startPosition !== 'undefined')){
+                drivingVariables["defaultExtentBegin"] = parametersToOverride.startPosition;
+            }
+            if (( typeof parametersToOverride.endPosition !== 'undefined')){
+                drivingVariables["defaultExtentEnd"] = parametersToOverride.endPosition;
+            }
+
         }
         $(drivingVariables.dynamicTableConfiguration.domSpecificationForAccumulatorStorage).empty().append(Mustache.render($('#mainVariantTableOrganizer')[0].innerHTML,
             {   phenotype:preferredPhenotype,
@@ -246,48 +262,53 @@ mpgSoftware.variantTable = (function () {
         $('.modal-content').resizable({
             alsoResize: ".modal-header, .modal-body, .modal-footer"
         });
-        //mpgSoftware.dynamicUi.modifyScreenFields({phenotype:preferredPhenotype},getVariablesToRemember());
+        mpgSoftware.dynamicUi.modifyScreenFields({
+                                                    phenotype:preferredPhenotype,
+                                                    chromosome:drivingVariables.defaultChromosome,
+                                                    startPosition:drivingVariables.defaultExtentBegin,
+                                                    endPosition:drivingVariables.defaultExtentEnd
+                                                    },drivingVariables);
 
-        var pageURL_string = window.location.href;
-        var url = new URL(pageURL_string);
-
-        if (url.searchParams.get("chromosomeNumber")){
-
-            //console.log("region view");
-            var chromosomeInput = url.searchParams.get("chromosomeNumber");
-            var startExtentInput = url.searchParams.get("startExtent");
-            var endExtentInput = url.searchParams.get("endExtent");
-
-            //console.log(preferredPhenotype+" : "+chromosomeInput+" : "+startExtentInput+" : "+endExtentInput);
-
-            mpgSoftware.dynamicUi.modifyScreenFields({phenotype:preferredPhenotype, chromosome:chromosomeInput, startPosition:startExtentInput, endPosition:endExtentInput},getVariablesToRemember());
-
-        } else {
-
-            //console.log("gene id view");
-            var urlPath = window.location.pathname.split("/");
-            var geneName = urlPath[urlPath.length - 1];
-
-            $.ajax({
-                cache: false,
-                type: "post",
-                url: drivingVariables.geneInfoAjaxUrl,
-                data: {geneName: geneName},
-                async: true
-            }).done(function (geneInfoData) {
-                //console.log(data);
-                var genePageExtent = 100000;
-
-                var chromosomeInput = geneInfoData.geneInfo.CHROM;
-                var startExtentInput = geneInfoData.geneInfo.BEG - genePageExtent;
-                var endExtentInput = geneInfoData.geneInfo.END + genePageExtent;
-
-                //console.log(preferredPhenotype+" : "+chromosomeInput+" : "+startExtentInput+" : "+endExtentInput);
-
-                mpgSoftware.dynamicUi.modifyScreenFields({phenotype:preferredPhenotype, chromosome:chromosomeInput, startPosition:startExtentInput, endPosition:endExtentInput},getVariablesToRemember());
-            });
-
-        }
+        // var pageURL_string = window.location.href;
+        // var url = new URL(pageURL_string);
+        //
+        // if (url.searchParams.get("chromosomeNumber")){
+        //
+        //     //console.log("region view");
+        //     var chromosomeInput = url.searchParams.get("chromosomeNumber");
+        //     var startExtentInput = url.searchParams.get("startExtent");
+        //     var endExtentInput = url.searchParams.get("endExtent");
+        //
+        //     //console.log(preferredPhenotype+" : "+chromosomeInput+" : "+startExtentInput+" : "+endExtentInput);
+        //
+        //     mpgSoftware.dynamicUi.modifyScreenFields({phenotype:preferredPhenotype, chromosome:chromosomeInput, startPosition:startExtentInput, endPosition:endExtentInput},getVariablesToRemember());
+        //
+        // } else {
+        //
+        //     //console.log("gene id view");
+        //     var urlPath = window.location.pathname.split("/");
+        //     var geneName = urlPath[urlPath.length - 1];
+        //
+        //     $.ajax({
+        //         cache: false,
+        //         type: "post",
+        //         url: drivingVariables.geneInfoAjaxUrl,
+        //         data: {geneName: geneName},
+        //         async: true
+        //     }).done(function (geneInfoData) {
+        //         //console.log(data);
+        //         var genePageExtent = 100000;
+        //
+        //         var chromosomeInput = geneInfoData.geneInfo.CHROM;
+        //         var startExtentInput = geneInfoData.geneInfo.BEG - genePageExtent;
+        //         var endExtentInput = geneInfoData.geneInfo.END + genePageExtent;
+        //
+        //         //console.log(preferredPhenotype+" : "+chromosomeInput+" : "+startExtentInput+" : "+endExtentInput);
+        //
+        //         mpgSoftware.dynamicUi.modifyScreenFields({phenotype:preferredPhenotype, chromosome:chromosomeInput, startPosition:startExtentInput, endPosition:endExtentInput},getVariablesToRemember());
+        //     });
+        //
+        // }
 
     }
 

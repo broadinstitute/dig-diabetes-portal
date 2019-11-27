@@ -9,14 +9,22 @@
   <%@ page import="org.broadinstitute.mpg.RestServerService" %>
 
   <g:set var="restServer" bean="restServerService"/>
+  <script>
+  $( document ).ready(function() {
+    mpgSoftware.variantTableInitializer.variantTableConfiguration();
 
+  });
+  </script>
 
 </head>
 
 <body>
+<div id="mainVariantDivHolder">
 
-
+</div>
+<g:render template="/templates/dynamicUi/VARIANT_TABLE" />
 <g:render template="variantTable" />
 
 </body>
 </html>
+

@@ -1819,7 +1819,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 var ajaxURL = $('#main').attr("geneinfoajaxurl");
 
                 $.ajax({
-                    url:mpgSoftware.variantTableInitializer.variantTableConfiguration(phenotypeName,ajaxURL),
+                   // url:mpgSoftware.variantTableInitializer.variantTableConfiguration(phenotypeName,ajaxURL),
                     success:function(){
 
                         setTimeout(function(){
@@ -1841,10 +1841,13 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                                     core.errorReporter(jqXHR, exception);
                                 }
                             });
-                        },5000);
+                        },0);
 
                     }});
-
+                mpgSoftware.variantTableInitializer.variantTableConfiguration({chromosome:coreVariables.geneChromosomeMinusChr(),
+                    startPosition:coreVariables.geneExtentBegin,
+                    endPosition:coreVariables.geneExtentEnd
+                });
             }
 
         } else {

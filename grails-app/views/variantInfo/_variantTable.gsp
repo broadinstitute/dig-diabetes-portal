@@ -8,8 +8,12 @@
 
         mpgSoftware.variantTableInitializer = (function () {
 
-            var variantTableConfiguration = function(INITIALPHENOTYPE, AJAXURL){
+            var variantTableConfiguration = function(parametersToOverride){
                 var drivingVariables = {
+                    preferredPhenotype:"${preferredPhenotype}",
+                    defaultChromosome:"${defaultChromosome}",
+                    defaultExtentBegin:"${defaultExtentBegin}",
+                    defaultExtentEnd:"${defaultExtentEnd}",
                     getGRSListOfVariantsAjaxUrl:"${createLink(controller:'grs',action: 'getGRSListOfVariantsAjax')}",
                     getLocusZoomFilledPlotUrl: '${createLink(controller:"gene", action:"getLocusZoomFilledPlot")}',
                     fillCredibleSetTableUrl: '${g.createLink(controller: "RegionInfo", action: "fillCredibleSetTable")}',
@@ -404,8 +408,8 @@
                     }
                 };
                 mpgSoftware.variantTable.setVariablesToRemember(drivingVariables);
-                //mpgSoftware.variantTable.initialPageSetUp("${phenotype}");
-                mpgSoftware.variantTable.initialPageSetUp(INITIALPHENOTYPE);
+                mpgSoftware.variantTable.initialPageSetUp(parametersToOverride);
+                //mpgSoftware.variantTable.initialPageSetUp(INITIALPHENOTYPE);
             };
 
 
@@ -422,13 +426,7 @@
 
 
 
-    $( document ).ready(function() {
-        //mpgSoftware.variantTableInitializer.variantTableConfiguration();
-    });
+
 </script>
 
-<!--
-<div id="mainVariantDivHolder">
 
-</div>
--->

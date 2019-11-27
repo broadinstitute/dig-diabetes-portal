@@ -57,13 +57,13 @@ mpgSoftware.dynamicUi.fullEffectorGeneTable = (function () {
             // 'fullEffectorGeneTable', // name of the persistent field where the data we received is stored
 
             // insert header records as necessary into the intermediate structure, and return header names that we can match on for the columns
-            function(incomingData,dataAnnotationType,intermediateDataStructure,returnObject){
+            function(incomingData,dataAnnotationType,intermediateDataStructure,returnObject,baseDomElement){
                     var headersObjects = [];
                 var initialLinearIndex = 0;
                 if (( typeof incomingData !== 'undefined') &&
                         ( incomingData.length > 0)) {
 
-                        mpgSoftware.dynamicUi.addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode, intermediateDataStructure);
+                        mpgSoftware.dynamicUi.addRowHolderToIntermediateDataStructure(dataAnnotationType.dataAnnotation.code,  intermediateDataStructure,  undefined, baseDomElement);
 
                         var expectedColumns = dataAnnotationType.dataAnnotation.customColumnOrdering.constituentColumns;
                         headersObjects = _.map(returnObject.headers, function (o) {
@@ -113,7 +113,7 @@ mpgSoftware.dynamicUi.fullEffectorGeneTable = (function () {
             },
 
             // take all the records for each row and insert them into the intermediateDataStructure
-            function(returnObject,dataAnnotationType,intermediateDataStructure,initialLinearIndex){
+            function(returnObject,dataAnnotationType,intermediateDataStructure,initialLinearIndex,baseDomElement){
                 var constituentColumns = _.map(dataAnnotationType.dataAnnotation.customColumnOrdering.constituentColumns,function(val){
                     return val.key;
                 });
@@ -182,7 +182,7 @@ mpgSoftware.dynamicUi.fullEffectorGeneTable = (function () {
                             }
 
                         });
-                        mpgSoftware.dynamicUi.addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,intermediateDataStructure);
+                        mpgSoftware.dynamicUi.addRowHolderToIntermediateDataStructure(dataAnnotationType.dataAnnotation.code,intermediateDataStructure, undefined,baseDomElement );
                     });
 
             })

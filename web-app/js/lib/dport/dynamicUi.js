@@ -2566,11 +2566,11 @@ mpgSoftware.dynamicUi = (function () {
             ( incomingData.length > 0)) {
              returnObject = incomingData[0];
         }
-        var sortedHeaderObjects = insertAnyHeaderRecords(incomingData,dataAnnotationType,intermediateDataStructure,returnObject);
+        var sortedHeaderObjects = insertAnyHeaderRecords(incomingData,dataAnnotationType,intermediateDataStructure,returnObject,callingParameters.baseDomElement);
         var initialLinearIndex = sortedHeaderObjects.length;
 
         if (returnObject.headers.length > 0){
-            placeContentRowsIntoIntermediateObject(returnObject,dataAnnotationType,intermediateDataStructure,initialLinearIndex);
+            placeContentRowsIntoIntermediateObject(returnObject,dataAnnotationType,intermediateDataStructure,initialLinearIndex,callingParameters.baseDomElement);
             intermediateDataStructure.tableToUpdate = additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory;
         }
 
@@ -4013,25 +4013,11 @@ alert('displayGenesPerTissueFromEqtl is not used anymore')
 
         initializeAccumulatorObject(additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage,additionalParameters);
 
-        // $( window ).resize(function() {
-        //     adjustTableWrapperWidth("table.fullEffectorGeneTableHolder");
-        // });
 
         if ( typeof data.phenotype !== 'undefined'){
             setAccumulatorObject("preferredPhenotype", data.phenotype,
                 additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage);
         }
-
-        // Every table depends on some in memory storage.  Create that here if requested.
-        // if (    ( typeof  additionalParameters.dynamicTableConfiguration !== 'undefined') &&
-        //         ( typeof  additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory !== 'undefined') ){
-        //     resetAccumulatorObject('gregorTissueArray',
-        //         additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage);
-        //     resetAccumulatorObject('tissueTableChosenAnnotations',
-        //         additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage);
-        //
-        //
-        // }
 
 
         let dataAnnotationTypes = [];
@@ -6609,7 +6595,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
 
     var contractColumns = function ( event, offeredThis, direction, whereTheTableGoes, baseDomElement) {
         event.stopPropagation();
-        const dyanamicUiVariables = getAccumulatorObject(undefined, baseDomElement);
+        const additionalParameters = getAccumulatorObject(undefined, baseDomElement);
         whereTheTableGoes = additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory;
         var identifyingNode = $(offeredThis).parent().parent().parent();
         var dataAnnotationType= getDatatypeInformation('FEGT',baseDomElement);

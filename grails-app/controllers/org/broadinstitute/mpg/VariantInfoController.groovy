@@ -33,6 +33,10 @@ class VariantInfoController {
         String phenotypeString = params.trait ?: restServerService.retrieveBeanForCurrentPortal().phenotype
 
         render (view: 'variantTableHolder', model:[
+                preferredPhenotype:phenotypeString,
+                defaultChromosome:"9",
+                defaultExtentBegin:21940000,
+                defaultExtentEnd:22190000,
                 portalVersionBean:restServerService.retrieveBeanForCurrentPortal(),
                 phenotype:phenotypeString
         ])
