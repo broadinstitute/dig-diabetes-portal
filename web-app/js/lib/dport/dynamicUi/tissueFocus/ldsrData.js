@@ -17,7 +17,7 @@ mpgSoftware.dynamicUi.ldsrTissueTable = (function () {
      * @returns {*}
      */
     var processLdsrDataForTissueTable = function (data,rawGeneAssociationRecords) {
-
+        rawGeneAssociationRecords.splice(0,rawGeneAssociationRecords.length);
         if ( ( typeof data !== 'undefined') &&
             ( typeof data.data !== 'undefined') ){
             var combinedRecord = {header:{}, contents:[]};

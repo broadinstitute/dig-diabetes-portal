@@ -12,7 +12,7 @@ mpgSoftware.dynamicUi.depictTissues = (function () {
      * @returns {*}
      */
     var processRecordsFromDepictTissues = function (data, rawGeneAssociationRecords) {
-        var dataArrayToProcess = [];
+        rawGeneAssociationRecords.splice(0,rawGeneAssociationRecords.length);
         if ( typeof data !== 'undefined'){
             var combinedRecord = {header:{}, contents:[]};
             combinedRecord.header['tissues'] = _.map(_.uniqBy(data,'tissue'),function(o){return o.tissue.replace('\'','').toLowerCase()});

@@ -4532,7 +4532,9 @@ alert('displayGenesPerTissueFromEqtl is not used anymore')
         };
 
         jQuery.fn.dataTableExt.oSort['generalSort-desc'] = function (a, b) {
-            var currentSortRequest = getAccumulatorObject("currentSortRequest",baseDomElement);
+            //var currentSortRequest = getAccumulatorObject("currentSortRequest",baseDomElement);
+            var currentSortRequest = getCurrentSortRequest ();
+//            return generalPurposeSort(a,b,'desc',currentSortRequest);
             if (currentSortRequest.currentSort === "variantAnnotationCategory"){
                 return generalPurposeSort(a,b,'desc',currentSortRequest);
             } else {
@@ -4584,7 +4586,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
                         'currentSort':oneClass,
                         'dataAnnotationType':dyanamicUiVariables.dataAnnotationTypes[0],
                         'desiredSearchTerm':findDesiredSearchTerm(  dyanamicUiVariables.dynamicTableConfiguration.initializeSharedTableMemory,
-                                                                    oneClass ),
+                                                                    oneClass,baseDomElement ),
                         'table':dyanamicUiVariables.dynamicTableConfiguration.initializeSharedTableMemory
                     };
                     return false;
@@ -4601,7 +4603,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
                     'currentSort':oneClass,
                     'dataAnnotationType': dyanamicUiVariables.dataAnnotationTypes[dataAnnotationTypeIndex],
                     'desiredSearchTerm':findDesiredSearchTerm(dyanamicUiVariables.dynamicTableConfiguration.initializeSharedTableMemory,
-                        oneClass ),
+                        oneClass, baseDomElement ),
                     'table':dyanamicUiVariables.dynamicTableConfiguration.initializeSharedTableMemory
                 };
                 return false;
@@ -4629,6 +4631,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
     setOfColumnsToSort.push([ currentSortRequestObject.columnNumberValue, currentSortRequestObject.sortOrder ]);
 
     setAccumulatorObject("currentSortRequest", currentSortRequestObject,baseDomElement );
+    setCurrentSortRequest(getAccumulatorObject("currentSortRequest",baseDomElement));
 
     dataTable
         .order( setOfColumnsToSort )
@@ -6252,9 +6255,9 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
             if ($(className).length) { $("button"+className).removeClass("active") }
             if ($(idName).length) { $("button"+className).removeClass("active") }
         });
-        redrawTableOnClick('table.combinedGeneTableHolder',function(sortedData, numberOfRows, numberOfColumns,baseDomElement){
+        redrawTableOnClick('table.combinedGeneTableHolder',function(sortedData, numberOfRows, numberOfColumns){
             return mpgSoftware.matrixMath.doNothing (sortedData, numberOfRows, numberOfColumns);
-        },{});
+        },{},baseDomElement);
         refineTableRecords(whereTheTableGoes,$(whereTheTableGoes).dataTable(),sharedTable.currentForm,[],false,baseDomElement);
     }
 

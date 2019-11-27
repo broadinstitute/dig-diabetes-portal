@@ -643,7 +643,7 @@
                    <span class="glyphicon glyphicon-step-forward" aria-hidden="true" onclick="mpgSoftware.dynamicUi.shiftColumnsByOne(event,this,'forward','table.combinedGeneTableHolder','#configurableUiTabStorage')"></span>
                </div>
                <div class="pull-right">
-                   <span class="glyphicon glyphicon-remove" aria-hidden="true" onclick="mpgSoftware.dynamicUi.removeColumn(event,this,'forward','table.combinedGeneTableHolder')" style="padding: 0 8px 0 0"></span>
+                   <span class="glyphicon glyphicon-remove" aria-hidden="true" onclick="mpgSoftware.dynamicUi.removeColumn(event,this,'forward','table.combinedGeneTableHolder','#configurableUiTabStorage')" style="padding: 0 8px 0 0"></span>
                </div>
                <span class="displayGeneName">{{name2}}</span>
             </div>

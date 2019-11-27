@@ -207,7 +207,7 @@ mpgSoftware.variantTable = (function () {
     };
 
 
-    const initialPageSetUp = function(preferredPhenotype, GENEINFOAJAXURL){
+    const initialPageSetUp = function(preferredPhenotype){
         var drivingVariables = getVariablesToRemember();
         if (( typeof preferredPhenotype === 'undefined')||(preferredPhenotype.length===0)){
             preferredPhenotype = 'T2D';
@@ -215,12 +215,15 @@ mpgSoftware.variantTable = (function () {
         $(drivingVariables.dynamicTableConfiguration.domSpecificationForAccumulatorStorage).empty().append(Mustache.render($('#mainVariantTableOrganizer')[0].innerHTML,
             {   phenotype:preferredPhenotype,
                 domTableSpecifier: drivingVariables.dynamicTableConfiguration.initializeSharedTableMemory,
-                organizingDiv: drivingVariables.dynamicTableConfiguration.organizingDiv  }
+                organizingDiv: drivingVariables.dynamicTableConfiguration.organizingDiv,
+                baseDomElement:drivingVariables.dynamicTableConfiguration.domSpecificationForAccumulatorStorage
+            }
         ));
         fillPhenotypeDropDown('select.phenotypePicker',preferredPhenotype);
         $('#annotationSelectorChoice').multiselect({includeSelectAllOption: true,
             onDropdownHide: function(event) {
-                mpgSoftware.dynamicUi.filterEpigeneticTable(drivingVariables.dynamicTableConfiguration.initializeSharedTableMemory);
+                mpgSoftware.dynamicUi.filterEpigeneticTable(drivingVariables.dynamicTableConfiguration.initializeSharedTableMemory,undefined,
+                                                            drivingVariables.dynamicTableConfiguration.domSpecificationForAccumulatorStorage );
             },
             onDropdownShow: function(event) {
                 $('#methodFilterCheckbox').prop('checked',true);
@@ -229,13 +232,16 @@ mpgSoftware.variantTable = (function () {
             enableHTML: true
             });
         $('#gregorFilterCheckbox').click(function(){
-            mpgSoftware.dynamicUi.filterEpigeneticTable(drivingVariables.dynamicTableConfiguration.initializeSharedTableMemory);
+            mpgSoftware.dynamicUi.filterEpigeneticTable(drivingVariables.dynamicTableConfiguration.initializeSharedTableMemory,undefined,
+                                                        drivingVariables.dynamicTableConfiguration.domSpecificationForAccumulatorStorage);
         });
         $('#methodFilterCheckbox').change(function(){
-            mpgSoftware.dynamicUi.filterEpigeneticTable(drivingVariables.dynamicTableConfiguration.initializeSharedTableMemory);
+            mpgSoftware.dynamicUi.filterEpigeneticTable(    drivingVariables.dynamicTableConfiguration.initializeSharedTableMemory,undefined,
+                                                            drivingVariables.dynamicTableConfiguration.domSpecificationForAccumulatorStorage);
         });
         $('#displayBlankRows').click(function(){
-            mpgSoftware.dynamicUi.filterEpigeneticTable(drivingVariables.dynamicTableConfiguration.initializeSharedTableMemory);
+            mpgSoftware.dynamicUi.filterEpigeneticTable(drivingVariables.dynamicTableConfiguration.initializeSharedTableMemory,undefined,
+                                                        drivingVariables.dynamicTableConfiguration.domSpecificationForAccumulatorStorage);
         });
         $('.modal-content').resizable({
             alsoResize: ".modal-header, .modal-body, .modal-footer"
@@ -265,7 +271,7 @@ mpgSoftware.variantTable = (function () {
             $.ajax({
                 cache: false,
                 type: "post",
-                url: GENEINFOAJAXURL,
+                url: drivingVariables.geneInfoAjaxUrl,
                 data: {geneName: geneName},
                 async: true
             }).done(function (geneInfoData) {

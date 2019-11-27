@@ -43,6 +43,7 @@
                     retrieveECaviarDataViaCredibleSetsUrl:"${createLink(controller:'RegionInfo',action: 'retrieveECaviarDataViaCredibleSets')}",
                     retrieveVariantAnnotationsUrl:"${createLink(controller:'RegionInfo',action: 'retrieveVariantAnnotations')}",
                     retrieveTfMotifUrl:"${createLink(controller:'RegionInfo',action: 'retrieveTfMotif')}",
+                    geneInfoAjaxUrl:"${createLink(controller:'gene',action: 'geneInfoAjax')}",
                     dynamicTableType:'variantTable',
                     dataAnnotationTypes: [
                         {
@@ -404,7 +405,7 @@
                 };
                 mpgSoftware.variantTable.setVariablesToRemember(drivingVariables);
                 //mpgSoftware.variantTable.initialPageSetUp("${phenotype}");
-                mpgSoftware.variantTable.initialPageSetUp(INITIALPHENOTYPE,AJAXURL);
+                mpgSoftware.variantTable.initialPageSetUp(INITIALPHENOTYPE);
             };
 
 

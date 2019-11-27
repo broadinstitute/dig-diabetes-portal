@@ -17,6 +17,7 @@ mpgSoftware.dynamicUi.gregorTissueTable = (function () {
      * @returns {*}
      */
     var processGregorDataForTissueTable = function (data,rawGeneAssociationRecords) {
+        rawGeneAssociationRecords.splice(0,rawGeneAssociationRecords.length);
 
         if ( ( typeof data !== 'undefined') &&
              ( typeof data.data !== 'undefined') ){

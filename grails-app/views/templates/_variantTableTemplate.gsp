@@ -8,7 +8,7 @@
       <div class="modal-header text-center">
         <h4 class="modal-title gregorModalLabel">Adjust GREGOR enrichments</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"
-        onclick="mpgSoftware.dynamicUi.filterEpigeneticTable('{{domTableSpecifier}}')">
+        onclick="mpgSoftware.dynamicUi.filterEpigeneticTable('{{domTableSpecifier}}', undefined, '{{baseDomElement}}')">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -94,7 +94,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal"
-        onclick="mpgSoftware.dynamicUi.filterEpigeneticTable('{{domTableSpecifier}}')">Close</button>
+        onclick="mpgSoftware.dynamicUi.filterEpigeneticTable('{{domTableSpecifier}}',undefined,'{{baseDomElement}}')">Close</button>
       </div>
     </div>
   </div>
@@ -234,7 +234,7 @@
                         <div class="well well-sm row" style="margin-left: 2px; height: 88.5px;">
                             <div class="datatable-zoom-control">
                                 <div class="tool-label">Direction</div>
-                                <button  class="btn btn-secondary btn-default transpose actualTransposeButton" type="button" title="click to transpose table" onclick="mpgSoftware.dynamicUi.transposeThisTable('{{domTableSpecifier}}','#mainTissueDiv')">
+                                <button  class="btn btn-secondary btn-default transpose actualTransposeButton" type="button" title="click to transpose table" onclick="mpgSoftware.dynamicUi.transposeThisTable('{{domTableSpecifier}}','{{baseDomElement}}')">
                                 Transpose
                               </button>
                             </div>
