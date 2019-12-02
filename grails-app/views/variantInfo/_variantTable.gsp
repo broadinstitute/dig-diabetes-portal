@@ -14,6 +14,7 @@
                     defaultChromosome:"${defaultChromosome}",
                     defaultExtentBegin:"${defaultExtentBegin}",
                     defaultExtentEnd:"${defaultExtentEnd}",
+                    includeIndependentRangeDisplay: true,
                     getGRSListOfVariantsAjaxUrl:"${createLink(controller:'grs',action: 'getGRSListOfVariantsAjax')}",
                     getLocusZoomFilledPlotUrl: '${createLink(controller:"gene", action:"getLocusZoomFilledPlot")}',
                     fillCredibleSetTableUrl: '${g.createLink(controller: "RegionInfo", action: "fillCredibleSetTable")}',

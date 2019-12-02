@@ -226,13 +226,18 @@ mpgSoftware.variantTable = (function () {
             if (( typeof parametersToOverride.endPosition !== 'undefined')){
                 drivingVariables["defaultExtentEnd"] = parametersToOverride.endPosition;
             }
+            if (( typeof parametersToOverride.includeIndependentRangeDisplay !== 'undefined')){
+                drivingVariables["includeIndependentRangeDisplay"] = parametersToOverride.includeIndependentRangeDisplay;
+            }
+
 
         }
         $(drivingVariables.dynamicTableConfiguration.domSpecificationForAccumulatorStorage).empty().append(Mustache.render($('#mainVariantTableOrganizer')[0].innerHTML,
             {   phenotype:preferredPhenotype,
                 domTableSpecifier: drivingVariables.dynamicTableConfiguration.initializeSharedTableMemory,
                 organizingDiv: drivingVariables.dynamicTableConfiguration.organizingDiv,
-                baseDomElement:drivingVariables.dynamicTableConfiguration.domSpecificationForAccumulatorStorage
+                baseDomElement:drivingVariables.dynamicTableConfiguration.domSpecificationForAccumulatorStorage,
+                displayIndependentRangeControl: (drivingVariables["includeIndependentRangeDisplay"])?[1]:[]
             }
         ));
         fillPhenotypeDropDown('select.phenotypePicker',preferredPhenotype);

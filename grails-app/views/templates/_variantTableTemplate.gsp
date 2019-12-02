@@ -102,9 +102,9 @@
 
 
 
-
+    {{#displayIndependentRangeControl}}
     <div class="container-fluid">
-        <div class="row" style="display:none;">
+        <div class="row">
             <div class="text-center">
                 <h1 class="dk-page-title">Variant FOCUS table for <span class="phenotypeSpecifier">{{phenotype}}</span></h1>
             </div>
@@ -117,11 +117,11 @@
         </div>
 
 
-        <div class="row" style="margin: 20px; display: none;">
+        <div class="row" style="margin: 20px">
             <div class="col-sm-2 text-center" style="">
                 <label style="padding-top:35px">Change genomic region or phenotype</label>
             </div>
-            <div class="col-sm-8" style="border: 1px solid black">
+            <div class="col-sm-8" style="border: 1px solid black; max-width: 730px">
                 <div class="row">
                     <div class="col-sm-1 text-center"></div>
                     <div class="col-sm-2 text-center">
@@ -133,26 +133,35 @@
                         <label for="startExtentInput" placeholder="Choose chromosome">start extent</label>
                         <input id="startExtentInput" type="text">
                     </div>
-                    <div class="focus-table-settings-content">
-                        <div class="" style="width:10%;">
-                            <input id="chromosomeInput" type="text" style="width: 90%">
-                        </div>
-                        <div class="" style="width:25%;">
-                            <input id="startExtentInput" type="text" style="width: 95%">
-                        </div>
-                        <div class="" style="width:25%;">
-                            <input id="endExtentInput" type="text" style="width: 95%">
-                        </div>
-                        <div class="" style="width:30%;">
-                            <select id="varishiftantTablePhenotypePicker" class="phenotypePicker form-control input-sm"  onchange="mpgSoftware.variantTable.refreshTableForPhenotype(this)" style="width: 95%"></select>
-                        </div>
-                        <div style="width:10%;"><button class="btn btn-secondary btn-default transpose focus-search-go" type="button" title="click to update table"
-                                onclick="mpgSoftware.variantTable.refreshTableForPhenotype('#variantTablePhenotypePicker')">
-                                Update</button></div>
+                    <div class="col-sm-4 text-center">
+                        <label for="endExtentInput" placeholder="Choose chromosome">end extent</label>
+                        <input id="endExtentInput" type="text">
                     </div>
                 </div>
+                <div class="row" style="margin-top: 15px">
+                    <div class="col-md-10">
+                        <label for="variantTablePhenotypePicker">Phenotype</label>
+                        <select id="variantTablePhenotypePicker" class="phenotypePicker" onchange="mpgSoftware.variantTable.refreshTableForPhenotype(this)"></select>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-secondary btn-default transpose" type="button" title="click to update table"
+                        onclick="mpgSoftware.variantTable.refreshTableForPhenotype('#variantTablePhenotypePicker')">
+                        Update</button>
+                    </div>
+                </div>
+
             </div>
         </div>
+        {{/displayIndependentRangeControl}}
+        {{^displayIndependentRangeControl}}
+%{--        create these dom elements, which will never be displayed, only for the purpose letting the calling code know the phenotype.  Necessary because sometimes the pages stand alone, and needs to manage its own phenotype,--}%
+%{--        but other times the table sits in a larger page which will handle the phenotype choices.--}%
+        <div class="neverDisplay" style="display: none">
+        <ul>
+        <li class="chosenPhenotype" id="{{phenotype}}">
+        </ul>
+        </div>
+        {{/displayIndependentRangeControl}}
 
                 <div class="container-fluid">
                     <div class="col-md-6">

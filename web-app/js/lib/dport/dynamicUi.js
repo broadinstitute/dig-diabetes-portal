@@ -2873,6 +2873,8 @@ mpgSoftware.dynamicUi = (function () {
         if ( typeof data.phenotype !== 'undefined'){
             setAccumulatorObject("preferredPhenotype", data.phenotype,
                 additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage);
+            setAccumulatorObject("phenotype", data.phenotype,
+                additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage);
         }
 
 
@@ -2947,11 +2949,11 @@ mpgSoftware.dynamicUi = (function () {
                 //const chosenPhenotype = $('select.phenotypePicker').children("option:selected"). val();
                 var chosenPhenotype = data.phenotype;
 
-                if (chromosomeInput.length>0){setAccumulatorObject("chromosome",chromosomeInput,
+                if (( typeof chromosomeInput !== 'undefined')&&(chromosomeInput.length>0)){setAccumulatorObject("chromosome",chromosomeInput,
                     additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage);}
-                if (startExtentInput.length>0){setAccumulatorObject("extentBegin",startExtentInput,
+                if (( typeof startExtentInput !== 'undefined')&&(startExtentInput.length>0)){setAccumulatorObject("extentBegin",startExtentInput,
                     additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage);}
-                if (endExtentInput.length>0){setAccumulatorObject("extentEnd",endExtentInput,
+                if (( typeof endExtentInput !== 'undefined')&&(endExtentInput.length>0)){setAccumulatorObject("extentEnd",endExtentInput,
                     additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage);}
                 if (( typeof chosenPhenotype !== 'undefined')&&(chosenPhenotype.length>0)){
                     setAccumulatorObject("phenotype",chosenPhenotype,

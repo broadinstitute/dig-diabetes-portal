@@ -927,7 +927,7 @@ class RegionInfoController {
         if (params.phenotype) {
             phenotype = params.phenotype
         } else {
-            looksOkay = falls
+            looksOkay = false
         }
 
         if (looksOkay){

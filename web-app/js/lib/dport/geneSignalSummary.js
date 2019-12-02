@@ -1774,6 +1774,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
         var rememberCallBack = callBack;
         var rememberParameter = parameter;
+        var rememberPhenotype = phenotypeName;
         var coreVariables = getSignalSummarySectionVariables();
         var propertiesToIncludeQuoted = [];
         var propertiesToRemoveQuoted = [];
@@ -1846,7 +1847,9 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                     }});
                 mpgSoftware.variantTableInitializer.variantTableConfiguration({chromosome:coreVariables.geneChromosomeMinusChr(),
                     startPosition:coreVariables.geneExtentBegin,
-                    endPosition:coreVariables.geneExtentEnd
+                    endPosition:coreVariables.geneExtentEnd,
+                    phenotype:rememberPhenotype,
+                    includeIndependentRangeDisplay: false
                 });
             }
 
