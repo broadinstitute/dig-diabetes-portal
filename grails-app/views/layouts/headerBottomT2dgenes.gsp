@@ -70,7 +70,9 @@
                     <li class="" style=""><a href="http://www.kp4cd.org/policies/${g.portalTypeString()}"><g:message code="portal.header.nav.policies"/></a></li>
 
                     <li class="" style=""><a href="http://www.kp4cd.org/resources/${g.portalTypeString()}">Resources</a></li>
+<g:if test="${g.portalTypeString()?.equals('t2d')}">
                     <li class="" style=""><a href="http://www.kp4cd.org/publications/${g.portalTypeString()}">Publications</a></li>
+</g:if>
                     <li class="" style=""><a href="http://www.kp4cd.org/new_features/${g.portalTypeString()}">Blog</a></li>
 
                 </ul>
