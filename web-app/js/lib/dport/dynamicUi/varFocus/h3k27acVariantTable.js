@@ -27,7 +27,8 @@ mpgSoftware.dynamicUi.h3k27acVariantTable = (function () {
                 groupByAnnotation:[],
                 groupByTissue:[],
                 groupByTissueAnnotation:[],
-                currentMethod:'NA'
+                currentMethod:'NA',
+                currentAnnotation:['H3K27AC']
             };
             _.forEach(_.groupBy(uniqueRecords, function (o) { return o.var_id }), function (value,key) {
                 dataGroupings.groupByVarId.push({name:key,arrayOfRecords:value});

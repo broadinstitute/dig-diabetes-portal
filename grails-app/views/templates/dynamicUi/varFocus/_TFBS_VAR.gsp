@@ -41,7 +41,7 @@ tfbs&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" 
 
 <script id="tfbsVariantTableBody"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortField="{{significanceValue}}"
-             class="varAllEpigenetics varTfbsEpigenetics tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}} annotationName_{{annotationName}} methodName_SPP tissueId_{{safeTissueId}} ">
+             class="varAllEpigenetics varTfbsEpigenetics tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}} annotationName_{{annotationName}} methodName_SPP tissueId_{{safeTissueId}} ">
 
                     {{#recordsExist}}
 

@@ -27,7 +27,8 @@ mpgSoftware.dynamicUi.coaccessibilityVariantTable = (function () {
                 groupByAnnotation:[],
                 groupByTissue:[],
                 groupByTissueAnnotation:[],
-                currentMethod:'cicero'
+                currentMethod:'cicero',
+                currentAnnotation:['GenePrediction']
             };
             _.forEach(_.groupBy(uniqueRecords, function (o) { return o.var_id }), function (value,key) {
                 dataGroupings.groupByVarId.push({name:key,arrayOfRecords:value});

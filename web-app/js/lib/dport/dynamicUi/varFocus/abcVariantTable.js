@@ -30,7 +30,8 @@ mpgSoftware.dynamicUi.abcVariantTable = (function () {
                 groupByAnnotation:[],
                 groupByTissue:[],
                 groupByTissueAnnotation:[],
-                currentMethod:'ABC'
+                currentMethod:'ABC',
+                currentAnnotation:['GenePrediction']
             };
             _.forEach(_.groupBy(uniqueRecords, function (o) { return o.var_id }), function (value,key) {
                 dataGroupings.groupByVarId.push({name:key,arrayOfRecords:value});

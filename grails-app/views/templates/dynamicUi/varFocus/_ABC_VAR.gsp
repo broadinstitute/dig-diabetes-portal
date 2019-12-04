@@ -35,10 +35,10 @@ ABC&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" b
 
 <script id="abcVariantTableBody"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortField="{{significanceValue}}"
-             class="varAllEpigenetics varAbcEpigenetics tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
+             class="varAllEpigenetics varAbcEpigenetics tissueCategory_{{tissueCategoryNumber}} methodName_{{method}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                 <div>
                {{#uniqueTissueRecords}}
-                  <div class="epigeneticCellElement tissueId_{{safeTissueId}} annotationName_{{annotation}}">
+                  <div class="epigeneticCellElement tissueId_{{safeTissueId}}  methodName_{{method}} annotationName_{{annotation}}">
                     {{tissue_name}}
                   </div>
                {{/uniqueTissueRecords}}

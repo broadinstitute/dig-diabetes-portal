@@ -28,7 +28,30 @@ mpgSoftware.dynamicUi.chromStateVariantTable = (function () {
                 groupByAnnotation:[],
                 groupByTissue:[],
                 groupByTissueAnnotation:[],
-                currentMethod:'ChromHMM'
+                currentMethod:'ChromHMM',
+                currentAnnotation:[ 'Enhancer',
+                                    'EnhancerActive1',
+                                    'EnhancerActive2',
+                                    'EnhancerBivalent',
+                                    'EnhancerGenic',
+                                    'EnhancerGenic1',
+                                    'EnhancerGenic2',
+                                    'EnhancerWeak',
+                                    'PromoterActive',
+                                    'PromoterBivalent',
+                                    'PromoterBivalentFlanking',
+                                    'PromoterFlanking',
+                                    'PromoterFlankingDownstream',
+                                    'PromoterFlankingUpstream',
+                                    'PromoterWeak',
+                                    'QuiescentLow',
+                                    'RepressedPolycomb',
+                                    'RepressedPolycombWeak',
+                                    'Transcription',
+                                    'TranscriptionFlanking',
+                                    'TranscriptionWeak',
+                                    'ZNFRepeat'
+                ]
             };
             _.forEach(_.groupBy(uniqueRecords, function (o) { return o.var_id }), function (value,key) {
                 dataGroupings.groupByVarId.push({name:key,arrayOfRecords:value});

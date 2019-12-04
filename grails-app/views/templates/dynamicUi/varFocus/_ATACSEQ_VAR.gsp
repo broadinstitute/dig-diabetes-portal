@@ -40,7 +40,7 @@ ATAC-seq&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bott
 
                      {{/recordsExist}}
                          {{#tissueRecords}}
-                          <div class="epigeneticCellElement tissueId_{{safeTissueId}} annotationName_{{annotation}}">
+                          <div class="epigeneticCellElement tissueId_{{safeTissueId}} methodName_{{method}} annotationName_{{annotation}}">
                                {{tissue_name}}
                             </div>
                           {{/tissueRecords}}

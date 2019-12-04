@@ -35,10 +35,10 @@ coaccessibility&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placemen
 
 <script id="coaccessibilityVariantTableBody"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortField="{{significanceValue}}"
-             class="varAllEpigenetics varCoaccessibilityEpigenetics tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
+             class="varAllEpigenetics varCoaccessibilityEpigenetics methodName_{{method}} annotationName_{{annotation}} tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                 <div>
                {{#uniqueTissueRecords}}
-                  <div class="epigeneticCellElement tissueId_{{safeTissueId}} annotationName_{{annotation}}">
+                  <div class="epigeneticCellElement tissueId_{{safeTissueId}}  methodName_{{method}} annotationName_{{annotation}}">
                     {{tissue_name}}
                   </div>
                {{/uniqueTissueRecords}}

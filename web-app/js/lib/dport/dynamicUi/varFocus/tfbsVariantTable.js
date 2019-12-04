@@ -44,7 +44,12 @@ mpgSoftware.dynamicUi.tfbsVariantTable = (function () {
                 groupByAnnotation:[],
                 groupByTissue:[],
                 groupByTissueAnnotation:[],
-                currentMethod:'SPP'
+                currentMethod:'SPP',
+                currentAnnotation:['FOXA2',
+                'MAFB',
+                'NKX2.2',
+                'NKX6.1',
+                'PDX1']
             };
             _.forEach(_.groupBy(uniqueRecords, function (o) { return o.var_id }), function (value,key) {
                 dataGroupings.groupByVarId.push({name:key,arrayOfRecords:value});
