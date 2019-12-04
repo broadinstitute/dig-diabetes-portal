@@ -16,7 +16,7 @@ tfbs&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" 
 </script>
 
 <script id="tfbsVariantTableIndividualAnnotationLabel"  type="x-tmpl-mustache">
-<div class="varAllEpigenetics varTfbsEpigenetics staticMethodLabels annotationName_SPP methodName_SPP initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation {{isBlank}}"
+<div class="varAllEpigenetics varTfbsEpigenetics staticMethodLabels annotationName_{{annotationName}} methodName_SPP initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation {{isBlank}}"
  sortField=0>
 <div style="font-weight: bold">TFBS</div>
 {{annotationName}}</div>
@@ -33,7 +33,7 @@ tfbs&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" 
 
 
 <script id="tfbsVariantTableTissueSpecificRowLabel"  type="x-tmpl-mustache">
-<div class="varAllEpigenetics varAbcEpigenetics staticMethodLabels annotationName_GenePrediction methodName_SPP  {{isBlank}} initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation"
+<div class="varAllEpigenetics varAbcEpigenetics staticMethodLabels annotationName_{{annotationName}} methodName_SPP tissueId_{{safeTissueId}} {{isBlank}} initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation"
  sortField=0>
 {{tissue_name}}</div>
 </script>
@@ -41,7 +41,7 @@ tfbs&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" 
 
 <script id="tfbsVariantTableBody"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortField="{{significanceValue}}"
-             class="varAllEpigenetics varTfbsEpigenetics tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
+             class="varAllEpigenetics varTfbsEpigenetics tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}} annotationName_{{annotationName}} methodName_SPP tissueId_{{safeTissueId}} ">
 
                     {{#recordsExist}}
 
