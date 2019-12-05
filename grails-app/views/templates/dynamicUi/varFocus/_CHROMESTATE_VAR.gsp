@@ -39,7 +39,7 @@ records={{numberRecords}}
 </script>
 <script id="chromStateVariantTableBody"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortField="{{significanceValue}}"
-             class="varAllEpigenetics varChromHmmEpigenetics chromState tissueCategory_{{tissueCategoryNumber}} methodName_{{method}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
+             class="multiRecordCell varAllEpigenetics varChromHmmEpigenetics chromState tissueCategory_{{tissueCategoryNumber}} methodName_{{method}} annotationName_{{annotation}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                    {{#recordsExist}}
 
                      {{/recordsExist}}

@@ -2291,7 +2291,8 @@ mpgSoftware.dynamicUi = (function () {
                     rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(currentMethod,
                         Mustache.render($('#' + dataAnnotationType.dataAnnotation.drillDownSubCategoryWriter)[0].innerHTML,
                             {
-                                annotationName: currentMethod,
+                                methodName: currentMethod,
+                                annotationName: currentAnnotation,
                                 indexInOneDimensionalArray: (((numberOfExistingRows + addedRows) * numberOfColumns) + 1),
                                 isBlank: "isBlank"
                             }),
@@ -2334,6 +2335,7 @@ mpgSoftware.dynamicUi = (function () {
                         rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(annotation,
                             Mustache.render($('#' + dataAnnotationType.dataAnnotation.drillDownSubCategoryWriter)[0].innerHTML,
                                 {
+                                    methodName: currentMethod,
                                     annotationName: alternateAnnotation,
                                     indexInOneDimensionalArray: (((numberOfExistingRows + addedRows) * numberOfColumns) + 1),
                                     isBlank: isBlank
@@ -3990,8 +3992,11 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
             _.forEach($('div.epigeneticCellElement'),function(oneTr){
                 const currentAnnotation = extractClassBasedTrailingString(oneTr,"annotationName_");
                 const currentTissue = extractClassBasedTrailingString(oneTr,"tissueId_");
+                const currentMethod = extractClassBasedTrailingString(oneTr,"methodName_");
                 if (_.includes(uniqueTissues,currentTissue)&&
-                    ((currentAnnotation.length===0)||(_.includes(uniqueAnnotations,currentAnnotation)))){
+                    ((currentAnnotation.length===0)||(_.includes(uniqueAnnotations,currentAnnotation)))&&
+                    ((currentMethod.length===0)||(_.includes(uniqueMethods,currentMethod)))
+                ){
                     $(oneTr).show();
                     $(oneTr).addClass('yesDisplay');
                     $(oneTr).parent().addClass('yesDisplay');
@@ -4007,6 +4012,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
                     $(oneTr).addClass('skipDisplay');
                 }
             });
+
         } else if (filterByExplicitMethod){
             _.forEach($('div.epigeneticCellElement'),function(oneTr){
                 const currentAnnotation = extractClassBasedTrailingString(oneTr,"annotationName_");
@@ -4023,6 +4029,14 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
                 }
             });
         }
+        _.forEach($('div.multiRecordCell'),function(multiRecordCell){
+            const multiRecordCellDom = $(multiRecordCell);
+            if (multiRecordCellDom.find('div.epigeneticCellElement.yesDisplay').length === 0){
+                multiRecordCellDom.hide();
+            } else {
+                multiRecordCellDom.show();
+            }
+        });
 
         // there are two reasons we might want to NOT display a row.
         //   1) it is not one of our 'uniqueAnnotations' that the user has asked about

@@ -34,13 +34,13 @@ H3K27AC&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="botto
 </script>
 <script id="h3k27acVariantTableBody"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortfield="{{significanceValue}}"
-             class="varAllEpigenetics varH3k27acEpigenetics tissueCategory_{{tissueCategoryNumber}} methodName_{{method}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
+             class="multiRecordCell varAllEpigenetics varH3k27acEpigenetics tissueCategory_{{tissueCategoryNumber}} methodName_{{method}} annotationName_{{annotation}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
 
                     {{#recordsExist}}
 
                      {{/recordsExist}}
                          {{#tissueRecords}}
-                          <div class="epigeneticCellElement tissueId_{{safeTissueId}} annotationName_{{annotation}}">
+                          <div class="epigeneticCellElement tissueId_{{safeTissueId}} methodName_{{method}} annotationName_{{annotation}}">
                                {{tissue_name}}
                             </div>
                           {{/tissueRecords}}

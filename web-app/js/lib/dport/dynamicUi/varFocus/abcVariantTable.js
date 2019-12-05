@@ -103,11 +103,13 @@ mpgSoftware.dynamicUi.abcVariantTable = (function () {
 
             // take all the records for each row and insert them into the intermediateDataStructure
             function(tissueRecords,
-                     recordsCellPresentationString,
-                     significanceCellPresentationString,
+                     method,
+                     annotation,
                      dataAnnotationTypeCode,
                      significanceValue,
                      tissueName ){
+                const recordsCellPresentationString = "";
+                const significanceCellPresentationString = "";
                 return {
                     tissueRecords:tissueRecords,
                     uniqueTissueRecords:_.uniqBy(tissueRecords,'tissue_id'),
@@ -120,7 +122,10 @@ mpgSoftware.dynamicUi.abcVariantTable = (function () {
                     significanceValue:significanceValue,
                     tissueNameKey:( typeof tissueName !== 'undefined')?tissueName.replace(/ /g,"_"):'var_name_missing',
                     tissueName:tissueName,
-                    tissuesFilteredByAnnotation:tissueRecords};
+                    tissuesFilteredByAnnotation:tissueRecords,
+                    method:method,
+                    annotation:annotation
+                };
 
             },
             createSingleAbcCell

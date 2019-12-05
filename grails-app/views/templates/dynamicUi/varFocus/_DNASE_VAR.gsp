@@ -34,13 +34,13 @@ DNase&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom"
 </script>
 <script id="dnaseVariantTableBody"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortfield="{{significanceValue}}"
-             class="varAllEpigenetics varDnaseEpigenetics tissueCategory_{{tissueCategoryNumber}}  methodName_{{method}}  significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
+             class="multiRecordCell varAllEpigenetics varDnaseEpigenetics tissueCategory_{{tissueCategoryNumber}} methodName_{{method}} annotationName_{{annotation}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
 
                     {{#recordsExist}}
 
                      {{/recordsExist}}
                          {{#tissueRecords}}
-                          <div class="epigeneticCellElement tissueId_{{safeTissueId}} annotationName_{{annotation}}">
+                          <div class="epigeneticCellElement tissueId_{{safeTissueId}}  methodName_{{method}} annotationName_{{annotation}}">
                                {{tissue_name}}
                             </div>
                           {{/tissueRecords}}

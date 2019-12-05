@@ -41,13 +41,13 @@ tfbs&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" 
 
 <script id="tfbsVariantTableBody"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortField="{{significanceValue}}"
-             class="varAllEpigenetics varTfbsEpigenetics tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}} annotationName_{{annotationName}} methodName_SPP tissueId_{{safeTissueId}} ">
+             class="multiRecordCell varAllEpigenetics varTfbsEpigenetics tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}} annotationName_{{annotationName}} methodName_SPP tissueId_{{safeTissueId}} ">
 
                     {{#recordsExist}}
 
                      {{/recordsExist}}
                          {{#tissueRecords}}
- <div class="epigeneticCellElement tissueId_{{safeTissueId}} annotationName_{{annotation}}">
+ <div class="epigeneticCellElement tissueId_{{safeTissueId}} methodName_SPP annotationName_{{annotation}}">
                                {{tissue_name}}
                             </div>
                           {{/tissueRecords}}

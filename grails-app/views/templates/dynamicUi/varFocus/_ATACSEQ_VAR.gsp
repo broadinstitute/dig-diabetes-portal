@@ -34,7 +34,7 @@ ATAC-seq&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bott
 </script>
 <script id="atacSeqVariantTableBody"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortfield="{{significanceValue}}"
-             class="varAllEpigenetics varAtacSeqEpigenetics tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
+             class="multiRecordCell varAllEpigenetics varAtacSeqEpigenetics tissueCategory_{{tissueCategoryNumber}} methodName_{{method}} annotationName_{{annotation}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
 
                     {{#recordsExist}}
 

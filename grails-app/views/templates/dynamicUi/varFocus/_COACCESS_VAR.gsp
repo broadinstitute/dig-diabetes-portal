@@ -35,14 +35,14 @@ coaccessibility&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placemen
 
 <script id="coaccessibilityVariantTableBody"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortField="{{significanceValue}}"
-             class="varAllEpigenetics varCoaccessibilityEpigenetics methodName_{{method}} annotationName_{{annotation}} tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
-                <div>
+             class="multiRecordCell varAllEpigenetics varCoaccessibilityEpigenetics methodName_{{method}} annotationName_{{annotation}} tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
+                %{--<div>--}%
                {{#uniqueTissueRecords}}
                   <div class="epigeneticCellElement tissueId_{{safeTissueId}}  methodName_{{method}} annotationName_{{annotation}}">
                     {{tissue_name}}
                   </div>
                {{/uniqueTissueRecords}}
-               </div>
+               %{--</div>--}%
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'coaccessibility predictions for {{tissueName}}',mpgSoftware.dynamicUi.extractStraightFromTarget)" class="cellExpander"
                data-target="#depict_coaccessibility_{{tissueNameKey}}" style="color:black">all records&gt;&gt;
                </a>
