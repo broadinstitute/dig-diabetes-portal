@@ -3856,7 +3856,11 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
 
     const filterEpigeneticTableAnnotationsOnTop = function(oneDiv,blankRowsAreOkay,weAreInTissueMode,uniqueAnnotations,uniqueMethods){
         if (blankRowsAreOkay){
-            $('tr.doNotDisplay').removeClass('doNotDisplay').show();
+            $('tr.doNotDisplay').removeClass('doNotDisplay').show(); // these should never exist.  Can we remove this line?
+            // now go through every annotation that is marked is not displayed, and display everythi
+            $('div.varAnnotation.doNotDisplay').removeClass('doNotDisplay').show();
+            $('#mainVariantDiv div').parent('.varAllEpigenetics').parent().show();
+            $('#mainVariantDiv div').parent('.header').show();
             return;
         }
 
@@ -3879,9 +3883,12 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
 
         } else {
             if ((_.includes(uniqueAnnotations,currentAnnotation))&&
-                (_.includes(uniqueMethods,currentMethod))){
+                (_.includes(uniqueMethods,currentMethod))&&
+                $('#mainVariantDiv div.yesDisplay.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess).length>0){
 
-
+                // Mark this annotation as displayed
+                $('#mainVariantDiv div.varAnnotation.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess).removeClass('doNotDisplay');
+                // display the rest of the column
                 $('#mainVariantDiv div.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess).parent('.varAllEpigenetics').parent().show();
                 $('#mainVariantDiv div.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess).parent('.header').show();
 
@@ -3889,8 +3896,9 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
 
             } else {
 
-
-                //we have a header with one annotation but no table cells. This must mean that we had no data, this is a blank row, and we have to work strictly with the method
+                // Mark this annotation as NOT displayed
+                $('#mainVariantDiv div.varAnnotation.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess).addClass('doNotDisplay');
+                // hide the rest of the column
                 $('#mainVariantDiv div.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess).parent('.varAllEpigenetics').parent().hide();
                 $('#mainVariantDiv div.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess).parent('.header').hide();
 
@@ -3905,6 +3913,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
 
     const filterEpigeneticTableVariantsOnTop = function(oneDiv,blankRowsAreOkay,weAreInTissueMode,uniqueAnnotations,uniqueMethods){
         if (blankRowsAreOkay){
+            // mark the rows as displayed
             $('tr.doNotDisplay').removeClass('doNotDisplay').show();
             return;
         }
@@ -3923,15 +3932,22 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
 
         } else {
             if ((_.includes(uniqueAnnotations,currentAnnotation))&&
-                (_.includes(uniqueMethods,currentMethod))){
+                (_.includes(uniqueMethods,currentMethod))&&
+                $(oneDiv).parent().parent().find('div.yesDisplay').length>0){
 
-                        $(oneDiv).parent().parent().show();
-                        $(oneDiv).parent().parent().removeClass('doNotDisplay');
+                // Mark this annotation as  displayed
+                $('#mainVariantDiv div.varAnnotation.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess).removeClass('doNotDisplay');
+                // now hide the row
+                $(oneDiv).parent().parent().show();
+                $(oneDiv).parent().parent().removeClass('doNotDisplay');
 
             } else {
 
-                    $(oneDiv).parent().parent().addClass('doNotDisplay');
-                    $(oneDiv).parent().parent().hide();
+                // Mark this annotation as NOT displayed
+                $('#mainVariantDiv div.varAnnotation.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess).addClass('doNotDisplay');
+                // now hide the row
+                $(oneDiv).parent().parent().addClass('doNotDisplay');
+                $(oneDiv).parent().parent().hide();
 
             }
         }
@@ -4016,7 +4032,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
         } else if (filterByExplicitMethod){
             _.forEach($('div.epigeneticCellElement'),function(oneTr){
                 const currentAnnotation = extractClassBasedTrailingString(oneTr,"annotationName_");
-
+                const currentMethod = extractClassBasedTrailingString(oneTr,"methodName_");
                 if ((_.includes(uniqueMethods,currentAnnotation)||
                     ((currentAnnotation.length===0)||(_.includes(uniqueAnnotations,currentAnnotation))))){
                     $(oneTr).show();
@@ -4041,6 +4057,9 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
         // there are two reasons we might want to NOT display a row.
         //   1) it is not one of our 'uniqueAnnotations' that the user has asked about
         //   2) it has no values that make the significance cut off
+
+
+        // Loop once for each annotation
         _.forEach($('div.varAnnotation'),function(oneDiv){
             if (currentTableForm === 'variantTableVariantHeaders') {
                 filterEpigeneticTableVariantsOnTop(oneDiv,blankRowsAreOkay,weAreInTissueMode,uniqueAnnotations,uniqueMethods);
