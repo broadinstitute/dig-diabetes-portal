@@ -2369,7 +2369,7 @@ mpgSoftware.dynamicUi = (function () {
                 numberOfExistingRows = tissueIntermediateDataStructure.rowsToAdd.length+6;
                 addedRows = 0;
                 if (arrayOfDataToDisplay[0].data.groupByTissue.length > 0) {
-                    { // we have real data
+                    { // we have data.  Step through each tissue.
                         _.forEach(arrayOfDataToDisplay[0].data.groupByTissue, function (recordsForTissue) {
                             tissueOptions.push({
                                 name: recordsForTissue.name,
@@ -2381,7 +2381,7 @@ mpgSoftware.dynamicUi = (function () {
                             // Either retrieve an existing row for this tissue, or else create a new one
 
                             let rowWeAreAddingTo = _.find(tissueIntermediateDataStructure.rowsToAdd, {'rowTag': tissueName});
-                            if (typeof rowWeAreAddingTo === 'undefined') {
+                            if (typeof rowWeAreAddingTo === 'undefined') { // we have never seen this tissue before. Add a new row.
                                 addRowHolderToIntermediateDataStructure(dataAnnotationTypeCode,
                                                                         tissueIntermediateDataStructure,
                                                                         tissueName,
@@ -2403,6 +2403,8 @@ mpgSoftware.dynamicUi = (function () {
                                     Mustache.render($('#' + dataAnnotationType.dataAnnotation.tissueSubCategoryWriter)[0].innerHTML,
                                         {
                                             tissueName: tissueName,
+                                            method: currentMethod,
+                                            annotation: currentAnnotation,
                                             indexInOneDimensionalArray: (((numberOfExistingRows + addedRows) * numberOfColumns) + 1),
                                             isBlank: isBlank,
                                             tissue_name: tissue_name
@@ -2436,7 +2438,7 @@ mpgSoftware.dynamicUi = (function () {
                                         arrayOfRecords = _.uniq(arrayOfRecords);
                                     }
                                     var renderData = placeDataIntoRenderForm(arrayOfRecords,
-                                        "", "",
+                                        getMethod, currentAnnotation,
                                         dataAnnotationTypeCode,
                                         0.5,
                                         oneRecord.name);

@@ -286,6 +286,9 @@ modules = {
         resource url: 'js/lib/dport/dynamicUi.js'
         resource url: 'css/dport/dynamicUi.css'
 
+        resource url: 'js/lib/dport/dynamicUi/shared/sortUtility.js'
+        resource url: 'js/lib/dport/dynamicUi/shared/categorizer.js'
+        resource url: 'js/lib/dport/dynamicUi/shared/renderData.js'
         resource url: 'js/lib/dport/dynamicUi/varFocus/variantTableHeaders.js'
         resource url: 'js/lib/dport/dynamicUi/varFocus/atacSeqVariantTable.js'
         resource url: 'js/lib/dport/dynamicUi/varFocus/tfbsVariantTable.js'

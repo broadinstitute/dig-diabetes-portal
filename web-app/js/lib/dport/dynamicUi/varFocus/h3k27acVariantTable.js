@@ -4,6 +4,12 @@ mpgSoftware.dynamicUi = mpgSoftware.dynamicUi || {};   // second level encapsula
 mpgSoftware.dynamicUi.h3k27acVariantTable = (function () {
     "use strict";
 
+    /***
+     * some objects that we can use to access shared prototype methods
+     */
+    const categorizor = new mpgSoftware.dynamicUi.sharedCategorizor.Categorizor();
+    const sortUtility = new mpgSoftware.dynamicUi.sharedSortUtility.SortUtility();
+    const renderData = new mpgSoftware.dynamicUi.sharednameRenderData.RenderData()
 
     /***
      * 1) a function to process records
@@ -86,56 +92,20 @@ mpgSoftware.dynamicUi.h3k27acVariantTable = (function () {
     var displayTissueInformationFromH3k27ac = function (idForTheTargetDiv, objectContainingRetrievedRecords, callingParameters ) {
 
         mpgSoftware.dynamicUi.displayForVariantTable(idForTheTargetDiv, // which table are we adding to
-            // callingParameters.code, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            // callingParameters.nameOfAccumulatorField, // name of the persistent field where the data we received is stored
-            // callingParameters.nameOfAccumulatorFieldWithIndex,
             callingParameters,
-            // insert header records as necessary into the intermediate structure, and return header names that we can match on for the columns
             function(records,tissueTranslations){
-                //return _.orderBy(_.filter(records,function(o){return (o.p_value<0.05)}),['p_value'],['asc']);
                 return _.orderBy(records,['SOURCE'],['asc']);
             },
-
-            // take all the records for each row and insert them into the intermediateDataStructure
-            function(tissueRecords,
-                     method,
-                     annotation,
-                     dataAnnotationTypeCode,
-                     significanceValue,
-                     tissueName ){
-                const recordsCellPresentationString = "";
-                const significanceCellPresentationString = "";
-                return {
-                    tissueRecords:tissueRecords,
-                    recordsExist:(tissueRecords.length>0)?[1]:[],
-                    cellPresentationStringMap:{
-                        'Significance':significanceCellPresentationString,
-                        'Records':recordsCellPresentationString
-                    },
-                    dataAnnotationTypeCode:dataAnnotationTypeCode,
-                    significanceValue:significanceValue,
-                    tissueNameKey:( typeof tissueName !== 'undefined')?tissueName.replace(/ /g,"_"):'var_name_missing',
-                    tissueName:tissueName,
-                    tissuesFilteredByAnnotation:tissueRecords,
-                    method:method,
-                    annotation:annotation};
-
-            },
-            createSingleDnaseCell
+            Object.getPrototypeOf(renderData).variantTableAnnotationDominant,
+            Object.getPrototypeOf(renderData).variantTableTissueDominant
         )
 
     };
 
 
 
-    /***
-     *  3) set of categorizor routines
-     * @type {Categorizor}
-     */
-    var categorizor = new mpgSoftware.dynamicUi.Categorizor();
     categorizor.categorizeSignificanceNumbers = Object.getPrototypeOf(categorizor).genePValueSignificance;
 
-    let sortUtility = new mpgSoftware.dynamicUi.SortUtility();
     const sortRoutine =  Object.getPrototypeOf(sortUtility).numericalComparisonWithEmptiesAtBottom;
 
 

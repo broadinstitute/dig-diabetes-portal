@@ -4,6 +4,12 @@ mpgSoftware.dynamicUi = mpgSoftware.dynamicUi || {};   // second level encapsula
 mpgSoftware.dynamicUi.tfbsVariantTable = (function () {
     "use strict";
 
+    /***
+     * some objects that we can use to access shared prototype methods
+     */
+    const categorizor = new mpgSoftware.dynamicUi.sharedCategorizor.Categorizor();
+    const sortUtility = new mpgSoftware.dynamicUi.sharedSortUtility.SortUtility();
+    const renderData = new mpgSoftware.dynamicUi.sharednameRenderData.RenderData()
 
     /***
      * 1) a function to process records
@@ -15,23 +21,6 @@ mpgSoftware.dynamicUi.tfbsVariantTable = (function () {
         if (( typeof data !== 'undefined')&&
             ( typeof data.data !== 'undefined')){
             arrayOfRecords.splice(0,arrayOfRecords.length);
-            // let arrayOfData = [];
-            // var recordsGroupedByVarId = _.groupBy(data.data, function (o) { return o.var_id });
-            // _.forEach(recordsGroupedByVarId, function (value,key) {
-            //     const uniqueRecords = _.uniqWith(value,
-            //         (recA, recB) =>
-            //             recA.annotation === recB.annotation &&
-            //             recA.tissue_id === recB.tissue_id
-            //     );
-            //     const allRecords = _.map(uniqueRecords, function (oneValue){
-            //         oneValue['safeTissueId'] = oneValue.tissue_id.replace(":","_");
-            //         return oneValue;
-            //     });
-            //     var allRecordsForOneVariety = {name:key,arrayOfRecords:allRecords};
-            //     arrayOfData.push(allRecordsForOneVariety);
-            // });
-            // arrayOfRecords.push({header:{ },
-            //     data:arrayOfData});
             let uniqueRecords = _.uniqWith(
                 data.data,
                 (recA, recB) =>
@@ -110,42 +99,12 @@ mpgSoftware.dynamicUi.tfbsVariantTable = (function () {
     var displayTissueInformationFromTfbs = function (idForTheTargetDiv, objectContainingRetrievedRecords, callingParameters ) {
 
         mpgSoftware.dynamicUi.displayForVariantTable(idForTheTargetDiv, // which table are we adding to
-            // callingParameters.code, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            // callingParameters.nameOfAccumulatorField, // name of the persistent field where the data we received is stored
-            // callingParameters.nameOfAccumulatorFieldWithIndex,
             callingParameters,
-            // insert header records as necessary into the intermediate structure, and return header names that we can match on for the columns
             function(records,tissueTranslations){
-                //return _.orderBy(_.filter(records,function(o){return (o.p_value<0.05)}),['p_value'],['asc']);
                 return _.orderBy(records,['SOURCE'],['asc']);
             },
-
-            // take all the records for each row and insert them into the intermediateDataStructure
-            function(tissueRecords,
-                     method,
-                     annotation,
-                     dataAnnotationTypeCode,
-                     significanceValue,
-                     tissueName ){
-                const recordsCellPresentationString = "";
-                const significanceCellPresentationString = "";
-                return {
-                    tissueRecords:tissueRecords,
-                    recordsExist:(tissueRecords.length>0)?[1]:[],
-                    cellPresentationStringMap:{
-                        'Significance':significanceCellPresentationString,
-                        'Records':recordsCellPresentationString
-                    },
-                    dataAnnotationTypeCode:dataAnnotationTypeCode,
-                    significanceValue:significanceValue,
-                    tissueNameKey:( typeof tissueName !== 'undefined')?tissueName.replace(/ /g,"_"):'var_name_missing',
-                    tissueName:tissueName,
-                    tissuesFilteredByAnnotation:tissueRecords,
-                    method:method,
-                    annotation:annotation};
-
-            },
-            createSingleTfbsCell
+            Object.getPrototypeOf(renderData).variantTableAnnotationDominant,
+            Object.getPrototypeOf(renderData).variantTableTissueDominant
         )
 
     };
@@ -156,7 +115,6 @@ mpgSoftware.dynamicUi.tfbsVariantTable = (function () {
      *  3) set of categorizor routines
      * @type {Categorizor}
      */
-    var categorizor = new mpgSoftware.dynamicUi.Categorizor();
     categorizor.categorizeSignificanceNumbers = Object.getPrototypeOf(categorizor).genePValueSignificance;
 
 

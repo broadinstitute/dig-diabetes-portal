@@ -6,6 +6,13 @@ mpgSoftware.dynamicUi.tfMotifVariantTable = (function () {
 
 
     /***
+     * some objects that we can use to access shared prototype methods
+     */
+    const categorizor = new mpgSoftware.dynamicUi.sharedCategorizor.Categorizor();
+    const sortUtility = new mpgSoftware.dynamicUi.sharedSortUtility.SortUtility();
+    const renderData = new mpgSoftware.dynamicUi.sharednameRenderData.RenderData()
+
+    /***
      * 1) a function to process records
      * @param data
      * @param rawGeneAssociationRecords
@@ -168,11 +175,9 @@ mpgSoftware.dynamicUi.tfMotifVariantTable = (function () {
      *  3) set of categorizor routines
      * @type {Categorizor}
      */
-    var categorizor = new mpgSoftware.dynamicUi.Categorizor();
     categorizor.categorizeSignificanceNumbers = Object.getPrototypeOf(categorizor).genePValueSignificance;
 
 
-    let sortUtility = new mpgSoftware.dynamicUi.SortUtility();
     const sortRoutine = Object.getPrototypeOf(sortUtility).textComparisonWithEmptiesAtBottom;
 
 

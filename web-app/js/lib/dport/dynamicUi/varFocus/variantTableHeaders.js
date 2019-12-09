@@ -260,7 +260,7 @@ mpgSoftware.dynamicUi.variantTableHeaders = (function () {
     };
 
 
-    let sortUtility = new mpgSoftware.dynamicUi.SortUtility();
+    let sortUtility = new mpgSoftware.dynamicUi.sharedSortUtility.SortUtility();
     const sortRoutine = function(a, b, direction, currentSortObject){
         switch(currentSortObject.currentSort){
             case 'VariantCoding':
