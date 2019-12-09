@@ -28,36 +28,14 @@ mpgSoftware.dynamicUi.tfbsVariantTable = (function () {
                     recA.var_id === recB.var_id &&
                     recA.tissue_id === recB.tissue_id
             );
-            _.forEach(uniqueRecords,function (oneValue){oneValue['safeTissueId'] = oneValue.tissue_id.replace(":","_");});
-            let dataGroupings = {groupByVarId:[],
-                groupByAnnotation:[],
-                groupByTissue:[],
-                groupByTissueAnnotation:[],
-                currentMethod:'SPP',
-                currentAnnotation:['FOXA2',
-                'MAFB',
-                'NKX2.2',
-                'NKX6.1',
-                'PDX1']
-            };
-            _.forEach(_.groupBy(uniqueRecords, function (o) { return o.var_id }), function (value,key) {
-                dataGroupings.groupByVarId.push({name:key,arrayOfRecords:value});
-            });
-            _.forEach( _.groupBy(uniqueRecords, function (o) { return o.annotation }), function (recordsGroupedByAnnotation,annotation) {
-                let groupedByAnnotation = {name:annotation, arrayOfRecords:[]};
-                _.forEach( _.groupBy(recordsGroupedByAnnotation, function (o) { return o.var_id }), function (recordsSubGroupedByVarId,varId) {
-                    groupedByAnnotation.arrayOfRecords.push({name:varId,arrayOfRecords:recordsSubGroupedByVarId});
-                });
-                dataGroupings.groupByAnnotation.push(groupedByAnnotation);
-            });
-            _.forEach( _.groupBy(uniqueRecords, function (o) { return o.tissue_id }), function (recordsGroupedByTissue,tissue) {
-                let groupedByTissue = {name:tissue,  tissue_name:recordsGroupedByTissue[0].tissue_name, arrayOfRecords:[]};
-                _.forEach( _.groupBy(recordsGroupedByTissue, function (o) { return o.var_id }), function (recordsSubGroupedByVarId,varId) {
-                    groupedByTissue.arrayOfRecords.push({name:varId,arrayOfRecords:recordsSubGroupedByVarId});
-                });
-                dataGroupings.groupByTissue.push(groupedByTissue);
-            });
-
+            let dataGroupings = Object.getPrototypeOf(renderData).groupRawData(uniqueRecords,
+                'SPP',
+                ['FOXA2',
+                    'MAFB',
+                    'NKX2.2',
+                    'NKX6.1',
+                    'PDX1']
+            );
             arrayOfRecords.push({header:{
                 },
                 data:dataGroupings});

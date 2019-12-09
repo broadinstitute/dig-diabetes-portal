@@ -18,12 +18,12 @@ ATAC-seq&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bott
 
 
 <script id="atacSeqVariantTableTissueSpecificHeaderLabel"  type="x-tmpl-mustache">
-<div class="varEpigeneticsLabel varTissueEpigenetics varAllEpigenetics varAbcEpigenetics variantEpigenetics initialLinearIndex_{{indexInOneDimensionalArray}}">ATAC-seq</div>
+<div class="varEpigeneticsLabel varTissueEpigenetics varAllEpigenetics varAbcEpigenetics variantEpigenetics initialLinearIndex_{{indexInOneDimensionalArray}}"></div>
 </script>
 
 
 <script id="atacSeqVariantTableTissueSpecificRowLabel"  type="x-tmpl-mustache">
-<div class="varAllEpigenetics varAtacSeqEpigenetics staticMethodLabels methodName_{{method}} annotationName_{{annotation}}  tissueName_{{tissueName}} {{isBlank}} initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation"
+<div class="varAllEpigenetics varAtacSeqEpigenetics staticMethodLabels methodName_{{method}} annotationName_{{annotation}} tissueId_{{safeTissueId}} {{isBlank}} initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation"
  sortField=0>
 {{tissue_name}}</div>
 </script>

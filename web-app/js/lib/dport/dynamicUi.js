@@ -2213,13 +2213,11 @@ mpgSoftware.dynamicUi = (function () {
      * @param mapSortAndFilterFunction
      * @param placeDataIntoRenderForm
      */
-    var displayForVariantTable = function (idForTheTargetDiv, // which table are we adding to
-                                           callingParameters,
-                                        // dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-                                        // nameOfAccumulatorField, // name of the persistent field where the data we received is stored
-                                        // nameOfAccumulatorFieldWithIndex, // we may wish to pull out one record for summary purposes
-                                        mapSortAndFilterFunction,
-                                        placeDataIntoRenderForm ) { // sort and filter the records we will use.  Resulting array must have fields tissue, value, and numericalValue
+    var displayForVariantTable = function ( idForTheTargetDiv, // which table are we adding to
+                                            callingParameters,
+                                            mapSortAndFilterFunction,
+                                            variantTableAnnotationDominant,
+                                            variantTableTissueDominant) { // sort and filter the records we will use.  Resulting array must have fields tissue, value, and numericalValue
         let dataAnnotationTypeCode = callingParameters.code;
         let nameOfAccumulatorField = callingParameters.nameOfAccumulatorField;
         let nameOfAccumulatorFieldWithIndex = callingParameters.nameOfAccumulatorFieldWithIndex;
@@ -2258,15 +2256,15 @@ mpgSoftware.dynamicUi = (function () {
                     accumulatorFieldWithIndex[0].header['annotationDisplay'] = new IntermediateDataStructure();
                 }
                 dataVector = accumulatorFieldWithIndex[0].data;
-                ////headerNames = _.map(dataVector, 'name');
                 headerNames = _.map(dataVector, function(o){
                     return o['name'].split(",")[0];
                 });
 
             }
-            //}
 
-            // fill in all of the column cells
+
+            // Create a grid of data cells with one annotation per row.  Sometimes we have more than one annotation per method,
+            //  in which case this section might generate multiple rows.  Whatever happens, however, we add our rose to the bottom of the grid.
             var numberOfExistingRows = $(idForTheTargetDiv).dataTable().DataTable().rows()[0].length + 1;
             var numberOfColumns = sharedTable.numberOfColumns;
             if (typeof arrayOfDataToDisplay[0].data.groupByAnnotation !== 'undefined') {
@@ -2282,7 +2280,6 @@ mpgSoftware.dynamicUi = (function () {
                                                             intermediateDataStructure,
                                                             'noRowTag',
                                                             callingParameters.baseDomElement );
-                    //const dataVector = getAccumulatorObject(dataAnnotationType.dataAnnotation.nameOfAccumulatorFieldWithIndex)[0].data;
                     let rowWeAreAddingTo = _.last(intermediateDataStructure.rowsToAdd);
                     rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(currentMethod,
                         Mustache.render($('#' + dataAnnotationType.dataAnnotation.drillDownCategoryWriter)[0].innerHTML,
@@ -2351,7 +2348,7 @@ mpgSoftware.dynamicUi = (function () {
                             if (indexOfColumn === -1) {
                                 console.log("Did not find index of epigenetic var_id==" + oneRecord.name + ".  Shouldn't we?")
                             } else {
-                                var renderData = placeDataIntoRenderForm(oneRecord.arrayOfRecords,
+                                var renderData = variantTableAnnotationDominant(oneRecord.arrayOfRecords,
                                     "", "",
                                     dataAnnotationTypeCode,
                                     0.5,
@@ -2365,6 +2362,8 @@ mpgSoftware.dynamicUi = (function () {
                     });
                 }
 
+                // create a grid of cells in which we have one row for each tissue.  This is a little trickier then adding rows on a per annotation basis,
+                //  since we will sometimes come across records that need to be added to a tissue for which we've already created a row.
                 const tissueIntermediateDataStructure = accumulatorFieldWithIndex[0].header['tissueDisplay'];
                 numberOfExistingRows = tissueIntermediateDataStructure.rowsToAdd.length+6;
                 addedRows = 0;
@@ -2373,10 +2372,12 @@ mpgSoftware.dynamicUi = (function () {
                         _.forEach(arrayOfDataToDisplay[0].data.groupByTissue, function (recordsForTissue) {
                             tissueOptions.push({
                                 name: recordsForTissue.name,
-                                value: recordsForTissue.name + "_" + currentMethod
+                                value: recordsForTissue.safeTissueId
                             });
                             const tissueName = recordsForTissue.name;
                             const tissue_name = recordsForTissue.tissue_name;
+                            const safeTissueId = recordsForTissue.safeTissueId;
+
 
                             // Either retrieve an existing row for this tissue, or else create a new one
 
@@ -2388,8 +2389,9 @@ mpgSoftware.dynamicUi = (function () {
                                                                         callingParameters.baseDomElement );
                                 rowWeAreAddingTo = _.last(tissueIntermediateDataStructure.rowsToAdd);
                                 rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(tissueName,
-                                    Mustache.render($('#' + dataAnnotationType.dataAnnotation.tissueCategoryWriter)[0].innerHTML,
-                                        {indexInOneDimensionalArray: ((numberOfExistingRows + addedRows) * numberOfColumns)}),
+                                    Mustache.render($('#' + dataAnnotationType.dataAnnotation.tissueCategoryWriter)[0].innerHTML
+                                                ,{indexInOneDimensionalArray:""}
+                                        ),
                                     dataAnnotationType.dataAnnotation.subcategory + " header", 'LIT'));
 
                                 //headerNames = _.map(dataVector, 'name');
@@ -2405,14 +2407,16 @@ mpgSoftware.dynamicUi = (function () {
                                             tissueName: tissueName,
                                             method: currentMethod,
                                             annotation: currentAnnotation,
-                                            indexInOneDimensionalArray: (((numberOfExistingRows + addedRows) * numberOfColumns) + 1),
+                                            indexInOneDimensionalArray: '',
+                                            //indexInOneDimensionalArray: (((numberOfExistingRows + addedRows) * numberOfColumns) + 1),
                                             isBlank: isBlank,
-                                            tissue_name: tissue_name
+                                            tissue_name: tissue_name,
+                                            safeTissueId: safeTissueId
                                         }),
                                     dataAnnotationType.dataAnnotation.subcategory, 'LIT'));
                                 _.forEach(dataVector, function (oneRecord) {
                                     rowWeAreAddingTo.columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
-                                        {otherClasses: "methodName_" + currentMethod + " annotationName_" + tissueName}, "discoDownAndCheckOutTheShow", 'EMP'));
+                                        {otherClasses: "methodName_" + currentMethod + " annotationName_" + currentAnnotation+"  tissueId_"+safeTissueId}, "emptyRecord", 'EMP'));
                                 });
                             } else {
                                 console.log("We recognize this row")
@@ -2426,19 +2430,12 @@ mpgSoftware.dynamicUi = (function () {
                                 if (indexOfColumn === -1) {
                                     console.log("Did not find index of tissue epigenetic var_id===" + oneRecord.name + ".  Shouldn't we?")
                                 } else {
+                                    const specificMethod = oneRecord.method;
+                                    const specificAnnotation = oneRecord.annotation;
                                     const existingCell = rowWeAreAddingTo.columnCells[indexOfColumn + 2];
-                                    let arrayOfRecords = [];
-                                    if ( typeof existingCell === 'undefined'){
-                                        console.log('wtf');
-                                    } else {
-                                        if (existingCell.dataAnnotationTypeCode !== 'EMP') {
-                                            arrayOfRecords = existingCell.renderData.tissueRecords;
-                                        }
-                                        arrayOfRecords = _.concat(arrayOfRecords, oneRecord.arrayOfRecords);
-                                        arrayOfRecords = _.uniq(arrayOfRecords);
-                                    }
-                                    var renderData = placeDataIntoRenderForm(arrayOfRecords,
-                                        getMethod, currentAnnotation,
+                                    const renderData = variantTableTissueDominant( oneRecord,
+                                        specificMethod, specificAnnotation,
+                                        safeTissueId, existingCell,
                                         dataAnnotationTypeCode,
                                         0.5,
                                         oneRecord.name);
@@ -3868,19 +3865,38 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
 
         const currentAnnotation = extractClassBasedTrailingString(oneDiv,"annotationName_");
         const currentMethod = extractClassBasedTrailingString(oneDiv,"methodName_");
+        const currentTissue = extractClassBasedTrailingString(oneDiv,"tissueId_");
         let methodNameToProcess = extractClassBasedTrailingString(oneDiv,"methodName_");
         let annotationNameToProcess = extractClassBasedTrailingString(oneDiv,"annotationName_");
         let isBlank  = extractClassBasedTrailingString(oneDiv,"isBlank");
 
         if (weAreInTissueMode){
 
-                if (isBlank.length>0){
-                    $('#mainVariantDiv div.methodName_'+methodNameToProcess).parent('.varAllEpigenetics').parent().show();
-                    $('#mainVariantDiv div.methodName_'+methodNameToProcess).parent('.header').show();
-                } else {
-                    $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.varAllEpigenetics').parent().show();
-                    $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.header').show();
-                }
+                // if (isBlank.length>0){
+                //     $('#mainVariantDiv div.methodName_'+methodNameToProcess).parent('.varAllEpigenetics').parent().show();
+                //     $('#mainVariantDiv div.methodName_'+methodNameToProcess).parent('.header').show();
+                // } else {
+                //     $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.varAllEpigenetics').parent().show();
+                //     $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.header').show();
+                // }
+            if ((_.includes(uniqueAnnotations,currentAnnotation))&&
+                $('#mainVariantDiv div.yesDisplay.annotationName_'+annotationNameToProcess+'.tissueId_'+currentTissue).length>0){
+
+                // Mark this tissue as  displayed
+                $('#mainVariantDiv div.varAnnotation.varAllEpigenetics.annotationName_'+annotationNameToProcess+'.tissueId_'+currentTissue).removeClass('doNotDisplay');
+                // now show the row
+                $('#mainVariantDiv div.varAllEpigenetics.annotationName_'+annotationNameToProcess+'.tissueId_'+currentTissue).parent().show();
+                $('#mainVariantDiv div.varAllEpigenetics.annotationName_'+annotationNameToProcess+'.tissueId_'+currentTissue).parent('.header').show();
+
+            } else {
+
+                // Mark this annotation as NOT displayed
+                $('#mainVariantDiv div.varAnnotation.varAllEpigenetics.annotationName_'+annotationNameToProcess+'.tissueId_'+currentTissue).addClass('doNotDisplay');
+                // now hide the row
+                $('#mainVariantDiv div.varAllEpigenetics.annotationName_'+annotationNameToProcess+'.tissueId_'+currentTissue).parent().hide();
+                $('#mainVariantDiv div.varAllEpigenetics.annotationName_'+annotationNameToProcess+'.tissueId_'+currentTissue).parent('.header').hide();
+
+            }
 
 
         } else {
@@ -3929,8 +3945,27 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
 
         if (weAreInTissueMode){
 
+                // $(oneDiv).parent().parent().show();
+                // $(oneDiv).parent().parent().removeClass('doNotDisplay');
+            if ((_.includes(uniqueAnnotations,currentAnnotation))&&
+                $(oneDiv).parent().parent().find('div.yesDisplay').length>0){
+
+                // Mark this annotation as  displayed
+                $('#mainVariantDiv div.varAnnotation.annotationName_'+annotationNameToProcess).removeClass('doNotDisplay');
+                // now hide the row
                 $(oneDiv).parent().parent().show();
                 $(oneDiv).parent().parent().removeClass('doNotDisplay');
+
+            } else {
+
+                // Mark this annotation as NOT displayed
+                $('#mainVariantDiv div.varAnnotation.annotationName_'+annotationNameToProcess).addClass('doNotDisplay');
+                // now hide the row
+                $(oneDiv).parent().parent().addClass('doNotDisplay');
+                $(oneDiv).parent().parent().hide();
+
+            }
+
 
         } else {
             if ((_.includes(uniqueAnnotations,currentAnnotation))&&
@@ -4554,10 +4589,13 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
             _.forEach(row.columnCells, function (val, index) {
                     var valContent =  getDisplayableCellContent(val,baseDomElement);
                     var initialLinearIndex = extractClassBasedIndex(valContent,"initialLinearIndex_");
-                    if (initialLinearIndex === -1){
-
+                    if (initialLinearIndex === -1){ // no index assigned.  add one
                         indexInOneDimensionalArray = (numberOfExistingRows*numberOfColumns)+index + numberOfColumnsAdded;
-                        val.renderData['initialLinearIndex'] = "initialLinearIndex_"+indexInOneDimensionalArray;
+                        if (val.dataAnnotationTypeCode==='LIT'){// literals are handled differently than everything else
+                            val.renderData = $(val.renderData).removeClass('initialLinearIndex_').addClass('initialLinearIndex_'+indexInOneDimensionalArray)[0].outerHTML;
+                        } else {
+                            val.renderData['initialLinearIndex'] = "initialLinearIndex_"+indexInOneDimensionalArray;
+                        }
                     }
                     rowDescriber.push(val);
                 var domContent = $(valContent);
@@ -5750,10 +5788,10 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
         const indexAccumulator = getAccumulatorObject("variantInfoArray",'#mainVariantDivHolder');
         const intermediateDataStructureHdr = getAccumulatorObject("topPortionDisplay",'#mainVariantDivHolder');
         if (tissueDominant) {
-            $('button.actualTransposeButton').attr("disabled", true);
+            // $('button.actualTransposeButton').attr("disabled", true);
             setAccumulatorObject("variantTableOrientation","tissueDominant",'#mainVariantDivHolder');
         } else {
-            $('button.actualTransposeButton').attr("disabled", false);
+            // $('button.actualTransposeButton').attr("disabled", false);
             setAccumulatorObject("variantTableOrientation","annotationDominant",'#mainVariantDivHolder');
         }
 

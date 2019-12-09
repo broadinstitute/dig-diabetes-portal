@@ -231,7 +231,7 @@
                                     <label class="form-check-label" for="displayBlankRows">
                                     Blank rows&nbsp;&nbsp;
                                     </label>
-                                    <input class="form-check-input" type="checkbox" value="" id="displayBlankRows" checked>
+                                    <input class="form-check-input" type="checkbox" value="" id="displayBlankRows">
                                 </div>
                             </div>
                         </div>

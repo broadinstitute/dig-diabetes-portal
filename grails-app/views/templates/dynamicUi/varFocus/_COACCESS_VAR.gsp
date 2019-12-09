@@ -13,12 +13,12 @@ coaccessibility&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placemen
 </script>
 
 <script id="coaccessibilityVariantTableTissueSpecificHeaderLabel"  type="x-tmpl-mustache">
-<div class="varEpigeneticsLabel varTissueEpigenetics varAllEpigenetics varCoaccessibilityEpigenetics variantEpigenetics initialLinearIndex_{{indexInOneDimensionalArray}}">coaccessibility</div>
+<div class="varEpigeneticsLabel varTissueEpigenetics varAllEpigenetics varCoaccessibilityEpigenetics variantEpigenetics initialLinearIndex_{{indexInOneDimensionalArray}}"></div>
 </script>
 
 
 <script id="coaccessibilityVariantTableTissueSpecificRowLabel"  type="x-tmpl-mustache">
-<div class="varAllEpigenetics varCoaccessibilityEpigenetics staticMethodLabels annotationName_GenePrediction methodName_cicero  {{isBlank}} initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation"
+<div class="varAllEpigenetics varCoaccessibilityEpigenetics staticMethodLabels annotationName_GenePrediction methodName_{{method}} tissueId_{{safeTissueId}} {{isBlank}} initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation"
  sortField=0>
 {{tissue_name}}</div>
 </script>

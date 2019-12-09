@@ -120,6 +120,61 @@ mpgSoftware.dynamicUi.tfMotifVariantTable = (function () {
 
 
 
+    const renderAnnotationDataFunction = function(tissueRecords,
+                                                    recordsCellPresentationString,
+                                                    significanceCellPresentationString,
+                                                    dataAnnotationTypeCode,
+                                                    significanceValue,
+                                                    tissueName ){
+        return {
+            tissueRecords:_.map(_.orderBy(tissueRecords,['delta'],['asc']),function(o){
+                o["ref_scorepp"]=o.ref_score.toPrecision(3);
+                o["alt_scorepp"]=o.alt_score.toPrecision(3);
+                o["deltapp"]=o.delta.toPrecision(3);
+                return o;
+            }),
+            recordsExist:(tissueRecords.length>0)?[1]:[],
+            cellPresentationStringMap:{
+                'Significance':significanceCellPresentationString,
+                'Records':recordsCellPresentationString
+            },
+            dataAnnotationTypeCode:dataAnnotationTypeCode,
+            significanceValue:significanceValue,
+            tissueNameKey:( typeof tissueName !== 'undefined')?tissueName.replace(/ /g,"_"):'var_name_missing',
+            tissueName:tissueName,
+            tissuesFilteredByAnnotation:tissueRecords};
+
+    };
+
+
+    const renderTissueDataFunction = function(oneRecord,
+                                        recordsCellPresentationString,
+                                        significanceCellPresentationString,
+                                        dataAnnotationTypeCode,
+                                        significanceValue,
+                                        tissueName ){
+        const tissueRecords = oneRecord.arrayOfRecords;
+        return {
+            tissueRecords:_.map(_.orderBy(tissueRecords,['delta'],['asc']),function(o){
+                o["ref_scorepp"]=o.ref_score.toPrecision(3);
+                o["alt_scorepp"]=o.alt_score.toPrecision(3);
+                o["deltapp"]=o.delta.toPrecision(3);
+                return o;
+            }),
+            recordsExist:(tissueRecords.length>0)?[1]:[],
+            cellPresentationStringMap:{
+                'Significance':significanceCellPresentationString,
+                'Records':recordsCellPresentationString
+            },
+            dataAnnotationTypeCode:dataAnnotationTypeCode,
+            significanceValue:significanceValue,
+            tissueNameKey:( typeof tissueName !== 'undefined')?tissueName.replace(/ /g,"_"):'var_name_missing',
+            tissueName:tissueName,
+            tissuesFilteredByAnnotation:tissueRecords};
+
+    };
+
+
     /***
      *  2) a function to display the processed records
      * @param idForTheTargetDiv
@@ -128,9 +183,6 @@ mpgSoftware.dynamicUi.tfMotifVariantTable = (function () {
     var displayTissueInformationFromTfMotif = function (idForTheTargetDiv, objectContainingRetrievedRecords, callingParameters ) {
 
         mpgSoftware.dynamicUi.displayForVariantTable(idForTheTargetDiv, // which table are we adding to
-            // callingParameters.code, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            // callingParameters.nameOfAccumulatorField, // name of the persistent field where the data we received is stored
-            // callingParameters.nameOfAccumulatorFieldWithIndex,
             callingParameters,
             // insert header records as necessary into the intermediate structure, and return header names that we can match on for the columns
             function(records,tissueTranslations){
@@ -139,32 +191,8 @@ mpgSoftware.dynamicUi.tfMotifVariantTable = (function () {
             },
 
             // take all the records for each row and insert them into the intermediateDataStructure
-            function(tissueRecords,
-                     recordsCellPresentationString,
-                     significanceCellPresentationString,
-                     dataAnnotationTypeCode,
-                     significanceValue,
-                     tissueName ){
-                return {
-                    tissueRecords:_.map(_.orderBy(tissueRecords,['delta'],['asc']),function(o){
-                        o["ref_scorepp"]=o.ref_score.toPrecision(3);
-                        o["alt_scorepp"]=o.alt_score.toPrecision(3);
-                        o["deltapp"]=o.delta.toPrecision(3);
-                        return o;
-                    }),
-                    recordsExist:(tissueRecords.length>0)?[1]:[],
-                    cellPresentationStringMap:{
-                        'Significance':significanceCellPresentationString,
-                        'Records':recordsCellPresentationString
-                    },
-                    dataAnnotationTypeCode:dataAnnotationTypeCode,
-                    significanceValue:significanceValue,
-                    tissueNameKey:( typeof tissueName !== 'undefined')?tissueName.replace(/ /g,"_"):'var_name_missing',
-                    tissueName:tissueName,
-                    tissuesFilteredByAnnotation:tissueRecords};
-
-            },
-            createSingleDnaseCell
+            renderAnnotationDataFunction,
+            renderTissueDataFunction
         )
 
     };

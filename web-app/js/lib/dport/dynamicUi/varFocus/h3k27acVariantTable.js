@@ -28,57 +28,14 @@ mpgSoftware.dynamicUi.h3k27acVariantTable = (function () {
                     recA.var_id === recB.var_id &&
                     recA.tissue_id === recB.tissue_id
             );
-            _.forEach(uniqueRecords,function (oneValue){oneValue['safeTissueId'] = oneValue.tissue_id.replace(":","_");});
-            let dataGroupings = {groupByVarId:[],
-                groupByAnnotation:[],
-                groupByTissue:[],
-                groupByTissueAnnotation:[],
-                currentMethod:'NA',
-                currentAnnotation:['H3K27AC']
-            };
-            _.forEach(_.groupBy(uniqueRecords, function (o) { return o.var_id }), function (value,key) {
-                dataGroupings.groupByVarId.push({name:key,arrayOfRecords:value});
-            });
-            _.forEach( _.groupBy(uniqueRecords, function (o) { return o.annotation }), function (recordsGroupedByAnnotation,annotation) {
-                let groupedByAnnotation = {name:annotation, arrayOfRecords:[]};
-                _.forEach( _.groupBy(recordsGroupedByAnnotation, function (o) { return o.var_id }), function (recordsSubGroupedByVarId,varId) {
-                    groupedByAnnotation.arrayOfRecords.push({name:varId,arrayOfRecords:recordsSubGroupedByVarId});
-                });
-                dataGroupings.groupByAnnotation.push(groupedByAnnotation);
-            });
-            _.forEach( _.groupBy(uniqueRecords, function (o) { return o.tissue_id }), function (recordsGroupedByTissue,tissue) {
-                let groupedByTissue = {name:tissue,  tissue_name:recordsGroupedByTissue[0].tissue_name, arrayOfRecords:[]};
-                _.forEach( _.groupBy(recordsGroupedByTissue, function (o) { return o.var_id }), function (recordsSubGroupedByVarId,varId) {
-                    groupedByTissue.arrayOfRecords.push({name:varId,arrayOfRecords:recordsSubGroupedByVarId});
-                });
-                dataGroupings.groupByTissue.push(groupedByTissue);
-            });
+            let dataGroupings = Object.getPrototypeOf(renderData).groupRawData(uniqueRecords,
+                'NA',
+                ['H3K27AC']
+            );
             arrayOfRecords.push({header:{ },
                 data:dataGroupings});
         }
         return arrayOfRecords;
-    };
-
-
-
-
-    var createSingleDnaseCell = function (recordsPerTissue,dataAnnotationType) {
-        var significanceValue = 0;
-        var returnValue = {};
-        if (( typeof recordsPerTissue !== 'undefined')&&
-            (recordsPerTissue.length>0)){
-            var mostSignificantRecord=recordsPerTissue[0];
-
-            significanceValue = mostSignificantRecord.value;
-            returnValue['significanceValue'] = significanceValue;
-            returnValue['significanceCellPresentationString'] = Mustache.render($('#'+dataAnnotationType.dataAnnotation.significanceCellPresentationStringWriter)[0].innerHTML,
-                {significanceValue:significanceValue,
-                    recordsPerTissue:recordsPerTissue,
-                    significanceValueAsString:UTILS.realNumberFormatter(""+significanceValue),
-                    recordDescription:mostSignificantRecord.tissue,
-                    numberRecords:recordsPerTissue.length});
-        }
-        return returnValue;
     };
 
 
