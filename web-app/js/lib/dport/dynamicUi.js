@@ -2440,7 +2440,7 @@ mpgSoftware.dynamicUi = (function () {
                                         0.5,
                                         oneRecord.name);
                                     rowWeAreAddingTo.columnCells[indexOfColumn + 2] = new IntermediateStructureDataCell(oneRecord.name,
-                                        renderData, "tissue specific", dataAnnotationTypeCode);
+                                        renderData, "tissueDominant", dataAnnotationTypeCode);
 
                                 }
                                 if (rowWeAreAddingTo.columnCells.length>dataVector.length+2){
@@ -3539,7 +3539,13 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
                     intermediateStructureDataCell.renderData.cellPresentationStringMap[findCellColoringChoice('table.combinedGeneTableHolder', baseDomElement)];
 
                 var displayDetails = getDatatypeInformation(intermediateStructureDataCell.dataAnnotationTypeCode,baseDomElement);
-                returnValue = Mustache.render($('#'+displayDetails.dataAnnotation.cellBodyWriter)[0].innerHTML,intermediateStructureDataCell.renderData);
+                if (false){
+                   // if (intermediateStructureDataCell.annotation==="tissueDominant"){
+
+                        returnValue = Mustache.render($('#'+displayDetails.dataAnnotation.cellBodyWriterTissueSpecific)[0].innerHTML,intermediateStructureDataCell.renderData);
+                } else {
+                    returnValue = Mustache.render($('#'+displayDetails.dataAnnotation.cellBodyWriter)[0].innerHTML,intermediateStructureDataCell.renderData);
+                }
                 break;
 
         }
@@ -3873,27 +3879,39 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
         if (weAreInTissueMode){
 
             if (filterByGregor){
-                if ((_.includes(uniqueAnnotations,currentAnnotation))&&
-                    (_.includes(uniqueMethods,currentMethod))&&
-                    $('#mainVariantDiv div.yesDisplay.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess+'.tissueId_'+currentTissue).length>0){
+                if ($('#mainVariantDiv div.yesDisplay.tissueId_'+currentTissue).length>0){
 
-                    // Mark this tissue as  displayed
-                    $('#mainVariantDiv div.varAnnotation.varAllEpigenetics.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess+'.tissueId_'+currentTissue).removeClass('doNotDisplay');
+                    // // Mark this tissue as  displayed
+                    // $('#mainVariantDiv div.varAnnotation.varAllEpigenetics.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess+'.tissueId_'+currentTissue).removeClass('doNotDisplay');
+                    // // now show the row
+                    // $('#mainVariantDiv div.varAllEpigenetics.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess+'.tissueId_'+currentTissue).parent().show();
+                    // $('#mainVariantDiv div.varAllEpigenetics.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess+'.tissueId_'+currentTissue).parent('.header').show();
+
+                    $(oneDiv).removeClass('doNotDisplay');
                     // now show the row
-                    $('#mainVariantDiv div.varAllEpigenetics.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess+'.tissueId_'+currentTissue).parent().show();
-                    $('#mainVariantDiv div.varAllEpigenetics.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess+'.tissueId_'+currentTissue).parent('.header').show();
+                    $('#mainVariantDiv div.varAllEpigenetics.tissueId_'+currentTissue).parent().show();
+                    $('#mainVariantDiv div.varAllEpigenetics.tissueId_'+currentTissue).parent('.header').show();
+
+
 
                 } else {
+                    // // Mark this annotation as NOT displayed
+                    // $('#mainVariantDiv div.varAnnotation.varAllEpigenetics.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess+'.methodName_'+methodNameToProcess+'.tissueId_'+currentTissue).addClass('doNotDisplay');
+                    // // now hide the row
+                    // $('#mainVariantDiv div.varAllEpigenetics.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess+'.tissueId_'+currentTissue).parent().hide();
+                    // $('#mainVariantDiv div.varAllEpigenetics.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess+'.tissueId_'+currentTissue).parent('.header').hide();
+
                     // Mark this annotation as NOT displayed
-                    $('#mainVariantDiv div.varAnnotation.varAllEpigenetics.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess+'.methodName_'+methodNameToProcess+'.tissueId_'+currentTissue).addClass('doNotDisplay');
+                    $(oneDiv).addClass('doNotDisplay');
                     // now hide the row
-                    $('#mainVariantDiv div.varAllEpigenetics.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess+'.tissueId_'+currentTissue).parent().hide();
-                    $('#mainVariantDiv div.varAllEpigenetics.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess+'.tissueId_'+currentTissue).parent('.header').hide();
+                    $('#mainVariantDiv div.varAllEpigenetics.tissueId_'+currentTissue).parent().hide();
+                    $('#mainVariantDiv div.varAllEpigenetics.tissueId_'+currentTissue).parent('.header').hide();
+
                 }
 
             } else {
-                if ((_.includes(uniqueAnnotations,currentAnnotation))&&
-                    $('#mainVariantDiv div.yesDisplay.annotationName_'+annotationNameToProcess+'.tissueId_'+currentTissue).length>0){
+
+                    if ($('#mainVariantDiv div.yesDisplay.tissueId_'+currentTissue).length>0){
 
                     // Mark this tissue as  displayed
                     $('#mainVariantDiv div.varAnnotation.varAllEpigenetics.annotationName_'+annotationNameToProcess+'.tissueId_'+currentTissue).removeClass('doNotDisplay');
@@ -3951,6 +3969,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
 
         const currentAnnotation = extractClassBasedTrailingString(oneDiv,"annotationName_");
         const currentMethod = extractClassBasedTrailingString(oneDiv,"methodName_");
+        const currentTissue = extractClassBasedTrailingString(oneDiv,"tissueId_");
         let methodNameToProcess = extractClassBasedTrailingString(oneDiv,"methodName_");
         let annotationNameToProcess = extractClassBasedTrailingString(oneDiv,"annotationName_");
         let isBlank  = extractClassBasedTrailingString(oneDiv,"isBlank");
@@ -3958,13 +3977,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
 
         if (weAreInTissueMode){
 
-                // $(oneDiv).parent().parent().show();
-                // $(oneDiv).parent().parent().removeClass('doNotDisplay');
-            if ((_.includes(uniqueAnnotations,currentAnnotation))&&
-                $(oneDiv).parent().parent().find('div.yesDisplay').length>0){
-
+            if ($(oneDiv).parent().parent().find('div.yesDisplay.tissueId_'+currentTissue).length>0){
                 // Mark this annotation as  displayed
-                //$('#mainVariantDiv div.varAnnotation.annotationName_'+annotationNameToProcess).removeClass('doNotDisplay');
                 $(oneDiv).removeClass('doNotDisplay');
 
                 // now hide the row
@@ -3974,7 +3988,6 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
             } else {
 
                 // Mark this annotation as NOT displayed
-                //$('#mainVariantDiv div.varAnnotation.annotationName_'+annotationNameToProcess).addClass('doNotDisplay');
                 $(oneDiv).addClass('doNotDisplay');
 
                 // now hide the row
@@ -4055,16 +4068,17 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
         if (gregorAcc.length>0){
             quantileDef =  gregorAcc[0].header['quickLookup']
         }
-        // now go through every cell and determine if we want to display it
 
 
+        // now go through every cell and determine if we want to display it.  We have to make all of these decisions here,
+        // before we start to step through row by row ( or column by column), if we want consistent behavior across transposition.
         if (filterByGregor){
             _.forEach($('div.epigeneticCellElement'),function(oneTr){
                 const currentAnnotation = extractClassBasedTrailingString(oneTr,"annotationName_");
                 const currentTissue = extractClassBasedTrailingString(oneTr,"tissueId_");
                 const currentMethod = extractClassBasedTrailingString(oneTr,"methodName_");
-                if (_.includes(uniqueTissues,currentTissue)&&
-                    ((currentAnnotation.length===0)||(_.includes(uniqueAnnotations,currentAnnotation)))&&
+                if ((currentAnnotation.length===0)||(_.includes(uniqueTissues,currentTissue))&&
+                    ((uniqueTissues.length===0)||(_.includes(uniqueAnnotations,currentAnnotation)))&&
                     ((currentMethod.length===0)||(_.includes(uniqueMethods,currentMethod)))
                 ){
                     $(oneTr).show();
@@ -4122,115 +4136,6 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
             } else {
                 alert('illegal currentTableForm='+currentTableForm+'.');
             }
-            // const currentAnnotation = extractClassBasedTrailingString(oneDiv,"annotationName_");
-            // const currentMethod = extractClassBasedTrailingString(oneDiv,"methodName_");
-            // let methodNameToProcess;
-            // let annotationNameToProcess;
-            // let isBlank;
-            // if (currentTableForm === 'variantTableAnnotationHeaders'){
-            //     methodNameToProcess = extractClassBasedTrailingString(oneDiv,"methodName_");
-            //     annotationNameToProcess = extractClassBasedTrailingString(oneDiv,"annotationName_");
-            //     isBlank = extractClassBasedTrailingString(oneDiv,"isBlank");
-            //     // if the line is completely blank then we must hide it based on method name.  Otherwise we use annotation name
-            // }
-            //
-            // let suppressRowDisplay = false;
-            // if (!blankRowsAreOkay){
-            //     if (currentTableForm === 'variantTableVariantHeaders'){ // If the variants are on top then we simply look for elements in the containing row
-            //         suppressRowDisplay = ($(oneDiv).parent().parent().find('div.epigeneticCellElement.yesDisplay').length === 0);
-            //     } else { // Otherwise we have to pull out the elements by name
-            //         suppressRowDisplay = ($('#mainVariantDiv td div.epigeneticCellElement.yesDisplay.annotationName_'+annotationNameToProcess).length === 0);
-            //     }
-            //
-            // }
-            // if (weAreInTissueMode){
-            //     if (currentTableForm === 'variantTableVariantHeaders') {
-            //         if (suppressRowDisplay){
-            //             $(oneDiv).parent().parent().addClass('doNotDisplay');
-            //             $(oneDiv).parent().parent().hide();
-            //         } else {
-            //             $(oneDiv).parent().parent().show();
-            //             $(oneDiv).parent().parent().removeClass('doNotDisplay');
-            //         }
-            //     } else  if (currentTableForm === 'variantTableAnnotationHeaders') {
-            //         if (suppressRowDisplay){
-            //             if (isBlank.length>0){
-            //                 $('#mainVariantDiv div.methodName_'+methodNameToProcess).parent('.varAllEpigenetics').parent().hide();
-            //                 $('#mainVariantDiv div.methodName_'+methodNameToProcess).parent('.header').hide();
-            //             } else {
-            //                 $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.varAllEpigenetics').parent().hide();
-            //                 $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.header').hide();
-            //             }
-            //
-            //         } else {
-            //
-            //             if (isBlank.length>0){
-            //                 $('#mainVariantDiv div.methodName_'+methodNameToProcess).parent('.varAllEpigenetics').parent().show();
-            //                 $('#mainVariantDiv div.methodName_'+methodNameToProcess).parent('.header').show();
-            //             } else {
-            //                 $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.varAllEpigenetics').parent().show();
-            //                 $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.header').show();
-            //             }
-            //
-            //
-            //         }
-            //     }
-            // } else {
-            //     if ((_.includes(uniqueAnnotations,currentAnnotation))||
-            //         (_.includes(uniqueMethods,currentAnnotation))){
-            //
-            //         if (currentTableForm === 'variantTableVariantHeaders') {
-            //             if (suppressRowDisplay){
-            //                 $(oneDiv).parent().parent().addClass('doNotDisplay');
-            //                 $(oneDiv).parent().parent().hide();
-            //             } else {
-            //                 $(oneDiv).parent().parent().show();
-            //                 $(oneDiv).parent().parent().removeClass('doNotDisplay');
-            //             }
-            //         } else  if (currentTableForm === 'variantTableAnnotationHeaders') {
-            //             if (suppressRowDisplay){
-            //                 if (isBlank.length>0){
-            //                     $('#mainVariantDiv div.methodName_'+methodNameToProcess).parent('.varAllEpigenetics').parent().hide();
-            //                     $('#mainVariantDiv div.methodName_'+methodNameToProcess).parent('.header').hide();
-            //                 } else {
-            //                     $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.varAllEpigenetics').parent().hide();
-            //                     $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.header').hide();
-            //                 }
-            //
-            //             } else {
-            //
-            //                 if (isBlank.length>0){
-            //                     $('#mainVariantDiv div.methodName_'+methodNameToProcess).parent('.varAllEpigenetics').parent().show();
-            //                     $('#mainVariantDiv div.methodName_'+methodNameToProcess).parent('.header').show();
-            //                 } else {
-            //                     $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.varAllEpigenetics').parent().show();
-            //                     $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.header').show();
-            //                 }
-            //
-            //
-            //             }
-            //         }
-            //
-            //
-            //     } else {
-            //         if (currentTableForm === 'variantTableVariantHeaders') {
-            //             $(oneDiv).parent().parent().addClass('doNotDisplay');
-            //             $(oneDiv).parent().parent().hide();
-            //         }
-            //         else  if (currentTableForm === 'variantTableAnnotationHeaders') {
-            //             if (isBlank.length>0){
-            //                 //we have a header with one annotation but no table cells. This must mean that we had no data, this is a blank row, and we have to work strictly with the method
-            //                 $('#mainVariantDiv div.methodName_'+methodNameToProcess).parent('.varAllEpigenetics').parent().hide();
-            //                 $('#mainVariantDiv div.methodName_'+methodNameToProcess).parent('.header').hide();
-            //             } else {
-            //                 $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.varAllEpigenetics').parent().hide();
-            //                 $('#mainVariantDiv div.annotationName_'+annotationNameToProcess).parent('.header').hide();
-            //             }
-            //         }
-            //
-            //     }
-            // }
-
 
         });
 

@@ -32,6 +32,7 @@ DNase&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom"
 <script id="dnaseVariantTableSignificanceCellPresentationString"  type="x-tmpl-mustache">
 {{significanceValueAsString}}No div!
 </script>
+
 <script id="dnaseVariantTableBody"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortfield="{{significanceValue}}"
              class="multiRecordCell varAllEpigenetics varDnaseEpigenetics tissueCategory_{{tissueCategoryNumber}} methodName_{{method}} annotationName_{{annotation}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
@@ -42,6 +43,29 @@ DNase&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom"
                          {{#tissueRecords}}
                           <div class="epigeneticCellElement tissueId_{{safeTissueId}}  methodName_{{method}} annotationName_{{annotation}}">
                                {{tissue_name}}
+                            </div>
+                          {{/tissueRecords}}
+                      {{#recordsExist}}
+
+                    {{/recordsExist}}
+                    {{#recordsExist}}
+                    {{/recordsExist}}
+                    {{^recordsExist}}
+                       No predicted connections
+                    {{/recordsExist}}
+
+            </div>
+</script>
+<script id="dnaseVariantTableBodyTissueSpecific"  type="x-tmpl-mustache">
+             <div significance_sortField="{{significanceValue}}" sortfield="{{significanceValue}}"
+             class="multiRecordCell varAllEpigenetics varDnaseEpigenetics tissueCategory_{{tissueCategoryNumber}} methodName_{{method}} annotationName_{{annotation}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
+
+                    {{#recordsExist}}
+
+                     {{/recordsExist}}
+                         {{#tissueRecords}}
+                          <div class="tissueDominantCell epigeneticCellElement tissueId_{{safeTissueId}}  methodName_{{method}} annotationName_{{annotation}}">
+                               DNase&nbsp;
                             </div>
                           {{/tissueRecords}}
                       {{#recordsExist}}

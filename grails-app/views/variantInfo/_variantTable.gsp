@@ -158,6 +158,7 @@
                             displaySubcategory: 'ABC list',
                             headerWriter:'abcVariantTableTissueHeader',
                             cellBodyWriter:'abcVariantTableBody',
+                            cellBodyWriterTissueSpecific:'abcVariantTableBodyTissueSpecific',
                             categoryWriter:'abcVariantTableTissueHeaderLabel',
                             drillDownCategoryWriter:'abcVariantTableTissueHeaderLabel',
                             subCategoryWriter:'abcVariantTableTissueRowLabel',
@@ -181,6 +182,7 @@
                             displaySubcategory: 'Coaccessibility list',
                             headerWriter:'coaccessibilityVariantTableTissueHeader',
                             cellBodyWriter:'coaccessibilityVariantTableBody',
+                            cellBodyWriterTissueSpecific:'coaccessibilityVariantTableBodyTissueSpecific',
                             categoryWriter:'coaccessibilityVariantTableTissueHeaderLabel',
                             drillDownCategoryWriter:'coaccessibilityVariantTableTissueHeaderLabel',
                             subCategoryWriter:'coaccessibilityVariantTableTissueRowLabel',
@@ -204,6 +206,7 @@
                             displaySubcategory: 'TfMotif',
                             headerWriter:'tfMotifVariantTableTissueHeader',
                             cellBodyWriter:'tfMotifVariantTableBody',
+                            cellBodyWriterTissueSpecific:'tfMotifVariantTableBodyTissueSpecific',
                             categoryWriter:'tfMotifVariantTableTissueHeaderLabel',
                             drillDownCategoryWriter:'tfMotifVariantTableTissueHeaderLabel',
                             subCategoryWriter:'tfMotifVariantTableTissueRowLabel',
@@ -228,6 +231,7 @@
                             displaySubcategory: 'ATAC-seq list',
                             headerWriter:'atacSeqVariantTableTissueHeader',
                             cellBodyWriter:'atacSeqVariantTableBody',
+                            cellBodyWriterTissueSpecific:'atacSeqVariantTableBodyTissueSpecific',
                             categoryWriter:'atacSeqVariantTableTissueHeaderLabel',
                             drillDownCategoryWriter:'atacSeqVariantTableTissueHeaderLabel',
                             subCategoryWriter:'atacSeqVariantTableTissueRowLabel',
@@ -253,6 +257,7 @@
                             displaySubcategory: 'TFBS list',
                             headerWriter:'tfbsVariantTableTissueHeader',
                             cellBodyWriter:'tfbsVariantTableBody',
+                            cellBodyWriterTissueSpecific:'tfbsVariantTableBodyTissueSpecific',
                             categoryWriter:'tfbsVariantTableTissueHeaderLabel',
                             drillDownCategoryWriter:'tfbsVariantTableTissueHeaderLabel',
                             subCategoryWriter:'tfbsVariantTableTissueRowLabel',
@@ -297,6 +302,7 @@
                             displaySubcategory: 'DNase list',
                             headerWriter:'dnaseVariantTableTissueHeader',
                             cellBodyWriter:'dnaseVariantTableBody',
+                            cellBodyWriterTissueSpecific:'dnaseVariantTableBodyTissueSpecific',
                             categoryWriter:'dnaseVariantTableTissueHeaderLabel',
                             drillDownCategoryWriter:'dnaseVariantTableTissueHeaderLabel',
                             subCategoryWriter:'dnaseVariantTableTissueRowLabel',
@@ -323,6 +329,7 @@
                             displaySubcategory: 'H3K27ac list',
                             headerWriter:'h3k27acVariantTableTissueHeader',
                             cellBodyWriter:'h3k27acVariantTableBody',
+                            cellBodyWriterTissueSpecific:'h3k27acVariantTableBodyTissueSpecific',
                             categoryWriter:'h3k27acVariantTableTissueHeaderLabel',
                             drillDownCategoryWriter:'h3k27acVariantTableTissueHeaderLabel',
                             subCategoryWriter:'h3k27acVariantTableTissueRowLabel',
@@ -340,30 +347,6 @@
                             nameOfAccumulatorFieldWithIndex:'variantInfoArray'
                         }
                         ,
-
-
-                        // {
-                        //     code: 'K27AC_VAR',
-                        //     category: 'H3K27ac',
-                        //     displayCategory: 'H3K27ac',
-                        //     subcategory: 'VariantK27ac',
-                        //     displaySubcategory: 'H3K27ac list',
-                        //     headerWriter:'k27acVariantTableTissueHeader',
-                        //     cellBodyWriter:'k27acVariantTableBody',
-                        //     categoryWriter:'k27acVariantTableTissueHeaderLabel',
-                        //     subCategoryWriter:'k27acVariantTableTissueRowLabel',
-                        //     numberRecordsCellPresentationStringWriter:'k27acVariantTableNumberRecordsCellPresentationString',
-                        //     significanceCellPresentationStringWriter:'k27acVariantTableSignificanceCellPresentationString',
-                        //     sortingSubroutine:'VariantK27ac',
-                        //     internalIdentifierString:'getH3k27acGivenVariantList',
-                        //     nameOfAccumulatorField:'h3k27acVariantInfo',
-                        //     nameOfAccumulatorFieldWithIndex:'variantInfoArray'
-                        // }
-                        // ,
-
-
-
-
                         {
                             code: 'CHROMESTATE_VAR',
                             category: 'ChromState',
@@ -372,6 +355,7 @@
                             displaySubcategory: 'ChromState list',
                             headerWriter:'chromStateVariantTableTissueHeader',
                             cellBodyWriter:'chromStateVariantTableBody',
+                            cellBodyWriterTissueSpecific:'chromStateVariantTableBodyTissueSpecific',
                             categoryWriter:'chromStateVariantTableTissueHeaderLabel',
                             drillDownCategoryWriter:'chromStateVariantTableTissueHeaderLabel',
                             subCategoryWriter:'chromStateVariantTableTissueRowLabel',

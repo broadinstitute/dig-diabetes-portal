@@ -32,6 +32,7 @@ H3K27AC&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="botto
 <script id="h3k27acVariantTableSignificanceCellPresentationString"  type="x-tmpl-mustache">
 {{significanceValueAsString}}No div!
 </script>
+
 <script id="h3k27acVariantTableBody"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortfield="{{significanceValue}}"
              class="multiRecordCell varAllEpigenetics varH3k27acEpigenetics tissueCategory_{{tissueCategoryNumber}} methodName_{{method}} annotationName_{{annotation}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
@@ -42,6 +43,30 @@ H3K27AC&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="botto
                          {{#tissueRecords}}
                           <div class="epigeneticCellElement tissueId_{{safeTissueId}} methodName_{{method}} annotationName_{{annotation}}">
                                {{tissue_name}}
+                            </div>
+                          {{/tissueRecords}}
+                      {{#recordsExist}}
+
+                    {{/recordsExist}}
+                    {{#recordsExist}}
+                    {{/recordsExist}}
+                    {{^recordsExist}}
+                       No predicted connections
+                    {{/recordsExist}}
+
+            </div>
+</script>
+
+<script id="h3k27acVariantTableBodyTissueSpecific"  type="x-tmpl-mustache">
+             <div significance_sortField="{{significanceValue}}" sortfield="{{significanceValue}}"
+             class="multiRecordCell varAllEpigenetics varH3k27acEpigenetics tissueCategory_{{tissueCategoryNumber}} methodName_{{method}} annotationName_{{annotation}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
+
+                    {{#recordsExist}}
+
+                     {{/recordsExist}}
+                         {{#tissueRecords}}
+                          <div class="tissueDominantCell epigeneticCellElement tissueId_{{safeTissueId}} methodName_{{method}} annotationName_{{annotation}}">
+                               H3K27ac&nbsp;
                             </div>
                           {{/tissueRecords}}
                       {{#recordsExist}}

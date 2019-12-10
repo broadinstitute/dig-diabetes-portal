@@ -62,3 +62,28 @@ tfbs&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" 
                </div>
             </div>
 </script>
+
+
+<script id="tfbsVariantTableBodyTissueSpecific"  type="x-tmpl-mustache">
+             <div significance_sortField="{{significanceValue}}" sortField="{{significanceValue}}"
+             class="multiRecordCell varAllEpigenetics varTfbsEpigenetics tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}} annotationName_{{annotationName}} methodName_SPP tissueId_{{safeTissueId}} ">
+
+                    {{#recordsExist}}
+
+                     {{/recordsExist}}
+                         {{#tissueRecords}}
+ <div class="tissueDominantCell epigeneticCellElement tissueId_{{safeTissueId}} methodName_SPP annotationName_{{annotation}}">
+                               Transcription factor binding site
+                            </div>
+                          {{/tissueRecords}}
+                      {{#recordsExist}}
+
+                    {{/recordsExist}}
+                    {{#recordsExist}}
+                    {{/recordsExist}}
+                    {{^recordsExist}}
+                       No predicted connections
+                    {{/recordsExist}}
+               </div>
+            </div>
+</script>

@@ -32,6 +32,7 @@ ATAC-seq&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bott
 <script id="atacSeqVariantTableSignificanceCellPresentationString"  type="x-tmpl-mustache">
 {{significanceValueAsString}}No div!
 </script>
+
 <script id="atacSeqVariantTableBody"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortfield="{{significanceValue}}"
              class="multiRecordCell varAllEpigenetics varAtacSeqEpigenetics tissueCategory_{{tissueCategoryNumber}} methodName_{{method}} annotationName_{{annotation}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
@@ -42,6 +43,30 @@ ATAC-seq&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bott
                          {{#tissueRecords}}
                           <div class="epigeneticCellElement tissueId_{{safeTissueId}} methodName_{{method}} annotationName_{{annotation}}">
                                {{tissue_name}}
+                            </div>
+                          {{/tissueRecords}}
+                      {{#recordsExist}}
+
+                    {{/recordsExist}}
+                    {{#recordsExist}}
+                    {{/recordsExist}}
+                    {{^recordsExist}}
+                       No predicted connections
+                    {{/recordsExist}}
+
+            </div>
+</script>
+
+<script id="atacSeqVariantTableBodyTissueSpecific"  type="x-tmpl-mustache">
+             <div significance_sortField="{{significanceValue}}" sortfield="{{significanceValue}}"
+             class="multiRecordCell varAllEpigenetics varAtacSeqEpigenetics tissueCategory_{{tissueCategoryNumber}} methodName_{{method}} annotationName_{{annotation}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
+
+                    {{#recordsExist}}
+
+                     {{/recordsExist}}
+                         {{#tissueRecords}}
+                          <div class="tissueDominantCell epigeneticCellElement tissueId_{{safeTissueId}} methodName_{{method}} annotationName_{{annotation}}">
+                               ATAC-seq
                             </div>
                           {{/tissueRecords}}
                       {{#recordsExist}}

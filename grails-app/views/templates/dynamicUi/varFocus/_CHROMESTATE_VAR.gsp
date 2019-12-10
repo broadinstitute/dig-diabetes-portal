@@ -59,3 +59,26 @@ records={{numberRecords}}
 
             </div>
 </script>
+<script id="chromStateVariantTableBodyTissueSpecific"  type="x-tmpl-mustache">
+             <div significance_sortField="{{significanceValue}}" sortField="{{significanceValue}}"
+             class="multiRecordCell varAllEpigenetics varChromHmmEpigenetics chromState tissueCategory_{{tissueCategoryNumber}} methodName_{{method}} annotationName_{{annotation}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
+                   {{#recordsExist}}
+
+                     {{/recordsExist}}
+                         {{#tissueRecords}}
+                          <div class="tissueDominantCell epigeneticCellElement tissueId_{{safeTissueId}}  methodName_{{method}} annotationName_{{annotation}}">
+                                ChrommHmm
+                               {{annotation}}
+                            </div>
+                          {{/tissueRecords}}
+                      {{#recordsExist}}
+
+                    {{/recordsExist}}
+                    {{#recordsExist}}
+                    {{/recordsExist}}
+                    {{^recordsExist}}
+                       No predicted connections
+                    {{/recordsExist}}
+
+            </div>
+</script>
