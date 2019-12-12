@@ -2430,17 +2430,18 @@ mpgSoftware.dynamicUi = (function () {
                                 if (indexOfColumn === -1) {
                                     console.log("Did not find index of tissue epigenetic var_id===" + oneRecord.name + ".  Shouldn't we?")
                                 } else {
+                                    const modifiedAnnotationCode = (dataAnnotationTypeCode==='TFMOTIF_VAR')?'TFMOTIF_VAR':'TISSUEDOMINANT_VAR';
                                     const specificMethod = oneRecord.method;
                                     const specificAnnotation = oneRecord.annotation;
                                     const existingCell = rowWeAreAddingTo.columnCells[indexOfColumn + 2];
                                     const renderData = variantTableTissueDominant( oneRecord,
                                         specificMethod, specificAnnotation,
                                         safeTissueId, existingCell,
-                                        dataAnnotationTypeCode,
+                                        modifiedAnnotationCode,
                                         0.5,
                                         oneRecord.name);
                                     rowWeAreAddingTo.columnCells[indexOfColumn + 2] = new IntermediateStructureDataCell(oneRecord.name,
-                                        renderData, "tissueDominant", dataAnnotationTypeCode);
+                                        renderData, "tissueDominant", modifiedAnnotationCode);
 
                                 }
                                 if (rowWeAreAddingTo.columnCells.length>dataVector.length+2){
@@ -3539,13 +3540,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
                     intermediateStructureDataCell.renderData.cellPresentationStringMap[findCellColoringChoice('table.combinedGeneTableHolder', baseDomElement)];
 
                 var displayDetails = getDatatypeInformation(intermediateStructureDataCell.dataAnnotationTypeCode,baseDomElement);
-                // if (false){
-                if (intermediateStructureDataCell.annotation==="tissueDominant"){
-
-                        returnValue = Mustache.render($('#'+displayDetails.dataAnnotation.cellBodyWriterTissueSpecific)[0].innerHTML,intermediateStructureDataCell.renderData);
-                } else {
                     returnValue = Mustache.render($('#'+displayDetails.dataAnnotation.cellBodyWriter)[0].innerHTML,intermediateStructureDataCell.renderData);
-                }
+
                 break;
 
         }
@@ -3966,8 +3962,10 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
 
         if (weAreInTissueMode){
 
-            if ($(oneDiv).parent().parent().find('div.yesDisplay.tissueId_'+currentTissue).length>0){
-                // Mark this annotation as  displayed
+           // if ($(oneDiv).parent().parent().find('#mainVariantDiv div.yesDisplay.tissueId_'+currentTissue).length>0){
+                if ($('#mainVariantDiv div.yesDisplay.tissueId_'+currentTissue).length>0){
+
+                    // Mark this annotation as  displayed
                 $(oneDiv).removeClass('doNotDisplay');
 
                 // now hide the row
@@ -5688,7 +5686,10 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
     const displayVariantTablePerTissue  = function (whereTheTableGoes, tissueDominant) {
         var sharedTable = getSharedTable(whereTheTableGoes,'#mainVariantDivHolder');
         // the switch to tissue dominant wants to have the the variance across the top
-        if ((tissueDominant) &&(sharedTable.currentForm === 'variantTableAnnotationHeaders')){
+        let switchWhenFinished = false;
+        if (sharedTable.currentForm === 'variantTableAnnotationHeaders'){
+            console.log('switching...');
+            switchWhenFinished = true;
             transposeThisTable('#mainVariantDiv table.variantTableHolder','#mainVariantDivHolder');
         }
 
@@ -5750,7 +5751,11 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
 
         }
 
-        sharedTable['matrix'] = new mpgSoftware.matrixMath.Matrix(sharedTable['dataCells'],sharedTable['numberOfRows'],sharedTable['numberOfColumns'])
+        sharedTable['matrix'] = new mpgSoftware.matrixMath.Matrix(sharedTable['dataCells'],sharedTable['numberOfRows'],sharedTable['numberOfColumns']);
+
+        if (switchWhenFinished){
+            transposeThisTable('#mainVariantDiv table.variantTableHolder','#mainVariantDivHolder');
+        }
         filterEpigeneticTable(idForTheTargetDiv,true,'#mainVariantDivHolder');
     }
 

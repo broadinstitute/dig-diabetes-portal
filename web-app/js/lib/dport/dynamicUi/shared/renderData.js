@@ -104,13 +104,34 @@ mpgSoftware.dynamicUi.sharednameRenderData = (function () {
                 arrayOfRecords = existingCell.renderData.tissueRecords;
             }
             arrayOfRecords = _.concat(arrayOfRecords, oneRecord.arrayOfRecords);
-            arrayOfRecords = _.uniq(arrayOfRecords);
+            //arrayOfRecords = _.uniq(arrayOfRecords);
         };
+        let annotationPresentationName = "";
+        let varId = "";
+        _.forEach(arrayOfRecords,function(oneRec){
+            varId = oneRec.var_id;
+            switch (oneRec.method){
+                case "ChromHMM": annotationPresentationName = "ChromHMM "; break;
+                case "SPP": annotationPresentationName = "TF footprint "; break;
+                case "ABC": annotationPresentationName = "ABC"; break;
+                case "CHiCAGO": annotationPresentationName = "promoter capture "; break;
+                case "cicero": annotationPresentationName = "coaccessibility "; break;
+                default: annotationPresentationName = ""; break;
+            }
+            switch (oneRec.annotation){
+                case "AccessibleChromatin": annotationPresentationName += "ATAC-seq"; break;
+                case "DNASE": annotationPresentationName += "DNase"; break;
+                case "H3K27AC": annotationPresentationName += "H3K27ac"; break;
+                default: annotationPresentationName += oneRec.annotation; break;
+            }
+            oneRec['annotation_name'] = annotationPresentationName;
+        });
+
         const recordsCellPresentationString = "";
         const significanceCellPresentationString = "";
         return {
             tissueRecords:arrayOfRecords,
-            uniqueTissueRecords:_.uniqBy(arrayOfRecords,'tissue_id'),
+            uniqueTissueRecords:arrayOfRecords,
             recordsExist:(arrayOfRecords.length>0)?[1]:[],
             cellPresentationStringMap:{
                 'Significance':significanceCellPresentationString,
@@ -118,11 +139,13 @@ mpgSoftware.dynamicUi.sharednameRenderData = (function () {
             },
             dataAnnotationTypeCode:dataAnnotationTypeCode,
             significanceValue:significanceValue,
-            tissueNameKey:( typeof tissueName !== 'undefined')?tissueName.replace(/ /g,"_"):'var_name_missing',
+            tissueNameKey:tissueId+(( typeof tissueName !== 'undefined')?tissueName.replace(/ /g,"_"):'var_name_missing'),
             tissueName:tissueName,
             tissuesFilteredByAnnotation:arrayOfRecords,
             method:method,
-            annotation:annotation
+            annotation:annotation,
+            annotation_name: annotationPresentationName,
+            varId: varId
         };
 
     };
