@@ -80,7 +80,7 @@ ABC&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" b
 </script>
  <script id="abcVariantTableBodyTissueSpecific"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortField="{{significanceValue}}"
-             class="multiRecordCell varAllEpigenetics varAbcEpigenetics tissueCategory_{{tissueCategoryNumber}} methodName_{{method}}  annotationName_{{annotation}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
+             class="multiRecordCell varAllEpigenetics varAbcEpigenetics tissueId_{{safeTissueId}} methodName_{{method}}  annotationName_{{annotation}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                 %{--<div>--}%
                {{#uniqueTissueRecords}}
                   <div class="tissueDominantCell epigeneticCellElement tissueId_{{safeTissueId}}  methodName_{{method}} annotationName_{{annotation}}">

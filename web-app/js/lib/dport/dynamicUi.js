@@ -3539,8 +3539,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
                     intermediateStructureDataCell.renderData.cellPresentationStringMap[findCellColoringChoice('table.combinedGeneTableHolder', baseDomElement)];
 
                 var displayDetails = getDatatypeInformation(intermediateStructureDataCell.dataAnnotationTypeCode,baseDomElement);
-                if (false){
-                   // if (intermediateStructureDataCell.annotation==="tissueDominant"){
+                // if (false){
+                if (intermediateStructureDataCell.annotation==="tissueDominant"){
 
                         returnValue = Mustache.render($('#'+displayDetails.dataAnnotation.cellBodyWriterTissueSpecific)[0].innerHTML,intermediateStructureDataCell.renderData);
                 } else {
@@ -3881,50 +3881,39 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
             if (filterByGregor){
                 if ($('#mainVariantDiv div.yesDisplay.tissueId_'+currentTissue).length>0){
 
-                    // // Mark this tissue as  displayed
-                    // $('#mainVariantDiv div.varAnnotation.varAllEpigenetics.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess+'.tissueId_'+currentTissue).removeClass('doNotDisplay');
-                    // // now show the row
-                    // $('#mainVariantDiv div.varAllEpigenetics.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess+'.tissueId_'+currentTissue).parent().show();
-                    // $('#mainVariantDiv div.varAllEpigenetics.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess+'.tissueId_'+currentTissue).parent('.header').show();
-
                     $(oneDiv).removeClass('doNotDisplay');
                     // now show the row
-                    $('#mainVariantDiv div.varAllEpigenetics.tissueId_'+currentTissue).parent().show();
-                    $('#mainVariantDiv div.varAllEpigenetics.tissueId_'+currentTissue).parent('.header').show();
-
+                    $('#mainVariantDiv div.epigeneticCellElement.tissueId_'+currentTissue).parent().parent().show();
+                    $('#mainVariantDiv div.tissueId_'+currentTissue).parent().show();
 
 
                 } else {
-                    // // Mark this annotation as NOT displayed
-                    // $('#mainVariantDiv div.varAnnotation.varAllEpigenetics.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess+'.methodName_'+methodNameToProcess+'.tissueId_'+currentTissue).addClass('doNotDisplay');
-                    // // now hide the row
-                    // $('#mainVariantDiv div.varAllEpigenetics.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess+'.tissueId_'+currentTissue).parent().hide();
-                    // $('#mainVariantDiv div.varAllEpigenetics.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess+'.tissueId_'+currentTissue).parent('.header').hide();
 
                     // Mark this annotation as NOT displayed
                     $(oneDiv).addClass('doNotDisplay');
                     // now hide the row
-                    $('#mainVariantDiv div.varAllEpigenetics.tissueId_'+currentTissue).parent().hide();
-                    $('#mainVariantDiv div.varAllEpigenetics.tissueId_'+currentTissue).parent('.header').hide();
+                    $('#mainVariantDiv div.epigeneticCellElement.tissueId_'+currentTissue).parent().parent().hide();
+                    $('#mainVariantDiv div.tissueId_'+currentTissue).parent().hide();
+                    // $('#mainVariantDiv div.tissueId_'+currentTissue).parent('.header').hide();
 
                 }
 
             } else {
 
-                    if ($('#mainVariantDiv div.yesDisplay.tissueId_'+currentTissue).length>0){
+                if ($('#mainVariantDiv div.yesDisplay.tissueId_'+currentTissue).length>0){
 
-                    // Mark this tissue as  displayed
-                    $('#mainVariantDiv div.varAnnotation.varAllEpigenetics.annotationName_'+annotationNameToProcess+'.tissueId_'+currentTissue).removeClass('doNotDisplay');
+                    $(oneDiv).removeClass('doNotDisplay');
                     // now show the row
-                    $('#mainVariantDiv div.varAllEpigenetics.annotationName_'+annotationNameToProcess+'.tissueId_'+currentTissue).parent().show();
-                    $('#mainVariantDiv div.varAllEpigenetics.annotationName_'+annotationNameToProcess+'.tissueId_'+currentTissue).parent('.header').show();
+                    $('#mainVariantDiv div.epigeneticCellElement.tissueId_'+currentTissue).parent().parent().show();
+                    $('#mainVariantDiv div.tissueId_'+currentTissue).parent().show();
 
                 } else {
-                    // Mark this annotation as NOT displayed
-                    $('#mainVariantDiv div.varAnnotation.varAllEpigenetics.annotationName_'+annotationNameToProcess+'.tissueId_'+currentTissue).addClass('doNotDisplay');
+
+                    $(oneDiv).addClass('doNotDisplay');
                     // now hide the row
-                    $('#mainVariantDiv div.varAllEpigenetics.annotationName_'+annotationNameToProcess+'.tissueId_'+currentTissue).parent().hide();
-                    $('#mainVariantDiv div.varAllEpigenetics.annotationName_'+annotationNameToProcess+'.tissueId_'+currentTissue).parent('.header').hide();
+                    $('#mainVariantDiv div.epigeneticCellElement.tissueId_'+currentTissue).parent().parent().hide();
+                    $('#mainVariantDiv div.tissueId_'+currentTissue).parent().hide();
+
                 }
 
             }

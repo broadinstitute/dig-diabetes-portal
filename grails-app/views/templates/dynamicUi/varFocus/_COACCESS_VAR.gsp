@@ -77,7 +77,7 @@ coaccessibility&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placemen
 
 <script id="coaccessibilityVariantTableBodyTissueSpecific"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortField="{{significanceValue}}"
-             class="multiRecordCell varAllEpigenetics varCoaccessibilityEpigenetics methodName_{{method}} annotationName_{{annotation}} tissueCategory_{{tissueCategoryNumber}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
+             class="multiRecordCell varAllEpigenetics varCoaccessibilityEpigenetics methodName_{{method}} annotationName_{{annotation}} tissueId_{{safeTissueId}}   significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                {{#uniqueTissueRecords}}
                   <div class="tissueDominantCell epigeneticCellElement tissueId_{{safeTissueId}}  methodName_{{method}} annotationName_{{annotation}}">
                     Chromatin co-accessibility

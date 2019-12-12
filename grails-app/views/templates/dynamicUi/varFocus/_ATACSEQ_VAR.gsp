@@ -59,7 +59,7 @@ ATAC-seq&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bott
 
 <script id="atacSeqVariantTableBodyTissueSpecific"  type="x-tmpl-mustache">
              <div significance_sortField="{{significanceValue}}" sortfield="{{significanceValue}}"
-             class="multiRecordCell varAllEpigenetics varAtacSeqEpigenetics tissueCategory_{{tissueCategoryNumber}} methodName_{{method}} annotationName_{{annotation}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
+             class="multiRecordCell varAllEpigenetics varAtacSeqEpigenetics tissueId_{{safeTissueId}} methodName_{{method}} annotationName_{{annotation}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
 
                     {{#recordsExist}}
 
