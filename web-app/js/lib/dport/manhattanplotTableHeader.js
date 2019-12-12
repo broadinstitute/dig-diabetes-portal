@@ -7,6 +7,7 @@ var mpgSoftware = mpgSoftware || {};
     mpgSoftware.manhattanplotTableHeader = (function () {
 
         var mySavedVariables = {};
+        var globalFirstDataset = "";
         var setMySavedVariables = function(saveTheseVariables){
             mySavedVariables = saveTheseVariables;
         }
@@ -34,19 +35,18 @@ var mpgSoftware = mpgSoftware || {};
                         (data)) {
                         if ((data.sampleGroups) &&
                             (data.sampleGroups.length > 0)) {
-                            //first empty the old one
-                            $('#manhattanSampleGroupChooser').empty()
-                            //assume we have data and process it
+                            var options = $('#manhattanSampleGroupChooser');
+                            options.empty();
+                            options.append("<option selected hidden value=default>-- &nbsp;&nbsp;select a dataset&nbsp;&nbsp; --</option>");
+
                             for (var i = 0; i < data.sampleGroups.length; i++) {
                                 var sampleGroup = data.sampleGroups[i];
-                                console.log("sample group default: "+sampleGroup.default);
-                                $('#manhattanSampleGroupChooser').append(new Option(sampleGroup.sgn, sampleGroup.sg, sampleGroup.default));
+                                var newOption = $("<option />").val(sampleGroup.sg).html(sampleGroup.sgn);
+                                options.append(newOption);
                             }
-
                             }
                          }
                     loader.hide();
-                    $('#manhattanSampleGroupChooser.selectpicker').selectpicker('refresh');
                 },
                 error: function (jqXHR, exception) {
                     loader.hide();
@@ -58,14 +58,13 @@ var mpgSoftware = mpgSoftware || {};
 
 
         var onCLickPhenotype = function (phenotype){
-            var coreVariables = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
-            //on click of phenotype populate the dataset dropdown list again
-            mpgSoftware.manhattanplotTableHeader.fillSampleGroupDropdown(phenotype)
-            //var sampleGroup = $('#manhattanSampleGroupChooser').val()
-            mpgSoftware.manhattanplotTableHeader.callFillClumpVariants()
-            // mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis(phenotype,$('#manhattanSampleGroupChooser').val());
-           //window.history.pushState('page2', 'Type 2 Diabetes', coreVariables.traitSearchUrl + "?trait=" + phenotype + "&significance=" + 0.0005);
+            mpgSoftware.manhattanplotTableHeader.fillSampleGroupDropdown(phenotype);
+            $('#manhattanPlot1').empty();
+            $('#traitTableBody').empty();
+            $('#phenotypeTraits').DataTable().rows().remove();
+            $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
 
+           // console.log("globalFirstDataset  " + globalFirstDataset);
         }
 
         var fillClumpVariants = function (phenotype, dataset, r2) {
@@ -135,11 +134,11 @@ var mpgSoftware = mpgSoftware || {};
             });
         };
 
-        var callFillClumpVariants = function() {
+        var callFillClumpVariants = function(dataset) {
             var mySavedVars = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
             var r2 = $('#rthreshold').val();
             var selectedPhenotype = $('#phenotypeVFChoser').val()
-            var selectedDataset = $('#manhattanSampleGroupChooser').val()
+            var selectedDataset = dataset
             //phenotype is null when its not selected from the manhattan plot page
             if(selectedPhenotype == null){
                 selectedPhenotype = mySavedVars.phenotypeName;
