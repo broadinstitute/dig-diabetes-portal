@@ -58,13 +58,16 @@ var mpgSoftware = mpgSoftware || {};
 
 
         var onCLickPhenotype = function (phenotype){
+            var coreVariables = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
             mpgSoftware.manhattanplotTableHeader.fillSampleGroupDropdown(phenotype);
             $('#manhattanPlot1').empty();
             $('#traitTableBody').empty();
             $('#phenotypeTraits').DataTable().rows().remove();
             $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
+            window.history.pushState('page2', 'Type 2 Diabetes', coreVariables.traitSearchUrl + "?trait=" + phenotype + "&significance=" + 0.0005);
 
-           // console.log("globalFirstDataset  " + globalFirstDataset);
+
+            // console.log("globalFirstDataset  " + globalFirstDataset);
         }
 
         var fillClumpVariants = function (phenotype, dataset, r2) {
@@ -134,11 +137,11 @@ var mpgSoftware = mpgSoftware || {};
             });
         };
 
-        var callFillClumpVariants = function(dataset) {
+        var callFillClumpVariants = function() {
             var mySavedVars = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
             var r2 = $('#rthreshold').val();
             var selectedPhenotype = $('#phenotypeVFChoser').val()
-            var selectedDataset = dataset
+            var selectedDataset = $('#manhattanSampleGroupChooser').val()
             //phenotype is null when its not selected from the manhattan plot page
             if(selectedPhenotype == null){
                 selectedPhenotype = mySavedVars.phenotypeName;
