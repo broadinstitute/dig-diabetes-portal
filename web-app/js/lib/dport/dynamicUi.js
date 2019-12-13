@@ -4107,10 +4107,10 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
                 }
             });
             _.forEach($('a.cellExpander+div>table'),function(oneTable){
-                if ($(oneTable).find('tr:visible').length>0){
-                    $(oneTable).parents('a.cellExpander').show();
+                if ($(oneTable).find('tr.yesDisplay').length>0){
+                    $(oneTable).parent().prev('a.cellExpander:hidden').show();
                 }else {
-                    $(oneTable).parents('a.cellExpander').hide();
+                    $(oneTable).parent().prev('a.cellExpander:visible').hide();
                 }
             });
 
