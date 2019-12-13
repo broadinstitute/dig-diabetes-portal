@@ -182,7 +182,20 @@ const setGregorSubTableByPValue = function(currentValue){
     };
 
 
-const setUpFilterAndSlider = function (retrievedRecords,valueDisplay ){
+    const setGregorSubTableByPValueAndFEValue = function(currentPValue,
+                                                         currentFEValue){
+        $('div.gregorVariantTableBody').filter(function() {return $(this).attr("sortFEField") >= currentValue;}).show();
+        $('div.gregorVariantTableBody').filter(function() {return $(this).attr("sortFEField") < currentValue;}).hide();
+        $('div.gregorSubTableRow').filter(function() {return $(this).attr("sortFEvalue") >= currentValue;}).find('input.gregorSubTableRowHeader').prop('checked', true);
+        $('div.gregorSubTableRow').filter(function() {return $(this).attr("sortFEvalue") < currentValue;}).find('input.gregorSubTableRowHeader').prop('checked', false);
+        $('div.gregorSubTableHeader').filter(function() {return $(this).attr("sortFEvalue") >= currentValue;}).find('input.gregorSubTableRowHeader').prop('checked', true);
+        $('div.gregorSubTableHeader').filter(function() {return $(this).attr("sortFEvalue") < currentValue;}).find('input.gregorSubTableRowHeader').prop('checked', false);
+
+    };
+
+
+
+    const setUpFilterAndSlider = function (retrievedRecords,valueDisplay ){
     const minVal = (retrievedRecords.header.minimumGregorPValue<=1)?
         retrievedRecords.header.minimumGregorPValue:1;
     const maxVal = (retrievedRecords.header.maximumGregorPValue<=1)?

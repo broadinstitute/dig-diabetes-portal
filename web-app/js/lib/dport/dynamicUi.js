@@ -4064,6 +4064,8 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
 
         // now go through every cell and determine if we want to display it.  We have to make all of these decisions here,
         // before we start to step through row by row ( or column by column), if we want consistent behavior across transposition.
+        // $('#mainVariantDiv a.cellExpander').show().removeClass('skipDisplay').addClass('yesDisplay');
+        $('#mainVariantDiv tr.singleCellElement').show();
         if (filterByGregor){
             _.forEach($('#mainVariantDiv div.epigeneticCellElement'),function(oneTr){
                 const currentAnnotation = extractClassBasedTrailingString(oneTr,"annotationName_");
@@ -4088,58 +4090,83 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
                     $(oneTr).addClass('skipDisplay');
                 }
             });
-            _.forEach($('#mainVariantDiv tr.singleCellElement'),function(oneTr){
-                const currentAnnotation = extractClassBasedTrailingString(oneTr,"annotationName_");
-                const currentTissue = extractClassBasedTrailingString(oneTr,"tissueId_");
-                const currentMethod = extractClassBasedTrailingString(oneTr,"methodName_");
-                if ((currentAnnotation.length===0)||(_.includes(uniqueTissues,currentTissue))&&
-                    ((uniqueTissues.length===0)||(_.includes(uniqueAnnotations,currentAnnotation)))&&
-                    ((currentMethod.length===0)||(_.includes(uniqueMethods,currentMethod)))
-                ){
+            _.forEach($('#mainVariantDiv tr.singleCellElement'),function(oneTr) {
+                const currentAnnotation = extractClassBasedTrailingString(oneTr, "annotationName_");
+                const currentTissue = extractClassBasedTrailingString(oneTr, "tissueId_");
+                const currentMethod = extractClassBasedTrailingString(oneTr, "methodName_");
+                if ((currentAnnotation.length === 0) || (_.includes( uniqueAnnotations, currentAnnotation )) &&
+                    ((uniqueTissues.length === 0) || (_.includes(uniqueTissues, currentTissue))) &&
+                    ((currentMethod.length === 0) || (_.includes(uniqueMethods, currentMethod)))
+                ) {
                     $(oneTr).show();
-                    $(oneTr).addClass('yesDisplay');
-                    $(oneTr).parent().addClass('yesDisplay');
-                    if (!$.isEmptyObject(quantileDef)){
+                    $(oneTr).addClass('yesDisplay').removeClass('skipDisplay');
+                    if (!$.isEmptyObject(quantileDef)) {
 
-                        const quanAss = quantileDef[currentAnnotation+"_"+currentTissue.replace("_",":")];
-                        if ( typeof quanAss !== 'undefined'){
-                            $(oneTr).addClass('gregorQuantile_'+quanAss.quantile);
+                        const quanAss = quantileDef[currentAnnotation + "_" + currentTissue.replace("_", ":")];
+                        if (typeof quanAss !== 'undefined') {
+                            $(oneTr).addClass('gregorQuantile_' + quanAss.quantile);
                         }
                     }
                 } else {
                     $(oneTr).hide();
-                    $(oneTr).addClass('skipDisplay');
+                    $(oneTr).addClass('skipDisplay').removeClass('yesDisplay');
                 }
             });
-            _.forEach($('#mainVariantDiv a.cellExpander+div>table'),function(oneTable){
-                if ($(oneTable).find('tr.yesDisplay').length>0){
-                    $(oneTable).parent().prev('a.cellExpander:hidden').show();
-                }else {
-                    $(oneTable).parent().prev('a.cellExpander:visible').hide();
-                }
-            });
+        } else if (filterByExplicitMethod) {
+                _.forEach($('#mainVariantDiv div.epigeneticCellElement'), function (oneTr) {
+                    const currentAnnotation = extractClassBasedTrailingString(oneTr, "annotationName_");
+                    const currentMethod = extractClassBasedTrailingString(oneTr, "methodName_");
+                    if ((_.includes(uniqueMethods, currentAnnotation) ||
+                        ((currentAnnotation.length === 0) || (_.includes(uniqueAnnotations, currentAnnotation))))) {
+                        $(oneTr).show();
+                        $(oneTr).addClass('yesDisplay').removeClass('skipDisplay');
+                        $(oneTr).parent().addClass('yesDisplay').removeClass('skipDisplay');
 
-        } else if (filterByExplicitMethod){
-            _.forEach($('#mainVariantDiv div.epigeneticCellElement'),function(oneTr){
-                const currentAnnotation = extractClassBasedTrailingString(oneTr,"annotationName_");
-                const currentMethod = extractClassBasedTrailingString(oneTr,"methodName_");
-                if ((_.includes(uniqueMethods,currentAnnotation)||
-                    ((currentAnnotation.length===0)||(_.includes(uniqueAnnotations,currentAnnotation))))){
-                    $(oneTr).show();
-                    $(oneTr).addClass('yesDisplay');
-                    $(oneTr).parent().addClass('yesDisplay');
+                    } else {
+                        $(oneTr).hide();
+                        $(oneTr).addClass('skipDisplay').removeClass('yesDisplay');
+                    }
+                });
+                _.forEach($('#mainVariantDiv tr.singleCellElement'), function (oneTr) {
+                    const currentAnnotation = extractClassBasedTrailingString(oneTr, "annotationName_");
+                    // const currentTissue = extractClassBasedTrailingString(oneTr,"tissueId_");
+                    // const currentMethod = extractClassBasedTrailingString(oneTr,"methodName_");
+                    if ((currentAnnotation.length === 0) || (_.includes(uniqueAnnotations, currentAnnotation))
+                    // ((uniqueTissues.length===0)||(_.includes(uniqueAnnotations,currentAnnotation)))&&
+                    // ((currentMethod.length===0)||(_.includes(uniqueMethods,currentMethod)))
+                    ) {
+                        $(oneTr).show();
+                        $(oneTr).addClass('yesDisplay').removeClass('skipDisplay');
+                        if (!$.isEmptyObject(quantileDef)) {
 
-                } else {
-                    $(oneTr).hide();
-                    $(oneTr).addClass('skipDisplay');
-                }
-            });
-        }
+                            const quanAss = quantileDef[currentAnnotation + "_" + currentAnnotation.replace("_", ":")];
+                            if (typeof quanAss !== 'undefined') {
+                                $(oneTr).addClass('gregorQuantile_' + quanAss.quantile);
+                            }
+                        }
+                    } else {
+                        $(oneTr).hide();
+                        $(oneTr).addClass('skipDisplay').removeClass('yesDisplay');
+                    }
+
+
+                });
+            }
+        _.forEach($('#mainVariantDiv a.cellExpander+div>table'),function(oneTable){
+            if ($(oneTable).find('tr.yesDisplay').length>0){
+                $(oneTable).parent().prev('a.cellExpander:hidden').show();
+            }else {
+                $(oneTable).parent().prev('a.cellExpander:visible').hide();
+            }
+        });
         _.forEach($('#mainVariantDiv div.multiRecordCell'),function(multiRecordCell){
             const multiRecordCellDom = $(multiRecordCell);
-            if (multiRecordCellDom.find('div.epigeneticCellElement.yesDisplay').length === 0){
+            const displayableEpigeneticCellElement = multiRecordCellDom.find('div.epigeneticCellElement.yesDisplay');
+            if (displayableEpigeneticCellElement.length === 0){
+                displayableEpigeneticCellElement.removeClass('yesDisplay').addClass('skipDisplay');
                 multiRecordCellDom.hide();
             } else {
+                displayableEpigeneticCellElement.removeClass('skipDisplay').addClass('yesDisplay');
                 multiRecordCellDom.show();
             }
         });
