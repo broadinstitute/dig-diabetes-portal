@@ -239,6 +239,9 @@ modules = {
         resource url: 'js/lib/dport/dynamicUi.js'
         resource url: 'css/dport/dynamicUi.css'
 
+        resource url: 'js/lib/dport/dynamicUi/shared/sortUtility.js'
+        resource url: 'js/lib/dport/dynamicUi/shared/categorizer.js'
+        resource url: 'js/lib/dport/dynamicUi/shared/renderData.js'
         resource url: 'js/lib/dport/dynamicUi/geneFocus/geneBurdenFirth.js'
         resource url: 'js/lib/dport/dynamicUi/geneFocus/geneBurdenSkat.js'
         resource url: 'js/lib/dport/dynamicUi/geneFocus/metaXcan.js'

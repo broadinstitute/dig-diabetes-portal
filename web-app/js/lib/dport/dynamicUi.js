@@ -636,7 +636,8 @@ mpgSoftware.dynamicUi = (function () {
                             {actionId:actionId}, baseDomElement);
                         actionToUndertake();
                     } else {
-                        var phenotype = $('li.chosenPhenotype').attr('id');
+                        //var phenotype = $('li.chosenPhenotype').attr('id');
+                        var phenotype = getAccumulatorObject("phenotype", baseDomElement);
                         var dataForCall = _.map(getAccumulatorObject("geneInfoArray", baseDomElement), function (o) {
                             return {
                                 gene: o.name,
@@ -668,7 +669,8 @@ mpgSoftware.dynamicUi = (function () {
                             {actionId: actionId}, baseDomElement);
                         actionToUndertake();
                     } else {
-                        var phenotype = $('li.chosenPhenotype').attr('id');
+                        //var phenotype = $('li.chosenPhenotype').attr('id');
+                        var phenotype = getAccumulatorObject("phenotype", baseDomElement);
                         var dataForCall = _.map(getAccumulatorObject("geneInfoArray", baseDomElement), function (o) {
                             return {
                                 gene: o.name,
@@ -703,7 +705,8 @@ mpgSoftware.dynamicUi = (function () {
                             baseDomElement);
                         actionToUndertake();
                     } else {
-                        var phenotype = $('li.chosenPhenotype').attr('id');
+                        //var phenotype = $('li.chosenPhenotype').attr('id');
+                        var phenotype = getAccumulatorObject("phenotype", baseDomElement);
                         var dataForCall = _.map(getAccumulatorObject("geneInfoArray", baseDomElement), function (o) {
                             return {
                                 gene: o.name,
@@ -2887,6 +2890,8 @@ mpgSoftware.dynamicUi = (function () {
 
         switch (additionalParameters.dynamicTableType) {
             case 'geneTable':
+                setAccumulatorObject("phenotype",data.phenotype,
+                    additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage);
                 $('#inputBoxForDynamicContextId').typeahead({
                     source: function (query, process) {
                         $.get(additionalParameters.generalizedTypeaheadUrl, {query: query}, function (data) {
@@ -4060,7 +4065,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
         // now go through every cell and determine if we want to display it.  We have to make all of these decisions here,
         // before we start to step through row by row ( or column by column), if we want consistent behavior across transposition.
         if (filterByGregor){
-            _.forEach($('div.epigeneticCellElement'),function(oneTr){
+            _.forEach($('#mainVariantDiv div.epigeneticCellElement'),function(oneTr){
                 const currentAnnotation = extractClassBasedTrailingString(oneTr,"annotationName_");
                 const currentTissue = extractClassBasedTrailingString(oneTr,"tissueId_");
                 const currentMethod = extractClassBasedTrailingString(oneTr,"methodName_");
@@ -4083,7 +4088,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
                     $(oneTr).addClass('skipDisplay');
                 }
             });
-            _.forEach($('tr.singleCellElement'),function(oneTr){
+            _.forEach($('#mainVariantDiv tr.singleCellElement'),function(oneTr){
                 const currentAnnotation = extractClassBasedTrailingString(oneTr,"annotationName_");
                 const currentTissue = extractClassBasedTrailingString(oneTr,"tissueId_");
                 const currentMethod = extractClassBasedTrailingString(oneTr,"methodName_");
@@ -4106,7 +4111,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
                     $(oneTr).addClass('skipDisplay');
                 }
             });
-            _.forEach($('a.cellExpander+div>table'),function(oneTable){
+            _.forEach($('#mainVariantDiv a.cellExpander+div>table'),function(oneTable){
                 if ($(oneTable).find('tr.yesDisplay').length>0){
                     $(oneTable).parent().prev('a.cellExpander:hidden').show();
                 }else {
@@ -4115,7 +4120,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
             });
 
         } else if (filterByExplicitMethod){
-            _.forEach($('div.epigeneticCellElement'),function(oneTr){
+            _.forEach($('#mainVariantDiv div.epigeneticCellElement'),function(oneTr){
                 const currentAnnotation = extractClassBasedTrailingString(oneTr,"annotationName_");
                 const currentMethod = extractClassBasedTrailingString(oneTr,"methodName_");
                 if ((_.includes(uniqueMethods,currentAnnotation)||
@@ -4130,7 +4135,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
                 }
             });
         }
-        _.forEach($('div.multiRecordCell'),function(multiRecordCell){
+        _.forEach($('#mainVariantDiv div.multiRecordCell'),function(multiRecordCell){
             const multiRecordCellDom = $(multiRecordCell);
             if (multiRecordCellDom.find('div.epigeneticCellElement.yesDisplay').length === 0){
                 multiRecordCellDom.hide();
@@ -4145,7 +4150,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
 
 
         // Loop once for each annotation
-        _.forEach($('div.varAnnotation'),function(oneDiv){
+        _.forEach($('#mainVariantDiv div.varAnnotation'),function(oneDiv){
             if (currentTableForm === 'variantTableVariantHeaders') {
                 filterEpigeneticTableVariantsOnTop(oneDiv,blankRowsAreOkay,weAreInTissueMode,uniqueAnnotations,uniqueMethods,filterByGregor);
             } else  if (currentTableForm === 'variantTableAnnotationHeaders') {
