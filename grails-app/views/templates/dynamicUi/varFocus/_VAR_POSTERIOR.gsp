@@ -5,7 +5,7 @@ Association
 </script>
 
 <script id="variantPosteriorPValueSubcategoryLabel"  type="x-tmpl-mustache">
-<div class="phenotypeRelatedData staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}" sortField=5>
+<div class="phenotypeRelatedData staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}" sortField='AAF'>
 posterior prob
 <g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/>
 </div>

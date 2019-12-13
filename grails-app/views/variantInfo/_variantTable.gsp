@@ -167,6 +167,30 @@
                         }
                         ,
                         {
+                            code: 'ABC_VAR',
+                            category: 'ABC Tissue',
+                            displayCategory: 'ABC Tissue',
+                            subcategory: 'VariantAbc',
+                            displaySubcategory: 'ABC list',
+                            headerWriter:'abcVariantTableTissueHeader',
+                            cellBodyWriter:'abcVariantTableBody',
+                            cellBodyWriterTissueSpecific:'abcVariantTableBodyTissueSpecific',
+                            categoryWriter:'abcVariantTableTissueHeaderLabel',
+                            drillDownCategoryWriter:'abcVariantTableTissueHeaderLabel',
+                            subCategoryWriter:'abcVariantTableTissueRowLabel',
+                            drillDownSubCategoryWriter:'abcVariantTableTissueRowLabel',
+                            tissueCategoryWriter:'abcVariantTableTissueSpecificHeaderLabel',
+                            tissueSubCategoryWriter:'abcVariantTableTissueSpecificRowLabel',
+                            numberRecordsCellPresentationStringWriter:'abcVariantTableNumberRecordsCellPresentationString',
+                            significanceCellPresentationStringWriter:'abcVariantTableSignificanceCellPresentationString',
+                            packagingString:'mpgSoftware.dynamicUi.dnaseVariantTable',
+                            sortingSubroutine:'VariantAbc',
+                            internalIdentifierString:'getABCGivenVariantList',
+                            nameOfAccumulatorField:'abcVariantInfo',
+                            nameOfAccumulatorFieldWithIndex:'variantInfoArray'
+                        }
+                        ,
+                        {
                             code: 'TISSUEDOMINANT_VAR',
                             category: 'TissueDominant',
                             displayCategory: 'TissueDominant',

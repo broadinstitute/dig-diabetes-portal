@@ -4083,6 +4083,36 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
                     $(oneTr).addClass('skipDisplay');
                 }
             });
+            _.forEach($('tr.singleCellElement'),function(oneTr){
+                const currentAnnotation = extractClassBasedTrailingString(oneTr,"annotationName_");
+                const currentTissue = extractClassBasedTrailingString(oneTr,"tissueId_");
+                const currentMethod = extractClassBasedTrailingString(oneTr,"methodName_");
+                if ((currentAnnotation.length===0)||(_.includes(uniqueTissues,currentTissue))&&
+                    ((uniqueTissues.length===0)||(_.includes(uniqueAnnotations,currentAnnotation)))&&
+                    ((currentMethod.length===0)||(_.includes(uniqueMethods,currentMethod)))
+                ){
+                    $(oneTr).show();
+                    $(oneTr).addClass('yesDisplay');
+                    $(oneTr).parent().addClass('yesDisplay');
+                    if (!$.isEmptyObject(quantileDef)){
+
+                        const quanAss = quantileDef[currentAnnotation+"_"+currentTissue.replace("_",":")];
+                        if ( typeof quanAss !== 'undefined'){
+                            $(oneTr).addClass('gregorQuantile_'+quanAss.quantile);
+                        }
+                    }
+                } else {
+                    $(oneTr).hide();
+                    $(oneTr).addClass('skipDisplay');
+                }
+            });
+            _.forEach($('a.cellExpander+div>table'),function(oneTable){
+                if ($(oneTable).find('tr:visible').length>0){
+                    $(oneTable).parents('a.cellExpander').show();
+                }else {
+                    $(oneTable).parents('a.cellExpander').hide();
+                }
+            });
 
         } else if (filterByExplicitMethod){
             _.forEach($('div.epigeneticCellElement'),function(oneTr){
@@ -5688,7 +5718,6 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
         // the switch to tissue dominant wants to have the the variance across the top
         let switchWhenFinished = false;
         if (sharedTable.currentForm === 'variantTableAnnotationHeaders'){
-            console.log('switching...');
             switchWhenFinished = true;
             transposeThisTable('#mainVariantDiv table.variantTableHolder','#mainVariantDivHolder');
         }

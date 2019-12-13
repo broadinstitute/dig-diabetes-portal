@@ -8,7 +8,7 @@ records={{numberRecords}}
 
 <script id="tfMotifVariantTableTissueRowLabel"  type="x-tmpl-mustache">
 <div class="variantAnnotationCompress variantHasMotifOverlap staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}  {{isBlank}}"
- sortField=7>
+ sortField='AAD'>
 TF motif overlap&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/></div>
 </script>
 

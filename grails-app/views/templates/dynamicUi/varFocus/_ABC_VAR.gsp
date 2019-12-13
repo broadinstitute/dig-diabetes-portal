@@ -8,7 +8,7 @@ records={{numberRecords}}
 
  <script id="abcVariantTableTissueRowLabel"  type="x-tmpl-mustache">
 <div class="varAllEpigenetics varAbcEpigenetics staticMethodLabels annotationName_GenePrediction methodName_ABC  {{isBlank}} initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation"
- sortField=0>
+  sortField='ABC'>
 ABC&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/></div>
 </script>
 
@@ -19,7 +19,7 @@ ABC&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" b
 
  <script id="abcVariantTableTissueSpecificRowLabel"  type="x-tmpl-mustache">
 <div class="varAllEpigenetics varAbcEpigenetics staticMethodLabels annotationName_GenePrediction methodName_ABC tissueId_{{safeTissueId}} {{isBlank}} initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation"
- sortField=0>
+  sortField='{{tissue_name}}'>
 {{tissue_name}}</div>
 </script>
 

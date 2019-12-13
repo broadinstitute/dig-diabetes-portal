@@ -8,7 +8,7 @@ records={{numberRecords}}
 
 <script id="coaccessibilityVariantTableTissueRowLabel"  type="x-tmpl-mustache">
 <div class="varAllEpigenetics varCoaccessibilityEpigenetics staticMethodLabels annotationName_GenePrediction methodName_cicero  {{isBlank}} initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation"
- sortField=0>
+ sortField='coaccessibility'>
 coaccessibility&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/></div>
 </script>
 
@@ -19,7 +19,7 @@ coaccessibility&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placemen
 
 <script id="coaccessibilityVariantTableTissueSpecificRowLabel"  type="x-tmpl-mustache">
 <div class="varAllEpigenetics varCoaccessibilityEpigenetics staticMethodLabels annotationName_GenePrediction methodName_{{method}} tissueId_{{safeTissueId}} {{isBlank}} initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation"
- sortField=0>
+  sortField='{{tissue_name}}'>
 {{tissue_name}}</div>
 </script>
 

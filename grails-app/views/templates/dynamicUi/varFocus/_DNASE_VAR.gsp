@@ -8,7 +8,7 @@ records={{numberRecords}}
 
 <script id="dnaseVariantTableTissueRowLabel"  type="x-tmpl-mustache">
 <div class="varAllEpigenetics varDnaseEpigenetics  staticMethodLabels annotationName_DNASE methodName_NA initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation {{isBlank}}"
- sortField=0>
+ sortField='DNASE'>
 DNase&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/></div>
 </script>
 
@@ -24,7 +24,7 @@ DNase&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom"
 
 <script id="dnaseVariantTableTissueSpecificRowLabel"  type="x-tmpl-mustache">
 <div class="varAllEpigenetics varDNaseEpigenetics staticMethodLabels annotationName_DNASE methodName_NA tissueId_{{safeTissueId}} {{isBlank}} initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation"
- sortField=0>
+  sortField='{{tissue_name}}'>
 {{tissue_name}}</div>
 </script>
 

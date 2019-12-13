@@ -270,7 +270,10 @@ mpgSoftware.dynamicUi.variantTableHeaders = (function () {
                 return sortBinaryEmphasis(a, b, direction, currentSortObject);
                 break;
             case 'sortMethodsInVariantTable':
-                return sortMethodNamesWithZerosAtTheBottom(a, b, direction, currentSortObject);
+
+                return  Object.getPrototypeOf(sortUtility).textComparisonWithEmptiesAtBottom(a,b, direction, currentSortObject);
+
+                // return sortMethodNamesWithZerosAtTheBottom(a, b, direction, currentSortObject);
                 break;
             case 'VariantAssociationPValue':
                 return  Object.getPrototypeOf(sortUtility).numericalComparisonWithEmptiesAtBottom(a, b, direction, currentSortObject);

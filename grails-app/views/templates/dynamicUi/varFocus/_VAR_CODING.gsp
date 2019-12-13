@@ -5,7 +5,7 @@ Annotation
 </script>
 
 <script id="variantIsCodingSubcategoryLabel"  type="x-tmpl-mustache">
-<div class="variantAnnotationCompress variantIsCoding staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}" sortField=10>
+<div class="variantAnnotationCompress variantIsCoding staticValuesLabelInTissueTable initialLinearIndex_{{indexInOneDimensionalArray}}" sortField='AAA'>
 Coding
 <g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/>
 </div>

@@ -8,7 +8,7 @@ records={{numberRecords}}
 
 <script id="atacSeqVariantTableTissueRowLabel"  type="x-tmpl-mustache">
 <div class="varAllEpigenetics varAtacSeqEpigenetics  staticMethodLabels annotationName_AccessibleChromatin methodName_MACS initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation {{isBlank}}"
- sortField=0>
+  sortField='ATAC-seq'>
 ATAC-seq&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/></div>
 </script>
 
@@ -24,7 +24,7 @@ ATAC-seq&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bott
 
 <script id="atacSeqVariantTableTissueSpecificRowLabel"  type="x-tmpl-mustache">
 <div class="varAllEpigenetics varAtacSeqEpigenetics staticMethodLabels methodName_{{method}} annotationName_{{annotation}} tissueId_{{safeTissueId}} {{isBlank}} initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation"
- sortField=0>
+  sortField='{{tissue_name}}'>
 {{tissue_name}}</div>
 </script>
 

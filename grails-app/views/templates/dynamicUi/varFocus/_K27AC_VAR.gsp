@@ -8,7 +8,7 @@ records={{numberRecords}}
 
 <script id="h3k27acVariantTableTissueRowLabel"  type="x-tmpl-mustache">
 <div class="varAllEpigenetics varH3k27acEpigenetics  staticMethodLabels annotationName_H3K27AC methodName_NA initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation {{isBlank}}"
- sortField=0>
+ sortField='H3K27AC'>
 H3K27AC&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="bottom" body="tissueTable.DEPICT.help.text"/></div>
 </script>
 
@@ -24,7 +24,7 @@ H3K27AC&nbsp;<g:helpText title="tissueTable.DEPICT.help.header" placement="botto
 
 <script id="h3k27acVariantTableTissueSpecificRowLabel"  type="x-tmpl-mustache">
 <div class="varAllEpigenetics varAbcEpigenetics staticMethodLabels annotationName_H3K27AC methodName_NA tissueId_{{safeTissueId}} {{isBlank}} initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation"
- sortField=0>
+  sortField='{{tissue_name}}'>
 {{tissue_name}}</div>
 </script>
 

@@ -16,7 +16,7 @@ records={{numberRecords}}
 
 <script id="chromStateVariantTableIndividualAnnotationLabel"  type="x-tmpl-mustache">
 <div class="varAllEpigenetics varChromHmmEpigenetics variantEpigenetics initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation methodName_ChromHMM staticMethodLabels annotationName_{{annotationName}} {{isBlank}}"
- sortField=0>
+ sortField='ChromHMM{{annotationName}}'>
 <div style="font-weight: bold">ChromHMM</div>
 {{annotationName}}
 </div>
@@ -29,7 +29,7 @@ records={{numberRecords}}
 
 <script id="chromStateVariantTableTissueSpecificRowLabel"  type="x-tmpl-mustache">
 <div class="varAllEpigenetics varAbcEpigenetics staticMethodLabels annotationName_{{annotation}} methodName_{{method}} {{isBlank}} tissueId_{{safeTissueId}} initialLinearIndex_{{indexInOneDimensionalArray}} varAnnotation"
- sortField=0>
+  sortField='{{tissue_name}}'>
 {{tissue_name}}</div>
 </script>
 
