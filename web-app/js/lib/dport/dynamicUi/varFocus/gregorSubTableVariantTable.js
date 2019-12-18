@@ -5,16 +5,18 @@ mpgSoftware.dynamicUi.gregorSubTableVariantTable = (function () {
     "use strict";
 
 
-
-const fieldsForPValue = {
-    numericalField:'p_value',
-    directionOfIncreasingSignificance:'asc',
-    defaultValueField:'defaultGregorPValueUpperValue',
-    strongestAssociationField:'minimumGregorPValue',
-    weakestAssociationField:'maximumGregorPValue',
-    numberOfQuantiles: 5,
-    quickLookupField:'quickLookup'
-};
+    let rememberCutOffs  = {};   // what has the user chosen as the current value cut offs?
+    const fieldDescribingCombinationStrategy = 'span.textualDescriptionOfFilteringStrategy';
+    const fieldsForPValue = {
+        numericalField:'p_value',
+        directionOfIncreasingSignificance:'asc',
+        defaultValueField:'defaultGregorPValueUpperValue',
+        strongestAssociationField:'minimumGregorPValue',
+        weakestAssociationField:'maximumGregorPValue',
+        numberOfQuantiles: 5,
+        quickLookupField:'quickLookup',
+        rememberCutOff:'p_value_cutoff',
+    };
     const fieldsForFEValue = {
         numericalField:'fe_value',
         directionOfIncreasingSignificance:'desc',
@@ -22,18 +24,20 @@ const fieldsForPValue = {
         strongestAssociationField:'maximumGregorFEValue',
         weakestAssociationField:'minimumGregorFEValue',
         numberOfQuantiles: 5,
-        quickLookupField:'quickLookupFE'
+        quickLookupField:'quickLookupFE',
+        rememberCutOff:'fe_value_cutoff',
     };
 
    const createFilteringRanges = function(allRecs,geneRecord,
                                           fieldMapping) {
        const recordsOrderedBySignificance = _.orderBy(allRecs,[fieldMapping.numericalField],[fieldMapping.directionOfIncreasingSignificance]);
        const defaultValue = _.last(_.take(recordsOrderedBySignificance,5));
-      geneRecord.header[fieldMapping.defaultValueField] = ( typeof defaultValue === 'undefined')?1:defaultValue[fieldMapping.numericalField];
-      const mostSignificantValue = _.first(recordsOrderedBySignificance);
-      geneRecord.header[fieldMapping.strongestAssociationField] = ( typeof mostSignificantValue === 'undefined')?0:mostSignificantValue[fieldMapping.numericalField];
-      const leastSignificantValue = _.last(recordsOrderedBySignificance);
-      geneRecord.header[fieldMapping.weakestAssociationField] = ( typeof leastSignificantValue === 'undefined')?1:leastSignificantValue[fieldMapping.numericalField];
+       rememberCutOffs[fieldMapping.rememberCutOff] = defaultValue[fieldMapping.numericalField];
+       geneRecord.header[fieldMapping.defaultValueField] = ( typeof defaultValue === 'undefined')?1:defaultValue[fieldMapping.numericalField];
+       const mostSignificantValue = _.first(recordsOrderedBySignificance);
+       geneRecord.header[fieldMapping.strongestAssociationField] = ( typeof mostSignificantValue === 'undefined')?0:mostSignificantValue[fieldMapping.numericalField];
+       const leastSignificantValue = _.last(recordsOrderedBySignificance);
+       geneRecord.header[fieldMapping.weakestAssociationField] = ( typeof leastSignificantValue === 'undefined')?1:leastSignificantValue[fieldMapping.numericalField];
        const quantileBreak = Math.floor(allRecs.length/fieldMapping.numberOfQuantiles);
        const quantiles = [];
        _.forEach(_.range(0,fieldMapping.numberOfQuantiles-1),function(rec, index){
@@ -161,37 +165,101 @@ const fieldsForPValue = {
     };
 
 const setGregorSubTableByPValue = function(currentValue){
-    $('div.gregorVariantTableBody').filter(function() {return $(this).attr("sortField") <= currentValue;}).show();
-    $('div.gregorVariantTableBody').filter(function() {return $(this).attr("sortField") > currentValue;}).hide();
-    $('div.gregorSubTableRow').filter(function() {return $(this).attr("sortvalue") <= currentValue;}).find('input.gregorSubTableRowHeader').prop('checked', true);
-    $('div.gregorSubTableRow').filter(function() {return $(this).attr("sortvalue") > currentValue;}).find('input.gregorSubTableRowHeader').prop('checked', false);
-    $('div.gregorSubTableHeader').filter(function() {return $(this).attr("sortvalue") <= currentValue;}).find('input.gregorSubTableRowHeader').prop('checked', true);
-    $('div.gregorSubTableHeader').filter(function() {return $(this).attr("sortvalue") > currentValue;}).find('input.gregorSubTableRowHeader').prop('checked', false);
-
+    setGregorSubTableByPValueAndFEValue();
+    // $('div.gregorVariantTableBody').filter(function() {return $(this).attr("sortField") <= currentValue;}).show();
+    // $('div.gregorVariantTableBody').filter(function() {return $(this).attr("sortField") > currentValue;}).hide();
+    // $('div.gregorSubTableRow').filter(function() {return $(this).attr("sortvalue") <= currentValue;}).find('input.gregorSubTableRowHeader').prop('checked', true);
+    // $('div.gregorSubTableRow').filter(function() {return $(this).attr("sortvalue") > currentValue;}).find('input.gregorSubTableRowHeader').prop('checked', false);
+    // $('div.gregorSubTableHeader').filter(function() {return $(this).attr("sortvalue") <= currentValue;}).find('input.gregorSubTableRowHeader').prop('checked', true);
+    // $('div.gregorSubTableHeader').filter(function() {return $(this).attr("sortvalue") > currentValue;}).find('input.gregorSubTableRowHeader').prop('checked', false);
 };
 
 
     const setGregorSubTableByFEValue = function(currentValue){
-        $('div.gregorVariantTableBody').filter(function() {return $(this).attr("sortFEField") >= currentValue;}).show();
-        $('div.gregorVariantTableBody').filter(function() {return $(this).attr("sortFEField") < currentValue;}).hide();
-        $('div.gregorSubTableRow').filter(function() {return $(this).attr("sortFEvalue") >= currentValue;}).find('input.gregorSubTableRowHeader').prop('checked', true);
-        $('div.gregorSubTableRow').filter(function() {return $(this).attr("sortFEvalue") < currentValue;}).find('input.gregorSubTableRowHeader').prop('checked', false);
-        $('div.gregorSubTableHeader').filter(function() {return $(this).attr("sortFEvalue") >= currentValue;}).find('input.gregorSubTableRowHeader').prop('checked', true);
-        $('div.gregorSubTableHeader').filter(function() {return $(this).attr("sortFEvalue") < currentValue;}).find('input.gregorSubTableRowHeader').prop('checked', false);
+        setGregorSubTableByPValueAndFEValue();
+        // $('div.gregorVariantTableBody').filter(function() {return $(this).attr("sortFEField") >= currentValue;}).show();
+        // $('div.gregorVariantTableBody').filter(function() {return $(this).attr("sortFEField") < currentValue;}).hide();
+        // $('div.gregorSubTableRow').filter(function() {return $(this).attr("sortFEvalue") >= currentValue;}).find('input.gregorSubTableRowHeader').prop('checked', true);
+        // $('div.gregorSubTableRow').filter(function() {return $(this).attr("sortFEvalue") < currentValue;}).find('input.gregorSubTableRowHeader').prop('checked', false);
+        // $('div.gregorSubTableHeader').filter(function() {return $(this).attr("sortFEvalue") >= currentValue;}).find('input.gregorSubTableRowHeader').prop('checked', true);
+        // $('div.gregorSubTableHeader').filter(function() {return $(this).attr("sortFEvalue") < currentValue;}).find('input.gregorSubTableRowHeader').prop('checked', false);
 
     };
 
 
-    const setGregorSubTableByPValueAndFEValue = function(currentPValue,
-                                                         currentFEValue){
-        $('div.gregorVariantTableBody').filter(function() {return $(this).attr("sortFEField") >= currentValue;}).show();
-        $('div.gregorVariantTableBody').filter(function() {return $(this).attr("sortFEField") < currentValue;}).hide();
-        $('div.gregorSubTableRow').filter(function() {return $(this).attr("sortFEvalue") >= currentValue;}).find('input.gregorSubTableRowHeader').prop('checked', true);
-        $('div.gregorSubTableRow').filter(function() {return $(this).attr("sortFEvalue") < currentValue;}).find('input.gregorSubTableRowHeader').prop('checked', false);
-        $('div.gregorSubTableHeader').filter(function() {return $(this).attr("sortFEvalue") >= currentValue;}).find('input.gregorSubTableRowHeader').prop('checked', true);
-        $('div.gregorSubTableHeader').filter(function() {return $(this).attr("sortFEvalue") < currentValue;}).find('input.gregorSubTableRowHeader').prop('checked', false);
+    const setGregorSubTableByPValueAndFEValue = function(){
+        const currentPValue = rememberCutOffs[fieldsForPValue.rememberCutOff];
+        const currentFEValue = rememberCutOffs[fieldsForFEValue.rememberCutOff];
+        const andTheCutoffs = ($(fieldDescribingCombinationStrategy).text()==='AND');
+        let fieldPasses;
+        let fieldFails;
+        let valuePasses;
+        let valueFails;
+        if (andTheCutoffs) {
+            fieldPasses = function () {
+                return (($(this).attr("sortField") <= currentPValue) &&
+                    ($(this).attr("sortFEField") >= currentFEValue));
+            };
+            fieldFails = function () {
+                return (($(this).attr("sortField") > currentPValue) ||
+                    ($(this).attr("sortFEField") < currentFEValue));
+            };
 
+            valuePasses = function () {
+                return (($(this).attr("sortvalue") <= currentPValue) &&
+                    ($(this).attr("sortFEvalue") >= currentFEValue));
+            };
+            valueFails = function () {
+                return (($(this).attr("sortvalue") > currentPValue) ||
+                    ($(this).attr("sortFEvalue") < currentFEValue));
+            };
+        } else {
+            fieldPasses = function () {
+                return (($(this).attr("sortField") <= currentPValue) ||
+                    ($(this).attr("sortFEField") >= currentFEValue));
+            };
+            fieldFails = function () {
+                return (($(this).attr("sortField") > currentPValue) &&
+                    ($(this).attr("sortFEField") < currentFEValue));
+            };
+            valuePasses = function () {
+                return (($(this).attr("sortvalue") <= currentPValue) ||
+                    ($(this).attr("sortFEvalue") >= currentFEValue));
+            };
+            valueFails = function () {
+                return (($(this).attr("sortvalue") > currentPValue) &&
+                    ($(this).attr("sortFEvalue") < currentFEValue));
+            };
+        }
+        $('div.gregorVariantTableBody').filter(fieldPasses).show();
+        $('div.gregorVariantTableBody').filter(fieldFails).hide();
+        $('div.gregorSubTableRow').filter(valuePasses).find('input.gregorSubTableRowHeader').prop('checked', true);
+        $('div.gregorSubTableRow').filter(valueFails).find('input.gregorSubTableRowHeader').prop('checked', false);
+        $('div.gregorSubTableHeader').filter(valuePasses).find('input.gregorSubTableRowHeader').prop('checked', true);
+        $('div.gregorSubTableHeader').filter(valueFails).find('input.gregorSubTableRowHeader').prop('checked', false);
     };
+
+    const changeCombinationStrategy= function(){
+        const domElementName = fieldDescribingCombinationStrategy;
+        if (( typeof domElementName === 'undefined') ||
+            (domElementName.length  === 0 )){
+            alert('expected a domElementName to describe the indicator field');
+            return;
+        }
+        const domElement = $(domElementName);
+        if ( domElement.length !== 1){
+            alert('expected the dom name="'+domElementName+'" to correspond to a unique element on the page.');
+            return;
+        }
+        if (domElement.text()==='AND'){
+            domElement.text('OR');
+        } else if (domElement.text()==='OR'){
+            domElement.text('AND');
+        } else {
+            alert('Unexpected value for text name = "'+domElement.text()+'".');
+        }
+        setGregorSubTableByPValueAndFEValue();
+    }
 
 
 
@@ -213,9 +281,10 @@ const setGregorSubTableByPValue = function(currentValue){
 
         },
         slide: function( event, ui ) {
-            const currentValue = Math.pow(10, 0-(logMinVal+(ui.value*(logMaxVal-logMinVal)/100.0)));
-            valueDisplay.text( UTILS.realNumberFormatter(currentValue) );
-            setGregorSubTableByPValue(currentValue);
+            rememberCutOffs[fieldsForPValue.rememberCutOff] = Math.pow(10, 0-(logMinVal+(ui.value*(logMaxVal-logMinVal)/100.0)));
+            valueDisplay.text( UTILS.realNumberFormatter(rememberCutOffs[fieldsForPValue.rememberCutOff]) );
+            //setGregorSubTableByPValue(rememberCutOffs[fieldsForPValue.rememberCutOff]);
+            setGregorSubTableByPValueAndFEValue();
         }
     });
     $('div.minimumGregorPValue').text(UTILS.realNumberFormatter(minVal));
@@ -232,13 +301,14 @@ const setGregorSubTableByPValue = function(currentValue){
             value: defaultGregorFEValue,
             step:(maxVal-minVal)/100.0,
             create: function() {
+                rememberCutOffs[fieldsForFEValue.rememberCutOff] = defaultGregorFEValue;
                 valueDisplay.text( UTILS.realNumberFormatter(defaultGregorFEValue));
-
             },
             slide: function( event, ui ) {
-                const currentValue = ui.value;
-                valueDisplay.text( UTILS.realNumberFormatter(currentValue) );
-                setGregorSubTableByFEValue(currentValue);
+                rememberCutOffs[fieldsForFEValue.rememberCutOff] = ui.value;
+                valueDisplay.text( UTILS.realNumberFormatter(rememberCutOffs[fieldsForFEValue.rememberCutOff]) );
+                // setGregorSubTableByFEValue(rememberCutOffs[fieldsForFEValue.rememberCutOff]);
+                setGregorSubTableByPValueAndFEValue();
             }
         });
         $('div.minimumGregorFEValue').text(UTILS.realNumberFormatter(minVal));
@@ -269,7 +339,8 @@ const setGregorSubTableByPValue = function(currentValue){
             },
             createSingleDnaseCell
         );
-         setGregorSubTableByPValue(objectContainingRetrievedRecords[0].header.defaultGregorPValueUpperValue);
+        //setGregorSubTableByPValue(objectContainingRetrievedRecords[0].header.defaultGregorPValueUpperValue);
+        setGregorSubTableByPValueAndFEValue()
         mpgSoftware.dynamicUi.filterEpigeneticTable("#mainVariantDiv table.variantTableHolder",
                                                     false,
                                                     callingParameters.baseDomElement );
@@ -308,6 +379,8 @@ const setGregorSubTableByPValue = function(currentValue){
     return {
         processRecordsFromGregor: processRecordsFromGregor,
         displayGregorSubTable:displayGregorSubTable,
-        deemphasizeOneFilter:deemphasizeOneFilter
+        deemphasizeOneFilter:deemphasizeOneFilter,
+        changeCombinationStrategy:changeCombinationStrategy,
+        setGregorSubTableByPValueAndFEValue:setGregorSubTableByPValueAndFEValue
     }
 }());

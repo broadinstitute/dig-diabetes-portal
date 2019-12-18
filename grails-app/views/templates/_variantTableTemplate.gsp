@@ -19,14 +19,13 @@
                     <label class="form-check-label" for="gregorPValuesCheckbox">
                     Filter by GREGOR p-values
                     </label>
-                    <input class="form-check-input" type="radio"  name="preferredQuantityForFiltering" value="" id="gregorPValuesCheckbox"
-                    onchange="mpgSoftware.dynamicUi.gregorSubTableVariantTable.deemphasizeOneFilter('div.pvFilterController',['div.feFilterController'])" checked>
+                    %{--<input class="form-check-input" type="radio"  name="preferredQuantityForFiltering" value="" id="gregorPValuesCheckbox"--}%
+                    %{--onchange="mpgSoftware.dynamicUi.gregorSubTableVariantTable.deemphasizeOneFilter('div.pvFilterController',['div.feFilterController'])" checked>--}%
                 </div>
                 <div class="col-md-4">
                     <div class="row">
                         <div class="col-xs-12">
-                            <div id="gregorPValueSlider"
-                    onclick="mpgSoftware.dynamicUi.gregorSubTableVariantTable.deemphasizeOneFilter('div.pvFilterController',['div.feFilterController'])">
+                            <div id="gregorPValueSlider">
                                 <div id="custom-handle" class="ui-slider-handle"></div>
                             </div>
                         </div>
@@ -52,19 +51,34 @@
                     </div>
                 </div>
             </div>
-            <div class="row feFilterController" style="margin-top: 4px; opacity: 0.5">
+            <div class="row" style="margin: 0;">
+                <div class="col-md-offset-4 col-md-4 text-center">
+                    %{--<span class="glyphicon glyphicon-magnet" aria-hidden="true"--}%
+                    %{--onclick="mpgSoftware.dynamicUi.gregorSubTableVariantTable.changeCombinationStrategy('span.textualDescriptionOfFilteringStrategy')"></span>--}%
+                    <span class="DescriptionOfFilteringStrategy"
+                    onclick="mpgSoftware.dynamicUi.gregorSubTableVariantTable.changeCombinationStrategy('span.textualDescriptionOfFilteringStrategy')">
+                     FILTER on P values </span>
+                    <span class="textualDescriptionOfFilteringStrategy"
+                    onclick="mpgSoftware.dynamicUi.gregorSubTableVariantTable.changeCombinationStrategy()"
+                    title="click to toggle between AND/OR filtering strategies">OR</span>
+                    <span class="DescriptionOfFilteringStrategy"
+                    onclick="mpgSoftware.dynamicUi.gregorSubTableVariantTable.changeCombinationStrategy('span.textualDescriptionOfFilteringStrategy')">
+                     fold enrichments </span>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+            <div class="row feFilterController" style="margin-top: 4px">
                 <div class="col-md-4 text-right">
                     <label class="form-check-label" for="gregorFoldEnrichmentsCheckbox">
                     Filter by GREGOR fold enrichments
                     </label>
-                    <input class="form-check-input" type="radio"  name="preferredQuantityForFiltering" value="" id="gregorFoldEnrichmentsCheckbox"
-                    onchange="mpgSoftware.dynamicUi.gregorSubTableVariantTable.deemphasizeOneFilter('div.feFilterController',['div.pvFilterController'])" >
+                    %{--<input class="form-check-input" type="radio"  name="preferredQuantityForFiltering" value="" id="gregorFoldEnrichmentsCheckbox"--}%
+                    %{--onchange="mpgSoftware.dynamicUi.gregorSubTableVariantTable.deemphasizeOneFilter('div.feFilterController',['div.pvFilterController'])" >--}%
                 </div>
                 <div class="col-md-4">
                     <div class="row">
                         <div class="col-xs-12">
-                            <div id="gregorFEValueSlider"
-                    onclick="mpgSoftware.dynamicUi.gregorSubTableVariantTable.deemphasizeOneFilter('div.feFilterController',['div.pvFilterController'])">
+                            <div id="gregorFEValueSlider">
                                 <div id="custom-fe-handle" class="ui-slider-handle"></div>
                             </div>
                         </div>

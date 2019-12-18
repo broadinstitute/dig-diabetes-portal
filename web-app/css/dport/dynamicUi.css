@@ -761,3 +761,9 @@ span.boldit{
 table.gregorSubTable th:first input.gregorSubTableRowHeader {
     display: none
 }
+span.textualDescriptionOfFilteringStrategy{
+    color: blue;
+    font-weight: bold;
+    text-decoration: underline;
+    cursor:pointer;
+}
