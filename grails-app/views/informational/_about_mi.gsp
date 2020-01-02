@@ -84,6 +84,7 @@
                 <p><g:message code="informational.about_MI.section1"/></p>
                 <p><g:message code="informational.about_MI.section2"/></p>
                 <p><g:message code="informational.about_MI.section3"/></p>
+                <p><g:message code="informational.about_MI.section3a"/></p>
                 <p><g:message code="informational.about_MI.section4"/></p>
                 <p><g:message code="informational.about_MI.section4a"/></p>
                 <h3 class="dk-blue-bordered"><g:message code="informational.about_KP.header"/></h3>

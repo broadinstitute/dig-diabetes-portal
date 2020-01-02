@@ -338,8 +338,8 @@
                 mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]);
              */
                 mpgSoftware.homePage.newFeatures([
-                    {"name":"Tutorial video: Custom aggregation tests","link":"https://www.youtube.com/watch?v=O78rN5A7SAw&list=PLlMMtlgw6qNj6ICrkMu2BAPhs-6XFBpTr&index=7&t=0s","class":"resource","type":"new"},
-                    {"name":"Webinar video: Diabetes Epigenome Atlas","link":"https://www.youtube.com/watch?v=zMHFSMkYNLk&feature=youtu.be","class":"resource","type":"new"}]);
+                    {"name":"Tutorial video: Diabetes Epigenome Atlas","link":"https://youtu.be/vZdMfjSvVQk","class":"resource","type":"new"},
+                    {"name":"Webinar video: LocusZoom","link":"https://www.youtube.com/watch?v=AmU7IIAeZJ4&feature=youtu.be","class":"resource","type":"new"}]);
             </script>
         </g:if>
         <g:elseif test="${g.portalTypeString()?.equals('mi')}">
@@ -347,8 +347,7 @@
                 /* Example to add 'new' or 'updated' feature buttons;
                  mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]);
                  */
-                %{--mpgSoftware.homePage.newFeatures([{"name":"Tissue enrichments","link":"${createLink(controller:'trait',action:'tissueTable')}","class":"resource","type":"new"},--}%
-                    %{--{"name":"Webinar video: gene-specific resources in the Portals","link":"https://www.youtube.com/watch?v=ylPn6D1hpY4","class":"resource","type":"new"}]);--}%
+                mpgSoftware.homePage.newFeatures([{"name":"Webinar video: LocusZoom","link":"https://www.youtube.com/watch?v=AmU7IIAeZJ4&feature=youtu.be","class":"resource","type":"new"}]);
             </script>
         </g:elseif>
         <g:elseif test="${g.portalTypeString()?.equals('stroke')}">
@@ -356,8 +355,7 @@
                 /* Example to add 'new' or 'updated' feature buttons;
                  mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]);
                  */
-                %{--mpgSoftware.homePage.newFeatures([{"name":"Tissue enrichments","link":"${createLink(controller:'trait',action:'tissueTable')}","class":"feature","type":"new"},--}%
-                    %{--{"name":"Webinar video: gene-specific resources in the Portals","link":"https://www.youtube.com/watch?v=ylPn6D1hpY4","class":"resource","type":"new"}]);--}%
+                mpgSoftware.homePage.newFeatures([{"name":"Webinar video: LocusZoom","link":"https://www.youtube.com/watch?v=AmU7IIAeZJ4&feature=youtu.be","class":"resource","type":"new"}]);
             </script>
         </g:elseif>
 
@@ -366,10 +364,18 @@
                 /* Example to add 'new' or 'updated' feature buttons;
                  mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]);
                  */
-                %{--mpgSoftware.homePage.newFeatures([{"name":"Tissue enrichments","link":"${createLink(controller:'trait',action:'tissueTable')}","class":"feature","type":"new"},--}%
-                    %{--{"name":"Webinar video: gene-specific resources in the Portals","link":"https://www.youtube.com/watch?v=ylPn6D1hpY4","class":"resource","type":"new"}]);--}%
+                mpgSoftware.homePage.newFeatures([{"name":"Webinar video: LocusZoom","link":"https://www.youtube.com/watch?v=AmU7IIAeZJ4&feature=youtu.be","class":"resource","type":"new"}]);
             </script>
         </g:elseif>
+
+        <g:elseif test="${g.portalTypeString()?.equals('bone')}"> 
+            <script type="text/javascript"> 
+                /* Example to add 'new' or 'updated' feature buttons; 
+                mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]); 
+                */ 
+                mpgSoftware.homePage.newFeatures([{"name":"Webinar video: LocusZoom","link":"https://www.youtube.com/watch?v=AmU7IIAeZJ4&feature=youtu.be","class":"resource","type":"new"}]); 
+            </script>
+             </g:elseif>
 
     <!-- New features buttons end -->
     </div>
@@ -386,7 +392,7 @@
                         <div class="col-md-12" style="padding-top:40px; font-size: 20px;">
                         <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700"><g:message code="portal.aboutTheData" default="About the data" /></h2>
                         <p><span  style="font-size: 20px;"><g:message code="portal.stroke.about.the.data.text" /></span>
-                        <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">37 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">69 traits</span></h1>
+                        <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">27 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">60 traits</span></h1>
                         <hr />
 
 
@@ -407,7 +413,7 @@
                             <img src="${resource(dir: 'images', file: 'data_icon4.png')}" style="width: 200px; margin-right: -50px;" align="right" >
                         <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData" default="About the data" /></h2>
                         <p><g:message code="portal.mi.about.the.data.text" />
-                        <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">28 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">52 traits</span></h1>
+                        <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">29 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">52 traits</span></h1>
 
                         <hr/> <a href="http://institute.heart.org" target="_blank"><img src="${resource(dir: 'images/organizations', file: 'AHA_precision.jpg')}" style="width: 330px; margin-right: 10px;" align="right" ></a>
 
@@ -432,7 +438,7 @@
                         <img src="${resource(dir: 'images', file: 'data_icon4.png')}" style="width: 200px; margin-right: -50px;" align="right" >
                         <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData" default="About the data" /></h2>
                     <p><g:message code="portal.sleep.about.the.data.text" />
-                    <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">24 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">65 traits</span></h1>
+                    <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">25 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">73 traits</span></h1>
 
                 </g:elseif>
                     <g:elseif test="${g.portalTypeString()?.equals('lung')}">

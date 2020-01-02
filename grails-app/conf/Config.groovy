@@ -601,7 +601,7 @@ portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", "ibd", "e
 
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
                                                         "T2D",  // displayable label for this portal type
-                                                        "mdv41",    // the MDV number for this portal
+                                                        "mdv42",    // the MDV number for this portal
                                                         "T2DKP", // name of KB data we want
                                                         "T2D",      // the default phenotype for this portal
                                                         "ExSeq_19k_mdv28",  // default data set.  Used rarely.
@@ -660,7 +660,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                             ),
                                   new PortalVersionBean("stroke",
                                                           "Stroke",
-                                                          "mdv75",
+                                                          "mdv76",
                                           "CDKP", // name of KB data we want
                                                           "Stroke_all",
                                                           "GWAS_Stroke_mdv70",
@@ -714,7 +714,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                   ),
                                   new PortalVersionBean("mi",
                                                           "Myocardial Infarction",
-                                                          "mdv96",
+                                                          "mdv97",
                                           "CVDKP", // name of KB data we want
                                                           "MI",
                                                           "GWAS_CARDIoGRAM_mdv91",
