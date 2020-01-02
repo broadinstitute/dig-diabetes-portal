@@ -208,6 +208,99 @@ mpgSoftware.variantTable = (function () {
     };
 
 
+
+
+    const filterEpigeneticTableAnnotationsOnTop = function(oneDiv,blankRowsAreOkay,weAreInTissueMode,uniqueAnnotations,uniqueMethods,filterByGregor){
+        if (blankRowsAreOkay){
+            $('tr.doNotDisplay').removeClass('doNotDisplay').show(); // these should never exist.  Can we remove this line?
+            // now go through every annotation that is marked is not displayed, and display everythi
+            $('div.varAnnotation.doNotDisplay').removeClass('doNotDisplay').show();
+            $('#mainVariantDiv div').parent('.varAllEpigenetics').parent().show();
+            $('#mainVariantDiv div').parent('.header').show();
+            return;
+        }
+
+        const currentAnnotation = extractClassBasedTrailingString(oneDiv,"annotationName_");
+        const currentMethod = extractClassBasedTrailingString(oneDiv,"methodName_");
+        const currentTissue = extractClassBasedTrailingString(oneDiv,"tissueId_");
+        let methodNameToProcess = extractClassBasedTrailingString(oneDiv,"methodName_");
+        let annotationNameToProcess = extractClassBasedTrailingString(oneDiv,"annotationName_");
+        //let isBlank  = extractClassBasedTrailingString(oneDiv,"isBlank");
+
+        if (weAreInTissueMode){
+
+            if (filterByGregor){
+                if ($('#mainVariantDiv div.yesDisplay.tissueId_'+currentTissue).length>0){
+
+                    $(oneDiv).removeClass('doNotDisplay');
+                    // now show the row
+                    $('#mainVariantDiv div.epigeneticCellElement.tissueId_'+currentTissue).parent().parent().show();
+                    $('#mainVariantDiv div.tissueId_'+currentTissue).parent().show();
+
+
+                } else {
+
+                    // Mark this annotation as NOT displayed
+                    $(oneDiv).addClass('doNotDisplay');
+                    // now hide the row
+                    $('#mainVariantDiv div.epigeneticCellElement.tissueId_'+currentTissue).parent().parent().hide();
+                    $('#mainVariantDiv div.tissueId_'+currentTissue).parent().hide();
+                    // $('#mainVariantDiv div.tissueId_'+currentTissue).parent('.header').hide();
+
+                }
+
+            } else {
+
+                if ($('#mainVariantDiv div.yesDisplay.tissueId_'+currentTissue).length>0){
+
+                    $(oneDiv).removeClass('doNotDisplay');
+                    // now show the row
+                    $('#mainVariantDiv div.epigeneticCellElement.tissueId_'+currentTissue).parent().parent().show();
+                    $('#mainVariantDiv div.tissueId_'+currentTissue).parent().show();
+
+                } else {
+
+                    $(oneDiv).addClass('doNotDisplay');
+                    // now hide the row
+                    $('#mainVariantDiv div.epigeneticCellElement.tissueId_'+currentTissue).parent().parent().hide();
+                    $('#mainVariantDiv div.tissueId_'+currentTissue).parent().hide();
+
+                }
+
+            }
+
+
+        } else {
+            if ((_.includes(uniqueAnnotations,currentAnnotation))&&
+                (_.includes(uniqueMethods,currentMethod))&&
+                $('#mainVariantDiv div.yesDisplay.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess).length>0){
+
+                // Mark this annotation as displayed
+                $('#mainVariantDiv div.varAnnotation.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess).removeClass('doNotDisplay');
+                // display the rest of the column
+                $('#mainVariantDiv div.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess).parent('.varAllEpigenetics').parent().show();
+                $('#mainVariantDiv div.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess).parent('.header').show();
+
+
+
+            } else {
+
+                // Mark this annotation as NOT displayed
+                $('#mainVariantDiv div.varAnnotation.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess).addClass('doNotDisplay');
+                // hide the rest of the column
+                $('#mainVariantDiv div.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess).parent('.varAllEpigenetics').parent().hide();
+                $('#mainVariantDiv div.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess).parent('.header').hide();
+
+
+
+            }
+        }
+
+
+
+    };
+
+
     const initialPageSetUp = function(parametersToOverride){
         var drivingVariables = getVariablesToRemember();
         let preferredPhenotype = 'T2D';
@@ -275,47 +368,6 @@ mpgSoftware.variantTable = (function () {
                                                     endPosition:drivingVariables.defaultExtentEnd
                                                     },drivingVariables);
 
-        // var pageURL_string = window.location.href;
-        // var url = new URL(pageURL_string);
-        //
-        // if (url.searchParams.get("chromosomeNumber")){
-        //
-        //     //console.log("region view");
-        //     var chromosomeInput = url.searchParams.get("chromosomeNumber");
-        //     var startExtentInput = url.searchParams.get("startExtent");
-        //     var endExtentInput = url.searchParams.get("endExtent");
-        //
-        //     //console.log(preferredPhenotype+" : "+chromosomeInput+" : "+startExtentInput+" : "+endExtentInput);
-        //
-        //     mpgSoftware.dynamicUi.modifyScreenFields({phenotype:preferredPhenotype, chromosome:chromosomeInput, startPosition:startExtentInput, endPosition:endExtentInput},getVariablesToRemember());
-        //
-        // } else {
-        //
-        //     //console.log("gene id view");
-        //     var urlPath = window.location.pathname.split("/");
-        //     var geneName = urlPath[urlPath.length - 1];
-        //
-        //     $.ajax({
-        //         cache: false,
-        //         type: "post",
-        //         url: drivingVariables.geneInfoAjaxUrl,
-        //         data: {geneName: geneName},
-        //         async: true
-        //     }).done(function (geneInfoData) {
-        //         //console.log(data);
-        //         var genePageExtent = 100000;
-        //
-        //         var chromosomeInput = geneInfoData.geneInfo.CHROM;
-        //         var startExtentInput = geneInfoData.geneInfo.BEG - genePageExtent;
-        //         var endExtentInput = geneInfoData.geneInfo.END + genePageExtent;
-        //
-        //         //console.log(preferredPhenotype+" : "+chromosomeInput+" : "+startExtentInput+" : "+endExtentInput);
-        //
-        //         mpgSoftware.dynamicUi.modifyScreenFields({phenotype:preferredPhenotype, chromosome:chromosomeInput, startPosition:startExtentInput, endPosition:endExtentInput},getVariablesToRemember());
-        //     });
-        //
-        // }
-
     }
 
     return {
@@ -325,6 +377,7 @@ mpgSoftware.variantTable = (function () {
         refreshTableForAnnotations:refreshTableForAnnotations,
         updateAnnotationDropDownBox:updateAnnotationDropDownBox,
         fillAnnotationDropDownBox:fillAnnotationDropDownBox,
-        refreshVariantFocusForPhenotype:refreshVariantFocusForPhenotype
+        refreshVariantFocusForPhenotype:refreshVariantFocusForPhenotype,
+        filterEpigeneticTableAnnotationsOnTop:filterEpigeneticTableAnnotationsOnTop
     }
 }());

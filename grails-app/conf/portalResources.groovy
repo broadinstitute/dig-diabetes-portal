@@ -167,7 +167,8 @@ modules = {
 
         resource url: 'js/lib/dport/matrixMath.js'
 
-        resource url: 'js/lib/dport/variantTable.js'
+        resource url: 'js/lib/dport/dynamicUi/geneFocus/geneFocusTable.js'
+        resource url: 'js/lib/dport/dynamicUi/varFocus/variantTable.js'
 
         resource url: 'js/lib/dport/dynamicUi/varFocus/variantTableHeaders.js'
         resource url: 'js/lib/dport/dynamicUi/varFocus/atacSeqVariantTable.js'
@@ -256,7 +257,7 @@ modules = {
     geneEffectorTable {
         dependsOn "core", "portalHome"
 
-        resource url: 'js/lib/dport/effectorGeneTable.js'
+        resource url: 'js/lib/dport/dynamicUi/effectorGeneFocus/effectorGeneTable.js'
 
         resource url: 'js/lib/dport/dynamicUi.js'
         resource url: 'css/dport/dynamicUi.css'
@@ -268,7 +269,7 @@ modules = {
     tissueTable {
         dependsOn "core", "portalHome"
 
-        resource url: 'js/lib/dport/tissueTable.js'
+        resource url: 'js/lib/dport/dynamicUi/tissueFocus/tissueTable.js'
 
         resource url: 'js/lib/dport/dynamicUi.js'
         resource url: 'css/dport/dynamicUi.css'
@@ -284,7 +285,7 @@ modules = {
     variantTable {
         dependsOn "core", "portalHome"
 
-        resource url: 'js/lib/dport/variantTable.js'
+        resource url: 'js/lib/dport/dynamicUi/varFocus/variantTable.js'
 
         resource url: 'js/lib/dport/dynamicUi.js'
         resource url: 'css/dport/dynamicUi.css'

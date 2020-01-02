@@ -2285,7 +2285,10 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
         //testing for v2f
         //mpgSoftware.dynamicUi.modifyScreenFields({},additionalParameters);
-        mpgSoftware.dynamicUi.modifyScreenFields({phenotype:additionalParameters.phenotype, chromosome:additionalParameters.geneChromosomeMinusChr, startPosition:additionalParameters.geneExtentBegin, endPosition:additionalParameters.geneExtentEnd},additionalParameters);
+        // mpgSoftware.dynamicUi.modifyScreenFields({phenotype:additionalParameters.phenotype, chromosome:additionalParameters.geneChromosomeMinusChr, startPosition:additionalParameters.geneExtentBegin, endPosition:additionalParameters.geneExtentEnd},
+        //     additionalParameters);
+        mpgSoftware.geneFocusTable.initialPageSetUp({phenotype:additionalParameters.phenotype, chromosome:additionalParameters.geneChromosomeMinusChr, startPosition:additionalParameters.geneExtentBegin, endPosition:additionalParameters.geneExtentEnd},
+            additionalParameters);
 
         $('div.credibleSetHeader input.credSetStartPos').val(""+additionalParameters.geneExtentBegin);
         $('div.credibleSetHeader input.credSetEndPos').val(""+additionalParameters.geneExtentEnd);

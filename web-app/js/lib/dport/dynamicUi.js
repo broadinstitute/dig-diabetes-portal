@@ -3859,97 +3859,6 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
     };
 
 
-
-    const filterEpigeneticTableAnnotationsOnTop = function(oneDiv,blankRowsAreOkay,weAreInTissueMode,uniqueAnnotations,uniqueMethods,filterByGregor){
-        if (blankRowsAreOkay){
-            $('tr.doNotDisplay').removeClass('doNotDisplay').show(); // these should never exist.  Can we remove this line?
-            // now go through every annotation that is marked is not displayed, and display everythi
-            $('div.varAnnotation.doNotDisplay').removeClass('doNotDisplay').show();
-            $('#mainVariantDiv div').parent('.varAllEpigenetics').parent().show();
-            $('#mainVariantDiv div').parent('.header').show();
-            return;
-        }
-
-        const currentAnnotation = extractClassBasedTrailingString(oneDiv,"annotationName_");
-        const currentMethod = extractClassBasedTrailingString(oneDiv,"methodName_");
-        const currentTissue = extractClassBasedTrailingString(oneDiv,"tissueId_");
-        let methodNameToProcess = extractClassBasedTrailingString(oneDiv,"methodName_");
-        let annotationNameToProcess = extractClassBasedTrailingString(oneDiv,"annotationName_");
-        let isBlank  = extractClassBasedTrailingString(oneDiv,"isBlank");
-
-        if (weAreInTissueMode){
-
-            if (filterByGregor){
-                if ($('#mainVariantDiv div.yesDisplay.tissueId_'+currentTissue).length>0){
-
-                    $(oneDiv).removeClass('doNotDisplay');
-                    // now show the row
-                    $('#mainVariantDiv div.epigeneticCellElement.tissueId_'+currentTissue).parent().parent().show();
-                    $('#mainVariantDiv div.tissueId_'+currentTissue).parent().show();
-
-
-                } else {
-
-                    // Mark this annotation as NOT displayed
-                    $(oneDiv).addClass('doNotDisplay');
-                    // now hide the row
-                    $('#mainVariantDiv div.epigeneticCellElement.tissueId_'+currentTissue).parent().parent().hide();
-                    $('#mainVariantDiv div.tissueId_'+currentTissue).parent().hide();
-                    // $('#mainVariantDiv div.tissueId_'+currentTissue).parent('.header').hide();
-
-                }
-
-            } else {
-
-                if ($('#mainVariantDiv div.yesDisplay.tissueId_'+currentTissue).length>0){
-
-                    $(oneDiv).removeClass('doNotDisplay');
-                    // now show the row
-                    $('#mainVariantDiv div.epigeneticCellElement.tissueId_'+currentTissue).parent().parent().show();
-                    $('#mainVariantDiv div.tissueId_'+currentTissue).parent().show();
-
-                } else {
-
-                    $(oneDiv).addClass('doNotDisplay');
-                    // now hide the row
-                    $('#mainVariantDiv div.epigeneticCellElement.tissueId_'+currentTissue).parent().parent().hide();
-                    $('#mainVariantDiv div.tissueId_'+currentTissue).parent().hide();
-
-                }
-
-            }
-
-
-        } else {
-            if ((_.includes(uniqueAnnotations,currentAnnotation))&&
-                (_.includes(uniqueMethods,currentMethod))&&
-                $('#mainVariantDiv div.yesDisplay.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess).length>0){
-
-                // Mark this annotation as displayed
-                $('#mainVariantDiv div.varAnnotation.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess).removeClass('doNotDisplay');
-                // display the rest of the column
-                $('#mainVariantDiv div.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess).parent('.varAllEpigenetics').parent().show();
-                $('#mainVariantDiv div.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess).parent('.header').show();
-
-
-
-            } else {
-
-                // Mark this annotation as NOT displayed
-                $('#mainVariantDiv div.varAnnotation.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess).addClass('doNotDisplay');
-                // hide the rest of the column
-                $('#mainVariantDiv div.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess).parent('.varAllEpigenetics').parent().hide();
-                $('#mainVariantDiv div.annotationName_'+annotationNameToProcess+'.methodName_'+methodNameToProcess).parent('.header').hide();
-
-
-
-            }
-        }
-
-
-
-    };
-
     const filterEpigeneticTableVariantsOnTop = function(oneDiv,blankRowsAreOkay,weAreInTissueMode,uniqueAnnotations,uniqueMethods,filterByGregor){
         if (blankRowsAreOkay){
             // mark the rows as displayed
@@ -4181,7 +4090,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable,baseDom
             if (currentTableForm === 'variantTableVariantHeaders') {
                 filterEpigeneticTableVariantsOnTop(oneDiv,blankRowsAreOkay,weAreInTissueMode,uniqueAnnotations,uniqueMethods,filterByGregor);
             } else  if (currentTableForm === 'variantTableAnnotationHeaders') {
-                filterEpigeneticTableAnnotationsOnTop(oneDiv,blankRowsAreOkay,weAreInTissueMode,uniqueAnnotations,uniqueMethods,filterByGregor);
+                mpgSoftware.variantTable.filterEpigeneticTableAnnotationsOnTop(oneDiv,blankRowsAreOkay,weAreInTissueMode,uniqueAnnotations,uniqueMethods,filterByGregor);
             } else {
                 alert('illegal currentTableForm='+currentTableForm+'.');
             }
