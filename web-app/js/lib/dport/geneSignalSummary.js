@@ -1904,6 +1904,9 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var pageConfigurationVariable = buildPageConfigurationVariable(drivingVariables,displayCommonTab,displayHighImpactTab,pName,credibleSetTab,incredibleSetTab);
         $("#collapseExample div.wellPlace").empty().append(Mustache.render($('#organizeSignalSummaryOutline')[0].innerHTML,
             pageConfigurationVariable));
+        var geneFocusTablevariable = buildGeneFocusTable(drivingVariables);
+        $("#exposeDynamicUiTabHolder").empty().append(Mustache.render($('#geneFocusTable')[0].innerHTML,
+            geneFocusTablevariable));
     };
 
     var refreshTopVariantsByPhenotype = function (sel, callBack) {
@@ -2018,6 +2021,50 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         ReactDOM.render(transcriptViewer, root);
 
     };
+
+
+    var buildGeneFocusTable = function (additionalParameters) {
+        var exposeDynamicUiIndicator = [];
+        if (additionalParameters.exposeDynamicUi === "1"){
+            var phenotype = additionalParameters.defaultPhenotype;
+            var chromosome =  (additionalParameters.geneChromosome.substr(0,3)==='chr')?
+                additionalParameters.geneChromosome.substr(3):
+                additionalParameters.geneChromosome;
+            if ( typeof additionalParameters.currentPhenotype !== 'undefined'){
+                phenotype =  additionalParameters.currentPhenotype;
+            }
+            var suppressionOfRange = "display: none";
+            if (additionalParameters.exposeRegionAdjustmentOnGenePage === "1"){
+                suppressionOfRange = "";
+            }
+            var suppressionOfGeneTable = "display: none";
+            if (additionalParameters.exposeGeneTableOnDynamicUi === "1"){
+                suppressionOfGeneTable = "";
+            }
+            var suppressionOfVariantTable = "display: none";
+            if (additionalParameters.exposeVariantTableOfDynamicUi === "1"){
+                suppressionOfVariantTable = "";
+            }
+            var suppressionOfAllDynamicUiTabs = "";
+            if ((additionalParameters.exposeGeneTableOnDynamicUi === "0") && (additionalParameters.exposeVariantTableOfDynamicUi === "0")){
+                suppressionOfAllDynamicUiTabs = "display: none";
+            }
+            exposeDynamicUiIndicator.push({
+                suppressionOfRange:suppressionOfRange,
+                suppressionOfGeneTable:suppressionOfGeneTable,
+                suppressionOfVariantTable:suppressionOfVariantTable,
+                suppressionOfAllDynamicUiTabs:suppressionOfAllDynamicUiTabs,
+                generalizedInputId:additionalParameters.generalizedInputId,
+                generalizedGoButtonId:additionalParameters.generalizedGoButtonId,
+                geneExtentBegin:additionalParameters.geneExtentBegin,
+                geneExtentEnd:additionalParameters.geneExtentEnd,
+                chromosome:chromosome,
+                pname: phenotype
+            });
+        }
+
+            return {dynamicUiTab:exposeDynamicUiIndicator}
+    }
 
 
     /***

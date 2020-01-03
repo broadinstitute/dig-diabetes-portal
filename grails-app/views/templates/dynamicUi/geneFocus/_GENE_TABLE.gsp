@@ -27,7 +27,7 @@
 </script>
 
 
-
+<g:render template="/templates/dynamicUi/geneFocus/geneTableTemplate"/>
 <g:render template="/templates/dynamicUi/geneFocus/GHDR" />
 <g:render template="/templates/dynamicUi/geneFocus/FIR" />
 <g:render template="/templates/dynamicUi/geneFocus/SKA" />
