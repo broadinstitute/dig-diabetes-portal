@@ -22,7 +22,7 @@
 <div id="mainVariantDivHolder">
 
 </div>
-<g:render template="/templates/dynamicUi/VARIANT_TABLE" />
+<g:render template="/templates/dynamicUi/varFocus/VARIANT_TABLE" />
 <g:render template="variantTable" />
 
 </body>

@@ -1,4 +1,4 @@
-
+%{--This file describes the variant focus table outline--}%
 <script id="mainVariantTableOrganizer"  type="x-tmpl-mustache">
 
 
@@ -19,8 +19,6 @@
                     <label class="form-check-label" for="gregorPValuesCheckbox">
                     Filter by GREGOR p-values
                     </label>
-                    %{--<input class="form-check-input" type="radio"  name="preferredQuantityForFiltering" value="" id="gregorPValuesCheckbox"--}%
-                    %{--onchange="mpgSoftware.dynamicUi.gregorSubTableVariantTable.deemphasizeOneFilter('div.pvFilterController',['div.feFilterController'])" checked>--}%
                 </div>
                 <div class="col-md-4">
                     <div class="row">
@@ -53,8 +51,6 @@
             </div>
             <div class="row" style="margin: 0;">
                 <div class="col-md-offset-4 col-md-4 text-center">
-                    %{--<span class="glyphicon glyphicon-magnet" aria-hidden="true"--}%
-                    %{--onclick="mpgSoftware.dynamicUi.gregorSubTableVariantTable.changeCombinationStrategy('span.textualDescriptionOfFilteringStrategy')"></span>--}%
                     <span class="DescriptionOfFilteringStrategy"
                     onclick="mpgSoftware.dynamicUi.gregorSubTableVariantTable.changeCombinationStrategy('span.textualDescriptionOfFilteringStrategy')">
                      FILTER on P values </span>
@@ -72,8 +68,6 @@
                     <label class="form-check-label" for="gregorFoldEnrichmentsCheckbox">
                     Filter by GREGOR fold enrichments
                     </label>
-                    %{--<input class="form-check-input" type="radio"  name="preferredQuantityForFiltering" value="" id="gregorFoldEnrichmentsCheckbox"--}%
-                    %{--onchange="mpgSoftware.dynamicUi.gregorSubTableVariantTable.deemphasizeOneFilter('div.feFilterController',['div.pvFilterController'])" >--}%
                 </div>
                 <div class="col-md-4">
                     <div class="row">

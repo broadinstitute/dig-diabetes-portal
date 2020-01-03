@@ -27,7 +27,7 @@
 </script>
 
 
-<g:render template="/templates/tissueTableTemplate" />
+<g:render template="/templates/dynamicUi/tissueFocus/tissueTableTemplate" />
 <g:render template="/templates/dynamicUi/tissueFocus/TITA" />
 <g:render template="/templates/dynamicUi/tissueFocus/LDSR" />
 <g:render template="/templates/dynamicUi/tissueFocus/DEP_TI" />

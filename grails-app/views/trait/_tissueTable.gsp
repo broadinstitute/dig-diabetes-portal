@@ -131,7 +131,7 @@
         mpgSoftware.tissueTableInitializer.tissueTableConfiguration();
     });
 </script>
-<g:render template="/templates/dynamicUi/TISSUE_TABLE" />
+<g:render template="/templates/dynamicUi/tissueFocus/TISSUE_TABLE" />
 
 
 <div id="mainTissueDiv" style="background-color: #eaeaea; margin-bottom: -50px;">

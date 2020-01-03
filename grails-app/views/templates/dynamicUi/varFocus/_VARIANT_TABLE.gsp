@@ -27,7 +27,7 @@
      </div>
 </script>
 
-<g:render template="/templates/variantTableTemplate" />
+<g:render template="/templates/dynamicUi/varFocus/variantTableTemplate" />
 <g:render template="/templates/dynamicUi/varFocus/VHDR" />
 <g:render template="/templates/dynamicUi/varFocus/ABC_VAR" />
 <g:render template="/templates/dynamicUi/varFocus/ATACSEQ_VAR" />

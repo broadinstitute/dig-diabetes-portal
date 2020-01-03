@@ -348,7 +348,7 @@
     </div>
 </div>
 
-<g:render template="../templates/dynamicUi/T2D_EFFECTOR_GENE_TABLE" />
+<g:render template="../templates/dynamicUi/effectorGeneFocus/T2D_EFFECTOR_GENE_TABLE" />
 
 </body>
 </html>
