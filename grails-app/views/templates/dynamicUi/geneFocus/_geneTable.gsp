@@ -282,6 +282,7 @@
                             sortingSubroutine: 'MAGMA',
                             packagingString: 'mpgSoftware.dynamicUi.depictGenePvalue',
                             internalIdentifierString: 'getInformationFromMagmaForGenesTable',
+                            nameOfAccumulatorField:'magmaGenePredictions',
                             nameOfAccumulatorFieldWithIndex:'geneInfoArray'
                         }
                         // additional sorting terms

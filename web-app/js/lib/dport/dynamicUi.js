@@ -1301,21 +1301,21 @@ mpgSoftware.dynamicUi = (function () {
                         var phenotype = $('li.chosenPhenotype').attr('id');
                         var genesAsJson = "[]";
                         if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement).length > 0) {
-                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement)[0].data;
+                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement);
                             if (dataVector.length===0){return;}
-                            var geneNameArray = _.map(dataVector, function(geneRec){return geneRec.gene;});
+                            var geneNameArray = _.map(dataVector, function(geneRec){return geneRec.name;});
                             genesAsJson = "[\"" + geneNameArray.join("\",\"") + "\"]";
                         }
                         var dataForCall = { genes: genesAsJson, phenotype: phenotype };
                         retrieveRemotedContextInformation(buildRemoteContextArray({
                             name: actionId,
-                            retrieveDataUrl: additionalParameters.retrieveDepictGeneSetUrl,
+                            retrieveDataUrl: additionalParameters.retrieveMagmaDataUrl,
                             dataForCall: dataForCall,
-                            processEachRecord: mpgSoftware.dynamicUi.depictGeneSets.processRecordsFromDepictGeneSet,
+                            processEachRecord: mpgSoftware.dynamicUi.magmaGeneAssociation.processRecordsFromMagma,
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
                             actionId: nextActionId,
-                            nameOfAccumulatorField:'depictGeneSetInfo',
+                            nameOfAccumulatorField:dataAnnotationType.nameOfAccumulatorField,
                             code:dataAnnotationType.code,
                             nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex,
                             baseDomElement:baseDomElement

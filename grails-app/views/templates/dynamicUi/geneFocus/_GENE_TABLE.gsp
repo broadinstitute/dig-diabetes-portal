@@ -38,4 +38,5 @@
 <g:render template="/templates/dynamicUi/geneFocus/COL" />
 <g:render template="/templates/dynamicUi/geneFocus/MOD" />
 <g:render template="/templates/dynamicUi/geneFocus/EFF" />
+<g:render template="/templates/dynamicUi/geneFocus/MAGMA" />
 

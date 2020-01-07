@@ -253,6 +253,7 @@ modules = {
         resource url: 'js/lib/dport/dynamicUi/geneFocus/mouseKnockout.js'
         resource url: 'js/lib/dport/dynamicUi/geneFocus/effectorGene.js'
         resource url: 'js/lib/dport/dynamicUi/geneFocus/geneHeaders.js'
+        resource url: 'js/lib/dport/dynamicUi/geneFocus/magma.js'
     }
     geneEffectorTable {
         dependsOn "core", "portalHome"

@@ -2644,7 +2644,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
     public JSONObject gatherMagmaData( List<String> geneList, String phenotype ) {
         List<String> specifyRequestList = []
-        if ((geneList) && (geneList.length() > 0)) {
+        if ((geneList) && (geneList.size() > 0)) {
             specifyRequestList << "gene=${geneList.join(",")}"
         }
 

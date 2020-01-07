@@ -25,19 +25,18 @@ mpgSoftware.dynamicUi.magmaGeneAssociation = (function () {
      * @returns {*}
      */
     var processRecordsFromMagma = function (data, rawGeneAssociationRecords) {
-        var dataArrayToProcess = [];
-        if ( typeof data !== 'undefined'){
-            _.forEach(data,function(oneRec){
-                dataArrayToProcess = {
+        //var dataArrayToProcess = [];
+        if (( typeof data !== 'undefined')&&
+            ( typeof data.data !== 'undefined')&&
+            ( data.data.length > 0)){
+            _.forEach(data.data,function(oneRec){
+                rawGeneAssociationRecords.push({
                     gene: oneRec.gene,
-                    tissues: [{
-                        gene: oneRec.gene,
-                        value: oneRec.pvalue
-                    }]
-                };
+                    tissues: [oneRec]
+                });
             });
         }
-        rawGeneAssociationRecords.push(dataArrayToProcess);
+        //rawGeneAssociationRecords.push(dataArrayToProcess);
     };
 
 
@@ -50,16 +49,14 @@ mpgSoftware.dynamicUi.magmaGeneAssociation = (function () {
 
         mpgSoftware.dynamicUi.displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
             callingParameters,
-            // 'DEP_GP', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            // 'rawDepictInfo', // name of the persistent field where the data we received is stored
             '', // we may wish to pull out one record for summary purposes
             function(records,tissueTranslations){
                 return _.map(_.sortBy(records,['value']),function(tissueRecord){
-                    return {    value:UTILS.realNumberFormatter(''+tissueRecord.value),
-                        numericalValue:tissueRecord.value,
-                        dataset: tissueRecord.dataset };
-                });
-
+                    let returnVal = tissueRecord;
+                    returnVal['displayablePValue'] = UTILS.realNumberFormatter(''+tissueRecord.pvalue);
+                    returnVal['value'] = UTILS.realNumberFormatter(''+tissueRecord.pvalue);
+                    returnVal['displayableZValue'] = UTILS.realNumberFormatter(''+tissueRecord.zstat);
+                    return returnVal});
             },
             function(records, // all records
                      recordsCellPresentationString,// record count cell text
