@@ -70,6 +70,7 @@
                     retrieveECaviarDataUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveECaviarData")}',
                     retrieveColocDataUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveColocData")}',
                     retrieveDepictDataUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveDepictData")}',
+                    retrieveMagmaDataUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveMagmaData")}',
                     retrieveDepictGeneSetUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveDepictGeneSetData")}',
                     retrieveDnaseDataUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveDnaseData")}',
                     retrieveH3k27acDataUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveH3k27acData")}',
@@ -120,7 +121,8 @@
                             significanceCellPresentationStringWriter: 'no significance string writer',
                             sortingSubroutine: 'geneHeader',
                             packagingString: 'mpgSoftware.dynamicUi.geneHeaders',
-                            internalIdentifierString: 'getTissuesFromProximityForLocusContext'
+                            internalIdentifierString: 'getTissuesFromProximityForLocusContext',
+                            nameOfAccumulatorFieldWithIndex:'geneInfoArray'
                         },
                         {
                             code: 'FIR',
@@ -135,7 +137,8 @@
                             significanceCellPresentationStringWriter: 'geneFirthAssociationTableSignificanceCellPresentationString',
                             sortingSubroutine: 'Firth',
                             packagingString: 'mpgSoftware.dynamicUi.geneBurdenFirth',
-                            internalIdentifierString: 'getFirthGeneAssociationsForGeneTable'
+                            internalIdentifierString: 'getFirthGeneAssociationsForGeneTable',
+                            nameOfAccumulatorFieldWithIndex:'geneInfoArray'
                         },
                         {
                             code: 'SKA',
@@ -150,7 +153,8 @@
                             significanceCellPresentationStringWriter: 'geneSkatAssociationTableSignificanceCellPresentationString',
                             sortingSubroutine: 'SKAT',
                             packagingString: 'mpgSoftware.dynamicUi.geneBurdenSkat',
-                            internalIdentifierString: 'getSkatGeneAssociationsForGeneTable'
+                            internalIdentifierString: 'getSkatGeneAssociationsForGeneTable',
+                            nameOfAccumulatorFieldWithIndex:'geneInfoArray'
                         },
                         {
                             code: 'MET',
@@ -165,7 +169,8 @@
                             significanceCellPresentationStringWriter: 'metaxcanTableSignificanceCellPresentationString',
                             sortingSubroutine: 'MetaXcan',
                             packagingString: 'mpgSoftware.dynamicUi.metaXcan',
-                            internalIdentifierString: 'getGeneAssociationsForGenesTable'
+                            internalIdentifierString: 'getGeneAssociationsForGenesTable',
+                            nameOfAccumulatorFieldWithIndex:'geneInfoArray'
                         },
                         {
                             code: 'DEP_GS',
@@ -180,7 +185,8 @@
                             significanceCellPresentationStringWriter: 'depictGeneSetTableSignificanceCellPresentationString',
                             sortingSubroutine: 'DEPICT',
                             packagingString: 'mpgSoftware.dynamicUi.depictGeneSets',
-                            internalIdentifierString: 'getDepictGeneSetForGenesTable'
+                            internalIdentifierString: 'getDepictGeneSetForGenesTable',
+                            nameOfAccumulatorFieldWithIndex:'geneInfoArray'
                         },
                         {
                             code: 'DEP_GP',
@@ -195,7 +201,8 @@
                             significanceCellPresentationStringWriter: 'depictGenePvalueTableSignificanceCellPresentationString',
                             sortingSubroutine: 'DEPICT',
                             packagingString: 'mpgSoftware.dynamicUi.depictGenePvalue',
-                            internalIdentifierString: 'getInformationFromDepictForGenesTable'
+                            internalIdentifierString: 'getInformationFromDepictForGenesTable',
+                            nameOfAccumulatorFieldWithIndex:'geneInfoArray'
                         },
                         {
                             code: 'ECA',
@@ -210,7 +217,8 @@
                             significanceCellPresentationStringWriter: 'eCaviarTableSignificanceCellPresentationString',
                             sortingSubroutine: 'eCAVIAR',
                             packagingString: 'mpgSoftware.dynamicUi.eCaviar',
-                            internalIdentifierString: 'getRecordsFromECaviarForGeneTable'
+                            internalIdentifierString: 'getRecordsFromECaviarForGeneTable',
+                            nameOfAccumulatorFieldWithIndex:'geneInfoArray'
                         },
                         {
                             code: 'COL',
@@ -225,7 +233,8 @@
                             significanceCellPresentationStringWriter: 'colocTableSignificanceCellPresentationString',
                             sortingSubroutine: 'COLOC',
                             packagingString: 'mpgSoftware.dynamicUi.coloc',
-                            internalIdentifierString: 'getRecordsFromColocForGeneTable'
+                            internalIdentifierString: 'getRecordsFromColocForGeneTable',
+                            nameOfAccumulatorFieldWithIndex:'geneInfoArray'
                         },
                         {
                             code: 'MOD',
@@ -240,7 +249,8 @@
                             significanceCellPresentationStringWriter: 'modTableSignificanceCellPresentationString',
                             sortingSubroutine: 'MOD',
                             packagingString: 'mpgSoftware.dynamicUi.mouseKnockout',
-                            internalIdentifierString: 'getAnnotationsFromModForGenesTable'
+                            internalIdentifierString: 'getAnnotationsFromModForGenesTable',
+                            nameOfAccumulatorFieldWithIndex:'geneInfoArray'
                         },
                         {
                             code: 'EFF',
@@ -255,7 +265,24 @@
                             significanceCellPresentationStringWriter: 'effectorGeneTableSignificanceCellPresentationString',
                             sortingSubroutine: 'straightAlphabetic',
                             packagingString: 'mpgSoftware.dynamicUi.effectorGene',
-                            internalIdentifierString: 'getInformationFromEffectorGeneListTable'
+                            internalIdentifierString: 'getInformationFromEffectorGeneListTable',
+                            nameOfAccumulatorFieldWithIndex:'geneInfoArray'
+                        },
+                        {
+                            code: 'MAGMA',
+                            category: 'Annotation',
+                            displayCategory: 'Significance of association',
+                            subcategory: 'MAGMA gene prioritization',
+                            displaySubcategory: 'MAGMA gene prioritization',
+                            cellBodyWriter: 'magmaTableBody',
+                            categoryWriter: 'sharedCategoryWriter',
+                            subCategoryWriter: 'magmaTableSubCategory',
+                            numberRecordsCellPresentationStringWriter: 'magmaPvalueTableNumberRecordsCellPresentationString',
+                            significanceCellPresentationStringWriter: 'magmaPvalueTableSignificanceCellPresentationString',
+                            sortingSubroutine: 'MAGMA',
+                            packagingString: 'mpgSoftware.dynamicUi.depictGenePvalue',
+                            internalIdentifierString: 'getInformationFromMagmaForGenesTable',
+                            nameOfAccumulatorFieldWithIndex:'geneInfoArray'
                         }
                         // additional sorting terms
                         ,

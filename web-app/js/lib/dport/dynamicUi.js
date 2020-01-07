@@ -433,6 +433,11 @@ mpgSoftware.dynamicUi = (function () {
                 defaultFollowUp.placeToDisplayData = '#dynamicGeneHolder div.dynamicUiHolder';
                 break;
 
+            case "getInformationFromMagmaForGenesTable":
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.magmaGeneAssociation.displayGenesFromMagma;
+                defaultFollowUp.placeToDisplayData = '#dynamicGeneHolder div.dynamicUiHolder';
+                break;
+
             case "getInformationFromDepictForTissueTable":
                 defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.depictTissues.displayTissueInformationFromDepict;
                 defaultFollowUp.placeToDisplayData = '#mainTissueDiv table.tissueTableHolder';
@@ -1286,6 +1291,38 @@ mpgSoftware.dynamicUi = (function () {
 
                 break;
 
+            case "getInformationFromMagmaForGenesTable":
+                functionToLaunchDataRetrieval = function () {
+                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement)) {
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
+                            {actionId: actionId}, baseDomElement);
+                        actionToUndertake();
+                    } else {
+                        var phenotype = $('li.chosenPhenotype').attr('id');
+                        var genesAsJson = "[]";
+                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement).length > 0) {
+                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement)[0].data;
+                            if (dataVector.length===0){return;}
+                            var geneNameArray = _.map(dataVector, function(geneRec){return geneRec.gene;});
+                            genesAsJson = "[\"" + geneNameArray.join("\",\"") + "\"]";
+                        }
+                        var dataForCall = { genes: genesAsJson, phenotype: phenotype };
+                        retrieveRemotedContextInformation(buildRemoteContextArray({
+                            name: actionId,
+                            retrieveDataUrl: additionalParameters.retrieveDepictGeneSetUrl,
+                            dataForCall: dataForCall,
+                            processEachRecord: mpgSoftware.dynamicUi.depictGeneSets.processRecordsFromDepictGeneSet,
+                            displayRefinedContextFunction: displayFunction,
+                            placeToDisplayData: displayLocation,
+                            actionId: nextActionId,
+                            nameOfAccumulatorField:'depictGeneSetInfo',
+                            code:dataAnnotationType.code,
+                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex,
+                            baseDomElement:baseDomElement
+                        }));
+                    }
+                };
+                break;
 
             default:
                 break;

@@ -80,6 +80,7 @@ class RestServerService {
     private String GET_CHROMATIN_STATE_FROM_VARIANTS_URL= "graph/region/variant/object"
     private String GET_TF_MOTIF_FROM_VARIANTS_URL= "graph/transcriptionfactor/variant/object"
     private String GET_TISSUES_FROM_LDSR_URL = "testcalls/ldscore/tissue/object"
+    private String GET_MAGMA_GENE_PREDICTIONS_URL= "testcalls/magma/gene/object"
     private String GET_HAIL_DATA_URL = "getHailData"
     private String GET_SAMPLE_DATA_URL = "getSampleData"
     private String GET_SAMPLE_METADATA_URL = "getSampleMetadata"
@@ -2629,6 +2630,29 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         }
 
         String rawReturnFromApi =  getRestCall("${GET_TISSUES_FROM_LDSR_URL}?${specifyRequestList.join("&")}".toString())
+        JsonSlurper slurper = new JsonSlurper()
+        JSONObject jsonObject
+        try{
+            jsonObject = slurper.parseText(rawReturnFromApi)
+        } catch(Exception e){
+            log.error("ERROR: gatherGregorData. problem parsing the data we received from the KB")
+        }
+        return jsonObject
+    }
+
+
+
+    public JSONObject gatherMagmaData( List<String> geneList, String phenotype ) {
+        List<String> specifyRequestList = []
+        if ((geneList) && (geneList.length() > 0)) {
+            specifyRequestList << "gene=${geneList.join(",")}"
+        }
+
+        if ((phenotype) && (phenotype.length() > 0)) {
+            specifyRequestList << "phenotype=${phenotype}"
+        }
+
+        String rawReturnFromApi =  getRestCall("${GET_MAGMA_GENE_PREDICTIONS_URL}?${specifyRequestList.join("&")}".toString())
         JsonSlurper slurper = new JsonSlurper()
         JSONObject jsonObject
         try{

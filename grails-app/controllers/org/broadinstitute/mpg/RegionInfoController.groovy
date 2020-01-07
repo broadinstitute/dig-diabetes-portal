@@ -1317,6 +1317,48 @@ class RegionInfoController {
 
 
 
+
+
+
+    def retrieveMagmaData() {
+        List<String> geneList = []
+        String phenotype = ""
+        boolean looksOkay = true
+        JSONArray genes
+
+        if (params.genes) {
+            genes = slurper.parseText( params.genes as String)  as JSONArray
+            geneList = genes as List <String>
+        }
+
+        if (params.phenotype) {
+            phenotype = params.phenotype
+        }
+
+        if (looksOkay){
+            jsonReturn = restServerService.gatherMagmaData( geneList,phenotype )
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+            def slurper = new JsonSlurper()
+            jsonReturn =  slurper.parseText(proposedJsonString) as JSONArray;
+        }
+
+        JSONArray jsonArray = new JSONArray()
+        for (JSONObject jsonObject in jsonReturn) {
+            jsonObject.put("common_name", geneNameMap[jsonObject.gene] ?: jsonObject.gene)
+            jsonObject.put("tissue_trans",g.message(code: "metadata.${jsonObject.tissue}", default: jsonObject.tissue))
+            jsonArray.put(jsonObject)
+        }
+
+        render(status: 200, contentType: "application/json") {jsonArray}
+        return
+    }
+
+
+
+
+
+
     def retrieveEffectorGeneInformation() {
         boolean looksOkay = true
 
