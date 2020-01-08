@@ -471,6 +471,10 @@ mpgSoftware.dynamicUi = (function () {
                 defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.coaccessibilityVariantTable.displayTissueInformationFromCoaccess;
                 defaultFollowUp.placeToDisplayData = '#mainVariantDiv table.variantTableHolder';
                 break;
+            case "getChicagoGivenVariantList":
+                defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.chicagoVariantTable.displayTissueInformationFromChicago;
+                defaultFollowUp.placeToDisplayData = '#mainVariantDiv table.variantTableHolder';
+                break;
 
             case "getAtacseqGivenVariantList":
                 defaultFollowUp.displayRefinedContextFunction = mpgSoftware.dynamicUi.atacSeqVariantTable.displayTissueInformationFromDnase;
@@ -990,6 +994,43 @@ mpgSoftware.dynamicUi = (function () {
                     }
                 };
                 break;
+            case "getChicagoGivenVariantList":
+                functionToLaunchDataRetrieval = function () {
+                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement)) {
+                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable",
+                            {actionId: actionId}, baseDomElement);
+                        actionToUndertake();
+                    } else {
+                        var variantsAsJson = "[]";
+                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement).length > 0) {
+                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement)[0].data;
+                            if (dataVector.length === 0) {
+                                return;
+                            }
+                            var variantNameArray = _.map(dataVector, function (variantRec) {
+                                return variantRec.var_id;
+                            });
+                            variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";
+
+                            var dataForCall = {variants: variantsAsJson, methodToRetrieve: 'CHiCAGO'};
+                            retrieveRemotedContextInformation(buildRemoteContextArray({
+                                name: actionId,
+                                retrieveDataUrl: additionalParameters.retrieveAnyTypeRegionData,
+                                dataForCall: dataForCall,
+                                processEachRecord: mpgSoftware.dynamicUi.chicagoVariantTable.processRecordsFromChicago,
+                                displayRefinedContextFunction: displayFunction,
+                                placeToDisplayData: displayLocation,
+                                actionId: nextActionId,
+                                nameOfAccumulatorField: dataAnnotationType.nameOfAccumulatorField,
+                                code: dataAnnotationType.code,
+                                nameOfAccumulatorFieldWithIndex: dataAnnotationType.nameOfAccumulatorFieldWithIndex,
+                                baseDomElement:baseDomElement
+                            }));
+                        }
+                    }
+                };
+                break;
+
             case "getInformationFromDepictForGenesTable":
                 functionToLaunchDataRetrieval = function () {
                     if (accumulatorObjectFieldEmpty("geneInfoArray", baseDomElement)) {

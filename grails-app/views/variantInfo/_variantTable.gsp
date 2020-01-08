@@ -232,12 +232,37 @@
                             tissueSubCategoryWriter:'coaccessibilityVariantTableTissueSpecificRowLabel',
                             numberRecordsCellPresentationStringWriter:'coaccessibilityVariantTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'coaccessibilityVariantTableSignificanceCellPresentationString',
-                            packagingString:'mpgSoftware.dynamicUi.dnaseVariantTable',
+                            packagingString:'mpgSoftware.dynamicUi.coaccessibilityVariantTable',
                             sortingSubroutine:'VariantCoaccessibility',
                             internalIdentifierString:'getCoaccessibilityGivenVariantList',
                             nameOfAccumulatorField:'coaccessibilityVariantInfo',
                             nameOfAccumulatorFieldWithIndex:'variantInfoArray'
                         }
+                        ,
+                        {
+                            code: 'CHICAGO_VAR',
+                            category: 'chicago Tissue',
+                            displayCategory: 'chicago Tissue',
+                            subcategory: 'Variantchicago',
+                            displaySubcategory: 'chicago list',
+                            headerWriter:'chicagoVariantTableTissueHeader',
+                            cellBodyWriter:'chicagoVariantTableBody',
+                            cellBodyWriterTissueSpecific:'chicagoVariantTableBodyTissueSpecific',
+                            categoryWriter:'chicagoVariantTableTissueHeaderLabel',
+                            drillDownCategoryWriter:'chicagoVariantTableTissueHeaderLabel',
+                            subCategoryWriter:'chicagoVariantTableTissueRowLabel',
+                            drillDownSubCategoryWriter:'chicagoVariantTableTissueRowLabel',
+                            tissueCategoryWriter:'chicagoVariantTableTissueSpecificHeaderLabel',
+                            tissueSubCategoryWriter:'chicagoVariantTableTissueSpecificRowLabel',
+                            numberRecordsCellPresentationStringWriter:'chicagoVariantTableNumberRecordsCellPresentationString',
+                            significanceCellPresentationStringWriter:'chicagoVariantTableSignificanceCellPresentationString',
+                            packagingString:'mpgSoftware.dynamicUi.chicagoVariantTable',
+                            sortingSubroutine:'VariantChicago',
+                            internalIdentifierString:'getChicagoGivenVariantList',
+                            nameOfAccumulatorField:'chicagoVariantInfo',
+                            nameOfAccumulatorFieldWithIndex:'variantInfoArray'
+                        }
+
                         ,
                         {
                             code: 'TFMOTIF_VAR',
