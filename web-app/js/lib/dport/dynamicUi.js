@@ -169,7 +169,7 @@ mpgSoftware.dynamicUi = (function () {
     var dyanamicUiVariables;
     let currentSortRequest = "";
     var clearBeforeStarting = false;
-    var deferredObject;
+    //var deferredObject;
 
     var CELL_COLORING_BLUISH_TOP = '#1240FE';
     var CELL_COLORING_BLUISH_TOP_MINUS1 = '#3D63FF';
@@ -1723,8 +1723,6 @@ mpgSoftware.dynamicUi = (function () {
 
     var displayHeaderForGeneTable = function (idForTheTargetDiv, // which table are we adding to
                                               callingParameters,
-                                        // dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-                                        // nameOfAccumulatorField, // name of the persistent field where the data we received is stored
                                         preferredSummaryKey, // we may wish to pull out one record for summary purposes
                                         mapSortAndFilterFunction,
                                         placeDataIntoRenderForm ) { // sort and filter the records we will use.  Resulting array must have fields tissue, value, and numericalValue
@@ -1733,6 +1731,12 @@ mpgSoftware.dynamicUi = (function () {
         var selectorForIidForTheTargetDiv = idForTheTargetDiv;
         $(selectorForIidForTheTargetDiv).empty();
         var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode,callingParameters.baseDomElement);
+        if (dataAnnotationType.dataAnnotation.unblockOnDisplay){
+            const deferredObject = getAccumulatorObject("blockingCallDeferral",callingParameters.baseDomElement);
+            if ( typeof deferredObject !== 'undefined'){
+                deferredObject.resolve();
+            }
+        }
         var objectContainingRetrievedRecords = getAccumulatorObject(nameOfAccumulatorField,callingParameters.baseDomElement);
 
         var intermediateDataStructure = new IntermediateDataStructure();
@@ -2620,18 +2624,22 @@ mpgSoftware.dynamicUi = (function () {
 
     var displayHeaderForVariantTable = function (idForTheTargetDiv, // which table are we adding to
                                                  callingParameters,
-                                                 // dataAnnotationTypeCode, // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-                                                 // nameOfAccumulatorField, // name of the persistent field where the data we received is stored
                                                  placeDataIntoRenderForm )
     { // sort and filter the records we will use.  Resulting array must have fields tissue, value, and numericalValue
-        deferredObject.resolve();
         let dataAnnotationTypeCode = callingParameters.code; // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
         let nameOfAccumulatorField = callingParameters.nameOfAccumulatorField;
         let baseDomElement = callingParameters.baseDomElement;
+        var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode,callingParameters.baseDomElement);
+        if (dataAnnotationType.dataAnnotation.unblockOnDisplay){
+            const deferredObject = getAccumulatorObject("blockingCallDeferral",callingParameters.baseDomElement);
+            if ( typeof deferredObject !== 'undefined'){
+                deferredObject.resolve();
+            }
+        }
 
         var selectorForIidForTheTargetDiv = idForTheTargetDiv;
         $(selectorForIidForTheTargetDiv).empty();
-        var dataAnnotationType= getDatatypeInformation(dataAnnotationTypeCode,callingParameters.baseDomElement);
+
         var objectContainingRetrievedRecords = getAccumulatorObject(nameOfAccumulatorField,callingParameters.baseDomElement);
         console.log("displayHeaderForVariantTable:"+dataAnnotationTypeCode+".");
         var intermediateDataStructure = new IntermediateDataStructure();
@@ -3055,24 +3063,25 @@ mpgSoftware.dynamicUi = (function () {
 
         destroySharedTable('table.combinedGeneTableHolder');
 
-
-        if (additionalParameters.dynamicTableType!=='variantTable'){
-            _.forEach(dataAnnotationTypes, function (oneAnnotationType){
-                if ( typeof oneAnnotationType.code !== 'undefined'){
-                    arrayOfRoutinesToUndertake.push( actionContainer(oneAnnotationType.internalIdentifierString,
-                        actionDefaultFollowUp(oneAnnotationType.internalIdentifierString),
-                        additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage));
-                }
+        if ( additionalParameters.dynamicTableConfiguration.useBlockingCall ){
+            // create a jquery promise, and then run only the blocking API initially.  When this blocking call
+            // has retrieved all its data and is ready to run its display routine then resolve the promise, and
+            // all of the other routines can be launched in parallel.
+            let deferredObject = $.Deferred();
+            setAccumulatorObject("blockingCallDeferral",deferredObject,
+                additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage);
+            dataAnnotationTypes = _.filter(additionalParameters.dataAnnotationTypes,function(o){
+                return o.unblockOnDisplay;
             });
-            _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
-        } else {
+            dataAnnotationTypesFollowUp = _.filter(additionalParameters.dataAnnotationTypes,function(o){
+                return !o.unblockOnDisplay;
+            });
             _.forEach(dataAnnotationTypes, function (oneAnnotationType){
                 arrayOfRoutinesToUndertake.push( actionContainer(oneAnnotationType.internalIdentifierString,
                     actionDefaultFollowUp(oneAnnotationType.internalIdentifierString),
                     additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage));
             });
             _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
-            deferredObject = $.Deferred();
             deferredObject.done(function () {
                 console.log("about to execute the other callbacks");
                 arrayOfRoutinesToUndertake = [];
@@ -3094,7 +3103,57 @@ mpgSoftware.dynamicUi = (function () {
                 console.log("Executed if the async work fails");
             });
 
+        } else {
+            // no blocking required -- let all the calls run in parallel
+            _.forEach(dataAnnotationTypes, function (oneAnnotationType){
+                if ( typeof oneAnnotationType.code !== 'undefined'){
+                    arrayOfRoutinesToUndertake.push( actionContainer(oneAnnotationType.internalIdentifierString,
+                        actionDefaultFollowUp(oneAnnotationType.internalIdentifierString),
+                        additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage));
+                }
+            });
+            _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
+
         }
+        // if (additionalParameters.dynamicTableType!=='variantTable'){
+        //     _.forEach(dataAnnotationTypes, function (oneAnnotationType){
+        //         if ( typeof oneAnnotationType.code !== 'undefined'){
+        //             arrayOfRoutinesToUndertake.push( actionContainer(oneAnnotationType.internalIdentifierString,
+        //                 actionDefaultFollowUp(oneAnnotationType.internalIdentifierString),
+        //                 additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage));
+        //         }
+        //     });
+        //     _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
+        // } else {
+        //     _.forEach(dataAnnotationTypes, function (oneAnnotationType){
+        //         arrayOfRoutinesToUndertake.push( actionContainer(oneAnnotationType.internalIdentifierString,
+        //             actionDefaultFollowUp(oneAnnotationType.internalIdentifierString),
+        //             additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage));
+        //     });
+        //     _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
+        //     deferredObject = $.Deferred();
+        //     deferredObject.done(function () {
+        //         console.log("about to execute the other callbacks");
+        //         arrayOfRoutinesToUndertake = [];
+        //         _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
+        //         if (dataAnnotationTypesFollowUp.length>0){
+        //             arrayOfRoutinesToUndertake = [];
+        //             _.forEach(dataAnnotationTypesFollowUp, function (oneAnnotationType){
+        //                 arrayOfRoutinesToUndertake.push( actionContainer(oneAnnotationType.internalIdentifierString,
+        //                     actionDefaultFollowUp(oneAnnotationType.internalIdentifierString),
+        //                     additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage));
+        //             });
+        //             _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
+        //
+        //         }
+        //         console.log("the other callbacks are all queued up");
+        //     });
+        //
+        //     deferredObject.fail(function () {
+        //         console.log("Executed if the async work fails");
+        //     });
+        //
+        // }
      };
 
 

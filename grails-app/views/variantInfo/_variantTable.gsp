@@ -67,7 +67,8 @@
                             packagingString:'mpgSoftware.dynamicUi.variantTableHeaders',
                             internalIdentifierString:'getVariantsWeWillUseToBuildTheVariantTable',
                             nameOfAccumulatorField:'variantInfoArray',
-                            nameOfAccumulatorFieldWithIndex:'notUsed'
+                            nameOfAccumulatorFieldWithIndex:'notUsed',
+                            unblockOnDisplay: true
                         }
                         ,
                         {
@@ -429,7 +430,8 @@
                             table: "#mainVariantDiv table.variantTableHolder",
                             dataAnnotationType: {packagingString:'mpgSoftware.dynamicUi.variantTableHeaders'},
                             desiredSearchTerm: "sortField"
-                        }
+                        },
+                        useBlockingCall: true
                     }
                 };
                 mpgSoftware.variantTable.setVariablesToRemember(drivingVariables);

@@ -122,7 +122,8 @@
                             sortingSubroutine: 'geneHeader',
                             packagingString: 'mpgSoftware.dynamicUi.geneHeaders',
                             internalIdentifierString: 'getTissuesFromProximityForLocusContext',
-                            nameOfAccumulatorFieldWithIndex:'geneInfoArray'
+                            nameOfAccumulatorFieldWithIndex:'geneInfoArray',
+                            unblockOnDisplay: true
                         },
                         {
                             code: 'FIR',
@@ -170,6 +171,23 @@
                             sortingSubroutine: 'MetaXcan',
                             packagingString: 'mpgSoftware.dynamicUi.metaXcan',
                             internalIdentifierString: 'getGeneAssociationsForGenesTable',
+                            nameOfAccumulatorFieldWithIndex:'geneInfoArray'
+                        },
+                        {
+                            code: 'MAGMA',
+                            category: 'Annotation',
+                            displayCategory: 'Significance of association',
+                            subcategory: 'MAGMA gene prioritization',
+                            displaySubcategory: 'MAGMA gene prioritization',
+                            cellBodyWriter: 'magmaTableBody',
+                            categoryWriter: 'sharedCategoryWriter',
+                            subCategoryWriter: 'magmaTableSubCategory',
+                            numberRecordsCellPresentationStringWriter: 'magmaPvalueTableNumberRecordsCellPresentationString',
+                            significanceCellPresentationStringWriter: 'magmaPvalueTableSignificanceCellPresentationString',
+                            sortingSubroutine: 'MAGMA',
+                            packagingString: 'mpgSoftware.dynamicUi.depictGenePvalue',
+                            internalIdentifierString: 'getInformationFromMagmaForGenesTable',
+                            nameOfAccumulatorField:'magmaGenePredictions',
                             nameOfAccumulatorFieldWithIndex:'geneInfoArray'
                         },
                         {
@@ -267,23 +285,6 @@
                             packagingString: 'mpgSoftware.dynamicUi.effectorGene',
                             internalIdentifierString: 'getInformationFromEffectorGeneListTable',
                             nameOfAccumulatorFieldWithIndex:'geneInfoArray'
-                        },
-                        {
-                            code: 'MAGMA',
-                            category: 'Annotation',
-                            displayCategory: 'Significance of association',
-                            subcategory: 'MAGMA gene prioritization',
-                            displaySubcategory: 'MAGMA gene prioritization',
-                            cellBodyWriter: 'magmaTableBody',
-                            categoryWriter: 'sharedCategoryWriter',
-                            subCategoryWriter: 'magmaTableSubCategory',
-                            numberRecordsCellPresentationStringWriter: 'magmaPvalueTableNumberRecordsCellPresentationString',
-                            significanceCellPresentationStringWriter: 'magmaPvalueTableSignificanceCellPresentationString',
-                            sortingSubroutine: 'MAGMA',
-                            packagingString: 'mpgSoftware.dynamicUi.depictGenePvalue',
-                            internalIdentifierString: 'getInformationFromMagmaForGenesTable',
-                            nameOfAccumulatorField:'magmaGenePredictions',
-                            nameOfAccumulatorFieldWithIndex:'geneInfoArray'
                         }
                         // additional sorting terms
                         ,
@@ -310,7 +311,8 @@
                         formOfStorage: 'loadFromTable',
                         initializeSharedTableMemory: 'table.combinedGeneTableHolder',
                         organizingDiv: '#DataTables_Table_0_wrapper',
-                        initialOrientation: 'geneTableGeneHeaders'
+                        initialOrientation: 'geneTableGeneHeaders',
+                        useBlockingCall: true
                     }
                 };
                 mpgSoftware.geneSignalSummaryMethods.setSignalSummarySectionVariables(drivingVariables);
