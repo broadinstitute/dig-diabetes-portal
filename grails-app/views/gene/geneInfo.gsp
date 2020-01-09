@@ -419,7 +419,7 @@
 
 </div>
 <g:render template="/templates/burdenTestSharedTemplate" />
-<g:render template="/variantInfo/variantTable" />
+<g:render template="/templates/dynamicUi/varFocus/variantTable" />
 
 
 </body>

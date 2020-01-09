@@ -121,8 +121,13 @@
                             significanceCellPresentationStringWriter: 'no significance string writer',
                             sortingSubroutine: 'geneHeader',
                             packagingString: 'mpgSoftware.dynamicUi.geneHeaders',
+                            displayRefinedContextFunction:mpgSoftware.dynamicUi.geneHeaders.displayRefinedGenesInARange,
+                            processEachRecord:mpgSoftware.dynamicUi.geneHeaders.processRecordsFromProximitySearch,
+                            prepareDataForApiCall:mpgSoftware.dynamicUi.geneHeaders.prepareDataForApiCall,
+                            urlOfTheApiCall:  '${g.createLink(controller: "RegionInfo", action: "retrieveListOfGenesInARange")}',
                             internalIdentifierString: 'getTissuesFromProximityForLocusContext',
-                            nameOfAccumulatorFieldWithIndex:'geneInfoArray',
+                            nameOfAccumulatorField:'geneInfoArray', // should be the same as nameOfAccumulatorFieldWithIndex if this is the blocker
+                            nameOfAccumulatorFieldWithIndex:'geneInfoArray',// should be the same as nameOfAccumulatorField if this is the blocker
                             unblockOnDisplay: true
                         },
                         {
@@ -138,7 +143,12 @@
                             significanceCellPresentationStringWriter: 'geneFirthAssociationTableSignificanceCellPresentationString',
                             sortingSubroutine: 'Firth',
                             packagingString: 'mpgSoftware.dynamicUi.geneBurdenFirth',
+                            displayRefinedContextFunction:mpgSoftware.dynamicUi.geneBurdenFirth.displayRefinedGenesInARange,
+                            processEachRecord:mpgSoftware.dynamicUi.geneBurdenFirth.processGeneFirthAssociationRecords,
+                            prepareDataForApiCall:mpgSoftware.dynamicUi.geneBurdenFirth.displayGeneFirthAssociationsForGeneTable,
+                            urlOfTheApiCall:  '${g.createLink(controller: "RegionInfo", action: "retrieveGeneLevelAssociations")}',
                             internalIdentifierString: 'getFirthGeneAssociationsForGeneTable',
+                            nameOfAccumulatorField:'rawGeneFirthRecords',
                             nameOfAccumulatorFieldWithIndex:'geneInfoArray'
                         },
                         {
@@ -154,7 +164,12 @@
                             significanceCellPresentationStringWriter: 'geneSkatAssociationTableSignificanceCellPresentationString',
                             sortingSubroutine: 'SKAT',
                             packagingString: 'mpgSoftware.dynamicUi.geneBurdenSkat',
+                            displayRefinedContextFunction:mpgSoftware.dynamicUi.geneBurdenSkat.displayRefinedGenesInARange,
+                            processEachRecord:mpgSoftware.dynamicUi.geneBurdenSkat.processGeneSkatAssociationRecords,
+                            prepareDataForApiCall:mpgSoftware.dynamicUi.geneBurdenSkat.displayGeneSkatAssociationsForGeneTable,
+                            urlOfTheApiCall:  '${g.createLink(controller: "RegionInfo", action: "retrieveGeneLevelAssociations")}',
                             internalIdentifierString: 'getSkatGeneAssociationsForGeneTable',
+                            nameOfAccumulatorField:'rawGeneSkatRecords',
                             nameOfAccumulatorFieldWithIndex:'geneInfoArray'
                         },
                         {
@@ -170,6 +185,10 @@
                             significanceCellPresentationStringWriter: 'metaxcanTableSignificanceCellPresentationString',
                             sortingSubroutine: 'MetaXcan',
                             packagingString: 'mpgSoftware.dynamicUi.metaXcan',
+                            displayRefinedContextFunction:mpgSoftware.dynamicUi.geneBurdenSkat.displayRefinedGenesInARange,
+                            processEachRecord:mpgSoftware.dynamicUi.geneBurdenSkat.processGeneSkatAssociationRecords,
+                            prepareDataForApiCall:mpgSoftware.dynamicUi.geneBurdenSkat.displayGeneSkatAssociationsForGeneTable,
+                            urlOfTheApiCall:  '${g.createLink(controller: "RegionInfo", action: "retrieveGeneLevelAssociations")}',
                             internalIdentifierString: 'getGeneAssociationsForGenesTable',
                             nameOfAccumulatorFieldWithIndex:'geneInfoArray'
                         },
@@ -310,6 +329,7 @@
                         domSpecificationForAccumulatorStorage: '#configurableUiTabStorage',
                         formOfStorage: 'loadFromTable',
                         initializeSharedTableMemory: 'table.combinedGeneTableHolder',
+                        placeToDisplayData:'#dynamicGeneHolder div.dynamicUiHolder',
                         organizingDiv: '#DataTables_Table_0_wrapper',
                         initialOrientation: 'geneTableGeneHeaders',
                         useBlockingCall: true

@@ -20,6 +20,17 @@ mpgSoftware.dynamicUi.geneHeaders = (function () {
     "use strict";
 
 
+    const prepareDataForApiCall = function ( objectWithDataToPrepare ) {
+        var chromosome = objectWithDataToPrepare.getAccumulatorObject("chromosome", objectWithDataToPrepare.baseDomElement);
+        var startPos = objectWithDataToPrepare.getAccumulatorObject("extentBegin", objectWithDataToPrepare.baseDomElement);
+        var endPos = objectWithDataToPrepare.getAccumulatorObject("extentEnd", objectWithDataToPrepare.baseDomElement);
+        return ( {
+            chromosome: chromosome,
+            startPos: startPos,
+            endPos: endPos
+        } );
+    };
+
 
     /***
      *   1) a function to process records
@@ -60,11 +71,7 @@ mpgSoftware.dynamicUi.geneHeaders = (function () {
     var displayRefinedGenesInARange = function (idForTheTargetDiv, objectContainingRetrievedRecords,callingParameters) {
         mpgSoftware.dynamicUi.displayHeaderForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
             callingParameters
-            // 'GHDR', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            // 'geneInfoArray'
         );
-
-
     };
 
 
@@ -88,6 +95,7 @@ mpgSoftware.dynamicUi.geneHeaders = (function () {
 
 // public routines are declared below
     return {
+        prepareDataForApiCall:prepareDataForApiCall,
         processRecordsFromProximitySearch: processRecordsFromProximitySearch,
         displayRefinedGenesInARange:displayRefinedGenesInARange,
         sortRoutine:sortRoutine

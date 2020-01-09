@@ -714,7 +714,6 @@ mpgSoftware.dynamicUi = (function () {
                             baseDomElement);
                         actionToUndertake();
                     } else {
-                        //var phenotype = $('li.chosenPhenotype').attr('id');
                         var phenotype = getAccumulatorObject("phenotype", baseDomElement);
                         var dataForCall = _.map(getAccumulatorObject("geneInfoArray", baseDomElement), function (o) {
                             return {
@@ -3156,45 +3155,6 @@ mpgSoftware.dynamicUi = (function () {
             _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
 
         }
-        // if (additionalParameters.dynamicTableType!=='variantTable'){
-        //     _.forEach(dataAnnotationTypes, function (oneAnnotationType){
-        //         if ( typeof oneAnnotationType.code !== 'undefined'){
-        //             arrayOfRoutinesToUndertake.push( actionContainer(oneAnnotationType.internalIdentifierString,
-        //                 actionDefaultFollowUp(oneAnnotationType.internalIdentifierString),
-        //                 additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage));
-        //         }
-        //     });
-        //     _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
-        // } else {
-        //     _.forEach(dataAnnotationTypes, function (oneAnnotationType){
-        //         arrayOfRoutinesToUndertake.push( actionContainer(oneAnnotationType.internalIdentifierString,
-        //             actionDefaultFollowUp(oneAnnotationType.internalIdentifierString),
-        //             additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage));
-        //     });
-        //     _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
-        //     deferredObject = $.Deferred();
-        //     deferredObject.done(function () {
-        //         console.log("about to execute the other callbacks");
-        //         arrayOfRoutinesToUndertake = [];
-        //         _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
-        //         if (dataAnnotationTypesFollowUp.length>0){
-        //             arrayOfRoutinesToUndertake = [];
-        //             _.forEach(dataAnnotationTypesFollowUp, function (oneAnnotationType){
-        //                 arrayOfRoutinesToUndertake.push( actionContainer(oneAnnotationType.internalIdentifierString,
-        //                     actionDefaultFollowUp(oneAnnotationType.internalIdentifierString),
-        //                     additionalParameters.dynamicTableConfiguration.domSpecificationForAccumulatorStorage));
-        //             });
-        //             _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
-        //
-        //         }
-        //         console.log("the other callbacks are all queued up");
-        //     });
-        //
-        //     deferredObject.fail(function () {
-        //         console.log("Executed if the async work fails");
-        //     });
-        //
-        // }
      };
 
 
