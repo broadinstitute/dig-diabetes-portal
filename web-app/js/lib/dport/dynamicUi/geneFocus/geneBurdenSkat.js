@@ -33,8 +33,6 @@ mpgSoftware.dynamicUi.geneBurdenSkat = (function () {
 
 
 
-
-
     /***
      * 1) a function to process records
      * @param data

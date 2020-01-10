@@ -18,6 +18,25 @@ mpgSoftware.dynamicUi.magmaGeneAssociation = (function () {
     "use strict";
 
 
+
+    const prepareDataForApiCall = function ( objectWithDataToPrepare ) {
+        var phenotype = objectWithDataToPrepare.getAccumulatorObject("phenotype", objectWithDataToPrepare.baseDomElement);
+        var genesAsJson = "[]";
+        if (objectWithDataToPrepare.getAccumulatorObject(objectWithDataToPrepare.nameOfAccumulatorFieldWithIndex,
+            objectWithDataToPrepare.baseDomElement).length > 0) {
+            const dataVector = objectWithDataToPrepare.getAccumulatorObject(objectWithDataToPrepare.nameOfAccumulatorFieldWithIndex,
+                objectWithDataToPrepare.baseDomElement);
+            if (dataVector.length===0){return;}
+            var geneNameArray = _.map(dataVector, function(geneRec){return geneRec.name;});
+            genesAsJson = "[\"" + geneNameArray.join("\",\"") + "\"]";
+        }
+        return { genes: genesAsJson, phenotype: phenotype };
+    };
+
+
+
+
+
     /***
      * 1) a function to process records
      * @param data
@@ -93,6 +112,7 @@ mpgSoftware.dynamicUi.magmaGeneAssociation = (function () {
 
 // public routines are declared below
     return {
+        prepareDataForApiCall:prepareDataForApiCall,
         processRecordsFromMagma: processRecordsFromMagma,
         displayGenesFromMagma:displayGenesFromMagma,
         sortRoutine:sortRoutine

@@ -645,7 +645,6 @@ mpgSoftware.dynamicUi = (function () {
                             {actionId:actionId}, baseDomElement);
                         actionToUndertake();
                     } else {
-                        //var phenotype = $('li.chosenPhenotype').attr('id');
                         var phenotype = getAccumulatorObject("phenotype", baseDomElement);
                         var dataForCall = _.map(getAccumulatorObject("geneInfoArray", baseDomElement), function (o) {
                             return {
