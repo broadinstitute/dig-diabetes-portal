@@ -18,6 +18,20 @@ mpgSoftware.dynamicUi.effectorGene = (function () {
     "use strict";
 
 
+
+    const prepareDataForApiCall = function ( objectWithDataToPrepare ) {
+        var dataForCall = _.map(objectWithDataToPrepare.getAccumulatorObject(objectWithDataToPrepare.nameOfAccumulatorFieldWithIndex,
+            objectWithDataToPrepare.baseDomElement), function (o) {
+            return {
+                gene: o.name,
+            }
+        });
+        return dataForCall;
+    };
+
+
+
+
     /***
      * 1) a function to process records
      * @param data
@@ -103,6 +117,7 @@ mpgSoftware.dynamicUi.effectorGene = (function () {
 
 // public routines are declared below
     return {
+        prepareDataForApiCall:prepareDataForApiCall,
         processRecordsFromEffectorGene: processRecordsFromEffectorGene,
         displayGenesFromEffectorGene:displayGenesFromEffectorGene,
         sortRoutine:sortRoutine

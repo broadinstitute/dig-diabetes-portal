@@ -18,6 +18,24 @@ mpgSoftware.dynamicUi = mpgSoftware.dynamicUi || {};   // second level encapsula
 mpgSoftware.dynamicUi.eCaviar = (function () {
     "use strict";
 
+
+
+
+    const prepareDataForApiCall = function ( objectWithDataToPrepare ) {
+        var phenotype = objectWithDataToPrepare.getAccumulatorObject("phenotype", objectWithDataToPrepare.baseDomElement);
+        var dataForCall = _.map(objectWithDataToPrepare.getAccumulatorObject(objectWithDataToPrepare.nameOfAccumulatorFieldWithIndex,
+            objectWithDataToPrepare.baseDomElement), function (o) {
+            return {
+                gene: o.name,
+                phenotype: phenotype
+            }
+        });
+        return dataForCall;
+    };
+
+
+
+
     /***
      * 1) a function to process records
      * @param data
@@ -102,6 +120,7 @@ mpgSoftware.dynamicUi.eCaviar = (function () {
 
 // public routines are declared below
     return {
+        prepareDataForApiCall:prepareDataForApiCall,
         processRecordsFromECaviar: processRecordsFromECaviar,
         displayGenesFromECaviar:displayGenesFromECaviar,
         sortRoutine:sortRoutine

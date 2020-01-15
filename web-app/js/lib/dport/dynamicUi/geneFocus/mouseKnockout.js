@@ -17,6 +17,15 @@ mpgSoftware.dynamicUi = mpgSoftware.dynamicUi || {};   // second level encapsula
 
 mpgSoftware.dynamicUi.mouseKnockout = (function () {
 
+    const prepareDataForApiCall = function ( objectWithDataToPrepare ) {
+        var dataForCall = _.map(objectWithDataToPrepare.getAccumulatorObject(objectWithDataToPrepare.nameOfAccumulatorFieldWithIndex,
+            objectWithDataToPrepare.baseDomElement), function (o) {
+            return {
+                gene: o.name,
+            }
+        });
+        return dataForCall;
+    };
 
 
     var processRecordsFromMod = function (data, rawGeneAssociationRecords) {
@@ -83,6 +92,7 @@ mpgSoftware.dynamicUi.mouseKnockout = (function () {
 
 // public routines are declared below
     return {
+        prepareDataForApiCall:prepareDataForApiCall,
         displayRefinedModContext:displayRefinedModContext,
         processRecordsFromMod: processRecordsFromMod,
         sortRoutine:sortRoutine

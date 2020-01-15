@@ -26,8 +26,7 @@ mpgSoftware.dynamicUi.depictGeneSets = (function () {
             objectWithDataToPrepare.baseDomElement), function (o) {
             return {
                 gene: o.name,
-                phenotype: phenotype,
-                propertyNames: "[\"P_VALUE\"]"
+                phenotype: phenotype
             }
         });
         return dataForCall;

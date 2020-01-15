@@ -18,6 +18,21 @@ mpgSoftware.dynamicUi.depictGenePvalue = (function () {
     "use strict";
 
 
+
+    const prepareDataForApiCall = function ( objectWithDataToPrepare ) {
+        var phenotype = objectWithDataToPrepare.getAccumulatorObject("phenotype", objectWithDataToPrepare.baseDomElement);
+        var dataForCall = _.map(objectWithDataToPrepare.getAccumulatorObject(objectWithDataToPrepare.nameOfAccumulatorFieldWithIndex,
+            objectWithDataToPrepare.baseDomElement), function (o) {
+            return {
+                gene: o.name,
+                phenotype: phenotype
+            }
+        });
+        return dataForCall;
+    };
+
+
+
     /***
      * 1) a function to process records
      * @param data
@@ -96,6 +111,7 @@ mpgSoftware.dynamicUi.depictGenePvalue = (function () {
 
 // public routines are declared below
     return {
+        prepareDataForApiCall:prepareDataForApiCall,
         processRecordsFromDepictGenePvalue: processRecordsFromDepictGenePvalue,
         displayGenesFromDepict:displayGenesFromDepict,
         sortRoutine:sortRoutine

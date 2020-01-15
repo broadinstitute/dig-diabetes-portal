@@ -227,9 +227,9 @@
                             significanceCellPresentationStringWriter: 'depictGeneSetTableSignificanceCellPresentationString',
                             sortingSubroutine: 'DEPICT',
                             packagingString: 'mpgSoftware.dynamicUi.depictGeneSets',
-                            processEachRecord:mpgSoftware.dynamicUi.magmaGeneAssociation.processRecordsFromDepictGeneSet,
-                            displayRefinedContextFunction:mpgSoftware.dynamicUi.magmaGeneAssociation.displayGeneSetFromDepict,
-                            prepareDataForApiCall:mpgSoftware.dynamicUi.magmaGeneAssociation.prepareDataForApiCall,
+                            processEachRecord:mpgSoftware.dynamicUi.depictGeneSets.processRecordsFromDepictGeneSet,
+                            displayRefinedContextFunction:mpgSoftware.dynamicUi.depictGeneSets.displayGeneSetFromDepict,
+                            prepareDataForApiCall:mpgSoftware.dynamicUi.depictGeneSets.prepareDataForApiCall,
                             urlOfTheApiCall: '${g.createLink(controller: "RegionInfo", action: "retrieveDepictGeneSetData")}',
                             internalIdentifierString: 'getDepictGeneSetForGenesTable',
                             nameOfAccumulatorField:'depictGeneSetInfo',
@@ -248,7 +248,12 @@
                             significanceCellPresentationStringWriter: 'depictGenePvalueTableSignificanceCellPresentationString',
                             sortingSubroutine: 'DEPICT',
                             packagingString: 'mpgSoftware.dynamicUi.depictGenePvalue',
+                            processEachRecord:mpgSoftware.dynamicUi.depictGenePvalue.processRecordsFromDepictGenePvalue,
+                            displayRefinedContextFunction:mpgSoftware.dynamicUi.depictGenePvalue.displayGenesFromDepict,
+                            prepareDataForApiCall:mpgSoftware.dynamicUi.depictGenePvalue.prepareDataForApiCall,
+                            urlOfTheApiCall: '${g.createLink(controller: "RegionInfo", action: "retrieveDepictData")}',
                             internalIdentifierString: 'getInformationFromDepictForGenesTable',
+                            nameOfAccumulatorField:'rawDepictInfo',
                             nameOfAccumulatorFieldWithIndex:'geneInfoArray'
                         },
                         {
@@ -264,7 +269,12 @@
                             significanceCellPresentationStringWriter: 'eCaviarTableSignificanceCellPresentationString',
                             sortingSubroutine: 'eCAVIAR',
                             packagingString: 'mpgSoftware.dynamicUi.eCaviar',
+                            processEachRecord:mpgSoftware.dynamicUi.eCaviar.processRecordsFromECaviar,
+                            displayRefinedContextFunction:mpgSoftware.dynamicUi.eCaviar.displayGenesFromECaviar,
+                            prepareDataForApiCall:mpgSoftware.dynamicUi.eCaviar.prepareDataForApiCall,
+                            urlOfTheApiCall: '${g.createLink(controller: "RegionInfo", action: "retrieveECaviarData")}',
                             internalIdentifierString: 'getRecordsFromECaviarForGeneTable',
+                            nameOfAccumulatorField:'rawColocalizationInfo',
                             nameOfAccumulatorFieldWithIndex:'geneInfoArray'
                         },
                         {
@@ -280,7 +290,12 @@
                             significanceCellPresentationStringWriter: 'colocTableSignificanceCellPresentationString',
                             sortingSubroutine: 'COLOC',
                             packagingString: 'mpgSoftware.dynamicUi.coloc',
+                            processEachRecord:mpgSoftware.dynamicUi.coloc.processRecordsFromColoc,
+                            displayRefinedContextFunction:mpgSoftware.dynamicUi.coloc.displayGenesFromColoc,
+                            prepareDataForApiCall:mpgSoftware.dynamicUi.coloc.prepareDataForApiCall,
+                            urlOfTheApiCall: '${g.createLink(controller: "RegionInfo", action: "retrieveColocData")}',
                             internalIdentifierString: 'getRecordsFromColocForGeneTable',
+                            nameOfAccumulatorField:'rawColoInfo',
                             nameOfAccumulatorFieldWithIndex:'geneInfoArray'
                         },
                         {
@@ -296,7 +311,12 @@
                             significanceCellPresentationStringWriter: 'modTableSignificanceCellPresentationString',
                             sortingSubroutine: 'MOD',
                             packagingString: 'mpgSoftware.dynamicUi.mouseKnockout',
+                            processEachRecord:mpgSoftware.dynamicUi.mouseKnockout.processRecordsFromMod,
+                            displayRefinedContextFunction:mpgSoftware.dynamicUi.mouseKnockout.displayRefinedModContext,
+                            prepareDataForApiCall:mpgSoftware.dynamicUi.mouseKnockout.prepareDataForApiCall,
+                            urlOfTheApiCall: '${g.createLink(controller: "RegionInfo", action: "retrieveModData")}',
                             internalIdentifierString: 'getAnnotationsFromModForGenesTable',
+                            nameOfAccumulatorField:'modNameArray',
                             nameOfAccumulatorFieldWithIndex:'geneInfoArray'
                         },
                         {
@@ -312,7 +332,12 @@
                             significanceCellPresentationStringWriter: 'effectorGeneTableSignificanceCellPresentationString',
                             sortingSubroutine: 'straightAlphabetic',
                             packagingString: 'mpgSoftware.dynamicUi.effectorGene',
+                            processEachRecord:mpgSoftware.dynamicUi.effectorGene.processRecordsFromEffectorGene,
+                            displayRefinedContextFunction:mpgSoftware.dynamicUi.effectorGene.displayGenesFromEffectorGene,
+                            prepareDataForApiCall:mpgSoftware.dynamicUi.effectorGene.prepareDataForApiCall,
+                            urlOfTheApiCall: '${g.createLink(controller: "RegionInfo", action: "retrieveEffectorGeneInformation")}',
                             internalIdentifierString: 'getInformationFromEffectorGeneListTable',
+                            nameOfAccumulatorField:'rawEffectorGeneRecords',
                             nameOfAccumulatorFieldWithIndex:'geneInfoArray'
                         }
                         // additional sorting terms

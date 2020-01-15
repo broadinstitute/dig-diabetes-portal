@@ -595,31 +595,6 @@ mpgSoftware.dynamicUi = (function () {
                 };
                 break;
 
-            case "getTissuesFromProximityForLocusContext":
-                functionToLaunchDataRetrieval = function () {
-                    var chromosome = getAccumulatorObject("chromosome", baseDomElement);
-                    var startPos = getAccumulatorObject("extentBegin", baseDomElement);
-                    var endPos = getAccumulatorObject("extentEnd", baseDomElement);
-                    retrieveRemotedContextInformation(buildRemoteContextArray({
-                        name: "getTissuesFromProximityForLocusContext",
-                        retrieveDataUrl: additionalParameters.retrieveListOfGenesInARangeUrl,
-                        dataForCall: {
-                            chromosome: chromosome,
-                            startPos: startPos,
-                            endPos: endPos
-                        },
-                        processEachRecord: mpgSoftware.dynamicUi.geneHeaders.processRecordsFromProximitySearch,
-                        displayRefinedContextFunction: displayFunction,
-                        placeToDisplayData: displayLocation,
-                        actionId: nextActionId,
-                        nameOfAccumulatorField:'geneInfoArray',
-                        code:dataAnnotationType.code,
-                        nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex,
-                        baseDomElement:baseDomElement
-                    }));
-                };
-                break;
-
             case "getFullFromEffectorGeneListTable":
                 functionToLaunchDataRetrieval = function () {
                     retrieveRemotedContextInformation(buildRemoteContextArray({
@@ -638,107 +613,43 @@ mpgSoftware.dynamicUi = (function () {
                 };
                 break;
 
-            case "getGeneAssociationsForGenesTable":
-                functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("geneInfoArray", baseDomElement)) {
-                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
-                            {actionId:actionId}, baseDomElement);
-                        actionToUndertake();
-                    } else {
-                        var phenotype = getAccumulatorObject("phenotype", baseDomElement);
-                        var dataForCall = _.map(getAccumulatorObject("geneInfoArray", baseDomElement), function (o) {
-                            return {
-                                gene: o.name,
-                                phenotype: phenotype,
-                                propertyNames: "[\"P_VALUE\"]"
-                            }
-                        });
-                        retrieveRemotedContextInformation(buildRemoteContextArray({
-                            name: actionId,
-                            retrieveDataUrl: additionalParameters.retrieveGeneLevelAssociationsUrl,
-                            dataForCall: dataForCall,
-                            processEachRecord: mpgSoftware.dynamicUi.metaXcan.processMetaXcanRecords,
-                            displayRefinedContextFunction: displayFunction,
-                            placeToDisplayData: displayLocation,
-                            actionId: nextActionId,
-                            nameOfAccumulatorField:'rawGeneAssociationRecords',
-                            code:dataAnnotationType.code,
-                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex,
-                            baseDomElement:baseDomElement
-                        }));
-                    }
-                };
-                break;
-
+            case "getTissuesFromProximityForLocusContext":
             case "getSkatGeneAssociationsForGeneTable":
-                functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("geneInfoArray", baseDomElement)) {
-                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
-                            {actionId: actionId}, baseDomElement);
-                        actionToUndertake();
-                    } else {
-                        //var phenotype = $('li.chosenPhenotype').attr('id');
-                        var phenotype = getAccumulatorObject("phenotype", baseDomElement);
-                        var dataForCall = _.map(getAccumulatorObject("geneInfoArray", baseDomElement), function (o) {
-                            return {
-                                gene: o.name,
-                                phenotype: phenotype,
-                                propertyNames: "[\"P_VALUE\"]",
-                                preferredSampleGroup: "ExSeq_52k"
-                            }
-                        });
-                        retrieveRemotedContextInformation(buildRemoteContextArray({
-                            name: actionId,
-                            retrieveDataUrl: additionalParameters.retrieveGeneLevelAssociationsUrl,
-                            dataForCall: dataForCall,
-                            processEachRecord: mpgSoftware.dynamicUi.geneBurdenSkat.processGeneSkatAssociationRecords,
-                            displayRefinedContextFunction: displayFunction,
-                            placeToDisplayData: displayLocation,
-                            actionId: nextActionId,
-                            nameOfAccumulatorField:'rawGeneSkatRecords',
-                            code:dataAnnotationType.code,
-                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex,
-                            baseDomElement:baseDomElement
-                        }));
-                    }
-                };
-                break;
-
-
+            case "getGeneAssociationsForGenesTable":
             case "getFirthGeneAssociationsForGeneTable":
+            case "getInformationFromMagmaForGenesTable":
+            case "getDepictGeneSetForGenesTable":
+            case "getInformationFromDepictForGenesTable":
+            //case "getRecordsFromECaviarForGeneTable":
+
                 functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("geneInfoArray", baseDomElement)) {
-                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
-                            {actionId: actionId},
-                            baseDomElement);
-                        actionToUndertake();
+
+                    if ((!dataAnnotationType.unblockOnDisplay)&&
+                        (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement))) {
+                        const indexType = _.find(additionalParameters.dataAnnotationTypes,{unblockOnDisplay:true});
+                        actionContainer(    indexType.internalIdentifierString,
+                            { actionId: actionId },
+                            baseDomElement )();
                     } else {
-                        var phenotype = getAccumulatorObject("phenotype", baseDomElement);
-                        var dataForCall = _.map(getAccumulatorObject("geneInfoArray", baseDomElement), function (o) {
-                            return {
-                                gene: o.name,
-                                phenotype: phenotype,
-                                propertyNames: "[\"P_VALUE\"]",
-                                preferredSampleGroup: "ExSeq_52k"
-                            }
-                        });
                         retrieveRemotedContextInformation(buildRemoteContextArray({
-                            name: actionId,
-                            retrieveDataUrl: additionalParameters.retrieveGeneLevelAssociationsUrl,
-                            dataForCall: dataForCall,
-                            processEachRecord: mpgSoftware.dynamicUi.geneBurdenFirth.processGeneFirthAssociationRecords,
-                            displayRefinedContextFunction: displayFunction,
-                            placeToDisplayData: displayLocation,
+                            name: dataAnnotationType.internalIdentifierString,
+                            retrieveDataUrl: dataAnnotationType.urlOfTheApiCall,
+                            dataForCall: dataAnnotationType.prepareDataForApiCall(_.merge(  dataAnnotationType,
+                                {   getAccumulatorObject:getAccumulatorObject,
+                                    baseDomElement:baseDomElement})),
+                            processEachRecord: dataAnnotationType.processEachRecord,
+                            displayRefinedContextFunction: dataAnnotationType.displayRefinedContextFunction,
+                            placeToDisplayData: additionalParameters.dynamicTableConfiguration.initializeSharedTableMemory,
                             actionId: nextActionId,
-                            nameOfAccumulatorField:'rawGeneFirthRecords',
+                            nameOfAccumulatorField:dataAnnotationType.nameOfAccumulatorField,
                             code:dataAnnotationType.code,
                             nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex,
                             baseDomElement:baseDomElement
                         }));
                     }
+
                 };
                 break;
-
 
             case "getInformationFromEffectorGeneListTable":
                 functionToLaunchDataRetrieval = function () {
@@ -792,7 +703,7 @@ mpgSoftware.dynamicUi = (function () {
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
                             actionId: nextActionId,
-                            nameOfAccumulatorField:'rawColocalizationInfo',
+                            nameOfAccumulatorField:'which',
                             code:dataAnnotationType.code,
                             nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex,
                             baseDomElement:baseDomElement
@@ -1029,69 +940,6 @@ mpgSoftware.dynamicUi = (function () {
                 };
                 break;
 
-            case "getInformationFromDepictForGenesTable":
-                functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("geneInfoArray", baseDomElement)) {
-                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
-                            {actionId: actionId}, baseDomElement);
-                        actionToUndertake();
-                    } else {
-                        var phenotype = $('li.chosenPhenotype').attr('id');
-                        var dataForCall = _.map(getAccumulatorObject("geneInfoArray", baseDomElement), function (o) {
-                            return {
-                                gene: o.name,
-                                phenotype: phenotype
-                            }
-                        });
-
-                        retrieveRemotedContextInformation(buildRemoteContextArray({
-                            name: actionId,
-                            retrieveDataUrl: additionalParameters.retrieveDepictDataUrl,
-                            dataForCall: dataForCall,
-                            processEachRecord: mpgSoftware.dynamicUi.depictGenePvalue.processRecordsFromDepictGenePvalue,
-                            displayRefinedContextFunction: displayFunction,
-                            placeToDisplayData: displayLocation,
-                            actionId: nextActionId,
-                            nameOfAccumulatorField:'rawDepictInfo',
-                            code:dataAnnotationType.code,
-                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex,
-                            baseDomElement:baseDomElement
-                        }));
-                    }
-                };
-                break;
-
-            case "getDepictGeneSetForGenesTable":
-                functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty("geneInfoArray", baseDomElement)) {
-                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
-                            {actionId: actionId}, baseDomElement);
-                        actionToUndertake();
-                    } else {
-                        var phenotype = $('li.chosenPhenotype').attr('id');
-                        var dataForCall = _.map(getAccumulatorObject("geneInfoArray", baseDomElement), function (o) {
-                            return {
-                                gene: o.name,
-                                phenotype: phenotype
-                            }
-                        });
-
-                        retrieveRemotedContextInformation(buildRemoteContextArray({
-                            name: actionId,
-                            retrieveDataUrl: additionalParameters.retrieveDepictGeneSetUrl,
-                            dataForCall: dataForCall,
-                            processEachRecord: mpgSoftware.dynamicUi.depictGeneSets.processRecordsFromDepictGeneSet,
-                            displayRefinedContextFunction: displayFunction,
-                            placeToDisplayData: displayLocation,
-                            actionId: nextActionId,
-                            nameOfAccumulatorField:'depictGeneSetInfo',
-                            code:dataAnnotationType.code,
-                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex,
-                            baseDomElement:baseDomElement
-                        }));
-                    }
-                };
-                break;
 
             case "getAtacseqGivenVariantList":
                 functionToLaunchDataRetrieval = function () {
@@ -1330,38 +1178,38 @@ mpgSoftware.dynamicUi = (function () {
 
                 break;
 
-            case "getInformationFromMagmaForGenesTable":
-                functionToLaunchDataRetrieval = function () {
-                    if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement)) {
-                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
-                            {actionId: actionId}, baseDomElement);
-                        actionToUndertake();
-                    } else {
-                        var phenotype = $('li.chosenPhenotype').attr('id');
-                        var genesAsJson = "[]";
-                        if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement).length > 0) {
-                            const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement);
-                            if (dataVector.length===0){return;}
-                            var geneNameArray = _.map(dataVector, function(geneRec){return geneRec.name;});
-                            genesAsJson = "[\"" + geneNameArray.join("\",\"") + "\"]";
-                        }
-                        var dataForCall = { genes: genesAsJson, phenotype: phenotype };
-                        retrieveRemotedContextInformation(buildRemoteContextArray({
-                            name: actionId,
-                            retrieveDataUrl: additionalParameters.retrieveMagmaDataUrl,
-                            dataForCall: dataForCall,
-                            processEachRecord: mpgSoftware.dynamicUi.magmaGeneAssociation.processRecordsFromMagma,
-                            displayRefinedContextFunction: displayFunction,
-                            placeToDisplayData: displayLocation,
-                            actionId: nextActionId,
-                            nameOfAccumulatorField:dataAnnotationType.nameOfAccumulatorField,
-                            code:dataAnnotationType.code,
-                            nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex,
-                            baseDomElement:baseDomElement
-                        }));
-                    }
-                };
-                break;
+            // case "getInformationFromMagmaForGenesTable":
+                // functionToLaunchDataRetrieval = function () {
+                //     if (accumulatorObjectFieldEmpty(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement)) {
+                //         var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext",
+                //             {actionId: actionId}, baseDomElement);
+                //         actionToUndertake();
+                //     } else {
+                //         var phenotype = $('li.chosenPhenotype').attr('id');
+                //         var genesAsJson = "[]";
+                //         if (getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement).length > 0) {
+                //             const dataVector = getAccumulatorObject(dataAnnotationType.nameOfAccumulatorFieldWithIndex, baseDomElement);
+                //             if (dataVector.length===0){return;}
+                //             var geneNameArray = _.map(dataVector, function(geneRec){return geneRec.name;});
+                //             genesAsJson = "[\"" + geneNameArray.join("\",\"") + "\"]";
+                //         }
+                //         var dataForCall = { genes: genesAsJson, phenotype: phenotype };
+                //         retrieveRemotedContextInformation(buildRemoteContextArray({
+                //             name: actionId,
+                //             retrieveDataUrl: additionalParameters.retrieveMagmaDataUrl,
+                //             dataForCall: dataForCall,
+                //             processEachRecord: mpgSoftware.dynamicUi.magmaGeneAssociation.processRecordsFromMagma,
+                //             displayRefinedContextFunction: displayFunction,
+                //             placeToDisplayData: displayLocation,
+                //             actionId: nextActionId,
+                //             nameOfAccumulatorField:dataAnnotationType.nameOfAccumulatorField,
+                //             code:dataAnnotationType.code,
+                //             nameOfAccumulatorFieldWithIndex:dataAnnotationType.nameOfAccumulatorFieldWithIndex,
+                //             baseDomElement:baseDomElement
+                //         }));
+                //     }
+                // };
+                // break;
 
             default:
                 break;
