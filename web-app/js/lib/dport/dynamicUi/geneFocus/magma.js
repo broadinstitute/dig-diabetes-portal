@@ -66,7 +66,7 @@ mpgSoftware.dynamicUi.magmaGeneAssociation = (function () {
      */
     var displayGenesFromMagma = function (idForTheTargetDiv, objectContainingRetrievedRecords, callingParameters) {
 
-        mpgSoftware.dynamicUi.displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
+        mpgSoftware.dynamicUi.displayForGeneTable(callingParameters.placeToDisplayData, // which table are we adding to
             callingParameters,
             '', // we may wish to pull out one record for summary purposes
             function(records,tissueTranslations){

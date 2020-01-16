@@ -65,10 +65,8 @@ mpgSoftware.dynamicUi.coloc = (function () {
      * @param objectContainingRetrievedRecords
      */
     var displayGenesFromColoc = function (idForTheTargetDiv, objectContainingRetrievedRecords, callingParameters) {
-        mpgSoftware.dynamicUi.displayForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
+        mpgSoftware.dynamicUi.displayForGeneTable(callingParameters.placeToDisplayData, // which table are we adding to
             callingParameters,
-            // 'COL', // Which codename from dataAnnotationTypes in geneSignalSummary are we referencing
-            // 'rawColoInfo', // name of the persistent field where the data we received is stored
             '', // we may wish to pull out one record for summary purposes
             function(records,tissueTranslations){
                 return _.map(_.orderBy(records,["prob_exists_coloc"],["desc"]),function(tissueRecord){

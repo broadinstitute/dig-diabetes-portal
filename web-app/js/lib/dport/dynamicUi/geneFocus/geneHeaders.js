@@ -69,7 +69,7 @@ mpgSoftware.dynamicUi.geneHeaders = (function () {
 
 
     var displayRefinedGenesInARange = function (idForTheTargetDiv, objectContainingRetrievedRecords,callingParameters) {
-        mpgSoftware.dynamicUi.displayHeaderForGeneTable('table.combinedGeneTableHolder', // which table are we adding to
+        mpgSoftware.dynamicUi.displayHeaderForGeneTable(callingParameters.placeToDisplayData, // which table are we adding to
             callingParameters
         );
     };
