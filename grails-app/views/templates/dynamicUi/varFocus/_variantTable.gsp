@@ -248,6 +248,10 @@
                             numberRecordsCellPresentationStringWriter:'coaccessibilityVariantTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'coaccessibilityVariantTableSignificanceCellPresentationString',
                             packagingString:'mpgSoftware.dynamicUi.coaccessibilityVariantTable',
+                            processEachRecord:mpgSoftware.dynamicUi.coaccessibilityVariantTable.processRecordsFromCoaccess,
+                            displayRefinedContextFunction:mpgSoftware.dynamicUi.coaccessibilityVariantTable.displayTissueInformationFromCoaccess,
+                            prepareDataForApiCall:mpgSoftware.dynamicUi.coaccessibilityVariantTable.prepareDataForApiCall,
+                            urlOfTheApiCall:  '${g.createLink(controller: "RegionInfo", action: "retrieveAnyTypeRegionData")}',
                             sortingSubroutine:'VariantCoaccessibility',
                             internalIdentifierString:'getCoaccessibilityGivenVariantList',
                             nameOfAccumulatorField:'coaccessibilityVariantInfo',
@@ -272,12 +276,15 @@
                             numberRecordsCellPresentationStringWriter:'chicagoVariantTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'chicagoVariantTableSignificanceCellPresentationString',
                             packagingString:'mpgSoftware.dynamicUi.chicagoVariantTable',
+                            processEachRecord:mpgSoftware.dynamicUi.chicagoVariantTable.processRecordsFromChicago,
+                            displayRefinedContextFunction:mpgSoftware.dynamicUi.chicagoVariantTable.displayTissueInformationFromChicago,
+                            prepareDataForApiCall:mpgSoftware.dynamicUi.chicagoVariantTable.prepareDataForApiCall,
+                            urlOfTheApiCall:  '${g.createLink(controller: "RegionInfo", action: "retrieveAnyTypeRegionData")}',
                             sortingSubroutine:'VariantChicago',
                             internalIdentifierString:'getChicagoGivenVariantList',
                             nameOfAccumulatorField:'chicagoVariantInfo',
                             nameOfAccumulatorFieldWithIndex:'variantInfoArray'
                         }
-
                         ,
                         {
                             code: 'TFMOTIF_VAR',
@@ -296,10 +303,13 @@
                             tissueSubCategoryWriter:'tfMotifVariantTableTissueRowLabel',
                             numberRecordsCellPresentationStringWriter:'tfMotifVariantTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'tfMotifVariantTableSignificanceCellPresentationString',
+                            packagingString:'mpgSoftware.dynamicUi.tfMotifVariantTable',
+                            processEachRecord:mpgSoftware.dynamicUi.tfMotifVariantTable.processRecordsFromTfMotif,
+                            displayRefinedContextFunction:mpgSoftware.dynamicUi.tfMotifVariantTable.displayTissueInformationFromTfMotif,
+                            prepareDataForApiCall:mpgSoftware.dynamicUi.tfMotifVariantTable.prepareDataForApiCall,
+                            urlOfTheApiCall:  '${g.createLink(controller: "RegionInfo", action: "retrieveTfMotif")}',
                             sortingSubroutine:'VariantTfMotif',
                             internalIdentifierString:'getTfMotifGivenVariantList',
-                            processEachRecord:mpgSoftware.dynamicUi.tfMotifVariantTable.processRecordsFromTfMotif,
-                            displayEverythingFromThisCall:mpgSoftware.dynamicUi.tfMotifVariantTable.displayTissueInformationFromTfMotif,
                             nameOfAccumulatorField:'tfMotifVariantInfo',
                             nameOfAccumulatorFieldWithIndex:'variantInfoArray'
                         }
@@ -349,10 +359,13 @@
                             tissueSubCategoryWriter:'tfbsVariantTableTissueSpecificRowLabel',
                             numberRecordsCellPresentationStringWriter:'tfbsVariantTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'tfbsVariantTableSignificanceCellPresentationString',
+                            packagingString:'mpgSoftware.dynamicUi.tfbsVariantTable',
+                            processEachRecord:mpgSoftware.dynamicUi.tfbsVariantTable.processRecordsFromTfbs,
+                            displayRefinedContextFunction:mpgSoftware.dynamicUi.tfbsVariantTable.displayTissueInformationFromTfbs,
+                            prepareDataForApiCall:mpgSoftware.dynamicUi.tfbsVariantTable.prepareDataForApiCall,
+                            urlOfTheApiCall:  '${g.createLink(controller: "RegionInfo", action: "retrieveVariantAnnotations")}',
                             sortingSubroutine:'VariantTfbs',
                             internalIdentifierString:'getTfbsGivenVariantList',
-                            processEachRecord:mpgSoftware.dynamicUi.tfbsVariantTable.processRecordsFromTfbs,
-                            displayEverythingFromThisCall:mpgSoftware.dynamicUi.tfbsVariantTable.displayTissueInformationFromTfbs,
                             nameOfAccumulatorField:'tfbsVariantInfo',
                             nameOfAccumulatorFieldWithIndex:'variantInfoArray'
                         }
@@ -401,7 +414,6 @@
                             urlOfTheApiCall:  '${g.createLink(controller: "RegionInfo", action: "retrieveVariantAnnotations")}',
                             sortingSubroutine:'VariantDNase',
                             internalIdentifierString:'getDnaseGivenVariantList',
-                            //displayEverythingFromThisCall:mpgSoftware.dynamicUi.dnaseVariantTable.displayTissueInformationFromDnase,
                             nameOfAccumulatorField:'dnaseVariantInfo',
                             nameOfAccumulatorFieldWithIndex:'variantInfoArray'
                         }
@@ -425,10 +437,12 @@
                             numberRecordsCellPresentationStringWriter:'h3k27acVariantTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'h3k27acVariantTableSignificanceCellPresentationString',
                             packagingString:'mpgSoftware.dynamicUi.h3k27acVariantTable',
+                            processEachRecord:mpgSoftware.dynamicUi.h3k27acVariantTable.processRecordsFromH3k27ac,
+                            displayRefinedContextFunction:mpgSoftware.dynamicUi.h3k27acVariantTable.displayTissueInformationFromH3k27ac,
+                            prepareDataForApiCall:mpgSoftware.dynamicUi.h3k27acVariantTable.prepareDataForApiCall,
+                            urlOfTheApiCall:  '${g.createLink(controller: "RegionInfo", action: "retrieveAnyTypeRegionData")}',
                             sortingSubroutine:'VariantK27ac',
                             internalIdentifierString:'getH3k27acGivenVariantList',
-                            processEachRecord:mpgSoftware.dynamicUi.h3k27acVariantTable.processRecordsFromH3k27ac,
-                            displayEverythingFromThisCall:mpgSoftware.dynamicUi.h3k27acVariantTable.displayTissueInformationFromH3k27ac,
                             nameOfAccumulatorField:'h3k27acVariantInfo',
                             nameOfAccumulatorFieldWithIndex:'variantInfoArray'
                         }
@@ -451,11 +465,13 @@
                             numberRecordsCellPresentationStringWriter:'chromStateVariantTableNumberRecordsCellPresentationString',
                             significanceCellPresentationStringWriter:'chromStateVariantTableSignificanceCellPresentationString',
                             packagingString:'mpgSoftware.dynamicUi.chromStateVariantTable',
+                            processEachRecord:mpgSoftware.dynamicUi.chromStateVariantTable.processRecordsFromChromState,
+                            displayRefinedContextFunction:mpgSoftware.dynamicUi.chromStateVariantTable.displayTissueInformationFromChromState,
+                            prepareDataForApiCall:mpgSoftware.dynamicUi.chromStateVariantTable.prepareDataForApiCall,
+                            urlOfTheApiCall:  '${g.createLink(controller: "RegionInfo", action: "retrieveVariantAnnotations")}',
                             sortingSubroutine:'VariantChromHmm',
                             internalIdentifierString:'getChromStateGivenVariantList',
-                            processEachRecord:mpgSoftware.dynamicUi.chromStateVariantTable.processRecordsFromChromState,
-                            displayEverythingFromThisCall:mpgSoftware.dynamicUi.chromStateVariantTable.displayTissueInformationFromChromState,
-                            nameOfAccumulatorField:'chromStateVariantInfo',
+                             nameOfAccumulatorField:'chromStateVariantInfo',
                             nameOfAccumulatorFieldWithIndex:'variantInfoArray'
                         }
 

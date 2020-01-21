@@ -12,6 +12,24 @@ mpgSoftware.dynamicUi.tfMotifVariantTable = (function () {
     const sortUtility = new mpgSoftware.dynamicUi.sharedSortUtility.SortUtility();
     const renderData = new mpgSoftware.dynamicUi.sharednameRenderData.RenderData()
 
+
+    const prepareDataForApiCall = function ( objectWithDataToPrepare ) {
+        var variantsAsJson = "[]";
+        if (objectWithDataToPrepare.getAccumulatorObject(objectWithDataToPrepare.nameOfAccumulatorFieldWithIndex,
+            objectWithDataToPrepare.baseDomElement).length > 0) {
+            const dataVector = objectWithDataToPrepare.getAccumulatorObject(objectWithDataToPrepare.nameOfAccumulatorFieldWithIndex,
+                objectWithDataToPrepare.baseDomElement)[0].data;
+            if (dataVector.length===0){return;}
+            var variantNameArray = _.map(dataVector, function(variantRec){return variantRec.var_id;});
+            variantsAsJson = "[\"" + variantNameArray.join("\",\"") + "\"]";
+        }
+        var dataForCall = {variants: variantsAsJson, method: 'TFMOTIF'};
+        return dataForCall;
+    };
+
+
+
+
     /***
      * 1) a function to process records
      * @param data
@@ -211,6 +229,7 @@ mpgSoftware.dynamicUi.tfMotifVariantTable = (function () {
 
 // public routines are declared below
     return {
+        prepareDataForApiCall:prepareDataForApiCall,
         processRecordsFromTfMotif: processRecordsFromTfMotif,
         displayTissueInformationFromTfMotif:displayTissueInformationFromTfMotif,
         sortRoutine:sortRoutine
