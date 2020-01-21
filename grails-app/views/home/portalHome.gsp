@@ -838,7 +838,7 @@
                                 <g:message code="about.the.portal.text2"/></p>
                             <p><g:message code='portal.home.funders'/>:</p>
 
-                            <h5 style="font-size: 18px; font-weight: 600; margin-top: 20px;">Scientific Collaborators</h5>
+                            <h5 style="font-size: 18px; font-weight: 600; margin-top: 20px; border-bottom: solid 1px #ccc; padding-bottom: 8px;">Scientific Collaborators</h5>
                             <a href="http://www.janssen.com"><img src="${resource(dir:'images/organizations', file:'janssen2.jpg')}" style=""></a>
                             <a href="https://www.lilly.com/home.aspx"><img src="${resource(dir:'images/organizations', file:'lilly2.jpg')}" style=""></a>
                             <a href="http://www.merck.com/index.html"><img src="${resource(dir:'images/organizations', file:'merck2.jpg')}" style=""></a>
@@ -847,7 +847,7 @@
                             <a href="https://www.diabetesepigenome.org/"><img src="${resource(dir:'images/organizations', file:'DGA2.png')}" style=""></a>
 
 
-                            <h5 style="font-size: 18px; font-weight: 600; margin-top: 20px;">Funders</h5>
+                            <h5 style="font-size: 18px; font-weight: 600; margin-top: 20px; border-bottom: solid 1px #ccc; padding-bottom: 8px;">Funders</h5>
 
                             <a href="http://www.niddk.nih.gov/Pages/default.aspx"><img src="${resource(dir:'images/organizations', file:'nih2.jpg')}" style=""></a>
                             <a href="http://www.fnih.org"><img src="${resource(dir:'images/organizations', file:'FNIH.jpg')}" style="width: 120px"></a>
