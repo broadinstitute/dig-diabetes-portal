@@ -844,6 +844,8 @@
                             <a href="http://www.merck.com/index.html"><img src="${resource(dir:'images/organizations', file:'merck2.jpg')}" style=""></a>
                             <a href="http://www.pfizer.com"><img src="${resource(dir:'images/organizations', file:'pfizer2.jpg')}" style=""></a>
                             <a href="http://en.sanofi.com"><img src="${resource(dir:'images/organizations', file:'sanofi2.jpg')}" style=""></a>
+                            <a href="https://www.diabetesepigenome.org/"><img src="${resource(dir:'images/organizations', file:'DGA2.png')}" style=""></a>
+
 
                             <h5 style="font-size: 18px; font-weight: 600; margin-top: 20px;">Funders</h5>
 
