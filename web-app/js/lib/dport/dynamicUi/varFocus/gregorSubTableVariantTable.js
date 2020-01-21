@@ -63,7 +63,7 @@ mpgSoftware.dynamicUi.gregorSubTableVariantTable = (function () {
      * @returns {*}
      */
     var processRecordsFromGregor = function (data,rawGeneAssociationRecords) {
-
+        rawGeneAssociationRecords.splice(0,rawGeneAssociationRecords.length);
         if ( ( typeof data !== 'undefined') &&
             ( typeof data.data !== 'undefined') &&
             (  data.data.length > 0)){

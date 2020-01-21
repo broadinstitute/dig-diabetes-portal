@@ -20,6 +20,52 @@ mpgSoftware.dynamicUi.variantTableHeaders = (function () {
     "use strict";
 
 
+    const prepareDataForApiCall = function ( objectWithDataToPrepare ) {
+        var phenotype = objectWithDataToPrepare.getAccumulatorObject("phenotype", objectWithDataToPrepare.baseDomElement);
+        var chromosome = objectWithDataToPrepare.getAccumulatorObject("chromosome", objectWithDataToPrepare.baseDomElement);
+        var startExtent = objectWithDataToPrepare.getAccumulatorObject("extentBegin", objectWithDataToPrepare.baseDomElement);
+        var endExtent = objectWithDataToPrepare.getAccumulatorObject("extentEnd", objectWithDataToPrepare.baseDomElement);
+        objectWithDataToPrepare.sharedTable['currentFormVariation'] = 2;
+
+        // update the interface to reflect the values used in this call
+        if (chromosome.startsWith("chr")){
+            chromosome =  chromosome.substring(3)
+        }
+        $(objectWithDataToPrepare.chromosomeInput).val(chromosome);
+        $(objectWithDataToPrepare.startExtentInput).val(startExtent);
+        $(objectWithDataToPrepare.endExtentInput).val(endExtent);
+        $(objectWithDataToPrepare.phenotypePicker).val(phenotype);
+        $(objectWithDataToPrepare.annotationSelectorChoice).empty().multiselect('refresh');
+        $(objectWithDataToPrepare.annotationSelectorChoice).multiselect('rebuild');
+
+        let dataNecessaryToRetrieveVariantsPerPhenotype;
+        if (( typeof phenotype === 'undefined') ||
+            (typeof chromosome === 'undefined') ||
+            (typeof startExtent === 'undefined') ||
+            (typeof endExtent === 'undefined')) {
+            alert(" missing a value when we want to collect variants for a phenotype");
+        } else {
+            dataNecessaryToRetrieveVariantsPerPhenotype = {
+                phenotype: phenotype,
+                geneToSummarize: "chr" + chromosome + ":" + startExtent + "-" + endExtent,
+                chromosome: chromosome,
+                startPos: startExtent,
+                start: startExtent,
+                endPos: endExtent,
+                end: endExtent,
+                gene:"",
+                dataSet:"",
+                dataType:"static",
+                propertyName:"POSTERIOR_PROBABILITY",
+                limit: "50",
+                findCredSetByOverlap: "1"
+            }
+        }
+        return dataNecessaryToRetrieveVariantsPerPhenotype;
+    };
+
+
+
     const calculatePosteriorPValues = function (objectWithVariantInfo) {
         const nlogpValArray = _.map( objectWithVariantInfo.data, function(eachVariant){
             var pValue = eachVariant.p_value;
@@ -74,8 +120,8 @@ mpgSoftware.dynamicUi.variantTableHeaders = (function () {
      * @param rawGeneAssociationRecords
      * @returns {*}
      */
-    var processRecordsFromProximitySearch = function (data, rawVariantAssociationRecords) {
-//the approach when we were using the graph database
+    const processRecordsFromProximitySearch = function (data, rawVariantAssociationRecords) {
+        //the approach when we were using the graph database
         if (( typeof data !== 'undefined') &&
             ( data !== null ) ){
             let returnValue = { header: {}, data: []};
@@ -270,10 +316,7 @@ mpgSoftware.dynamicUi.variantTableHeaders = (function () {
                 return sortBinaryEmphasis(a, b, direction, currentSortObject);
                 break;
             case 'sortMethodsInVariantTable':
-
                 return  Object.getPrototypeOf(sortUtility).textComparisonWithEmptiesAtBottom(a,b, direction, currentSortObject);
-
-                // return sortMethodNamesWithZerosAtTheBottom(a, b, direction, currentSortObject);
                 break;
             case 'VariantAssociationPValue':
                 return  Object.getPrototypeOf(sortUtility).numericalComparisonWithEmptiesAtBottom(a, b, direction, currentSortObject);
@@ -287,6 +330,7 @@ mpgSoftware.dynamicUi.variantTableHeaders = (function () {
 
 // public routines are declared below
     return {
+        prepareDataForApiCall: prepareDataForApiCall,
         processRecordsFromProximitySearch: processRecordsFromProximitySearch,
         displayRefinedVariantsInARange:displayRefinedVariantsInARange,
         sortRoutine:sortRoutine

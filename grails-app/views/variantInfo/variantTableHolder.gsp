@@ -23,7 +23,7 @@
 
 </div>
 <g:render template="/templates/dynamicUi/varFocus/VARIANT_TABLE" />
-<g:render template="variantTable" />
+<g:render template="/templates/dynamicUi/varFocus/variantTable" />
 
 </body>
 </html>
