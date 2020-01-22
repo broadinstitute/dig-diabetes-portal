@@ -43,6 +43,20 @@ class VariantInfoController {
     }
 
 
+    def genomeBrowser(){
+        String phenotypeString = params.trait ?: restServerService.retrieveBeanForCurrentPortal().phenotype
+
+        render (view: 'genomeBrowserHolder', model:[
+                preferredPhenotype:phenotypeString,
+                defaultChromosome:"9",
+                defaultExtentBegin:21940000,
+                defaultExtentEnd:22190000,
+                portalVersionBean:restServerService.retrieveBeanForCurrentPortal(),
+                phenotype:phenotypeString
+        ])
+    }
+
+
 
     /***
      *  Launch the page frame that will hold a friendly collection of information about a single variant. The associated Ajax call is  variantAjax

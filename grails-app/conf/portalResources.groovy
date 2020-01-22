@@ -1,4 +1,11 @@
 modules = {
+    genomeBrowser {
+        dependsOn "core"
+
+        resource url: 'https://cdn.jsdelivr.net/npm/igv@2.3.5/dist/igv.min.js'
+    }
+
+
     jquery {
         resource url: 'https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js'
         resource url: 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js'
