@@ -57,6 +57,826 @@ class VariantInfoController {
     }
 
 
+    def gwasFile(){
+        String fileContents = new File('./web-app/WEB-INF/resources/testFile/v2_newest_converted_GWAS.bed').text
+        render fileContents
+    }
+
+
+    def gwasFile2(){
+        String sampleString = """{
+    "is_error": false,
+    "numRecords": 20,
+    "result_format": "verbose",
+    "variants": [
+        [
+            {
+                "CHROM": "8"
+            },
+            {
+                "Consequence": "3_prime_UTR_variant"
+            },
+            {
+                "Effect_Allele": "A"
+            },
+            {
+                "MOST_DEL_SCORE": 4
+            },
+            {
+                "MOTIF_NAME": null
+            },
+            {
+                "POS": 118185025
+            },
+            {
+                "Reference_Allele": "G"
+            },
+            {
+                "VAR_ID": "8_118185025_G_A"
+            },
+            {
+                "CREDIBLE_SET_ID": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": "20302"
+                    }
+                }
+            },
+            {
+                "P_VALUE": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": 6.3e-55
+                    }
+                }
+            }
+        ],
+        [
+            {
+                "CHROM": "8"
+            },
+            {
+                "Consequence": "missense_variant"
+            },
+            {
+                "Effect_Allele": "T"
+            },
+            {
+                "MOST_DEL_SCORE": 2
+            },
+            {
+                "MOTIF_NAME": null
+            },
+            {
+                "POS": 118184783
+            },
+            {
+                "Reference_Allele": "C"
+            },
+            {
+                "VAR_ID": "8_118184783_C_T"
+            },
+            {
+                "CREDIBLE_SET_ID": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": "20302"
+                    }
+                }
+            },
+            {
+                "P_VALUE": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": 9.9e-55
+                    }
+                }
+            }
+        ],
+        [
+            {
+                "CHROM": "8"
+            },
+            {
+                "Consequence": "downstream_gene_variant"
+            },
+            {
+                "Effect_Allele": "T"
+            },
+            {
+                "MOST_DEL_SCORE": 4
+            },
+            {
+                "MOTIF_NAME": null
+            },
+            {
+                "POS": 118191475
+            },
+            {
+                "Reference_Allele": "C"
+            },
+            {
+                "VAR_ID": "8_118191475_C_T"
+            },
+            {
+                "CREDIBLE_SET_ID": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": "20302"
+                    }
+                }
+            },
+            {
+                "P_VALUE": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": 1.2e-53
+                    }
+                }
+            }
+        ],
+        [
+            {
+                "CHROM": "8"
+            },
+            {
+                "Consequence": "intergenic_variant"
+            },
+            {
+                "Effect_Allele": "T"
+            },
+            {
+                "MOST_DEL_SCORE": 4
+            },
+            {
+                "MOTIF_NAME": null
+            },
+            {
+                "POS": 118204020
+            },
+            {
+                "Reference_Allele": "C"
+            },
+            {
+                "VAR_ID": "8_118204020_C_T"
+            },
+            {
+                "CREDIBLE_SET_ID": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": "20302"
+                    }
+                }
+            },
+            {
+                "P_VALUE": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": 1.2e-53
+                    }
+                }
+            }
+        ],
+        [
+            {
+                "CHROM": "8"
+            },
+            {
+                "Consequence": "3_prime_UTR_variant"
+            },
+            {
+                "Effect_Allele": "G"
+            },
+            {
+                "MOST_DEL_SCORE": 4
+            },
+            {
+                "MOTIF_NAME": null
+            },
+            {
+                "POS": 118185733
+            },
+            {
+                "Reference_Allele": "A"
+            },
+            {
+                "VAR_ID": "8_118185733_A_G"
+            },
+            {
+                "CREDIBLE_SET_ID": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": "20302"
+                    }
+                }
+            },
+            {
+                "P_VALUE": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": 1.6e-53
+                    }
+                }
+            }
+        ],
+        [
+            {
+                "CHROM": "8"
+            },
+            {
+                "Consequence": "intergenic_variant"
+            },
+            {
+                "Effect_Allele": "A"
+            },
+            {
+                "MOST_DEL_SCORE": 4
+            },
+            {
+                "MOTIF_NAME": null
+            },
+            {
+                "POS": 118217915
+            },
+            {
+                "Reference_Allele": "G"
+            },
+            {
+                "VAR_ID": "8_118217915_G_A"
+            },
+            {
+                "CREDIBLE_SET_ID": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": null
+                    }
+                }
+            },
+            {
+                "P_VALUE": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": 5.5e-53
+                    }
+                }
+            }
+        ],
+        [
+            {
+                "CHROM": "8"
+            },
+            {
+                "Consequence": "intergenic_variant"
+            },
+            {
+                "Effect_Allele": "C"
+            },
+            {
+                "MOST_DEL_SCORE": 4
+            },
+            {
+                "MOTIF_NAME": null
+            },
+            {
+                "POS": 118220270
+            },
+            {
+                "Reference_Allele": "T"
+            },
+            {
+                "VAR_ID": "8_118220270_T_C"
+            },
+            {
+                "CREDIBLE_SET_ID": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": null
+                    }
+                }
+            },
+            {
+                "P_VALUE": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": 1.4e-38
+                    }
+                }
+            }
+        ],
+        [
+            {
+                "CHROM": "8"
+            },
+            {
+                "Consequence": "3_prime_UTR_variant"
+            },
+            {
+                "Effect_Allele": "G"
+            },
+            {
+                "MOST_DEL_SCORE": 4
+            },
+            {
+                "MOTIF_NAME": null
+            },
+            {
+                "POS": 118185063
+            },
+            {
+                "Reference_Allele": "C"
+            },
+            {
+                "VAR_ID": "8_118185063_C_G"
+            },
+            {
+                "CREDIBLE_SET_ID": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": null
+                    }
+                }
+            },
+            {
+                "P_VALUE": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": 6.4e-27
+                    }
+                }
+            }
+        ],
+        [
+            {
+                "CHROM": "8"
+            },
+            {
+                "Consequence": "downstream_gene_variant"
+            },
+            {
+                "Effect_Allele": "G"
+            },
+            {
+                "MOST_DEL_SCORE": 4
+            },
+            {
+                "MOTIF_NAME": null
+            },
+            {
+                "POS": 118190393
+            },
+            {
+                "Reference_Allele": "A"
+            },
+            {
+                "VAR_ID": "8_118190393_A_G"
+            },
+            {
+                "CREDIBLE_SET_ID": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": null
+                    }
+                }
+            },
+            {
+                "P_VALUE": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": 3.4e-26
+                    }
+                }
+            }
+        ],
+        [
+            {
+                "CHROM": "8"
+            },
+            {
+                "Consequence": "intergenic_variant"
+            },
+            {
+                "Effect_Allele": "T"
+            },
+            {
+                "MOST_DEL_SCORE": 4
+            },
+            {
+                "MOTIF_NAME": null
+            },
+            {
+                "POS": 118225198
+            },
+            {
+                "Reference_Allele": "G"
+            },
+            {
+                "VAR_ID": "8_118225198_G_T"
+            },
+            {
+                "CREDIBLE_SET_ID": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": null
+                    }
+                }
+            },
+            {
+                "P_VALUE": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": 5.3e-24
+                    }
+                }
+            }
+        ],
+        [
+            {
+                "CHROM": "8"
+            },
+            {
+                "Consequence": "intergenic_variant"
+            },
+            {
+                "Effect_Allele": "A"
+            },
+            {
+                "MOST_DEL_SCORE": 4
+            },
+            {
+                "MOTIF_NAME": null
+            },
+            {
+                "POS": 118195570
+            },
+            {
+                "Reference_Allele": "G"
+            },
+            {
+                "VAR_ID": "8_118195570_G_A"
+            },
+            {
+                "CREDIBLE_SET_ID": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": null
+                    }
+                }
+            },
+            {
+                "P_VALUE": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": 5e-19
+                    }
+                }
+            }
+        ],
+        [
+            {
+                "CHROM": "8"
+            },
+            {
+                "Consequence": "3_prime_UTR_variant"
+            },
+            {
+                "Effect_Allele": "T"
+            },
+            {
+                "MOST_DEL_SCORE": 4
+            },
+            {
+                "MOTIF_NAME": null
+            },
+            {
+                "POS": 118185041
+            },
+            {
+                "Reference_Allele": "C"
+            },
+            {
+                "VAR_ID": "8_118185041_C_T"
+            },
+            {
+                "CREDIBLE_SET_ID": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": null
+                    }
+                }
+            },
+            {
+                "P_VALUE": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": 5.7e-19
+                    }
+                }
+            }
+        ],
+        [
+            {
+                "CHROM": "8"
+            },
+            {
+                "Consequence": "downstream_gene_variant"
+            },
+            {
+                "Effect_Allele": "T"
+            },
+            {
+                "MOST_DEL_SCORE": 4
+            },
+            {
+                "MOTIF_NAME": null
+            },
+            {
+                "POS": 118189531
+            },
+            {
+                "Reference_Allele": "C"
+            },
+            {
+                "VAR_ID": "8_118189531_C_T"
+            },
+            {
+                "CREDIBLE_SET_ID": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": null
+                    }
+                }
+            },
+            {
+                "P_VALUE": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": 9.9e-19
+                    }
+                }
+            }
+        ],
+        [
+            {
+                "CHROM": "8"
+            },
+            {
+                "Consequence": "intergenic_variant"
+            },
+            {
+                "Effect_Allele": "C"
+            },
+            {
+                "MOST_DEL_SCORE": 4
+            },
+            {
+                "MOTIF_NAME": null
+            },
+            {
+                "POS": 118200188
+            },
+            {
+                "Reference_Allele": "G"
+            },
+            {
+                "VAR_ID": "8_118200188_G_C"
+            },
+            {
+                "CREDIBLE_SET_ID": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": null
+                    }
+                }
+            },
+            {
+                "P_VALUE": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": 3.3e-18
+                    }
+                }
+            }
+        ],
+        [
+            {
+                "CHROM": "8"
+            },
+            {
+                "Consequence": "intergenic_variant"
+            },
+            {
+                "Effect_Allele": "C"
+            },
+            {
+                "MOST_DEL_SCORE": 4
+            },
+            {
+                "MOTIF_NAME": null
+            },
+            {
+                "POS": 118221096
+            },
+            {
+                "Reference_Allele": "G"
+            },
+            {
+                "VAR_ID": "8_118221096_G_C"
+            },
+            {
+                "CREDIBLE_SET_ID": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": null
+                    }
+                }
+            },
+            {
+                "P_VALUE": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": 4.9e-18
+                    }
+                }
+            }
+        ],
+        [
+            {
+                "CHROM": "8"
+            },
+            {
+                "Consequence": "intergenic_variant"
+            },
+            {
+                "Effect_Allele": "A"
+            },
+            {
+                "MOST_DEL_SCORE": 4
+            },
+            {
+                "MOTIF_NAME": null
+            },
+            {
+                "POS": 118222398
+            },
+            {
+                "Reference_Allele": "G"
+            },
+            {
+                "VAR_ID": "8_118222398_G_A"
+            },
+            {
+                "CREDIBLE_SET_ID": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": null
+                    }
+                }
+            },
+            {
+                "P_VALUE": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": 4.9e-18
+                    }
+                }
+            }
+        ],
+        [
+            {
+                "CHROM": "8"
+            },
+            {
+                "Consequence": "intergenic_variant"
+            },
+            {
+                "Effect_Allele": "T"
+            },
+            {
+                "MOST_DEL_SCORE": 4
+            },
+            {
+                "MOTIF_NAME": null
+            },
+            {
+                "POS": 118216673
+            },
+            {
+                "Reference_Allele": "G"
+            },
+            {
+                "VAR_ID": "8_118216673_G_T"
+            },
+            {
+                "CREDIBLE_SET_ID": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": null
+                    }
+                }
+            },
+            {
+                "P_VALUE": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": 6.4e-18
+                    }
+                }
+            }
+        ],
+        [
+            {
+                "CHROM": "8"
+            },
+            {
+                "Consequence": "intergenic_variant"
+            },
+            {
+                "Effect_Allele": "C"
+            },
+            {
+                "MOST_DEL_SCORE": 4
+            },
+            {
+                "MOTIF_NAME": null
+            },
+            {
+                "POS": 118217307
+            },
+            {
+                "Reference_Allele": "T"
+            },
+            {
+                "VAR_ID": "8_118217307_T_C"
+            },
+            {
+                "CREDIBLE_SET_ID": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": null
+                    }
+                }
+            },
+            {
+                "P_VALUE": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": 1.1e-17
+                    }
+                }
+            }
+        ],
+        [
+            {
+                "CHROM": "8"
+            },
+            {
+                "Consequence": "intergenic_variant"
+            },
+            {
+                "Effect_Allele": "C"
+            },
+            {
+                "MOST_DEL_SCORE": 4
+            },
+            {
+                "MOTIF_NAME": null
+            },
+            {
+                "POS": 118224482
+            },
+            {
+                "Reference_Allele": "T"
+            },
+            {
+                "VAR_ID": "8_118224482_T_C"
+            },
+            {
+                "CREDIBLE_SET_ID": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": null
+                    }
+                }
+            },
+            {
+                "P_VALUE": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": 1.3e-16
+                    }
+                }
+            }
+        ],
+        [
+            {
+                "CHROM": "8"
+            },
+            {
+                "Consequence": "3_prime_UTR_variant"
+            },
+            {
+                "Effect_Allele": "G"
+            },
+            {
+                "MOST_DEL_SCORE": 4
+            },
+            {
+                "MOTIF_NAME": null
+            },
+            {
+                "POS": 118185938
+            },
+            {
+                "Reference_Allele": "A"
+            },
+            {
+                "VAR_ID": "8_118185938_A_G"
+            },
+            {
+                "CREDIBLE_SET_ID": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": null
+                    }
+                }
+            },
+            {
+                "P_VALUE": {
+                    "GWAS_DIAMANTE_eu_mdv39": {
+                        "T2D": 3.8e-14
+                    }
+                }
+            }
+        ]
+    ],
+    "passback": "abc123"
+}""".toString()
+        render sampleString
+    }
+
+
+
 
     /***
      *  Launch the page frame that will hold a friendly collection of information about a single variant. The associated Ajax call is  variantAjax
