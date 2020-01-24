@@ -10,13 +10,29 @@ mpgSoftware.igvInit = (function () {
         return $(nameOfBase).data("dataHolder");
     };
 
-    const igvLaunch = function (nameOfBase) {
+    const igvLaunch = function (nameOfBase,
+                                chromosome,
+                                startPosition,
+                                endPosition,
+                                phenotype
+                                ) {
         var igvDiv = document.getElementById(nameOfBase);
         const savedVariable = getVariable('#'+nameOfBase);
+        startPosition = startPosition || 127000000
+        endPosition = endPosition || 128000000
+        chromosome = chromosome || "8"
+        phenotype = phenotype || "T2D"
+        const args = "?phenotype="+phenotype+
+                    "&startPos="+startPosition+
+                    "&endPos="+endPosition+
+                    "&chromosome="+chromosome+
+                    "&limit=500";
         var options =
             {
                 genome: "hg38",
-                locus: "chr8:104,426,389-131,426,389",
+                locus: "chr"+chromosome+":"+startPosition+"-"+endPosition,
+                clickHandler:  function(){alert("click handler")},
+                init:  function(){alert("init")},
                 tracks: [
                     {
                         "name": "HG00103",
@@ -30,8 +46,8 @@ mpgSoftware.igvInit = (function () {
 
                         // can we use the old t2d code?
                         // type: 't2d',
-                        // trait: "T2D",
-                        // label: "Type 2 Diabetes: DIAGRAM GWAS",
+                         trait: "T2D",
+                        label: "Type 2 Diabetes: DIAGRAM GWAS",
                         maxLogP: 50,
                         height: 300,
                          pvalue: "P-value",
@@ -41,13 +57,13 @@ mpgSoftware.igvInit = (function () {
                         },
 
 
-                        //type: 'eqtl',
                         type: 'gwas',
                         format: 'gtexgwas',
-                        //format: 'bed',
 
-                        url: savedVariable['storedGWASData'],
-                        //url: savedVariable['rawAPIData'],
+
+
+                        url: savedVariable['retrieveBottomLineVariants']+args,
+                        //url: savedVariable['storedGWASData'],
 
                         indexed: false,
                         color: 'rgb(100,200,200)',

@@ -16,6 +16,9 @@
 </head>
 
 <body>
+<div class="text-center">
+    <h2>Genome browser</h2>
+</div>
 
 <div id="mainVariantDivHolder">
 </div>
