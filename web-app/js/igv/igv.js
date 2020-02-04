@@ -26327,6 +26327,2390 @@ Context.prototype = {
     return TribbleIndex;
   }();
 
+  var GZIP_FLAG = 0x1;
+
+  var TDFReader = function TDFReader(config, genome) {
+    this.config = config;
+    this.genome = genome;
+    this.path = config.url;
+    this.groupCache = {};
+    this.datasetCache = {};
+  };
+
+  TDFReader.prototype.readHeader =
+  /*#__PURE__*/
+  _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee() {
+    var data, binaryParser, headerSize, nWindowFunctions, nTracks, nEntries, _name, pos, size, _name2, _pos, _size;
+
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            if (!(this.magic !== undefined)) {
+              _context.next = 2;
+              break;
+            }
+
+            return _context.abrupt("return", this);
+
+          case 2:
+            _context.next = 4;
+            return igvxhr.loadArrayBuffer(this.path, buildOptions(this.config, {
+              range: {
+                start: 0,
+                size: 64000
+              }
+            }));
+
+          case 4:
+            data = _context.sent;
+            binaryParser = new BinaryParser(new DataView(data));
+            this.magic = binaryParser.getInt();
+            this.version = binaryParser.getInt();
+            this.indexPos = binaryParser.getLong();
+            this.indexSize = binaryParser.getInt();
+            headerSize = binaryParser.getInt();
+
+            if (this.version >= 2) {
+              nWindowFunctions = binaryParser.getInt();
+              this.windowFunctions = [];
+
+              while (nWindowFunctions-- > 0) {
+                this.windowFunctions.push(binaryParser.getString());
+              }
+            }
+
+            this.trackType = binaryParser.getString();
+            this.trackLine = binaryParser.getString();
+            nTracks = binaryParser.getInt();
+            this.trackNames = [];
+
+            while (nTracks-- > 0) {
+              this.trackNames.push(binaryParser.getString());
+            }
+
+            this.genomeID = binaryParser.getString();
+            this.flags = binaryParser.getInt();
+            this.compressed = (this.flags & GZIP_FLAG) !== 0; // Now read index
+
+            _context.next = 22;
+            return igvxhr.loadArrayBuffer(this.path, buildOptions(this.config, {
+              range: {
+                start: this.indexPos,
+                size: this.indexSize
+              }
+            }));
+
+          case 22:
+            data = _context.sent;
+            binaryParser = new BinaryParser(new DataView(data));
+            this.datasetIndex = {};
+            nEntries = binaryParser.getInt();
+
+            while (nEntries-- > 0) {
+              _name = binaryParser.getString();
+              pos = binaryParser.getLong();
+              size = binaryParser.getInt();
+              this.datasetIndex[_name] = {
+                position: pos,
+                size: size
+              };
+            }
+
+            this.groupIndex = {};
+            nEntries = binaryParser.getInt();
+
+            while (nEntries-- > 0) {
+              _name2 = binaryParser.getString();
+              _pos = binaryParser.getLong();
+              _size = binaryParser.getInt();
+              this.groupIndex[_name2] = {
+                position: _pos,
+                size: _size
+              };
+            }
+
+            return _context.abrupt("return", this);
+
+          case 31:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee, this);
+  }));
+
+  TDFReader.prototype.readDataset =
+  /*#__PURE__*/
+  function () {
+    var _ref2 = _asyncToGenerator(
+    /*#__PURE__*/
+    regeneratorRuntime.mark(function _callee2(chr, windowFunction, zoom) {
+      var key, wf, zoomString, dsName, indexEntry, data, binaryParser, nAttributes, attributes, dataType, tileWidth, nTiles, tiles, dataset;
+      return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              key = chr + "_" + windowFunction + "_" + zoom;
+
+              if (!this.datasetCache[key]) {
+                _context2.next = 5;
+                break;
+              }
+
+              return _context2.abrupt("return", this.datasetCache[key]);
+
+            case 5:
+              _context2.next = 7;
+              return this.readHeader();
+
+            case 7:
+              wf = this.version < 2 ? "" : "/" + windowFunction;
+              zoomString = chr.toLowerCase() === "all" || zoom === undefined ? "0" : zoom.toString();
+
+              if (windowFunction === "raw") {
+                dsName = "/" + chr + "/raw";
+              } else {
+                dsName = "/" + chr + "/z" + zoomString + wf;
+              }
+
+              indexEntry = this.datasetIndex[dsName];
+
+              if (!(indexEntry === undefined)) {
+                _context2.next = 13;
+                break;
+              }
+
+              return _context2.abrupt("return", undefined);
+
+            case 13:
+              _context2.next = 15;
+              return igvxhr.loadArrayBuffer(this.path, buildOptions(this.config, {
+                range: {
+                  start: indexEntry.position,
+                  size: indexEntry.size
+                }
+              }));
+
+            case 15:
+              data = _context2.sent;
+
+              if (data) {
+                _context2.next = 18;
+                break;
+              }
+
+              return _context2.abrupt("return", undefined);
+
+            case 18:
+              binaryParser = new BinaryParser(new DataView(data));
+              nAttributes = binaryParser.getInt();
+              attributes = {};
+
+              while (nAttributes-- > 0) {
+                attributes[binaryParser.getString()] = binaryParser.getString();
+              }
+
+              dataType = binaryParser.getString();
+              tileWidth = binaryParser.getFloat();
+              nTiles = binaryParser.getInt();
+              tiles = [];
+
+              while (nTiles-- > 0) {
+                tiles.push({
+                  position: binaryParser.getLong(),
+                  size: binaryParser.getInt()
+                });
+              }
+
+              dataset = {
+                name: dsName,
+                attributes: attributes,
+                dataType: dataType,
+                tileWidth: tileWidth,
+                tiles: tiles
+              };
+              this.datasetCache[key] = dataset;
+              return _context2.abrupt("return", dataset);
+
+            case 30:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, this);
+    }));
+
+    return function (_x, _x2, _x3) {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+
+  TDFReader.prototype.readRootGroup =
+  /*#__PURE__*/
+  _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee3() {
+    var genome, rootGroup, group, names, maxZoomString, chrAliasTable;
+    return regeneratorRuntime.wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            genome = this.genome;
+            rootGroup = this.groupCache["/"];
+
+            if (!rootGroup) {
+              _context3.next = 6;
+              break;
+            }
+
+            return _context3.abrupt("return", rootGroup);
+
+          case 6:
+            _context3.next = 8;
+            return this.readGroup("/");
+
+          case 8:
+            group = _context3.sent;
+            names = group["chromosomes"];
+            maxZoomString = group["maxZoom"]; // Now parse out interesting attributes.  This is a side effect, but the alternative is messy as well.
+
+            if (maxZoomString) {
+              this.maxZoom = Number(maxZoomString);
+            } // Chromosome names
+
+
+            chrAliasTable = {};
+
+            if (names) {
+              names.split(",").forEach(function (chr) {
+                var canonicalName = genome.getChromosomeName(chr);
+                chrAliasTable[canonicalName] = chr;
+              });
+            }
+
+            this.chrAliasTable = chrAliasTable;
+            this.groupCache["/"] = group;
+            return _context3.abrupt("return", group);
+
+          case 17:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee3, this);
+  }));
+
+  TDFReader.prototype.readGroup =
+  /*#__PURE__*/
+  function () {
+    var _ref4 = _asyncToGenerator(
+    /*#__PURE__*/
+    regeneratorRuntime.mark(function _callee4(name) {
+      var group, indexEntry, data, binaryParser, _group, nAttributes, key, value;
+
+      return regeneratorRuntime.wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              group = this.groupCache[name];
+
+              if (!group) {
+                _context4.next = 5;
+                break;
+              }
+
+              return _context4.abrupt("return", group);
+
+            case 5:
+              _context4.next = 7;
+              return this.readHeader();
+
+            case 7:
+              indexEntry = this.groupIndex[name];
+
+              if (!(indexEntry === undefined)) {
+                _context4.next = 10;
+                break;
+              }
+
+              return _context4.abrupt("return", undefined);
+
+            case 10:
+              _context4.next = 12;
+              return igvxhr.loadArrayBuffer(this.path, buildOptions(this.config, {
+                range: {
+                  start: indexEntry.position,
+                  size: indexEntry.size
+                }
+              }));
+
+            case 12:
+              data = _context4.sent;
+
+              if (data) {
+                _context4.next = 15;
+                break;
+              }
+
+              return _context4.abrupt("return", undefined);
+
+            case 15:
+              binaryParser = new BinaryParser(new DataView(data));
+              _group = {
+                name: name
+              };
+              nAttributes = binaryParser.getInt();
+
+              while (nAttributes-- > 0) {
+                key = binaryParser.getString();
+                value = binaryParser.getString();
+                _group[key] = value;
+              }
+
+              this.groupCache[name] = _group;
+              return _context4.abrupt("return", _group);
+
+            case 21:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, _callee4, this);
+    }));
+
+    return function (_x4) {
+      return _ref4.apply(this, arguments);
+    };
+  }();
+
+  function createFixedStep(binaryParser, nTracks) {
+    var nPositions = binaryParser.getInt();
+    var start = binaryParser.getInt();
+    var span = binaryParser.getFloat();
+    var data = [];
+    var nt = nTracks;
+
+    while (nt-- > 0) {
+      var np = nPositions;
+      var dtrack = [];
+
+      while (np-- > 0) {
+        dtrack.push(binaryParser.getFloat());
+      }
+
+      data.push(dtrack);
+    }
+
+    return {
+      type: "fixedStep",
+      start: start,
+      span: span,
+      data: data,
+      nTracks: nTracks,
+      nPositions: nPositions
+    };
+  }
+
+  function createVariableStep(binaryParser, nTracks) {
+    var tileStart = binaryParser.getInt();
+    var span = binaryParser.getFloat();
+    var nPositions = binaryParser.getInt();
+    var start = [];
+    var np = nPositions;
+
+    while (np-- > 0) {
+      start.push(binaryParser.getInt());
+    }
+
+    var nS = binaryParser.getInt(); // # of samples, ignored but should === nTracks
+
+    var data = [];
+    var nt = nTracks;
+
+    while (nt-- > 0) {
+      np = nPositions;
+      var dtrack = [];
+
+      while (np-- > 0) {
+        dtrack.push(binaryParser.getFloat());
+      }
+
+      data.push(dtrack);
+    }
+
+    return {
+      type: "variableStep",
+      tileStart: tileStart,
+      span: span,
+      start: start,
+      data: data,
+      nTracks: nTracks,
+      nPositions: nPositions
+    };
+  }
+
+  function createBed(binaryParser, nTracks, type) {
+    var nPositions = binaryParser.getInt();
+    var n = nPositions;
+    var start = [];
+
+    while (n-- > 0) {
+      start.push(binaryParser.getInt());
+    }
+
+    n = nPositions;
+    var end = [];
+
+    while (n-- > 0) {
+      end.push(binaryParser.getInt());
+    }
+
+    var nS = binaryParser.getInt(); // # of samples, ignored but should === nTracks
+
+    var data = [];
+    var nt = nTracks;
+
+    while (nt-- > 0) {
+      var np = nPositions;
+      var dtrack = [];
+
+      while (np-- > 0) {
+        dtrack.push(binaryParser.getFloat());
+      }
+
+      data.push(dtrack);
+    }
+
+    if (type === "bedWithName") {
+      n = nPositions;
+      var _name3 = [];
+
+      while (n-- > 0) {
+        _name3.push(binaryParser.getString());
+      }
+    }
+
+    return {
+      type: type,
+      start: start,
+      end: end,
+      data: data,
+      name: name,
+      nTracks: nTracks,
+      nPositions: nPositions
+    };
+  }
+
+  TDFReader.prototype.readTiles =
+  /*#__PURE__*/
+  function () {
+    var _ref5 = _asyncToGenerator(
+    /*#__PURE__*/
+    regeneratorRuntime.mark(function _callee5(tileIndeces, nTracks) {
+      var firstEntry, lastEntry, position, size, data, tiles, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, indexEntry, start, _size2, tileData, inflate, plain, binaryParser, type, tile;
+
+      return regeneratorRuntime.wrap(function _callee5$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              tileIndeces.sort(function (a, b) {
+                return a.position - b.position;
+              });
+              tileIndeces = tileIndeces.filter(function (idx) {
+                return idx.size > 0;
+              });
+
+              if (!(tileIndeces.length === 0)) {
+                _context5.next = 4;
+                break;
+              }
+
+              return _context5.abrupt("return", Promise.resolve([]));
+
+            case 4:
+              firstEntry = tileIndeces[0];
+              lastEntry = tileIndeces[tileIndeces.length - 1];
+              position = firstEntry.position;
+              size = lastEntry.position + lastEntry.size - position;
+              _context5.next = 10;
+              return igvxhr.loadArrayBuffer(this.path, buildOptions(this.config, {
+                range: {
+                  start: position,
+                  size: size
+                }
+              }));
+
+            case 10:
+              data = _context5.sent;
+              tiles = []; // Loop through and decode tiles
+
+              _iteratorNormalCompletion = true;
+              _didIteratorError = false;
+              _iteratorError = undefined;
+              _context5.prev = 15;
+              _iterator = tileIndeces[Symbol.iterator]();
+
+            case 17:
+              if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
+                _context5.next = 41;
+                break;
+              }
+
+              indexEntry = _step.value;
+              start = indexEntry.position - position;
+              _size2 = indexEntry.size;
+
+              if (!(_size2 > 0)) {
+                _context5.next = 38;
+                break;
+              }
+
+              tileData = void 0;
+
+              if (this.compressed) {
+                inflate = new Zlib.Inflate(new Uint8Array(data, start, _size2));
+                plain = inflate.decompress();
+                tileData = plain.buffer;
+              } else {
+                tileData = data.slice(start, start + _size2);
+              }
+
+              binaryParser = new BinaryParser(new DataView(tileData));
+              type = binaryParser.getString();
+              tile = void 0;
+              _context5.t0 = type;
+              _context5.next = _context5.t0 === "fixedStep" ? 30 : _context5.t0 === "variableStep" ? 32 : _context5.t0 === "bed" ? 34 : _context5.t0 === "bedWithName" ? 34 : 36;
+              break;
+
+            case 30:
+              tile = createFixedStep(binaryParser, nTracks);
+              return _context5.abrupt("break", 37);
+
+            case 32:
+              tile = createVariableStep(binaryParser, nTracks);
+              return _context5.abrupt("break", 37);
+
+            case 34:
+              tile = createBed(binaryParser, nTracks, type);
+              return _context5.abrupt("break", 37);
+
+            case 36:
+              throw "Unknown tile type: " + type;
+
+            case 37:
+              tiles.push(tile);
+
+            case 38:
+              _iteratorNormalCompletion = true;
+              _context5.next = 17;
+              break;
+
+            case 41:
+              _context5.next = 47;
+              break;
+
+            case 43:
+              _context5.prev = 43;
+              _context5.t1 = _context5["catch"](15);
+              _didIteratorError = true;
+              _iteratorError = _context5.t1;
+
+            case 47:
+              _context5.prev = 47;
+              _context5.prev = 48;
+
+              if (!_iteratorNormalCompletion && _iterator.return != null) {
+                _iterator.return();
+              }
+
+            case 50:
+              _context5.prev = 50;
+
+              if (!_didIteratorError) {
+                _context5.next = 53;
+                break;
+              }
+
+              throw _iteratorError;
+
+            case 53:
+              return _context5.finish(50);
+
+            case 54:
+              return _context5.finish(47);
+
+            case 55:
+              return _context5.abrupt("return", tiles);
+
+            case 56:
+            case "end":
+              return _context5.stop();
+          }
+        }
+      }, _callee5, this, [[15, 43, 47, 55], [48,, 50, 54]]);
+    }));
+
+    return function (_x5, _x6) {
+      return _ref5.apply(this, arguments);
+    };
+  }();
+
+  TDFReader.prototype.readTile =
+  /*#__PURE__*/
+  function () {
+    var _ref6 = _asyncToGenerator(
+    /*#__PURE__*/
+    regeneratorRuntime.mark(function _callee6(indexEntry, nTracks) {
+      var data, inflate, plain, binaryParser, type;
+      return regeneratorRuntime.wrap(function _callee6$(_context6) {
+        while (1) {
+          switch (_context6.prev = _context6.next) {
+            case 0:
+              _context6.next = 2;
+              return igvxhr.loadArrayBuffer(this.path, buildOptions(this.config, {
+                range: {
+                  start: indexEntry.position,
+                  size: indexEntry.size
+                }
+              }));
+
+            case 2:
+              data = _context6.sent;
+
+              if (this.compressed) {
+                inflate = new Zlib.Inflate(new Uint8Array(data));
+                plain = inflate.decompress();
+                data = plain.buffer;
+              }
+
+              binaryParser = new BinaryParser(new DataView(data));
+              type = binaryParser.getString();
+              _context6.t0 = type;
+              _context6.next = _context6.t0 === "fixedStep" ? 9 : _context6.t0 === "variableStep" ? 10 : _context6.t0 === "bed" ? 11 : _context6.t0 === "bedWithName" ? 11 : 12;
+              break;
+
+            case 9:
+              return _context6.abrupt("return", createFixedStep(binaryParser, nTracks));
+
+            case 10:
+              return _context6.abrupt("return", createVariableStep(binaryParser, nTracks));
+
+            case 11:
+              return _context6.abrupt("return", createBed(binaryParser, nTracks, type));
+
+            case 12:
+              throw "Unknown tile type: " + type;
+
+            case 13:
+            case "end":
+              return _context6.stop();
+          }
+        }
+      }, _callee6, this);
+    }));
+
+    return function (_x7, _x8) {
+      return _ref6.apply(this, arguments);
+    };
+  }();
+
+  var TDFSource = function TDFSource(config, genome) {
+    this.genome = genome;
+    this.windowFunction = config.windowFunction || "mean";
+    this.reader = new TDFReader(config, genome);
+  };
+
+  TDFSource.prototype.getFeatures =
+  /*#__PURE__*/
+  function () {
+    var _ref = _asyncToGenerator(
+    /*#__PURE__*/
+    regeneratorRuntime.mark(function _callee2(chr, bpStart, bpEnd, bpPerPixel) {
+      var genomicInterval, genome, group, zoom, queryChr, maxZoom, wf, dataset, tileWidth, startTile, endTile, NTRACKS, tiles, features, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, tile, getRootGroup, _getRootGroup;
+
+      return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _getRootGroup = function _ref3() {
+                _getRootGroup = _asyncToGenerator(
+                /*#__PURE__*/
+                regeneratorRuntime.mark(function _callee() {
+                  return regeneratorRuntime.wrap(function _callee$(_context) {
+                    while (1) {
+                      switch (_context.prev = _context.next) {
+                        case 0:
+                          if (!this.rootGroup) {
+                            _context.next = 4;
+                            break;
+                          }
+
+                          return _context.abrupt("return", this.rootGroup);
+
+                        case 4:
+                          _context.next = 6;
+                          return this.reader.readRootGroup();
+
+                        case 6:
+                          this.rootGroup = _context.sent;
+                          return _context.abrupt("return", this.rootGroup);
+
+                        case 8:
+                        case "end":
+                          return _context.stop();
+                      }
+                    }
+                  }, _callee, this);
+                }));
+                return _getRootGroup.apply(this, arguments);
+              };
+
+              getRootGroup = function _ref2() {
+                return _getRootGroup.apply(this, arguments);
+              };
+
+              _context2.next = 4;
+              return getRootGroup.call(this);
+
+            case 4:
+              genomicInterval = new GenomicInterval(chr, bpStart, bpEnd);
+              genome = this.genome;
+
+              if (!(chr.toLowerCase() === "all")) {
+                _context2.next = 8;
+                break;
+              }
+
+              return _context2.abrupt("return", []);
+
+            case 8:
+              genomicInterval.bpPerPixel = bpPerPixel;
+              _context2.next = 11;
+              return getRootGroup.call(this);
+
+            case 11:
+              group = _context2.sent;
+              zoom = zoomLevelForScale(chr, bpPerPixel, genome);
+              queryChr = this.reader.chrAliasTable[chr];
+              maxZoom = this.reader.maxZoom;
+              if (queryChr === undefined) queryChr = chr;
+              if (maxZoom === undefined) maxZoom = -1;
+              wf = zoom > maxZoom ? "raw" : this.windowFunction;
+              _context2.next = 20;
+              return this.reader.readDataset(queryChr, wf, zoom);
+
+            case 20:
+              dataset = _context2.sent;
+
+              if (!(dataset == null)) {
+                _context2.next = 23;
+                break;
+              }
+
+              return _context2.abrupt("return", []);
+
+            case 23:
+              tileWidth = dataset.tileWidth;
+              startTile = Math.floor(bpStart / tileWidth);
+              endTile = Math.floor(bpEnd / tileWidth);
+              NTRACKS = 1; // TODO read this
+
+              _context2.next = 29;
+              return this.reader.readTiles(dataset.tiles.slice(startTile, endTile + 1), NTRACKS);
+
+            case 29:
+              tiles = _context2.sent;
+              features = [];
+              _iteratorNormalCompletion = true;
+              _didIteratorError = false;
+              _iteratorError = undefined;
+              _context2.prev = 34;
+              _iterator = tiles[Symbol.iterator]();
+
+            case 36:
+              if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
+                _context2.next = 51;
+                break;
+              }
+
+              tile = _step.value;
+              _context2.t0 = tile.type;
+              _context2.next = _context2.t0 === "bed" ? 41 : _context2.t0 === "variableStep" ? 43 : _context2.t0 === "fixedStep" ? 45 : 47;
+              break;
+
+            case 41:
+              decodeBedTile(tile, chr, bpStart, bpEnd, bpPerPixel, features);
+              return _context2.abrupt("break", 48);
+
+            case 43:
+              decodeVaryTile(tile, chr, bpStart, bpEnd, bpPerPixel, features);
+              return _context2.abrupt("break", 48);
+
+            case 45:
+              decodeFixedTile(tile, chr, bpStart, bpEnd, bpPerPixel, features);
+              return _context2.abrupt("break", 48);
+
+            case 47:
+              throw "Unknown tile type: " + tile.type;
+
+            case 48:
+              _iteratorNormalCompletion = true;
+              _context2.next = 36;
+              break;
+
+            case 51:
+              _context2.next = 57;
+              break;
+
+            case 53:
+              _context2.prev = 53;
+              _context2.t1 = _context2["catch"](34);
+              _didIteratorError = true;
+              _iteratorError = _context2.t1;
+
+            case 57:
+              _context2.prev = 57;
+              _context2.prev = 58;
+
+              if (!_iteratorNormalCompletion && _iterator.return != null) {
+                _iterator.return();
+              }
+
+            case 60:
+              _context2.prev = 60;
+
+              if (!_didIteratorError) {
+                _context2.next = 63;
+                break;
+              }
+
+              throw _iteratorError;
+
+            case 63:
+              return _context2.finish(60);
+
+            case 64:
+              return _context2.finish(57);
+
+            case 65:
+              features.sort(function (a, b) {
+                return a.start - b.start;
+              });
+              return _context2.abrupt("return", features);
+
+            case 67:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, this, [[34, 53, 57, 65], [58,, 60, 64]]);
+    }));
+
+    return function (_x, _x2, _x3, _x4) {
+      return _ref.apply(this, arguments);
+    };
+  }();
+
+  TDFSource.prototype.supportsWholeGenome = function () {
+    return false;
+  };
+
+  function decodeBedTile(tile, chr, bpStart, bpEnd, bpPerPixel, features) {
+    var nPositions = tile.nPositions;
+    var starts = tile.start;
+    var ends = tile.end;
+    var data = tile.data[0]; // Single track for now
+
+    for (var i = 0; i < nPositions; i++) {
+      var s = starts[i];
+      var e = ends[i];
+      if (e < bpStart) continue;
+      if (s > bpEnd) break;
+      features.push({
+        chr: chr,
+        start: s,
+        end: e,
+        value: data[i]
+      });
+    }
+  }
+
+  function decodeVaryTile(tile, chr, bpStart, bpEnd, bpPerPixel, features) {
+    var nPositions = tile.nPositions;
+    var starts = tile.start;
+    var span = tile.span;
+    var data = tile.data[0]; // Single track for now
+
+    for (var i = 0; i < nPositions; i++) {
+      var s = starts[i];
+      var e = s + span;
+      if (e < bpStart) continue;
+      if (s > bpEnd) break;
+      features.push({
+        chr: chr,
+        start: s,
+        end: e,
+        value: data[i]
+      });
+    }
+  }
+
+  function decodeFixedTile(tile, chr, bpStart, bpEnd, bpPerPixel, features) {
+    var nPositions = tile.nPositions;
+    var s = tile.start;
+    var span = tile.span;
+    var data = tile.data[0]; // Single track for now
+
+    for (var i = 0; i < nPositions; i++) {
+      var e = s + span;
+      if (s > bpEnd) break;
+
+      if (e >= bpStart) {
+        if (!Number.isNaN(data[i])) {
+          features.push({
+            chr: chr,
+            start: s,
+            end: e,
+            value: data[i]
+          });
+        }
+      }
+
+      s = e;
+    }
+  }
+
+  var log2 = Math.log(2);
+
+  function zoomLevelForScale(chr, bpPerPixel, genome) {
+    // Convert bpPerPixel to IGV "zoom" level.   This is a bit convoluted,  IGV computes zoom levels assuming
+    // display in a 700 pixel window.  The fully zoomed out view of a chromosome is zoom level "0".
+    // Zoom level 1 is magnified 2X,  and so forth
+    var chrSize = genome.getChromosome(chr).bpLength;
+    return Math.ceil(Math.log(Math.max(0, chrSize / (bpPerPixel * 700))) / log2);
+  }
+
+  /*
+   * The MIT License (MIT)
+   *
+   * Copyright (c) 2014 Broad Institute
+   *
+   * Permission is hereby granted, free of charge, to any person obtaining a copy
+   * of this software and associated documentation files (the "Software"), to deal
+   * in the Software without restriction, including without limitation the rights
+   * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+   * copies of the Software, and to permit persons to whom the Software is
+   * furnished to do so, subject to the following conditions:
+   *
+   * The above copyright notice and this permission notice shall be included in
+   * all copies or substantial portions of the Software.
+   *
+   *
+   * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+   * THE SOFTWARE.
+   */
+
+  var BufferedReader = function BufferedReader(config, contentLength, bufferSize) {
+    this.path = config.url;
+    this.bufferSize = bufferSize ? bufferSize : 512000;
+    this.range = {
+      start: -1,
+      size: -1
+    };
+    this.config = config;
+  };
+  /**
+   *
+   * @param requestedRange - byte rangeas {start, size}
+   * @param fulfill - function to receive result
+   * @param asUint8 - optional flag to return result as an UInt8Array
+   */
+
+
+  BufferedReader.prototype.dataViewForRange = function (requestedRange, asUint8) {
+    var self = this;
+    var hasData = self.data && self.range.start <= requestedRange.start && self.range.start + self.range.size >= requestedRange.start + requestedRange.size,
+        bufferSize,
+        loadRange;
+
+    if (hasData) {
+      return Promise.resolve(subbuffer(self, requestedRange, asUint8));
+    } else {
+      // If requested range size is specified, expand buffer size
+      if (requestedRange.size) {
+        bufferSize = Math.max(self.bufferSize, requestedRange.size);
+      } else {
+        bufferSize = self.bufferSize;
+      }
+
+      loadRange = {
+        start: requestedRange.start,
+        size: bufferSize
+      };
+      return igvxhr.loadArrayBuffer(self.path, buildOptions(self.config, {
+        range: loadRange
+      })).then(function (arrayBuffer) {
+        self.data = arrayBuffer;
+        self.range = loadRange;
+        return subbuffer(self, requestedRange, asUint8);
+      });
+    }
+
+    function subbuffer(bufferedReader, requestedRange, asUint8) {
+      var len = bufferedReader.data.byteLength,
+          bufferStart = requestedRange.start - bufferedReader.range.start,
+          result = asUint8 ? new Uint8Array(bufferedReader.data, bufferStart, len - bufferStart) : new DataView(bufferedReader.data, bufferStart, len - bufferStart);
+      return result;
+    }
+  };
+
+  /*
+   * The MIT License (MIT)
+   *
+   * Copyright (c) 2014 Broad Institute
+   *
+   * Permission is hereby granted, free of charge, to any person obtaining a copy
+   * of this software and associated documentation files (the "Software"), to deal
+   * in the Software without restriction, including without limitation the rights
+   * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+   * copies of the Software, and to permit persons to whom the Software is
+   * furnished to do so, subject to the following conditions:
+   *
+   * The above copyright notice and this permission notice shall be included in
+   * all copies or substantial portions of the Software.
+   *
+   *
+   * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+   * THE SOFTWARE.
+   */
+  var BIGWIG_MAGIC_LTH = 0x888FFC26; // BigWig Magic Low to High
+
+  var BIGWIG_MAGIC_HTL = 0x26FC8F66; // BigWig Magic High to Low
+
+  var BIGBED_MAGIC_LTH = 0x8789F2EB; // BigBed Magic Low to High
+
+  var BIGBED_MAGIC_HTL = 0xEBF28987; // BigBed Magic High to Low
+
+  var BBFILE_HEADER_SIZE = 64;
+  var RPTREE_HEADER_SIZE = 48;
+  var RPTREE_NODE_LEAF_ITEM_SIZE = 32; // leaf item size
+
+  var RPTREE_NODE_CHILD_ITEM_SIZE = 24; // child item size
+
+  var BUFFER_SIZE = 512000; //  buffer
+
+  var BWReader = function BWReader(config, genome) {
+    this.path = config.url;
+    this.genome = genome;
+    this.rpTreeCache = {};
+    this.config = config;
+  };
+
+  BWReader.prototype.readWGFeatures = function (bpPerPixel, windowFunction) {
+    var self = this;
+    var genome = this.genome;
+    return self.getZoomHeaders().then(function (zoomLevelHeaders) {
+      var chrIdx1, chrIdx2, chr1, chr2;
+      chrIdx1 = 0;
+      chrIdx2 = self.chromTree.idToChrom.length - 1;
+      chr1 = self.chromTree.idToChrom[chrIdx1];
+      chr2 = self.chromTree.idToChrom[chrIdx2];
+      return self.readFeatures(chr1, 0, chr2, Number.MAX_VALUE, bpPerPixel, windowFunction);
+    });
+  };
+
+  BWReader.prototype.readFeatures = function (chr1, bpStart, chr2, bpEnd, bpPerPixel, windowFunction) {
+    var self = this,
+        decodeFunction,
+        chrIdx1,
+        chrIdx2;
+    return self.getZoomHeaders().then(function (zoomLevelHeaders) {
+      // Select a biwig "zoom level" appropriate for the current resolution
+      var zoomLevelHeader = zoomLevelForScale$1(bpPerPixel, zoomLevelHeaders),
+          treeOffset;
+
+      if (zoomLevelHeader) {
+        treeOffset = zoomLevelHeader.indexOffset;
+        decodeFunction = decodeZoomData;
+      } else {
+        treeOffset = self.header.fullIndexOffset;
+
+        if (self.type === "BigWig") {
+          decodeFunction = decodeWigData;
+        } else {
+          decodeFunction = decodeBedData;
+        }
+      }
+
+      return self.loadRPTree(treeOffset);
+    }).then(function (rpTree) {
+      chrIdx1 = self.chromTree.chromToID[chr1];
+      chrIdx2 = self.chromTree.chromToID[chr2];
+
+      if (chrIdx1 === undefined || chrIdx2 === undefined) {
+        return undefined;
+      } else {
+        return rpTree.findLeafItemsOverlapping(chrIdx1, bpStart, chrIdx2, bpEnd);
+      }
+    }).then(function (leafItems) {
+      if (!leafItems || leafItems.length === 0) {
+        return [];
+      } else {
+        // Consolidate leaf items and get all data at once
+        var start = Number.MAX_VALUE;
+        var end = 0;
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+          for (var _iterator = leafItems[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var item = _step.value;
+            start = Math.min(start, item.dataOffset);
+            end = Math.max(end, item.dataOffset + item.dataSize);
+          }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator.return != null) {
+              _iterator.return();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
+        }
+
+        var size = end - start;
+        return igvxhr.loadArrayBuffer(self.config.url, buildOptions(self.config, {
+          range: {
+            start: start,
+            size: size
+          }
+        })).then(function (arrayBuffer) {
+          var allFeatures = [];
+          var buffer = new Uint8Array(arrayBuffer);
+          var _iteratorNormalCompletion2 = true;
+          var _didIteratorError2 = false;
+          var _iteratorError2 = undefined;
+
+          try {
+            for (var _iterator2 = leafItems[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+              var item = _step2.value;
+              var uint8Array = buffer.subarray(item.dataOffset - start, item.dataOffset + item.dataSize);
+              var plain = void 0;
+              var isCompressed = self.header.uncompressBuffSize > 0;
+
+              if (isCompressed) {
+                var inflate = new Zlib.Inflate(uint8Array);
+                plain = inflate.decompress();
+              } else {
+                plain = uint8Array;
+              }
+
+              decodeFunction(new DataView(plain.buffer), chrIdx1, bpStart, chrIdx2, bpEnd, allFeatures, self.chromTree.idToChrom, windowFunction);
+            }
+          } catch (err) {
+            _didIteratorError2 = true;
+            _iteratorError2 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
+                _iterator2.return();
+              }
+            } finally {
+              if (_didIteratorError2) {
+                throw _iteratorError2;
+              }
+            }
+          }
+
+          allFeatures.sort(function (a, b) {
+            return a.start - b.start;
+          });
+          return allFeatures;
+        });
+      }
+    });
+  };
+
+  BWReader.prototype.getZoomHeaders = function () {
+    var self = this;
+
+    if (self.zoomLevelHeaders) {
+      return Promise.resolve(self.zoomLevelHeaders);
+    } else {
+      return self.loadHeader().then(function () {
+        return self.zoomLevelHeaders;
+      });
+    }
+  };
+
+  BWReader.prototype.loadHeader = function () {
+    var self = this;
+
+    if (self.header) {
+      return Promise.resolve(self.header);
+    } else {
+      return igvxhr.loadArrayBuffer(self.path, buildOptions(self.config, {
+        range: {
+          start: 0,
+          size: BBFILE_HEADER_SIZE
+        }
+      })).then(function (data) {
+        var header; // Assume low-to-high unless proven otherwise
+
+        self.littleEndian = true;
+        var binaryParser = new BinaryParser(new DataView(data));
+        var magic = binaryParser.getUInt();
+
+        if (magic === BIGWIG_MAGIC_LTH) {
+          self.type = "BigWig";
+        } else if (magic === BIGBED_MAGIC_LTH) {
+          self.type = "BigBed";
+        } else {
+          //Try big endian order
+          self.littleEndian = false;
+          binaryParser.littleEndian = false;
+          binaryParser.position = 0;
+
+          var _magic = binaryParser.getUInt();
+
+          if (_magic === BIGWIG_MAGIC_HTL) {
+            self.type = "BigWig";
+          } else if (_magic === BIGBED_MAGIC_HTL) {
+            self.type = "BigBed";
+          }
+        } // Table 5  "Common header for BigWig and BigBed files"
+
+
+        header = {};
+        header.bwVersion = binaryParser.getUShort();
+        header.nZoomLevels = binaryParser.getUShort();
+        header.chromTreeOffset = binaryParser.getLong();
+        header.fullDataOffset = binaryParser.getLong();
+        header.fullIndexOffset = binaryParser.getLong();
+        header.fieldCount = binaryParser.getUShort();
+        header.definedFieldCount = binaryParser.getUShort();
+        header.autoSqlOffset = binaryParser.getLong();
+        header.totalSummaryOffset = binaryParser.getLong();
+        header.uncompressBuffSize = binaryParser.getInt();
+        header.reserved = binaryParser.getLong();
+        return header;
+      }).then(function (header) {
+        self.header = header;
+        return loadZoomHeadersAndChrTree.call(self);
+      });
+    }
+
+    function loadZoomHeadersAndChrTree() {
+      var self = this;
+      var startOffset = BBFILE_HEADER_SIZE;
+      var range = {
+        start: startOffset,
+        size: self.header.fullDataOffset - startOffset + 5
+      };
+      return igvxhr.loadArrayBuffer(self.path, buildOptions(self.config, {
+        range: range
+      })).then(function (data) {
+        var nZooms = self.header.nZoomLevels;
+        var binaryParser = new BinaryParser(new DataView(data));
+        self.zoomLevelHeaders = [];
+        self.firstZoomDataOffset = Number.MAX_VALUE;
+
+        for (var i = 1; i <= nZooms; i++) {
+          var zoomNumber = nZooms - i;
+          var zlh = new ZoomLevelHeader(zoomNumber, binaryParser);
+          self.firstZoomDataOffset = Math.min(zlh.dataOffset, self.firstZoomDataOffset);
+          self.zoomLevelHeaders[zoomNumber] = zlh;
+        } // Autosql
+
+
+        if (self.header.autoSqlOffset > 0) {
+          binaryParser.position = self.header.autoSqlOffset - startOffset;
+          self.autoSql = binaryParser.getString();
+        } // Total summary
+
+
+        if (self.header.totalSummaryOffset > 0) {
+          binaryParser.position = self.header.totalSummaryOffset - startOffset;
+          self.totalSummary = new BWTotalSummary(binaryParser);
+        } // Chrom data index
+
+
+        if (self.header.chromTreeOffset > 0) {
+          binaryParser.position = self.header.chromTreeOffset - startOffset;
+          self.chromTree = new BPTree(binaryParser, startOffset, self.genome);
+        } else {
+          // TODO -- this is an error, not expected
+          throw "BigWig chromosome tree offset <= 0";
+        } //Finally total data count
+
+
+        binaryParser.position = self.header.fullDataOffset - startOffset;
+        self.header.dataCount = binaryParser.getInt();
+        return self.header;
+      });
+    }
+  };
+
+  BWReader.prototype.loadRPTree = function (offset) {
+    var self = this;
+    var rpTree = self.rpTreeCache[offset];
+
+    if (rpTree) {
+      return Promise.resolve(rpTree);
+    } else {
+      rpTree = new RPTree(offset, self.config, self.littleEndian);
+      return rpTree.load().then(function () {
+        self.rpTreeCache[offset] = rpTree;
+        return rpTree;
+      });
+    }
+  };
+
+  function ZoomLevelHeader(index, byteBuffer) {
+    this.index = index;
+    this.reductionLevel = byteBuffer.getInt();
+    this.reserved = byteBuffer.getInt();
+    this.dataOffset = byteBuffer.getLong();
+    this.indexOffset = byteBuffer.getLong();
+  }
+
+  function RPTree(fileOffset, config, littleEndian) {
+    this.config = config;
+    this.fileOffset = fileOffset; // File offset to beginning of tree
+
+    this.path = config.url;
+    this.littleEndian = littleEndian;
+  }
+
+  RPTree.prototype.load = function () {
+    var self = this;
+    var rootNodeOffset = self.fileOffset + RPTREE_HEADER_SIZE,
+        bufferedReader = new BufferedReader(self.config, BUFFER_SIZE);
+    return self.readNode(rootNodeOffset, bufferedReader).then(function (node) {
+      self.rootNode = node;
+      return self;
+    });
+  };
+
+  RPTree.prototype.readNode = function (filePosition, bufferedReader) {
+    var self = this;
+    var count, isLeaf;
+    return bufferedReader.dataViewForRange({
+      start: filePosition,
+      size: 4
+    }, false).then(function (dataView) {
+      var binaryParser, type, reserved;
+      binaryParser = new BinaryParser(dataView, self.littleEndian);
+      type = binaryParser.getByte();
+      isLeaf = type === 1;
+      reserved = binaryParser.getByte();
+      count = binaryParser.getUShort();
+      filePosition += 4;
+      var bytesRequired = count * (isLeaf ? RPTREE_NODE_LEAF_ITEM_SIZE : RPTREE_NODE_CHILD_ITEM_SIZE);
+      var range2 = {
+        start: filePosition,
+        size: bytesRequired
+      };
+      return bufferedReader.dataViewForRange(range2, false);
+    }).then(function (dataView) {
+      var i,
+          items = new Array(count),
+          binaryParser = new BinaryParser(dataView);
+
+      if (isLeaf) {
+        for (i = 0; i < count; i++) {
+          var item = {
+            isLeaf: true,
+            startChrom: binaryParser.getInt(),
+            startBase: binaryParser.getInt(),
+            endChrom: binaryParser.getInt(),
+            endBase: binaryParser.getInt(),
+            dataOffset: binaryParser.getLong(),
+            dataSize: binaryParser.getLong()
+          };
+          items[i] = item;
+        }
+
+        return new RPTreeNode(items);
+      } else {
+        // non-leaf
+        for (i = 0; i < count; i++) {
+          var _item = {
+            isLeaf: false,
+            startChrom: binaryParser.getInt(),
+            startBase: binaryParser.getInt(),
+            endChrom: binaryParser.getInt(),
+            endBase: binaryParser.getInt(),
+            childOffset: binaryParser.getLong()
+          };
+          items[i] = _item;
+        }
+
+        return new RPTreeNode(items);
+      }
+    });
+  };
+
+  RPTree.prototype.findLeafItemsOverlapping = function (chrIdx1, startBase, chrIdx2, endBase) {
+    var self = this;
+    return new Promise(function (fulfill, reject) {
+      var leafItems = [],
+          processing = new Set(),
+          bufferedReader = new BufferedReader(self.config, BUFFER_SIZE);
+      processing.add(0); // Zero represents the root node
+
+      findLeafItems(self.rootNode, 0);
+
+      function findLeafItems(node, nodeId) {
+        if (overlaps(node, chrIdx1, startBase, chrIdx2, endBase)) {
+          var items = node.items;
+          items.forEach(function (item) {
+            if (overlaps(item, chrIdx1, startBase, chrIdx2, endBase)) {
+              if (item.isLeaf) {
+                leafItems.push(item);
+              } else {
+                if (item.childNode) {
+                  findLeafItems(item.childNode);
+                } else {
+                  processing.add(item.childOffset); // Represent node to-be-loaded by its file position
+
+                  self.readNode(item.childOffset, bufferedReader).then(function (node) {
+                    item.childNode = node;
+                    findLeafItems(node, item.childOffset);
+                  }).catch(reject);
+                }
+              }
+            }
+          });
+        }
+
+        if (nodeId !== undefined) processing.delete(nodeId); // Wait until all nodes are processed
+
+        if (processing.size === 0) {
+          fulfill(leafItems);
+        }
+      }
+    });
+  };
+
+  function RPTreeNode(items) {
+    this.items = items;
+    var minChromId = Number.MAX_VALUE,
+        maxChromId = 0,
+        minStartBase = Number.MAX_VALUE,
+        maxEndBase = 0,
+        i,
+        item;
+
+    for (i = 0; i < items.length; i++) {
+      item = items[i];
+      minChromId = Math.min(minChromId, item.startChrom);
+      maxChromId = Math.max(maxChromId, item.endChrom);
+      minStartBase = Math.min(minStartBase, item.startBase);
+      maxEndBase = Math.max(maxEndBase, item.endBase);
+    }
+
+    this.startChrom = minChromId;
+    this.endChrom = maxChromId;
+    this.startBase = minStartBase;
+    this.endBase = maxEndBase;
+  }
+
+  function BPTree(binaryParser, startOffset, genome) {
+    var magic = binaryParser.getInt();
+    var blockSize = binaryParser.getInt();
+    var keySize = binaryParser.getInt();
+    var valSize = binaryParser.getInt();
+    var itemCount = binaryParser.getLong();
+    var reserved = binaryParser.getLong();
+    var chromToId = {};
+    var idToChrom = [];
+    this.header = {
+      magic: magic,
+      blockSize: blockSize,
+      keySize: keySize,
+      valSize: valSize,
+      itemCount: itemCount,
+      reserved: reserved
+    };
+    this.chromToID = chromToId;
+    this.idToChrom = idToChrom; // Recursively walk tree to populate dictionary
+
+    readTreeNode(binaryParser, -1);
+
+    function readTreeNode(byteBuffer, offset) {
+      if (offset >= 0) byteBuffer.position = offset;
+      var type = byteBuffer.getByte(),
+          reserved = byteBuffer.getByte(),
+          count = byteBuffer.getUShort(),
+          i,
+          key,
+          chromId,
+          chromSize,
+          childOffset,
+          bufferOffset,
+          currOffset;
+
+      if (type === 1) {
+        for (i = 0; i < count; i++) {
+          key = byteBuffer.getFixedLengthTrimmedString(keySize);
+          chromId = byteBuffer.getInt();
+          chromSize = byteBuffer.getInt();
+          if (genome) key = genome.getChromosomeName(key); // Translate to canonical chr name
+
+          chromToId[key] = chromId;
+          idToChrom[chromId] = key;
+        }
+      } else {
+        // non-leaf
+        for (i = 0; i < count; i++) {
+          key = byteBuffer.getFixedLengthTrimmedString(keySize);
+          childOffset = byteBuffer.getLong();
+          bufferOffset = childOffset - startOffset;
+          currOffset = byteBuffer.position;
+          readTreeNode(byteBuffer, bufferOffset);
+          byteBuffer.position = currOffset;
+        }
+      }
+    }
+  }
+  /**
+   * Return true if {chrIdx1:startBase-chrIdx2:endBase} overlaps item's interval
+   * @returns {boolean}
+   */
+
+
+  function overlaps(item, chrIdx1, startBase, chrIdx2, endBase) {
+    if (!item) {
+      console.log("null item for " + chrIdx1 + " " + startBase + " " + endBase);
+      return false;
+    }
+
+    return (chrIdx2 > item.startChrom || chrIdx2 === item.startChrom && endBase >= item.startBase) && (chrIdx1 < item.endChrom || chrIdx1 === item.endChrom && startBase <= item.endBase);
+  }
+
+  function BWTotalSummary(byteBuffer) {
+    if (byteBuffer) {
+      this.basesCovered = byteBuffer.getLong();
+      this.minVal = byteBuffer.getDouble();
+      this.maxVal = byteBuffer.getDouble();
+      this.sumData = byteBuffer.getDouble();
+      this.sumSquares = byteBuffer.getDouble();
+      computeStats.call(this);
+    } else {
+      this.basesCovered = 0;
+      this.minVal = 0;
+      this.maxVal = 0;
+      this.sumData = 0;
+      this.sumSquares = 0;
+      this.mean = 0;
+      this.stddev = 0;
+    }
+  }
+
+  function computeStats() {
+    var n = this.basesCovered;
+
+    if (n > 0) {
+      this.mean = this.sumData / n;
+      this.stddev = Math.sqrt(this.sumSquares / (n - 1));
+      var min = this.minVal < 0 ? this.mean - 2 * this.stddev : 0,
+          max = this.maxVal > 0 ? this.mean + 2 * this.stddev : 0;
+      this.defaultRange = {
+        min: min,
+        max: max
+      };
+    }
+  }
+
+  function zoomLevelForScale$1(bpPerPixel, zoomLevelHeaders) {
+    var level = null,
+        i,
+        zl;
+
+    for (i = 0; i < zoomLevelHeaders.length; i++) {
+      zl = zoomLevelHeaders[i];
+
+      if (zl.reductionLevel < bpPerPixel) {
+        level = zl;
+        break;
+      }
+    }
+
+    return level;
+  }
+
+  function decodeWigData(data, chrIdx1, bpStart, chrIdx2, bpEnd, featureArray, chrDict) {
+    var binaryParser = new BinaryParser(data),
+        chromId = binaryParser.getInt(),
+        chromStart = binaryParser.getInt(),
+        chromEnd = binaryParser.getInt(),
+        itemStep = binaryParser.getInt(),
+        itemSpan = binaryParser.getInt(),
+        type = binaryParser.getByte(),
+        reserved = binaryParser.getByte(),
+        itemCount = binaryParser.getUShort(),
+        value,
+        chr;
+
+    if (chromId >= chrIdx1 && chromId <= chrIdx2) {
+      while (itemCount-- > 0) {
+        switch (type) {
+          case 1:
+            chromStart = binaryParser.getInt();
+            chromEnd = binaryParser.getInt();
+            value = binaryParser.getFloat();
+            break;
+
+          case 2:
+            chromStart = binaryParser.getInt();
+            value = binaryParser.getFloat();
+            chromEnd = chromStart + itemSpan;
+            break;
+
+          case 3:
+            // Fixed step
+            value = binaryParser.getFloat();
+            chromEnd = chromStart + itemSpan;
+            chromStart += itemStep;
+            break;
+        }
+
+        if (chromId < chrIdx1 || chromId === chrIdx1 && chromEnd < bpStart) continue;else if (chromId > chrIdx2 || chromId === chrIdx2 && chromStart >= bpEnd) break;
+
+        if (Number.isFinite(value)) {
+          chr = chrDict[chromId];
+          featureArray.push({
+            chr: chr,
+            start: chromStart,
+            end: chromEnd,
+            value: value
+          });
+        }
+      }
+    }
+  }
+
+  function decodeBedData(data, chrIdx1, bpStart, chrIdx2, bpEnd, featureArray, chrDict) {
+    var binaryParser = new BinaryParser(data),
+        minSize = 3 * 4 + 1,
+        // Minimum # of bytes required for a bed record
+    chromId,
+        chromStart,
+        chromEnd,
+        rest,
+        tokens,
+        feature,
+        exonCount,
+        exonSizes,
+        exonStarts,
+        exons,
+        eStart,
+        eEnd,
+        chr;
+
+    while (binaryParser.remLength() >= minSize) {
+      chromId = binaryParser.getInt();
+      chr = chrDict[chromId];
+      chromStart = binaryParser.getInt();
+      chromEnd = binaryParser.getInt();
+      rest = binaryParser.getString();
+      if (chromId < chrIdx1 || chromId === chrIdx1 && chromEnd < bpStart) continue;else if (chromId > chrIdx2 || chromId === chrIdx2 && chromStart >= bpEnd) break;
+      feature = {
+        chr: chr,
+        start: chromStart,
+        end: chromEnd
+      };
+      featureArray.push(feature);
+      tokens = rest.split("\t");
+
+      if (tokens.length > 0) {
+        feature.name = tokens[0];
+      }
+
+      if (tokens.length > 1) {
+        feature.score = parseFloat(tokens[1]);
+      }
+
+      if (tokens.length > 2) {
+        feature.strand = tokens[2];
+      }
+
+      if (tokens.length > 3) {
+        feature.cdStart = parseInt(tokens[3]);
+      }
+
+      if (tokens.length > 4) {
+        feature.cdEnd = parseInt(tokens[4]);
+      }
+
+      if (tokens.length > 5) {
+        if (tokens[5] !== "." && tokens[5] !== "0" && tokens[5] !== "-1") {
+          var c = IGVColor.createColorString(tokens[5]);
+          feature.color = c.startsWith("rgb") ? c : undefined;
+        }
+      }
+
+      if (tokens.length > 8) {
+        exonCount = parseInt(tokens[6]);
+        exonSizes = tokens[7].split(',');
+        exonStarts = tokens[8].split(',');
+        exons = [];
+
+        for (var i = 0; i < exonCount; i++) {
+          eStart = chromStart + parseInt(exonStarts[i]);
+          eEnd = eStart + parseInt(exonSizes[i]);
+          exons.push({
+            start: eStart,
+            end: eEnd
+          });
+        }
+
+        feature.exons = exons;
+      }
+    }
+  }
+
+  function decodeZoomData(data, chrIdx1, bpStart, chrIdx2, bpEnd, featureArray, chrDict, windowFunction) {
+    var binaryParser = new BinaryParser(data),
+        minSize = 8 * 4,
+        // Minimum # of bytes required for a zoom record
+    chromId,
+        chromStart,
+        chromEnd,
+        validCount,
+        minVal,
+        maxVal,
+        sumData,
+        sumSquares,
+        value,
+        chr;
+
+    while (binaryParser.remLength() >= minSize) {
+      chromId = binaryParser.getInt();
+      chr = chrDict[chromId];
+      chromStart = binaryParser.getInt();
+      chromEnd = binaryParser.getInt();
+      validCount = binaryParser.getInt();
+      minVal = binaryParser.getFloat();
+      maxVal = binaryParser.getFloat();
+      sumData = binaryParser.getFloat();
+      sumSquares = binaryParser.getFloat();
+
+      switch (windowFunction) {
+        case "min":
+          value = minVal;
+          break;
+
+        case "max":
+          value = maxVal;
+          break;
+
+        default:
+          value = validCount === 0 ? 0 : sumData / validCount;
+      }
+
+      if (chromId < chrIdx1 || chromId === chrIdx1 && chromEnd < bpStart) continue;else if (chromId > chrIdx2 || chromId === chrIdx2 && chromStart >= bpEnd) break;
+
+      if (Number.isFinite(value)) {
+        featureArray.push({
+          chr: chr,
+          start: chromStart,
+          end: chromEnd,
+          value: value
+        });
+      }
+    }
+  }
+
+  /*
+   * The MIT License (MIT)
+   *
+   * Copyright (c) 2014 Broad Institute
+   *
+   * Permission is hereby granted, free of charge, to any person obtaining a copy
+   * of this software and associated documentation files (the "Software"), to deal
+   * in the Software without restriction, including without limitation the rights
+   * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+   * copies of the Software, and to permit persons to whom the Software is
+   * furnished to do so, subject to the following conditions:
+   *
+   * The above copyright notice and this permission notice shall be included in
+   * all copies or substantial portions of the Software.
+   *
+   *
+   * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+   * THE SOFTWARE.
+   */
+
+  var BWSource = function BWSource(config, genome) {
+    this.reader = new BWReader(config, genome);
+    this.genome = genome;
+    this.wgValues = {};
+  };
+
+  BWSource.prototype.getFeatures = function (chr, bpStart, bpEnd, bpPerPixel, windowFunction) {
+    var self = this;
+
+    if (chr.toLowerCase() === "all") {
+      return self.getWGValues(windowFunction);
+    } else {
+      return self.reader.readFeatures(chr, bpStart, chr, bpEnd, bpPerPixel, windowFunction);
+    }
+  };
+
+  BWSource.prototype.getDefaultRange = function () {
+    if (this.reader.totalSummary !== undefined) {
+      return this.reader.totalSummary.defaultRange;
+    } else {
+      return undefined;
+    }
+  };
+
+  BWSource.prototype.defaultVisibilityWindow = function () {
+    if (this.reader.type === 'bigwig') {
+      return Promise.resolve(undefined);
+    } else {
+      // bigbed
+      var genomeSize = this.genome ? this.genome.getGenomeLength() : 3088286401;
+      return this.reader.loadHeader().then(function (header) {
+        // Estimate window size to return ~ 1,000 features, assuming even distribution across the genome
+        return 1000 * (genomeSize / header.dataCount);
+      });
+    }
+  };
+
+  BWSource.prototype.getWGValues = function (windowFunction) {
+    var self = this,
+        bpPerPixel,
+        nominalScreenWidth = 500; // This doesn't need to be precise
+
+    var genome = this.genome;
+
+    if (self.wgValues[windowFunction]) {
+      return Promise.resolve(self.wgValues[windowFunction]);
+    } else {
+      bpPerPixel = genome.getGenomeLength() / nominalScreenWidth;
+      return self.reader.readWGFeatures(bpPerPixel, windowFunction).then(function (features) {
+        var wgValues = [];
+        features.forEach(function (f) {
+          var wgFeature, offset, chr;
+          chr = f.chr;
+          offset = genome.getCumulativeOffset(chr);
+          wgFeature = Object.assign({}, f);
+          wgFeature.chr = "all";
+          wgFeature.start = offset + f.start;
+          wgFeature.end = offset + f.end;
+          wgValues.push(wgFeature);
+        });
+        self.wgValues[windowFunction] = wgValues;
+        return wgValues;
+      });
+    }
+  };
+
+  BWSource.prototype.supportsWholeGenome = function () {
+    return true;
+  };
+
+  function paintAxis(ctx, pixelWidth, pixelHeight) {
+    var x1,
+        x2,
+        y1,
+        y2,
+        a,
+        b,
+        reference,
+        shim,
+        font = {
+      'font': 'normal 10px Arial',
+      'textAlign': 'right',
+      'strokeStyle': "black"
+    };
+
+    if (undefined === this.dataRange || undefined === this.dataRange.max || undefined === this.dataRange.min) {
+      return;
+    }
+
+    IGVGraphics.fillRect(ctx, 0, 0, pixelWidth, pixelHeight, {
+      'fillStyle': "rgb(255, 255, 255)"
+    });
+    reference = 0.95 * pixelWidth;
+    x1 = reference - 8;
+    x2 = reference; //shim = 0.5 * 0.125;
+
+    shim = .01;
+    y1 = y2 = shim * pixelHeight;
+    a = {
+      x: x2,
+      y: y1
+    }; // tick
+
+    IGVGraphics.strokeLine(ctx, x1, y1, x2, y2, font);
+    IGVGraphics.fillText(ctx, prettyPrint(this.dataRange.max), x1 + 4, y1 + 12, font); //shim = 0.25 * 0.125;
+
+    y1 = y2 = (1.0 - shim) * pixelHeight;
+    b = {
+      x: x2,
+      y: y1
+    }; // tick
+
+    IGVGraphics.strokeLine(ctx, x1, y1, x2, y2, font);
+    IGVGraphics.fillText(ctx, prettyPrint(this.dataRange.min), x1 + 4, y1 - 4, font);
+    IGVGraphics.strokeLine(ctx, a.x, a.y, b.x, b.y, font);
+
+    function prettyPrint(number) {
+      // if number >= 100, show whole number
+      // if >= 1 show 1 significant digits
+      // if <  1 show 2 significant digits
+      if (number === 0) {
+        return "0";
+      } else if (Math.abs(number) >= 10) {
+        return number.toFixed();
+      } else if (Math.abs(number) >= 1) {
+        return number.toFixed(1);
+      } else {
+        return number.toFixed(2);
+      }
+    }
+  }
+
+  var dataRangeMenuItem = MenuUtils.dataRangeMenuItem;
+  var WigTrack = extend(TrackBase, function (config, browser) {
+    this.type = "wig";
+    this.featureType = 'numeric'; // Default color, might be overridden by track line
+
+    if (config.color === undefined) {
+      config.color = "rgb(150,150,150)";
+    }
+
+    if (config.height === undefined) {
+      config.height = 50;
+    }
+
+    TrackBase.call(this, config, browser);
+    var format = config.format ? config.format.toLowerCase() : config.format;
+
+    if ("bigwig" === format) {
+      this.featureSource = new BWSource(config, browser.genome);
+    } else if ("tdf" === format) {
+      this.featureSource = new TDFSource(config, browser.genome);
+    } else {
+      this.featureSource = new FeatureSource(config, browser.genome);
+    }
+
+    this.autoscale = config.autoscale || config.max === undefined;
+
+    if (!this.autoscale) {
+      this.dataRange = {
+        min: config.min || 0,
+        max: config.max
+      };
+    }
+
+    this.windowFunction = config.windowFunction || "mean";
+    this.paintAxis = paintAxis;
+    this.graphType = config.graphType || "bar";
+  });
+  WigTrack.prototype.postInit =
+  /*#__PURE__*/
+  _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee() {
+    var header;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return this.getFileHeader();
+
+          case 2:
+            header = _context.sent;
+            if (header) this.setTrackProperties(header);
+
+          case 4:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee, this);
+  }));
+
+  WigTrack.prototype.getFeatures =
+  /*#__PURE__*/
+  function () {
+    var _ref2 = _asyncToGenerator(
+    /*#__PURE__*/
+    regeneratorRuntime.mark(function _callee2(chr, bpStart, bpEnd, bpPerPixel) {
+      return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              return _context2.abrupt("return", this.featureSource.getFeatures(chr, bpStart, bpEnd, bpPerPixel, this.windowFunction));
+
+            case 1:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, this);
+    }));
+
+    return function (_x, _x2, _x3, _x4) {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+
+  WigTrack.prototype.menuItemList = function () {
+    var self = this,
+        menuItems = [];
+    menuItems.push(dataRangeMenuItem(this.trackView));
+    menuItems.push({
+      object: createCheckbox("Autoscale", self.autoscale),
+      click: function click() {
+        self.autoscale = !self.autoscale;
+        self.config.autoscale = self.autoscale;
+        self.trackView.setDataRange(undefined, undefined, self.autoscale);
+      }
+    });
+    return menuItems;
+  };
+
+  WigTrack.prototype.getFileHeader =
+  /*#__PURE__*/
+  _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee3() {
+    return regeneratorRuntime.wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            if (!(typeof this.featureSource.getFileHeader === "function")) {
+              _context3.next = 4;
+              break;
+            }
+
+            _context3.next = 3;
+            return this.featureSource.getFileHeader();
+
+          case 3:
+            this.header = _context3.sent;
+
+          case 4:
+            return _context3.abrupt("return", this.header);
+
+          case 5:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee3, this);
+  }));
+
+  WigTrack.prototype.draw = function (options) {
+    var self = this;
+    var features = options.features;
+    var ctx = options.context;
+    var bpPerPixel = options.bpPerPixel;
+    var bpStart = options.bpStart;
+    var pixelWidth = options.pixelWidth;
+    var pixelHeight = options.pixelHeight;
+    var bpEnd = bpStart + pixelWidth * bpPerPixel + 1;
+    var lastValue = -1;
+    var lastNegValue = 1;
+    var baselineColor;
+
+    if (typeof self.color === "string" && self.color.startsWith("rgb(")) {
+      baselineColor = IGVColor.addAlpha(self.color, 0.1);
+    }
+
+    var yScale = function yScale(yValue) {
+      return (self.dataRange.max - yValue) / (self.dataRange.max - self.dataRange.min) * pixelHeight;
+    };
+
+    var getX = function getX(feature) {
+      var x = Math.floor((feature.start - bpStart) / bpPerPixel);
+      if (isNaN(x)) console.log('isNaN(x). feature start ' + numberFormatter(feature.start) + ' bp start ' + numberFormatter(bpStart));
+      return x;
+    };
+
+    var getWidth = function getWidth(feature, x) {
+      var rectEnd = Math.ceil((feature.end - bpStart) / bpPerPixel);
+      return Math.max(1, rectEnd - x);
+    };
+
+    var drawGuideLines = function drawGuideLines(options) {
+      if (self.config.hasOwnProperty('guideLines')) {
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+          for (var _iterator = self.config.guideLines[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var line = _step.value;
+
+            if (line.hasOwnProperty('color') && line.hasOwnProperty('y') && line.hasOwnProperty('dotted')) {
+              var y = yScale(line.y);
+              var props = {
+                'strokeStyle': line['color'],
+                'strokeWidth': 2
+              };
+              if (line['dotted']) IGVGraphics.dashedLine(options.context, 0, y, options.pixelWidth, y, 5, props);else IGVGraphics.strokeLine(options.context, 0, y, options.pixelWidth, y, props);
+            }
+          }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator.return != null) {
+              _iterator.return();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
+        }
+      }
+    };
+
+    if (features && features.length > 0) {
+      if (self.dataRange.min === undefined) self.dataRange.min = 0; // Max can be less than min if config.min is set but max left to autoscale.   If that's the case there is
+      // nothing to paint.
+
+      if (self.dataRange.max > self.dataRange.min) {
+        if (renderFeature.end < bpStart) return;
+        if (renderFeature.start > bpEnd) return;
+        var _iteratorNormalCompletion2 = true;
+        var _didIteratorError2 = false;
+        var _iteratorError2 = undefined;
+
+        try {
+          for (var _iterator2 = features[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+            var f = _step2.value;
+            renderFeature(f);
+          } // If the track includes negative values draw a baseline
+
+        } catch (err) {
+          _didIteratorError2 = true;
+          _iteratorError2 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
+              _iterator2.return();
+            }
+          } finally {
+            if (_didIteratorError2) {
+              throw _iteratorError2;
+            }
+          }
+        }
+
+        if (self.dataRange.min < 0) {
+          var basepx = self.dataRange.max / (self.dataRange.max - self.dataRange.min) * options.pixelHeight;
+          IGVGraphics.strokeLine(ctx, 0, basepx, options.pixelWidth, basepx, {
+            strokeStyle: baselineColor
+          });
+        }
+      }
+    }
+
+    drawGuideLines(options);
+
+    function renderFeature(feature) {
+      if (feature.value < self.dataRange.min) return;
+      var y = yScale(feature.value);
+      var x = getX(feature);
+      if (isNaN(x)) return;
+      var height = yScale(0) - y;
+      var width = getWidth(feature, x);
+      var c = feature.value < 0 && self.altColor ? self.altColor : self.color;
+      var color = typeof c === "function" ? c(feature.value) : c;
+
+      if (self.graphType === "points") {
+        var pointSize = self.config.pointSize || 3;
+        var px = x + width / 2;
+        IGVGraphics.fillCircle(ctx, px, y, pointSize / 2, {
+          "fillStyle": color,
+          "strokeStyle": color
+        });
+      } else {
+        IGVGraphics.fillRect(ctx, x, y, width, height, {
+          fillStyle: color
+        });
+
+        if (feature.value > 0) {
+          lastValue = feature.value;
+        } else if (feature.value < 0) {
+          lastNegValue = feature.value;
+        }
+      }
+    }
+  };
+
+  WigTrack.prototype.popupData = function (clickState, features) {
+    // We use the featureCache property rather than method to avoid async load.  If the
+    // feature is not already loaded this won't work,  but the user wouldn't be mousing over it either.
+    if (!features) features = this.clickedFeatures(clickState);
+
+    if (features && features.length > 0) {
+      var genomicLocation = clickState.genomicLocation;
+      var referenceFrame = clickState.viewport.genomicState.referenceFrame;
+      var popupData = []; // We need some tolerance around genomicLocation, start with +/- 2 pixels
+
+      var tolerance = 2 * referenceFrame.bpPerPixel;
+      var selectedFeature = binarySearch(features, genomicLocation, tolerance);
+
+      if (selectedFeature) {
+        var posString = selectedFeature.end - selectedFeature.start === 1 ? numberFormatter(selectedFeature.start + 1) : numberFormatter(selectedFeature.start + 1) + "-" + numberFormatter(selectedFeature.end);
+        popupData.push({
+          name: "Position:",
+          value: posString
+        });
+        popupData.push({
+          name: "Value:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",
+          value: numberFormatter(selectedFeature.value)
+        });
+      }
+
+      return popupData;
+    } else {
+      return [];
+    }
+  };
+  /**
+   * Called when the track is removed.  Do any needed cleanup here
+   */
+
+
+  WigTrack.prototype.dispose = function () {
+    this.trackView = undefined;
+  };
+  /**
+   * Return the closest feature to the genomic position +/- the specified tolerance.  Closest is defined
+   * by the minimum of the distance between position and start or end of the feature.
+   *
+   * @param features
+   * @param position
+   * @returns {*}
+   */
+
+
+  function binarySearch(features, position, tolerance) {
+    var startIndex = 0,
+        stopIndex = features.length - 1,
+        index = startIndex + stopIndex >> 1,
+        candidateFeature,
+        tmp; // Use binary search to get the index of at least 1 feature in the click tolerance bounds
+
+    while (!test(features[index], position, tolerance) && startIndex < stopIndex) {
+      if (position < features[index].start) {
+        stopIndex = index - 1;
+      } else if (position > features[index].end) {
+        startIndex = index + 1;
+      }
+
+      index = startIndex + stopIndex >> 1;
+    }
+
+    if (test(features[index], position, tolerance)) {
+      candidateFeature = features[index];
+      if (test(candidateFeature, position, 0)) return candidateFeature; // Else, find closest feature to click
+
+      tmp = index;
+
+      while (tmp-- >= 0) {
+        if (!test(features[tmp]), tolerance) {
+          break;
+        }
+
+        if (test(features[tmp], position, 0)) {
+          return features[tmp];
+        }
+
+        if (delta(features[tmp], position) < delta(candidateFeature, position)) {
+          candidateFeature = features[tmp];
+        }
+
+        tmp = index;
+
+        while (tmp++ < features.length) {
+          if (!test(features[tmp]), tolerance) {
+            break;
+          }
+
+          if (test(features[tmp], position, 0)) {
+            return features[tmp];
+          }
+
+          if (delta(features[tmp], position) < delta(candidateFeature, position)) {
+            candidateFeature = features[tmp];
+          }
+        }
+      }
+
+      return candidateFeature;
+    } else {
+      console.log(position + ' not found!');
+      return undefined;
+    }
+
+    function test(feature, position, tolerance) {
+      return position >= feature.start - tolerance && position <= feature.end + tolerance;
+    }
+
+    function delta(feature, position) {
+      return Math.min(Math.abs(feature.start - position), Math.abs(feature.end - position));
+    }
+  }
+
+  WigTrack.prototype.getState = function () {
+    var config = this.config;
+    config.autoscale = this.autoscale;
+
+    if (!this.autoscale && this.dataRange) {
+      config.min = this.dataRange.min;
+      config.max = this.dataRange.max;
+    }
+
+    return config;
+  };
+
+  WigTrack.prototype.supportsWholeGenome = function () {
+    if (typeof this.featureSource.supportsWholeGenome === 'function') {
+      return this.featureSource.supportsWholeGenome();
+    } else {
+      return false;
+    }
+  };
+
+  var dataRangeMenuItem$1 = MenuUtils.dataRangeMenuItem;
   /**
    * Reader for "bed like" files (tab delimited files with 1 feature per line: bed, gff, vcf, etc)
    *
@@ -26350,6 +28734,15 @@ Context.prototype = {
     } else {
       uriParts = parseUri(this.config.url);
       this.filename = config.filename || uriParts.file;
+    }
+
+    this.autoscale = config.autoscale || config.max === undefined;
+
+    if (!this.autoscale) {
+      this.dataRange = {
+        min: config.min || 0,
+        max: config.max
+      };
     }
 
     this.format = this.config.format;
@@ -26530,6 +28923,21 @@ Context.prototype = {
       }
     }, _callee2, this);
   }));
+
+  FeatureFileReader.prototype.menuItemList = function () {
+    var self = this,
+        menuItems = [];
+    menuItems.push(dataRangeMenuItem$1(this.trackView));
+    menuItems.push({
+      object: createCheckbox("Autoscale", self.autoscale),
+      click: function click() {
+        self.autoscale = !self.autoscale;
+        self.config.autoscale = self.autoscale;
+        self.trackView.setDataRange(undefined, undefined, self.autoscale);
+      }
+    });
+    return menuItems;
+  };
 
   FeatureFileReader.prototype.getParser = function (format, decode, config) {
     switch (format) {
@@ -26918,6 +29326,19 @@ Context.prototype = {
       }
     }, _callee7, this, [[1, 16]]);
   }));
+
+  FeatureFileReader.prototype.getState = function () {
+    var config = this.config;
+    config.autoscale = this.autoscale;
+
+    if (!this.autoscale && this.dataRange) {
+      config.min = this.dataRange.min;
+      config.max = this.dataRange.max;
+    }
+
+    return config;
+  };
+
   FeatureFileReader.prototype.loadFeaturesFromDataURI =
   /*#__PURE__*/
   _asyncToGenerator(
@@ -28987,950 +31408,6 @@ Context.prototype = {
     });
   }
 
-  /*
-   * The MIT License (MIT)
-   *
-   * Copyright (c) 2014 Broad Institute
-   *
-   * Permission is hereby granted, free of charge, to any person obtaining a copy
-   * of this software and associated documentation files (the "Software"), to deal
-   * in the Software without restriction, including without limitation the rights
-   * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-   * copies of the Software, and to permit persons to whom the Software is
-   * furnished to do so, subject to the following conditions:
-   *
-   * The above copyright notice and this permission notice shall be included in
-   * all copies or substantial portions of the Software.
-   *
-   *
-   * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-   * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-   * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-   * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-   * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-   * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-   * THE SOFTWARE.
-   */
-
-  var BufferedReader = function BufferedReader(config, contentLength, bufferSize) {
-    this.path = config.url;
-    this.bufferSize = bufferSize ? bufferSize : 512000;
-    this.range = {
-      start: -1,
-      size: -1
-    };
-    this.config = config;
-  };
-  /**
-   *
-   * @param requestedRange - byte rangeas {start, size}
-   * @param fulfill - function to receive result
-   * @param asUint8 - optional flag to return result as an UInt8Array
-   */
-
-
-  BufferedReader.prototype.dataViewForRange = function (requestedRange, asUint8) {
-    var self = this;
-    var hasData = self.data && self.range.start <= requestedRange.start && self.range.start + self.range.size >= requestedRange.start + requestedRange.size,
-        bufferSize,
-        loadRange;
-
-    if (hasData) {
-      return Promise.resolve(subbuffer(self, requestedRange, asUint8));
-    } else {
-      // If requested range size is specified, expand buffer size
-      if (requestedRange.size) {
-        bufferSize = Math.max(self.bufferSize, requestedRange.size);
-      } else {
-        bufferSize = self.bufferSize;
-      }
-
-      loadRange = {
-        start: requestedRange.start,
-        size: bufferSize
-      };
-      return igvxhr.loadArrayBuffer(self.path, buildOptions(self.config, {
-        range: loadRange
-      })).then(function (arrayBuffer) {
-        self.data = arrayBuffer;
-        self.range = loadRange;
-        return subbuffer(self, requestedRange, asUint8);
-      });
-    }
-
-    function subbuffer(bufferedReader, requestedRange, asUint8) {
-      var len = bufferedReader.data.byteLength,
-          bufferStart = requestedRange.start - bufferedReader.range.start,
-          result = asUint8 ? new Uint8Array(bufferedReader.data, bufferStart, len - bufferStart) : new DataView(bufferedReader.data, bufferStart, len - bufferStart);
-      return result;
-    }
-  };
-
-  /*
-   * The MIT License (MIT)
-   *
-   * Copyright (c) 2014 Broad Institute
-   *
-   * Permission is hereby granted, free of charge, to any person obtaining a copy
-   * of this software and associated documentation files (the "Software"), to deal
-   * in the Software without restriction, including without limitation the rights
-   * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-   * copies of the Software, and to permit persons to whom the Software is
-   * furnished to do so, subject to the following conditions:
-   *
-   * The above copyright notice and this permission notice shall be included in
-   * all copies or substantial portions of the Software.
-   *
-   *
-   * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-   * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-   * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-   * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-   * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-   * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-   * THE SOFTWARE.
-   */
-  var BIGWIG_MAGIC_LTH = 0x888FFC26; // BigWig Magic Low to High
-
-  var BIGWIG_MAGIC_HTL = 0x26FC8F66; // BigWig Magic High to Low
-
-  var BIGBED_MAGIC_LTH = 0x8789F2EB; // BigBed Magic Low to High
-
-  var BIGBED_MAGIC_HTL = 0xEBF28987; // BigBed Magic High to Low
-
-  var BBFILE_HEADER_SIZE = 64;
-  var RPTREE_HEADER_SIZE = 48;
-  var RPTREE_NODE_LEAF_ITEM_SIZE = 32; // leaf item size
-
-  var RPTREE_NODE_CHILD_ITEM_SIZE = 24; // child item size
-
-  var BUFFER_SIZE = 512000; //  buffer
-
-  var BWReader = function BWReader(config, genome) {
-    this.path = config.url;
-    this.genome = genome;
-    this.rpTreeCache = {};
-    this.config = config;
-  };
-
-  BWReader.prototype.readWGFeatures = function (bpPerPixel, windowFunction) {
-    var self = this;
-    var genome = this.genome;
-    return self.getZoomHeaders().then(function (zoomLevelHeaders) {
-      var chrIdx1, chrIdx2, chr1, chr2;
-      chrIdx1 = 0;
-      chrIdx2 = self.chromTree.idToChrom.length - 1;
-      chr1 = self.chromTree.idToChrom[chrIdx1];
-      chr2 = self.chromTree.idToChrom[chrIdx2];
-      return self.readFeatures(chr1, 0, chr2, Number.MAX_VALUE, bpPerPixel, windowFunction);
-    });
-  };
-
-  BWReader.prototype.readFeatures = function (chr1, bpStart, chr2, bpEnd, bpPerPixel, windowFunction) {
-    var self = this,
-        decodeFunction,
-        chrIdx1,
-        chrIdx2;
-    return self.getZoomHeaders().then(function (zoomLevelHeaders) {
-      // Select a biwig "zoom level" appropriate for the current resolution
-      var zoomLevelHeader = zoomLevelForScale(bpPerPixel, zoomLevelHeaders),
-          treeOffset;
-
-      if (zoomLevelHeader) {
-        treeOffset = zoomLevelHeader.indexOffset;
-        decodeFunction = decodeZoomData;
-      } else {
-        treeOffset = self.header.fullIndexOffset;
-
-        if (self.type === "BigWig") {
-          decodeFunction = decodeWigData;
-        } else {
-          decodeFunction = decodeBedData;
-        }
-      }
-
-      return self.loadRPTree(treeOffset);
-    }).then(function (rpTree) {
-      chrIdx1 = self.chromTree.chromToID[chr1];
-      chrIdx2 = self.chromTree.chromToID[chr2];
-
-      if (chrIdx1 === undefined || chrIdx2 === undefined) {
-        return undefined;
-      } else {
-        return rpTree.findLeafItemsOverlapping(chrIdx1, bpStart, chrIdx2, bpEnd);
-      }
-    }).then(function (leafItems) {
-      if (!leafItems || leafItems.length === 0) {
-        return [];
-      } else {
-        // Consolidate leaf items and get all data at once
-        var start = Number.MAX_VALUE;
-        var end = 0;
-        var _iteratorNormalCompletion = true;
-        var _didIteratorError = false;
-        var _iteratorError = undefined;
-
-        try {
-          for (var _iterator = leafItems[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var item = _step.value;
-            start = Math.min(start, item.dataOffset);
-            end = Math.max(end, item.dataOffset + item.dataSize);
-          }
-        } catch (err) {
-          _didIteratorError = true;
-          _iteratorError = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion && _iterator.return != null) {
-              _iterator.return();
-            }
-          } finally {
-            if (_didIteratorError) {
-              throw _iteratorError;
-            }
-          }
-        }
-
-        var size = end - start;
-        return igvxhr.loadArrayBuffer(self.config.url, buildOptions(self.config, {
-          range: {
-            start: start,
-            size: size
-          }
-        })).then(function (arrayBuffer) {
-          var allFeatures = [];
-          var buffer = new Uint8Array(arrayBuffer);
-          var _iteratorNormalCompletion2 = true;
-          var _didIteratorError2 = false;
-          var _iteratorError2 = undefined;
-
-          try {
-            for (var _iterator2 = leafItems[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-              var item = _step2.value;
-              var uint8Array = buffer.subarray(item.dataOffset - start, item.dataOffset + item.dataSize);
-              var plain = void 0;
-              var isCompressed = self.header.uncompressBuffSize > 0;
-
-              if (isCompressed) {
-                var inflate = new Zlib.Inflate(uint8Array);
-                plain = inflate.decompress();
-              } else {
-                plain = uint8Array;
-              }
-
-              decodeFunction(new DataView(plain.buffer), chrIdx1, bpStart, chrIdx2, bpEnd, allFeatures, self.chromTree.idToChrom, windowFunction);
-            }
-          } catch (err) {
-            _didIteratorError2 = true;
-            _iteratorError2 = err;
-          } finally {
-            try {
-              if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
-                _iterator2.return();
-              }
-            } finally {
-              if (_didIteratorError2) {
-                throw _iteratorError2;
-              }
-            }
-          }
-
-          allFeatures.sort(function (a, b) {
-            return a.start - b.start;
-          });
-          return allFeatures;
-        });
-      }
-    });
-  };
-
-  BWReader.prototype.getZoomHeaders = function () {
-    var self = this;
-
-    if (self.zoomLevelHeaders) {
-      return Promise.resolve(self.zoomLevelHeaders);
-    } else {
-      return self.loadHeader().then(function () {
-        return self.zoomLevelHeaders;
-      });
-    }
-  };
-
-  BWReader.prototype.loadHeader = function () {
-    var self = this;
-
-    if (self.header) {
-      return Promise.resolve(self.header);
-    } else {
-      return igvxhr.loadArrayBuffer(self.path, buildOptions(self.config, {
-        range: {
-          start: 0,
-          size: BBFILE_HEADER_SIZE
-        }
-      })).then(function (data) {
-        var header; // Assume low-to-high unless proven otherwise
-
-        self.littleEndian = true;
-        var binaryParser = new BinaryParser(new DataView(data));
-        var magic = binaryParser.getUInt();
-
-        if (magic === BIGWIG_MAGIC_LTH) {
-          self.type = "BigWig";
-        } else if (magic === BIGBED_MAGIC_LTH) {
-          self.type = "BigBed";
-        } else {
-          //Try big endian order
-          self.littleEndian = false;
-          binaryParser.littleEndian = false;
-          binaryParser.position = 0;
-
-          var _magic = binaryParser.getUInt();
-
-          if (_magic === BIGWIG_MAGIC_HTL) {
-            self.type = "BigWig";
-          } else if (_magic === BIGBED_MAGIC_HTL) {
-            self.type = "BigBed";
-          }
-        } // Table 5  "Common header for BigWig and BigBed files"
-
-
-        header = {};
-        header.bwVersion = binaryParser.getUShort();
-        header.nZoomLevels = binaryParser.getUShort();
-        header.chromTreeOffset = binaryParser.getLong();
-        header.fullDataOffset = binaryParser.getLong();
-        header.fullIndexOffset = binaryParser.getLong();
-        header.fieldCount = binaryParser.getUShort();
-        header.definedFieldCount = binaryParser.getUShort();
-        header.autoSqlOffset = binaryParser.getLong();
-        header.totalSummaryOffset = binaryParser.getLong();
-        header.uncompressBuffSize = binaryParser.getInt();
-        header.reserved = binaryParser.getLong();
-        return header;
-      }).then(function (header) {
-        self.header = header;
-        return loadZoomHeadersAndChrTree.call(self);
-      });
-    }
-
-    function loadZoomHeadersAndChrTree() {
-      var self = this;
-      var startOffset = BBFILE_HEADER_SIZE;
-      var range = {
-        start: startOffset,
-        size: self.header.fullDataOffset - startOffset + 5
-      };
-      return igvxhr.loadArrayBuffer(self.path, buildOptions(self.config, {
-        range: range
-      })).then(function (data) {
-        var nZooms = self.header.nZoomLevels;
-        var binaryParser = new BinaryParser(new DataView(data));
-        self.zoomLevelHeaders = [];
-        self.firstZoomDataOffset = Number.MAX_VALUE;
-
-        for (var i = 1; i <= nZooms; i++) {
-          var zoomNumber = nZooms - i;
-          var zlh = new ZoomLevelHeader(zoomNumber, binaryParser);
-          self.firstZoomDataOffset = Math.min(zlh.dataOffset, self.firstZoomDataOffset);
-          self.zoomLevelHeaders[zoomNumber] = zlh;
-        } // Autosql
-
-
-        if (self.header.autoSqlOffset > 0) {
-          binaryParser.position = self.header.autoSqlOffset - startOffset;
-          self.autoSql = binaryParser.getString();
-        } // Total summary
-
-
-        if (self.header.totalSummaryOffset > 0) {
-          binaryParser.position = self.header.totalSummaryOffset - startOffset;
-          self.totalSummary = new BWTotalSummary(binaryParser);
-        } // Chrom data index
-
-
-        if (self.header.chromTreeOffset > 0) {
-          binaryParser.position = self.header.chromTreeOffset - startOffset;
-          self.chromTree = new BPTree(binaryParser, startOffset, self.genome);
-        } else {
-          // TODO -- this is an error, not expected
-          throw "BigWig chromosome tree offset <= 0";
-        } //Finally total data count
-
-
-        binaryParser.position = self.header.fullDataOffset - startOffset;
-        self.header.dataCount = binaryParser.getInt();
-        return self.header;
-      });
-    }
-  };
-
-  BWReader.prototype.loadRPTree = function (offset) {
-    var self = this;
-    var rpTree = self.rpTreeCache[offset];
-
-    if (rpTree) {
-      return Promise.resolve(rpTree);
-    } else {
-      rpTree = new RPTree(offset, self.config, self.littleEndian);
-      return rpTree.load().then(function () {
-        self.rpTreeCache[offset] = rpTree;
-        return rpTree;
-      });
-    }
-  };
-
-  function ZoomLevelHeader(index, byteBuffer) {
-    this.index = index;
-    this.reductionLevel = byteBuffer.getInt();
-    this.reserved = byteBuffer.getInt();
-    this.dataOffset = byteBuffer.getLong();
-    this.indexOffset = byteBuffer.getLong();
-  }
-
-  function RPTree(fileOffset, config, littleEndian) {
-    this.config = config;
-    this.fileOffset = fileOffset; // File offset to beginning of tree
-
-    this.path = config.url;
-    this.littleEndian = littleEndian;
-  }
-
-  RPTree.prototype.load = function () {
-    var self = this;
-    var rootNodeOffset = self.fileOffset + RPTREE_HEADER_SIZE,
-        bufferedReader = new BufferedReader(self.config, BUFFER_SIZE);
-    return self.readNode(rootNodeOffset, bufferedReader).then(function (node) {
-      self.rootNode = node;
-      return self;
-    });
-  };
-
-  RPTree.prototype.readNode = function (filePosition, bufferedReader) {
-    var self = this;
-    var count, isLeaf;
-    return bufferedReader.dataViewForRange({
-      start: filePosition,
-      size: 4
-    }, false).then(function (dataView) {
-      var binaryParser, type, reserved;
-      binaryParser = new BinaryParser(dataView, self.littleEndian);
-      type = binaryParser.getByte();
-      isLeaf = type === 1;
-      reserved = binaryParser.getByte();
-      count = binaryParser.getUShort();
-      filePosition += 4;
-      var bytesRequired = count * (isLeaf ? RPTREE_NODE_LEAF_ITEM_SIZE : RPTREE_NODE_CHILD_ITEM_SIZE);
-      var range2 = {
-        start: filePosition,
-        size: bytesRequired
-      };
-      return bufferedReader.dataViewForRange(range2, false);
-    }).then(function (dataView) {
-      var i,
-          items = new Array(count),
-          binaryParser = new BinaryParser(dataView);
-
-      if (isLeaf) {
-        for (i = 0; i < count; i++) {
-          var item = {
-            isLeaf: true,
-            startChrom: binaryParser.getInt(),
-            startBase: binaryParser.getInt(),
-            endChrom: binaryParser.getInt(),
-            endBase: binaryParser.getInt(),
-            dataOffset: binaryParser.getLong(),
-            dataSize: binaryParser.getLong()
-          };
-          items[i] = item;
-        }
-
-        return new RPTreeNode(items);
-      } else {
-        // non-leaf
-        for (i = 0; i < count; i++) {
-          var _item = {
-            isLeaf: false,
-            startChrom: binaryParser.getInt(),
-            startBase: binaryParser.getInt(),
-            endChrom: binaryParser.getInt(),
-            endBase: binaryParser.getInt(),
-            childOffset: binaryParser.getLong()
-          };
-          items[i] = _item;
-        }
-
-        return new RPTreeNode(items);
-      }
-    });
-  };
-
-  RPTree.prototype.findLeafItemsOverlapping = function (chrIdx1, startBase, chrIdx2, endBase) {
-    var self = this;
-    return new Promise(function (fulfill, reject) {
-      var leafItems = [],
-          processing = new Set(),
-          bufferedReader = new BufferedReader(self.config, BUFFER_SIZE);
-      processing.add(0); // Zero represents the root node
-
-      findLeafItems(self.rootNode, 0);
-
-      function findLeafItems(node, nodeId) {
-        if (overlaps(node, chrIdx1, startBase, chrIdx2, endBase)) {
-          var items = node.items;
-          items.forEach(function (item) {
-            if (overlaps(item, chrIdx1, startBase, chrIdx2, endBase)) {
-              if (item.isLeaf) {
-                leafItems.push(item);
-              } else {
-                if (item.childNode) {
-                  findLeafItems(item.childNode);
-                } else {
-                  processing.add(item.childOffset); // Represent node to-be-loaded by its file position
-
-                  self.readNode(item.childOffset, bufferedReader).then(function (node) {
-                    item.childNode = node;
-                    findLeafItems(node, item.childOffset);
-                  }).catch(reject);
-                }
-              }
-            }
-          });
-        }
-
-        if (nodeId !== undefined) processing.delete(nodeId); // Wait until all nodes are processed
-
-        if (processing.size === 0) {
-          fulfill(leafItems);
-        }
-      }
-    });
-  };
-
-  function RPTreeNode(items) {
-    this.items = items;
-    var minChromId = Number.MAX_VALUE,
-        maxChromId = 0,
-        minStartBase = Number.MAX_VALUE,
-        maxEndBase = 0,
-        i,
-        item;
-
-    for (i = 0; i < items.length; i++) {
-      item = items[i];
-      minChromId = Math.min(minChromId, item.startChrom);
-      maxChromId = Math.max(maxChromId, item.endChrom);
-      minStartBase = Math.min(minStartBase, item.startBase);
-      maxEndBase = Math.max(maxEndBase, item.endBase);
-    }
-
-    this.startChrom = minChromId;
-    this.endChrom = maxChromId;
-    this.startBase = minStartBase;
-    this.endBase = maxEndBase;
-  }
-
-  function BPTree(binaryParser, startOffset, genome) {
-    var magic = binaryParser.getInt();
-    var blockSize = binaryParser.getInt();
-    var keySize = binaryParser.getInt();
-    var valSize = binaryParser.getInt();
-    var itemCount = binaryParser.getLong();
-    var reserved = binaryParser.getLong();
-    var chromToId = {};
-    var idToChrom = [];
-    this.header = {
-      magic: magic,
-      blockSize: blockSize,
-      keySize: keySize,
-      valSize: valSize,
-      itemCount: itemCount,
-      reserved: reserved
-    };
-    this.chromToID = chromToId;
-    this.idToChrom = idToChrom; // Recursively walk tree to populate dictionary
-
-    readTreeNode(binaryParser, -1);
-
-    function readTreeNode(byteBuffer, offset) {
-      if (offset >= 0) byteBuffer.position = offset;
-      var type = byteBuffer.getByte(),
-          reserved = byteBuffer.getByte(),
-          count = byteBuffer.getUShort(),
-          i,
-          key,
-          chromId,
-          chromSize,
-          childOffset,
-          bufferOffset,
-          currOffset;
-
-      if (type === 1) {
-        for (i = 0; i < count; i++) {
-          key = byteBuffer.getFixedLengthTrimmedString(keySize);
-          chromId = byteBuffer.getInt();
-          chromSize = byteBuffer.getInt();
-          if (genome) key = genome.getChromosomeName(key); // Translate to canonical chr name
-
-          chromToId[key] = chromId;
-          idToChrom[chromId] = key;
-        }
-      } else {
-        // non-leaf
-        for (i = 0; i < count; i++) {
-          key = byteBuffer.getFixedLengthTrimmedString(keySize);
-          childOffset = byteBuffer.getLong();
-          bufferOffset = childOffset - startOffset;
-          currOffset = byteBuffer.position;
-          readTreeNode(byteBuffer, bufferOffset);
-          byteBuffer.position = currOffset;
-        }
-      }
-    }
-  }
-  /**
-   * Return true if {chrIdx1:startBase-chrIdx2:endBase} overlaps item's interval
-   * @returns {boolean}
-   */
-
-
-  function overlaps(item, chrIdx1, startBase, chrIdx2, endBase) {
-    if (!item) {
-      console.log("null item for " + chrIdx1 + " " + startBase + " " + endBase);
-      return false;
-    }
-
-    return (chrIdx2 > item.startChrom || chrIdx2 === item.startChrom && endBase >= item.startBase) && (chrIdx1 < item.endChrom || chrIdx1 === item.endChrom && startBase <= item.endBase);
-  }
-
-  function BWTotalSummary(byteBuffer) {
-    if (byteBuffer) {
-      this.basesCovered = byteBuffer.getLong();
-      this.minVal = byteBuffer.getDouble();
-      this.maxVal = byteBuffer.getDouble();
-      this.sumData = byteBuffer.getDouble();
-      this.sumSquares = byteBuffer.getDouble();
-      computeStats.call(this);
-    } else {
-      this.basesCovered = 0;
-      this.minVal = 0;
-      this.maxVal = 0;
-      this.sumData = 0;
-      this.sumSquares = 0;
-      this.mean = 0;
-      this.stddev = 0;
-    }
-  }
-
-  function computeStats() {
-    var n = this.basesCovered;
-
-    if (n > 0) {
-      this.mean = this.sumData / n;
-      this.stddev = Math.sqrt(this.sumSquares / (n - 1));
-      var min = this.minVal < 0 ? this.mean - 2 * this.stddev : 0,
-          max = this.maxVal > 0 ? this.mean + 2 * this.stddev : 0;
-      this.defaultRange = {
-        min: min,
-        max: max
-      };
-    }
-  }
-
-  function zoomLevelForScale(bpPerPixel, zoomLevelHeaders) {
-    var level = null,
-        i,
-        zl;
-
-    for (i = 0; i < zoomLevelHeaders.length; i++) {
-      zl = zoomLevelHeaders[i];
-
-      if (zl.reductionLevel < bpPerPixel) {
-        level = zl;
-        break;
-      }
-    }
-
-    return level;
-  }
-
-  function decodeWigData(data, chrIdx1, bpStart, chrIdx2, bpEnd, featureArray, chrDict) {
-    var binaryParser = new BinaryParser(data),
-        chromId = binaryParser.getInt(),
-        chromStart = binaryParser.getInt(),
-        chromEnd = binaryParser.getInt(),
-        itemStep = binaryParser.getInt(),
-        itemSpan = binaryParser.getInt(),
-        type = binaryParser.getByte(),
-        reserved = binaryParser.getByte(),
-        itemCount = binaryParser.getUShort(),
-        value,
-        chr;
-
-    if (chromId >= chrIdx1 && chromId <= chrIdx2) {
-      while (itemCount-- > 0) {
-        switch (type) {
-          case 1:
-            chromStart = binaryParser.getInt();
-            chromEnd = binaryParser.getInt();
-            value = binaryParser.getFloat();
-            break;
-
-          case 2:
-            chromStart = binaryParser.getInt();
-            value = binaryParser.getFloat();
-            chromEnd = chromStart + itemSpan;
-            break;
-
-          case 3:
-            // Fixed step
-            value = binaryParser.getFloat();
-            chromEnd = chromStart + itemSpan;
-            chromStart += itemStep;
-            break;
-        }
-
-        if (chromId < chrIdx1 || chromId === chrIdx1 && chromEnd < bpStart) continue;else if (chromId > chrIdx2 || chromId === chrIdx2 && chromStart >= bpEnd) break;
-
-        if (Number.isFinite(value)) {
-          chr = chrDict[chromId];
-          featureArray.push({
-            chr: chr,
-            start: chromStart,
-            end: chromEnd,
-            value: value
-          });
-        }
-      }
-    }
-  }
-
-  function decodeBedData(data, chrIdx1, bpStart, chrIdx2, bpEnd, featureArray, chrDict) {
-    var binaryParser = new BinaryParser(data),
-        minSize = 3 * 4 + 1,
-        // Minimum # of bytes required for a bed record
-    chromId,
-        chromStart,
-        chromEnd,
-        rest,
-        tokens,
-        feature,
-        exonCount,
-        exonSizes,
-        exonStarts,
-        exons,
-        eStart,
-        eEnd,
-        chr;
-
-    while (binaryParser.remLength() >= minSize) {
-      chromId = binaryParser.getInt();
-      chr = chrDict[chromId];
-      chromStart = binaryParser.getInt();
-      chromEnd = binaryParser.getInt();
-      rest = binaryParser.getString();
-      if (chromId < chrIdx1 || chromId === chrIdx1 && chromEnd < bpStart) continue;else if (chromId > chrIdx2 || chromId === chrIdx2 && chromStart >= bpEnd) break;
-      feature = {
-        chr: chr,
-        start: chromStart,
-        end: chromEnd
-      };
-      featureArray.push(feature);
-      tokens = rest.split("\t");
-
-      if (tokens.length > 0) {
-        feature.name = tokens[0];
-      }
-
-      if (tokens.length > 1) {
-        feature.score = parseFloat(tokens[1]);
-      }
-
-      if (tokens.length > 2) {
-        feature.strand = tokens[2];
-      }
-
-      if (tokens.length > 3) {
-        feature.cdStart = parseInt(tokens[3]);
-      }
-
-      if (tokens.length > 4) {
-        feature.cdEnd = parseInt(tokens[4]);
-      }
-
-      if (tokens.length > 5) {
-        if (tokens[5] !== "." && tokens[5] !== "0" && tokens[5] !== "-1") {
-          var c = IGVColor.createColorString(tokens[5]);
-          feature.color = c.startsWith("rgb") ? c : undefined;
-        }
-      }
-
-      if (tokens.length > 8) {
-        exonCount = parseInt(tokens[6]);
-        exonSizes = tokens[7].split(',');
-        exonStarts = tokens[8].split(',');
-        exons = [];
-
-        for (var i = 0; i < exonCount; i++) {
-          eStart = chromStart + parseInt(exonStarts[i]);
-          eEnd = eStart + parseInt(exonSizes[i]);
-          exons.push({
-            start: eStart,
-            end: eEnd
-          });
-        }
-
-        feature.exons = exons;
-      }
-    }
-  }
-
-  function decodeZoomData(data, chrIdx1, bpStart, chrIdx2, bpEnd, featureArray, chrDict, windowFunction) {
-    var binaryParser = new BinaryParser(data),
-        minSize = 8 * 4,
-        // Minimum # of bytes required for a zoom record
-    chromId,
-        chromStart,
-        chromEnd,
-        validCount,
-        minVal,
-        maxVal,
-        sumData,
-        sumSquares,
-        value,
-        chr;
-
-    while (binaryParser.remLength() >= minSize) {
-      chromId = binaryParser.getInt();
-      chr = chrDict[chromId];
-      chromStart = binaryParser.getInt();
-      chromEnd = binaryParser.getInt();
-      validCount = binaryParser.getInt();
-      minVal = binaryParser.getFloat();
-      maxVal = binaryParser.getFloat();
-      sumData = binaryParser.getFloat();
-      sumSquares = binaryParser.getFloat();
-
-      switch (windowFunction) {
-        case "min":
-          value = minVal;
-          break;
-
-        case "max":
-          value = maxVal;
-          break;
-
-        default:
-          value = validCount === 0 ? 0 : sumData / validCount;
-      }
-
-      if (chromId < chrIdx1 || chromId === chrIdx1 && chromEnd < bpStart) continue;else if (chromId > chrIdx2 || chromId === chrIdx2 && chromStart >= bpEnd) break;
-
-      if (Number.isFinite(value)) {
-        featureArray.push({
-          chr: chr,
-          start: chromStart,
-          end: chromEnd,
-          value: value
-        });
-      }
-    }
-  }
-
-  /*
-   * The MIT License (MIT)
-   *
-   * Copyright (c) 2014 Broad Institute
-   *
-   * Permission is hereby granted, free of charge, to any person obtaining a copy
-   * of this software and associated documentation files (the "Software"), to deal
-   * in the Software without restriction, including without limitation the rights
-   * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-   * copies of the Software, and to permit persons to whom the Software is
-   * furnished to do so, subject to the following conditions:
-   *
-   * The above copyright notice and this permission notice shall be included in
-   * all copies or substantial portions of the Software.
-   *
-   *
-   * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-   * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-   * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-   * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-   * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-   * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-   * THE SOFTWARE.
-   */
-
-  var BWSource = function BWSource(config, genome) {
-    this.reader = new BWReader(config, genome);
-    this.genome = genome;
-    this.wgValues = {};
-  };
-
-  BWSource.prototype.getFeatures = function (chr, bpStart, bpEnd, bpPerPixel, windowFunction) {
-    var self = this;
-
-    if (chr.toLowerCase() === "all") {
-      return self.getWGValues(windowFunction);
-    } else {
-      return self.reader.readFeatures(chr, bpStart, chr, bpEnd, bpPerPixel, windowFunction);
-    }
-  };
-
-  BWSource.prototype.getDefaultRange = function () {
-    if (this.reader.totalSummary !== undefined) {
-      return this.reader.totalSummary.defaultRange;
-    } else {
-      return undefined;
-    }
-  };
-
-  BWSource.prototype.defaultVisibilityWindow = function () {
-    if (this.reader.type === 'bigwig') {
-      return Promise.resolve(undefined);
-    } else {
-      // bigbed
-      var genomeSize = this.genome ? this.genome.getGenomeLength() : 3088286401;
-      return this.reader.loadHeader().then(function (header) {
-        // Estimate window size to return ~ 1,000 features, assuming even distribution across the genome
-        return 1000 * (genomeSize / header.dataCount);
-      });
-    }
-  };
-
-  BWSource.prototype.getWGValues = function (windowFunction) {
-    var self = this,
-        bpPerPixel,
-        nominalScreenWidth = 500; // This doesn't need to be precise
-
-    var genome = this.genome;
-
-    if (self.wgValues[windowFunction]) {
-      return Promise.resolve(self.wgValues[windowFunction]);
-    } else {
-      bpPerPixel = genome.getGenomeLength() / nominalScreenWidth;
-      return self.reader.readWGFeatures(bpPerPixel, windowFunction).then(function (features) {
-        var wgValues = [];
-        features.forEach(function (f) {
-          var wgFeature, offset, chr;
-          chr = f.chr;
-          offset = genome.getCumulativeOffset(chr);
-          wgFeature = Object.assign({}, f);
-          wgFeature.chr = "all";
-          wgFeature.start = offset + f.start;
-          wgFeature.end = offset + f.end;
-          wgValues.push(wgFeature);
-        });
-        self.wgValues[windowFunction] = wgValues;
-        return wgValues;
-      });
-    }
-  };
-
-  BWSource.prototype.supportsWholeGenome = function () {
-    return true;
-  };
-
   var GtexUtils = {
     getTissueInfo: function getTissueInfo(datasetId, baseURL) {
       datasetId = datasetId || 'gtex_v8';
@@ -29951,6 +31428,276 @@ Context.prototype = {
         visibilityWindow: 250000
       };
     }
+  };
+
+  /*
+   * The MIT License (MIT)
+   *
+   * Copyright (c) 2014 Broad Institute
+   *
+   * Permission is hereby granted, free of charge, to any person obtaining a copy
+   * of this software and associated documentation files (the "Software"), to deal
+   * in the Software without restriction, including without limitation the rights
+   * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+   * copies of the Software, and to permit persons to whom the Software is
+   * furnished to do so, subject to the following conditions:
+   *
+   * The above copyright notice and this permission notice shall be included in
+   * all copies or substantial portions of the Software.
+   *
+   *
+   * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+   * THE SOFTWARE.
+   */
+  var dataRangeMenuItem$2 = MenuUtils.dataRangeMenuItem;
+  var EqtlTrack = extend(TrackBase, function (config, browser) {
+    var url = config.url,
+        label = config.name;
+    this.config = config;
+    this.url = url;
+    this.name = label;
+    this.pValueField = config.pValueField || "pValue";
+    this.geneField = config.geneField || "geneSymbol";
+    this.snpField = config.snpField || "snp";
+    var min = config.minLogP || config.min;
+    var max = config.maxLogP || config.max;
+    this.dataRange = {
+      min: min || 3.5,
+      max: max || 25
+    };
+
+    if (!max) {
+      this.autoscale = true;
+    } else {
+      this.autoscale = config.autoscale;
+    }
+
+    this.autoscalePercentile = config.autoscalePercentile === undefined ? 98 : config.autoscalePercentile;
+    this.background = config.background; // No default
+
+    this.divider = config.divider || "rgb(225,225,225)";
+    this.dotSize = config.dotSize || 2;
+    this.height = config.height || 100;
+    this.autoHeight = false;
+    this.disableButtons = config.disableButtons; // Limit visibility window to 2 mb,  gtex server gets flaky beyond that
+
+    this.visibilityWindow = config.visibilityWindow === undefined ? 2000000 : config.visibilityWindow >= 0 ? Math.min(2000000, config.visibilityWindow) : 2000000;
+    this.featureSource = new FeatureSource(config, browser.genome);
+    GtexUtils.gtexLoaded = true;
+  });
+
+  EqtlTrack.prototype.paintAxis = function (ctx, pixelWidth, pixelHeight) {
+    var track = this,
+        yScale = (track.dataRange.max - track.dataRange.min) / pixelHeight;
+    var font = {
+      'font': 'normal 10px Arial',
+      'textAlign': 'right',
+      'strokeStyle': "black"
+    };
+    IGVGraphics.fillRect(ctx, 0, 0, pixelWidth, pixelHeight, {
+      'fillStyle': "rgb(255, 255, 255)"
+    }); // Determine a tick spacing such that there is at least 10 pixels between ticks
+
+    var n = Math.ceil((this.dataRange.max - this.dataRange.min) * 10 / pixelHeight);
+
+    for (var p = 4; p <= track.dataRange.max; p += n) {
+      var x1, x2, y1, y2, ref; // TODO: Dashes may not actually line up with correct scale. Ask Jim about this
+
+      ref = 0.85 * pixelWidth;
+      x1 = ref - 5;
+      x2 = ref;
+      y1 = y2 = pixelHeight - Math.round((p - track.dataRange.min) / yScale);
+      IGVGraphics.strokeLine(ctx, x1, y1, x2, y2, font); // Offset dashes up by 2 pixel
+
+      if (y1 > 8) {
+        IGVGraphics.fillText(ctx, p, x1 - 1, y1 + 2, font);
+      } // Offset numbers down by 2 pixels;
+
+    }
+
+    font['textAlign'] = 'center';
+    IGVGraphics.fillText(ctx, "-log10(pvalue)", pixelWidth / 4, pixelHeight / 2, font, {
+      rotate: {
+        angle: -90
+      }
+    });
+  };
+
+  EqtlTrack.prototype.getFeatures = function (chr, bpStart, bpEnd) {
+    var pValueField = this.pValueField;
+    return this.featureSource.getFeatures(chr, bpStart, bpEnd).then(function (features) {
+      features.forEach(function (f) {
+        f.value = f[pValueField];
+      });
+      return features;
+    });
+  };
+
+  EqtlTrack.prototype.draw = function (options) {
+    var self = this,
+        featureList = options.features,
+        ctx = options.context,
+        bpPerPixel = options.bpPerPixel,
+        bpStart = options.bpStart,
+        pixelWidth = options.pixelWidth,
+        pixelHeight = options.pixelHeight,
+        yScale = (self.dataRange.max - self.dataRange.min) / pixelHeight,
+        selection = options.genomicState.selection; // Background
+
+    if (this.background) IGVGraphics.fillRect(ctx, 0, 0, pixelWidth, pixelHeight, {
+      'fillStyle': this.background
+    });
+    IGVGraphics.strokeLine(ctx, 0, pixelHeight - 1, pixelWidth, pixelHeight - 1, {
+      'strokeStyle': this.divider
+    });
+
+    if (ctx) {
+      var len = featureList.length;
+      ctx.save(); // Draw in two passes, with "selected" eqtls drawn last
+
+      drawEqtls(false);
+      drawEqtls(true);
+      ctx.restore();
+    }
+
+    function drawEqtls(drawSelected) {
+      var radius = drawSelected ? 2 * self.dotSize : self.dotSize,
+          eqtl,
+          i,
+          px,
+          py,
+          color,
+          isSelected,
+          snp,
+          geneName,
+          capped;
+
+      for (i = 0; i < len; i++) {
+        eqtl = featureList[i];
+        px = Math.round(eqtl.position - bpStart + 0.5) / bpPerPixel;
+        if (px < 0) continue;else if (px > pixelWidth) break;
+        snp = eqtl.snp.toUpperCase();
+        geneName = eqtl[self.geneField].toUpperCase();
+        isSelected = selection && (selection.snp === snp || selection.gene === geneName);
+
+        if (!drawSelected || isSelected) {
+          // Add eqtl's gene to the selection if this is the selected snp.
+          // TODO -- this should not be done here in the rendering code.
+          if (selection && selection.snp === snp) {
+            selection.addGene(geneName);
+          }
+
+          var mLogP = -Math.log(eqtl[self.pValueField]) / Math.LN10;
+
+          if (mLogP >= self.dataRange.min) {
+            if (mLogP > self.dataRange.max) {
+              mLogP = self.dataRange.max;
+              capped = true;
+            } else {
+              capped = false;
+            }
+
+            py = Math.max(0 + radius, pixelHeight - Math.round((mLogP - self.dataRange.min) / yScale));
+            eqtl.px = px;
+            eqtl.py = py;
+
+            if (drawSelected && selection) {
+              color = selection.colorForGene(geneName);
+              IGVGraphics.setProperties(ctx, {
+                fillStyle: color,
+                strokeStyle: "black"
+              });
+            } else {
+              color = capped ? "rgb(150, 150, 150)" : "rgb(180, 180, 180)";
+              IGVGraphics.setProperties(ctx, {
+                fillStyle: color,
+                strokeStyle: color
+              });
+            }
+
+            IGVGraphics.fillCircle(ctx, px, py, radius);
+            IGVGraphics.strokeCircle(ctx, px, py, radius);
+          }
+        }
+      }
+    }
+  };
+  /**
+   * Return "popup data" for feature @ genomic location.  Data is an array of key-value pairs
+   */
+
+
+  EqtlTrack.prototype.popupData = function (config) {
+    var features = config.viewport.getCachedFeatures();
+    if (!features || features.length === 0) return [];
+    var genomicLocation = config.genomicLocation,
+        xOffset = config.x,
+        yOffset = config.y,
+        referenceFrame = config.viewport.genomicState.referenceFrame,
+        tolerance = 2 * this.dotSize * referenceFrame.bpPerPixel,
+        dotSize = this.dotSize,
+        tissue = this.name,
+        popupData = [];
+    features.forEach(function (feature) {
+      if (feature.end >= genomicLocation - tolerance && feature.start <= genomicLocation + tolerance && feature.py - yOffset < 2 * dotSize) {
+        if (popupData.length > 0) {
+          popupData.push("<hr>");
+        }
+
+        popupData.push({
+          name: "snp id",
+          value: feature.snp
+        }, {
+          name: "gene id",
+          value: feature.geneId
+        }, {
+          name: "gene name",
+          value: feature.geneName
+        }, {
+          name: "p value",
+          value: feature.pValue
+        }, {
+          name: "tissue",
+          value: tissue
+        });
+      }
+    });
+    return popupData;
+  };
+
+  EqtlTrack.prototype.menuItemList = function () {
+    var self = this,
+        menuItems = [];
+    menuItems.push(dataRangeMenuItem$2(this.trackView));
+    menuItems.push({
+      object: createCheckbox("Autoscale", self.autoscale),
+      click: function click() {
+        self.autoscale = !self.autoscale;
+        self.config.autoscale = self.autoscale;
+        self.trackView.setDataRange(undefined, undefined, self.autoscale);
+      }
+    });
+    return menuItems;
+  };
+
+  EqtlTrack.prototype.doAutoscale = function (featureList) {
+    if (featureList.length > 0) {
+      var values = featureList.map(function (eqtl) {
+        return -Math.log(eqtl.value) / Math.LN10;
+      });
+      this.dataRange.max = IGVMath.percentile(values, this.autoscalePercentile);
+    } else {
+      // No features -- default
+      var max = this.config.maxLogP || this.config.max;
+      this.dataRange.max = max || 25;
+    }
+
+    return this.dataRange;
   };
 
   var JUNCTION_MOTIF_PALETTE = new PaletteColorTable("Dark2"); // Lock in color-to-motif mapping so it's independent of data loading order. This list may not include all possible
@@ -31292,1445 +33039,6 @@ Context.prototype = {
 
   SequenceTrack.prototype.computePixelHeight = function (ignore) {
     return this.height;
-  };
-
-  var GZIP_FLAG = 0x1;
-
-  var TDFReader = function TDFReader(config, genome) {
-    this.config = config;
-    this.genome = genome;
-    this.path = config.url;
-    this.groupCache = {};
-    this.datasetCache = {};
-  };
-
-  TDFReader.prototype.readHeader =
-  /*#__PURE__*/
-  _asyncToGenerator(
-  /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee() {
-    var data, binaryParser, headerSize, nWindowFunctions, nTracks, nEntries, _name, pos, size, _name2, _pos, _size;
-
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            if (!(this.magic !== undefined)) {
-              _context.next = 2;
-              break;
-            }
-
-            return _context.abrupt("return", this);
-
-          case 2:
-            _context.next = 4;
-            return igvxhr.loadArrayBuffer(this.path, buildOptions(this.config, {
-              range: {
-                start: 0,
-                size: 64000
-              }
-            }));
-
-          case 4:
-            data = _context.sent;
-            binaryParser = new BinaryParser(new DataView(data));
-            this.magic = binaryParser.getInt();
-            this.version = binaryParser.getInt();
-            this.indexPos = binaryParser.getLong();
-            this.indexSize = binaryParser.getInt();
-            headerSize = binaryParser.getInt();
-
-            if (this.version >= 2) {
-              nWindowFunctions = binaryParser.getInt();
-              this.windowFunctions = [];
-
-              while (nWindowFunctions-- > 0) {
-                this.windowFunctions.push(binaryParser.getString());
-              }
-            }
-
-            this.trackType = binaryParser.getString();
-            this.trackLine = binaryParser.getString();
-            nTracks = binaryParser.getInt();
-            this.trackNames = [];
-
-            while (nTracks-- > 0) {
-              this.trackNames.push(binaryParser.getString());
-            }
-
-            this.genomeID = binaryParser.getString();
-            this.flags = binaryParser.getInt();
-            this.compressed = (this.flags & GZIP_FLAG) !== 0; // Now read index
-
-            _context.next = 22;
-            return igvxhr.loadArrayBuffer(this.path, buildOptions(this.config, {
-              range: {
-                start: this.indexPos,
-                size: this.indexSize
-              }
-            }));
-
-          case 22:
-            data = _context.sent;
-            binaryParser = new BinaryParser(new DataView(data));
-            this.datasetIndex = {};
-            nEntries = binaryParser.getInt();
-
-            while (nEntries-- > 0) {
-              _name = binaryParser.getString();
-              pos = binaryParser.getLong();
-              size = binaryParser.getInt();
-              this.datasetIndex[_name] = {
-                position: pos,
-                size: size
-              };
-            }
-
-            this.groupIndex = {};
-            nEntries = binaryParser.getInt();
-
-            while (nEntries-- > 0) {
-              _name2 = binaryParser.getString();
-              _pos = binaryParser.getLong();
-              _size = binaryParser.getInt();
-              this.groupIndex[_name2] = {
-                position: _pos,
-                size: _size
-              };
-            }
-
-            return _context.abrupt("return", this);
-
-          case 31:
-          case "end":
-            return _context.stop();
-        }
-      }
-    }, _callee, this);
-  }));
-
-  TDFReader.prototype.readDataset =
-  /*#__PURE__*/
-  function () {
-    var _ref2 = _asyncToGenerator(
-    /*#__PURE__*/
-    regeneratorRuntime.mark(function _callee2(chr, windowFunction, zoom) {
-      var key, wf, zoomString, dsName, indexEntry, data, binaryParser, nAttributes, attributes, dataType, tileWidth, nTiles, tiles, dataset;
-      return regeneratorRuntime.wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              key = chr + "_" + windowFunction + "_" + zoom;
-
-              if (!this.datasetCache[key]) {
-                _context2.next = 5;
-                break;
-              }
-
-              return _context2.abrupt("return", this.datasetCache[key]);
-
-            case 5:
-              _context2.next = 7;
-              return this.readHeader();
-
-            case 7:
-              wf = this.version < 2 ? "" : "/" + windowFunction;
-              zoomString = chr.toLowerCase() === "all" || zoom === undefined ? "0" : zoom.toString();
-
-              if (windowFunction === "raw") {
-                dsName = "/" + chr + "/raw";
-              } else {
-                dsName = "/" + chr + "/z" + zoomString + wf;
-              }
-
-              indexEntry = this.datasetIndex[dsName];
-
-              if (!(indexEntry === undefined)) {
-                _context2.next = 13;
-                break;
-              }
-
-              return _context2.abrupt("return", undefined);
-
-            case 13:
-              _context2.next = 15;
-              return igvxhr.loadArrayBuffer(this.path, buildOptions(this.config, {
-                range: {
-                  start: indexEntry.position,
-                  size: indexEntry.size
-                }
-              }));
-
-            case 15:
-              data = _context2.sent;
-
-              if (data) {
-                _context2.next = 18;
-                break;
-              }
-
-              return _context2.abrupt("return", undefined);
-
-            case 18:
-              binaryParser = new BinaryParser(new DataView(data));
-              nAttributes = binaryParser.getInt();
-              attributes = {};
-
-              while (nAttributes-- > 0) {
-                attributes[binaryParser.getString()] = binaryParser.getString();
-              }
-
-              dataType = binaryParser.getString();
-              tileWidth = binaryParser.getFloat();
-              nTiles = binaryParser.getInt();
-              tiles = [];
-
-              while (nTiles-- > 0) {
-                tiles.push({
-                  position: binaryParser.getLong(),
-                  size: binaryParser.getInt()
-                });
-              }
-
-              dataset = {
-                name: dsName,
-                attributes: attributes,
-                dataType: dataType,
-                tileWidth: tileWidth,
-                tiles: tiles
-              };
-              this.datasetCache[key] = dataset;
-              return _context2.abrupt("return", dataset);
-
-            case 30:
-            case "end":
-              return _context2.stop();
-          }
-        }
-      }, _callee2, this);
-    }));
-
-    return function (_x, _x2, _x3) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
-
-  TDFReader.prototype.readRootGroup =
-  /*#__PURE__*/
-  _asyncToGenerator(
-  /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee3() {
-    var genome, rootGroup, group, names, maxZoomString, chrAliasTable;
-    return regeneratorRuntime.wrap(function _callee3$(_context3) {
-      while (1) {
-        switch (_context3.prev = _context3.next) {
-          case 0:
-            genome = this.genome;
-            rootGroup = this.groupCache["/"];
-
-            if (!rootGroup) {
-              _context3.next = 6;
-              break;
-            }
-
-            return _context3.abrupt("return", rootGroup);
-
-          case 6:
-            _context3.next = 8;
-            return this.readGroup("/");
-
-          case 8:
-            group = _context3.sent;
-            names = group["chromosomes"];
-            maxZoomString = group["maxZoom"]; // Now parse out interesting attributes.  This is a side effect, but the alternative is messy as well.
-
-            if (maxZoomString) {
-              this.maxZoom = Number(maxZoomString);
-            } // Chromosome names
-
-
-            chrAliasTable = {};
-
-            if (names) {
-              names.split(",").forEach(function (chr) {
-                var canonicalName = genome.getChromosomeName(chr);
-                chrAliasTable[canonicalName] = chr;
-              });
-            }
-
-            this.chrAliasTable = chrAliasTable;
-            this.groupCache["/"] = group;
-            return _context3.abrupt("return", group);
-
-          case 17:
-          case "end":
-            return _context3.stop();
-        }
-      }
-    }, _callee3, this);
-  }));
-
-  TDFReader.prototype.readGroup =
-  /*#__PURE__*/
-  function () {
-    var _ref4 = _asyncToGenerator(
-    /*#__PURE__*/
-    regeneratorRuntime.mark(function _callee4(name) {
-      var group, indexEntry, data, binaryParser, _group, nAttributes, key, value;
-
-      return regeneratorRuntime.wrap(function _callee4$(_context4) {
-        while (1) {
-          switch (_context4.prev = _context4.next) {
-            case 0:
-              group = this.groupCache[name];
-
-              if (!group) {
-                _context4.next = 5;
-                break;
-              }
-
-              return _context4.abrupt("return", group);
-
-            case 5:
-              _context4.next = 7;
-              return this.readHeader();
-
-            case 7:
-              indexEntry = this.groupIndex[name];
-
-              if (!(indexEntry === undefined)) {
-                _context4.next = 10;
-                break;
-              }
-
-              return _context4.abrupt("return", undefined);
-
-            case 10:
-              _context4.next = 12;
-              return igvxhr.loadArrayBuffer(this.path, buildOptions(this.config, {
-                range: {
-                  start: indexEntry.position,
-                  size: indexEntry.size
-                }
-              }));
-
-            case 12:
-              data = _context4.sent;
-
-              if (data) {
-                _context4.next = 15;
-                break;
-              }
-
-              return _context4.abrupt("return", undefined);
-
-            case 15:
-              binaryParser = new BinaryParser(new DataView(data));
-              _group = {
-                name: name
-              };
-              nAttributes = binaryParser.getInt();
-
-              while (nAttributes-- > 0) {
-                key = binaryParser.getString();
-                value = binaryParser.getString();
-                _group[key] = value;
-              }
-
-              this.groupCache[name] = _group;
-              return _context4.abrupt("return", _group);
-
-            case 21:
-            case "end":
-              return _context4.stop();
-          }
-        }
-      }, _callee4, this);
-    }));
-
-    return function (_x4) {
-      return _ref4.apply(this, arguments);
-    };
-  }();
-
-  function createFixedStep(binaryParser, nTracks) {
-    var nPositions = binaryParser.getInt();
-    var start = binaryParser.getInt();
-    var span = binaryParser.getFloat();
-    var data = [];
-    var nt = nTracks;
-
-    while (nt-- > 0) {
-      var np = nPositions;
-      var dtrack = [];
-
-      while (np-- > 0) {
-        dtrack.push(binaryParser.getFloat());
-      }
-
-      data.push(dtrack);
-    }
-
-    return {
-      type: "fixedStep",
-      start: start,
-      span: span,
-      data: data,
-      nTracks: nTracks,
-      nPositions: nPositions
-    };
-  }
-
-  function createVariableStep(binaryParser, nTracks) {
-    var tileStart = binaryParser.getInt();
-    var span = binaryParser.getFloat();
-    var nPositions = binaryParser.getInt();
-    var start = [];
-    var np = nPositions;
-
-    while (np-- > 0) {
-      start.push(binaryParser.getInt());
-    }
-
-    var nS = binaryParser.getInt(); // # of samples, ignored but should === nTracks
-
-    var data = [];
-    var nt = nTracks;
-
-    while (nt-- > 0) {
-      np = nPositions;
-      var dtrack = [];
-
-      while (np-- > 0) {
-        dtrack.push(binaryParser.getFloat());
-      }
-
-      data.push(dtrack);
-    }
-
-    return {
-      type: "variableStep",
-      tileStart: tileStart,
-      span: span,
-      start: start,
-      data: data,
-      nTracks: nTracks,
-      nPositions: nPositions
-    };
-  }
-
-  function createBed(binaryParser, nTracks, type) {
-    var nPositions = binaryParser.getInt();
-    var n = nPositions;
-    var start = [];
-
-    while (n-- > 0) {
-      start.push(binaryParser.getInt());
-    }
-
-    n = nPositions;
-    var end = [];
-
-    while (n-- > 0) {
-      end.push(binaryParser.getInt());
-    }
-
-    var nS = binaryParser.getInt(); // # of samples, ignored but should === nTracks
-
-    var data = [];
-    var nt = nTracks;
-
-    while (nt-- > 0) {
-      var np = nPositions;
-      var dtrack = [];
-
-      while (np-- > 0) {
-        dtrack.push(binaryParser.getFloat());
-      }
-
-      data.push(dtrack);
-    }
-
-    if (type === "bedWithName") {
-      n = nPositions;
-      var _name3 = [];
-
-      while (n-- > 0) {
-        _name3.push(binaryParser.getString());
-      }
-    }
-
-    return {
-      type: type,
-      start: start,
-      end: end,
-      data: data,
-      name: name,
-      nTracks: nTracks,
-      nPositions: nPositions
-    };
-  }
-
-  TDFReader.prototype.readTiles =
-  /*#__PURE__*/
-  function () {
-    var _ref5 = _asyncToGenerator(
-    /*#__PURE__*/
-    regeneratorRuntime.mark(function _callee5(tileIndeces, nTracks) {
-      var firstEntry, lastEntry, position, size, data, tiles, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, indexEntry, start, _size2, tileData, inflate, plain, binaryParser, type, tile;
-
-      return regeneratorRuntime.wrap(function _callee5$(_context5) {
-        while (1) {
-          switch (_context5.prev = _context5.next) {
-            case 0:
-              tileIndeces.sort(function (a, b) {
-                return a.position - b.position;
-              });
-              tileIndeces = tileIndeces.filter(function (idx) {
-                return idx.size > 0;
-              });
-
-              if (!(tileIndeces.length === 0)) {
-                _context5.next = 4;
-                break;
-              }
-
-              return _context5.abrupt("return", Promise.resolve([]));
-
-            case 4:
-              firstEntry = tileIndeces[0];
-              lastEntry = tileIndeces[tileIndeces.length - 1];
-              position = firstEntry.position;
-              size = lastEntry.position + lastEntry.size - position;
-              _context5.next = 10;
-              return igvxhr.loadArrayBuffer(this.path, buildOptions(this.config, {
-                range: {
-                  start: position,
-                  size: size
-                }
-              }));
-
-            case 10:
-              data = _context5.sent;
-              tiles = []; // Loop through and decode tiles
-
-              _iteratorNormalCompletion = true;
-              _didIteratorError = false;
-              _iteratorError = undefined;
-              _context5.prev = 15;
-              _iterator = tileIndeces[Symbol.iterator]();
-
-            case 17:
-              if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-                _context5.next = 41;
-                break;
-              }
-
-              indexEntry = _step.value;
-              start = indexEntry.position - position;
-              _size2 = indexEntry.size;
-
-              if (!(_size2 > 0)) {
-                _context5.next = 38;
-                break;
-              }
-
-              tileData = void 0;
-
-              if (this.compressed) {
-                inflate = new Zlib.Inflate(new Uint8Array(data, start, _size2));
-                plain = inflate.decompress();
-                tileData = plain.buffer;
-              } else {
-                tileData = data.slice(start, start + _size2);
-              }
-
-              binaryParser = new BinaryParser(new DataView(tileData));
-              type = binaryParser.getString();
-              tile = void 0;
-              _context5.t0 = type;
-              _context5.next = _context5.t0 === "fixedStep" ? 30 : _context5.t0 === "variableStep" ? 32 : _context5.t0 === "bed" ? 34 : _context5.t0 === "bedWithName" ? 34 : 36;
-              break;
-
-            case 30:
-              tile = createFixedStep(binaryParser, nTracks);
-              return _context5.abrupt("break", 37);
-
-            case 32:
-              tile = createVariableStep(binaryParser, nTracks);
-              return _context5.abrupt("break", 37);
-
-            case 34:
-              tile = createBed(binaryParser, nTracks, type);
-              return _context5.abrupt("break", 37);
-
-            case 36:
-              throw "Unknown tile type: " + type;
-
-            case 37:
-              tiles.push(tile);
-
-            case 38:
-              _iteratorNormalCompletion = true;
-              _context5.next = 17;
-              break;
-
-            case 41:
-              _context5.next = 47;
-              break;
-
-            case 43:
-              _context5.prev = 43;
-              _context5.t1 = _context5["catch"](15);
-              _didIteratorError = true;
-              _iteratorError = _context5.t1;
-
-            case 47:
-              _context5.prev = 47;
-              _context5.prev = 48;
-
-              if (!_iteratorNormalCompletion && _iterator.return != null) {
-                _iterator.return();
-              }
-
-            case 50:
-              _context5.prev = 50;
-
-              if (!_didIteratorError) {
-                _context5.next = 53;
-                break;
-              }
-
-              throw _iteratorError;
-
-            case 53:
-              return _context5.finish(50);
-
-            case 54:
-              return _context5.finish(47);
-
-            case 55:
-              return _context5.abrupt("return", tiles);
-
-            case 56:
-            case "end":
-              return _context5.stop();
-          }
-        }
-      }, _callee5, this, [[15, 43, 47, 55], [48,, 50, 54]]);
-    }));
-
-    return function (_x5, _x6) {
-      return _ref5.apply(this, arguments);
-    };
-  }();
-
-  TDFReader.prototype.readTile =
-  /*#__PURE__*/
-  function () {
-    var _ref6 = _asyncToGenerator(
-    /*#__PURE__*/
-    regeneratorRuntime.mark(function _callee6(indexEntry, nTracks) {
-      var data, inflate, plain, binaryParser, type;
-      return regeneratorRuntime.wrap(function _callee6$(_context6) {
-        while (1) {
-          switch (_context6.prev = _context6.next) {
-            case 0:
-              _context6.next = 2;
-              return igvxhr.loadArrayBuffer(this.path, buildOptions(this.config, {
-                range: {
-                  start: indexEntry.position,
-                  size: indexEntry.size
-                }
-              }));
-
-            case 2:
-              data = _context6.sent;
-
-              if (this.compressed) {
-                inflate = new Zlib.Inflate(new Uint8Array(data));
-                plain = inflate.decompress();
-                data = plain.buffer;
-              }
-
-              binaryParser = new BinaryParser(new DataView(data));
-              type = binaryParser.getString();
-              _context6.t0 = type;
-              _context6.next = _context6.t0 === "fixedStep" ? 9 : _context6.t0 === "variableStep" ? 10 : _context6.t0 === "bed" ? 11 : _context6.t0 === "bedWithName" ? 11 : 12;
-              break;
-
-            case 9:
-              return _context6.abrupt("return", createFixedStep(binaryParser, nTracks));
-
-            case 10:
-              return _context6.abrupt("return", createVariableStep(binaryParser, nTracks));
-
-            case 11:
-              return _context6.abrupt("return", createBed(binaryParser, nTracks, type));
-
-            case 12:
-              throw "Unknown tile type: " + type;
-
-            case 13:
-            case "end":
-              return _context6.stop();
-          }
-        }
-      }, _callee6, this);
-    }));
-
-    return function (_x7, _x8) {
-      return _ref6.apply(this, arguments);
-    };
-  }();
-
-  var TDFSource = function TDFSource(config, genome) {
-    this.genome = genome;
-    this.windowFunction = config.windowFunction || "mean";
-    this.reader = new TDFReader(config, genome);
-  };
-
-  TDFSource.prototype.getFeatures =
-  /*#__PURE__*/
-  function () {
-    var _ref = _asyncToGenerator(
-    /*#__PURE__*/
-    regeneratorRuntime.mark(function _callee2(chr, bpStart, bpEnd, bpPerPixel) {
-      var genomicInterval, genome, group, zoom, queryChr, maxZoom, wf, dataset, tileWidth, startTile, endTile, NTRACKS, tiles, features, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, tile, getRootGroup, _getRootGroup;
-
-      return regeneratorRuntime.wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              _getRootGroup = function _ref3() {
-                _getRootGroup = _asyncToGenerator(
-                /*#__PURE__*/
-                regeneratorRuntime.mark(function _callee() {
-                  return regeneratorRuntime.wrap(function _callee$(_context) {
-                    while (1) {
-                      switch (_context.prev = _context.next) {
-                        case 0:
-                          if (!this.rootGroup) {
-                            _context.next = 4;
-                            break;
-                          }
-
-                          return _context.abrupt("return", this.rootGroup);
-
-                        case 4:
-                          _context.next = 6;
-                          return this.reader.readRootGroup();
-
-                        case 6:
-                          this.rootGroup = _context.sent;
-                          return _context.abrupt("return", this.rootGroup);
-
-                        case 8:
-                        case "end":
-                          return _context.stop();
-                      }
-                    }
-                  }, _callee, this);
-                }));
-                return _getRootGroup.apply(this, arguments);
-              };
-
-              getRootGroup = function _ref2() {
-                return _getRootGroup.apply(this, arguments);
-              };
-
-              _context2.next = 4;
-              return getRootGroup.call(this);
-
-            case 4:
-              genomicInterval = new GenomicInterval(chr, bpStart, bpEnd);
-              genome = this.genome;
-
-              if (!(chr.toLowerCase() === "all")) {
-                _context2.next = 8;
-                break;
-              }
-
-              return _context2.abrupt("return", []);
-
-            case 8:
-              genomicInterval.bpPerPixel = bpPerPixel;
-              _context2.next = 11;
-              return getRootGroup.call(this);
-
-            case 11:
-              group = _context2.sent;
-              zoom = zoomLevelForScale$1(chr, bpPerPixel, genome);
-              queryChr = this.reader.chrAliasTable[chr];
-              maxZoom = this.reader.maxZoom;
-              if (queryChr === undefined) queryChr = chr;
-              if (maxZoom === undefined) maxZoom = -1;
-              wf = zoom > maxZoom ? "raw" : this.windowFunction;
-              _context2.next = 20;
-              return this.reader.readDataset(queryChr, wf, zoom);
-
-            case 20:
-              dataset = _context2.sent;
-
-              if (!(dataset == null)) {
-                _context2.next = 23;
-                break;
-              }
-
-              return _context2.abrupt("return", []);
-
-            case 23:
-              tileWidth = dataset.tileWidth;
-              startTile = Math.floor(bpStart / tileWidth);
-              endTile = Math.floor(bpEnd / tileWidth);
-              NTRACKS = 1; // TODO read this
-
-              _context2.next = 29;
-              return this.reader.readTiles(dataset.tiles.slice(startTile, endTile + 1), NTRACKS);
-
-            case 29:
-              tiles = _context2.sent;
-              features = [];
-              _iteratorNormalCompletion = true;
-              _didIteratorError = false;
-              _iteratorError = undefined;
-              _context2.prev = 34;
-              _iterator = tiles[Symbol.iterator]();
-
-            case 36:
-              if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-                _context2.next = 51;
-                break;
-              }
-
-              tile = _step.value;
-              _context2.t0 = tile.type;
-              _context2.next = _context2.t0 === "bed" ? 41 : _context2.t0 === "variableStep" ? 43 : _context2.t0 === "fixedStep" ? 45 : 47;
-              break;
-
-            case 41:
-              decodeBedTile(tile, chr, bpStart, bpEnd, bpPerPixel, features);
-              return _context2.abrupt("break", 48);
-
-            case 43:
-              decodeVaryTile(tile, chr, bpStart, bpEnd, bpPerPixel, features);
-              return _context2.abrupt("break", 48);
-
-            case 45:
-              decodeFixedTile(tile, chr, bpStart, bpEnd, bpPerPixel, features);
-              return _context2.abrupt("break", 48);
-
-            case 47:
-              throw "Unknown tile type: " + tile.type;
-
-            case 48:
-              _iteratorNormalCompletion = true;
-              _context2.next = 36;
-              break;
-
-            case 51:
-              _context2.next = 57;
-              break;
-
-            case 53:
-              _context2.prev = 53;
-              _context2.t1 = _context2["catch"](34);
-              _didIteratorError = true;
-              _iteratorError = _context2.t1;
-
-            case 57:
-              _context2.prev = 57;
-              _context2.prev = 58;
-
-              if (!_iteratorNormalCompletion && _iterator.return != null) {
-                _iterator.return();
-              }
-
-            case 60:
-              _context2.prev = 60;
-
-              if (!_didIteratorError) {
-                _context2.next = 63;
-                break;
-              }
-
-              throw _iteratorError;
-
-            case 63:
-              return _context2.finish(60);
-
-            case 64:
-              return _context2.finish(57);
-
-            case 65:
-              features.sort(function (a, b) {
-                return a.start - b.start;
-              });
-              return _context2.abrupt("return", features);
-
-            case 67:
-            case "end":
-              return _context2.stop();
-          }
-        }
-      }, _callee2, this, [[34, 53, 57, 65], [58,, 60, 64]]);
-    }));
-
-    return function (_x, _x2, _x3, _x4) {
-      return _ref.apply(this, arguments);
-    };
-  }();
-
-  TDFSource.prototype.supportsWholeGenome = function () {
-    return false;
-  };
-
-  function decodeBedTile(tile, chr, bpStart, bpEnd, bpPerPixel, features) {
-    var nPositions = tile.nPositions;
-    var starts = tile.start;
-    var ends = tile.end;
-    var data = tile.data[0]; // Single track for now
-
-    for (var i = 0; i < nPositions; i++) {
-      var s = starts[i];
-      var e = ends[i];
-      if (e < bpStart) continue;
-      if (s > bpEnd) break;
-      features.push({
-        chr: chr,
-        start: s,
-        end: e,
-        value: data[i]
-      });
-    }
-  }
-
-  function decodeVaryTile(tile, chr, bpStart, bpEnd, bpPerPixel, features) {
-    var nPositions = tile.nPositions;
-    var starts = tile.start;
-    var span = tile.span;
-    var data = tile.data[0]; // Single track for now
-
-    for (var i = 0; i < nPositions; i++) {
-      var s = starts[i];
-      var e = s + span;
-      if (e < bpStart) continue;
-      if (s > bpEnd) break;
-      features.push({
-        chr: chr,
-        start: s,
-        end: e,
-        value: data[i]
-      });
-    }
-  }
-
-  function decodeFixedTile(tile, chr, bpStart, bpEnd, bpPerPixel, features) {
-    var nPositions = tile.nPositions;
-    var s = tile.start;
-    var span = tile.span;
-    var data = tile.data[0]; // Single track for now
-
-    for (var i = 0; i < nPositions; i++) {
-      var e = s + span;
-      if (s > bpEnd) break;
-
-      if (e >= bpStart) {
-        if (!Number.isNaN(data[i])) {
-          features.push({
-            chr: chr,
-            start: s,
-            end: e,
-            value: data[i]
-          });
-        }
-      }
-
-      s = e;
-    }
-  }
-
-  var log2 = Math.log(2);
-
-  function zoomLevelForScale$1(chr, bpPerPixel, genome) {
-    // Convert bpPerPixel to IGV "zoom" level.   This is a bit convoluted,  IGV computes zoom levels assuming
-    // display in a 700 pixel window.  The fully zoomed out view of a chromosome is zoom level "0".
-    // Zoom level 1 is magnified 2X,  and so forth
-    var chrSize = genome.getChromosome(chr).bpLength;
-    return Math.ceil(Math.log(Math.max(0, chrSize / (bpPerPixel * 700))) / log2);
-  }
-
-  function paintAxis(ctx, pixelWidth, pixelHeight) {
-    var x1,
-        x2,
-        y1,
-        y2,
-        a,
-        b,
-        reference,
-        shim,
-        font = {
-      'font': 'normal 10px Arial',
-      'textAlign': 'right',
-      'strokeStyle': "black"
-    };
-
-    if (undefined === this.dataRange || undefined === this.dataRange.max || undefined === this.dataRange.min) {
-      return;
-    }
-
-    IGVGraphics.fillRect(ctx, 0, 0, pixelWidth, pixelHeight, {
-      'fillStyle': "rgb(255, 255, 255)"
-    });
-    reference = 0.95 * pixelWidth;
-    x1 = reference - 8;
-    x2 = reference; //shim = 0.5 * 0.125;
-
-    shim = .01;
-    y1 = y2 = shim * pixelHeight;
-    a = {
-      x: x2,
-      y: y1
-    }; // tick
-
-    IGVGraphics.strokeLine(ctx, x1, y1, x2, y2, font);
-    IGVGraphics.fillText(ctx, prettyPrint(this.dataRange.max), x1 + 4, y1 + 12, font); //shim = 0.25 * 0.125;
-
-    y1 = y2 = (1.0 - shim) * pixelHeight;
-    b = {
-      x: x2,
-      y: y1
-    }; // tick
-
-    IGVGraphics.strokeLine(ctx, x1, y1, x2, y2, font);
-    IGVGraphics.fillText(ctx, prettyPrint(this.dataRange.min), x1 + 4, y1 - 4, font);
-    IGVGraphics.strokeLine(ctx, a.x, a.y, b.x, b.y, font);
-
-    function prettyPrint(number) {
-      // if number >= 100, show whole number
-      // if >= 1 show 1 significant digits
-      // if <  1 show 2 significant digits
-      if (number === 0) {
-        return "0";
-      } else if (Math.abs(number) >= 10) {
-        return number.toFixed();
-      } else if (Math.abs(number) >= 1) {
-        return number.toFixed(1);
-      } else {
-        return number.toFixed(2);
-      }
-    }
-  }
-
-  var dataRangeMenuItem = MenuUtils.dataRangeMenuItem;
-  var WigTrack = extend(TrackBase, function (config, browser) {
-    this.type = "wig";
-    this.featureType = 'numeric'; // Default color, might be overridden by track line
-
-    if (config.color === undefined) {
-      config.color = "rgb(150,150,150)";
-    }
-
-    if (config.height === undefined) {
-      config.height = 50;
-    }
-
-    TrackBase.call(this, config, browser);
-    var format = config.format ? config.format.toLowerCase() : config.format;
-
-    if ("bigwig" === format) {
-      this.featureSource = new BWSource(config, browser.genome);
-    } else if ("tdf" === format) {
-      this.featureSource = new TDFSource(config, browser.genome);
-    } else {
-      this.featureSource = new FeatureSource(config, browser.genome);
-    }
-
-    this.autoscale = config.autoscale || config.max === undefined;
-
-    if (!this.autoscale) {
-      this.dataRange = {
-        min: config.min || 0,
-        max: config.max
-      };
-    }
-
-    this.windowFunction = config.windowFunction || "mean";
-    this.paintAxis = paintAxis;
-    this.graphType = config.graphType || "bar";
-  });
-  WigTrack.prototype.postInit =
-  /*#__PURE__*/
-  _asyncToGenerator(
-  /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee() {
-    var header;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            _context.next = 2;
-            return this.getFileHeader();
-
-          case 2:
-            header = _context.sent;
-            if (header) this.setTrackProperties(header);
-
-          case 4:
-          case "end":
-            return _context.stop();
-        }
-      }
-    }, _callee, this);
-  }));
-
-  WigTrack.prototype.getFeatures =
-  /*#__PURE__*/
-  function () {
-    var _ref2 = _asyncToGenerator(
-    /*#__PURE__*/
-    regeneratorRuntime.mark(function _callee2(chr, bpStart, bpEnd, bpPerPixel) {
-      return regeneratorRuntime.wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              return _context2.abrupt("return", this.featureSource.getFeatures(chr, bpStart, bpEnd, bpPerPixel, this.windowFunction));
-
-            case 1:
-            case "end":
-              return _context2.stop();
-          }
-        }
-      }, _callee2, this);
-    }));
-
-    return function (_x, _x2, _x3, _x4) {
-      return _ref2.apply(this, arguments);
-    };
-  }();
-
-  WigTrack.prototype.menuItemList = function () {
-    var self = this,
-        menuItems = [];
-    menuItems.push(dataRangeMenuItem(this.trackView));
-    menuItems.push({
-      object: createCheckbox("Autoscale", self.autoscale),
-      click: function click() {
-        self.autoscale = !self.autoscale;
-        self.config.autoscale = self.autoscale;
-        self.trackView.setDataRange(undefined, undefined, self.autoscale);
-      }
-    });
-    return menuItems;
-  };
-
-  WigTrack.prototype.getFileHeader =
-  /*#__PURE__*/
-  _asyncToGenerator(
-  /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee3() {
-    return regeneratorRuntime.wrap(function _callee3$(_context3) {
-      while (1) {
-        switch (_context3.prev = _context3.next) {
-          case 0:
-            if (!(typeof this.featureSource.getFileHeader === "function")) {
-              _context3.next = 4;
-              break;
-            }
-
-            _context3.next = 3;
-            return this.featureSource.getFileHeader();
-
-          case 3:
-            this.header = _context3.sent;
-
-          case 4:
-            return _context3.abrupt("return", this.header);
-
-          case 5:
-          case "end":
-            return _context3.stop();
-        }
-      }
-    }, _callee3, this);
-  }));
-
-  WigTrack.prototype.draw = function (options) {
-    var self = this;
-    var features = options.features;
-    var ctx = options.context;
-    var bpPerPixel = options.bpPerPixel;
-    var bpStart = options.bpStart;
-    var pixelWidth = options.pixelWidth;
-    var pixelHeight = options.pixelHeight;
-    var bpEnd = bpStart + pixelWidth * bpPerPixel + 1;
-    var lastValue = -1;
-    var lastNegValue = 1;
-    var baselineColor;
-
-    if (typeof self.color === "string" && self.color.startsWith("rgb(")) {
-      baselineColor = IGVColor.addAlpha(self.color, 0.1);
-    }
-
-    var yScale = function yScale(yValue) {
-      return (self.dataRange.max - yValue) / (self.dataRange.max - self.dataRange.min) * pixelHeight;
-    };
-
-    var getX = function getX(feature) {
-      var x = Math.floor((feature.start - bpStart) / bpPerPixel);
-      if (isNaN(x)) console.log('isNaN(x). feature start ' + numberFormatter(feature.start) + ' bp start ' + numberFormatter(bpStart));
-      return x;
-    };
-
-    var getWidth = function getWidth(feature, x) {
-      var rectEnd = Math.ceil((feature.end - bpStart) / bpPerPixel);
-      return Math.max(1, rectEnd - x);
-    };
-
-    var drawGuideLines = function drawGuideLines(options) {
-      if (self.config.hasOwnProperty('guideLines')) {
-        var _iteratorNormalCompletion = true;
-        var _didIteratorError = false;
-        var _iteratorError = undefined;
-
-        try {
-          for (var _iterator = self.config.guideLines[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var line = _step.value;
-
-            if (line.hasOwnProperty('color') && line.hasOwnProperty('y') && line.hasOwnProperty('dotted')) {
-              var y = yScale(line.y);
-              var props = {
-                'strokeStyle': line['color'],
-                'strokeWidth': 2
-              };
-              if (line['dotted']) IGVGraphics.dashedLine(options.context, 0, y, options.pixelWidth, y, 5, props);else IGVGraphics.strokeLine(options.context, 0, y, options.pixelWidth, y, props);
-            }
-          }
-        } catch (err) {
-          _didIteratorError = true;
-          _iteratorError = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion && _iterator.return != null) {
-              _iterator.return();
-            }
-          } finally {
-            if (_didIteratorError) {
-              throw _iteratorError;
-            }
-          }
-        }
-      }
-    };
-
-    if (features && features.length > 0) {
-      if (self.dataRange.min === undefined) self.dataRange.min = 0; // Max can be less than min if config.min is set but max left to autoscale.   If that's the case there is
-      // nothing to paint.
-
-      if (self.dataRange.max > self.dataRange.min) {
-        if (renderFeature.end < bpStart) return;
-        if (renderFeature.start > bpEnd) return;
-        var _iteratorNormalCompletion2 = true;
-        var _didIteratorError2 = false;
-        var _iteratorError2 = undefined;
-
-        try {
-          for (var _iterator2 = features[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-            var f = _step2.value;
-            renderFeature(f);
-          } // If the track includes negative values draw a baseline
-
-        } catch (err) {
-          _didIteratorError2 = true;
-          _iteratorError2 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
-              _iterator2.return();
-            }
-          } finally {
-            if (_didIteratorError2) {
-              throw _iteratorError2;
-            }
-          }
-        }
-
-        if (self.dataRange.min < 0) {
-          var basepx = self.dataRange.max / (self.dataRange.max - self.dataRange.min) * options.pixelHeight;
-          IGVGraphics.strokeLine(ctx, 0, basepx, options.pixelWidth, basepx, {
-            strokeStyle: baselineColor
-          });
-        }
-      }
-    }
-
-    drawGuideLines(options);
-
-    function renderFeature(feature) {
-      if (feature.value < self.dataRange.min) return;
-      var y = yScale(feature.value);
-      var x = getX(feature);
-      if (isNaN(x)) return;
-      var height = yScale(0) - y;
-      var width = getWidth(feature, x);
-      var c = feature.value < 0 && self.altColor ? self.altColor : self.color;
-      var color = typeof c === "function" ? c(feature.value) : c;
-
-      if (self.graphType === "points") {
-        var pointSize = self.config.pointSize || 3;
-        var px = x + width / 2;
-        IGVGraphics.fillCircle(ctx, px, y, pointSize / 2, {
-          "fillStyle": color,
-          "strokeStyle": color
-        });
-      } else {
-        IGVGraphics.fillRect(ctx, x, y, width, height, {
-          fillStyle: color
-        });
-
-        if (feature.value > 0) {
-          lastValue = feature.value;
-        } else if (feature.value < 0) {
-          lastNegValue = feature.value;
-        }
-      }
-    }
-  };
-
-  WigTrack.prototype.popupData = function (clickState, features) {
-    // We use the featureCache property rather than method to avoid async load.  If the
-    // feature is not already loaded this won't work,  but the user wouldn't be mousing over it either.
-    if (!features) features = this.clickedFeatures(clickState);
-
-    if (features && features.length > 0) {
-      var genomicLocation = clickState.genomicLocation;
-      var referenceFrame = clickState.viewport.genomicState.referenceFrame;
-      var popupData = []; // We need some tolerance around genomicLocation, start with +/- 2 pixels
-
-      var tolerance = 2 * referenceFrame.bpPerPixel;
-      var selectedFeature = binarySearch(features, genomicLocation, tolerance);
-
-      if (selectedFeature) {
-        var posString = selectedFeature.end - selectedFeature.start === 1 ? numberFormatter(selectedFeature.start + 1) : numberFormatter(selectedFeature.start + 1) + "-" + numberFormatter(selectedFeature.end);
-        popupData.push({
-          name: "Position:",
-          value: posString
-        });
-        popupData.push({
-          name: "Value:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",
-          value: numberFormatter(selectedFeature.value)
-        });
-      }
-
-      return popupData;
-    } else {
-      return [];
-    }
-  };
-  /**
-   * Called when the track is removed.  Do any needed cleanup here
-   */
-
-
-  WigTrack.prototype.dispose = function () {
-    this.trackView = undefined;
-  };
-  /**
-   * Return the closest feature to the genomic position +/- the specified tolerance.  Closest is defined
-   * by the minimum of the distance between position and start or end of the feature.
-   *
-   * @param features
-   * @param position
-   * @returns {*}
-   */
-
-
-  function binarySearch(features, position, tolerance) {
-    var startIndex = 0,
-        stopIndex = features.length - 1,
-        index = startIndex + stopIndex >> 1,
-        candidateFeature,
-        tmp; // Use binary search to get the index of at least 1 feature in the click tolerance bounds
-
-    while (!test(features[index], position, tolerance) && startIndex < stopIndex) {
-      if (position < features[index].start) {
-        stopIndex = index - 1;
-      } else if (position > features[index].end) {
-        startIndex = index + 1;
-      }
-
-      index = startIndex + stopIndex >> 1;
-    }
-
-    if (test(features[index], position, tolerance)) {
-      candidateFeature = features[index];
-      if (test(candidateFeature, position, 0)) return candidateFeature; // Else, find closest feature to click
-
-      tmp = index;
-
-      while (tmp-- >= 0) {
-        if (!test(features[tmp]), tolerance) {
-          break;
-        }
-
-        if (test(features[tmp], position, 0)) {
-          return features[tmp];
-        }
-
-        if (delta(features[tmp], position) < delta(candidateFeature, position)) {
-          candidateFeature = features[tmp];
-        }
-
-        tmp = index;
-
-        while (tmp++ < features.length) {
-          if (!test(features[tmp]), tolerance) {
-            break;
-          }
-
-          if (test(features[tmp], position, 0)) {
-            return features[tmp];
-          }
-
-          if (delta(features[tmp], position) < delta(candidateFeature, position)) {
-            candidateFeature = features[tmp];
-          }
-        }
-      }
-
-      return candidateFeature;
-    } else {
-      console.log(position + ' not found!');
-      return undefined;
-    }
-
-    function test(feature, position, tolerance) {
-      return position >= feature.start - tolerance && position <= feature.end + tolerance;
-    }
-
-    function delta(feature, position) {
-      return Math.min(Math.abs(feature.start - position), Math.abs(feature.end - position));
-    }
-  }
-
-  WigTrack.prototype.getState = function () {
-    var config = this.config;
-    config.autoscale = this.autoscale;
-
-    if (!this.autoscale && this.dataRange) {
-      config.min = this.dataRange.min;
-      config.max = this.dataRange.max;
-    }
-
-    return config;
-  };
-
-  WigTrack.prototype.supportsWholeGenome = function () {
-    if (typeof this.featureSource.supportsWholeGenome === 'function') {
-      return this.featureSource.supportsWholeGenome();
-    } else {
-      return false;
-    }
   };
 
   /**
@@ -51563,276 +51871,6 @@ Context.prototype = {
    * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
    * THE SOFTWARE.
    */
-  var dataRangeMenuItem$1 = MenuUtils.dataRangeMenuItem;
-  var EqtlTrack = extend(TrackBase, function (config, browser) {
-    var url = config.url,
-        label = config.name;
-    this.config = config;
-    this.url = url;
-    this.name = label;
-    this.pValueField = config.pValueField || "pValue";
-    this.geneField = config.geneField || "geneSymbol";
-    this.snpField = config.snpField || "snp";
-    var min = config.minLogP || config.min;
-    var max = config.maxLogP || config.max;
-    this.dataRange = {
-      min: min || 3.5,
-      max: max || 25
-    };
-
-    if (!max) {
-      this.autoscale = true;
-    } else {
-      this.autoscale = config.autoscale;
-    }
-
-    this.autoscalePercentile = config.autoscalePercentile === undefined ? 98 : config.autoscalePercentile;
-    this.background = config.background; // No default
-
-    this.divider = config.divider || "rgb(225,225,225)";
-    this.dotSize = config.dotSize || 2;
-    this.height = config.height || 100;
-    this.autoHeight = false;
-    this.disableButtons = config.disableButtons; // Limit visibility window to 2 mb,  gtex server gets flaky beyond that
-
-    this.visibilityWindow = config.visibilityWindow === undefined ? 2000000 : config.visibilityWindow >= 0 ? Math.min(2000000, config.visibilityWindow) : 2000000;
-    this.featureSource = new FeatureSource(config, browser.genome);
-    GtexUtils.gtexLoaded = true;
-  });
-
-  EqtlTrack.prototype.paintAxis = function (ctx, pixelWidth, pixelHeight) {
-    var track = this,
-        yScale = (track.dataRange.max - track.dataRange.min) / pixelHeight;
-    var font = {
-      'font': 'normal 10px Arial',
-      'textAlign': 'right',
-      'strokeStyle': "black"
-    };
-    IGVGraphics.fillRect(ctx, 0, 0, pixelWidth, pixelHeight, {
-      'fillStyle': "rgb(255, 255, 255)"
-    }); // Determine a tick spacing such that there is at least 10 pixels between ticks
-
-    var n = Math.ceil((this.dataRange.max - this.dataRange.min) * 10 / pixelHeight);
-
-    for (var p = 4; p <= track.dataRange.max; p += n) {
-      var x1, x2, y1, y2, ref; // TODO: Dashes may not actually line up with correct scale. Ask Jim about this
-
-      ref = 0.85 * pixelWidth;
-      x1 = ref - 5;
-      x2 = ref;
-      y1 = y2 = pixelHeight - Math.round((p - track.dataRange.min) / yScale);
-      IGVGraphics.strokeLine(ctx, x1, y1, x2, y2, font); // Offset dashes up by 2 pixel
-
-      if (y1 > 8) {
-        IGVGraphics.fillText(ctx, p, x1 - 1, y1 + 2, font);
-      } // Offset numbers down by 2 pixels;
-
-    }
-
-    font['textAlign'] = 'center';
-    IGVGraphics.fillText(ctx, "-log10(pvalue)", pixelWidth / 4, pixelHeight / 2, font, {
-      rotate: {
-        angle: -90
-      }
-    });
-  };
-
-  EqtlTrack.prototype.getFeatures = function (chr, bpStart, bpEnd) {
-    var pValueField = this.pValueField;
-    return this.featureSource.getFeatures(chr, bpStart, bpEnd).then(function (features) {
-      features.forEach(function (f) {
-        f.value = f[pValueField];
-      });
-      return features;
-    });
-  };
-
-  EqtlTrack.prototype.draw = function (options) {
-    var self = this,
-        featureList = options.features,
-        ctx = options.context,
-        bpPerPixel = options.bpPerPixel,
-        bpStart = options.bpStart,
-        pixelWidth = options.pixelWidth,
-        pixelHeight = options.pixelHeight,
-        yScale = (self.dataRange.max - self.dataRange.min) / pixelHeight,
-        selection = options.genomicState.selection; // Background
-
-    if (this.background) IGVGraphics.fillRect(ctx, 0, 0, pixelWidth, pixelHeight, {
-      'fillStyle': this.background
-    });
-    IGVGraphics.strokeLine(ctx, 0, pixelHeight - 1, pixelWidth, pixelHeight - 1, {
-      'strokeStyle': this.divider
-    });
-
-    if (ctx) {
-      var len = featureList.length;
-      ctx.save(); // Draw in two passes, with "selected" eqtls drawn last
-
-      drawEqtls(false);
-      drawEqtls(true);
-      ctx.restore();
-    }
-
-    function drawEqtls(drawSelected) {
-      var radius = drawSelected ? 2 * self.dotSize : self.dotSize,
-          eqtl,
-          i,
-          px,
-          py,
-          color,
-          isSelected,
-          snp,
-          geneName,
-          capped;
-
-      for (i = 0; i < len; i++) {
-        eqtl = featureList[i];
-        px = Math.round(eqtl.position - bpStart + 0.5) / bpPerPixel;
-        if (px < 0) continue;else if (px > pixelWidth) break;
-        snp = eqtl.snp.toUpperCase();
-        geneName = eqtl[self.geneField].toUpperCase();
-        isSelected = selection && (selection.snp === snp || selection.gene === geneName);
-
-        if (!drawSelected || isSelected) {
-          // Add eqtl's gene to the selection if this is the selected snp.
-          // TODO -- this should not be done here in the rendering code.
-          if (selection && selection.snp === snp) {
-            selection.addGene(geneName);
-          }
-
-          var mLogP = -Math.log(eqtl[self.pValueField]) / Math.LN10;
-
-          if (mLogP >= self.dataRange.min) {
-            if (mLogP > self.dataRange.max) {
-              mLogP = self.dataRange.max;
-              capped = true;
-            } else {
-              capped = false;
-            }
-
-            py = Math.max(0 + radius, pixelHeight - Math.round((mLogP - self.dataRange.min) / yScale));
-            eqtl.px = px;
-            eqtl.py = py;
-
-            if (drawSelected && selection) {
-              color = selection.colorForGene(geneName);
-              IGVGraphics.setProperties(ctx, {
-                fillStyle: color,
-                strokeStyle: "black"
-              });
-            } else {
-              color = capped ? "rgb(150, 150, 150)" : "rgb(180, 180, 180)";
-              IGVGraphics.setProperties(ctx, {
-                fillStyle: color,
-                strokeStyle: color
-              });
-            }
-
-            IGVGraphics.fillCircle(ctx, px, py, radius);
-            IGVGraphics.strokeCircle(ctx, px, py, radius);
-          }
-        }
-      }
-    }
-  };
-  /**
-   * Return "popup data" for feature @ genomic location.  Data is an array of key-value pairs
-   */
-
-
-  EqtlTrack.prototype.popupData = function (config) {
-    var features = config.viewport.getCachedFeatures();
-    if (!features || features.length === 0) return [];
-    var genomicLocation = config.genomicLocation,
-        xOffset = config.x,
-        yOffset = config.y,
-        referenceFrame = config.viewport.genomicState.referenceFrame,
-        tolerance = 2 * this.dotSize * referenceFrame.bpPerPixel,
-        dotSize = this.dotSize,
-        tissue = this.name,
-        popupData = [];
-    features.forEach(function (feature) {
-      if (feature.end >= genomicLocation - tolerance && feature.start <= genomicLocation + tolerance && feature.py - yOffset < 2 * dotSize) {
-        if (popupData.length > 0) {
-          popupData.push("<hr>");
-        }
-
-        popupData.push({
-          name: "snp id",
-          value: feature.snp
-        }, {
-          name: "gene id",
-          value: feature.geneId
-        }, {
-          name: "gene name",
-          value: feature.geneName
-        }, {
-          name: "p value",
-          value: feature.pValue
-        }, {
-          name: "tissue",
-          value: tissue
-        });
-      }
-    });
-    return popupData;
-  };
-
-  EqtlTrack.prototype.menuItemList = function () {
-    var self = this,
-        menuItems = [];
-    menuItems.push(dataRangeMenuItem$1(this.trackView));
-    menuItems.push({
-      object: createCheckbox("Autoscale", self.autoscale),
-      click: function click() {
-        self.autoscale = !self.autoscale;
-        self.config.autoscale = self.autoscale;
-        self.trackView.setDataRange(undefined, undefined, self.autoscale);
-      }
-    });
-    return menuItems;
-  };
-
-  EqtlTrack.prototype.doAutoscale = function (featureList) {
-    if (featureList.length > 0) {
-      var values = featureList.map(function (eqtl) {
-        return -Math.log(eqtl.value) / Math.LN10;
-      });
-      this.dataRange.max = IGVMath.percentile(values, this.autoscalePercentile);
-    } else {
-      // No features -- default
-      var max = this.config.maxLogP || this.config.max;
-      this.dataRange.max = max || 25;
-    }
-
-    return this.dataRange;
-  };
-
-  /*
-   * The MIT License (MIT)
-   *
-   * Copyright (c) 2014 Broad Institute
-   *
-   * Permission is hereby granted, free of charge, to any person obtaining a copy
-   * of this software and associated documentation files (the "Software"), to deal
-   * in the Software without restriction, including without limitation the rights
-   * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-   * copies of the Software, and to permit persons to whom the Software is
-   * furnished to do so, subject to the following conditions:
-   *
-   * The above copyright notice and this permission notice shall be included in
-   * all copies or substantial portions of the Software.
-   *
-   *
-   * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-   * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-   * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-   * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-   * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-   * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-   * THE SOFTWARE.
-   */
   var VARIANT = "VARIANT";
   var TRAIT = "TRAIT";
   /**
@@ -52103,6 +52141,20 @@ Context.prototype = {
 
     this.minLogP = config.minLogP || 0;
     this.maxLogP = config.maxLogP || 15;
+    var min = config.minLogP || config.min;
+    var max = config.maxLogP || config.max;
+    this.dataRange = {
+      min: min || 0,
+      max: max || 25
+    };
+
+    if (!max) {
+      this.autoscale = true;
+    } else {
+      this.autoscale = config.autoscale;
+    }
+
+    this.autoscalePercentile = config.autoscalePercentile === undefined ? 98 : config.autoscalePercentile;
     this.background = config.background; // No default
 
     this.divider = config.divider || "rgb(225,225,225)";
@@ -52142,8 +52194,9 @@ Context.prototype = {
         pixelWidth = options.pixelWidth,
         pixelHeight = options.pixelHeight,
         bpEnd = bpStart + pixelWidth * bpPerPixel + 1,
-        yScale = (track.maxLogP - track.minLogP) / pixelHeight,
-        enablePopover = bpEnd - bpStart < DEFAULT_POPOVER_WINDOW;
+        yScale = (track.dataRange.max - track.dataRange.min) / pixelHeight,
+        // yScale = (track.maxLogP - track.minLogP) / pixelHeight,
+    enablePopover = bpEnd - bpStart < DEFAULT_POPOVER_WINDOW;
 
     if (enablePopover) {
       this.po = [];
@@ -52173,8 +52226,9 @@ Context.prototype = {
         color = track.colorScale.getColor(pvalue);
         val = -Math.log(pvalue) / 2.302585092994046;
         xScale = bpPerPixel;
-        px = Math.round((pos - bpStart) / xScale);
-        py = Math.max(track.dotSize, pixelHeight - Math.round((val - track.minLogP) / yScale));
+        px = Math.round((pos - bpStart) / xScale); // py = Math.max(track.dotSize, pixelHeight - Math.round((val - track.minLogP) / yScale));
+
+        py = Math.max(track.dotSize, pixelHeight - Math.round((val - track.dataRange.min) / yScale));
         if (color) IGVGraphics.setProperties(ctx, {
           fillStyle: color,
           strokeStyle: "black"
@@ -52192,7 +52246,8 @@ Context.prototype = {
 
   GWASTrack.prototype.paintAxis = function (ctx, pixelWidth, pixelHeight) {
     var track = this,
-        yScale = (track.maxLogP - track.minLogP) / pixelHeight;
+        yScale = (track.dataRange.max - track.dataRange.min) / pixelHeight; // yScale = (track.maxLogP - track.minLogP) / pixelHeight;
+
     var font = {
       'font': 'normal 10px Arial',
       'textAlign': 'right',
@@ -52201,9 +52256,10 @@ Context.prototype = {
     IGVGraphics.fillRect(ctx, 0, 0, pixelWidth, pixelHeight, {
       'fillStyle': "rgb(255, 255, 255)"
     });
+    var n = Math.ceil((this.dataRange.max - this.dataRange.min) * 10 / pixelHeight);
 
-    for (var p = 2; p < track.maxLogP; p += 2) {
-      var yp = pixelHeight - Math.round((p - track.minLogP) / yScale); // TODO: Dashes may not actually line up with correct scale. Ask Jim about this
+    for (var p = track.dataRange.min; p < track.dataRange.max; p += n) {
+      var yp = pixelHeight - Math.round((p - track.dataRange.min) / yScale); // TODO: Dashes may not actually line up with correct scale. Ask Jim about this
 
       IGVGraphics.strokeLine(ctx, 45, yp - 2, 50, yp - 2, font); // Offset dashes up by 2 pixel
 
@@ -52278,6 +52334,23 @@ Context.prototype = {
     }
 
     return data;
+  };
+
+  GWASTrack.prototype.doAutoscale = function (featureList) {
+    console.log('gwas autoscale');
+
+    if (featureList.length > 0) {
+      var values = featureList.map(function (qtl) {
+        return -Math.log(qtl["P-value"]) / Math.LN10;
+      });
+      this.dataRange.max = IGVMath.percentile(values, this.autoscalePercentile);
+    } else {
+      // No features -- default
+      var max = this.config.maxLogP || this.config.max;
+      this.dataRange.max = max || 25;
+    }
+
+    return this.dataRange;
   };
 
   /*

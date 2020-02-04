@@ -3,7 +3,7 @@ modules = {
         dependsOn "core"
 
         //resource url: 'https://cdn.jsdelivr.net/npm/igv@2.3.5/dist/igv.min.js'
-        resource url: 'js/igv/igv-current.js'
+        resource url: 'js/igv/igv.js'
 
         resource url: 'js/lib/dport/igvInit.js'
     }
