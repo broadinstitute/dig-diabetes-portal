@@ -338,6 +338,7 @@
                 mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]);
              */
                 mpgSoftware.homePage.newFeatures([
+                    {"name":"Webinar video: API access to results","link":"https://www.youtube.com/watch?v=hWhT1Tp1C78&list=PLlMMtlgw6qNj6ICrkMu2BAPhs-6XFBpTr&index=11&t=0s","class":"resource","type":"new"},
                     {"name":"Tutorial video: Diabetes Epigenome Atlas","link":"https://youtu.be/vZdMfjSvVQk","class":"resource","type":"new"},
                     {"name":"Webinar video: LocusZoom","link":"https://www.youtube.com/watch?v=AmU7IIAeZJ4&feature=youtu.be","class":"resource","type":"new"}]);
             </script>
@@ -347,7 +348,9 @@
                 /* Example to add 'new' or 'updated' feature buttons;
                  mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]);
                  */
-                mpgSoftware.homePage.newFeatures([{"name":"Webinar video: LocusZoom","link":"https://www.youtube.com/watch?v=AmU7IIAeZJ4&feature=youtu.be","class":"resource","type":"new"}]);
+                mpgSoftware.homePage.newFeatures([
+                    {"name":"Webinar video: API access to results","link":"https://www.youtube.com/watch?v=hWhT1Tp1C78&list=PLlMMtlgw6qNj6ICrkMu2BAPhs-6XFBpTr&index=11&t=0s","class":"resource","type":"new"},
+                    {"name":"Webinar video: LocusZoom","link":"https://www.youtube.com/watch?v=AmU7IIAeZJ4&feature=youtu.be","class":"resource","type":"new"}]);
             </script>
         </g:elseif>
         <g:elseif test="${g.portalTypeString()?.equals('stroke')}">
@@ -355,7 +358,8 @@
                 /* Example to add 'new' or 'updated' feature buttons;
                  mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]);
                  */
-                mpgSoftware.homePage.newFeatures([{"name":"Webinar video: LocusZoom","link":"https://www.youtube.com/watch?v=AmU7IIAeZJ4&feature=youtu.be","class":"resource","type":"new"}]);
+                mpgSoftware.homePage.newFeatures([{"name":"Webinar video: API access to results","link":"https://www.youtube.com/watch?v=hWhT1Tp1C78&list=PLlMMtlgw6qNj6ICrkMu2BAPhs-6XFBpTr&index=11&t=0s","class":"resource","type":"new"},
+                    {"name":"Webinar video: LocusZoom","link":"https://www.youtube.com/watch?v=AmU7IIAeZJ4&feature=youtu.be","class":"resource","type":"new"}]);
             </script>
         </g:elseif>
 
@@ -364,7 +368,8 @@
                 /* Example to add 'new' or 'updated' feature buttons;
                  mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]);
                  */
-                mpgSoftware.homePage.newFeatures([{"name":"Webinar video: LocusZoom","link":"https://www.youtube.com/watch?v=AmU7IIAeZJ4&feature=youtu.be","class":"resource","type":"new"}]);
+                mpgSoftware.homePage.newFeatures([{"name":"Webinar video: API access to results","link":"https://www.youtube.com/watch?v=hWhT1Tp1C78&list=PLlMMtlgw6qNj6ICrkMu2BAPhs-6XFBpTr&index=11&t=0s","class":"resource","type":"new"},
+                    {"name":"Webinar video: LocusZoom","link":"https://www.youtube.com/watch?v=AmU7IIAeZJ4&feature=youtu.be","class":"resource","type":"new"}]);
             </script>
         </g:elseif>
 
@@ -373,7 +378,8 @@
                 /* Example to add 'new' or 'updated' feature buttons; 
                 mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]); 
                 */ 
-                mpgSoftware.homePage.newFeatures([{"name":"Webinar video: LocusZoom","link":"https://www.youtube.com/watch?v=AmU7IIAeZJ4&feature=youtu.be","class":"resource","type":"new"}]); 
+                mpgSoftware.homePage.newFeatures([{"name":"Webinar video: API access to results","link":"https://www.youtube.com/watch?v=hWhT1Tp1C78&list=PLlMMtlgw6qNj6ICrkMu2BAPhs-6XFBpTr&index=11&t=0s","class":"resource","type":"new"},
+                    {"name":"Webinar video: LocusZoom","link":"https://www.youtube.com/watch?v=AmU7IIAeZJ4&feature=youtu.be","class":"resource","type":"new"}]); 
             </script>
              </g:elseif>
 
