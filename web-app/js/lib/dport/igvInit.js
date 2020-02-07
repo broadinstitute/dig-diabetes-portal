@@ -15,6 +15,37 @@ mpgSoftware.igvInit = (function () {
         return $(nameOfBase).data("dataHolder");
     };
 
+    const addToStoredVariantList = function (nameOfBase,variantToAdd) {
+        const savedVariable = getVariable('#'+nameOfBase);
+        const existingVariantList = savedVariable.storedVariantList;
+        if ( typeof existingVariantList === 'undefined') { // no variants stored yet
+            savedVariable["storedVariantList"] = [savedVariable.storedVariantList];
+        } else {
+            if (!_.includes(existingVariantList,variantToAdd)){
+                existingVariantList.push(variantToAdd);
+            }
+        }
+    };
+
+
+    const generateAddToStoredVariantListFunction = function (nameOfBase) {
+        // return a function preset with the nameOfBase variable
+        return function (variantToAdd) {
+            const savedVariable = getVariable('#'+nameOfBase);
+            const existingVariantList = savedVariable.storedVariantList;
+            if ( typeof existingVariantList === 'undefined') { // no variants stored yet
+                savedVariable["storedVariantList"] = [variantToAdd];
+            } else { // add to the existing variant list
+                if (!_.includes(existingVariantList,variantToAdd)){
+                    existingVariantList.push(variantToAdd);
+                }
+            }
+            return existingVariantList;
+        };
+    };
+
+
+
     const igvLaunch = function (nameOfBase,
                                 chromosome,
                                 startPosition,
@@ -117,7 +148,7 @@ mpgSoftware.igvInit = (function () {
                     // }
                     // ,
                     {
-                         name: 'GWAS Catalog',
+                         name: 'T2D GWAS',
                          trait: "T2D",
                          label: "Type 2 Diabetes: DIAGRAM GWAS",
                          maxLogP: 10,
@@ -132,6 +163,8 @@ mpgSoftware.igvInit = (function () {
                         format: 'gtexgwas',
 
                         url: savedVariable['retrieveBottomLineVariants']+args,
+
+                        rememberVariant: generateAddToStoredVariantListFunction(nameOfBase),
 
                         indexed: false,
                         color: 'rgb(100,200,200)',
@@ -164,7 +197,22 @@ mpgSoftware.igvInit = (function () {
                                 $("#geneList").append('<li><a href="https://uswest.ensembl.org/Multi/Search/Results?q=' + symbol + '">' + symbol + '</a></li>');
                             }
                         });
+                        return false;
+                    } else  if ( ( typeof track !== 'undefined') &&
+                        ( track.name == 'T2D GWAS') &&
+                        ( typeof popoverData !== 'undefined') ){
+                        // popoverData.forEach(function (nameValue) {
+                        //     if (nameValue.name && nameValue.name.toLowerCase() === 'name') {
+                        //         symbol = nameValue.value;
+                        //     }
+                        //     if (symbol && !genesInList[symbol]) {
+                        //         genesInList[symbol] = true;
+                        //         $("#geneList").append('<li><a href="https://uswest.ensembl.org/Multi/Search/Results?q=' + symbol + '">' + symbol + '</a></li>');
+                        //     }
+                        // });
+                        return true;
                     }
+
 
                     // Prevent default pop-over behavior
                     return false;

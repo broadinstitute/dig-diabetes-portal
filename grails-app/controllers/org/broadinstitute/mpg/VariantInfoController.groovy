@@ -42,7 +42,29 @@ class VariantInfoController {
                 portalVersionBean:restServerService.retrieveBeanForCurrentPortal(),
                 phenotype:phenotypeString
         ])
-    }
+    };
+
+
+
+
+
+
+    def variantTableWithPredeterminedList(){
+        String phenotypeString = params.trait ?: restServerService.retrieveBeanForCurrentPortal().phenotype
+
+        render (view: 'variantTableHolder', model:[
+                preferredPhenotype:phenotypeString,
+                defaultChromosome:"9",
+                defaultExtentBegin:21940000,
+                defaultExtentEnd:22190000,
+                portalVersionBean:restServerService.retrieveBeanForCurrentPortal(),
+                phenotype:phenotypeString
+        ])
+    };
+
+
+
+
 
 
     def genomeBrowser(){
@@ -56,7 +78,7 @@ class VariantInfoController {
                 portalVersionBean:restServerService.retrieveBeanForCurrentPortal(),
                 phenotype:phenotypeString
         ])
-    }
+    };
 
 
     def gwasFile(){
@@ -137,7 +159,7 @@ class VariantInfoController {
                 } catch(e){
                     println("Prob parsing ${nameElements[1]}")
                 }
-                sb.append("${nameElements[0]}\t${position}\t${position+1}\t${oneRecord.DBSNP_ID}\t${oneRecord.phenotype}\t${oneRecord.P_VALUE}\t${oneRecord.BETA}\t${oneRecord.DBSNP_ID}\t${0}\n")
+                sb.append("${nameElements[0]}\t${position}\t${position+1}\t${oneRecord.DBSNP_ID}\t${oneRecord.phenotype}\t${oneRecord.P_VALUE}\t${oneRecord.BETA}\t${oneRecord.DBSNP_ID}\t${varId}\n")
             }
         }
 

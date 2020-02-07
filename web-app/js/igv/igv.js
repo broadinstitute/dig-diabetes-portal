@@ -24280,6 +24280,10 @@ Context.prototype = {
       feature['PUBMEDID'] = "<a target = \"blank\" href = \"https://www.ncbi.nlm.nih.gov/pubmed/".concat(tokens[7], "\">").concat(tokens[7], "</a>");
     }
 
+    if (tokens.length > 7) {
+      feature['varID'] = tokens[8];
+    }
+
     return feature;
   }
 
@@ -52107,31 +52111,8 @@ Context.prototype = {
     return json.variants;
   }
 
-  /*
-   * The MIT License (MIT)
-   *
-   * Copyright (c) 2014 Broad Institute
-   *
-   * Permission is hereby granted, free of charge, to any person obtaining a copy
-   * of this software and associated documentation files (the "Software"), to deal
-   * in the Software without restriction, including without limitation the rights
-   * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-   * copies of the Software, and to permit persons to whom the Software is
-   * furnished to do so, subject to the following conditions:
-   *
-   * The above copyright notice and this permission notice shall be included in
-   * all copies or substantial portions of the Software.
-   *
-   *
-   * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-   * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-   * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-   * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-   * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-   * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-   * THE SOFTWARE.
-   */
   var DEFAULT_POPOVER_WINDOW = 100000000;
+  var dataRangeMenuItem$3 = MenuUtils.dataRangeMenuItem;
   var GWASTrack = extend(TrackBase, function (config, browser) {
     this.config = config;
     this.url = config.url;
@@ -52195,7 +52176,7 @@ Context.prototype = {
         pixelHeight = options.pixelHeight,
         bpEnd = bpStart + pixelWidth * bpPerPixel + 1,
         yScale = (track.dataRange.max - track.dataRange.min) / pixelHeight,
-        // yScale = (track.maxLogP - track.minLogP) / pixelHeight,
+        //yScale = (track.maxLogP - track.minLogP) / pixelHeight,
     enablePopover = bpEnd - bpStart < DEFAULT_POPOVER_WINDOW;
 
     if (enablePopover) {
@@ -52226,9 +52207,9 @@ Context.prototype = {
         color = track.colorScale.getColor(pvalue);
         val = -Math.log(pvalue) / 2.302585092994046;
         xScale = bpPerPixel;
-        px = Math.round((pos - bpStart) / xScale); // py = Math.max(track.dotSize, pixelHeight - Math.round((val - track.minLogP) / yScale));
+        px = Math.round((pos - bpStart) / xScale);
+        py = Math.max(track.dotSize, pixelHeight - Math.round((val - track.dataRange.min) / yScale)); //py = Math.max(track.dotSize, pixelHeight - Math.round((val - track.minLogP) / yScale));
 
-        py = Math.max(track.dotSize, pixelHeight - Math.round((val - track.dataRange.min) / yScale));
         if (color) IGVGraphics.setProperties(ctx, {
           fillStyle: color,
           strokeStyle: "black"
@@ -52259,11 +52240,12 @@ Context.prototype = {
     var n = Math.ceil((this.dataRange.max - this.dataRange.min) * 10 / pixelHeight);
 
     for (var p = track.dataRange.min; p < track.dataRange.max; p += n) {
-      var yp = pixelHeight - Math.round((p - track.dataRange.min) / yScale); // TODO: Dashes may not actually line up with correct scale. Ask Jim about this
+      //for (var p = 2; p < track.maxLogP; p += 2) {
+      var yp = pixelHeight - Math.round((p - this.dataRange.min) / yScale); // TODO: Dashes may not actually line up with correct scale. Ask Jim about this
 
       IGVGraphics.strokeLine(ctx, 45, yp - 2, 50, yp - 2, font); // Offset dashes up by 2 pixel
 
-      IGVGraphics.fillText(ctx, p, 44, yp + 2, font); // Offset numbers down by 2 pixels;
+      IGVGraphics.fillText(ctx, Math.floor(p), 44, yp + 2, font); // Offset numbers down by 2 pixels;
     }
 
     font['textAlign'] = 'center';
@@ -52287,30 +52269,46 @@ Context.prototype = {
         data = [],
         chr,
         pos,
+        beta,
+        track = config.viewport.trackView.track,
         pvalue;
 
     if (this.po) {
       for (i = 0, len = this.po.length; i < len; i++) {
         p = this.po[i];
+        pvalue = p.feature[this.pvalue] || p.feature.pvalue;
+        var proportion = (track.height - yOffset) / track.height;
+        var displayedHeight = track.dataRange.min + (track.dataRange.max - track.dataRange.min) * proportion;
 
-        if (Math.abs(xOffset - p.x) < this.dotSize && Math.abs(yOffset - p.y) <= this.dotSize) {
+        if (Math.abs(genomicLocation - p.feature.start) < referenceFrame.bpPerPixel * this.dotSize && Math.abs(displayedHeight + Math.log10(pvalue)) < 0.3) {
           chr = p.feature.CHROM || p.feature.chr; // TODO fixme
 
           pos = p.feature.POS || p.feature.start; // TODO fixme
 
-          pvalue = p.feature[this.pvalue] || p.feature.pvalue;
-          dbSnp = p.feature.DBSNP_ID;
+          dbSnp = p.feature.DBSNP_ID || p.feature["Strongest SNP-risk allele"];
+          beta = p.feature["Odds ratio or beta"];
 
           if (dbSnp) {
             url = this.variantURL.startsWith("http") ? this.variantURL : this.portalURL + "/" + this.variantURL;
             data.push("<a target='_blank' href='" + url + (url.endsWith("/") ? "" : "/") + dbSnp + "' >" + dbSnp + "</a>");
-          }
+          } //data.push(chr + ":" + pos.toString());
 
-          data.push(chr + ":" + pos.toString());
+
+          data.push({
+            name: 'position',
+            value: pos + 1
+          });
           data.push({
             name: 'p-value',
             value: pvalue
           });
+
+          if (typeof beta === "number") {
+            data.push({
+              name: 'effect',
+              value: beta.toPrecision(3)
+            });
+          }
 
           if (p.feature.ZSCORE) {
             data.push({
@@ -52324,8 +52322,8 @@ Context.prototype = {
             data.push("<a target='_blank' href='" + url + (url.endsWith("/") ? "" : "/") + dbSnp + "'>" + "see all available statistics for this variant</a>");
           }
 
-          if (i < len - 1) {
-            data.push("<p/>");
+          if (typeof track.config.rememberVariant === 'function' && p.feature.varID) {
+            track.config.rememberVariant(p.feature.varID);
           }
         }
       }
@@ -52336,6 +52334,22 @@ Context.prototype = {
     return data;
   };
 
+  GWASTrack.prototype.menuItemList = function () {
+    var self = this,
+        menuItems = [];
+    menuItems.push(dataRangeMenuItem$3(this.trackView));
+    menuItems.push({
+      object: createCheckbox("Autoscale", self.autoscale),
+      click: function click() {
+        self.autoscale = !self.autoscale;
+        self.config.autoscale = self.autoscale;
+        self.trackView.setDataRange(undefined, undefined, self.autoscale);
+      }
+    });
+    menuItems.push('<a href = "/dig-diabetes-portal/variantInfo/variantTable">focus table</a>');
+    return menuItems;
+  };
+
   GWASTrack.prototype.doAutoscale = function (featureList) {
     console.log('gwas autoscale');
 
@@ -52344,6 +52358,7 @@ Context.prototype = {
         return -Math.log(qtl["P-value"]) / Math.LN10;
       });
       this.dataRange.max = IGVMath.percentile(values, this.autoscalePercentile);
+      this.dataRange.min = Math.min.apply(Math, _toConsumableArray(values));
     } else {
       // No features -- default
       var max = this.config.maxLogP || this.config.max;
