@@ -28951,6 +28951,9 @@ Context.prototype = {
       case "seg":
         return new SegParser();
 
+      case "gtexgwas":
+        return new FeatureParser("bed", decode, this.config);
+
       default:
         return new FeatureParser(format, decode, this.config);
     }
@@ -52111,6 +52114,30 @@ Context.prototype = {
     return json.variants;
   }
 
+  /*
+   * The MIT License (MIT)
+   *
+   * Copyright (c) 2014 Broad Institute
+   *
+   * Permission is hereby granted, free of charge, to any person obtaining a copy
+   * of this software and associated documentation files (the "Software"), to deal
+   * in the Software without restriction, including without limitation the rights
+   * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+   * copies of the Software, and to permit persons to whom the Software is
+   * furnished to do so, subject to the following conditions:
+   *
+   * The above copyright notice and this permission notice shall be included in
+   * all copies or substantial portions of the Software.
+   *
+   *
+   * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+   * THE SOFTWARE.
+   */
   var DEFAULT_POPOVER_WINDOW = 100000000;
   var dataRangeMenuItem$3 = MenuUtils.dataRangeMenuItem;
   var GWASTrack = extend(TrackBase, function (config, browser) {
@@ -52351,14 +52378,16 @@ Context.prototype = {
   };
 
   GWASTrack.prototype.doAutoscale = function (featureList) {
-    console.log('gwas autoscale');
+    var track = this;
 
     if (featureList.length > 0) {
       var values = featureList.map(function (qtl) {
-        return -Math.log(qtl["P-value"]) / Math.LN10;
-      });
-      this.dataRange.max = IGVMath.percentile(values, this.autoscalePercentile);
-      this.dataRange.min = Math.min.apply(Math, _toConsumableArray(values));
+        var pvalue = qtl.pvalue || qtl[track.pvalue];
+        return -Math.log(pvalue) / Math.LN10;
+      }); //this.dataRange.max = IGVMath.percentile(values, this.autoscalePercentile);
+
+      this.dataRange.max = Math.max.apply(Math, values);
+      this.dataRange.min = Math.min.apply(Math, values);
     } else {
       // No features -- default
       var max = this.config.maxLogP || this.config.max;

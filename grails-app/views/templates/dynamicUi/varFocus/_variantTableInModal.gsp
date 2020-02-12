@@ -6,7 +6,7 @@
     (function () {
         "use strict";
 
-        mpgSoftware.variantTableInitializer = (function () {
+        mpgSoftware.variantTableInitializerInModal = (function () {
 
             var variantTableConfiguration = function(parametersToOverride){
                 var drivingVariables = {
@@ -496,7 +496,7 @@
                     }
                 };
                 mpgSoftware.variantTable.setVariablesToRemember(drivingVariables);
-                mpgSoftware.variantTable.initialPageSetUp(parametersToOverride);
+             //   mpgSoftware.variantTable.initialPageSetUp(parametersToOverride);
             };
 
 
@@ -515,5 +515,4 @@
 
 
 </script>
-
 

@@ -88,6 +88,23 @@ mpgSoftware.igvInit = (function () {
                 // ],
                 tracks: [
                     // {
+                    //     type: "annotation",
+                    //     format: "bed",
+                    //     url: "https://dig-humgen.s3.amazonaws.com/diamante.1.gz",
+                    //     indexURL: "https://dig-humgen.s3.amazonaws.com/diamante.1.gz.tbi",
+                    //     displayMode: "EXPANDED",
+                    //     name: "Diamante",
+                    //     visibilityWindow: 10000000
+                    // },
+                    // {
+                    //     type: "annotation",
+                    //     format: "bed",
+                    //     url: "https://dig-humgen.s3.amazonaws.com/atac_seq.uberon_0000017.bed.gz",
+                    //     indexURL: "https://dig-humgen.s3.amazonaws.com/atac_seq.uberon_0000017.bed.gz.tbi",
+                    //     name: "ATAC-seq",
+                    //     visibilityWindow: 10000000
+                    // },
+                    // {
                     //     "name": "HG00103",
                     //     "url": "https://s3.amazonaws.com/1000genomes/data/HG00103/alignment/HG00103.alt_bwamem_GRCh38DH.20150718.GBR.low_coverage.cram",
                     //     "indexURL": "https://s3.amazonaws.com/1000genomes/data/HG00103/alignment/HG00103.alt_bwamem_GRCh38DH.20150718.GBR.low_coverage.cram.crai",
@@ -147,33 +164,33 @@ mpgSoftware.igvInit = (function () {
                     //     }
                     // }
                     // ,
-                    {
-                         name: 'T2D GWAS',
-                         trait: "T2D",
-                         label: "Type 2 Diabetes: DIAGRAM GWAS",
-                         maxLogP: 10,
-                         height: 200,
-                         pvalue: "P-value",
-                         colorScale:  {
-                            thresholds: [5e-8, 5e-4, 0.05],
-                            colors: ["rgb(0,102,51)", "rgb(122,179,23)", "rgb(158,213,76)", "rgb(227,238,249)"]
-                         },
-
-                        type: 'gwas',
-                        format: 'gtexgwas',
-
-                        url: savedVariable['retrieveBottomLineVariants']+args,
-
-                        rememberVariant: generateAddToStoredVariantListFunction(nameOfBase),
-
-                        indexed: false,
-                        color: 'rgb(100,200,200)',
-                        displayMode: 'EXPANDED',
-                        autoHeight: true,
-                        // autoscaleGroup: '2',
-                        autoscale: true
-                        // order: Number.MAX_SAFE_INTEGER // 2nd to last track
-                    }
+                    // {
+                    //      name: 'T2D GWAS',
+                    //      trait: "T2D",
+                    //      label: "Type 2 Diabetes: DIAGRAM GWAS",
+                    //      maxLogP: 10,
+                    //      height: 200,
+                    //      pvalue: "P-value",
+                    //      colorScale:  {
+                    //         thresholds: [5e-8, 5e-4, 0.05],
+                    //         colors: ["rgb(0,102,51)", "rgb(122,179,23)", "rgb(158,213,76)", "rgb(227,238,249)"]
+                    //      },
+                    //
+                    //     type: 'gwas',
+                    //     format: 'gtexgwas',
+                    //
+                    //     url: savedVariable['retrieveBottomLineVariants']+args,
+                    //
+                    //     rememberVariant: generateAddToStoredVariantListFunction(nameOfBase),
+                    //
+                    //     indexed: false,
+                    //     color: 'rgb(100,200,200)',
+                    //     displayMode: 'EXPANDED',
+                    //     autoHeight: true,
+                    //     // autoscaleGroup: '2',
+                    //     autoscale: true
+                    //     // order: Number.MAX_SAFE_INTEGER // 2nd to last track
+                    // }
                 ]
             };
 

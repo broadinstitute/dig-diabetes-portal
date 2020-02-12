@@ -57,27 +57,94 @@
 
                     <li>
                         <a href="#"
-                           onclick="igv.browser.loadTrack(
-                               {
-                                   type: 'wig',
-                                   format: 'bigwig',
-                                   url: 'https://s3.amazonaws.com/igv.broadinstitute.org/data/hg19/encode/wgEncodeBroadHistoneGm12878H3k4me3StdSig.bigWig',
-                                   name: 'Gm12878H3k4me3'
-                               })">Encode bigwig
+                           onclick="igv.browser.loadTrack({
+                               type: 'annotation',
+                               format: 'bed',
+                               url: 'https://dig-humgen.s3.amazonaws.com/atac_seq.uberon_0000017.bed.gz',
+                               indexURL: 'https://dig-humgen.s3.amazonaws.com/atac_seq.uberon_0000017.bed.gz.tbi',
+                               visibilityWindow: 200000,
+                               name: 'exocrine pancreas'})">ATAC-seq
                         </a>
                     </li>
 
                     <li>
                         <a href="#"
+                           onclick="igv.browser.loadTrack({
+                                name: 'diamante as plain bed',
+                               type: 'annotation',
+                               format: 'bed',
+                                url: 'https://dig-humgen.s3.amazonaws.com/diamante.1.gz',
+                                indexURL: 'https://dig-humgen.s3.amazonaws.com/diamante.1.gz.tbi',
+
+                                name: 'diamante'})">Diamante and plain bed
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#"
+                           onclick="igv.browser.loadTrack({
+                               name: 'T2D GWAS indexed',
+                               trait: 'T2D',
+                                label: 'Type 2 Diabetes: indexed GWAS',
+                                maxLogP: 10,
+                                height: 200,
+                                pvalue: 'score',
+                                colorScale:  {
+                                thresholds: [5e-8, 5e-4, 0.05],
+                                colors: ['rgb(0,102,51)', 'rgb(122,179,23)', 'rgb(158,213,76)', 'rgb(227,238,249)']
+                                },
+                                type: 'gwas',
+                               format: 'gtexgwas',
+                               // type: 'annotation',
+                               // format: 'bed',
+                                url: 'https://dig-humgen.s3.amazonaws.com/diamante.1.gz',
+                                indexURL: 'https://dig-humgen.s3.amazonaws.com/diamante.1.gz.tbi',
+                               visibilityWindow: 200000,
+
+                    rememberVariant: function(){alert('attempt to remember')},
+
+                                //indexed: false,
+                                color: 'rgb(100,200,200)',
+                                displayMode: 'EXPANDED',
+                                autoHeight: true,
+                                autoscale: true
+                    })">Indexed Diamante
+                        </a>
+                    </li>
+
+                    %{--<li>--}%
+                        %{--<a href="#"--}%
+                           %{--onclick="igv.browser.loadTrack(--}%
+                               %{--{--}%
+                                   %{--type: 'wig',--}%
+                                   %{--format: 'bigwig',--}%
+                                   %{--url: 'https://s3.amazonaws.com/igv.broadinstitute.org/data/hg19/encode/wgEncodeBroadHistoneGm12878H3k4me3StdSig.bigWig',--}%
+                                   %{--name: 'Gm12878H3k4me3'--}%
+                               %{--})">Encode bigwig--}%
+                        %{--</a>--}%
+                    %{--</li>--}%
+                    <li>
+                        <a href="#"
                            onclick="igv.browser.loadTrack(
                                {
-                                   type: 'alignment',
-                                   format: 'bam',
-                                   url:'https://1000genomes.s3.amazonaws.com/phase3/data/HG02450/alignment/HG02450.mapped.ILLUMINA.bwa.ACB.low_coverage.20120522.bam',
-                                   name: 'HG02450'
+                                   // type: 'alignment',
+                                   // format: 'bam',
+                                   // url:'https://1000genomes.s3.amazonaws.com/phase3/data/HG02450/alignment/HG02450.mapped.ILLUMINA.bwa.ACB.low_coverage.20120522.bam',
+                                   // name: 'HG02450'
                                })">1KG Bam (HG02450)
                         </a>
                     </li>
+                    %{--<li>--}%
+                        %{--<a href="#"--}%
+                           %{--onclick="igv.browser.loadTrack(--}%
+                               %{--{--}%
+                                   %{--type: 'alignment',--}%
+                                   %{--format: 'bam',--}%
+                                   %{--url:'https://1000genomes.s3.amazonaws.com/phase3/data/HG02450/alignment/HG02450.mapped.ILLUMINA.bwa.ACB.low_coverage.20120522.bam',--}%
+                                   %{--name: 'HG02450'--}%
+                               %{--})">1KG Bam (HG02450)--}%
+                        %{--</a>--}%
+                    %{--</li>--}%
 
                 </ul>
             </div>
@@ -108,6 +175,9 @@
 <div id="igv-div">
 
 </div>
+
+<g:render template="/templates/dynamicUi/varFocus/variantTableTemplateInModal" />
+
 <g:render template="/genomeBrowser/igv" />
 
 </body>
