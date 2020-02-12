@@ -374,7 +374,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 obj = { "name": colName,  "class":"codeName_"+colName, "targets": [target], "title": "Gene" };
                 break;
             case 'Consequence':
-                obj = { "name": colName,  "class":"codeName_"+colName, "targets": [target], "title": "Predicted<br/>impact" };
+                obj = { "name": colName,  "class":"codeName_"+colName, "targets": [target], "title": "SO Term" };
                 break;
             case 'AF':
                 obj = { "name": colName,  "class":"codeName_"+colName, "targets": [target], "title": "MAF" };
@@ -408,6 +408,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         });
         if (requestedProperties.length===0){
             requestedProperties.push("VAR_ID");
+            requestedProperties.push("GENE");
             requestedProperties.push("DBSNP_ID");
             requestedProperties.push("Reference_allele");
             requestedProperties.push("Effect_allele");

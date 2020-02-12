@@ -543,7 +543,6 @@ class VariantSearchController {
             }
 
         }
-
         render(status: 200, contentType: "application/json") {
             [variants: dataJsonObject
             ]
