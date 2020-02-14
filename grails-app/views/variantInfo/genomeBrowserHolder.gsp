@@ -95,34 +95,75 @@
                                 },
                                 type: 'gwas',
                                format: 'gtexgwas',
-                               // type: 'annotation',
-                               // format: 'bed',
                                 url: 'https://dig-humgen.s3.amazonaws.com/diamante.1.gz',
                                 indexURL: 'https://dig-humgen.s3.amazonaws.com/diamante.1.gz.tbi',
                                visibilityWindow: 200000,
-
-                    rememberVariant: function(){alert('attempt to remember')},
-
-                                //indexed: false,
+                                rememberVariant: function(){alert('attempt to remember')},
                                 color: 'rgb(100,200,200)',
                                 displayMode: 'EXPANDED',
                                 autoHeight: true,
-                                autoscale: true
+                                autoscale: true,
+                               order: 4
                     })">Indexed Diamante
                         </a>
                     </li>
 
-                    %{--<li>--}%
-                        %{--<a href="#"--}%
-                           %{--onclick="igv.browser.loadTrack(--}%
-                               %{--{--}%
-                                   %{--type: 'wig',--}%
-                                   %{--format: 'bigwig',--}%
-                                   %{--url: 'https://s3.amazonaws.com/igv.broadinstitute.org/data/hg19/encode/wgEncodeBroadHistoneGm12878H3k4me3StdSig.bigWig',--}%
-                                   %{--name: 'Gm12878H3k4me3'--}%
-                               %{--})">Encode bigwig--}%
-                        %{--</a>--}%
-                    %{--</li>--}%
+                    <li>
+                        <a href="#"
+                           onclick="igv.browser.loadTrack({
+                               name: 'Posterior probabilities',
+                               trait: 'T2D',
+                               label: 'Type 2 Diabetes: posterior probabilities',
+                               posteriorProbability: true,
+                               ppa: 'score',
+                               maxLogP: 10,
+                               height: 200,
+                               pvalue: 'score',
+                               colorScale:  {
+                                   thresholds: [0.1, 0.5, 0.8],
+                                   colors: ['rgb(210,180,181)', 'rgb(230,140,163)', 'rgb(255,100,120)', 'rgb(255,0,0)']
+                               },
+                               type: 'gwas',
+                               format: 'gtexgwas',
+                               url: 'https://dig-humgen.s3.amazonaws.com/diamante.posterior.gz',
+                               indexURL: 'https://dig-humgen.s3.amazonaws.com/diamante.posterior.gz.tbi',
+                               visibilityWindow: 200000,
+                               rememberVariant: function(){alert('attempt to remember')},
+                               color: 'rgb(100,200,200)',
+                               displayMode: 'EXPANDED',
+                               autoHeight: true,
+                               autoscale: true,
+                                order: 3
+                           })">Posteriors
+                        </a>
+                    </li>
+
+
+
+                    <li>
+                        <a href="#"
+                           onclick="igv.browser.loadTrack(
+                               {
+                                name: 'Sample BAM',
+                                url: 'https://idea-cdn.s3.eu-west-2.amazonaws.com/out.marked.bam',
+                                indexURL: 'https://idea-cdn.s3.eu-west-2.amazonaws.com/out.marked.bai',
+                                format: 'bam',
+                                height: 100,
+                                order: 51
+                                })">BAM (HG02450)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#"
+                           onclick="igv.browser.loadTrack(
+                               {
+                                   type: 'wig',
+                                   format: 'bigwig',
+                                   url: 'https://s3.amazonaws.com/igv.broadinstitute.org/data/hg19/encode/wgEncodeBroadHistoneGm12878H3k4me3StdSig.bigWig',
+                                   name: 'Gm12878H3k4me3'
+                               })">Encode bigwig
+                        </a>
+                    </li>
                     <li>
                         <a href="#"
                            onclick="igv.browser.loadTrack(

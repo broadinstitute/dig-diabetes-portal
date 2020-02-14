@@ -58,8 +58,8 @@ mpgSoftware.igvInit = (function () {
         });
         var igvDiv = document.getElementById(nameOfBase);
         const savedVariable = getVariable('#'+nameOfBase);
-        startPosition = startPosition || 41233047;
-        endPosition = endPosition || 41235646;
+        startPosition = startPosition || 36089936;
+        endPosition = endPosition || 36110735;
         chromosome = chromosome || "17";
         phenotype = phenotype || "T2D";
         limit = limit || 200;
@@ -90,32 +90,26 @@ mpgSoftware.igvInit = (function () {
                     // {
                     //     type: "annotation",
                     //     format: "bed",
-                    //     url: "https://dig-humgen.s3.amazonaws.com/diamante.1.gz",
-                    //     indexURL: "https://dig-humgen.s3.amazonaws.com/diamante.1.gz.tbi",
-                    //     displayMode: "EXPANDED",
-                    //     name: "Diamante",
-                    //     visibilityWindow: 10000000
-                    // },
-                    // {
-                    //     type: "annotation",
-                    //     format: "bed",
                     //     url: "https://dig-humgen.s3.amazonaws.com/atac_seq.uberon_0000017.bed.gz",
                     //     indexURL: "https://dig-humgen.s3.amazonaws.com/atac_seq.uberon_0000017.bed.gz.tbi",
                     //     name: "ATAC-seq",
                     //     visibilityWindow: 10000000
                     // },
-                    // {
-                    //     "name": "HG00103",
-                    //     "url": "https://s3.amazonaws.com/1000genomes/data/HG00103/alignment/HG00103.alt_bwamem_GRCh38DH.20150718.GBR.low_coverage.cram",
-                    //     "indexURL": "https://s3.amazonaws.com/1000genomes/data/HG00103/alignment/HG00103.alt_bwamem_GRCh38DH.20150718.GBR.low_coverage.cram.crai",
-                    //     "format": "cram"
-                    // }
-                    // ,
+                    {
+                        "name": "HG00103",
+                        "url": "https://s3.amazonaws.com/1000genomes/data/HG00103/alignment/HG00103.alt_bwamem_GRCh38DH.20150718.GBR.low_coverage.cram",
+                        "indexURL": "https://s3.amazonaws.com/1000genomes/data/HG00103/alignment/HG00103.alt_bwamem_GRCh38DH.20150718.GBR.low_coverage.cram.crai",
+                        "format": "cram",
+                        "order": 50
+                    }
+                    ,
                     // {
                     //     "name": "Sample BAM",
                     //     "url": "https://idea-cdn.s3.eu-west-2.amazonaws.com/out.marked.bam",
                     //     "indexURL": "https://idea-cdn.s3.eu-west-2.amazonaws.com/out.marked.bai",
-                    //     "format": "bam"
+                    //     "format": "bam",
+                    //     height: 100,
+                    //     "order": 51
                     // },
                     // {
                     //     name: "gnomAD coverage at 10x",
@@ -134,12 +128,12 @@ mpgSoftware.igvInit = (function () {
                     //     height: 50,
                     //     visibilityWindow: 500000
                     // },
-                    // {
-                    //     url: 'https://www.encodeproject.org/files/ENCFF000ASF/@@download/ENCFF000ASF.bigWig',
-                    //     name: 'GM12878 H3K4me3',
-                    //     color: 'rgb(200,0,0)',
-                    //     //autoscaleGroup: '1'
-                    // },
+                    {
+                        url: 'https://www.encodeproject.org/files/ENCFF000ASF/@@download/ENCFF000ASF.bigWig',
+                        name: 'GM12878 H3K4me3',
+                        color: 'rgb(200,0,0)',
+                        "order": 52
+                    },
                     // {
                     //     url: 'https://www.encodeproject.org/files/ENCFF000AST/@@download/ENCFF000AST.bigWig',
                     //     name: 'GM12878 H3K4me3',
@@ -148,22 +142,23 @@ mpgSoftware.igvInit = (function () {
                     //     min: -5,
                     //     max: 5
                     // },
-                    // {
-                    //     url: 'https://s3.us-east-2.amazonaws.com/ccrs/tracks/gerp.bw',
-                    //     name: 'Genomic Evolutionary Rate Profiling',
-                    //     type: "wig",
-                    //     color: function(value) {
-                    //         var c;
-                    //         if (value < 1.7){
-                    //             c = "rgb(0,0,255)"
-                    //         }
-                    //         if (value >= 1.7){
-                    //             c = "rgb(255,0,0)"
-                    //         }
-                    //         return c
-                    //     }
-                    // }
-                    // ,
+                    {
+                        url: 'https://s3.us-east-2.amazonaws.com/ccrs/tracks/gerp.bw',
+                        name: 'GERP',
+                        type: "wig",
+                        color: function(value) {
+                            var c;
+                            if (value < 1.7){
+                                c = "rgb(0,0,255)"
+                            }
+                            if (value >= 1.7){
+                                c = "rgb(255,0,0)"
+                            }
+                            return c
+                        },
+                        "order": 53
+                    }
+                    ,
                     // {
                     //      name: 'T2D GWAS',
                     //      trait: "T2D",
