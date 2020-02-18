@@ -374,7 +374,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 obj = { "name": colName,  "class":"codeName_"+colName, "targets": [target], "title": "Gene" };
                 break;
             case 'Consequence':
-                obj = { "name": colName,  "class":"codeName_"+colName, "targets": [target], "title": "SO Term" };
+                obj = { "name": colName,  "class":"codeName_"+colName, "targets": [target], "title": "Sequence Ontology Term" };
                 break;
             case 'AF':
                 obj = { "name": colName,  "class":"codeName_"+colName, "targets": [target], "title": "MAF" };
