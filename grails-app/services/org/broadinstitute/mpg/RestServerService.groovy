@@ -17,6 +17,7 @@ import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryBean
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryHolder
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter
+import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilterBean
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryJsonBuilder
 import org.broadinstitute.mpg.diabetes.util.PortalException
 import org.codehaus.groovy.grails.commons.GrailsApplication
@@ -2029,6 +2030,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
     private JSONObject gatherGenePrioritizationInformation (String phenotypeName, String dataSetName, String propertyName) {
         LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties([ "GENE", "START" , "END", "GEN_ID", "CHROM"])
+//        String filter = "17=" + phenotypeName + "[" + dataSetName + "]" + propertyName + ">0";
+//        List<String> filters = [filter];
+
         List<String> filters = []
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(filters, searchBuilderService, metaDataService,MetaDataService.METADATA_GENE)
 
@@ -2043,6 +2047,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForControlCount)
 
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
+//        getDataQueryHolder.decodeFilter(filter)
         getDataQueryHolder.addOrderByProperty(metaDataService.getPropertyByNamePhenotypeAndSampleGroup(propertyName, phenotypeName, dataSetName,MetaDataService.METADATA_GENE), '1')
         getDataQueryHolder.getDataQuery.setLimit(7000)
         JsonSlurper slurper = new JsonSlurper()

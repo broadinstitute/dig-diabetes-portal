@@ -18,6 +18,9 @@ var mpgSoftware = mpgSoftware || {};
 
 
         var retrieveSpecifiedDataAndDisplayIt  = function(currentPhenotypeName,selectedDataset,currentPropertyName){
+            if(currentPropertyName == "default"){
+                return
+            }
             var mySavedVariables = getMySavedVariables();
             $('#spinner').show();
             $.ajax({
@@ -51,6 +54,8 @@ var mpgSoftware = mpgSoftware || {};
 
             options.empty();
 
+            options.append("<option selected hidden value=default>-- &nbsp;&nbsp;select a dataset&nbsp;&nbsp; --</option>");
+
             // now restrict all options based on the two incoming parameters
             var matchingPhenotypeRecords =  _.filter(dataSetJson.pheotypeRecords, function(oneGroup){
                 return (oneGroup.systemId === selectedDataset && oneGroup.name === currentPhenotypeName); // name here equals phenotype
@@ -60,9 +65,10 @@ var mpgSoftware = mpgSoftware || {};
                     _.forEach(matchingPhenotypeRecords, function (oneElement) {
                         _.forEach(oneElement.properties, function (subElement){
                             var selectorOption = "";
-                            if (subElement.name.indexOf('ynonymous')>-1){
-                                selectorOption = " selected";
-                            }
+                            // if (subElement.name.indexOf('ynonymous')>-1){
+                            //     selectorOption = " selected";
+                            // }
+
                             options.append($("<option "+selectorOption+"/>").val(subElement.name)
                                 .html(subElement.translatedProperty));
                         });
@@ -77,7 +83,7 @@ var mpgSoftware = mpgSoftware || {};
 
 
 
-        var fillGenePhenotypeAndSubPhenotypeDropdown = function ( dataSetJson,
+        var fillGenePhenotypeAndSubPhenotypeDropdown = function ( dataSetJson,mode,
                                                                   currentPhenotypeName,
                                                                   phenotypeDropdownIdentifier,
                                                                   subphenotypeDropdownIdentifier ) { // help text for each row
@@ -87,28 +93,30 @@ var mpgSoftware = mpgSoftware || {};
                 (typeof dataSetJson["pheotypeRecords"]  !== 'undefined' )&&
                 ( dataSetJson["pheotypeRecords"].length > 0 ))
             {
-                var options = $(phenotypeDropdownIdentifier);
-                $.data(options[0],'metadata',dataSetJson);
+                if (mode !== 'datasetChanged') {
+                    var options = $(phenotypeDropdownIdentifier);
+                    $.data(options[0], 'metadata', dataSetJson);
 
-                options.empty();
+                    options.empty();
 
-                var keys = dataSetJson.preferredGroups;
+                    var keys = dataSetJson.preferredGroups;
 
-                // begin by retrieving the most desirable phenotype groups
-                var matchingPhenotypeRecords =  _.filter(dataSetJson.pheotypeRecords, function(oneGroup){
-                    return oneGroup.name === currentPhenotypeName;
+                    // begin by retrieving the most desirable phenotype groups
+                    var matchingPhenotypeRecords = _.filter(dataSetJson.pheotypeRecords, function (oneGroup) {
+                        return oneGroup.name === currentPhenotypeName;
 
-                });
-                var dataSetRecordsForPhenotype = _.uniqBy(matchingPhenotypeRecords,'systemId');
-                if (dataSetRecordsForPhenotype.length > 0){
-                    _.forEach (dataSetRecordsForPhenotype, function (oneElement){
-                        options.append($("<option />").val(oneElement.systemId)
-                            .html(oneElement.translatedSystemId));
                     });
-                }
+                    var dataSetRecordsForPhenotype = _.uniqBy(matchingPhenotypeRecords, 'systemId');
+                    if (dataSetRecordsForPhenotype.length > 0) {
+                        _.forEach(dataSetRecordsForPhenotype, function (oneElement) {
+                            options.append($("<option />").val(oneElement.systemId)
+                                .html(oneElement.translatedSystemId));
+                        });
+                    }
 
-                // enable the input
-                options.prop('disabled', false);
+                    // enable the input
+                    options.prop('disabled', false);
+                }
 
                 fillSubPhenotypeBoxBasedOnPhenotypeAndDataSet(  currentPhenotypeName,
                                                                 $(phenotypeDropdownIdentifier+' option:selected').val(),
@@ -121,7 +129,7 @@ var mpgSoftware = mpgSoftware || {};
 
 
 
-        var fillDropdownsForGenePrioritization = function () {
+        var fillDropdownsForGenePrioritization = function (mode) {
             var mySavedVariables = getMySavedVariables();
 
             $.ajax({
@@ -132,7 +140,7 @@ var mpgSoftware = mpgSoftware || {};
                 async: true
             }).done ( function(data){
                     var myLocalSavedVariables = getMySavedVariables();
-                    fillGenePhenotypeAndSubPhenotypeDropdown(data,
+                    fillGenePhenotypeAndSubPhenotypeDropdown(data,mode,
                         myLocalSavedVariables.phenotypeName,
                         myLocalSavedVariables.phenotypeDropdownIdentifier,
                         myLocalSavedVariables.subphenotypeDropdownIdentifier);
@@ -147,19 +155,31 @@ var mpgSoftware = mpgSoftware || {};
 
 
 
-        var pickNewGeneInfo = function (){
-            var mySavedVars = getMySavedVariables();
-            $('#spinner').show();
-            var sampleGroup = $('#manhattanSampleGroupChooser').val();
-            $('#manhattanPlot1').empty();
-            $('#traitTableBody').empty();
-            $('#phenotypeTraits').DataTable().rows().remove();
-            $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
-            retrieveSpecifiedDataAndDisplayIt (mySavedVars.phenotypeName,
-                $(mySavedVars.phenotypeDropdownIdentifier+' option:selected').val(),
-                $(mySavedVars.subphenotypeDropdownIdentifier+' option:selected').val());
-            //mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis(mySavedVars.phenotypeName,sampleGroup);
+        var pickNewGeneInfo = function (mode){
+            if(mode =="datasetChanged"){
+                //fill the subPhenotype, make fetch call and redraw the plot and table
+                // var mySavedVars = getMySavedVariables();
+                // $(mySavedVars.phenotypeDropdownIdentifier+' option:selected').val()
+                // $('#manhattanPlot1').empty();
+                // $('#traitTableBody').empty();
+                // $('#phenotypeTraits').DataTable().rows().remove();
+                // $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
 
+                fillDropdownsForGenePrioritization(mode);
+
+            }
+            else if(mode == "subPhenotypeChanged"){
+                // make a fetch call and redraw the plot and table
+                var mySavedVars = getMySavedVariables();
+                $('#spinner').show();
+                // $('#manhattanPlot1').empty();
+                // $('#traitTableBody').empty();
+                // $('#phenotypeTraits').DataTable().rows().remove();
+                // $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
+                retrieveSpecifiedDataAndDisplayIt (mySavedVars.phenotypeName,
+                                   $(mySavedVars.phenotypeDropdownIdentifier+' option:selected').val(),
+                                   $(mySavedVars.subphenotypeDropdownIdentifier+' option:selected').val());
+            }
         };
 
         var refreshGeneTableView = (function(data) {

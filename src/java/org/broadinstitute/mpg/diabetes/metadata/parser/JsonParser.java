@@ -980,6 +980,7 @@ public class JsonParser {
         // local variables
         Property property;
 
+
         // create the visitor
         JsNameTranslationVisitor visitor = new JsNameTranslationVisitor(jsNameString);
 
