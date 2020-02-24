@@ -468,7 +468,7 @@
                         <img src="${resource(dir: 'images', file: 'data_icon4.png')}" style="width: 200px; margin-right: -50px;" align="right" >
                         <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData" default="About the data" /></h2>
                     <p><g:message code="about.the.portal.data.text" />
-                    <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">87 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">198 traits</span></h1>
+                    <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">88 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">198 traits</span></h1>
 
                         <span style="display:block; width: 100%;text-align:left;"><a style=" font-size: 20px; padding:10px 40px 10px 0; margin-right: -30px;background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; text-decoration:none; color:#333333; " href="http://www.kp4cd.org/datasets/t2d"><g:message code="about.the.portal.data.text2"/></a></span>
                     <p style="font-size:20px; margin-top: 10px;"><a href="https://www.diabetesepigenome.org/"><img src="${resource(dir:'images/organizations', file:'DGA.png')}" align="left" style="width:190px; margin-top: 5px; margin-left: -5px; "></a>View complementary data at <br />the <a href="https://www.diabetesepigenome.org/">Diabetes Epigenome Atlas</a></p>
