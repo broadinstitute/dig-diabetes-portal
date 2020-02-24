@@ -263,6 +263,8 @@
             </div>
         </div>
 
+        <div id="effector-genes-table-switch"><a href="javascript:;" class="switch active">Prediction method 1</a><a href="http://kp4cd.org/effector_genes/t2d" class="switch">Prediction method 2</a></div>
+
         <!--<h5><a data-toggle="collapse" href="#graphicsDiv" aria-expanded="false" aria-controls="collapseExample" style="font-size: 0.8em;">View / hide graphic</a></h5>-->
         <div class="col-md-12" style="border-bottom:solid 1px #ddd; margin-top: -25px; margin-bottom: 20px; padding-left: 0;">
             <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact"><a data-toggle="collapse" href="#graphicsDiv" aria-expanded="false" aria-controls="collapseExample" style="font-size: 0.8em;">View / hide graphic</a></div>
