@@ -1684,3 +1684,27 @@ ul.traits-filter-options > li {
 .front-top-banner-bone .front-logo-wrapper { width: 930px; }
 
 .front-top-banner-bone .front-logo-img { width: 500px; }
+
+#effector-genes-table-switch {
+	width: 100%;
+	text-align: center;
+	border-bottom: solid 1px #ddd;
+	margin-bottom: 50px;
+	font-size: 16px;
+}
+
+#effector-genes-table-switch > a.switch {
+	display: inline-block;
+	color: #999;
+	padding: 5px 15px;
+	border: solid 1px #ddd;
+	margin: 5px;
+	margin-bottom: -1px;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+}
+
+#effector-genes-table-switch > a.switch.active {
+	color: #000;
+	border-bottom:solid 1px #fff;
+}
