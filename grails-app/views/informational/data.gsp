@@ -74,6 +74,14 @@
     }
     </style>
 
+    <script>
+        var portal = "${ g.portalTypeString() }";
+        var redirectAddress = "http://kp4cd.org/datasets/"+portal;
+
+        window.location.href = redirectAddress;
+
+    </script>
+
 
 </head>
 
