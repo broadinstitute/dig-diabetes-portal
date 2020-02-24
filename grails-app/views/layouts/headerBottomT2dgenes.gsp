@@ -75,10 +75,12 @@
 </g:if>
                     <li class="" style=""><a href="http://www.kp4cd.org/new_features/${g.portalTypeString()}">Blog</a></li>
 
+                    <li class="" style=""><a href="http://www.kp4cd.org/contacts/${g.portalTypeString()}">Contacts</a></li>
+
                 </ul>
             </li>
 
-            <li class="contact-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="http://www.kp4cd.org/contacts/${g.portalTypeString()}"><g:message code="portal.header.nav.contact_plural"/></a></li>
+            <li class="contact-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="http://www.kp4cd.org/contact">Help</a></li>
 
 
             <sec:ifLoggedIn>
