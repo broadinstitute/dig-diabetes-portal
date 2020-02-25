@@ -83,9 +83,9 @@
                     <li>
                         <a href="#"
                            onclick="igv.browser.loadTrack({
-                               name: 'T2D GWAS indexed',
+                               name: 'T2D DIAMANTE GWAS',
                                trait: 'T2D',
-                                label: 'Type 2 Diabetes: indexed GWAS',
+                                label: 'T2D DIAMANTE GWAS',
                                 maxLogP: 10,
                                 height: 200,
                                 pvalue: 'score',
@@ -111,7 +111,7 @@
                     <li>
                         <a href="#"
                            onclick="igv.browser.loadTrack({
-                               name: 'Posterior probabilities',
+                               name: 'T2D Posterior prob.',
                                trait: 'T2D',
                                label: 'Type 2 Diabetes: posterior probabilities',
                                posteriorProbability: true,

@@ -9676,6 +9676,7 @@ Context.prototype = {
   }
 
   function dragStart(event) {
+    console.log('dragStart1');
     event.stopPropagation();
     event.preventDefault();
     var styleX = Math.round(parseFloat(this.style.left.replace("px", "")));
@@ -9696,6 +9697,7 @@ Context.prototype = {
 
   function drag(event) {
     if (!dragData) {
+      console.log("No drag data!");
       return;
     }
 
@@ -9709,6 +9711,7 @@ Context.prototype = {
 
   function dragEnd(event) {
     if (!dragData) {
+      console.log("No drag data!");
       return;
     }
 
@@ -16666,6 +16669,7 @@ Context.prototype = {
       if (color.startsWith("rgb")) {
         return color.replace("rgb", "rgba").replace(")", ", " + alpha + ")");
       } else {
+        console.log(color + " is not an rgb style string");
         return color;
       }
     },
@@ -16899,7 +16903,10 @@ Context.prototype = {
       $genericContainer.append($swatch);
       $swatch.css('background-color', color);
 
-      if ('white' === color) ; else {
+      if ('white' === color) {
+        // do nothing
+        console.log('-');
+      } else {
         $swatch.hover(function () {
           $swatch.get(0).style.borderColor = color;
         }, function () {
@@ -16969,7 +16976,9 @@ Context.prototype = {
         posx,
         posy;
 
-    if (undefined === $target.offset()) ;
+    if (undefined === $target.offset()) {
+      console.log('translateMouseCoordinates - $target.offset() is undefined.');
+    }
 
     var coords = pageCoordinates(e);
     posx = coords.x - $target.offset().left;
@@ -17477,6 +17486,7 @@ Context.prototype = {
       qIdx = gsUrl.indexOf('?');
 
       if (i < 0) {
+        console.log("Invalid gs url: " + gsUrl);
         return gsUrl;
       }
 
@@ -18181,6 +18191,7 @@ Context.prototype = {
                                           };
 
                                           xhr.onabort = function (event) {
+                                            console.log("Aborted");
                                             reject(event);
                                           };
 
@@ -18383,6 +18394,7 @@ Context.prototype = {
       };
 
       fileReader.onerror = function (e) {
+        console.log("reject uploading local file " + localfile.name);
         reject(null, fileReader);
       };
 
@@ -18622,7 +18634,11 @@ Context.prototype = {
     if (startupCalls === 0 && !href.includes("localhost") && !href.includes("127.0.0.1")) {
       startupCalls++;
       var url = "https://data.broadinstitute.org/igv/projects/current/counter_igvjs.php?version=" + "0";
-      igvxhr.load(url).then(function (ignore) {}).catch(function (error) {});
+      igvxhr.load(url).then(function (ignore) {
+        console.log(ignore);
+      }).catch(function (error) {
+        console.log(error);
+      });
     }
   }
   /**
@@ -18946,7 +18962,8 @@ Context.prototype = {
       var idxEntry = self.index[chr];
 
       if (!idxEntry) {
-        // Tag interval with null so we don't try again
+        console.log("No index entry for chr: " + chr); // Tag interval with null so we don't try again
+
         self.interval = new GenomicInterval(chr, qstart, qend, null);
         return null;
       } else {
@@ -20892,11 +20909,20 @@ Context.prototype = {
 
 
   IntervalTree.prototype.logIntervals = function () {
-    logNode(this.root);
+    logNode(this.root, 0);
 
     function logNode(node, indent) {
-      if (node.left !== NIL) logNode(node.left);
-      if (node.right !== NIL) logNode(node.right);
+      var space = "";
+
+      for (var i = 0; i < indent; i++) {
+        space += " ";
+      }
+
+      console.log(space + node.interval.low + " " + node.interval.high); // + " " + (node.interval.value ? node.interval.value : " null"));
+
+      indent += 5;
+      if (node.left !== NIL) logNode(node.left, indent);
+      if (node.right !== NIL) logNode(node.right, indent);
     }
   };
 
@@ -21753,7 +21779,9 @@ Context.prototype = {
     }
   };
 
-  Tick.prototype.description = function (blurb) {};
+  Tick.prototype.description = function (blurb) {
+    console.log((blurb || '') + ' tick ' + numberFormatter(this.majorTick) + ' label width ' + numberFormatter(this.labelWidthBP) + ' multiplier ' + this.unitMultiplier);
+  };
 
   /*
    * The MIT License (MIT)
@@ -24252,6 +24280,10 @@ Context.prototype = {
       feature['PUBMEDID'] = "<a target = \"blank\" href = \"https://www.ncbi.nlm.nih.gov/pubmed/".concat(tokens[7], "\">").concat(tokens[7], "</a>");
     }
 
+    if (tokens.length > 7) {
+      feature['varID'] = tokens[8];
+    }
+
     return feature;
   }
 
@@ -24552,6 +24584,7 @@ Context.prototype = {
         i; // Each aed row must match the exact number of columns or we skip it
 
     if (tokens.length !== aedColumns.length) {
+      console.log('Corrupted AED file row: ' + tokens.join(','));
       return undefined;
     }
 
@@ -24592,6 +24625,7 @@ Context.prototype = {
     var feature = new AedFeature(this.aed, tokens);
 
     if (!feature.chr || !feature.start && feature.start !== 0 || !feature.end) {
+      console.log('Cannot parse feature: ' + tokens.join(','));
       return undefined;
     }
 
@@ -24600,6 +24634,7 @@ Context.prototype = {
 
   function decodeBedpe(tokens, ignore) {
     if (tokens.length < 6) {
+      console.log("Skipping line: " + tokens.join(' '));
       return undefined;
     }
 
@@ -25496,6 +25531,7 @@ Context.prototype = {
             gtIdx = line.lastIndexOf(">");
 
             if (!(ltIdx > 2 && gtIdx > 0)) {
+              console.log("Malformed VCF header line: " + line);
               continue;
             }
 
@@ -26077,6 +26113,8 @@ Context.prototype = {
             lastChunk = chunk;
           }
         }
+      } else {
+        console.log("skipping chunk ".concat(chunk));
       }
     });
     return mergedChunks;
@@ -27867,6 +27905,7 @@ Context.prototype = {
 
   function overlaps(item, chrIdx1, startBase, chrIdx2, endBase) {
     if (!item) {
+      console.log("null item for " + chrIdx1 + " " + startBase + " " + endBase);
       return false;
     }
 
@@ -28420,6 +28459,7 @@ Context.prototype = {
 
     var getX = function getX(feature) {
       var x = Math.floor((feature.start - bpStart) / bpPerPixel);
+      if (isNaN(x)) console.log('isNaN(x). feature start ' + numberFormatter(feature.start) + ' bp start ' + numberFormatter(bpStart));
       return x;
     };
 
@@ -28641,6 +28681,7 @@ Context.prototype = {
 
       return candidateFeature;
     } else {
+      console.log(position + ' not found!');
       return undefined;
     }
 
@@ -28930,11 +28971,13 @@ Context.prototype = {
           case 0:
             options = buildOptions(this.config); // Add oauth token, if any
 
-            _context3.next = 3;
+            console.log("loadFeaturesNoIndex1");
+            _context3.next = 4;
             return igvxhr.loadString(this.config.url, options);
 
-          case 3:
+          case 4:
             data = _context3.sent;
+            console.log("loadFeaturesNoIndex2");
             this.header = this.parser.parseHeader(data);
 
             if (this.header instanceof String && this.header.startsWith("##gff-version 3")) {
@@ -28943,7 +28986,7 @@ Context.prototype = {
 
             return _context3.abrupt("return", this.parser.parseFeatures(data));
 
-          case 7:
+          case 9:
           case "end":
             return _context3.stop();
         }
@@ -31394,6 +31437,276 @@ Context.prototype = {
     }
   };
 
+  /*
+   * The MIT License (MIT)
+   *
+   * Copyright (c) 2014 Broad Institute
+   *
+   * Permission is hereby granted, free of charge, to any person obtaining a copy
+   * of this software and associated documentation files (the "Software"), to deal
+   * in the Software without restriction, including without limitation the rights
+   * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+   * copies of the Software, and to permit persons to whom the Software is
+   * furnished to do so, subject to the following conditions:
+   *
+   * The above copyright notice and this permission notice shall be included in
+   * all copies or substantial portions of the Software.
+   *
+   *
+   * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+   * THE SOFTWARE.
+   */
+  var dataRangeMenuItem$2 = MenuUtils.dataRangeMenuItem;
+  var EqtlTrack = extend(TrackBase, function (config, browser) {
+    var url = config.url,
+        label = config.name;
+    this.config = config;
+    this.url = url;
+    this.name = label;
+    this.pValueField = config.pValueField || "pValue";
+    this.geneField = config.geneField || "geneSymbol";
+    this.snpField = config.snpField || "snp";
+    var min = config.minLogP || config.min;
+    var max = config.maxLogP || config.max;
+    this.dataRange = {
+      min: min || 3.5,
+      max: max || 25
+    };
+
+    if (!max) {
+      this.autoscale = true;
+    } else {
+      this.autoscale = config.autoscale;
+    }
+
+    this.autoscalePercentile = config.autoscalePercentile === undefined ? 98 : config.autoscalePercentile;
+    this.background = config.background; // No default
+
+    this.divider = config.divider || "rgb(225,225,225)";
+    this.dotSize = config.dotSize || 2;
+    this.height = config.height || 100;
+    this.autoHeight = false;
+    this.disableButtons = config.disableButtons; // Limit visibility window to 2 mb,  gtex server gets flaky beyond that
+
+    this.visibilityWindow = config.visibilityWindow === undefined ? 2000000 : config.visibilityWindow >= 0 ? Math.min(2000000, config.visibilityWindow) : 2000000;
+    this.featureSource = new FeatureSource(config, browser.genome);
+    GtexUtils.gtexLoaded = true;
+  });
+
+  EqtlTrack.prototype.paintAxis = function (ctx, pixelWidth, pixelHeight) {
+    var track = this,
+        yScale = (track.dataRange.max - track.dataRange.min) / pixelHeight;
+    var font = {
+      'font': 'normal 10px Arial',
+      'textAlign': 'right',
+      'strokeStyle': "black"
+    };
+    IGVGraphics.fillRect(ctx, 0, 0, pixelWidth, pixelHeight, {
+      'fillStyle': "rgb(255, 255, 255)"
+    }); // Determine a tick spacing such that there is at least 10 pixels between ticks
+
+    var n = Math.ceil((this.dataRange.max - this.dataRange.min) * 10 / pixelHeight);
+
+    for (var p = 4; p <= track.dataRange.max; p += n) {
+      var x1, x2, y1, y2, ref; // TODO: Dashes may not actually line up with correct scale. Ask Jim about this
+
+      ref = 0.85 * pixelWidth;
+      x1 = ref - 5;
+      x2 = ref;
+      y1 = y2 = pixelHeight - Math.round((p - track.dataRange.min) / yScale);
+      IGVGraphics.strokeLine(ctx, x1, y1, x2, y2, font); // Offset dashes up by 2 pixel
+
+      if (y1 > 8) {
+        IGVGraphics.fillText(ctx, p, x1 - 1, y1 + 2, font);
+      } // Offset numbers down by 2 pixels;
+
+    }
+
+    font['textAlign'] = 'center';
+    IGVGraphics.fillText(ctx, "-log10(pvalue)", pixelWidth / 4, pixelHeight / 2, font, {
+      rotate: {
+        angle: -90
+      }
+    });
+  };
+
+  EqtlTrack.prototype.getFeatures = function (chr, bpStart, bpEnd) {
+    var pValueField = this.pValueField;
+    return this.featureSource.getFeatures(chr, bpStart, bpEnd).then(function (features) {
+      features.forEach(function (f) {
+        f.value = f[pValueField];
+      });
+      return features;
+    });
+  };
+
+  EqtlTrack.prototype.draw = function (options) {
+    var self = this,
+        featureList = options.features,
+        ctx = options.context,
+        bpPerPixel = options.bpPerPixel,
+        bpStart = options.bpStart,
+        pixelWidth = options.pixelWidth,
+        pixelHeight = options.pixelHeight,
+        yScale = (self.dataRange.max - self.dataRange.min) / pixelHeight,
+        selection = options.genomicState.selection; // Background
+
+    if (this.background) IGVGraphics.fillRect(ctx, 0, 0, pixelWidth, pixelHeight, {
+      'fillStyle': this.background
+    });
+    IGVGraphics.strokeLine(ctx, 0, pixelHeight - 1, pixelWidth, pixelHeight - 1, {
+      'strokeStyle': this.divider
+    });
+
+    if (ctx) {
+      var len = featureList.length;
+      ctx.save(); // Draw in two passes, with "selected" eqtls drawn last
+
+      drawEqtls(false);
+      drawEqtls(true);
+      ctx.restore();
+    }
+
+    function drawEqtls(drawSelected) {
+      var radius = drawSelected ? 2 * self.dotSize : self.dotSize,
+          eqtl,
+          i,
+          px,
+          py,
+          color,
+          isSelected,
+          snp,
+          geneName,
+          capped;
+
+      for (i = 0; i < len; i++) {
+        eqtl = featureList[i];
+        px = Math.round(eqtl.position - bpStart + 0.5) / bpPerPixel;
+        if (px < 0) continue;else if (px > pixelWidth) break;
+        snp = eqtl.snp.toUpperCase();
+        geneName = eqtl[self.geneField].toUpperCase();
+        isSelected = selection && (selection.snp === snp || selection.gene === geneName);
+
+        if (!drawSelected || isSelected) {
+          // Add eqtl's gene to the selection if this is the selected snp.
+          // TODO -- this should not be done here in the rendering code.
+          if (selection && selection.snp === snp) {
+            selection.addGene(geneName);
+          }
+
+          var mLogP = -Math.log(eqtl[self.pValueField]) / Math.LN10;
+
+          if (mLogP >= self.dataRange.min) {
+            if (mLogP > self.dataRange.max) {
+              mLogP = self.dataRange.max;
+              capped = true;
+            } else {
+              capped = false;
+            }
+
+            py = Math.max(0 + radius, pixelHeight - Math.round((mLogP - self.dataRange.min) / yScale));
+            eqtl.px = px;
+            eqtl.py = py;
+
+            if (drawSelected && selection) {
+              color = selection.colorForGene(geneName);
+              IGVGraphics.setProperties(ctx, {
+                fillStyle: color,
+                strokeStyle: "black"
+              });
+            } else {
+              color = capped ? "rgb(150, 150, 150)" : "rgb(180, 180, 180)";
+              IGVGraphics.setProperties(ctx, {
+                fillStyle: color,
+                strokeStyle: color
+              });
+            }
+
+            IGVGraphics.fillCircle(ctx, px, py, radius);
+            IGVGraphics.strokeCircle(ctx, px, py, radius);
+          }
+        }
+      }
+    }
+  };
+  /**
+   * Return "popup data" for feature @ genomic location.  Data is an array of key-value pairs
+   */
+
+
+  EqtlTrack.prototype.popupData = function (config) {
+    var features = config.viewport.getCachedFeatures();
+    if (!features || features.length === 0) return [];
+    var genomicLocation = config.genomicLocation,
+        xOffset = config.x,
+        yOffset = config.y,
+        referenceFrame = config.viewport.genomicState.referenceFrame,
+        tolerance = 2 * this.dotSize * referenceFrame.bpPerPixel,
+        dotSize = this.dotSize,
+        tissue = this.name,
+        popupData = [];
+    features.forEach(function (feature) {
+      if (feature.end >= genomicLocation - tolerance && feature.start <= genomicLocation + tolerance && feature.py - yOffset < 2 * dotSize) {
+        if (popupData.length > 0) {
+          popupData.push("<hr>");
+        }
+
+        popupData.push({
+          name: "snp id",
+          value: feature.snp
+        }, {
+          name: "gene id",
+          value: feature.geneId
+        }, {
+          name: "gene name",
+          value: feature.geneName
+        }, {
+          name: "p value",
+          value: feature.pValue
+        }, {
+          name: "tissue",
+          value: tissue
+        });
+      }
+    });
+    return popupData;
+  };
+
+  EqtlTrack.prototype.menuItemList = function () {
+    var self = this,
+        menuItems = [];
+    menuItems.push(dataRangeMenuItem$2(this.trackView));
+    menuItems.push({
+      object: createCheckbox("Autoscale", self.autoscale),
+      click: function click() {
+        self.autoscale = !self.autoscale;
+        self.config.autoscale = self.autoscale;
+        self.trackView.setDataRange(undefined, undefined, self.autoscale);
+      }
+    });
+    return menuItems;
+  };
+
+  EqtlTrack.prototype.doAutoscale = function (featureList) {
+    if (featureList.length > 0) {
+      var values = featureList.map(function (eqtl) {
+        return -Math.log(eqtl.value) / Math.LN10;
+      });
+      this.dataRange.max = IGVMath.percentile(values, this.autoscalePercentile);
+    } else {
+      // No features -- default
+      var max = this.config.maxLogP || this.config.max;
+      this.dataRange.max = max || 25;
+    }
+
+    return this.dataRange;
+  };
+
   var JUNCTION_MOTIF_PALETTE = new PaletteColorTable("Dark2"); // Lock in color-to-motif mapping so it's independent of data loading order. This list may not include all possible
   // motif values as this varies depending on the RNA-seq pipeline. The current list is based on STAR v2.4 docs.
 
@@ -31721,6 +32034,8 @@ Context.prototype = {
           }
         }
       }
+    } else {
+      console.log("No feature list");
     }
   };
 
@@ -32990,6 +33305,8 @@ Context.prototype = {
           }
         }
       }
+    } else {
+      console.log("No feature list");
     }
 
     function checkForLog(featureList) {
@@ -33308,6 +33625,7 @@ Context.prototype = {
     var self = this;
 
     if (!config.tracks) {
+      console.log("Error: not tracks defined for merged track. " + config);
       return;
     }
 
@@ -34804,6 +35122,7 @@ Context.prototype = {
       reader.samplingDepth = config.samplingDepth === undefined ? DEFAULT_SAMPLING_DEPTH : config.samplingDepth;
 
       if (reader.samplingDepth > MAXIMUM_SAMPLING_DEPTH) {
+        console.log("Warning: attempt to set sampling depth > maximum value of " + MAXIMUM_SAMPLING_DEPTH);
         reader.samplingDepth = MAXIMUM_SAMPLING_DEPTH;
       }
 
@@ -34966,7 +35285,7 @@ Context.prototype = {
             break;
 
           default:
-            void 0;
+            console.log('Error processing cigar element: ' + c.len + c.ltr);
         }
       }
     } catch (err) {
@@ -35231,7 +35550,7 @@ Context.prototype = {
     var _ref = _asyncToGenerator(
     /*#__PURE__*/
     regeneratorRuntime.mark(function _callee(chr, bpStart, bpEnd) {
-      var chrToIndex, queryChr, chrId, alignmentContainer, bamIndex, chunks, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, c, lastBlockSize, bsizeOptions, abuffer, fetchMin, fetchMax, range, compressed, ba, done;
+      var chrToIndex, queryChr, chrId, alignmentContainer, bamIndex, chunks, counter, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, c, lastBlockSize, bsizeOptions, abuffer, fetchMin, fetchMax, range, compressed, ba, done;
 
       return regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
@@ -35269,6 +35588,7 @@ Context.prototype = {
               return _context.abrupt("return", alignmentContainer);
 
             case 16:
+              counter = 1;
               _iteratorNormalCompletion = true;
               _didIteratorError = false;
               _iteratorError = undefined;
@@ -35277,7 +35597,7 @@ Context.prototype = {
 
             case 22:
               if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-                _context.next = 48;
+                _context.next = 49;
                 break;
               }
 
@@ -35327,63 +35647,65 @@ Context.prototype = {
               done = BamUtils.decodeBamRecords(ba, c.minv.offset, alignmentContainer, this.indexToChr, chrId, bpStart, bpEnd, this.filter);
 
               if (!done) {
-                _context.next = 44;
+                _context.next = 45;
                 break;
               }
 
-              return _context.abrupt("break", 48);
-
-            case 44:
+              console.log("Loaded ".concat(counter, " chunks out of  ").concat(chunks.length));
+              return _context.abrupt("break", 49);
 
             case 45:
+              counter++;
+
+            case 46:
               _iteratorNormalCompletion = true;
               _context.next = 22;
               break;
 
-            case 48:
-              _context.next = 54;
+            case 49:
+              _context.next = 55;
               break;
 
-            case 50:
-              _context.prev = 50;
+            case 51:
+              _context.prev = 51;
               _context.t0 = _context["catch"](20);
               _didIteratorError = true;
               _iteratorError = _context.t0;
 
-            case 54:
-              _context.prev = 54;
+            case 55:
               _context.prev = 55;
+              _context.prev = 56;
 
               if (!_iteratorNormalCompletion && _iterator.return != null) {
                 _iterator.return();
               }
 
-            case 57:
-              _context.prev = 57;
+            case 58:
+              _context.prev = 58;
 
               if (!_didIteratorError) {
-                _context.next = 60;
+                _context.next = 61;
                 break;
               }
 
               throw _iteratorError;
 
-            case 60:
-              return _context.finish(57);
-
             case 61:
-              return _context.finish(54);
+              return _context.finish(58);
 
             case 62:
+              return _context.finish(55);
+
+            case 63:
               alignmentContainer.finish();
               return _context.abrupt("return", alignmentContainer);
 
-            case 64:
+            case 65:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, this, [[20, 50, 54, 62], [55,, 57, 61]]);
+      }, _callee, this, [[20, 51, 55, 63], [56,, 58, 62]]);
     }));
 
     return function (_x, _x2, _x3) {
@@ -38990,6 +39312,10 @@ Context.prototype = {
         return Object.prototype.toString.call(e);
       }
 
+      function k(e) {
+        return e < 10 ? "0" + e.toString(10) : e.toString(10);
+      }
+
       t.debuglog = function (e) {
         if (y(o) && (o = n.env.NODE_DEBUG || ""), e = e.toUpperCase(), !s[e]) if (new RegExp("\\b" + e + "\\b", "i").test(o)) {
           var r = n.pid;
@@ -39030,12 +39356,15 @@ Context.prototype = {
       }, t.isUndefined = y, t.isRegExp = b, t.isObject = w, t.isDate = v, t.isError = E, t.isFunction = S, t.isPrimitive = function (e) {
         return null === e || "boolean" == typeof e || "number" == typeof e || "string" == typeof e || "symbol" == _typeof(e) || void 0 === e;
       }, t.isBuffer = r(52);
+      var x = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
       function C(e, t) {
         return Object.prototype.hasOwnProperty.call(e, t);
       }
 
       t.log = function () {
+        var e, r;
+        console.log("%s - %s", (e = new Date(), r = [k(e.getHours()), k(e.getMinutes()), k(e.getSeconds())].join(":"), [e.getDate(), x[e.getMonth()], r].join(" ")), t.format.apply(t, arguments));
       }, t.inherits = r(4), t._extend = function (e, t) {
         if (!t || !w(t)) return e;
 
@@ -47558,7 +47887,9 @@ Context.prototype = {
               var readPos = feature.pos - 1;
               var refPos = feature.refPos - 1;
 
-              if (alignment.readName === 'SRR062635.16695874') {}
+              if (alignment.readName === 'SRR062635.16695874') {
+                console.log("");
+              }
 
               switch (code) {
                 case 'S':
@@ -48674,6 +49005,9 @@ Context.prototype = {
               seqOffset += c.len;
               pos += c.len;
               break;
+
+            default:
+              console.log("Error processing cigar element: " + c.len + c.ltr);
           }
         }
 
@@ -51277,6 +51611,8 @@ Context.prototype = {
           }
         }
       }
+    } else {
+      console.log("No feature list");
     }
   };
   /**
@@ -51516,276 +51852,6 @@ Context.prototype = {
       });
     });
     return menuItems;
-  };
-
-  /*
-   * The MIT License (MIT)
-   *
-   * Copyright (c) 2014 Broad Institute
-   *
-   * Permission is hereby granted, free of charge, to any person obtaining a copy
-   * of this software and associated documentation files (the "Software"), to deal
-   * in the Software without restriction, including without limitation the rights
-   * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-   * copies of the Software, and to permit persons to whom the Software is
-   * furnished to do so, subject to the following conditions:
-   *
-   * The above copyright notice and this permission notice shall be included in
-   * all copies or substantial portions of the Software.
-   *
-   *
-   * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-   * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-   * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-   * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-   * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-   * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-   * THE SOFTWARE.
-   */
-  var dataRangeMenuItem$2 = MenuUtils.dataRangeMenuItem;
-  var EqtlTrack = extend(TrackBase, function (config, browser) {
-    var url = config.url,
-        label = config.name;
-    this.config = config;
-    this.url = url;
-    this.name = label;
-    this.pValueField = config.pValueField || "pValue";
-    this.geneField = config.geneField || "geneSymbol";
-    this.snpField = config.snpField || "snp";
-    var min = config.minLogP || config.min;
-    var max = config.maxLogP || config.max;
-    this.dataRange = {
-      min: min || 3.5,
-      max: max || 25
-    };
-
-    if (!max) {
-      this.autoscale = true;
-    } else {
-      this.autoscale = config.autoscale;
-    }
-
-    this.autoscalePercentile = config.autoscalePercentile === undefined ? 98 : config.autoscalePercentile;
-    this.background = config.background; // No default
-
-    this.divider = config.divider || "rgb(225,225,225)";
-    this.dotSize = config.dotSize || 2;
-    this.height = config.height || 100;
-    this.autoHeight = false;
-    this.disableButtons = config.disableButtons; // Limit visibility window to 2 mb,  gtex server gets flaky beyond that
-
-    this.visibilityWindow = config.visibilityWindow === undefined ? 2000000 : config.visibilityWindow >= 0 ? Math.min(2000000, config.visibilityWindow) : 2000000;
-    this.featureSource = new FeatureSource(config, browser.genome);
-    GtexUtils.gtexLoaded = true;
-  });
-
-  EqtlTrack.prototype.paintAxis = function (ctx, pixelWidth, pixelHeight) {
-    var track = this,
-        yScale = (track.dataRange.max - track.dataRange.min) / pixelHeight;
-    var font = {
-      'font': 'normal 10px Arial',
-      'textAlign': 'right',
-      'strokeStyle': "black"
-    };
-    IGVGraphics.fillRect(ctx, 0, 0, pixelWidth, pixelHeight, {
-      'fillStyle': "rgb(255, 255, 255)"
-    }); // Determine a tick spacing such that there is at least 10 pixels between ticks
-
-    var n = Math.ceil((this.dataRange.max - this.dataRange.min) * 10 / pixelHeight);
-
-    for (var p = 4; p <= track.dataRange.max; p += n) {
-      var x1, x2, y1, y2, ref; // TODO: Dashes may not actually line up with correct scale. Ask Jim about this
-
-      ref = 0.85 * pixelWidth;
-      x1 = ref - 5;
-      x2 = ref;
-      y1 = y2 = pixelHeight - Math.round((p - track.dataRange.min) / yScale);
-      IGVGraphics.strokeLine(ctx, x1, y1, x2, y2, font); // Offset dashes up by 2 pixel
-
-      if (y1 > 8) {
-        IGVGraphics.fillText(ctx, p, x1 - 1, y1 + 2, font);
-      } // Offset numbers down by 2 pixels;
-
-    }
-
-    font['textAlign'] = 'center';
-    IGVGraphics.fillText(ctx, "-log10(pvalue)", pixelWidth / 4, pixelHeight / 2, font, {
-      rotate: {
-        angle: -90
-      }
-    });
-  };
-
-  EqtlTrack.prototype.getFeatures = function (chr, bpStart, bpEnd) {
-    var pValueField = this.pValueField;
-    return this.featureSource.getFeatures(chr, bpStart, bpEnd).then(function (features) {
-      features.forEach(function (f) {
-        f.value = f[pValueField];
-      });
-      return features;
-    });
-  };
-
-  EqtlTrack.prototype.draw = function (options) {
-    var self = this,
-        featureList = options.features,
-        ctx = options.context,
-        bpPerPixel = options.bpPerPixel,
-        bpStart = options.bpStart,
-        pixelWidth = options.pixelWidth,
-        pixelHeight = options.pixelHeight,
-        yScale = (self.dataRange.max - self.dataRange.min) / pixelHeight,
-        selection = options.genomicState.selection; // Background
-
-    if (this.background) IGVGraphics.fillRect(ctx, 0, 0, pixelWidth, pixelHeight, {
-      'fillStyle': this.background
-    });
-    IGVGraphics.strokeLine(ctx, 0, pixelHeight - 1, pixelWidth, pixelHeight - 1, {
-      'strokeStyle': this.divider
-    });
-
-    if (ctx) {
-      var len = featureList.length;
-      ctx.save(); // Draw in two passes, with "selected" eqtls drawn last
-
-      drawEqtls(false);
-      drawEqtls(true);
-      ctx.restore();
-    }
-
-    function drawEqtls(drawSelected) {
-      var radius = drawSelected ? 2 * self.dotSize : self.dotSize,
-          eqtl,
-          i,
-          px,
-          py,
-          color,
-          isSelected,
-          snp,
-          geneName,
-          capped;
-
-      for (i = 0; i < len; i++) {
-        eqtl = featureList[i];
-        px = Math.round(eqtl.position - bpStart + 0.5) / bpPerPixel;
-        if (px < 0) continue;else if (px > pixelWidth) break;
-        snp = eqtl.snp.toUpperCase();
-        geneName = eqtl[self.geneField].toUpperCase();
-        isSelected = selection && (selection.snp === snp || selection.gene === geneName);
-
-        if (!drawSelected || isSelected) {
-          // Add eqtl's gene to the selection if this is the selected snp.
-          // TODO -- this should not be done here in the rendering code.
-          if (selection && selection.snp === snp) {
-            selection.addGene(geneName);
-          }
-
-          var mLogP = -Math.log(eqtl[self.pValueField]) / Math.LN10;
-
-          if (mLogP >= self.dataRange.min) {
-            if (mLogP > self.dataRange.max) {
-              mLogP = self.dataRange.max;
-              capped = true;
-            } else {
-              capped = false;
-            }
-
-            py = Math.max(0 + radius, pixelHeight - Math.round((mLogP - self.dataRange.min) / yScale));
-            eqtl.px = px;
-            eqtl.py = py;
-
-            if (drawSelected && selection) {
-              color = selection.colorForGene(geneName);
-              IGVGraphics.setProperties(ctx, {
-                fillStyle: color,
-                strokeStyle: "black"
-              });
-            } else {
-              color = capped ? "rgb(150, 150, 150)" : "rgb(180, 180, 180)";
-              IGVGraphics.setProperties(ctx, {
-                fillStyle: color,
-                strokeStyle: color
-              });
-            }
-
-            IGVGraphics.fillCircle(ctx, px, py, radius);
-            IGVGraphics.strokeCircle(ctx, px, py, radius);
-          }
-        }
-      }
-    }
-  };
-  /**
-   * Return "popup data" for feature @ genomic location.  Data is an array of key-value pairs
-   */
-
-
-  EqtlTrack.prototype.popupData = function (config) {
-    var features = config.viewport.getCachedFeatures();
-    if (!features || features.length === 0) return [];
-    var genomicLocation = config.genomicLocation,
-        xOffset = config.x,
-        yOffset = config.y,
-        referenceFrame = config.viewport.genomicState.referenceFrame,
-        tolerance = 2 * this.dotSize * referenceFrame.bpPerPixel,
-        dotSize = this.dotSize,
-        tissue = this.name,
-        popupData = [];
-    features.forEach(function (feature) {
-      if (feature.end >= genomicLocation - tolerance && feature.start <= genomicLocation + tolerance && feature.py - yOffset < 2 * dotSize) {
-        if (popupData.length > 0) {
-          popupData.push("<hr>");
-        }
-
-        popupData.push({
-          name: "snp id",
-          value: feature.snp
-        }, {
-          name: "gene id",
-          value: feature.geneId
-        }, {
-          name: "gene name",
-          value: feature.geneName
-        }, {
-          name: "p value",
-          value: feature.pValue
-        }, {
-          name: "tissue",
-          value: tissue
-        });
-      }
-    });
-    return popupData;
-  };
-
-  EqtlTrack.prototype.menuItemList = function () {
-    var self = this,
-        menuItems = [];
-    menuItems.push(dataRangeMenuItem$2(this.trackView));
-    menuItems.push({
-      object: createCheckbox("Autoscale", self.autoscale),
-      click: function click() {
-        self.autoscale = !self.autoscale;
-        self.config.autoscale = self.autoscale;
-        self.trackView.setDataRange(undefined, undefined, self.autoscale);
-      }
-    });
-    return menuItems;
-  };
-
-  EqtlTrack.prototype.doAutoscale = function (featureList) {
-    if (featureList.length > 0) {
-      var values = featureList.map(function (eqtl) {
-        return -Math.log(eqtl.value) / Math.LN10;
-      });
-      this.dataRange.max = IGVMath.percentile(values, this.autoscalePercentile);
-    } else {
-      // No features -- default
-      var max = this.config.maxLogP || this.config.max;
-      this.dataRange.max = max || 25;
-    }
-
-    return this.dataRange;
   };
 
   /*
@@ -52320,6 +52386,7 @@ Context.prototype = {
   };
 
   GWASTrack.prototype.doAutoscale = function (featureList) {
+    console.log('gwas autoscale');
     var track = this;
 
     if (featureList.length > 0) {
@@ -52332,8 +52399,7 @@ Context.prototype = {
       });
       var range = getRange(values);
       this.dataRange.max = range.max;
-      this.dataRange.min = range.min; // this.dataRange.max = IGVMath.percentile(values, this.autoscalePercentile);
-      // this.dataRange.min = Math.min(...values);
+      this.dataRange.min = range.min !== range.max ? range.min : 0;
     } else {
       // No features -- default
       if (track.posteriorProbability) {
@@ -56037,6 +56103,7 @@ Context.prototype = {
                               var _result = results[0];
 
                               if (!(_result.hasOwnProperty(searchConfig.chromosomeField) && _result.hasOwnProperty(searchConfig.startField))) {
+                                console.log("Search service results must include chromosome and start fields: " + _result);
                                 return undefined;
                               }
 
@@ -57814,6 +57881,7 @@ Context.prototype = {
     var viewport = browser.getViewportWithGUID(guid);
 
     if (undefined === viewport) {
+      console.log('ERROR: No viewport found');
       return undefined;
     }
 
