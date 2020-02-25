@@ -24,8 +24,8 @@ records={{numberRecords}}
              <div significance_sortField="{{significanceValue}}" sortField={{numberOfRecords}}
              class="tissueCategory_{{tissueCategoryNumber}} significanceCategory_{{significanceCategoryNumber}} {{initialLinearIndex}}">
                <a onclick="mpgSoftware.dynamicUi.showAttachedData(event,'MOD matches for {{gene}}',mpgSoftware.dynamicUi.extractStraightFromTarget)"
-               class="cellExpander" data-target="#mod_data_{{geneName}}"  style="color:black">{{cellPresentationString}}</a>
-               <div  class="collapse openModInGeneTable" id="mod_data_{{geneName}}">
+               class="cellExpander" data-target="#mod_data_{{gene}}"  style="color:black">{{cellPresentationString}}</a>
+               <div  class="collapse openModInGeneTable" id="mod_data_{{gene}}">
                     {{#recordsExist}}
                     {{#geneName}}
                      <div> {{.}}</div>
