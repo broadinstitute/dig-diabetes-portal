@@ -520,7 +520,9 @@ class RegionInfoController {
                                    [value: 28, name:"RectalSmoothMuscle",description:"rectal smooth muscle"],
                                    [value: 29, name:"SkeletalMuscle",description:"skeletal muscle"],
                                    [value: 30, name:"StomachSmoothMuscle",description:"stomach smooth muscle"],
-                                   [value: 31, name:"SubstantiaNigra",description:"brain substantia nigra"]
+                                   [value: 31, name:"SubstantiaNigra",description:"brain substantia nigra"],
+                                   [value: 31, name:"Osteoblast_DNase",description:"Osteoblast_DNase"],
+                                   [value: 32, name:"Osteoblast_ATAC-seq ",description:"Osteoblast_ATAC-seq "],
                 ]
         ArrayList annotationInformation = [
                                     [annotationID: 1, value: 'coding', name: "Coding", description: "coding", type: "BINARY", sort_order: 1, group: "annotation" ],
