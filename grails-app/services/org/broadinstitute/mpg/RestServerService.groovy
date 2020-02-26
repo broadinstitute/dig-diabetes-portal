@@ -2049,7 +2049,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
 //        getDataQueryHolder.decodeFilter(filter)
         getDataQueryHolder.addOrderByProperty(metaDataService.getPropertyByNamePhenotypeAndSampleGroup(propertyName, phenotypeName, dataSetName,MetaDataService.METADATA_GENE), '1')
-        getDataQueryHolder.getDataQuery.setLimit(7000)
+        getDataQueryHolder.getDataQuery.setLimit(500)
         JsonSlurper slurper = new JsonSlurper()
         String dataJsonObjectString = postGeneDataQueryRestCall(getDataQueryHolder)
         JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
