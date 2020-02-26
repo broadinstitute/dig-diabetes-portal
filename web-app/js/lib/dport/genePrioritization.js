@@ -172,10 +172,10 @@ var mpgSoftware = mpgSoftware || {};
                 // make a fetch call and redraw the plot and table
                 var mySavedVars = getMySavedVariables();
                 $('#spinner').show();
-                // $('#manhattanPlot1').empty();
-                // $('#traitTableBody').empty();
-                // $('#phenotypeTraits').DataTable().rows().remove();
-                // $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
+                $('#manhattanPlot1').empty();
+                $('#traitTableBody').empty();
+                $('#phenotypeTraits').DataTable().rows().remove();
+                $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
                 retrieveSpecifiedDataAndDisplayIt (mySavedVars.phenotypeName,
                                    $(mySavedVars.phenotypeDropdownIdentifier+' option:selected').val(),
                                    $(mySavedVars.subphenotypeDropdownIdentifier+' option:selected').val());

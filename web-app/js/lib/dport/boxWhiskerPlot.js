@@ -30,6 +30,9 @@ immedTip = function(){
                 target    = null
 
             function tip(vis) {
+                if(vis[0] == null){
+                    vis[0] = "svg"
+                }
                 svg = getSVGNode(vis)
                 point = svg.createSVGPoint()
                 document.body.appendChild(node)
