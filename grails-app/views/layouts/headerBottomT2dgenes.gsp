@@ -63,7 +63,11 @@
                 <ul>
                     <li class="" style=""><a href="http://www.kp4cd.org/about/${g.portalTypeString()}"><g:message code="portal.header.nav.about"/></a></li>
 
-                    <g:if test="${g.portalTypeString()?.equals('t2d')} || ${g.portalTypeString()?.equals('bone')}">
+                    <g:if test="${g.portalTypeString()?.equals('t2d')}">
+                        <li class="" style=""><a href="http://www.kp4cd.org/collaborate/${g.portalTypeString()}"><g:message code="portal.header.nav.submit"/></a></li>
+                    </g:if>
+
+                    <g:if test="${g.portalTypeString()?.equals('bone')}">
                         <li class="" style=""><a href="http://www.kp4cd.org/collaborate/${g.portalTypeString()}"><g:message code="portal.header.nav.submit"/></a></li>
                     </g:if>
 
