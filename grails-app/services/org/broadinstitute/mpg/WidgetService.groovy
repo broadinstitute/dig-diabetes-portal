@@ -1850,6 +1850,8 @@ public Map convertParametersToUsableFormat(def params){
         beanList << new PhenotypeBean(key:"SkeletalMuscle", name:"SkeletalMuscle",description:"skeletal muscle", dataType:"tissue", suitableForDefaultDisplay: true)
         beanList << new PhenotypeBean(key:"StomachSmoothMuscle", name:"StomachSmoothMuscle",description:"stomach smooth muscle", dataType:"tissue", suitableForDefaultDisplay: true)
         beanList << new PhenotypeBean(key:"SubstantiaNigra", name:"SubstantiaNigra",description:"brain substantia nigra", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"Osteoblast_DNase ", name:"Osteoblast_DNase ",description:"Osteoblast_DNase ", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"Osteoblast_ATAC-seq", name:"Osteoblast_ATAC-seq",description:"Osteoblast_ATAC-seq", dataType:"tissue", suitableForDefaultDisplay: true)
 //        beanList << new PhenotypeBean(key:"Islet1", name:"Islet1",description:"pancreatic islets 1", dataType:"tissue",  assayId:4, suitableForDefaultDisplay: true)
 //        beanList << new PhenotypeBean(key:"Islet2", name:"Islet2",description:"pancreatic islets 2", dataType:"tissue",  assayId:4, suitableForDefaultDisplay: true)
 //        beanList << new PhenotypeBean(key:"SkeletalMuscle", name:"SkeletalMuscle",description:"skeletal muscle", dataType:"tissue",  assayId:4, suitableForDefaultDisplay: true)

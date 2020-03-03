@@ -419,7 +419,7 @@
                             <img src="${resource(dir: 'images', file: 'data_icon4.png')}" style="width: 200px; margin-right: -50px;" align="right" >
                         <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData" default="About the data" /></h2>
                         <p><g:message code="portal.mi.about.the.data.text" />
-                        <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">29 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">52 traits</span></h1>
+                        <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">30 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">52 traits</span></h1>
 
                         <hr/> <a href="http://institute.heart.org" target="_blank"><img src="${resource(dir: 'images/organizations', file: 'AHA_precision.jpg')}" style="width: 330px; margin-right: 10px;" align="right" ></a>
 
@@ -444,7 +444,7 @@
                         <img src="${resource(dir: 'images', file: 'data_icon4.png')}" style="width: 200px; margin-right: -50px;" align="right" >
                         <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData" default="About the data" /></h2>
                     <p><g:message code="portal.sleep.about.the.data.text" />
-                    <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">25 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">73 traits</span></h1>
+                    <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">23 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">69 traits</span></h1>
 
                 </g:elseif>
                     <g:elseif test="${g.portalTypeString()?.equals('lung')}">
@@ -728,7 +728,7 @@
                         <g:if test="${g.portalTypeString()?.equals('mi')}">
                             <div style="position:absolute; top: 25px; right:-40px; ">
                                 <p style="margin-bottom:3px;">
-                                    <a href="mailto:cvdgenetics@gmail.com">
+                                    <a href="http://www.kp4cd.org/contact" target="_blank">
                                         <img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'email_update.svg')}" />
                                     </a>
                                 </p>
@@ -739,7 +739,7 @@
                         <g:elseif test="${g.portalTypeString()?.equals('stroke')}">
                             <div style="position:absolute; top: 25px; right:-40px; ">
                                 <p style="margin-bottom:3px;">
-                                    <a href="https://goo.gl/forms/EcXR6Kv2P4Ifdmtl1" target="_blank">
+                                    <a href="http://www.kp4cd.org/contact" target="_blank">
                                         <img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'email_update.svg')}" />
                                     </a>
                                 </p>
@@ -750,7 +750,7 @@
                         <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
                             <div style="position:absolute; top: 25px; right:-40px; ">
                                 <p style="margin-bottom:3px;">
-                                    <a href="mailto:help@sleepdisordergenetics.org">
+                                    <a href="http://www.kp4cd.org/contact" target="_blank">
                                         <img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'email_update.svg')}" />
                                     </a>
                                 </p>
@@ -762,7 +762,19 @@
                     <g:elseif test="${g.portalTypeString()?.equals('bone')}">
                         <div style="position:absolute; top: 25px; right:-40px; ">
                             <p style="margin-bottom:3px;">
-                                <a href="mailto:help@musculoskeletalgenomics.org">
+                                <a href="http://www.kp4cd.org/contact" target="_blank">
+                                    <img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'email_update.svg')}" />
+                                </a>
+                            </p>
+                            <p style="margin-bottom:3px;"><a href="https://twitter.com/KPortalNetwork" target="_blank"><img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'twitter_icn.svg')}" /></a></p>
+                        </div>
+
+                    </g:elseif>
+
+                    <g:elseif test="${g.portalTypeString()?.equals('lung')}">
+                        <div style="position:absolute; top: 25px; right:-40px; ">
+                            <p style="margin-bottom:3px;">
+                                <a href="http://www.kp4cd.org/contact" target="_blank">
                                     <img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'email_update.svg')}" />
                                 </a>
                             </p>
