@@ -728,7 +728,7 @@
                         <g:if test="${g.portalTypeString()?.equals('mi')}">
                             <div style="position:absolute; top: 25px; right:-40px; ">
                                 <p style="margin-bottom:3px;">
-                                    <a href="mailto:cvdgenetics@gmail.com">
+                                    <a href="http://www.kp4cd.org/contact" target="_blank">
                                         <img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'email_update.svg')}" />
                                     </a>
                                 </p>
@@ -739,7 +739,7 @@
                         <g:elseif test="${g.portalTypeString()?.equals('stroke')}">
                             <div style="position:absolute; top: 25px; right:-40px; ">
                                 <p style="margin-bottom:3px;">
-                                    <a href="https://goo.gl/forms/EcXR6Kv2P4Ifdmtl1" target="_blank">
+                                    <a href="http://www.kp4cd.org/contact" target="_blank">
                                         <img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'email_update.svg')}" />
                                     </a>
                                 </p>
@@ -750,7 +750,7 @@
                         <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
                             <div style="position:absolute; top: 25px; right:-40px; ">
                                 <p style="margin-bottom:3px;">
-                                    <a href="mailto:help@sleepdisordergenetics.org">
+                                    <a href="http://www.kp4cd.org/contact" target="_blank">
                                         <img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'email_update.svg')}" />
                                     </a>
                                 </p>
@@ -762,7 +762,19 @@
                     <g:elseif test="${g.portalTypeString()?.equals('bone')}">
                         <div style="position:absolute; top: 25px; right:-40px; ">
                             <p style="margin-bottom:3px;">
-                                <a href="mailto:help@musculoskeletalgenomics.org">
+                                <a href="http://www.kp4cd.org/contact" target="_blank">
+                                    <img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'email_update.svg')}" />
+                                </a>
+                            </p>
+                            <p style="margin-bottom:3px;"><a href="https://twitter.com/KPortalNetwork" target="_blank"><img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'twitter_icn.svg')}" /></a></p>
+                        </div>
+
+                    </g:elseif>
+
+                    <g:elseif test="${g.portalTypeString()?.equals('lung')}">
+                        <div style="position:absolute; top: 25px; right:-40px; ">
+                            <p style="margin-bottom:3px;">
+                                <a href="http://www.kp4cd.org/contact" target="_blank">
                                     <img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'email_update.svg')}" />
                                 </a>
                             </p>
