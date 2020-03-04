@@ -50,7 +50,7 @@ var mpgSoftware = mpgSoftware || {};
             $('#populationsHowCommonIs').append(variantTitle);
             $('#exploreSurroundingSequenceTitle').append(variantTitle);
             $('#PheWebLink').attr("href", "http://pheweb.sph.umich.edu:5000/variant/"+varId);
-            $('#T2DREAMLink').attr("href", "https://www.t2depigenome.org/variant-search/?region="+dbsnpId+"&genome=GRCh37");
+            $('#T2DREAMLink').attr("href", "https://www.diabetesepigenome.org/variant-search/?region="+dbsnpId+"&genome=GRCh37");
 
             // load the summary text
             $("#chromosomeNumber").append(chrom);
