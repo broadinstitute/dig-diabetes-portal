@@ -1116,10 +1116,15 @@ class RegionInfoController {
 
         if (params.phenotype) {
             phenotype = params.phenotype
-        } else {
-            log.error("retrieveGeneLevelAssociations: did not receive the required phenotype parameter")
-            looksOkay = false
         }
+        else{
+            phenotype = "MI"
+        }
+
+//        else {
+//            log.error("retrieveGeneLevelAssociations: did not receive the required phenotype parameter")
+//            looksOkay = false
+//        }
 
         if (looksOkay){
             jsonReturn = restServerService.gatherGenePhenotypeAssociations( phenotype, gene, propertyList, preferredSampleGroup)
