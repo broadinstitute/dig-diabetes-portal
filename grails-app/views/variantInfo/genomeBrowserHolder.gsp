@@ -94,11 +94,12 @@
                                 colors: ['rgb(0,102,51)', 'rgb(122,179,23)', 'rgb(158,213,76)', 'rgb(227,238,249)']
                                 },
                                 type: 'gwas',
-                               format: 'gtexgwas',
+                                format: 'bedgwas',
                                 url: 'https://dig-humgen.s3.amazonaws.com/diamante.1.gz',
                                 indexURL: 'https://dig-humgen.s3.amazonaws.com/diamante.1.gz.tbi',
-                               visibilityWindow: 200000,
-                                rememberVariant: function(){alert('attempt to remember')},
+                                visibilityWindow: 200000,
+                                rememberVariant:  function(parm){alert(parm)},
+                                traitURL:'${createLink(controller:"variantInfo", action:"variantInfo")}',
                                 color: 'rgb(100,200,200)',
                                 displayMode: 'EXPANDED',
                                 autoHeight: true,
@@ -124,7 +125,7 @@
                                    colors: ['rgb(210,180,181)', 'rgb(230,140,163)', 'rgb(255,100,120)', 'rgb(255,0,0)']
                                },
                                type: 'gwas',
-                               format: 'gtexgwas',
+                               format: 'bedgwas',
                                url: 'https://dig-humgen.s3.amazonaws.com/diamante.posterior.gz',
                                indexURL: 'https://dig-humgen.s3.amazonaws.com/diamante.posterior.gz.tbi',
                                visibilityWindow: 200000,
@@ -135,6 +136,23 @@
                                autoscale: true,
                                 order: 3
                            })">Posteriors
+                        </a>
+                    </li>
+
+
+
+                    <li>
+                        <a href="#"
+                           onclick="igv.browser.loadTrack(
+                               {
+                                   name: 'bedgraph',
+                                   //url: 'https://dig-humgen.s3.amazonaws.com/v4c.bedGraph',
+                                   url: '/dig-diabetes-portal/variantInfo/bedGraphFile',
+                                   type: 'wig',
+                                   format: 'bedGraph',
+                                   height: 100,
+                                   order: 52
+                               })">bedgraph
                         </a>
                     </li>
 
@@ -191,12 +209,18 @@
             </div>
 
         </div>
-        <div class="col-md-6">
-            <div>Click on the Refseq track to add genes:</div>
-            <div id="geneList" width="100%" style="background-color: #d5d5d5">
+    <div class="col-md-3">
+        <div>Click on the Refseq track to add genes:</div>
+        <div id="geneList" width="100%" style="background-color: #d5d5d5">
 
-            </div>
         </div>
+    </div>
+    <div class="col-md-3">
+        <div>Click on association tracks to add variants:</div>
+        <div id="variantList" width="100%" style="background-color: #d5d5d5">
+
+        </div>
+    </div>
     </div>
 %{--</nav>--}%
 

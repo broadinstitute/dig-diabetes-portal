@@ -86,6 +86,11 @@ class VariantInfoController {
         render fileContents
     }
 
+    def bedGraphFile(){
+        String fileContents = new File('./web-app/WEB-INF/resources/testFile/v4c.bedGraph').text
+        render fileContents
+    }
+
 
     def retrieveBottomLineVariants (){
         boolean looksOkay = true

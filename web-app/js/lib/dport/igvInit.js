@@ -193,13 +193,29 @@ mpgSoftware.igvInit = (function () {
             .then(function (browser) {
                 igv.browser = browser;
                 var genesInList = {};
+                var variantsInList = {};
                 console.log("Created IGV browser");
 
                 browser.on('trackclick', function (track, popoverData) {
-                    var symbol = null;
+
                     if ( ( typeof track !== 'undefined') &&
-                        ( track.name == 'Refseq Genes') &&
+                        ( track.config.type == 'gwas') &&
                         ( typeof popoverData !== 'undefined') ){
+                        let variantIdentifier =  null ;
+                        popoverData.forEach(function (nameValue) {
+                            if (nameValue.name && nameValue.name === 'ID') {
+                                variantIdentifier = nameValue.value;
+                            }
+                            if (variantIdentifier && !variantsInList[variantIdentifier]) {
+                                variantsInList[variantIdentifier] = true;
+                                $("#variantList").append('<li><a class="variantIdentifier '+variantIdentifier+'" href="#' + variantIdentifier + '">' + variantIdentifier + '</a></li>');
+                            }
+                        });
+                        return true;
+                    } else  if ( ( typeof track !== 'undefined') &&
+                        ( track.config.name == 'Refseq Genes') &&
+                        ( typeof popoverData !== 'undefined') ){
+                        let symbol = null;
                         popoverData.forEach(function (nameValue) {
                             if (nameValue.name && nameValue.name.toLowerCase() === 'name') {
                                 symbol = nameValue.value;
@@ -209,10 +225,6 @@ mpgSoftware.igvInit = (function () {
                                 $("#geneList").append('<li><a href="https://uswest.ensembl.org/Multi/Search/Results?q=' + symbol + '">' + symbol + '</a></li>');
                             }
                         });
-                        return false;
-                    } else  if ( ( typeof track !== 'undefined') &&
-                        ( track.name == 'T2D GWAS') &&
-                        ( typeof popoverData !== 'undefined') ){
                         // popoverData.forEach(function (nameValue) {
                         //     if (nameValue.name && nameValue.name.toLowerCase() === 'name') {
                         //         symbol = nameValue.value;
@@ -222,7 +234,7 @@ mpgSoftware.igvInit = (function () {
                         //         $("#geneList").append('<li><a href="https://uswest.ensembl.org/Multi/Search/Results?q=' + symbol + '">' + symbol + '</a></li>');
                         //     }
                         // });
-                        return true;
+                        return false;
                     }
 
 

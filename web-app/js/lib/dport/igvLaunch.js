@@ -57,6 +57,7 @@ var igvLauncher = igvLauncher || {};  // encapsulating variable
 
 
     };
+
     igvLauncher.setUpIgv = function (locusName,
                              sectionSelector,
                              recombinationMessage,//"<g:message code='controls.shared.igv.tracks.recomb_rate' />"
