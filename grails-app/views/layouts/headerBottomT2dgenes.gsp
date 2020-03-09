@@ -77,7 +77,7 @@
 <g:if test="${g.portalTypeString()?.equals('t2d')}">
                     <li class="" style=""><a href="http://www.kp4cd.org/publications/${g.portalTypeString()}">Publications</a></li>
 </g:if>
-                    <li class="" style=""><a href="http://www.kp4cd.org/new_features/${g.portalTypeString()}">Blog</a></li>
+                    <li class="" style=""><a href="http://www.kp4cd.org/new_features/${g.portalTypeString()}">News</a></li>
 
                     <li class="" style=""><a href="http://www.kp4cd.org/contacts/${g.portalTypeString()}">Contacts</a></li>
 
