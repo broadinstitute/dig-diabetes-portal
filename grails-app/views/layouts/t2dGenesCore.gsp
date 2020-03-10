@@ -479,12 +479,17 @@
     <div class="container-fluid dk-t2d-footer"><div class="container">
 </g:else>
 
-    <div class="row">
+    <!--<div class="row">
         <div class="col-md-12" style="text-align: center;">
             <div style="padding-top:10px;"><span class="glyphicon glyphicon-comment" style="color:#fff"></span> <a href="${createLink(controller:'informational', action:'contact')}"><g:message code="mainpage.send.feedback"/></a><div>
             <div style="font-size: 10px;"><g:message code="buildInfo.shared.build_message" args="${[BuildInfo?.buildHost, BuildInfo?.buildTime]}"/>.  <g:message code='buildInfo.shared.version'/>=${BuildInfo?.appVersion}.${BuildInfo?.buildNumber}</div>
         </div>
-    </div>
+    </div>-->
+
+        <div style="text-align:center; color: #333;padding-top: 15px;">
+            Powered by the
+            <span style="font-weight: 600; font-size: 1.2em; vertical-align: -0.1em;">AMP-T2DKP</span> resource
+        </div>
         </div></div>
 
 <g:applyLayout name="activatePopups"/>

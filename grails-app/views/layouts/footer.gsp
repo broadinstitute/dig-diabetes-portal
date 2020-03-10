@@ -1,5 +1,5 @@
 <%@ page import="temporary.BuildInfo" %>
-
+<!--
 <div id="footer">
     <div class="container">
         <div class="separator"></div>
@@ -17,6 +17,16 @@
                 </span>
             </div>
 
+        </div>
+    </div>
+</div>-->
+
+<div id="footer">
+    <div class="container">
+        <div class="separator"></div>
+        <div>
+            Powered by the
+            <span style="font-weight: 600; font-size: 1.2em; vertical-align: -0.1em;">AMP-T2DKP</span> resource
         </div>
     </div>
 </div>
