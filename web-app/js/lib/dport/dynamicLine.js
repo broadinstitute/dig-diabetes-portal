@@ -1,6 +1,6 @@
 var baget = baget || {};  // encapsulating variable
 
-(function () {
+baget.dynamicLine = (function () {
     //const d3 = require("d3@5");
     //import * as d3 from "d3";
     // const data = [{
@@ -91,6 +91,10 @@ var baget = baget || {};  // encapsulating variable
     let y;
     let xAxis;
     let yAxis;
+    let height;
+    let width;
+    let margin;
+
     function halo(text) {
         text.select(function() { return this.parentNode.insertBefore(this.cloneNode(true), this); })
             .attr("fill", "none")
@@ -101,6 +105,20 @@ var baget = baget || {};  // encapsulating variable
     function length(path) {
         return d3.create("svg:path").attr("d", path).node().getTotalLength();
     };
+    var widthAdjuster = function ()  {
+        var returnValue;
+        var browserWidth =   $(window).width();
+        returnValue = (browserWidth > 200) ?  browserWidth : 200;
+        returnValue = (returnValue < 1000) ?  returnValue : 1000;
+        return   returnValue;
+    }
+    var heightAdjuster = function ()  {
+        var returnValue;
+        var browserHeight =   $(window).height()-3200;
+        returnValue = (browserHeight > 300) ?  browserHeight : 350;
+        returnValue = (returnValue < 1000) ?  returnValue : 1000;
+        return   returnValue;
+    }
     let line;
 
 
@@ -163,13 +181,25 @@ var baget = baget || {};  // encapsulating variable
         }
     };
 
+    const resize = function () {
+        width = widthAdjuster()- margin.left - margin.right;
+        height = heightAdjuster() - margin.top - margin.bottom;
+        var extractedData  = d3.selectAll('#groupHolder').selectAll('g.allGroups').data();
+        var dataRange = UTILS.extractDataRange(extractedData);
+        d3.select("#scatterPlot1").selectAll('svg').remove();
+        qqPlot.width(width)
+            .height(height)
+            .dataHanger ("#scatterPlot1", extractedData);
+        d3.select("#scatterPlot1").call(qqPlot.render);
+    };
 
 
-    baget.dynamicLine = function (data) {
 
-        const height = 720;
-        const width = 1000;
-        const margin = ({top: 20, right: 30, bottom: 30, left: 40});
+    const buildDynamicLinePlot = function (data,geneName) {
+
+        height = 720;
+        width = 1000;
+        margin = ({top: 20, right: 30, bottom: 30, left: 40});
         x = d3.scaleLinear()
             .domain(d3.extent(data, d => d.x)).nice()
             .range([margin.left, width - margin.right]);
@@ -205,23 +235,10 @@ var baget = baget || {};  // encapsulating variable
                 .attr("fill", "black")
                 .text(data.y)
                 .call(halo));
-        // function halo(text) {
-        //     text.select(function() { return this.parentNode.insertBefore(this.cloneNode(true), this); })
-        //         .attr("fill", "none")
-        //         .attr("stroke", "white")
-        //         .attr("stroke-width", 4)
-        //         .attr("stroke-linejoin", "round");
-        //};
         line = d3.line()
             .curve(d3.curveCatmullRom)
             .x(d => x(d.x))
             .y(d => y(d.y));
-        // function length(path) {
-        //     return d3.create("svg:path").attr("d", path).node().getTotalLength();
-        // };
-
-
-
 
         var dynamicLineSelection = d3.select("#dynamicLine");
         const svg = dynamicLineSelection.append("svg")
@@ -258,7 +275,7 @@ var baget = baget || {};  // encapsulating variable
             .join("circle")
             .attr("cx", d => x(d.x))
             .attr("cy", d => y(d.y))
-            .attr("r", 3);
+            .attr("r", 1);
 
         const label = svg.append("g")
             .attr("font-family", "sans-serif")
@@ -288,9 +305,16 @@ var baget = baget || {};  // encapsulating variable
 
         svg.call(hover, path);
 
+
+
         return svg.node();
 
 
 
+    }
+
+    return {
+        resize:resize,
+        buildDynamicLinePlot: buildDynamicLinePlot
     }
 })();

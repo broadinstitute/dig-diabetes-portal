@@ -33,12 +33,8 @@
     <div>
         <label for="priorAllelicVariance">prior allelic variance:</label>
         <input type="text" id="priorAllelicVariance" name="priorAllelicVariance">
+        <span  class="pull-right"><button onclick="drawPic()">Launch</button></span>
     </div>
-    <div>
-        <div>
-            <button onclick="drawPic()">Launch</button>
-        </div>
-
 
 
 </div>
@@ -109,13 +105,13 @@
     </div>
 </div>
 <script>
-    %{--var widthAdjuster = function ()  {--}%
-        %{--var returnValue;--}%
-        %{--var browserWidth =   $(window).width();--}%
-        %{--returnValue = (browserWidth > 200) ?  browserWidth : 200;--}%
-        %{--returnValue = (returnValue < 1000) ?  returnValue : 1000;--}%
-        %{--return   returnValue;--}%
-    %{--}--}%
+    // var widthAdjuster = function ()  {
+    //     var returnValue;
+    //     var browserWidth =   $(window).width();
+    //     returnValue = (browserWidth > 200) ?  browserWidth : 200;
+    //     returnValue = (returnValue < 1000) ?  returnValue : 1000;
+    //     return   returnValue;
+    // }
     %{--var heightAdjuster = function ()  {--}%
         %{--var returnValue;--}%
         %{--var browserHeight =   $(window).height()-3200;--}%
@@ -162,7 +158,9 @@
         const stringPriorAllelicVarianceVar  = $('#priorAllelicVariance').val() || '0.14';
         const priorAllelicVarianceVar  = parseFloat(stringPriorAllelicVarianceVar);
         mpgSoftware.dynaLineLauncher.prepareDisplay("${createLink(controller: 'variantInfo', action:'bestGeneBurdenResultsForGene')}",
-            geneName,priorAllelicVarianceVar);
+                                                    geneName,
+                                                    priorAllelicVarianceVar,
+                                                    window);
     }
 
 
@@ -206,26 +204,26 @@
 
     %{--});--}%
 
-    function type(d) {
-        d.value = +d.value; // coerce to number
-        return d;
-    }
+    // function type(d) {
+    //     d.value = +d.value; // coerce to number
+    //     return d;
+    // }
 
 
 
-    d3.select(window).on('resize', resize);
-
-    function resize() {
-        width = widthAdjuster()- margin.left - margin.right;
-        height = heightAdjuster() - margin.top - margin.bottom;
-        var extractedData  = d3.selectAll('#groupHolder').selectAll('g.allGroups').data();
-        var dataRange = UTILS.extractDataRange(extractedData);
-        d3.select("#scatterPlot1").selectAll('svg').remove();
-        qqPlot.width(width)
-            .height(height)
-            .dataHanger ("#scatterPlot1", extractedData);
-        d3.select("#scatterPlot1").call(qqPlot.render);
-    }
+    // d3.select(window).on('resize', resize);
+    //
+    // function resize() {
+    //     width = widthAdjuster()- margin.left - margin.right;
+    //     height = heightAdjuster() - margin.top - margin.bottom;
+    //     var extractedData  = d3.selectAll('#groupHolder').selectAll('g.allGroups').data();
+    //     var dataRange = UTILS.extractDataRange(extractedData);
+    //     d3.select("#scatterPlot1").selectAll('svg').remove();
+    //     qqPlot.width(width)
+    //         .height(height)
+    //         .dataHanger ("#scatterPlot1", extractedData);
+    //     d3.select("#scatterPlot1").call(qqPlot.render);
+    // }
 
 
 
