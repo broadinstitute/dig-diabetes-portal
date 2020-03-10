@@ -79,6 +79,14 @@ class VariantInfoController {
                 phenotype:phenotypeString
         ])
     };
+    def dynaline(){
+        String geneString = params.gene
+
+        render (view: 'dynaline', model:[
+                portalVersionBean:restServerService.retrieveBeanForCurrentPortal(),
+                gene: geneString
+        ])
+    };
 
 
     def gwasFile(){
@@ -89,6 +97,28 @@ class VariantInfoController {
     def bedGraphFile(){
         String fileContents = new File('./web-app/WEB-INF/resources/testFile/v4c.bedGraph').text
         render fileContents
+    }
+
+    def bestGeneBurdenResults(){
+        String jsonDataAsString = new File('./web-app/WEB-INF/resources/testFile/bestBurdenTest.json').text
+        def slurper = new JsonSlurper()
+        JSONArray jsonArray = slurper.parseText(jsonDataAsString)
+        render(status:200, contentType:"application/json") {
+            jsonArray
+        }
+        return
+    }
+
+    def bestGeneBurdenResultsForGene(){
+        String geneString = params.gene
+        String jsonDataAsString = new File('./web-app/WEB-INF/resources/testFile/bestBurdenTest.json').text
+        def slurper = new JsonSlurper()
+        JSONArray jsonArray = slurper.parseText(jsonDataAsString)
+        JSONObject jsonObject = jsonArray.find {a->a.gene==geneString}
+        render(status:200, contentType:"application/json") {
+            jsonObject
+        }
+        return
     }
 
 

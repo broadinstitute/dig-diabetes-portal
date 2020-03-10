@@ -64,6 +64,7 @@
                     <li class="" style=""><a href="${createLink(controller:'trait',action:'tissueTable')}">Tissue FOCUS</a></li>
                     <li class="" style=""><a href="${createLink(controller:'variantInfo',action:'variantTable')}">Variant FOCUS</a></li>
                     <li class="" style=""><a href="${createLink(controller:'variantInfo',action:'genomeBrowser')}">Genome browser</a></li>
+                    <li class="" style=""><a href="${createLink(controller:'variantInfo',action:'dynaline')}">Gene burden calcs</a></li>
                     <li class="" style=""><a href="${createLink(controller:'gene',action:'effectorGeneTable')}">Effector gene</a></li>
 
                     <g:if test="${g.portalTypeString() != 'v2f'}">

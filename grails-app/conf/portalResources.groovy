@@ -34,6 +34,12 @@ modules = {
         dependsOn 'core'
         resource url: 'js/lib/dport/portalHome.js'
     }
+    dynaline {
+        dependsOn 'cored3V5'
+        resource url: 'js/lib/dport/dynaLineLauncher.js'
+        resource url: 'js/lib/dport/dynamicLine.js'
+    }
+
     grsInfo {
         dependsOn "core", "mbar", "bootstrapMultiselect", "burdenTest","boxwhisker"
 
@@ -340,6 +346,28 @@ modules = {
         resource url: 'css/lib/dkstyle.css'
 
         resource url: 'js/lib/d3.min.js'
+        resource url: 'js/lib/utils.js'
+
+        resource url: 'js/lib/bootstrap3-typeahead.min.js'
+
+        resource url: 'js/lib/lodash.min.js'
+
+        resource url: 'js/lib/dport/portalHome.js'
+    }
+    cored3V5 {
+        dependsOn "jquery"
+
+        resource url: 'images/ajax-loader.gif'
+
+        resource url: 'css/lib/bootstrap.min.css'
+        resource url: 'js/lib/bootstrap.min.js'
+
+        resource url: 'https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js'
+
+        resource url: 'css/lib/style.css'
+        resource url: 'css/lib/dkstyle.css'
+
+        resource url: 'https://d3js.org/d3.v5.min.js'
         resource url: 'js/lib/utils.js'
 
         resource url: 'js/lib/bootstrap3-typeahead.min.js'
