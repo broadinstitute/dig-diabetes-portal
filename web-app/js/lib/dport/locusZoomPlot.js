@@ -1758,7 +1758,7 @@ var mpgSoftware = mpgSoftware || {};
                 };
             }
             var ds = new LocusZoom.DataSources();
-            ds.add("constraint", ["GeneConstraintLZ", { url: "http://exac.broadinstitute.org/api/constraint" }])
+            ds.add("constraint", ["GeneConstraintLZ", { url: "https://gnomad.broadinstitute.org/api",  params: { build: 'GRCh37' } }])
                 .add("assoc", ["AssociationLZ", {url: apiBase + "statistic/single/", params: {analysis: 3, id_field: "variant"}}])
                 .add("ld", ["LDLZ2" , { url: ldServerApiBase, params:{ source: '1000G', build: 'GRCh37', population: 'ALL' }} ])
                 .add("gene", ["GeneLZ", { url: apiBase + "annotation/genes/", params: { build: 'GRCh37' } }])
@@ -1783,7 +1783,7 @@ var mpgSoftware = mpgSoftware || {};
             switch (plotType){
                 case 1: // Association plot
                     newLayout = initLocusZoomLayout();
-                    ds.add("constraint", ["GeneConstraintLZ", { url: "http://exac.broadinstitute.org/api/constraint" }])
+                    ds.add("constraint", ["GeneConstraintLZ", {url: "https://gnomad.broadinstitute.org/api",  params: { build: 'GRCh37' }}])
                         .add("assoc", ["AssociationLZ", {url: apiBase + "statistic/single/", params: {analysis: 3, id_field: "variant"}}])
                         .add("ld", ["LDLZ2" , { url: ldServerApiBase, params:{ source: '1000G', build: 'GRCh37', population: 'ALL' }} ])
                         .add("gene", ["GeneLZ", { url: apiBase + "annotation/genes/", params: { build: 'GRCh37' } }])
