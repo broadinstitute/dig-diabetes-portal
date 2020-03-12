@@ -1,0 +1,21 @@
+text.labelEachGene  {
+    font-family: 'Lato';
+    font-weight: bold;
+    font-size: 9pt;
+}
+text.labelEachGene:first-of-type{
+    font-size: 12pt;
+    text-decoration: underline;
+}
+text.movingTextDescription {
+    font-family: 'Lato';
+    font-weight: 300;
+    font-size: 10pt;
+    fill: red;
+}
+text.axisLabel {
+    font-family: 'Lato';
+    font-weight: bold;
+    font-style: italic;
+    font-size: 10pt;
+}

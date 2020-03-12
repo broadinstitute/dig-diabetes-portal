@@ -100,7 +100,9 @@ class VariantInfoController {
     }
 
     def bestGeneBurdenResults(){
-        String jsonDataAsString = new File('./web-app/WEB-INF/resources/testFile/bestBurdenTest.json').text
+        String fileLocation = grailsApplication.mainContext.getResource("/WEB-INF/resources/bestBurdenTest.json").file.toString()
+       // String jsonDataAsString = new File('/WEB-INF/resources/testFile/bestBurdenTest.json').text
+        String jsonDataAsString = new File(fileLocation).text
         def slurper = new JsonSlurper()
         JSONArray jsonArray = slurper.parseText(jsonDataAsString)
         render(status:200, contentType:"application/json") {
@@ -111,7 +113,8 @@ class VariantInfoController {
 
     def bestGeneBurdenResultsForGene(){
         String geneString = params.gene
-        String jsonDataAsString = new File('./web-app/WEB-INF/resources/testFile/bestBurdenTest.json').text
+        String fileLocation = grailsApplication.mainContext.getResource("/WEB-INF/resources/bestBurdenTest.json").file.toString()
+        String jsonDataAsString = new File(fileLocation).text
         def slurper = new JsonSlurper()
         JSONArray jsonArray = slurper.parseText(jsonDataAsString)
         JSONObject jsonObject = jsonArray.find {a->a.gene==geneString}

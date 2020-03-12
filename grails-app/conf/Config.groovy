@@ -1106,3 +1106,4 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0  // expose the effector gene table
                                   )
 ]
+

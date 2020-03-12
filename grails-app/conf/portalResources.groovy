@@ -38,6 +38,7 @@ modules = {
         dependsOn 'cored3V5'
         resource url: 'js/lib/dport/dynaLineLauncher.js'
         resource url: 'js/lib/dport/dynamicLine.js'
+        resource url: 'css/dport/dynaline.css'
     }
 
     grsInfo {

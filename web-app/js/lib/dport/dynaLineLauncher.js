@@ -59,13 +59,20 @@ mpgSoftware.dynaLineLauncher = (function () {
         const numerator = priorAllelicVariance*beta*beta;
         const denominator = (2*variance)*(variance+priorAllelicVariance);
         const bayesFactor = multiplier * Math.exp(numerator/denominator);
-        const rangeOfPossiblePriors = _.map(_.range(100),function(rangeElement){return rangeElement/100.0});
+        const rangeOfPossiblePriors = _.map(_.range(101),function(rangeElement){return rangeElement/100.0});
         return _.map(rangeOfPossiblePriors,function(prior){
-            const po = (prior/(1-prior))*bayesFactor;
+            let posterior;
+            if (prior<1) {
+                const po = (prior/(1-prior))*bayesFactor;
+                posterior = po/(1+po);
+            } else {
+                posterior = 1;
+            }
+            po = (prior/(1-prior))*bayesFactor;
             return {x:prior,
-            y:po/(1+po),
-            name:'',
-            orient:'bottom'};
+                y:posterior,
+                name:'',
+                orient:'bottom'};
         });
     }
 
@@ -73,21 +80,22 @@ mpgSoftware.dynaLineLauncher = (function () {
 
     const prepareDisplay = function(dataUrl, geneName,priorAllelicVarianceVar, window){
         try{
+            const geneNameUpperCase = geneName.toUpperCase();
             var promise =  $.ajax({
                 cache: false,
                 type: "post",
                 url: dataUrl,
-                data: { gene: geneName },
+                data: { gene: geneNameUpperCase },
                 async: true
             });
-            const priorAllelicVariance = priorAllelicVarianceVar || 0.18;
+            const priorAllelicVariance = priorAllelicVarianceVar || 0.0462;
             promise.done(
                 function (dataForGene) {
                     const numericSE = parseFloat(dataForGene.se);
                     const numericBeta = parseFloat(dataForGene.beta);
                     const numericpValue = parseFloat(dataForGene.pValue);
                     const arrayOfPlotElements = priorPosteriorArray(numericBeta,numericSE,priorAllelicVariance)
-                    var dynaline = baget.dynamicLine.buildDynamicLinePlot(arrayOfPlotElements,geneName);
+                    var dynaline = baget.dynamicLine.buildDynamicLinePlot(arrayOfPlotElements,geneNameUpperCase,priorAllelicVariance,dataForGene);
                     d3.select(window).on('resize', baget.dynamicLine.resize);
                 }
 
@@ -105,3 +113,4 @@ mpgSoftware.dynaLineLauncher = (function () {
     }
 
 }());
+
