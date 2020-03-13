@@ -2765,7 +2765,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             specifyRequestList << "tissue=${tissue}"
         }
 
-        if ((variantList) && (variantList.length() > 0)) {
+        if ((variantList) && (variantList.size() > 0)) {
             specifyRequestList << "var_id=${variantList.join(",").replace("\"","")}"
         }
 
@@ -2780,7 +2780,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     public JSONObject gatherEffectorGeneData(  List <String> geneList ) {
         List<String> specifyRequestList = []
 
-        if ((geneList) && (geneList.length() > 0)) {
+        if ((geneList) && (geneList.size() > 0)) {
             specifyRequestList << "gene=${geneList.join(",").replace("\"","")}"
         }
 

@@ -1361,6 +1361,8 @@ class RegionInfoController {
         if (params.geneList) {
             geneList = slurper.parseText( params.geneList as String)  as JSONArray
             looksOkay = true
+        } else if (params.gene) {
+            geneList << params.gene
         }
 
         JSONObject jsonReturn
