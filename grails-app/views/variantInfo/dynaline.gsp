@@ -75,15 +75,28 @@
 
         <div class="col-md-2"></div>
 
-        <div class="col-md-8"><div id="dynamicLine"></div>
+        <div class="col-md-8">
+            <div id="dynamicLine"></div>
             <div id="chart"></div>
             %{--<svg class="chart"></svg>--}%
 
-            <div class="col-md-2"></div>
+
 
         </div>
-
+        <div class="col-md-2"></div>
     </div>
+    <div class="row">
+
+        <div class="col-md-2"></div>
+
+        <div class="col-md-8"><div id="confidenceInterval"></div>
+
+
+
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+
 </div>
 <script>
     $('#geneName').typeahead({

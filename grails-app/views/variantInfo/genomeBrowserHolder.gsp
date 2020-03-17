@@ -139,6 +139,36 @@
                         </a>
                     </li>
 
+                    <li>
+                        <a href="#"
+                           onclick="igv.browser.loadTrack({
+                               name: 'Genome wide DIAMANTE GWAS',
+                               trait: 'T2D',
+                               label: 'T2D DIAMANTE GWAS',
+                               maxLogP: 10,
+                               height: 200,
+                               pvalue: 'score',
+                               colorScale:  {
+                                   thresholds: [5e-8, 5e-4, 0.05],
+                                   colors: ['rgb(0,102,51)', 'rgb(122,179,23)', 'rgb(158,213,76)', 'rgb(227,238,249)']
+                               },
+                               type: 'gwas',
+                               format: 'bedgwas',
+                               url: 'https://dig-humgen.s3.amazonaws.com/diamante.0001.gz',
+                               indexURL: 'https://dig-humgen.s3.amazonaws.com/diamante.0001.gz.tbi',
+                               //visibilityWindow: -1,
+                               wholeGenomeView: true,
+                               rememberVariant:  function(parm){alert(parm)},
+                               traitURL:'${createLink(controller:"variantInfo", action:"variantInfo")}',
+                               color: 'rgb(100,200,200)',
+                               displayMode: 'EXPANDED',
+                               autoHeight: true,
+                               autoscale: true,
+                               order: 4
+                           })">Genome-wide Diamante
+                        </a>
+                    </li>
+
 
 
                     <li>

@@ -1588,20 +1588,26 @@ mpgSoftware.dynamicUi = (function () {
             intermediateDataStructure.tableToUpdate = idForTheTargetDiv;
         }
 
+        // there is at least one non-empty record...
+        if (_.find(intermediateDataStructure.rowsToAdd[0].columnCells,function(cell){console.log('t:'+cell.dataAnnotationTypeCode);return cell.dataAnnotationTypeCode!=='EMC'})){
 
-        prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
-            '#dynamicAbcGeneTable',
-            callingParameters.baseDomElement,
-            clearBeforeStarting,
-            intermediateDataStructure,
-            true,
-            'geneTableGeneHeaders',
-            true,
-            false );
+            // then add it to the gene table
+            prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
+                '#dynamicAbcGeneTable',
+                callingParameters.baseDomElement,
+                clearBeforeStarting,
+                intermediateDataStructure,
+                true,
+                'geneTableGeneHeaders',
+                true,
+                false );
+
+        }
 
 
 
-    };
+
+};
 
 
     /***

@@ -97,6 +97,7 @@ mpgSoftware.dynaLineLauncher = (function () {
                     const arrayOfPlotElements = priorPosteriorArray(numericBeta,numericSE,priorAllelicVariance)
                     var dynaline = baget.dynamicLine.buildDynamicLinePlot(arrayOfPlotElements,geneNameUpperCase,priorAllelicVariance,dataForGene);
                     d3.select(window).on('resize', baget.dynamicLine.resize);
+                    var confidenceInterval = baget.confidenceIntervalPlot.buildConfidenceIntervalPlot(0.8,0.3);
                 }
 
             );

@@ -39,6 +39,8 @@ modules = {
         resource url: 'js/lib/dport/dynaLineLauncher.js'
         resource url: 'js/lib/dport/dynamicLine.js'
         resource url: 'css/dport/dynaline.css'
+        resource url: 'js/lib/dport/confidenceIntervalPlot.js'
+        resource url: 'css/dport/confidenceIntervalPlot.css'
     }
 
     grsInfo {
