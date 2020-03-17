@@ -502,32 +502,32 @@
                         <g:if test="${g.portalTypeString()?.equals('stroke')}">
                             <div style="margin-top: 25px;">
                                 <img src="${resource(dir: 'images', file: 'stroke_symbol.svg')}" style="width: 70px; margin-top: -10px; float: left; margin-right: 15px;">
-                                <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CDKP"></g:message></h3>
-                                <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cerebrovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                                <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CDKP"></g:message></h3>-->
+                                <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cerebrovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
                             </div>
 
-                            <div style="margin-top: 25px;">
+                            <div style="margin-top: 25px; clear: both; padding-top: 10px;">
                                 <a href="http://www.type2diabetesgenetics.org/"><img src="${resource(dir: 'images', file: 't2d_symbol.svg')}" style="width: 76px; float: left; margin-top:-3px; margin-left:-3px; margin-right: 13px;"></a>
-                                <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_T2DKP"></g:message></h3>
-                                <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Type 2 Diabetes <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://www.type2diabetesgenetics.org/">Visit portal</a></h3>
+                                <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_T2DKP"></g:message></h3>-->
+                                <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Type 2 Diabetes <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://www.type2diabetesgenetics.org/">Visit portal</a></h3>
                             </div>
-                            <div style="margin-top: 15px;">
+                            <div style="margin-top: 25px; clear: both; padding-top: 10px;">
                                 <a href="http://www.broadcvdi.org/"><img src="${resource(dir: 'images', file: 'mi_symbol.svg')}" style="width: 90px; float: left; margin-top:-10px; margin-left:-10px; margin-right: 5px;"></a>
-                                <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CVDI"></g:message></h3>
-                                <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cardiovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://www.broadcvdi.org/">Visit portal</a></h3>
+                                <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CVDI"></g:message></h3>-->
+                                <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cardiovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://www.broadcvdi.org/">Visit portal</a></h3>
                             </div>
-                            <div style="margin-top: 15px;">
+                            <div style="margin-top: 25px; clear: both; padding-top: 10px;">
                             <a href="http://sleepdisordergenetics.org/"><img src="${resource(dir: 'images', file: 'sleep_symbol.svg')}" style="width: 90px; float: left; margin-top:-10px; margin-left:-10px; margin-right: 5px;"></a>
-                            <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_sleep"></g:message></h3>
-                            <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Sleep Disorder <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                            <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://sleepdisordergenetics.org/">Visit portal</a></h3>
-                            <div style="margin-top: 15px;">
+                            <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_sleep"></g:message></h3>-->
+                            <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Sleep Disorder <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                            <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://sleepdisordergenetics.org/">Visit portal</a></h3>
+                            <div style="margin-top: 25px; clear: both; padding-top: 10px;">
                                 <a href="http://musculoskeletalknowledgeportal.org"><img src="${resource(dir: 'images', file: 'mskp_symbol.svg')}" style="width: 80px; float: left; margin-top:-10px; margin-left:-5px; margin-right: 10px;"></a>
-                                <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_MSKP"></g:message></h3>
-                                <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Musculoskeletal <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://musculoskeletalknowledgeportal.org">Visit portal</a></h3>
+                                <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_MSKP"></g:message></h3>-->
+                                <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Musculoskeletal <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://musculoskeletalknowledgeportal.org">Visit portal</a></h3>
                             </div>
                         </div>
                             <hr />
@@ -540,67 +540,67 @@
                         <g:elseif test="${g.portalTypeString()?.equals('mi')}">
                             <div style="margin-top: 15px;">
                                 <img src="${resource(dir: 'images', file: 'mi_symbol.svg')}" style="width: 90px; float: left; margin-top:-20px; margin-left:-10px; margin-right: 5px;">
-                                <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CVDI"></g:message></h3>
-                                <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cardiovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                                <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CVDI"></g:message></h3>-->
+                                <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cardiovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
                             </div>
 
-                            <div style="margin-top: 25px;">
+                            <div style="margin-top: 25px; clear: both; padding-top: 10px;">
                                 <a href="http://www.type2diabetesgenetics.org/"><img src="${resource(dir: 'images', file: 't2d_symbol.svg')}" style="width: 76px; float: left; margin-top:-3px; margin-left:-3px; margin-right: 13px;"></a>
-                                <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_T2DKP"></g:message></h3>
-                                <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Type 2 Diabetes <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://www.type2diabetesgenetics.org/">Visit portal</a></h3>
+                                <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_T2DKP"></g:message></h3>-->
+                                <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Type 2 Diabetes <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://www.type2diabetesgenetics.org/">Visit portal</a></h3>
                             </div>
 
-                            <div style="margin-top: 15px;">
+                            <div style="margin-top: 25px; clear: both; padding-top: 10px;">
                                 <a href="http://www.cerebrovascularportal.org/"><img src="${resource(dir: 'images', file: 'stroke_symbol.svg')}" style="width: 70px; float: left; margin-right: 15px;"></a>
-                                <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CDKP"></g:message></h3>
-                                <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cerebrovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://www.cerebrovascularportal.org/">Visit portal</a></h3>
+                                <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CDKP"></g:message></h3>-->
+                                <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cerebrovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://www.cerebrovascularportal.org/">Visit portal</a></h3>
                             </div>
-                            <div style="margin-top: 15px;">
+                            <div style="margin-top: 25px; clear: both; padding-top: 10px;">
                                 <a href="http://sleepdisordergenetics.org/"><img src="${resource(dir: 'images', file: 'sleep_symbol.svg')}" style="width: 90px; float: left; margin-top:-10px; margin-left:-10px; margin-right: 5px;"></a>
-                                <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_sleep"></g:message></h3>
-                                <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Sleep Disorder <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://sleepdisordergenetics.org/">Visit portal</a></h3>
+                                <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_sleep"></g:message></h3>-->
+                                <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Sleep Disorder <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://sleepdisordergenetics.org/">Visit portal</a></h3>
                             </div>
-                            <div style="margin-top: 15px;">
+                            <div style="margin-top: 25px; clear: both; padding-top: 10px;">
                                 <a href="http://musculoskeletalknowledgeportal.org"><img src="${resource(dir: 'images', file: 'mskp_symbol.svg')}" style="width: 80px; float: left; margin-top:-10px; margin-left:-5px; margin-right: 10px;"></a>
-                                <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_MSKP"></g:message></h3>
-                                <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Musculoskeletal <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://musculoskeletalknowledgeportal.org">Visit portal</a></h3>
+                                <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_MSKP"></g:message></h3>-->
+                                <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Musculoskeletal <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://musculoskeletalknowledgeportal.org">Visit portal</a></h3>
                             </div>
                         </g:elseif>
                         <g:elseif test="${g.portalTypeString()?.equals('epilepsy')}">
                             <div style="margin-top: 25px;">
                                 <a href="http://www.type2diabetesgenetics.org/"><img src="${resource(dir: 'images', file: 't2d_symbol.svg')}" style="width: 76px; float: left; margin-top:-3px; margin-left:-3px; margin-right: 13px;"></a>
-                                <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_T2DKP"></g:message></h3>
-                                <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Type 2 Diabetes <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://www.type2diabetesgenetics.org/">Visit portal</a></h3>
+                                <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_T2DKP"></g:message></h3>-->
+                                <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Type 2 Diabetes <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://www.type2diabetesgenetics.org/">Visit portal</a></h3>
                             </div>
-                            <div style="margin-top: 25px;">
+                            <div style="margin-top: 25px; clear: both; padding-top: 10px;">
                                 <a href="http://www.broadcvdi.org/"><img src="${resource(dir: 'images', file: 'mi_symbol.svg')}" style="width: 90px; float: left; margin-top:-10px; margin-left:-10px; margin-right: 5px;"></a>
-                                <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CVDI"></g:message></h3>
-                                <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cardiovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://www.broadcvdi.org/">Visit portal</a></h3>
+                                <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CVDI"></g:message></h3>-->
+                                <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cardiovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://www.broadcvdi.org/">Visit portal</a></h3>
                             </div>
 
-                            <div style="margin-top: 15px;">
+                            <div style="margin-top: 25px; clear: both; padding-top: 10px;">
                                 <a href="http://www.cerebrovascularportal.org/"><img src="${resource(dir: 'images', file: 'stroke_symbol.svg')}" style="width: 70px; float: left; margin-right: 15px;"></a>
-                                <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CDKP"></g:message></h3>
-                                <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cerebrovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://www.cerebrovascularportal.org/">Visit portal</a></h3>
+                                <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CDKP"></g:message></h3>-->
+                                <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cerebrovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://www.cerebrovascularportal.org/">Visit portal</a></h3>
                             </div>
-                            <div style="margin-top: 15px;">
+                            <div style="margin-top: 25px; clear: both; padding-top: 10px;">
                                 <a href="http://sleepdisordergenetics.org/"><img src="${resource(dir: 'images', file: 'sleep_symbol.svg')}" style="width: 90px; float: left; margin-top:-10px; margin-left:-10px; margin-right: 5px;"></a>
-                                <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_sleep"></g:message></h3>
-                                <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Sleep Disorder <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://sleepdisordergenetics.org/">Visit portal</a></h3>
+                                <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_sleep"></g:message></h3>-->
+                                <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Sleep Disorder <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://sleepdisordergenetics.org/">Visit portal</a></h3>
                             </div>
-                            <div style="margin-top: 15px;">
+                            <div style="margin-top: 25px; clear: both; padding-top: 10px;">
                                 <a href="http://musculoskeletalknowledgeportal.org"><img src="${resource(dir: 'images', file: 'mskp_symbol.svg')}" style="width: 80px; float: left; margin-top:-10px; margin-left:-5px; margin-right: 10px;"></a>
-                                <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_MSKP"></g:message></h3>
-                                <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Musculoskeletal <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://musculoskeletalknowledgeportal.org">Visit portal</a></h3>
+                                <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_MSKP"></g:message></h3>-->
+                                <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Musculoskeletal <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://musculoskeletalknowledgeportal.org">Visit portal</a></h3>
                             </div>
 
                         </g:elseif>
@@ -608,34 +608,34 @@
                         <g:elseif test="${g.portalTypeString()?.equals('lung')}">
                             <div style="margin-top: 25px;">
                                 <a href="http://www.type2diabetesgenetics.org/"><img src="${resource(dir: 'images', file: 't2d_symbol.svg')}" style="width: 76px; float: left; margin-top:-3px; margin-left:-3px; margin-right: 13px;"></a>
-                                <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_T2DKP"></g:message></h3>
-                                <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Type 2 Diabetes <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://www.type2diabetesgenetics.org/">Visit portal</a></h3>
+                                <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_T2DKP"></g:message></h3>-->
+                                <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Type 2 Diabetes <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://www.type2diabetesgenetics.org/">Visit portal</a></h3>
                             </div>
-                            <div style="margin-top: 25px;">
+                            <div style="margin-top: 25px; clear: both; padding-top: 10px;">
                                 <a href="http://www.broadcvdi.org/"><img src="${resource(dir: 'images', file: 'mi_symbol.svg')}" style="width: 90px; float: left; margin-top:-10px; margin-left:-10px; margin-right: 5px;"></a>
-                                <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CVDI"></g:message></h3>
-                                <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cardiovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://www.broadcvdi.org/">Visit portal</a></h3>
+                                <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CVDI"></g:message></h3>-->
+                                <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cardiovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://www.broadcvdi.org/">Visit portal</a></h3>
                             </div>
 
-                            <div style="margin-top: 15px;">
+                            <div style="margin-top: 25px; clear: both; padding-top: 10px;">
                                 <a href="http://www.cerebrovascularportal.org/"><img src="${resource(dir: 'images', file: 'stroke_symbol.svg')}" style="width: 70px; float: left; margin-right: 15px;"></a>
-                                <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CDKP"></g:message></h3>
-                                <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cerebrovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://www.cerebrovascularportal.org/">Visit portal</a></h3>
+                                <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CDKP"></g:message></h3>-->
+                                <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cerebrovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://www.cerebrovascularportal.org/">Visit portal</a></h3>
                             </div>
-                            <div style="margin-top: 15px;">
+                            <div style="margin-top: 25px; clear: both; padding-top: 10px;">
                                 <a href="http://sleepdisordergenetics.org/"><img src="${resource(dir: 'images', file: 'sleep_symbol.svg')}" style="width: 90px; float: left; margin-top:-10px; margin-left:-10px; margin-right: 5px;"></a>
-                                <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_sleep"></g:message></h3>
-                                <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Sleep Disorder <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://sleepdisordergenetics.org/">Visit portal</a></h3>
+                                <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_sleep"></g:message></h3>-->
+                                <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Sleep Disorder <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://sleepdisordergenetics.org/">Visit portal</a></h3>
                             </div>
-                            <div style="margin-top: 15px;">
+                            <div style="margin-top: 25px; clear: both; padding-top: 10px;">
                                 <a href="http://musculoskeletalknowledgeportal.org"><img src="${resource(dir: 'images', file: 'mskp_symbol.svg')}" style="width: 80px; float: left; margin-top:-10px; margin-left:-5px; margin-right: 10px;"></a>
-                                <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_MSKP"></g:message></h3>
-                                <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Musculoskeletal <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://musculoskeletalknowledgeportal.org">Visit portal</a></h3>
+                                <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_MSKP"></g:message></h3>-->
+                                <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Musculoskeletal <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://musculoskeletalknowledgeportal.org">Visit portal</a></h3>
                             </div>
 
                         </g:elseif>
@@ -643,34 +643,34 @@
                         <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
                             <div style="margin-top: 15px;">
                                 <a href="javascript:;"><img src="${resource(dir: 'images', file: 'sleep_symbol.svg')}" style="width: 90px; float: left; margin-top:-10px; margin-left:-10px; margin-right: 5px;"></a>
-                                <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_sleep"></g:message></h3>
-                                <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Sleep Disorder <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:16px; margin:5px 0 0 0; "></h3>
+                                <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_sleep"></g:message></h3>-->
+                                <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Sleep Disorder <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "></h3>
                             </div>
-                            <div style="margin-top: 25px;">
+                            <div style="margin-top: 25px; clear: both; padding-top: 10px;">
                                 <a href="http://www.type2diabetesgenetics.org/"><img src="${resource(dir: 'images', file: 't2d_symbol.svg')}" style="width: 76px; float: left; margin-top:-3px; margin-left:-3px; margin-right: 13px;"></a>
-                                <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_T2DKP"></g:message></h3>
-                                <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Type 2 Diabetes <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://www.type2diabetesgenetics.org/">Visit portal</a></h3>
+                                <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_T2DKP"></g:message></h3>-->
+                                <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Type 2 Diabetes <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://www.type2diabetesgenetics.org/">Visit portal</a></h3>
                             </div>
-                            <div style="margin-top: 25px;">
+                            <div style="margin-top: 25px; clear: both; padding-top: 10px;">
                                 <a href="http://www.broadcvdi.org/"><img src="${resource(dir: 'images', file: 'mi_symbol.svg')}" style="width: 90px; float: left; margin-top:-10px; margin-left:-10px; margin-right: 5px;"></a>
-                                <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CVDI"></g:message></h3>
-                                <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cardiovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://www.broadcvdi.org/">Visit portal</a></h3>
+                                <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CVDI"></g:message></h3>-->
+                                <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cardiovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://www.broadcvdi.org/">Visit portal</a></h3>
                             </div>
 
-                            <div style="margin-top: 15px;">
+                            <div style="margin-top: 25px; clear: both; padding-top: 10px;">
                                 <a href="http://www.cerebrovascularportal.org/"><img src="${resource(dir: 'images', file: 'stroke_symbol.svg')}" style="width: 70px; float: left; margin-right: 15px;"></a>
-                                <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CDKP"></g:message></h3>
-                                <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cerebrovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://www.cerebrovascularportal.org/">Visit portal</a></h3>
+                                <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CDKP"></g:message></h3>-->
+                                <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cerebrovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://www.cerebrovascularportal.org/">Visit portal</a></h3>
                             </div>
-                            <div style="margin-top: 15px;">
+                            <div style="margin-top: 25px; clear: both; padding-top: 10px;">
                                 <a href="http://musculoskeletalknowledgeportal.org"><img src="${resource(dir: 'images', file: 'mskp_symbol.svg')}" style="width: 80px; float: left; margin-top:-10px; margin-left:-5px; margin-right: 10px;"></a>
-                                <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_MSKP"></g:message></h3>
-                                <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Musculoskeletal <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://musculoskeletalknowledgeportal.org">Visit portal</a></h3>
+                                <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_MSKP"></g:message></h3>-->
+                                <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Musculoskeletal <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://musculoskeletalknowledgeportal.org">Visit portal</a></h3>
                             </div>
 
 
@@ -679,36 +679,36 @@
                         <g:else>
                             <div style="margin-top: 25px;">
                                 <img src="${resource(dir: 'images', file: 't2d_symbol.svg')}" style="width: 76px; float: left; margin-top:-13px; margin-left:-3px; margin-right: 13px;">
-                                <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_T2DKP"></g:message></h3>
-                                <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Type 2 Diabetes <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://type2diabetesgenetics.org/" target="_blank">Visit portal</a></h3>
+                                <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_T2DKP"></g:message></h3>-->
+                                <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Type 2 Diabetes <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://type2diabetesgenetics.org/" target="_blank">Visit portal</a></h3>
                             </div>
-                            <div style="margin-top: 25px;">
+                            <div style="margin-top: 25px; clear: both; padding-top: 10px;">
                                 <a href="http://www.broadcvdi.org/"><img src="${resource(dir: 'images', file: 'mi_symbol.svg')}" style="width: 90px; float: left; margin-top:-10px; margin-left:-10px; margin-right: 5px;"></a>
-                                <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CVDI"></g:message></h3>
-                                <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cardiovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://www.broadcvdi.org/" target="_blank">Visit portal</a></h3>
+                                <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CVDI"></g:message></h3>-->
+                                <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cardiovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://www.broadcvdi.org/" target="_blank">Visit portal</a></h3>
                             </div>
 
-                            <div style="margin-top: 15px;">
+                            <div style="margin-top: 25px; clear: both; padding-top: 10px;">
                                 <a href="http://www.cerebrovascularportal.org/"><img src="${resource(dir: 'images', file: 'stroke_symbol.svg')}" style="width: 70px; float: left; margin-right: 15px;"></a>
-                                <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CDKP"></g:message></h3>
-                                <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cerebrovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://www.cerebrovascularportal.org/" target="_blank">Visit portal</a></h3>
+                                <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CDKP"></g:message></h3>-->
+                                <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cerebrovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://www.cerebrovascularportal.org/" target="_blank">Visit portal</a></h3>
                             </div>
 
-                            <div style="margin-top: 15px;">
+                            <div style="margin-top: 25px; clear: both; padding-top: 10px;">
                                 <a href="http://sleepdisordergenetics.org/"><img src="${resource(dir: 'images', file: 'sleep_symbol.svg')}" style="width: 90px; float: left; margin-top:-10px; margin-left:-10px; margin-right: 5px;"></a>
-                                <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_sleep"></g:message></h3>
-                                <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Sleep Disorder <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://sleepdisordergenetics.org/" target="_blank">Visit portal</a></h3>
+                                <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_sleep"></g:message></h3>-->
+                                <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Sleep Disorder <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://sleepdisordergenetics.org/" target="_blank">Visit portal</a></h3>
                             </div>
 
-                            <div style="margin-top: 15px;">
+                            <div style="margin-top: 25px; clear: both; padding-top: 10px;">
                                 <a href="http://musculoskeletalknowledgeportal.org"><img src="${resource(dir: 'images', file: 'mskp_symbol.svg')}" style="width: 80px; float: left; margin-top:-10px; margin-left:-5px; margin-right: 10px;"></a>
-                                <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_MSKP"></g:message></h3>
-                                <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Musculoskeletal <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://musculoskeletalknowledgeportal.org">Visit portal</a></h3>
+                                <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_MSKP"></g:message></h3>-->
+                                <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Musculoskeletal <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://musculoskeletalknowledgeportal.org">Visit portal</a></h3>
                             </div>
 
                         </g:else>
