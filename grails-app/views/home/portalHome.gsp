@@ -882,7 +882,9 @@
                             <a href="http://www.cancerandbone.org/" target="_blank" style="float: left; display:block; margin-right: 10px;">
                                 <img src="${resource(dir:'images/organizations', file:'CABS_logo_small.png')}" style="width:150px; margin-top:5px;margin-left:10px;"></a>
                             <a href="https://ethz.ch/en.html" target="_blank" style="float: left; display:block; margin-right: 10px;">
-                                <img src="${resource(dir:'images/organizations', file:'ETH_ZURICH.png')}" style="width:150px; margin-top:5px; margin-left:5px;"></a>
+                                <img src="${resource(dir:'images/organizations', file:'ETH_ZURICH.png')}" style="width:175px; margin-top:35px; margin-left:5px;"></a>
+                            <a href="https://www.cuanschutz.edu" target="_blank" style="float: left; display:block; margin-right: 10px;">
+                                <img src="${resource(dir:'images/organizations', file:'u_of_colorado.png')}" style="width:140px; margin-top:5px; margin-left:35px;"></a>
                               </p>
 
 
