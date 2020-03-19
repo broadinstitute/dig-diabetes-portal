@@ -28,99 +28,6 @@ baget.confidenceIntervalPlot = (function () {
     let path;
 
 
-    function hover(svg, path) {
-        const straightLine = d3.line()
-            .x(d => x(d.x))
-            .y(d => y(d.y));
-
-        if ("ontouchstart" in document) svg
-            .style("-webkit-tap-highlight-color", "transparent")
-            .on("touchmove", moved)
-            .on("touchstart", entered)
-            .on("touchend", left)
-        else svg
-            .on("mousemove", moved)
-            .on("mouseenter", entered)
-            .on("mouseleave", left);
-
-        const dotHolder = svg.append("g")
-            .attr("display", "none");
-
-        const dot = dotHolder.append("circle")
-            .attr("r", 3)
-            .attr("fill", "red")
-            .attr("class", "movingDot");
-
-        const crosshairsVertical = dotHolder.append("line")
-            .attr("class", "crosshairs")
-            .style("stroke", "red")
-            .attr("stroke-opacity", 0.5)
-            .style("stroke-width", 0.5);
-        const crosshairsHorizontal = dotHolder.append("line")
-            .attr("class", "crosshairs")
-            .style("stroke", "red")
-            .attr("stroke-opacity", 0.5)
-            .style("stroke-width", 0.5);
-
-        const priorDescription = dotHolder.append("text")
-            .attr("class", "movingTextDescription")
-            .attr("x", 4)
-            .attr("y", -2)
-            .attr("text-anchor", "left");
-        const posteriorDescription = dotHolder.append("text")
-            .attr("class", "movingTextDescription")
-            .attr("x", 4)
-            .attr("y", -3)
-            .attr("text-anchor", "left");
-
-        function moved() {
-            d3.event.preventDefault();
-            const ym = y.invert(d3.event.layerY);
-            const xm = x.invert(d3.event.layerX);
-            const path = d3.select(this).select('path');
-            let closestIndex;
-            _.forEach(path.datum(),function(d,i){
-                if (d.x > xm){
-                    closestIndex = i;
-                    return false;
-                }
-            });
-            const closestDataPoint = path.datum()[closestIndex];
-            if ( typeof closestDataPoint !== 'undefined'){
-                dotHolder.attr("display", null);
-                dot
-                    .attr("cx", d => x(closestDataPoint.x))
-                    .attr("cy", d => y(closestDataPoint.y));
-                priorDescription
-                    .attr("dx", d => x(closestDataPoint.x))
-                    .attr("dy", d => y(0))
-                    .text('prior:'+closestDataPoint.x);
-                posteriorDescription
-                    .attr("dx", d => x(0))
-                    .attr("dy", d => y(closestDataPoint.y))
-                    .text('posterior probability:'+d3.format(".2f")(closestDataPoint.y));
-                crosshairsVertical
-                    .attr("x1", d => x(closestDataPoint.x))
-                    .attr("y1", d => y(0))
-                    .attr("x2", d => x(closestDataPoint.x))
-                    .attr("y2", d => y(1));
-                crosshairsHorizontal
-                    .attr("x1", d => x(0))
-                    .attr("y1", d => y(closestDataPoint.y))
-                    .attr("x2", d => x(1))
-                    .attr("y2", d => y(closestDataPoint.y));
-            }
-
-        }
-
-        function entered() {
-            dotHolder.attr("display", null);
-        }
-
-        function left() {
-            dotHolder.attr("display", "none");
-        }
-    };
 
     const resize = function () {
         width = widthAdjuster()- margin.left - margin.right;
@@ -144,8 +51,8 @@ baget.confidenceIntervalPlot = (function () {
         const xDataRawRange = [beta-(1.96*standardError),beta+(1.96*standardError)];
         const xDataRawinterval = (xDataRawRange[1]===xDataRawRange[0])?1:(xDataRawRange[1]-xDataRawRange[0]); // this is the range of our actual data. don't arrow a range of 0
         const xDataRawintervalExpander = xDataRawinterval/5.0; //let's go 20% beyond that
-        const displayableXRange = [(xDataRawRange[0]<(1-xDataRawintervalExpander))?(xDataRawRange[0]-xDataRawintervalExpander):(1-xDataRawintervalExpander),
-                                (xDataRawRange[1]>(1+xDataRawintervalExpander))?(xDataRawRange[1]+xDataRawintervalExpander):(1+xDataRawintervalExpander)];
+        const displayableXRange = [(xDataRawRange[0]<(0-xDataRawintervalExpander))?(xDataRawRange[0]-xDataRawintervalExpander):(0-xDataRawintervalExpander),
+                                (xDataRawRange[1]>(0+xDataRawintervalExpander))?(xDataRawRange[1]+xDataRawintervalExpander):(0+xDataRawintervalExpander)];
         margin = ({top: 50, right: 50, bottom: 35, left: 60});
         x = d3.scaleLinear()
             .domain(d3.extent(displayableXRange, d => d)).nice()
@@ -159,15 +66,6 @@ baget.confidenceIntervalPlot = (function () {
 
         const svg = confidenceIntervalSelection.append("svg")
             .attr("viewBox", [0, 0, width, height]);
-
-        var borderPath = svg.append("rect")
-            .attr("x", width/5)
-            .attr("y", margin.top)
-            .attr("height", height-margin.top-margin.bottom)
-            .attr("width", 3*width/5)
-            .style("stroke", 'black')
-            .style("fill", "none")
-            .style("stroke-width", 0.5);
 
         // build the 95% confidence line
         const confidenceIndicator = svg.append("g");
@@ -246,17 +144,23 @@ baget.confidenceIntervalPlot = (function () {
             .duration(1000)
             .attr("x", d => x(d)-5)
             .attr("width", 10);
-        // confidenceIndicator
-        //     .append("text")
-        //     .attr("class", "LOFTEE_OR")
-        //     .attr("text-anchor", "middle")
-        //     .attr("alignment-baseline", "hanging")
-        //     .attr("x", d => x(1)+2)
-        //     .attr("y", d => y(1)-2)
-        //     .text("LOFTEE OR:");
+        confidenceIndicator
+            .append("text")
+            .attr("class", "lofteeOr")
+            .attr("text-anchor", "middle")
+            .attr("alignment-baseline", "hanging")
+            .attr("x", d => x(beta))
+            .attr("y", d => y(0.5)+7)
+            .text(d3.format(".2f")(beta));
 
-
-
+        // Title the display
+        svg.append("text")
+            .attr("class", "displayTitle")
+            .attr("text-anchor", "left")
+            .attr("alignment-baseline", "ideographic")
+            .attr("x", d => x(displayableXRange[0])+2)
+            .attr("y", d => y(0)-2)
+            .text("LOFTEE beta ("+d3.format(".3f")(beta)+") with 95% confidence interval");
 
         // build the beta==0 line
         svg.append("line")
@@ -265,17 +169,17 @@ baget.confidenceIntervalPlot = (function () {
             .attr("stroke-opacity", 0.5)
             .style("stroke-width", 0.5)
             .style("stroke-dasharray", ("3, 3"))
-            .attr("x1", d => x(1))
+            .attr("x1", d => x(0))
             .attr("y1", d => y(0))
-            .attr("x2", d => x(1))
+            .attr("x2", d => x(0))
             .attr("y2", d => y(1));
         svg.append("text")
             .attr("class", "oddsRatioZero")
             .attr("text-anchor", "left")
             .attr("alignment-baseline", "ideographic")
-            .attr("x", d => x(1)+2)
+            .attr("x", d => x(0)+2)
             .attr("y", d => y(1)-2)
-            .text("odds ratio = 0");
+            .text("beta = 0");
         return svg.node();
 
 

@@ -16,3 +16,16 @@ text.describeEachEndOfTheConfidenceInterval{
     font-size: 6pt;
     fill: red;
 }
+text.lofteeOr{
+    font-family: 'Lato';
+    font-weight: normal;
+    font-size: 6pt;
+    fill: red;
+}
+text.displayTitle{
+    font-family: 'Lato';
+    font-weight: normal;
+    font-style: italic;
+    font-size: 8pt;
+    fill: blue;
+}

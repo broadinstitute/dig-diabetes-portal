@@ -78,18 +78,18 @@ mpgSoftware.dynaLineLauncher = (function () {
 
 
 
-    const prepareDisplay = function(dataUrl, geneName,priorAllelicVarianceVar, window){
+    const prepareDisplay = function(bestMaskUrl,lofteeMaskUrl, geneName,priorAllelicVarianceVar, window){
         try{
             const geneNameUpperCase = geneName.toUpperCase();
-            var promise =  $.ajax({
+            const bestMaskPromise =  $.ajax({
                 cache: false,
                 type: "post",
-                url: dataUrl,
+                url: bestMaskUrl,
                 data: { gene: geneNameUpperCase },
                 async: true
             });
             const priorAllelicVariance = priorAllelicVarianceVar || 0.0462;
-            promise.done(
+            bestMaskPromise.done(
                 function (dataForGene) {
                     const numericSE = parseFloat(dataForGene.se);
                     const numericBeta = parseFloat(dataForGene.beta);
@@ -97,7 +97,25 @@ mpgSoftware.dynaLineLauncher = (function () {
                     const arrayOfPlotElements = priorPosteriorArray(numericBeta,numericSE,priorAllelicVariance)
                     var dynaline = baget.dynamicLine.buildDynamicLinePlot(arrayOfPlotElements,geneNameUpperCase,priorAllelicVariance,dataForGene);
                     d3.select(window).on('resize', baget.dynamicLine.resize);
-                    var confidenceInterval = baget.confidenceIntervalPlot.buildConfidenceIntervalPlot(0.8,0.3);
+                }
+
+            );
+            var lofteeMaskPromise = $.ajax({
+                cache: false,
+                type: "post",
+                url: lofteeMaskUrl,
+                data: { gene: geneNameUpperCase },
+                async: true
+            });
+            lofteeMaskPromise.done(
+                function (dataForGene) {
+                    const numericSE = parseFloat(dataForGene.se);
+                    const numericBeta = parseFloat(dataForGene.beta);
+                    const numericpValue = parseFloat(dataForGene.pValue);
+                    const arrayOfPlotElements = priorPosteriorArray(numericBeta,numericSE,priorAllelicVariance)
+                    var confidenceInterval = baget.confidenceIntervalPlot.buildConfidenceIntervalPlot(numericBeta,
+                        numericSE);
+                    d3.select(window).on('resize', baget.confidenceIntervalPlot.resize);
                 }
 
             );

@@ -124,6 +124,19 @@ class VariantInfoController {
         return
     }
 
+    def lofteeGeneBurdenResultsForGene(){
+        String geneString = params.gene
+        String fileLocation = grailsApplication.mainContext.getResource("/WEB-INF/resources/lofteeBurdenTest.json").file.toString()
+        String jsonDataAsString = new File(fileLocation).text
+        def slurper = new JsonSlurper()
+        JSONArray jsonArray = slurper.parseText(jsonDataAsString)
+        JSONObject jsonObject = jsonArray.find {a->a.gene==geneString}
+        render(status:200, contentType:"application/json") {
+            jsonObject
+        }
+        return
+    }
+
 
     def retrieveBottomLineVariants (){
         boolean looksOkay = true
