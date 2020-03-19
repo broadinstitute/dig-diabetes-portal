@@ -138,7 +138,7 @@ baget.confidenceIntervalPlot = (function () {
 
     const buildConfidenceIntervalPlot = function (beta,standardError) {
 
-        height = 300;
+        height = 200;
         width = 500;
         const yData = [0,1];
         const xDataRawRange = [beta-(1.96*standardError),beta+(1.96*standardError)];
@@ -146,35 +146,13 @@ baget.confidenceIntervalPlot = (function () {
         const xDataRawintervalExpander = xDataRawinterval/5.0; //let's go 20% beyond that
         const displayableXRange = [(xDataRawRange[0]<(1-xDataRawintervalExpander))?(xDataRawRange[0]-xDataRawintervalExpander):(1-xDataRawintervalExpander),
                                 (xDataRawRange[1]>(1+xDataRawintervalExpander))?(xDataRawRange[1]+xDataRawintervalExpander):(1+xDataRawintervalExpander)];
-        margin = ({top: 100, right: 50, bottom: 35, left: 60});
+        margin = ({top: 50, right: 50, bottom: 35, left: 60});
         x = d3.scaleLinear()
             .domain(d3.extent(displayableXRange, d => d)).nice()
             .range([margin.left, width - margin.right]);
         y = d3.scaleLinear()
             .domain(d3.extent(yData, d => d)).nice()
-            .range([height - margin.bottom, margin.top])
-        xAxis = g => g
-            .attr("transform", `translate(0,${height - margin.bottom})`)
-            .call(d3.axisBottom(x).ticks(width / 80))
-            .call(g => g.select(".domain").remove())
-            .call(g => g.selectAll(".tick line").clone()
-                .attr("y2", -height+margin.top)
-                .attr("stroke-opacity", 0.05));
-            // .call(g => g.append("text")
-            //     .attr("x", width - 4)
-            //     .attr("y", -4)
-            //     .attr("font-weight", "bold")
-            //     .attr("text-anchor", "end")
-            //     .attr("fill", "black")
-            //     .text('x foo'));
-
-        yAxis = g => g
-            .attr("transform", `translate(${margin.left},0)`);
-            // .call(d3.axisLeft(y).ticks(null, ".2f"))
-            // .call(g => g.select(".domain").remove())
-            // .call(g => g.selectAll(".tick line").clone()
-            //     .attr("x2", width)
-            //     .attr("stroke-opacity", 0.1));
+            .range([margin.top,height - margin.bottom]);
 
 
         var confidenceIntervalSelection = d3.select("#confidenceInterval");
@@ -182,47 +160,122 @@ baget.confidenceIntervalPlot = (function () {
         const svg = confidenceIntervalSelection.append("svg")
             .attr("viewBox", [0, 0, width, height]);
 
-        // build the axes
-        svg.append("g")
-            .call(xAxis);
-        svg.append("g")
-            .call(yAxis);
+        var borderPath = svg.append("rect")
+            .attr("x", width/5)
+            .attr("y", margin.top)
+            .attr("height", height-margin.top-margin.bottom)
+            .attr("width", 3*width/5)
+            .style("stroke", 'black')
+            .style("fill", "none")
+            .style("stroke-width", 0.5);
 
         // build the 95% confidence line
         const confidenceIndicator = svg.append("g");
-        confidenceIndicator.append("line")
+        confidenceIndicator
+            .selectAll("line")
+            .data([xDataRawRange])
+            .enter()
+            .append("line")
             .attr("class", "confidenceLine")
             .style("stroke", "black")
             .attr("stroke-opacity", 1)
             .style("stroke-width", 0.5)
-            .attr("x1", d => x(xDataRawRange[0]))
+            .attr("x1", d => x(beta))
             .attr("y1", d => y(0.5))
-            .attr("x2", d => x(xDataRawRange[1]))
-            .attr("y2", d => y(0.5));
+            .attr("x2", d => x(beta))
+            .attr("y2", d => y(0.5))
+            .transition()
+            .duration(1000)
+            .attr("x1", d => x(d[0]))
+            .attr("x2", d => x(d[1]));
+
+        // mark each end of the confidence line
+        confidenceIndicator
+            .append("g")
+            .selectAll("line")
+            .data(xDataRawRange)
+            .enter()
+            .append("line")
+            .attr("class", "eachEndOfTheConfidenceLine")
+            .style("stroke", "black")
+            .attr("stroke-opacity", 1)
+            .style("stroke-width", 0.5)
+            .attr("x1", d => x(beta))
+            .attr("y1", d => y(0.5)-5)
+            .attr("x2", d => x(beta))
+            .attr("y2", d => y(0.5)+5)
+            .transition()
+            .duration(1000)
+            .attr("x1", d => x(d))
+            .attr("y1", d => y(0.5)-5)
+            .attr("x2", d => x(d))
+            .attr("y2", d => y(0.5)+5);
+
+        // enumerate the number at each end of the confidence interval
+        confidenceIndicator
+            .append("g")
+            .selectAll("text")
+            .data(xDataRawRange)
+            .enter()
+            .append("text")
+            .attr("class", "describeEachEndOfTheConfidenceInterval")
+            .attr("text-anchor", "middle")
+            .attr("alignment-baseline", "ideographic")
+            .text( d => d3.format(".2f")(d))
+            .attr("x", d => x(beta))
+            .attr("y", d => y(0.5)-5)
+            .transition()
+            .duration(1000)
+            .attr("x", d => x(d));
+
 
 
         // build the 95% confidence line
         //const betaRectangle = svg.append("g");
-        confidenceIndicator.append("rect")
+        confidenceIndicator
+            .selectAll("rect")
+            .data([beta])
+            .enter()
+            .append("rect")
             .attr("class", "betaPoint")
-            .attr("x", d => x(beta))
+            .attr("x", d => x(d))
             .attr("y", d => y(0.5)-5)
-            .attr("width", 10)
-            .attr("height", 10);
+            .attr("width", 0)
+            .attr("height", 10)
+            .transition()
+            .duration(1000)
+            .attr("x", d => x(d)-5)
+            .attr("width", 10);
+        // confidenceIndicator
+        //     .append("text")
+        //     .attr("class", "LOFTEE_OR")
+        //     .attr("text-anchor", "middle")
+        //     .attr("alignment-baseline", "hanging")
+        //     .attr("x", d => x(1)+2)
+        //     .attr("y", d => y(1)-2)
+        //     .text("LOFTEE OR:");
 
 
-        // build the identity line
-        //const identityLine = svg.append("g");
-        confidenceIndicator.append("line")
-            .attr("class", "identity")
+
+
+        // build the beta==0 line
+        svg.append("line")
+            .attr("class", "oddsRatioZero")
             .style("stroke", "blue")
             .attr("stroke-opacity", 0.5)
             .style("stroke-width", 0.5)
+            .style("stroke-dasharray", ("3, 3"))
             .attr("x1", d => x(1))
             .attr("y1", d => y(0))
             .attr("x2", d => x(1))
             .attr("y2", d => y(1));
-
+        svg.append("text")
+            .attr("class", "oddsRatioZero")
+            .attr("text-anchor", "left")
+            .attr("alignment-baseline", "ideographic")
+            .attr("x", d => x(1)+2)
+            .attr("y", d => y(1)-2)
+            .text("odds ratio = 0");
         return svg.node();
 
 

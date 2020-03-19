@@ -186,7 +186,7 @@ baget.dynamicLine = (function () {
                 .text(data.y)
                 .call(halo));
         line = d3.line()
-            .curve(d3.curveCatmullRom)
+            .curve(d3.curveLinear)
             .x(d => x(d.x))
             .y(d => y(d.y));
 
@@ -227,8 +227,8 @@ baget.dynamicLine = (function () {
             .attr("stroke-dasharray", `0,${l}`)
             .attr("d", line)
             .transition()
-            .duration(800)
-            .ease(d3.easeLinear)
+            .duration(1000)
+            .ease(d3.easeCubicOut)
             .attr("stroke-dasharray", `${l},${l}`);
         svg.append("g")
             .attr("fill", "white")

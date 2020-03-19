@@ -12,11 +12,7 @@
 <div class="container">
 
     <div class="starter-template">
-        <h1 style="font-weight: bold">Dynamic line Plot</h1>
-    </div>
-
-    <div class="starter-template">
-        <h2>Plot made with dynaline.js</h2>
+        <h1 style="font-weight: bold">Gene analysis page</h1>
     </div>
 
     <div>
@@ -35,39 +31,39 @@
 
 
 <div class="jumbotron">
-    <div class="container">
+%{--    <div class="container">--}%
 
-        <div class="btn-toolbar">
-            <div class="pull-left"></div>
+%{--        <div class="btn-toolbar">--}%
+%{--            <div class="pull-left"></div>--}%
 
-            <div class="pull-right">
-                <div class="btn-group">
-                    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                        JavaScript
-                        <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li class="btn"
-                            onclick="UTILS.openTheWindow('<g:createLink controller='qqPlot' action ='index'/>', 'js/baget/sharedMethods.js')">sharedMethods.js</li>
-                        <li class="btn"
-                            onclick="UTILS.openTheWindow('<g:createLink controller='qqPlot' action ='index'/>', 'js/baget/manhattan.js')">manhattan.js</li>
-                    </ul>
-                </div>
+%{--            <div class="pull-right">--}%
+%{--                <div class="btn-group">--}%
+%{--                    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">--}%
+%{--                        JavaScript--}%
+%{--                        <span class="caret"></span>--}%
+%{--                    </a>--}%
+%{--                    <ul class="dropdown-menu">--}%
+%{--                        <li class="btn"--}%
+%{--                            onclick="UTILS.openTheWindow('<g:createLink controller='qqPlot' action ='index'/>', 'js/baget/sharedMethods.js')">sharedMethods.js</li>--}%
+%{--                        <li class="btn"--}%
+%{--                            onclick="UTILS.openTheWindow('<g:createLink controller='qqPlot' action ='index'/>', 'js/baget/manhattan.js')">manhattan.js</li>--}%
+%{--                    </ul>--}%
+%{--                </div>--}%
 
-                <div class="btn-group">
-                    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                        Stylesheets
-                        <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li class="btn"
-                            onclick="UTILS.openTheWindow('<g:createLink controller='qqPlot' action ='index'/>', 'css/baget/manhattan.css')">manhattan.css</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+%{--                <div class="btn-group">--}%
+%{--                    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">--}%
+%{--                        Stylesheets--}%
+%{--                        <span class="caret"></span>--}%
+%{--                    </a>--}%
+%{--                    <ul class="dropdown-menu">--}%
+%{--                        <li class="btn"--}%
+%{--                            onclick="UTILS.openTheWindow('<g:createLink controller='qqPlot' action ='index'/>', 'css/baget/manhattan.css')">manhattan.css</li>--}%
+%{--                    </ul>--}%
+%{--                </div>--}%
+%{--            </div>--}%
+%{--        </div>--}%
 
-    </div>
+%{--    </div>--}%
 
 
 
