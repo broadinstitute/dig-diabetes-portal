@@ -474,6 +474,34 @@
                              nameOfAccumulatorField:'chromStateVariantInfo',
                             nameOfAccumulatorFieldWithIndex:'variantInfoArray'
                         }
+                        ,
+                        {
+                            code: 'COLOC_VAR',
+                            category: 'Colocalization',
+                            displayCategory: 'Colocalization',
+                            subcategory: 'Colocalization',
+                            displaySubcategory: 'Colocalization',
+                            headerWriter:'colocVariantTableTissueHeader',
+                            cellBodyWriter:'colocVariantTableBody',
+                            cellBodyWriterTissueSpecific:'colocVariantTableBodyTissueSpecific',
+                            categoryWriter:'colocVariantTableTissueHeaderLabel',
+                            drillDownCategoryWriter:'colocVariantTableTissueHeaderLabel',
+                            subCategoryWriter:'colocVariantTableTissueRowLabel',
+                            drillDownSubCategoryWriter:'colocVariantTableTissueRowLabel',
+                            tissueCategoryWriter:'colocVariantTableTissueSpecificHeaderLabel',
+                            tissueSubCategoryWriter:'colocVariantTableTissueSpecificRowLabel',
+                            numberRecordsCellPresentationStringWriter:'colocVariantTableNumberRecordsCellPresentationString',
+                            significanceCellPresentationStringWriter:'colocVariantTableSignificanceCellPresentationString',
+                            packagingString:'mpgSoftware.dynamicUi.colocVariantTable',
+                            processEachRecord:mpgSoftware.dynamicUi.colocVariantTable.processRecordsFromColoc,
+                            displayRefinedContextFunction:mpgSoftware.dynamicUi.colocVariantTable.displayTissueInformationFromColoc,
+                            prepareDataForApiCall:mpgSoftware.dynamicUi.colocVariantTable.prepareDataForApiCall,
+                            urlOfTheApiCall:  '${g.createLink(controller: "VariantInfo", action: "retrieveColocRecordsByVariants")}',
+                            sortingSubroutine:'sortRoutine',
+                            internalIdentifierString:'getColocGivenVariantList',
+                            nameOfAccumulatorField:'getColocGivenVariantList',
+                            nameOfAccumulatorFieldWithIndex:'variantInfoArray'
+                        }
 
                     ],
                     dynamicTableConfiguration: {

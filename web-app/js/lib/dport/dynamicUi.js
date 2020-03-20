@@ -634,6 +634,8 @@ mpgSoftware.dynamicUi = (function () {
             case "getTfbsGivenVariantList":
             case "getH3k27acGivenVariantList":
             case "getChromStateGivenVariantList":
+            case "getColocGivenVariantList":
+
                 functionToLaunchDataRetrieval = function () {
 
                     if ((!dataAnnotationType.unblockOnDisplay)&&

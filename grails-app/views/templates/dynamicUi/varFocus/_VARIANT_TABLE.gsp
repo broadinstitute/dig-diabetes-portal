@@ -45,3 +45,4 @@
 <g:render template="/templates/dynamicUi/varFocus/DNASE_VAR" />
 <g:render template="/templates/dynamicUi/varFocus/TISSUEDOM_VAR" />
 <g:render template="/templates/dynamicUi/varFocus/CHICAGO_VAR" />
+<g:render template="/templates/dynamicUi/varFocus/COLOC_VAR" />

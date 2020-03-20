@@ -71,6 +71,7 @@ class RestServerService {
     private String GET_GENESET_RECORDS_FROM_DEPICT_URL= "testcalls/depict/genepathway/object"
     private String GET_DNASE_RECORDS_URL= "testcalls/region/dnase/object"
     private String GET_H3K27AC_RECORDS_URL= "testcalls/region/h3k27ac/object"
+    private String GET_COLOC_RECORDS_BY_VARIANTS_URL= "testcalls/ecaviar/colocalization/object"
     private String GET_CREDIBLE_SET_BASED_ON_OVERLAP_URL= "testcalls/variant/credibleset/object"
     private String GET_BOTTOM_LINE_RESULTS_URL= "graph/meta/variant/object"
     private String GET_TISSUES_FROM_GREGOR_URL= "graph/gregor/phenotype/object"
@@ -2774,6 +2775,31 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         JSONArray jsonArray = slurper.parseText(rawReturnFromApi) as JSONArray
         return jsonArray
     }
+
+
+
+
+    public JSONArray gatherColocDataByVariant( String tissue, String phenotype, List <String> variantList ) {
+        List<String> specifyRequestList = []
+
+        if ((phenotype) && (phenotype.length() > 0)) {
+            specifyRequestList << "phenotype=${phenotype}"
+        }
+        if ((tissue) && (tissue.length() > 0)) {
+            specifyRequestList << "tissue=${tissue}"
+        }
+
+        if ((variantList) && (variantList.size() > 0)) {
+            specifyRequestList << "var_id=${variantList.join(",").replace("\"","")}"
+        }
+
+        String rawReturnFromApi =  getRestCall("${GET_COLOC_RECORDS_BY_VARIANTS_URL}?${specifyRequestList.join("&")}".toString())
+        JsonSlurper slurper = new JsonSlurper()
+        JSONArray jsonArray = slurper.parseText(rawReturnFromApi) as JSONArray
+        return jsonArray
+    }
+
+
 
 
 

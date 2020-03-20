@@ -1,6 +1,7 @@
 package org.broadinstitute.mpg
 
 import grails.converters.JSON
+import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.diabetes.BurdenService
 import org.broadinstitute.mpg.diabetes.MetaDataService
@@ -36,9 +37,9 @@ class VariantInfoController {
 
         render (view: 'variantTableHolder', model:[
                 preferredPhenotype:phenotypeString,
-                defaultChromosome:"9",
-                defaultExtentBegin:21940000,
-                defaultExtentEnd:22190000,
+                defaultChromosome:"3",
+                defaultExtentBegin:12181000,
+                defaultExtentEnd:12182000,
                 portalVersionBean:restServerService.retrieveBeanForCurrentPortal(),
                 phenotype:phenotypeString
         ])
@@ -135,6 +136,41 @@ class VariantInfoController {
             jsonObject
         }
         return
+    }
+
+    def retrieveColocRecordsByVariants(){
+        String tissue = ""
+        String phenotype = ""
+        boolean looksOkay = true
+        JSONArray jsonReturn
+        JSONArray variants
+        List <String> variantList = []
+        def slurper = new JsonSlurper()
+
+        if (params.phenotype) {
+            phenotype = params.phenotype
+        }
+        if (params.tissue) {
+            tissue = params.tissue
+        }
+
+        if (params.variants) {
+            variants = slurper.parseText( params.variants as String)  as JSONArray
+            variantList = variants as List <String>
+        } else {
+            looksOkay = false
+        }
+
+        if (looksOkay){
+            jsonReturn = restServerService.gatherColocDataByVariant( tissue, phenotype, variantList )
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+            jsonReturn =  slurper.parseText(proposedJsonString) as JSONArray;
+        }
+
+        render(status: 200, contentType: "application/json") {jsonReturn}
+        return
+
     }
 
 

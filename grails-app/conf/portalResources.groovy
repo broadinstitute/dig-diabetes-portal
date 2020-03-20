@@ -325,6 +325,7 @@ modules = {
         resource url: 'js/lib/dport/dynamicUi/varFocus/dnaseVariantTable.js'
         resource url: 'js/lib/dport/dynamicUi/varFocus/coaccessibilityVariantTable.js'
         resource url: 'js/lib/dport/dynamicUi/varFocus/chicagoVariantTable.js'
+        resource url: 'js/lib/dport/dynamicUi/varFocus/colocVariantTable.js'
         resource url: 'js/lib/dport/matrixMath.js'
         resource url: 'js/lib/gwas-credible-sets.js'
 

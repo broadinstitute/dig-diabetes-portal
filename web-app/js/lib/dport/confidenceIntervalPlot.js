@@ -119,7 +119,7 @@ baget.confidenceIntervalPlot = (function () {
             .attr("class", "describeEachEndOfTheConfidenceInterval")
             .attr("text-anchor", "middle")
             .attr("alignment-baseline", "ideographic")
-            .text( d => d3.format(".2f")(d))
+            .text( d => d3.format(".2f")(Math.exp(d)))
             .attr("x", d => x(beta))
             .attr("y", d => y(0.5)-5)
             .transition()
@@ -151,7 +151,7 @@ baget.confidenceIntervalPlot = (function () {
             .attr("alignment-baseline", "hanging")
             .attr("x", d => x(beta))
             .attr("y", d => y(0.5)+7)
-            .text(d3.format(".2f")(beta));
+            .text(d3.format(".2f")(Math.exp(beta)));
 
         // Title the display
         svg.append("text")
@@ -160,7 +160,7 @@ baget.confidenceIntervalPlot = (function () {
             .attr("alignment-baseline", "ideographic")
             .attr("x", d => x(displayableXRange[0])+2)
             .attr("y", d => y(0)-2)
-            .text("LOFTEE beta ("+d3.format(".3f")(beta)+") with 95% confidence interval");
+            .text("LOFTEE Odds Ratio ("+d3.format(".3f")(Math.exp(beta))+") with 95% confidence interval");
 
         // build the beta==0 line
         svg.append("line")
@@ -179,7 +179,7 @@ baget.confidenceIntervalPlot = (function () {
             .attr("alignment-baseline", "ideographic")
             .attr("x", d => x(0)+2)
             .attr("y", d => y(1)-2)
-            .text("beta = 0");
+            .text("Odds Ratio = 1");
         return svg.node();
 
 
