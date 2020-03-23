@@ -171,6 +171,7 @@ digQaFedAwsServer = new ServerBean("KB-qa-fed-aws", "http://ec2-34-229-106-174.c
 digProdAwsServer = new ServerBean("KB-prod-aws", "http://ec2-34-207-249-213.compute-1.amazonaws.com:8090/dccservices/")
 digProdFedAwsServer = new ServerBean("KB-prod-fed-aws", "http://ec2-34-207-249-213.compute-1.amazonaws.com:8085/dccservices/distributed/")
 
+//these legacy KB's will be removed.
 digLegacyProdAwsServer = new ServerBean("KB-legacy-prod-aws", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/dccservices/")
 digLegacyProdFedAwsServer = new ServerBean("KB-legacy-prod-fed-aws", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8085/dccservices/distributed/")
 
@@ -192,24 +193,6 @@ getRestServerList = [
         digLegacyProdFedAwsServer
 ]
 
-//getRestServerList = [
-//        digdevlocalServer,
-//        digdevlocalFederatedServer,
-//        digAWSKBV2prodServer,
-//        federatedAwsProdKBV2Server,
-//        digawsqanewKB,
-//        digawsdevWorkflowKB,
-//        digawsdevWorkflowKBrevised,
-//        digawsdevnewKB_fed,
-//        digawsqanewKB_fed,
-//        digawsqanewKB_fed_dedicated,
-//        ebiKB1,
-//        ebiKB2,
-//        digawsqanewKB_fed_dedicated_EBIv2,
-//        digawsprodmiKB,
-//        digawsprodstrokeKB,
-//        digawsdemoibdKB
-//]
 
 
 //    default server on start up
