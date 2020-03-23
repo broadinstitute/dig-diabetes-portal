@@ -26,8 +26,15 @@
 
             <li class="data-btn home-drop-down-menu" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="javascript:;"><g:message code="portal.header.nav.about_data"/></a>
                 <ul>
-                    <li class="" style=""><a href="http://www.kp4cd.org/datasets/${g.portalTypeString()}">Datasets</a></li>
-                    <li class="" style=""><a href="http://www.kp4cd.org/dataset_downloads/${g.portalTypeString()}">Downloads</a></li>
+                    <g:if test="${g.portalTypeString()?.equals('bone')}">
+                        <li class="" style=""><a href="http://www.kp4cd.org/datasets/mskkp">Datasets</a></li>
+                        <li class="" style=""><a href="http://www.kp4cd.org/dataset_downloads/mskkp">Downloads</a></li>
+                    </g:if>
+                    <g:else>
+                        <li class="" style=""><a href="http://www.kp4cd.org/datasets/${g.portalTypeString()}">Datasets</a></li>
+                        <li class="" style=""><a href="http://www.kp4cd.org/dataset_downloads/${g.portalTypeString()}">Downloads</a></li>
+                    </g:else>
+
                     <g:if test="${g.portalTypeString()?.equals('t2d')}">
                         <li class="" style=""><a href="http://www.kp4cd.org/apis/${g.portalTypeString()}">APIs</a></li>
                     </g:if>
@@ -61,25 +68,46 @@
 
             <li class="about-btn home-drop-down-menu" style="display:inline-block;margin-right:15px;padding-bottom: 15px;"><a href="javascript:;">Information</a>
                 <ul>
-                    <li class="" style=""><a href="http://www.kp4cd.org/about/${g.portalTypeString()}"><g:message code="portal.header.nav.about"/></a></li>
+                    <g:if test="${g.portalTypeString()?.equals('bone')}">
+                        <li class="" style=""><a href="http://www.kp4cd.org/about/mskkp"><g:message code="portal.header.nav.about"/></a></li>
+                    </g:if>
+                    <g:else>
+                        <li class="" style=""><a href="http://www.kp4cd.org/about/${g.portalTypeString()}"><g:message code="portal.header.nav.about"/></a></li>
+                    </g:else>
+
 
                     <g:if test="${g.portalTypeString()?.equals('t2d')}">
                         <li class="" style=""><a href="http://www.kp4cd.org/collaborate/${g.portalTypeString()}"><g:message code="portal.header.nav.submit"/></a></li>
                     </g:if>
 
                     <g:if test="${g.portalTypeString()?.equals('bone')}">
-                        <li class="" style=""><a href="http://www.kp4cd.org/collaborate/${g.portalTypeString()}"><g:message code="portal.header.nav.submit"/></a></li>
+                        <li class="" style=""><a href="http://www.kp4cd.org/collaborate/mskkp"><g:message code="portal.header.nav.submit"/></a></li>
                     </g:if>
 
-                    <li class="" style=""><a href="http://www.kp4cd.org/policies/${g.portalTypeString()}"><g:message code="portal.header.nav.policies"/></a></li>
+                    <g:if test="${g.portalTypeString()?.equals('bone')}">
+                        <li class="" style=""><a href="http://www.kp4cd.org/policies/mskkp"><g:message code="portal.header.nav.policies"/></a></li>
+                        <li class="" style=""><a href="http://www.kp4cd.org/resources/mskkp">Resources</a></li>
+                    </g:if>
+                    <g:else>
+                        <li class="" style=""><a href="http://www.kp4cd.org/policies/${g.portalTypeString()}"><g:message code="portal.header.nav.policies"/></a></li>
+                        <li class="" style=""><a href="http://www.kp4cd.org/resources/${g.portalTypeString()}">Resources</a></li>
+                    </g:else>
 
-                    <li class="" style=""><a href="http://www.kp4cd.org/resources/${g.portalTypeString()}">Resources</a></li>
-<g:if test="${g.portalTypeString()?.equals('t2d')}">
-                    <li class="" style=""><a href="http://www.kp4cd.org/publications/${g.portalTypeString()}">Publications</a></li>
-</g:if>
-                    <li class="" style=""><a href="http://www.kp4cd.org/new_features/${g.portalTypeString()}">News</a></li>
 
-                    <li class="" style=""><a href="http://www.kp4cd.org/contacts/${g.portalTypeString()}">Contacts</a></li>
+                    <g:if test="${g.portalTypeString()?.equals('t2d')}">
+                        <li class="" style=""><a href="http://www.kp4cd.org/publications/${g.portalTypeString()}">Publications</a></li>
+                    </g:if>
+
+                    <g:if test="${g.portalTypeString()?.equals('bone')}">
+                        <li class="" style=""><a href="http://www.kp4cd.org/new_features/mskkp">News</a></li>
+
+                        <li class="" style=""><a href="http://www.kp4cd.org/contacts/mskkp">Contacts</a></li>
+                    </g:if>
+                    <g:else>
+                        <li class="" style=""><a href="http://www.kp4cd.org/new_features/${g.portalTypeString()}">News</a></li>
+
+                        <li class="" style=""><a href="http://www.kp4cd.org/contacts/${g.portalTypeString()}">Contacts</a></li>
+                    </g:else>
 
                 </ul>
             </li>

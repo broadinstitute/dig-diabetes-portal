@@ -1022,7 +1022,7 @@ portal.data.versionDesignator = [ new PortalVersionBean
                                           ["chr7:120,500,000-121,500,000"],
                                           "images/bone/front_boneKP_banner_bg.png",
                                           "",
-                                          "images/bone/header_MSKP_2019.png",
+                                          "images/bone/header_MSKKP_2019.png",
                                           "images/menu_bg_2017_5.png",
                                           "false",
                                           "",

@@ -524,10 +524,10 @@
                             <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Sleep Disorder <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
                             <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://sleepdisordergenetics.org/">Visit portal</a></h3>
                             <div style="margin-top: 25px; clear: both; padding-top: 10px;">
-                                <a href="http://musculoskeletalknowledgeportal.org"><img src="${resource(dir: 'images', file: 'mskp_symbol.svg')}" style="width: 80px; float: left; margin-top:-10px; margin-left:-5px; margin-right: 10px;"></a>
+                                <a href="http://mskkp.org"><img src="${resource(dir: 'images', file: 'mskp_symbol.svg')}" style="width: 80px; float: left; margin-top:-10px; margin-left:-5px; margin-right: 10px;"></a>
                                 <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_MSKP"></g:message></h3>-->
                                 <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Musculoskeletal <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://musculoskeletalknowledgeportal.org">Visit portal</a></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://mskkp.org">Visit portal</a></h3>
                             </div>
                         </div>
                             <hr />
@@ -564,10 +564,10 @@
                                 <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://sleepdisordergenetics.org/">Visit portal</a></h3>
                             </div>
                             <div style="margin-top: 25px; clear: both; padding-top: 10px;">
-                                <a href="http://musculoskeletalknowledgeportal.org"><img src="${resource(dir: 'images', file: 'mskp_symbol.svg')}" style="width: 80px; float: left; margin-top:-10px; margin-left:-5px; margin-right: 10px;"></a>
+                                <a href="http://mskkp.org"><img src="${resource(dir: 'images', file: 'mskp_symbol.svg')}" style="width: 80px; float: left; margin-top:-10px; margin-left:-5px; margin-right: 10px;"></a>
                                 <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_MSKP"></g:message></h3>-->
                                 <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Musculoskeletal <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://musculoskeletalknowledgeportal.org">Visit portal</a></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://mskkp.org">Visit portal</a></h3>
                             </div>
                         </g:elseif>
                         <g:elseif test="${g.portalTypeString()?.equals('epilepsy')}">
@@ -597,10 +597,10 @@
                                 <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://sleepdisordergenetics.org/">Visit portal</a></h3>
                             </div>
                             <div style="margin-top: 25px; clear: both; padding-top: 10px;">
-                                <a href="http://musculoskeletalknowledgeportal.org"><img src="${resource(dir: 'images', file: 'mskp_symbol.svg')}" style="width: 80px; float: left; margin-top:-10px; margin-left:-5px; margin-right: 10px;"></a>
+                                <a href="http://mskkp.org"><img src="${resource(dir: 'images', file: 'mskp_symbol.svg')}" style="width: 80px; float: left; margin-top:-10px; margin-left:-5px; margin-right: 10px;"></a>
                                 <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_MSKP"></g:message></h3>-->
                                 <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Musculoskeletal <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://musculoskeletalknowledgeportal.org">Visit portal</a></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://mskkp.org">Visit portal</a></h3>
                             </div>
 
                         </g:elseif>
@@ -632,10 +632,10 @@
                                 <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://sleepdisordergenetics.org/">Visit portal</a></h3>
                             </div>
                             <div style="margin-top: 25px; clear: both; padding-top: 10px;">
-                                <a href="http://musculoskeletalknowledgeportal.org"><img src="${resource(dir: 'images', file: 'mskp_symbol.svg')}" style="width: 80px; float: left; margin-top:-10px; margin-left:-5px; margin-right: 10px;"></a>
+                                <a href="http://mskkp.org"><img src="${resource(dir: 'images', file: 'mskp_symbol.svg')}" style="width: 80px; float: left; margin-top:-10px; margin-left:-5px; margin-right: 10px;"></a>
                                 <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_MSKP"></g:message></h3>-->
                                 <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Musculoskeletal <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://musculoskeletalknowledgeportal.org">Visit portal</a></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://mskkp.org">Visit portal</a></h3>
                             </div>
 
                         </g:elseif>
@@ -667,10 +667,10 @@
                                 <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://www.cerebrovascularportal.org/">Visit portal</a></h3>
                             </div>
                             <div style="margin-top: 25px; clear: both; padding-top: 10px;">
-                                <a href="http://musculoskeletalknowledgeportal.org"><img src="${resource(dir: 'images', file: 'mskp_symbol.svg')}" style="width: 80px; float: left; margin-top:-10px; margin-left:-5px; margin-right: 10px;"></a>
+                                <a href="http://mskkp.org"><img src="${resource(dir: 'images', file: 'mskp_symbol.svg')}" style="width: 80px; float: left; margin-top:-10px; margin-left:-5px; margin-right: 10px;"></a>
                                 <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_MSKP"></g:message></h3>-->
                                 <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Musculoskeletal <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://musculoskeletalknowledgeportal.org">Visit portal</a></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://mskkp.org">Visit portal</a></h3>
                             </div>
 
 
@@ -705,10 +705,10 @@
                             </div>
 
                             <div style="margin-top: 25px; clear: both; padding-top: 10px;">
-                                <a href="http://musculoskeletalknowledgeportal.org"><img src="${resource(dir: 'images', file: 'mskp_symbol.svg')}" style="width: 80px; float: left; margin-top:-10px; margin-left:-5px; margin-right: 10px;"></a>
+                                <a href="http://mskkp.org"><img src="${resource(dir: 'images', file: 'mskp_symbol.svg')}" style="width: 80px; float: left; margin-top:-10px; margin-left:-5px; margin-right: 10px;"></a>
                                 <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_MSKP"></g:message></h3>-->
                                 <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Musculoskeletal <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://musculoskeletalknowledgeportal.org">Visit portal</a></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://mskkp.org">Visit portal</a></h3>
                             </div>
 
                         </g:else>
