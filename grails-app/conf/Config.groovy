@@ -128,59 +128,69 @@ if (grails.config.locations.isEmpty()){
     }
 }
 
-digdevlocalServer = new ServerBean("KB-dev-localhost", "http://localhost:8090/dccservices/")
-digdevlocalFederatedServer = new ServerBean("KB-dev-localhost-federated", "http://localhost:8090/dccservices/distributed/")
-digAWS02KBV2prodServer = new ServerBean("KB-stage-2016-aws", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/")
-federatedAwsStageKBV2Server = new ServerBean("KB-stage-fed-2016-aws", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/dccservices/distributed/")
-toddTestServer = new ServerBean("KB-ToddTest-Broad","http://dig-prod.broadinstitute.org:8087/todd/gs/")
-digdevmarcin = new ServerBean("KB-dev-Broad", "http://dig-api-dev.broadinstitute.org/dev/gs/")
-digawsdevWorkflowKB = new ServerBean("KB-dev-2017-aws-8089", "http://ec2-34-229-106-174.compute-1.amazonaws.com:8089/dccservices/")
-digawsdevWorkflowKBrevised = new ServerBean("KB-dev-2017-aws-8090", "http://ec2-34-229-106-174.compute-1.amazonaws.com:8090/dccservices/")
-digawsdevnewKB_fed = new ServerBean("KB-dev-fed-2017-aws", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8085/dccservices/distributed/")
-digawsdevnewKB_fed = new ServerBean("KB-dev-fed-2017-aws", "http://ec2-34-229-106-174.compute-1.amazonaws.com:8085/dccservices/distributed/")
-digawsqanewKB = new ServerBean("KB-qa-2017-aws", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8090/dccservices/")
-digawsqanewKB_fed = new ServerBean("KB-qa-fed-2017-aws", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8085/dccservices/distributed/")
-digawsprodmiKB = new ServerBean("KB-prod-mi-2017-aws", "http://ec2-52-55-251-60.compute-1.amazonaws.com:8090/dccservices/")
-digawsprodstrokeKB = new ServerBean("KB-prod-stroke-2017-aws", "http://ec2-34-207-249-213.compute-1.amazonaws.com:8090/dccservices/")
-digawsdemoibdKB = new ServerBean("KB-ibd-demo-2017-aws", "http://ec2-54-90-219-234.compute-1.amazonaws.com:8090/dccservices/")
 
 
-// I'm not sure whether the following seven lines are necessary or not
-ebiKB1 = new ServerBean("EBI prod KB1 - no burden", "http://www.ebi.ac.uk/ega/t2d/dig-genome-store/gs/")
-ebiKB2 = new ServerBean("EBI dev KB2", "http://www.ebi.ac.uk/ega/ampt2d/dev/dig-genome-services/")
-digawsqanewKB = new ServerBean("QA Broad non fed KB", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8090/dccservices/")
-digawsqanewKB_fed = new ServerBean("QA fed KB", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8085/dccservices/distributed/")
-digawsqanewKB_fed_dedicated = new ServerBean("Dedicated EBI QA fed KB", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8082/dccservices/distributed/")
-digAWSKBV2prodServer = new ServerBean("Prod Broad non fed KB", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/dccservices/")
-federatedAwsProdKBV2Server = new ServerBean("Prod fed KB", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8085/dccservices/distributed/")
+//digdevlocalFederatedServer = new ServerBean("KB-dev-localhost-federated", "http://localhost:8090/dccservices/distributed/")
+//digAWS02KBV2prodServer = new ServerBean("KB-stage-2016-aws", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/")
+//federatedAwsStageKBV2Server = new ServerBean("KB-stage-fed-2016-aws", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/dccservices/distributed/")
+//toddTestServer = new ServerBean("KB-ToddTest-Broad","http://dig-prod.broadinstitute.org:8087/todd/gs/")
+//digdevmarcin = new ServerBean("KB-dev-Broad", "http://dig-api-dev.broadinstitute.org/dev/gs/")
+//digawsdevWorkflowKB = new ServerBean("KB-dev-2017-aws-8089", "http://ec2-34-229-106-174.compute-1.amazonaws.com:8089/dccservices/")
+//digawsdevWorkflowKBrevised = new ServerBean("KB-dev-2017-aws-8090", "http://ec2-34-229-106-174.compute-1.amazonaws.com:8090/dccservices/")
+//digawsdevnewKB_fed = new ServerBean("KB-dev-fed-2017-aws", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8085/dccservices/distributed/")
+//digawsdevnewKB_fed = new ServerBean("KB-dev-fed-2017-aws", "http://ec2-34-229-106-174.compute-1.amazonaws.com:8085/dccservices/distributed/")
+//digawsqanewKB = new ServerBean("KB-qa-2017-aws", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8090/dccservices/")
+//digawsqanewKB_fed = new ServerBean("KB-qa-fed-2017-aws", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8085/dccservices/distributed/")
+//digawsprodmiKB = new ServerBean("KB-prod-mi-2017-aws", "http://ec2-52-55-251-60.compute-1.amazonaws.com:8090/dccservices/")
+//digawsprodstrokeKB = new ServerBean("KB-prod-stroke-2017-aws", "http://ec2-34-207-249-213.compute-1.amazonaws.com:8090/dccservices/")
+//digawsdemoibdKB = new ServerBean("KB-ibd-demo-2017-aws", "http://ec2-54-90-219-234.compute-1.amazonaws.com:8090/dccservices/")
+//
+//
+//// I'm not sure whether the following seven lines are necessary or not
+//ebiKB1 = new ServerBean("EBI prod KB1 - no burden", "http://www.ebi.ac.uk/ega/t2d/dig-genome-store/gs/")
+//ebiKB2 = new ServerBean("EBI dev KB2", "http://www.ebi.ac.uk/ega/ampt2d/dev/dig-genome-services/")
+//digawsqanewKB = new ServerBean("QA Broad non fed KB", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8090/dccservices/")
+//digawsqanewKB_fed = new ServerBean("QA fed KB", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8085/dccservices/distributed/")
+//digawsqanewKB_fed_dedicated = new ServerBean("Dedicated EBI QA fed KB", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8082/dccservices/distributed/")
+//digAWSKBV2prodServer = new ServerBean("Prod Broad non fed KB", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/dccservices/")
+//federatedAwsProdKBV2Server = new ServerBean("Prod fed KB", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8085/dccservices/distributed/")
+//
+//// KB for the test federated portal changes
+//digawsqanewKB_fed_dedicated_EBIv2 = new ServerBean("Dedicated EBI QA fed KB - Using EBI KB2", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8082/dccservices/distributed/")
 
-// KB for the test federated portal changes
-digawsqanewKB_fed_dedicated_EBIv2 = new ServerBean("Dedicated EBI QA fed KB - Using EBI KB2", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8082/dccservices/distributed/")
+
+digLocalServer = new ServerBean("KB-localhost", "http://localhost:8090/dccservices/")
+digLocalFedServer = new ServerBean("KB-fed-localhost", "http://localhost:8090/dccservices/distributed/")
+
+digDevAwsServer = new ServerBean("KB-dev-aws", "http://ec2-34-229-106-174.compute-1.amazonaws.com:8090/dccservices/")
+digDevFedAwsServer = new ServerBean("KB-dev-fed-aws", "http://ec2-34-229-106-174.compute-1.amazonaws.com:8085/dccservices/distributed/")
+
+digQaAwsServer = new ServerBean("KB-qa-aws", "http://ec2-34-229-106-174.compute-1.amazonaws.com:8080/dccservices/")
+digQaFedAwsServer = new ServerBean("KB-qa-fed-aws", "http://ec2-34-229-106-174.compute-1.amazonaws.com:8082/dccservices/distributed/")
+
+digProdAwsServer = new ServerBean("KB-prod-aws", "http://ec2-34-207-249-213.compute-1.amazonaws.com:8090/dccservices/")
+digProdFedAwsServer = new ServerBean("KB-prod-fed-aws", "http://ec2-34-207-249-213.compute-1.amazonaws.com:8085/dccservices/distributed/")
+
+//these legacy KB's will be removed.
+digLegacyProdAwsServer = new ServerBean("KB-legacy-prod-aws", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/dccservices/")
+digLegacyProdFedAwsServer = new ServerBean("KB-legacy-prod-fed-aws", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8085/dccservices/distributed/")
 
 
 // this will be your default
-defaultRestServer = digawsdevWorkflowKBrevised
-
-
-
+//defaultRestServer = digawsdevWorkflowKBrevised
+defaultRestServer = digDevAwsServer
 
 getRestServerList = [
-        digdevlocalServer,
-        digdevlocalFederatedServer,
-        digAWSKBV2prodServer,
-        federatedAwsProdKBV2Server,
-        digawsqanewKB,
-        digawsdevWorkflowKB,
-        digawsdevWorkflowKBrevised,
-        digawsdevnewKB_fed,
-        digawsqanewKB_fed,
-        digawsqanewKB_fed_dedicated,
-        ebiKB1,
-        ebiKB2,
-        digawsqanewKB_fed_dedicated_EBIv2,
-        digawsprodmiKB,
-        digawsprodstrokeKB,
-        digawsdemoibdKB
+        digLocalServer,
+        digLocalFedServer,
+        digDevAwsServer,
+        digDevFedAwsServer,
+        digQaAwsServer,
+        digQaFedAwsServer,
+        digProdAwsServer,
+        digProdFedAwsServer,
+        digLegacyProdAwsServer,
+        digLegacyProdFedAwsServer
 ]
 
 
