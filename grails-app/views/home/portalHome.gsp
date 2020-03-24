@@ -379,15 +379,15 @@
         </g:elseif>
 
         <g:elseif test="${g.portalTypeString()?.equals('bone')}"> 
-            <script type="text/javascript"> 
-                /* Example to add 'new' or 'updated' feature buttons; 
-                mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]); 
-                */ 
-                mpgSoftware.homePage.newFeatures([
-                    {"name":"Tutorial video: API access to results","link":"https://www.youtube.com/watch?v=y2CRoAp_eLM&amp=&index=2&amp=&t=0s","class":"resource","type":"new"},
-                    {"name":"Webinar video: API access to results","link":"https://www.youtube.com/watch?v=hWhT1Tp1C78&list=PLlMMtlgw6qNj6ICrkMu2BAPhs-6XFBpTr&index=11&t=0s","class":"resource","type":"new"},
-                    {"name":"Webinar video: LocusZoom","link":"https://www.youtube.com/watch?v=AmU7IIAeZJ4&feature=youtu.be","class":"resource","type":"new"}]); 
-            </script>
+            %{--<script type="text/javascript"> --}%
+                %{--/* Example to add 'new' or 'updated' feature buttons; --}%
+                %{--mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]); --}%
+                %{--*/ --}%
+                %{--mpgSoftware.homePage.newFeatures([--}%
+                    %{--{"name":"Tutorial video: API access to results","link":"https://www.youtube.com/watch?v=y2CRoAp_eLM&amp=&index=2&amp=&t=0s","class":"resource","type":"new"},--}%
+                    %{--{"name":"Webinar video: API access to results","link":"https://www.youtube.com/watch?v=hWhT1Tp1C78&list=PLlMMtlgw6qNj6ICrkMu2BAPhs-6XFBpTr&index=11&t=0s","class":"resource","type":"new"},--}%
+                    %{--{"name":"Webinar video: LocusZoom","link":"https://www.youtube.com/watch?v=AmU7IIAeZJ4&feature=youtu.be","class":"resource","type":"new"}]); --}%
+            %{--</script>--}%
              </g:elseif>
 
     <!-- New features buttons end -->
@@ -524,10 +524,10 @@
                             <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Sleep Disorder <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
                             <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://sleepdisordergenetics.org/">Visit portal</a></h3>
                             <div style="margin-top: 25px; clear: both; padding-top: 10px;">
-                                <a href="http://musculoskeletalknowledgeportal.org"><img src="${resource(dir: 'images', file: 'mskp_symbol.svg')}" style="width: 80px; float: left; margin-top:-10px; margin-left:-5px; margin-right: 10px;"></a>
+                                <a href="http://mskkp.org"><img src="${resource(dir: 'images', file: 'mskp_symbol.svg')}" style="width: 80px; float: left; margin-top:-10px; margin-left:-5px; margin-right: 10px;"></a>
                                 <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_MSKP"></g:message></h3>-->
                                 <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Musculoskeletal <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://musculoskeletalknowledgeportal.org">Visit portal</a></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://mskkp.org">Visit portal</a></h3>
                             </div>
                         </div>
                             <hr />
@@ -564,10 +564,10 @@
                                 <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://sleepdisordergenetics.org/">Visit portal</a></h3>
                             </div>
                             <div style="margin-top: 25px; clear: both; padding-top: 10px;">
-                                <a href="http://musculoskeletalknowledgeportal.org"><img src="${resource(dir: 'images', file: 'mskp_symbol.svg')}" style="width: 80px; float: left; margin-top:-10px; margin-left:-5px; margin-right: 10px;"></a>
+                                <a href="http://mskkp.org"><img src="${resource(dir: 'images', file: 'mskp_symbol.svg')}" style="width: 80px; float: left; margin-top:-10px; margin-left:-5px; margin-right: 10px;"></a>
                                 <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_MSKP"></g:message></h3>-->
                                 <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Musculoskeletal <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://musculoskeletalknowledgeportal.org">Visit portal</a></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://mskkp.org">Visit portal</a></h3>
                             </div>
                         </g:elseif>
                         <g:elseif test="${g.portalTypeString()?.equals('epilepsy')}">
@@ -597,10 +597,10 @@
                                 <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://sleepdisordergenetics.org/">Visit portal</a></h3>
                             </div>
                             <div style="margin-top: 25px; clear: both; padding-top: 10px;">
-                                <a href="http://musculoskeletalknowledgeportal.org"><img src="${resource(dir: 'images', file: 'mskp_symbol.svg')}" style="width: 80px; float: left; margin-top:-10px; margin-left:-5px; margin-right: 10px;"></a>
+                                <a href="http://mskkp.org"><img src="${resource(dir: 'images', file: 'mskp_symbol.svg')}" style="width: 80px; float: left; margin-top:-10px; margin-left:-5px; margin-right: 10px;"></a>
                                 <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_MSKP"></g:message></h3>-->
                                 <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Musculoskeletal <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://musculoskeletalknowledgeportal.org">Visit portal</a></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://mskkp.org">Visit portal</a></h3>
                             </div>
 
                         </g:elseif>
@@ -632,10 +632,10 @@
                                 <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://sleepdisordergenetics.org/">Visit portal</a></h3>
                             </div>
                             <div style="margin-top: 25px; clear: both; padding-top: 10px;">
-                                <a href="http://musculoskeletalknowledgeportal.org"><img src="${resource(dir: 'images', file: 'mskp_symbol.svg')}" style="width: 80px; float: left; margin-top:-10px; margin-left:-5px; margin-right: 10px;"></a>
+                                <a href="http://mskkp.org"><img src="${resource(dir: 'images', file: 'mskp_symbol.svg')}" style="width: 80px; float: left; margin-top:-10px; margin-left:-5px; margin-right: 10px;"></a>
                                 <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_MSKP"></g:message></h3>-->
                                 <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Musculoskeletal <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://musculoskeletalknowledgeportal.org">Visit portal</a></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://mskkp.org">Visit portal</a></h3>
                             </div>
 
                         </g:elseif>
@@ -667,10 +667,10 @@
                                 <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://www.cerebrovascularportal.org/">Visit portal</a></h3>
                             </div>
                             <div style="margin-top: 25px; clear: both; padding-top: 10px;">
-                                <a href="http://musculoskeletalknowledgeportal.org"><img src="${resource(dir: 'images', file: 'mskp_symbol.svg')}" style="width: 80px; float: left; margin-top:-10px; margin-left:-5px; margin-right: 10px;"></a>
+                                <a href="http://mskkp.org"><img src="${resource(dir: 'images', file: 'mskp_symbol.svg')}" style="width: 80px; float: left; margin-top:-10px; margin-left:-5px; margin-right: 10px;"></a>
                                 <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_MSKP"></g:message></h3>-->
                                 <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Musculoskeletal <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://musculoskeletalknowledgeportal.org">Visit portal</a></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://mskkp.org">Visit portal</a></h3>
                             </div>
 
 
@@ -705,10 +705,10 @@
                             </div>
 
                             <div style="margin-top: 25px; clear: both; padding-top: 10px;">
-                                <a href="http://musculoskeletalknowledgeportal.org"><img src="${resource(dir: 'images', file: 'mskp_symbol.svg')}" style="width: 80px; float: left; margin-top:-10px; margin-left:-5px; margin-right: 10px;"></a>
+                                <a href="http://mskkp.org"><img src="${resource(dir: 'images', file: 'mskp_symbol.svg')}" style="width: 80px; float: left; margin-top:-10px; margin-left:-5px; margin-right: 10px;"></a>
                                 <!--<h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_MSKP"></g:message></h3>-->
                                 <h3 style="font-size:26px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Musculoskeletal <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://musculoskeletalknowledgeportal.org">Visit portal</a></h3>
+                                <h3 style="font-size:20px; margin:5px 0 0 0; "><a href="http://mskkp.org">Visit portal</a></h3>
                             </div>
 
                         </g:else>
@@ -875,16 +875,20 @@
                         <p><g:message code="about.the.bone.portal.text"/></p>
                         <p><g:message code="about.the.bone.portal.text2"/></p>
                         <p><g:message code="about.the.bone.portal.text3"/></p>
-                        <p><a href="http://www.ifmrs.org" target="_blank" style="float: left; display:block; margin-right: 20px;"><img src="${resource(dir:'images/organizations', file:'IFMRS_logo_large.jpg')}" style="width:200px; margin-top: 10px;"></a>
+                        <p><a href="http://www.ifmrs.org" target="_blank" style="float: left; display:block; margin-right: 20px;"><img src="${resource(dir:'images/organizations', file:'IFMRS_logo_large.jpg')}" style="width:180px; margin-top: 10px;"></a>
                             <a href="http://www.asbmr.org" target="_blank" style="float: left; display:block; margin-right: 10px;"><img src="${resource(dir:'images/organizations', file:'ASBMR_logo.png')}" style="width:150px"></a>
                             <a href="https://medicine.iu.edu/research/centers-institutes/musculoskeletal-health/" target="_blank" style="float: left; display:block; margin-right: 10px;">
-                                <img src="${resource(dir:'images/organizations', file:'ICMH_logo.png')}" style="width:190px; margin-top:15px; margin-left:5px;"></a>
+                                <img src="${resource(dir:'images/organizations', file:'ICMH_logo.png')}" style="width:180px; margin-top:25px; margin-left:5px;"></a>
                             <a href="http://www.cancerandbone.org/" target="_blank" style="float: left; display:block; margin-right: 10px;">
-                                <img src="${resource(dir:'images/organizations', file:'CABS_logo_small.png')}" style="width:150px; margin-top:5px;margin-left:10px;"></a>
+                                <img src="${resource(dir:'images/organizations', file:'CABS_logo_small.png')}" style="width:150px; margin-top:5px;margin-left:5px;"></a>
                             <a href="https://ethz.ch/en.html" target="_blank" style="float: left; display:block; margin-right: 10px;">
-                                <img src="${resource(dir:'images/organizations', file:'ETH_ZURICH.png')}" style="width:175px; margin-top:35px; margin-left:5px;"></a>
+                                <img src="${resource(dir:'images/organizations', file:'ETH_ZURICH.png')}" style="width:155px; margin-top:35px; margin-left:5px;"></a>
                             <a href="https://www.cuanschutz.edu" target="_blank" style="float: left; display:block; margin-right: 10px;">
                                 <img src="${resource(dir:'images/organizations', file:'u_of_colorado.png')}" style="width:140px; margin-top:5px; margin-left:35px;"></a>
+                            <a href="https://www.ors.org/" target="_blank" style="float: left; display:block; margin-right: 10px;">
+                                <img src="${resource(dir:'images/organizations', file:'ORS_logo.jpg')}" style="width:110px; margin-top:10px; margin-left:25px;"></a>
+                            <a href="https://ectsoc.org/" target="_blank" style="float: left; display:block; margin-right: 10px;">
+                                <img src="${resource(dir:'images/organizations', file:'ECTS_logo.jpeg')}" style="width:150px; margin-top:25px; margin-left:55px;"></a>
                               </p>
 
 
