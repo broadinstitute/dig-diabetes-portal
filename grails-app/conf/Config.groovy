@@ -333,6 +333,7 @@ environments {
 //
 //        grails.serverURL = "http://mdgkp.us-east-1.elasticbeanstalk.com"
 //        grails.serverURL = "http://musculoskeletalknowledgeportal.org"
+        //        grails.serverURL = "http://mskkp.org"
 
 
 
