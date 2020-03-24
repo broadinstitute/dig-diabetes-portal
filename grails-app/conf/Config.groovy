@@ -606,7 +606,7 @@ grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'org.broadinsti
 grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.people.Role'
 
 
-portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", "ibd", "epilepsy", or "sleep".   What is the portal type for all nonsystem users?
+portal.type.override = "bone"     // options are "t2d", "stroke", "mi", "ibd", "epilepsy", or "sleep".   What is the portal type for all nonsystem users?
 
 
 portal.data.versionDesignator = [ new PortalVersionBean
@@ -1004,7 +1004,7 @@ portal.data.versionDesignator = [ new PortalVersionBean
                                           "Bone",
                                           "mdv140",
                                           "MGKP", // name of KB data we want
-                                          "Fracture", // make sure your default phenotype exists in your default data set
+                                          "eBMD", // make sure your default phenotype exists in your default data set
                                           "GWAS_UKBiobankGEFOS_eu_mdv140",// used to pick a default data set for a gene query
                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
