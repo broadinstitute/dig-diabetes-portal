@@ -885,6 +885,10 @@
                                 <img src="${resource(dir:'images/organizations', file:'ETH_ZURICH.png')}" style="width:155px; margin-top:35px; margin-left:5px;"></a>
                             <a href="https://www.cuanschutz.edu" target="_blank" style="float: left; display:block; margin-right: 10px;">
                                 <img src="${resource(dir:'images/organizations', file:'u_of_colorado.png')}" style="width:140px; margin-top:5px; margin-left:35px;"></a>
+                            <a href="https://www.ors.org/" target="_blank" style="float: left; display:block; margin-right: 10px;">
+                                <img src="${resource(dir:'images/organizations', file:'ORS_logo.jpg')}" style="width:110px; margin-top:10px; margin-left:25px;"></a>
+                            <a href="https://ectsoc.org/" target="_blank" style="float: left; display:block; margin-right: 10px;">
+                                <img src="${resource(dir:'images/organizations', file:'ECTS_logo.jpeg')}" style="width:150px; margin-top:25px; margin-left:55px;"></a>
                               </p>
 
 
