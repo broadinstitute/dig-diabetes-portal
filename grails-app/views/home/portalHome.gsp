@@ -467,6 +467,7 @@
                             <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData" default="About the data" /></h2>
                         <p><g:message code="portal.bone.about.the.data.text" />
                     <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">27 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">54 traits</span></h1>
+                        <p>&nbsp;</p>
                     </g:elseif>
 
  %{--comment out this section for 52k demo site                   --}%
