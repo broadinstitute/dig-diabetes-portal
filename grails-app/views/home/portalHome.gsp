@@ -379,15 +379,13 @@
         </g:elseif>
 
         <g:elseif test="${g.portalTypeString()?.equals('bone')}"> 
-            %{--<script type="text/javascript"> --}%
+            <script type="text/javascript"> 
                 %{--/* Example to add 'new' or 'updated' feature buttons; --}%
                 %{--mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]); --}%
                 %{--*/ --}%
-                %{--mpgSoftware.homePage.newFeatures([--}%
-                    %{--{"name":"Tutorial video: API access to results","link":"https://www.youtube.com/watch?v=y2CRoAp_eLM&amp=&index=2&amp=&t=0s","class":"resource","type":"new"},--}%
-                    %{--{"name":"Webinar video: API access to results","link":"https://www.youtube.com/watch?v=hWhT1Tp1C78&list=PLlMMtlgw6qNj6ICrkMu2BAPhs-6XFBpTr&index=11&t=0s","class":"resource","type":"new"},--}%
-                    %{--{"name":"Webinar video: LocusZoom","link":"https://www.youtube.com/watch?v=AmU7IIAeZJ4&feature=youtu.be","class":"resource","type":"new"}]); --}%
-            %{--</script>--}%
+                mpgSoftware.homePage.newFeatures([
+                    {"name":"Tutorial video: Overview of the Musculoskeletal Knowledge Portal","link":"https://youtu.be/9m6VN_t7bJ0","class":"resource","type":"new"}]); 
+            </script>
              </g:elseif>
 
     <!-- New features buttons end -->
@@ -467,6 +465,7 @@
                             <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData" default="About the data" /></h2>
                         <p><g:message code="portal.bone.about.the.data.text" />
                     <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">27 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">54 traits</span></h1>
+                        <p>&nbsp;</p>
                     </g:elseif>
 
  %{--comment out this section for 52k demo site                   --}%
@@ -886,9 +885,11 @@
                             <a href="https://www.cuanschutz.edu" target="_blank" style="float: left; display:block; margin-right: 10px;">
                                 <img src="${resource(dir:'images/organizations', file:'u_of_colorado.png')}" style="width:140px; margin-top:5px; margin-left:35px;"></a>
                             <a href="https://www.ors.org/" target="_blank" style="float: left; display:block; margin-right: 10px;">
-                                <img src="${resource(dir:'images/organizations', file:'ORS_logo.jpg')}" style="width:110px; margin-top:10px; margin-left:25px;"></a>
+                                <img src="${resource(dir:'images/organizations', file:'ORS_logo.jpg')}" style="width:110px; margin-top:10px; margin-bottom: -5px; margin-left:25px;"></a>
                             <a href="https://ectsoc.org/" target="_blank" style="float: left; display:block; margin-right: 10px;">
                                 <img src="${resource(dir:'images/organizations', file:'ECTS_logo.jpeg')}" style="width:150px; margin-top:25px; margin-left:55px;"></a>
+                            <a href="https://www.broadinstitute.org" target="_blank" style="float: left; display:block; margin-right: 10px;">
+                                <img src="${resource(dir:'images', file:'BroadInstLogoforDigitalRGB.png')}" style="width:160px; margin-top:40px; margin-left:10px;"></a>
                               </p>
 
 

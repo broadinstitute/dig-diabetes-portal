@@ -38,6 +38,11 @@
                 <g:applyLayout name="analyticsSleepPortal"/>
             </g:renderT2dGenesSection>
         </g:if>
+        <g:if test="${g.portalTypeString()?.equals('bone')}">
+            <g:renderT2dGenesSection>
+                <g:applyLayout name="analyticsMSKKP"/>
+            </g:renderT2dGenesSection>
+        </g:if>
 
         <g:else>
             <g:renderT2dGenesSection>

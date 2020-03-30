@@ -46,9 +46,11 @@ var mpgSoftware = mpgSoftware || {};
             });
         }
 
-        var buildNewsSlides = function(PORTAL) {
+        var buildNewsSlides = function(PORTALNAME) {
+
+            var PORTAL = (PORTALNAME == 'bone')? 'mskkp' : PORTALNAME;
             $.getJSON('http://kp4cd.org/rest/views/news2portals', function(news) {
-                console.log(news);
+                //console.log(news);
 
                 var newsContent = "";
                 var portalNews = 0;
