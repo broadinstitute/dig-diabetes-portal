@@ -29,31 +29,17 @@ mpgSoftware.dynamicUi.geneHeaders = (function () {
      * @returns {*}
      */
     var processRecordsFromProximitySearch = function (data, rawGeneAssociationRecords) {
-        //var returnObject = {
-        //    rawData: [],
-        //    uniqueGenes: [],
-        //    genePositions: [],
-        //    uniqueTissues: [],
-        //    genesPositionsExist: function () {
-        //        return (this.genePositions.length > 0) ? [1] : [];
-        //    },
-        //    genesExist: function () {
-        //        return (this.uniqueGenes.length > 0) ? [1] : [];
-        //    }
-        //};
+
         var geneInfoArray = [];
         if (( typeof data !== 'undefined') &&
             ( data !== null ) &&
             (data.is_error === false ) &&
             ( typeof data.listOfGenes !== 'undefined')) {
             if (data.listOfGenes.length === 0) {
-                alert(' No genes in the specified region')
+                alert(' No genes in the specified region, please check if start and stop position is right')
             } else {
                 _.forEach(data.listOfGenes, function (geneRec) {
-                    //returnObject.rawData.push(geneRec);
-                    //if (!returnObject.uniqueGenes.includes(geneRec.name2)) {
-                    //    returnObject.uniqueGenes.push({name: geneRec.name2});
-                    //    returnObject.genePositions.push({name: geneRec.chromosome + ":" + geneRec.addrStart + "-" + geneRec.addrEnd});
+                  
                     if ( typeof _.find(rawGeneAssociationRecords,{name:geneRec.name2}) === 'undefined'){
                         var chromosomeString = _.includes(geneRec.chromosome, "chr") ? geneRec.chromosome.substr(3) : geneRec.chromosome;
                         rawGeneAssociationRecords.push({
