@@ -1003,7 +1003,7 @@ portal.data.versionDesignator = [ new PortalVersionBean
                                   ),
                                   new PortalVersionBean("bone",
                                           "Bone",
-                                          "mdv140",
+                                          "mdv141",
                                           "MGKP", // name of KB data we want
                                           "eBMD", // make sure your default phenotype exists in your default data set
                                           "GWAS_UKBiobankGEFOS_eu_mdv140",// used to pick a default data set for a gene query
