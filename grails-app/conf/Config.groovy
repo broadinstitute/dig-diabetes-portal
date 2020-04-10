@@ -726,7 +726,7 @@ portal.data.versionDesignator = [ new PortalVersionBean
                                   ),
                                   new PortalVersionBean("mi",
                                                           "Myocardial Infarction",
-                                                          "mdv97",
+                                                          "mdv99",
                                           "CVDKP", // name of KB data we want
                                                           "MI",
                                                           "GWAS_CARDIoGRAM_mdv91",
@@ -894,7 +894,7 @@ portal.data.versionDesignator = [ new PortalVersionBean
                                   ),
                                   new PortalVersionBean("sleep",
                                           "Sleep",
-                                          "mdv112",
+                                          "mdv113",
                                           "SDKP", // name of KB data we want
                                           "SleepChronotype", // make sure your default phenotype exists in your default data set
                                           "GWAS_UKBB_mdv110",// used to pick a default data set for a gene query
