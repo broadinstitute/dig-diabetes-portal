@@ -449,7 +449,7 @@
                         <img src="${resource(dir: 'images', file: 'data_icon4.png')}" style="width: 200px; margin-right: -50px;" align="right" >
                         <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData" default="About the data" /></h2>
                     <p><g:message code="portal.sleep.about.the.data.text" />
-                    <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">23 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">69 traits</span></h1>
+                    <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">24 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">71 traits</span></h1>
 
                 </g:elseif>
                     <g:elseif test="${g.portalTypeString()?.equals('lung')}">
@@ -464,7 +464,7 @@
                             <img src="${resource(dir: 'images', file: 'data_icon4.png')}" style="width: 230px; margin-right: -80px;" align="right" >
                             <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData" default="About the data" /></h2>
                         <p><g:message code="portal.bone.about.the.data.text" />
-                    <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">27 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">54 traits</span></h1>
+                    <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">28 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">58 traits</span></h1>
                         <p>&nbsp;</p>
                     </g:elseif>
 
@@ -888,8 +888,10 @@
                                 <img src="${resource(dir:'images/organizations', file:'ORS_logo.jpg')}" style="width:110px; margin-top:10px; margin-bottom: -5px; margin-left:25px;"></a>
                             <a href="https://ectsoc.org/" target="_blank" style="float: left; display:block; margin-right: 10px;">
                                 <img src="${resource(dir:'images/organizations', file:'ECTS_logo.jpeg')}" style="width:150px; margin-top:25px; margin-left:55px;"></a>
+                            <a href="https://ectsoc.org/" target="_blank" style="float: left; display:block; margin-right: 10px;">
+                                <img src="${resource(dir:'images/organizations', file:'JSBMR_logo_cropped.png')}" style="width:100px; margin-top:25px; margin-left:35px;"></a>
                             <a href="https://www.broadinstitute.org" target="_blank" style="float: left; display:block; margin-right: 10px;">
-                                <img src="${resource(dir:'images', file:'BroadInstLogoforDigitalRGB.png')}" style="width:160px; margin-top:40px; margin-left:10px;"></a>
+                                <img src="${resource(dir:'images', file:'BroadInstLogoforDigitalRGB.png')}" style="width:160px; margin-top:40px; margin-left:60px;"></a>
                               </p>
 
 
