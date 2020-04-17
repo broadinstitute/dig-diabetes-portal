@@ -338,9 +338,8 @@
                 mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]);
              */
                 mpgSoftware.homePage.newFeatures([
-                    {"name":"Tutorial video: API access to results","link":"https://www.youtube.com/watch?v=y2CRoAp_eLM&amp=&index=2&amp=&t=0s","class":"resource","type":"new"},
-                    {"name":"Webinar video: API access to results","link":"https://www.youtube.com/watch?v=hWhT1Tp1C78&list=PLlMMtlgw6qNj6ICrkMu2BAPhs-6XFBpTr&index=11&t=0s","class":"resource","type":"new"},
-                    {"name":"Tutorial video: Diabetes Epigenome Atlas","link":"https://youtu.be/vZdMfjSvVQk","class":"resource","type":"new"}]);
+                    {"name":"Webinar video: Upcoming developments","link":"https://youtu.be/RC7pe6--v2A","class":"resource","type":"new"},
+                    ]);
             </script>
         </g:if>
         <g:elseif test="${g.portalTypeString()?.equals('mi')}">
@@ -424,7 +423,7 @@
                             <img src="${resource(dir: 'images', file: 'data_icon4.png')}" style="width: 200px; margin-right: -50px;" align="right" >
                         <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData" default="About the data" /></h2>
                         <p><g:message code="portal.mi.about.the.data.text" />
-                        <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">30 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">52 traits</span></h1>
+                        <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">33 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">72 traits</span></h1>
 
                         <hr/> <a href="http://institute.heart.org" target="_blank"><img src="${resource(dir: 'images/organizations', file: 'AHA_precision.jpg')}" style="width: 330px; margin-right: 10px;" align="right" ></a>
 
@@ -474,7 +473,7 @@
                         <img src="${resource(dir: 'images', file: 'data_icon4.png')}" style="width: 200px; margin-right: -50px;" align="right" >
                         <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData" default="About the data" /></h2>
                     <p><g:message code="about.the.portal.data.text" />
-                    <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">88 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">198 traits</span></h1>
+                    <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">99 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">234 traits</span></h1>
 
                         <span style="display:block; width: 100%;text-align:left;"><a style=" font-size: 20px; padding:10px 40px 10px 0; margin-right: -30px;background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; text-decoration:none; color:#333333; " href="http://www.kp4cd.org/datasets/t2d"><g:message code="about.the.portal.data.text2"/></a></span>
                     <p style="font-size:20px; margin-top: 10px;"><a href="https://www.diabetesepigenome.org/"><img src="${resource(dir:'images/organizations', file:'DGA.png')}" align="left" style="width:190px; margin-top: 5px; margin-left: -5px; "></a>View complementary data at <br />the <a href="https://www.diabetesepigenome.org/">Diabetes Epigenome Atlas</a></p>
