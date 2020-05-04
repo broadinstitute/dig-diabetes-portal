@@ -531,7 +531,7 @@ class VariantSearchController {
                 }
                 if (pval.containsKey("BETA")&&(pval["BETA"])){
                     Double beta = pval["BETA"] as Double
-                    if ((beta!=null)&&(beta!=Double.NaN)){
+                    if ((beta!=null) && (beta!=Double.NaN) && (beta < 20.0)){
                         pval["BETA"] = Math.exp(beta)
                     }
 
@@ -660,7 +660,7 @@ class VariantSearchController {
                 }
                 if (pval.containsKey("BETA")&&convertEffectToOr&&(pval["BETA"])){
                     Double beta = pval["BETA"] as Double
-                    if ((beta!=null)&&(beta!=Double.NaN)){
+                    if ((beta!=null) && (beta!=Double.NaN) && (beta < 20.0)){
                         pval["BETA"] = Math.exp(beta)
                     }
 
