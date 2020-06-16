@@ -951,7 +951,7 @@ portal.data.versionDesignator = [ new PortalVersionBean
                                   ),
                                   new PortalVersionBean("lung",
                                           "Lung",
-                                          "mdv130",
+                                          "mdv131",
                                           "LDKP", // name of KB data we want
                                           "COPD", // make sure your default phenotype exists in your default data set
                                           "GWAS_UKBiobank_ModLeic_eu_mdv130",// used to pick a default data set for a gene query
