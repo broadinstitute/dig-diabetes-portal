@@ -674,7 +674,7 @@ portal.data.versionDesignator = [ new PortalVersionBean
 ),
                                   new PortalVersionBean("stroke",
                                                           "Stroke",
-                                                          "mdv76",
+                                                          "mdv77",
                                           "CDKP", // name of KB data we want
                                                           "Stroke_all",
                                                           "GWAS_Stroke_mdv70",
