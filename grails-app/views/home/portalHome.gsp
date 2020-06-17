@@ -402,7 +402,7 @@
                         <div class="col-md-12" style="padding-top:40px; font-size: 20px;">
                         <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700"><g:message code="portal.aboutTheData" default="About the data" /></h2>
                         <p><span  style="font-size: 20px;"><g:message code="portal.stroke.about.the.data.text" /></span>
-                        <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">27 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">60 traits</span></h1>
+                        <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">28 datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">66 traits</span></h1>
                         <hr />
 
 
