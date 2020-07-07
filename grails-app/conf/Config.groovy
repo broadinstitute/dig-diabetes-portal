@@ -335,8 +335,8 @@ environments {
 //        grails.serverURL = "http://musculoskeletalknowledgeportal.org"
         //        grails.serverURL = "http://mskkp.org"
 
-        //        grails.serverURL = "http://demositenew1.us-east-1.elasticbeanstalk.com/"
-        //        grails.serverURL = "http://demositenew2.us-east-1.elasticbeanstalk.com/"
+        //        grails.serverURL = "http://demositenew1.us-east-1.elasticbeanstalk.com"
+        //        grails.serverURL = "http://demositenew2.us-east-1.elasticbeanstalk.com"
 
 
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
