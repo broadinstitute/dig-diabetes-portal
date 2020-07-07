@@ -338,7 +338,8 @@
                 mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]);
              */
                 mpgSoftware.homePage.newFeatures([
-                    {"name":"Webinar video: Upcoming developments","link":"https://youtu.be/RC7pe6--v2A","class":"resource","type":"new"},
+                    {"name":"Try the CMDKP beta site","link":"http://cmdgenkp-beta.org:5000/","class":"feature","type":"new"},
+                    {"name":"Webinar video: Beta release of CMDKP","link":"https://www.youtube.com/watch?v=BSyfu7tTnPY","class":"resource","type":"new"},
                     ]);
             </script>
         </g:if>
@@ -348,9 +349,8 @@
                  mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]);
                  */
                 mpgSoftware.homePage.newFeatures([
-                    {"name":"Tutorial video: API access to results","link":"https://www.youtube.com/watch?v=y2CRoAp_eLM&amp=&index=2&amp=&t=0s","class":"resource","type":"new"},
-                    {"name":"Webinar video: API access to results","link":"https://www.youtube.com/watch?v=hWhT1Tp1C78&list=PLlMMtlgw6qNj6ICrkMu2BAPhs-6XFBpTr&index=11&t=0s","class":"resource","type":"new"},
-                    {"name":"Webinar video: LocusZoom","link":"https://www.youtube.com/watch?v=AmU7IIAeZJ4&feature=youtu.be","class":"resource","type":"new"}]);
+                    {"name":"Try the CMDKP beta site","link":"http://cmdgenkp-beta.org:5000/","class":"feature","type":"new"},
+                    {"name":"Webinar video: Beta release of CMDKP","link":"https://www.youtube.com/watch?v=BSyfu7tTnPY","class":"resource","type":"new"},]);
             </script>
         </g:elseif>
         <g:elseif test="${g.portalTypeString()?.equals('stroke')}">
@@ -359,9 +359,8 @@
                  mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]);
                  */
                 mpgSoftware.homePage.newFeatures([
-                    {"name":"Tutorial video: API access to results","link":"https://www.youtube.com/watch?v=y2CRoAp_eLM&amp=&index=2&amp=&t=0s","class":"resource","type":"new"},
-                    {"name":"Webinar video: API access to results","link":"https://www.youtube.com/watch?v=hWhT1Tp1C78&list=PLlMMtlgw6qNj6ICrkMu2BAPhs-6XFBpTr&index=11&t=0s","class":"resource","type":"new"},
-                    {"name":"Webinar video: LocusZoom","link":"https://www.youtube.com/watch?v=AmU7IIAeZJ4&feature=youtu.be","class":"resource","type":"new"}]);
+                    {"name":"Try the CMDKP beta site","link":"http://cmdgenkp-beta.org:5000/","class":"feature","type":"new"},
+                    {"name":"Webinar video: Beta release of CMDKP","link":"https://www.youtube.com/watch?v=BSyfu7tTnPY","class":"resource","type":"new"},]);
             </script>
         </g:elseif>
 
@@ -371,9 +370,8 @@
                  mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]);
                  */
                 mpgSoftware.homePage.newFeatures([
-                    {"name":"Tutorial video: API access to results","link":"https://www.youtube.com/watch?v=y2CRoAp_eLM&amp=&index=2&amp=&t=0s","class":"resource","type":"new"},
-                    {"name":"Webinar video: API access to results","link":"https://www.youtube.com/watch?v=hWhT1Tp1C78&list=PLlMMtlgw6qNj6ICrkMu2BAPhs-6XFBpTr&index=11&t=0s","class":"resource","type":"new"},
-                    {"name":"Webinar video: LocusZoom","link":"https://www.youtube.com/watch?v=AmU7IIAeZJ4&feature=youtu.be","class":"resource","type":"new"}]);
+                    {"name":"Try the CMDKP beta site","link":"http://cmdgenkp-beta.org:5000/","class":"feature","type":"new"},
+                    {"name":"Webinar video: Beta release of CMDKP","link":"https://www.youtube.com/watch?v=BSyfu7tTnPY","class":"resource","type":"new"},]);
             </script>
         </g:elseif>
 
