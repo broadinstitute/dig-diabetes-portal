@@ -95,9 +95,16 @@
                 <!-- Logo and tagline part end -->
 
                 <!-- Learn portal button linked to KP website 'new_features' page -->
+<g:if test="${g.portalTypeString()?.equals('bone')}">
+    <div class="col-md-6 col-md-offset-3" style="text-align: center; padding-top: 30px;">
+                    <a href="http://www.kp4cd.org/new_features/mskkp" target="_blank" class="btn btn-lg btn-default front-banner-btn">Learn about the portal</a>
+                </div>
+</g:if>
+                <g:else>
                 <div class="col-md-6 col-md-offset-3" style="text-align: center; padding-top: 30px;">
                     <a href="http://www.kp4cd.org/new_features/${g.portalTypeString()}" target="_blank" class="btn btn-lg btn-default front-banner-btn">Learn about the portal</a>
                 </div>
+                </g:else>
                 <!-- Learn portal button end -->
 
 
