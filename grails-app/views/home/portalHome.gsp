@@ -388,7 +388,8 @@
                 %{--mpgSoftware.homePage.newFeatures([{"name":"New Resource","link":"javascript:;","class":"resource","type":"new"},{"name":"Update Module","link":"javascript:;","class":"module","type":"updated"},{"name":"New Feature","link":"javascript:;","class":"feature","type":"new"}]); --}%
                 %{--*/ --}%
                 mpgSoftware.homePage.newFeatures([
-                    {"name":"Tutorial video: Overview of the Musculoskeletal Knowledge Portal","link":"https://youtu.be/9m6VN_t7bJ0","class":"resource","type":"new"}]); 
+                    {"name":"Tutorial video: Overview of the Musculoskeletal Knowledge Portal","link":"https://youtu.be/9m6VN_t7bJ0","class":"resource","type":"new"},
+                    {"name":"Webinar video: Upcoming changes to the Knowledge Portal framework","link":"https://www.youtube.com/watch?v=5U7G3d-CaKc&feature=youtu.be","class":"resource","type":"new"}]); 
             </script>
              </g:elseif>
 
