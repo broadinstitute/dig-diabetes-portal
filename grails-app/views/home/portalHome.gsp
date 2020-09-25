@@ -773,6 +773,9 @@
                     <div class="col-md-5 col-md-offset-1" style="margin-top:30px;">
                         <h3 style="font-weight:700; font-size:30px; font-family:'Oswald'; color:#000000; text-align: left; margin-top: 10px;"><g:message code="portal.home.news_headline" default="What's new" />&nbsp;<span style="color:#4eadcd; vertical-align: 5px;" class="glyphicon glyphicon-comment" aria-hidden="true"></span></h3>
                         <ul id="newsFeedHolder" class="dk-news-items gallery-fade"></ul>
+<g:if test="${g.portalTypeString()?.equals('bone')}">
+                    <h4><g:message code="about.the.bone.portal.text0"/></h4>
+</g:if>
                         <g:if test="${g.portalTypeString()?.equals('mi')}">
                             <div style="position:absolute; top: 25px; right:-40px; ">
                                 <p style="margin-bottom:3px;">
@@ -842,7 +845,16 @@
                                 %{--<p><a href="https://www.linkedin.com/groups/8505761" target="_blank"><img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'linkedin_icn.svg')}" /></a></p>--}%
                             </div>
                         </g:else>
+
+<g:if test="${g.portalTypeString()?.equals('bone')}">
+    <h3 style="margin-top: 30px;font-weight:700; font-size:30px; font-family:'Oswald'"><g:message code="bone.publications.header"/></h3>
+    <p><g:message code="bone.publication1"/></p>
+    <p><g:message code="bone.publication2"/></p>
+    <h3 style="margin-top: 30px;font-weight:700; font-size:30px; font-family:'Oswald'"><g:message code="about.the.portal.header"/></h3>
+</g:if>
+<g:else>
                         <h3 style="margin-top: 0px;font-weight:700; font-size:30px; font-family:'Oswald'"><g:message code="about.the.portal.header"/></h3>
+</g:else>
                         <g:if test="${g.portalTypeString()?.equals('stroke')}">
                             <p><g:message code="about.the.stroke.portal.text"/></p>
                             <p><g:message code='portal.stroke.home.funders'/>:</p>
